@@ -163,11 +163,11 @@ bool j1Gui::CleanUp()
 
 	App->tex->UnLoadTexture(atlas);
 
-	//while (elements_list.Count() > 0)
-	//{
-	//	p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start;
-	//	DeleteElement(elements->data);
-	//}
+	while (elements_list.Count() > 0)
+	{
+		p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start;
+		DeleteElement(elements->data);
+	}
 
 	return true;
 }
@@ -1681,7 +1681,6 @@ bool UI_Scroll_Bar::update()
 
 bool UI_Scroll_Bar::cleanup()
 {
-	ClearElements();
 	return true;
 }
 
@@ -1710,8 +1709,15 @@ void UI_Scroll_Bar::DeleteScrollElement(UI_Element * element)
 
 void UI_Scroll_Bar::ClearElements()
 {
-	for (list<scroll_element>::iterator it = elements.begin(); it != elements.end(); it++)
-		App->gui->DeleteElement((*it).element);
+	while (!elements.empty())
+	{
+		for (list<scroll_element>::iterator it = elements.begin(); it != elements.end(); it++)
+		{
+			App->gui->DeleteElement((*it).element);
+			elements.remove(*it);
+			break;
+		}
+	}
 	
 	elements.clear();
 }
@@ -1748,12 +1754,6 @@ void UI_Scroll_Bar::ChangeHeightMovingRect()
 	// Update min and max bar positions
 	min_bar_v = rect.y;
 	max_bar_v = rect.y + rect.h;
-
-	if (button_v->rect.h >= max_bar_v - min_bar_v && button_v->enabled)
-		button_v->SetEnabled(false);
-	else if (!button_v->enabled)
-		button_v->SetEnabled(true);
-
 }
 
 void UI_Scroll_Bar::ChangeWidthMovingRect()
@@ -1788,11 +1788,6 @@ void UI_Scroll_Bar::ChangeWidthMovingRect()
 	// Update min and max bar positions
 	min_bar_h = rect.x;
 	max_bar_h = min_bar_h + rect.w;
-
-	if (button_h->rect.w >= max_bar_h - min_bar_h && button_h->enabled)
-		button_h->SetEnabled(false);
-	else if (!button_h->enabled)
-		button_h->SetEnabled(true);
 }
 
 void UI_Scroll_Bar::MoveBarV()
