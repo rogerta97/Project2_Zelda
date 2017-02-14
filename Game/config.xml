@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+	<app framerate_cap="">
+		<title name="simon la xupa" />
+		<organization>UPC</organization>
+	</app>
+	<renderer>
+		<vsync value="false" />
+	</renderer>
+	<fonts>
+		<default_font file="fonts/open_sans/OpenSans-Regular.ttf" size="24" />
+	</fonts>
+	<gui>
+		<atlas file="gui/sf2.png" />
+	</gui>
+	<window>
+		<resolution width="1280" height="720" scale="1" />
+		<fullscreen value="false" />
+		<borderless value="false" />
+		<resizable value="false" />
+		<fullscreen_window value="false" />
+		<set_title />
+	</window>
+	<file_system>
+		<path>data.zip</path>
+	</file_system>
+	<map>
+		<folder>maps/</folder>
+	</map>
+</config>
