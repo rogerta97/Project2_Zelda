@@ -47,8 +47,7 @@ bool j1Console::Start()
 	
 	App->win->GetWindowSize(win_w, win_h);
 
-	window = (UI_Window*)App->gui->UI_CreateWin(iPoint(App->render->camera.x, App->render->camera.y),win_w, win_h/3);
-	window->always_top = true;
+	window = (UI_Window*)App->gui->UI_CreateWin(iPoint(App->render->camera.x, App->render->camera.y),win_w, win_h/3, 2);
 
 	console_background = (UI_ColoredRect*)window->CreateColoredRect(iPoint(window->rect.x, window->rect.y), window->rect.w, window->rect.h, CONSOLE_COLOR_1);
 	console_background2 = (UI_ColoredRect*)window->CreateColoredRect(iPoint(window->rect.x + FRAMES_SIZE, window->rect.y + TOP_FRAME_SIZE), window->rect.x + window->rect.w - (FRAMES_SIZE * 2) - 15, win_h / 3 - FRAMES_SIZE - TOP_FRAME_SIZE, CONSOLE_COLOR_1);

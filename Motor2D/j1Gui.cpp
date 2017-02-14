@@ -71,16 +71,20 @@ bool j1Gui::Update(float dt)
 
 	if (start)
 	{
-		// Put all always top elements to top ----
-		list<UI_Element*> always_top;
-		GetAlwaysTopElements(always_top);
-
-		int acumulator = 0;
-		for(list<UI_Element*>::iterator it = always_top.begin(); it != always_top.end(); it++, acumulator++)
-			(*it)->layer = elements_list.Count() + acumulator;
-		
-		ReorderElements();
-		// ---------------------------------------
+		// Set variables that inherit from window to childs
+		for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
+		{
+			if (elements->data->type == ui_element::ui_window)
+			{
+				list<UI_Element*> childs;
+				App->gui->GetChilds(elements->data, childs);
+				for (list<UI_Element*>::iterator it = childs.begin(); it != childs.end(); it++)
+				{
+					(*it)->blit_layer = elements->data->blit_layer;
+					(*it)->is_ui = elements->data->is_ui;
+				}
+			}
+		}
 
 		start = false;
 	}
@@ -90,7 +94,7 @@ bool j1Gui::Update(float dt)
 	
 	// Update all elements in order
 	list<UI_Element*> to_top;
-	list<UI_Element*> to_update;
+	p2PQueue<UI_Element*> to_update;
 
 	for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
 	{
@@ -104,7 +108,7 @@ bool j1Gui::Update(float dt)
 		// To update if enabled
 		if (elements->data->enabled)
 		{
-			to_update.push_back(elements->data);
+			to_update.Push(elements->data, elements->data->blit_layer);
 
 			// Debug lines ------------------------------------
 			if (debug)
@@ -130,9 +134,8 @@ bool j1Gui::Update(float dt)
 	}
 
 	// Update
-	for (list<UI_Element*>::iterator it = to_update.begin(); it != to_update.end(); it++)
-		(*it)->update();
-
+	for (p2PQueue_item<UI_Element*>* up = to_update.start; up != nullptr; up = up->next)
+		up->data->update();
 
 	// Move clicked elements
 	Move_Elements();
@@ -180,7 +183,7 @@ const void j1Gui::GetAtlas() const
 // ---------------------------------------------------------------------
 // Create a new Window
 // ---------------------------------------------------------------------
-UI_Element* j1Gui::UI_CreateWin(iPoint pos, int w, int h, bool _dinamic, bool _is_ui)
+UI_Element* j1Gui::UI_CreateWin(iPoint pos, int w, int h, int blit, bool _dinamic, bool _is_ui)
 {
 	UI_Window* ret = nullptr;
 	ret = new UI_Window();
@@ -195,6 +198,7 @@ UI_Element* j1Gui::UI_CreateWin(iPoint pos, int w, int h, bool _dinamic, bool _i
 		// Layer
 
 		ret->layer = elements_list.Count();
+		ret->blit_layer = blit;
 
 		// -----
 
@@ -258,33 +262,6 @@ void j1Gui::GetParentElements(UI_Element * element, list<UI_Element*>& visited)
 		if(curr != nullptr)
 			visited.push_back(curr);
 		curr = curr->parent_element;
-	}
-}
-
-// ---------------------------------------------------------------------
-// Looks for all the elements that must be always on the top.
-// ---------------------------------------------------------------------
-void j1Gui::GetAlwaysTopElements(list<UI_Element*>& always_top)
-{
-	// Put childs from always top elements also to top elements
-	for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
-	{
-		if (elements->data->always_top)
-		{
-			list<UI_Element*> childs;
-			GetChilds(elements->data, childs);
-
-			for (list<UI_Element*>::iterator ch = childs.begin(); ch != childs.end(); ch++)
-			{
-				(*ch)->always_top = true;
-			}
-		}
-	}
-
-	for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
-	{
-		if (elements->data->always_top)
-			always_top.push_back(elements->data);
 	}
 }
 
@@ -414,15 +391,17 @@ UI_Element* j1Gui::CheckClickMove(int x, int y)
 
 	// Get the higher element
 	int higher_layer = -1;
+	int higher_blit_layer = -1;
 	UI_Element* higher_element = nullptr;
 
 	if (!elements_clicked.empty())
 	{
 		for (list<UI_Element*>::iterator it = elements_clicked.begin(); it != elements_clicked.end(); it++)
 		{
-			if ((*it)->layer > higher_layer)
+			if ((*it)->layer > higher_layer && (*it)->blit_layer >= higher_blit_layer)
 			{
 				higher_layer = (*it)->layer;
+				higher_blit_layer = (*it)->blit_layer;
 				higher_element = *it;
 			}
 		}
@@ -537,7 +516,6 @@ void UI_Element::SetEnabledAndChilds(bool set)
 
 	for (list<UI_Element*>::iterator it = visited.begin(); it != visited.end(); it++)
 		(*it)->enabled = set;
-
 }
 
 
@@ -551,28 +529,14 @@ bool UI_Element::PutWindowToTop()
 	list<UI_Element*> visited;
 	list<UI_Element*> copy;
 
-	list<UI_Element*> always_top;
-
 	// Get childs from the window parent
 	App->gui->GetChilds(parent, visited);
-
-	// Get always top elements
-	App->gui->GetAlwaysTopElements(always_top);
 
 	// Update layer
 	int i = 0;
 	for (list<UI_Element*>::iterator it = visited.begin(); it != visited.end(); it++, i++)
-	{
-		if(!(*it)->always_top)
-			(*it)->layer = App->gui->higher_layer + i + 1;
-	}
-
-	// Update always top layer
-	for (list<UI_Element*>::iterator it = always_top.begin(); it != always_top.end(); it++, i++)
-	{
 		(*it)->layer = App->gui->higher_layer + i + 1;
-	}
-
+	
 	// Rorded the elements of the PQ
 	App->gui->ReorderElements();
 
@@ -584,7 +548,7 @@ bool UI_Element::PutWindowToTop()
 // ---------------------------------------------------------------------
 int UI_Element::CheckClickOverlap(int x, int y)
 {
-	list<int> contactors;
+	list<UI_Element*> contactors;
 
 	// Check the UI_Elements that are in the point
 	for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
@@ -595,19 +559,23 @@ int UI_Element::CheckClickOverlap(int x, int y)
 			{
 				// Check if is dinamic
 				if (!elements->data->click_through)
-					contactors.push_back(elements->data->layer);
+					contactors.push_back(elements->data);
 			}
 		}
 	}
 
 	// Get the higher layer
 	int higher_layer = -1;
+	int higher_blit_layer = -1;
 	if (!contactors.empty())
 	{
-		for (list<int>::iterator it = contactors.begin(); it != contactors.end(); it++)
+		for (list<UI_Element*>::iterator it = contactors.begin(); it != contactors.end(); it++)
 		{
-			if (*it > higher_layer)
-				higher_layer = *it;
+			if ((*it)->layer > higher_layer && (*it)->blit_layer >= higher_blit_layer)
+			{
+				higher_layer = (*it)->layer;
+				higher_blit_layer = (*it)->blit_layer;
+			}
 		}
 	}
 
@@ -725,7 +693,7 @@ void UI_Window::Set(iPoint pos, int w, int h)
 // ---------------------------------------------------------------------
 // Create a button linked to the current window
 // ---------------------------------------------------------------------
-UI_Element* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic, bool _is_ui)
+UI_Element* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic)
 {
 	UI_Button* ret = nullptr;
 	ret = new UI_Button();
@@ -738,7 +706,6 @@ UI_Element* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic, boo
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
-		ret->is_ui = _is_ui;
 
 		// Layers --
 
@@ -756,7 +723,7 @@ UI_Element* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic, boo
 // ---------------------------------------------------------------------
 // Create text linked to the current window
 // ---------------------------------------------------------------------
-UI_Element* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, bool _dinamic, bool _is_ui, uint r, uint g, uint b)
+UI_Element* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, bool _dinamic, uint r, uint g, uint b)
 {
 	UI_Text* ret = nullptr;
 	ret = new UI_Text();
@@ -769,7 +736,6 @@ UI_Element* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, boo
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
-		ret->is_ui = _is_ui;
 
 		// Layers --
 
@@ -786,7 +752,7 @@ UI_Element* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, boo
 // ---------------------------------------------------------------------
 // Create an image linked to the current window
 // ---------------------------------------------------------------------
-UI_Element* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic, bool _is_ui)
+UI_Element* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic)
 {
 	UI_Image* ret = nullptr;
 	ret = new UI_Image();
@@ -799,7 +765,6 @@ UI_Element* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic, bo
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
-		ret->is_ui = _is_ui;
 
 		// Layers --
 
@@ -816,7 +781,7 @@ UI_Element* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic, bo
 // ---------------------------------------------------------------------
 // Create a text input box to the current window
 // ---------------------------------------------------------------------
-UI_Element* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bool _dinamic, bool _is_ui, uint r, uint g, uint b)
+UI_Element* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bool _dinamic, uint r, uint g, uint b)
 {
 	UI_Text_Input* ret = nullptr;
 	ret = new UI_Text_Input();
@@ -829,7 +794,6 @@ UI_Element* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bool 
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
-		ret->is_ui = _is_ui;
 
 		// Layers --
 
@@ -843,7 +807,7 @@ UI_Element* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bool 
 	return ret;
 }
 
-UI_Element * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, int button_size, bool _dinamic, bool _is_ui)
+UI_Element * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, int button_size, bool _dinamic)
 {
 	UI_Scroll_Bar* ret = nullptr;
 	ret = new UI_Scroll_Bar();
@@ -856,7 +820,6 @@ UI_Element * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, int 
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
-		ret->is_ui = _is_ui;
 
 		// Layers --
 
@@ -871,7 +834,7 @@ UI_Element * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, int 
 	return ret;
 }
 
-UI_Element * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Color color, bool filled, bool _dinamic, bool _is_ui)
+UI_Element * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Color color, bool filled, bool _dinamic)
 {
 	UI_ColoredRect* ret = nullptr;
 	ret = new UI_ColoredRect();
@@ -884,7 +847,6 @@ UI_Element * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Color co
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
-		ret->is_ui = _is_ui;
 
 		// Layers --
 
