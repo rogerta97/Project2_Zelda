@@ -24,4 +24,8 @@ We are a group of studients from UPC studying a Design and Development of Videog
   - Design: Sergi Perez
   - UI: Roger Tello
   
+#Contact us
+
+https://www.facebook.com/CatPad-1785899698399344/?fref=ts
+  
 
