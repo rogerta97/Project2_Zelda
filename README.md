@@ -27,5 +27,6 @@ We are a group of students from UPC studying a Design and Development of Videoga
 #Contact us
 
 https://www.facebook.com/CatPad-1785899698399344/?fref=ts
+https://twitter.com/catpad_games
   
 
