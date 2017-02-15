@@ -60,7 +60,6 @@ bool j1Console::Start()
 	button_h_background->click_through = true;
 
 	input_background = (UI_ColoredRect*)window->CreateColoredRect(iPoint(window->rect.x, scroll->rect.y + scroll->rect.h + FRAMES_SIZE), window->rect.w, FRAMES_SIZE * 2.5f, CONSOLE_COLOR_1);
-	text_input = (UI_Text_Input*)window->CreateTextInput(iPoint(window->rect.x + FRAMES_SIZE * 1.5f, scroll->rect.y + scroll->rect.h + (FRAMES_SIZE*1.5f)), window->rect.w - FRAMES_SIZE, App->font->default_15);
 	input_mark = (UI_Text*)window->CreateText(iPoint(10, scroll->rect.y + scroll->rect.h + (FRAMES_SIZE*1.5f)), App->font->default_15);
 	input_mark->SetText(">");
 

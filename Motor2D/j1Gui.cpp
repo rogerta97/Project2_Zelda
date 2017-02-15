@@ -98,7 +98,7 @@ bool j1Gui::Update(float dt)
 
 	for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
 	{
-		// Move elements if the camera si moving
+		// Move elements if the camera is moving
 		if (elements->data->is_ui && (camera_x != App->render->camera.x || camera_y != App->render->camera.y))
 		{
 			elements->data->rect.x += camera_x - App->render->camera.x;
@@ -227,12 +227,12 @@ void j1Gui::GetChilds(UI_Element * element, list<UI_Element*>& visited)
 		frontier.push_back(*it);
 
 
-	// Navigate through all the childs and add them (works but needs inprovement)
+	// Navigate through all the childs and add them
 
 	int end = 0;
 	while (!frontier.empty())
 	{
-		for (list<UI_Element*>::iterator fr = frontier.begin(); fr != frontier.end(); fr++) // Navegate through frontier
+		for (list<UI_Element*>::iterator fr = frontier.begin(); fr != frontier.end(); fr++)
 		{
 			list<UI_Element*>::iterator find = std::find(visited.begin(), visited.end(), *fr);
 			if (find == visited.end() && *fr != element)
@@ -285,7 +285,6 @@ void j1Gui::ReorderElements()
 	// Place againt he elements on the PQ (now they are on the correct order)
 	for (list<UI_Element*>::iterator it = copy.begin(); it != copy.end(); it++)
 		App->gui->elements_list.Push(*it, (*it)->layer);
-	
 }
 
 // ---------------------------------------------------------------------
@@ -299,7 +298,6 @@ bool j1Gui::Move_Elements()
 	if((App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) && !moving)
 	{
 		App->input->GetMousePosition(mouse_x, mouse_y);
-
 		mouse_x -= App->render->camera.x;
 		mouse_y -= App->render->camera.y;
 
@@ -322,7 +320,6 @@ bool j1Gui::Move_Elements()
 
 		int curr_x; int curr_y;
 		App->input->GetMousePosition(curr_x, curr_y);
-
 		curr_x -= App->render->camera.x;
 		curr_y -= App->render->camera.y;
 
@@ -433,10 +430,7 @@ UI_Element* j1Gui::CheckClickMove(int x, int y)
 // ---------------------------------------------------------------------
 void j1Gui::DeleteElement(UI_Element* element)
 {
-	if (element == nullptr || element == NULL)
-		return;
-
-	if (element->type == ui_window && windows.empty())
+	if (element == nullptr)
 		return;
 
 	list<UI_Element*> childs;
@@ -445,16 +439,13 @@ void j1Gui::DeleteElement(UI_Element* element)
 	// Delete element and it's childs
 	for (list<UI_Element*>::iterator ch = childs.begin(); ch != childs.end(); ch++)
 	{
-		if (*ch == nullptr)
-			continue;
-		
-		if ((*ch)->parent != nullptr)
+		if (*ch == nullptr && (*ch)->parent->childs.size() > 0)
 			(*ch)->parent->childs.remove(*ch);
 
-		if ((*ch)->parent_element != nullptr)
+		if ((*ch)->parent_element != nullptr && (*ch)->parent_element->childs.size() > 0)
 			(*ch)->parent_element->childs.remove(*ch);
 
-		if ((*ch)->type == ui_window)
+		if ((*ch)->type == ui_window && windows.size() > 0)
 			windows.remove((UI_Window*)*ch);
 
 			// Delete from pQ
@@ -1183,6 +1174,7 @@ bool UI_Text::cleanup()
 {
 	for (list<tex_str>::iterator it = tex_str_list.begin(); it != tex_str_list.end(); it++)
 		App->tex->UnLoadTexture((*it).texture);
+
 	return true;
 }
 
@@ -1267,6 +1259,8 @@ void UI_Text_Input::Set(iPoint pos, int w, _TTF_Font* font, uint r, uint g, uint
 	camera_before.y = App->render->camera.y;
 
 	color.r = color.g = color.b = color.a = 255;
+
+	text_offset = 0;
 }
 
 bool UI_Text_Input::update()
@@ -1316,12 +1310,12 @@ bool UI_Text_Input::update()
 
 			// Move cursor
 			MoveCursor();
-
+			MoveTextView();
 			DrawBar();
 		}
 
 		// Viewport -----------
-		App->render->SetViewPort({ rect.x + App->render->camera.x, rect.y + App->render->camera.y, rect.x + rect.w + App->render->camera.x, rect.h });
+		App->render->SetViewPort({ rect.x + App->render->camera.x, rect.y + App->render->camera.y, rect.w, rect.h });
 
 			text->update();
 
@@ -1429,13 +1423,32 @@ void UI_Text_Input::MoveCursor()
 		{
 			if (i == bar_pos - 1)
 			{
-				bar_x = *it;
+				bar_x = *it + text_offset;
 				break;
 			}
 		}
 	}
+	else if (text_offset != 0)
+	{
+		bar_x -= words_lenght.front();
+	}
 	else
 		bar_x = 0;
+}
+
+void UI_Text_Input::MoveTextView()
+{
+	if (bar_x > rect.w && bar_x > 0)
+	{
+		text->rect.x -= (bar_x - rect.w);
+		text_offset -= (bar_x - rect.w);
+	}
+
+	if (bar_x <= 0 && text_offset != 0)
+	{
+		text->rect.x -= (bar_x);
+		text_offset -= (bar_x);
+	}
 }
 
 void UI_Text_Input::UpdateWordsLenght(string l_text)
@@ -1614,7 +1627,8 @@ bool UI_Scroll_Bar::update()
 	}
 
 	// Viewport -----------
-	App->render->SetViewPort({ rect.x + App->render->camera.x, rect.y + App->render->camera.y, rect.x + rect.w + App->render->camera.x, rect.h});
+	App->render->SetViewPort({ rect.x + App->render->camera.x, rect.y + App->render->camera.y, rect.w, rect.h});
+	//  rect.x + rect.w + App->render->camera.x
 
 	for (list<scroll_element>::iterator it = elements.begin(); it != elements.end(); it++)
 		(*it).element->update();
@@ -1643,6 +1657,8 @@ bool UI_Scroll_Bar::update()
 
 bool UI_Scroll_Bar::cleanup()
 {
+	ClearElements();
+
 	return true;
 }
 
