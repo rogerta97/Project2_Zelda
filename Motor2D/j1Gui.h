@@ -350,12 +350,15 @@ private:
 
 	bool TakeInput();
 	bool Delete();
-	void MoveCursor();
-	void MoveTextView();
-	void UpdateWordsLenght(string l_text);
-	void DrawBar();
+	bool MoveCursor();
+
+	void SetBarPos(string text);	
+	int  GetTextSize(string text);
 	void SetPasword();
-	void SetCursorToEnd();
+	void ChangeTextInput();
+
+	void DrawBar();
+	void DinamicViewport();
 
 public:
 	string	     intern_text;
@@ -369,16 +372,14 @@ private:
 	SDL_Rect	 bar = NULLRECT;
 	uint		 bar_pos = 0;
 	int	     	 bar_x = 0;
+	int          text_offset = 0;
 
-	list<int>	 words_lenght;
-
+	// Camera
 	SDL_Rect     camera_before = NULLRECT;
 
 	// Change text manually
 	string       text_change;
 	bool         change = false;
-
-	int          text_offset = 0;
 };
 
 // ------------------------

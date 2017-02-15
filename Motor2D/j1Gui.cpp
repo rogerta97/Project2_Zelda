@@ -1278,39 +1278,28 @@ bool UI_Text_Input::update()
 	{
 		SetIsActive();
 
-		// Text setup
-		//if (intern_text.Length() == 0 && !active)
-		//	text->SetText("Insert Text");
+		if (intern_text.size() == 0 && active)
+		text->SetText("");
 
 		// Manuall change text
-		if (change)
-		{
-			text->SetText(text_change);
-			intern_text = text_change.c_str();
-			UpdateWordsLenght(intern_text);
-			SetCursorToEnd();
-			change = false;
-		}
-		// Set empty text
-		else if (intern_text.size() == 0 && active)
-			text->SetText("");
+		ChangeTextInput();
 
 		// Input
 		if (active)
 		{
 			// Take and print input
-			if (TakeInput() || Delete())
+			if (TakeInput() || Delete() || MoveCursor())
 			{
 				// Update words position list
 				if(!pasword)
-					UpdateWordsLenght(intern_text);
+					SetBarPos(intern_text.substr(0, bar_pos));
 				else
 					SetPasword();
+
+				LOG("%d %s %d", bar_pos, intern_text.substr(0, bar_pos).c_str(), text_offset);
 			}
 
 			// Move cursor
-			MoveCursor();
-			MoveTextView();
 			DrawBar();
 		}
 
@@ -1322,6 +1311,7 @@ bool UI_Text_Input::update()
 		App->render->ResetViewPort();
 		// --------------------
 
+		// Camera
 		if (camera_before.x != App->render->camera.x)
 		{
 			text->rect.x += camera_before.x - App->render->camera.x;
@@ -1344,7 +1334,6 @@ bool UI_Text_Input::cleanup()
 	return true;
 }
 
-
 void UI_Text_Input::SetTextInput(string text)
 {
 	text_change = text;
@@ -1359,8 +1348,11 @@ bool UI_Text_Input::TakeInput()
 	{
 		intern_text.insert(bar_pos, App->input->input_text.c_str());
 
+		// Set new text
 		text->SetText(intern_text);
-		App->input->input_text.clear(); // Clean input
+
+		// Clean input
+		App->input->input_text.clear(); 
 
 		// Increase bar positon
 		bar_pos++;
@@ -1379,6 +1371,23 @@ bool UI_Text_Input::Delete()
 	{
 		if (intern_text.size() > 0 && bar_pos > 0)
 		{
+			// Dynamic movement
+			if (text_offset < 0)
+			{
+				int to_erase = GetTextSize(intern_text.substr(bar_pos - 1, 1));
+				if (text_offset + to_erase > 0)
+				{
+					text_offset = 0;
+					text->rect.x = 0;
+				}
+				else
+				{
+					text_offset += to_erase;
+					text->rect.x += to_erase;
+				}
+			}
+			// ---------------
+
 			intern_text.erase(bar_pos-1, 1);
 			bar_pos--;
 
@@ -1391,6 +1400,23 @@ bool UI_Text_Input::Delete()
 	{
 		if (intern_text.size() > 0 && bar_pos < intern_text.size())
 		{
+			// Dynamic movement
+			if (text_offset < 0)
+			{
+				int to_erase = GetTextSize(intern_text.substr(bar_pos, 1));
+				if (text_offset + to_erase > 0)
+				{
+					text_offset = 0;
+					text->rect.x = 0;
+				}
+				else
+				{
+					text_offset += to_erase;
+					text->rect.x += to_erase;
+				}
+			}
+			// ---------------
+
 			intern_text.erase(bar_pos, 1);
 
 			text->SetText(intern_text);
@@ -1402,73 +1428,50 @@ bool UI_Text_Input::Delete()
 	return ret;
 }
 
-void UI_Text_Input::MoveCursor()
+bool UI_Text_Input::MoveCursor()
 {
+	bool ret = false;
+
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		if (bar_pos > 0)
+		{
 			bar_pos--;
+			ret = true;
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		if(bar_pos < intern_text.size())
-			bar_pos++;
-	}
-
-	if (bar_pos != 0)
-	{
-		int i = 0;
-		for (list<int>::iterator it = words_lenght.begin(); it != words_lenght.end(); it++, i++)
+		if (bar_pos < intern_text.size())
 		{
-			if (i == bar_pos - 1)
-			{
-				bar_x = *it + text_offset;
-				break;
-			}
+			bar_pos++;
+			ret = true;
 		}
 	}
-	else if (text_offset != 0)
-	{
-		bar_x -= words_lenght.front();
-	}
-	else
-		bar_x = 0;
+
+	return ret;
 }
 
-void UI_Text_Input::MoveTextView()
+void UI_Text_Input::SetBarPos(string _text)
 {
-	if (bar_x > rect.w && bar_x > 0)
-	{
-		text->rect.x -= (bar_x - rect.w);
-		text_offset -= (bar_x - rect.w);
-	}
+	int width, height;
+	App->font->CalcSize(_text.c_str(), width, height, text->font);
+	bar_x = width + text_offset;
 
-	if (bar_x <= 0 && text_offset != 0)
-	{
-		text->rect.x -= (bar_x);
-		text_offset -= (bar_x);
-	}
+	DinamicViewport();
+
+	bar_x = width + text_offset;
 }
 
-void UI_Text_Input::UpdateWordsLenght(string l_text)
+int UI_Text_Input::GetTextSize(string _text)
 {
-	words_lenght.clear();
+	int width, height;
+	App->font->CalcSize(_text.c_str(), width, height, text->font);
 
-	int acumulated = 0;
-	for (uint i = 0; i < intern_text.size(); i++)
-	{
-		string word; word = intern_text[i];
-		int x = 0, y = 0;
-		App->font->CalcSize(word.c_str(), x, y, text->font);
-
-		if (TextCmp(word.c_str(), "f") || TextCmp(word.c_str(), "j"))
-			x--;
-
-		acumulated += x;
-		words_lenght.push_back(acumulated);
-	}
+	return width;
 }
+
 
 void UI_Text_Input::DrawBar()
 {
@@ -1476,6 +1479,23 @@ void UI_Text_Input::DrawBar()
 	bar.y = rect.y;
 
 	App->render->DrawQuad(bar, color.r, color.g, color.b, color.a, true);
+}
+
+void UI_Text_Input::DinamicViewport()
+{
+	// Right
+	if (bar_x > rect.w)
+	{
+		text_offset -= bar_x - rect.w;
+		text->rect.x -= bar_x - rect.w;
+	}
+
+	// Left
+	if (bar_pos >= 0 && text_offset < 0 && bar_x <= 0)
+	{
+		text_offset -= bar_x;
+		text->rect.x -= bar_x;
+	}
 }
 
 void UI_Text_Input::SetPasword()
@@ -1486,24 +1506,20 @@ void UI_Text_Input::SetPasword()
 
 	text->SetText(tmp);
 
-	UpdateWordsLenght(tmp);
+	SetBarPos(tmp);
 }
 
-void UI_Text_Input::SetCursorToEnd()
+void UI_Text_Input::ChangeTextInput()
 {
-	bar_pos = words_lenght.size();
-	
-	if (bar_pos != 0)
+	if (change)
 	{
-		int i = 0;
-		for (list<int>::iterator it = words_lenght.begin(); it != words_lenght.end(); it++, i++)
-		{
-			if(i = bar_pos - 1)
-			bar_x = *it;
-		}
+		text->SetText(text_change);
+		intern_text = text_change.c_str();
+		SetBarPos(intern_text);
+		bar_pos = intern_text.size();
+		change = false;
 	}
 }
-
 
 void UI_Text_Input::Clear()
 {
@@ -1511,8 +1527,6 @@ void UI_Text_Input::Clear()
 
 	bar_pos = 0;
 	bar_x = 0;
-
-	words_lenght.clear();
 }
 
 
