@@ -1296,7 +1296,7 @@ bool UI_Text_Input::update()
 				else
 					SetPasword();
 
-				LOG("%d %s %d", bar_pos, intern_text.substr(0, bar_pos).c_str(), text_offset);
+				//LOG("%d %s %d", bar_pos, intern_text.substr(0, bar_pos).c_str(), text_offset);
 			}
 
 			// Move cursor
