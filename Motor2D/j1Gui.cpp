@@ -1122,14 +1122,19 @@ void UI_Text::SetText(string _text)
 		tex_str_list.push_back(ts);
 	}
 }
-const char* UI_Text::GetText()
+string UI_Text::GetText()
 {
 	string ret;
 
+	int acumulated = 0;
 	for (list<tex_str>::iterator it = tex_str_list.begin(); it != tex_str_list.end(); it++)
-		ret.insert(ret.size(), (*it).text.c_str());
+	{
+		ret.insert(acumulated, (*it).text.c_str());
+		acumulated += (*it).text.size() + 1;
+	}
+	ret[acumulated] = '\0';
 
-	return ret.c_str();
+	return ret;
 }
 
 bool UI_Text::update()

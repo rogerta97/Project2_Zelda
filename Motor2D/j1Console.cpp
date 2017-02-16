@@ -524,7 +524,6 @@ void j1Console::FastCommands()
 						if (currentLabel != index)
 						{
 							text_input->SetTextInput((*entry)->GetText());
-							LOG("%s", (*entry)->GetText());
 							currentLabel = index;
 							break;
 						}

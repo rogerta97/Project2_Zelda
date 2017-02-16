@@ -291,7 +291,7 @@ public:
 
 	void Set(iPoint pos, _TTF_Font* font, int spacing,  uint r = 255, uint g = 255, uint b = 255);
 	void SetText(string text);
-	const char* GetText();
+	string GetText();
 
 public:
 	list<tex_str>          tex_str_list;  
