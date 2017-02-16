@@ -67,6 +67,12 @@ public:
 	void SetViews(uint number);
 	uint GetViews();
 
+	void OnCommand(std::list<std::string>& tokens);
+
+	void OnCVar(std::list<std::string>& tokens);
+
+	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
+
 private:
 	// Blit in the layer order
 	void DoLayerBlit();

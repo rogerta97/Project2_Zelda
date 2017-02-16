@@ -1,9 +1,11 @@
 #include "j1Viewports.h"
 #include "j1Window.h"
 #include "j1Input.h"
+#include "j1Console.h"
 
 j1Viewports::j1Viewports()
 {
+	name = "viewports";
 }
 
 j1Viewports::~j1Viewports()
@@ -24,6 +26,8 @@ bool j1Viewports::Start()
 	number_of_views = 1;
 
 	App->win->GetWindowSize(win_w, win_h);
+
+	App->console->AddCVar("viewports.set", this, "Set the number of viewports on screen (1, 2, 4)");
 
 	return ret;
 }
@@ -84,6 +88,10 @@ void j1Viewports::SetViews(uint number)
 uint j1Viewports::GetViews()
 {
 	return number_of_views;
+}
+
+void j1Viewports::OnCommand(std::list<std::string>& tokens)
+{
 }
 
 void j1Viewports::DoLayerBlit()
@@ -168,5 +176,32 @@ void j1Viewports::DoLayerBlit()
 		break;
 		}
 	}
+}
+
+void j1Viewports::OnCVar(std::list<std::string>& tokens)
+{
+	if (tokens.front() == "viewports.set")
+	{
+		list<string>::iterator it = tokens.begin();
+		it++;
+		float value = atof((*it).c_str());
+		SetViews(value);
+
+		if (value > 0 && value < 5 && value != 3)
+		{
+			string output("Number of set viewports to: ");
+			output.insert(output.size(), *it);
+			App->console->AddText(output.c_str(), Output);
+		}
+		else
+		{
+			string output("Error: It's only possible to set 1, 2 and 4 viewports");
+			App->console->AddText(output.c_str(), Error);
+		}
+	}
+}
+
+void j1Viewports::SaveCVar(std::string & cvar_name, pugi::xml_node & node) const
+{
 }
 

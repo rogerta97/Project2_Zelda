@@ -20,7 +20,7 @@
 #define SCROLL_BUTTON_SIZE 15
 #define MAX_LABELS 40
 
-#define CONSOLE_COLOR_1 { 30, 30, 30, 155 }
+#define CONSOLE_COLOR_1 { 30, 30, 30, 195 }
 #define CONSOLE_COLOR_2 {60, 60, 60, 255}
 
 // -------------------------------------------------
