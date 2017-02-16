@@ -64,6 +64,9 @@ public:
 
 	// Blit choosing the layer
 	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, float scale = -1.0f, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
+	void LayerDrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera = true) const;
+	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
+	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 	void SetViews(uint number);
 	uint GetViews();
 
@@ -92,6 +95,14 @@ private:
 
 	// Views
 	uint				 number_of_views = 0;
+
+	SDL_Rect			 view2_1 = NULLRECT;
+	SDL_Rect			 view2_2 = NULLRECT;
+
+	SDL_Rect			 view4_1 = NULLRECT;
+	SDL_Rect			 view4_2 = NULLRECT;
+	SDL_Rect			 view4_3 = NULLRECT;
+	SDL_Rect			 view4_4 = NULLRECT;
 
 };
 
