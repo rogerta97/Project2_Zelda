@@ -54,7 +54,7 @@ bool j1Viewports::Update(float dt)
 	bool ret = true;
 
 	// Blit different layers
-	DoLayerBlit();
+	DoLayerPrint();
 	// ---------------------
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -100,221 +100,177 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 	layer_list.Push(lblit, layer);
 }
 
-void j1Viewports::LayerDrawQuad(const SDL_Rect & rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
+void j1Viewports::LayerDrawQuad(const SDL_Rect & rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera)
 {
-	switch (number_of_views)
-	{
-	case 1:
-	{
-		App->render->DrawQuad({ rect.x + camera1.x, rect.y + camera1.x, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-	}
-	break;
-	case 2:
-	{
-		App->render->SetViewPort(view2_1);
-
-		App->render->DrawQuad({ rect.x + camera1.x, rect.y + camera1.y, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-
-		App->render->SetViewPort(view2_2);
-
-		App->render->DrawQuad({ rect.x + camera2.x, rect.y + camera2.y, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-
-		App->render->ResetViewPort();
-	}
-	break;
-	case 4:
-	{
-		App->render->SetViewPort(view4_1);
-
-		App->render->DrawQuad({ rect.x + camera1.x, rect.y + camera1.y, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-
-		App->render->SetViewPort(view4_2);
-
-		App->render->DrawQuad({ rect.x + camera2.x, rect.y + camera2.y, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-
-		App->render->SetViewPort(view4_3);
-
-		App->render->DrawQuad({ rect.x + camera3.x, rect.y + camera3.y, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-
-		App->render->SetViewPort(view4_4);
-
-		App->render->DrawQuad({ rect.x + camera4.x, rect.y + camera4.y, rect.w, rect.h }, r, g, b, a, filled, use_camera);
-
-		App->render->ResetViewPort();
-	}
-	break;
-
-	}
+	layer_quad q(rect, r, g, b, a, filled, use_camera);
+	quad_list.push_back(q);
 }
 
-void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
-	switch (number_of_views)
-	{
-	case 1:
-	{
-		App->render->DrawLine(x1 + camera1.x, y1 + camera1.y, x2 + camera1.x, y2 + camera1.y, r, g, b, a, use_camera);
-	}
-	break;
-	case 2:
-	{
-		App->render->SetViewPort(view2_1);
-
-		App->render->DrawLine(x1 + camera1.x, y1 + camera1.y, x2 + camera1.x, y2 + camera1.y, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view2_2);
-
-		App->render->DrawLine(x1 + camera2.x, y1 + camera2.y, x2 + camera2.x, y2 + camera2.y, r, g, b, a, use_camera);
-
-		App->render->ResetViewPort();
-	}
-	break;
-	case 4:
-	{
-		App->render->SetViewPort(view4_1);
-
-		App->render->DrawLine(x1 + camera1.x, y1 + camera1.y, x2 + camera1.x, y2 + camera1.y, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view4_2);
-
-		App->render->DrawLine(x1 + camera2.x, y1 + camera2.y, x2 + camera2.x, y2 + camera2.y, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view4_3);
-
-		App->render->DrawLine(x1 + camera3.x, y1 + camera3.y, x2 + camera3.x, y2 + camera3.y, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view4_4);
-
-		App->render->DrawLine(x1 + camera4.x, y1 + camera4.y, x2 + camera4.x, y2 + camera4.y, r, g, b, a, use_camera);
-
-		App->render->ResetViewPort();
-	}
-	break;
-
-	}
+	layer_line l(x1, y1, x2, y2, r, g, b, a, use_camera);
+	line_list.push_back(l);
 }
 
-void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
-	switch (number_of_views)
-	{
-	case 1:
-	{
-		App->render->DrawCircle(x1 + camera1.x, y1 + camera1.y, redius, r, g, b, a, use_camera);
-	}
-	break;
-	case 2:
-	{
-		App->render->SetViewPort(view2_1);
-
-		App->render->DrawCircle(x1 + camera1.x, y1 + camera1.y, redius, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view2_2);
-
-		App->render->DrawCircle(x1 + camera2.x, y1 + camera2.y, redius, r, g, b, a, use_camera);
-
-		App->render->ResetViewPort();
-	}
-	break;
-	case 4:
-	{
-		App->render->SetViewPort(view4_1);
-
-		App->render->DrawCircle(x1 + camera1.x, y1 + camera1.y, redius, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view4_2);
-
-		App->render->DrawCircle(x1 + camera2.x, y1 + camera2.y, redius, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view4_3);
-
-		App->render->DrawCircle(x1 + camera3.x, y1 + camera3.y, redius, r, g, b, a, use_camera);
-
-		App->render->SetViewPort(view4_4);
-
-		App->render->DrawCircle(x1 + camera4.x, y1 + camera4.y, redius, r, g, b, a, use_camera);
-
-		App->render->ResetViewPort();
-	}
-	break;
-
-	}
+	layer_circle c(x1, y1, redius, r, g, b, a, use_camera);
+	circle_list.push_back(c);
 }
 
-void j1Viewports::DoLayerBlit()
+void j1Viewports::DoLayerPrint()
 {
+	vector<layer_blit> blit;
 	while (layer_list.Count() > 0)
 	{
 		layer_blit current;
 		layer_list.Pop(current);
+		blit.push_back(current);
+	}
 
 		// Viewports
 		
 		switch (number_of_views)
 		{
-		case 1:
-		{
-			App->render->Blit(current.texture, current.pos.x + camera1.x, current.pos.y + camera1.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-		}
-		break;
-		case 2:
-		{
-			if (App->debug_mode)
+			case 1:
+			{
+				for(int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera1.x, blit.at(i).pos.y + camera1.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+		
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera1.x, quad_list.at(i).rect.y + camera1.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+			
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera1.x, line_list.at(i).y1 + camera1.y, line_list.at(i).x2 + camera1.x, line_list.at(i).y2 + camera1.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera1.x, circle_list.at(i).y1 + camera1.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+			}
+			break;
+			case 2:
+			{
+				if (App->debug_mode)
+				{
+					// Debug
+					App->render->DrawQuad(view2_1, 255, 0, 0, 100);
+					App->render->DrawQuad(view2_2, 0, 255, 0, 100);
+				}
+
+				// View 1
+				App->render->SetViewPort(view2_1);
+
+				for (int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera1.x, blit.at(i).pos.y + camera1.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera1.x, quad_list.at(i).rect.y + camera1.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera1.x, line_list.at(i).y1 + camera1.y, line_list.at(i).x2 + camera1.x, line_list.at(i).y2 + camera1.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera1.x, circle_list.at(i).y1 + camera1.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+				// View 2
+				App->render->SetViewPort(view2_2);
+
+				for (int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera2.x, blit.at(i).pos.y + camera2.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera2.x, quad_list.at(i).rect.y + camera2.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera2.x, line_list.at(i).y1 + camera2.y, line_list.at(i).x2 + camera2.x, line_list.at(i).y2 + camera2.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera2.x, circle_list.at(i).y1 + camera2.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+				App->render->ResetViewPort();
+			}
+			break;
+			case 4:
 			{
 				// Debug
-				App->render->DrawQuad(view2_1, 255, 0, 0, 100);
-				App->render->DrawQuad(view2_2, 0, 255, 0, 100);
+				if (App->debug_mode)
+				{
+					App->render->DrawQuad(view4_1, 255, 0, 0, 100);
+					App->render->DrawQuad(view4_2, 0, 255, 0, 100);
+					App->render->DrawQuad(view4_3, 0, 0, 255, 100);
+					App->render->DrawQuad(view4_4, 255, 0, 255, 100);
+				}
+
+				// View 1
+				App->render->SetViewPort(view4_1);
+
+				for (int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera1.x, blit.at(i).pos.y + camera1.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera1.x, quad_list.at(i).rect.y + camera1.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera1.x, line_list.at(i).y1 + camera1.y, line_list.at(i).x2 + camera1.x, line_list.at(i).y2 + camera1.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera1.x, circle_list.at(i).y1 + camera1.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+
+				// View 2
+				App->render->SetViewPort(view4_2);
+
+				for (int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera2.x, blit.at(i).pos.y + camera2.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera2.x, quad_list.at(i).rect.y + camera2.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera2.x, line_list.at(i).y1 + camera2.y, line_list.at(i).x2 + camera2.x, line_list.at(i).y2 + camera2.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera2.x, circle_list.at(i).y1 + camera2.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+				// View 3
+				App->render->SetViewPort(view4_3);
+
+				for (int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera3.x, blit.at(i).pos.y + camera3.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera3.x, quad_list.at(i).rect.y + camera3.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera3.x, line_list.at(i).y1 + camera3.y, line_list.at(i).x2 + camera3.x, line_list.at(i).y2 + camera3.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera3.x, circle_list.at(i).y1 + camera3.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+				// View 4
+				App->render->SetViewPort(view4_4);
+
+				for (int i = 0; i < blit.size(); i++)
+					App->render->Blit(blit.at(i).texture, blit.at(i).pos.x + camera4.x, blit.at(i).pos.y + camera4.y, &blit.at(i).section, blit.at(i).scale, blit.at(i).flip, blit.at(i).angle, blit.at(i).pivot_x, blit.at(i).pivot_y);
+
+				for (int i = 0; i < quad_list.size(); i++)
+					App->render->DrawQuad({ quad_list.at(i).rect.x + camera4.x, quad_list.at(i).rect.y + camera4.y, quad_list.at(i).rect.w, quad_list.at(i).rect.h }, quad_list.at(i).r, quad_list.at(i).g, quad_list.at(i).b, quad_list.at(i).a, quad_list.at(i).filled, quad_list.at(i).use_camera);
+
+				for (int i = 0; i < line_list.size(); i++)
+					App->render->DrawLine(line_list.at(i).x1 + camera4.x, line_list.at(i).y1 + camera4.y, line_list.at(i).x2 + camera4.x, line_list.at(i).y2 + camera4.y, line_list.at(i).r, line_list.at(i).g, line_list.at(i).b, line_list.at(i).a, line_list.at(i).use_camera);
+
+				for (int i = 0; i < circle_list.size(); i++)
+					App->render->DrawCircle(circle_list.at(i).x1 + camera4.x, circle_list.at(i).y1 + camera4.y, circle_list.at(i).redius, circle_list.at(i).r, circle_list.at(i).g, circle_list.at(i).b, circle_list.at(i).a, circle_list.at(i).use_camera);
+
+				App->render->ResetViewPort();
 			}
-
-			// View 1
-			App->render->SetViewPort(view2_1);
-
-			App->render->Blit(current.texture, current.pos.x + camera1.x, current.pos.y + camera1.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-
-			// View 2
-			App->render->SetViewPort(view2_2);
-
-			App->render->Blit(current.texture, current.pos.x + camera2.x, current.pos.y + camera2.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-
-			App->render->ResetViewPort();
+			break;
 		}
-		break;
-		case 4:
-		{
-			// Debug
-			if (App->debug_mode)
-			{
-				App->render->DrawQuad(view4_1, 255, 0, 0, 100);
-				App->render->DrawQuad(view4_2, 0, 255, 0, 100);
-				App->render->DrawQuad(view4_3, 0, 0, 255, 100);
-				App->render->DrawQuad(view4_4, 255, 0, 255, 100);
-			}
 
-			// View 1
-			App->render->SetViewPort(view4_1);
-
-			App->render->Blit(current.texture, current.pos.x + camera1.x, current.pos.y + camera1.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-
-			// View 2
-			App->render->SetViewPort(view4_2);
-
-			App->render->Blit(current.texture, current.pos.x + camera2.x, current.pos.y + camera2.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-
-			// View 3
-			App->render->SetViewPort(view4_3);
-
-			App->render->Blit(current.texture, current.pos.x + camera3.x, current.pos.y + camera3.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-
-			// View 4
-			App->render->SetViewPort(view4_4);
-
-			App->render->Blit(current.texture, current.pos.x + camera4.x, current.pos.y + camera4.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-
-			App->render->ResetViewPort();
-		}
-		break;
-		}
-	}
+		blit.clear();
+		quad_list.clear();
+		line_list.clear();
+		circle_list.clear();
 }
 
 void j1Viewports::OnCommand(std::list<std::string>& tokens)
