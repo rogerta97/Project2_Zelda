@@ -47,21 +47,21 @@ bool j1Console::Start()
 	
 	App->win->GetWindowSize(win_w, win_h);
 
-	window = (UI_Window*)App->gui->UI_CreateWin(iPoint(App->render->camera.x, App->render->camera.y),win_w, win_h/3, 2);
+	window = App->gui->UI_CreateWin(iPoint(App->render->camera.x, App->render->camera.y),win_w, win_h/3, 2);
 
-	console_background = (UI_ColoredRect*)window->CreateColoredRect(iPoint(window->rect.x, window->rect.y), window->rect.w, window->rect.h, CONSOLE_COLOR_1);
-	console_background2 = (UI_ColoredRect*)window->CreateColoredRect(iPoint(window->rect.x + FRAMES_SIZE, window->rect.y + TOP_FRAME_SIZE), window->rect.x + window->rect.w - (FRAMES_SIZE * 2) - 15, win_h / 3 - FRAMES_SIZE - TOP_FRAME_SIZE, CONSOLE_COLOR_1);
+	console_background = window->CreateColoredRect(iPoint(window->rect.x, window->rect.y), window->rect.w, window->rect.h, CONSOLE_COLOR_1);
+	console_background2 = window->CreateColoredRect(iPoint(window->rect.x + FRAMES_SIZE, window->rect.y + TOP_FRAME_SIZE), window->rect.x + window->rect.w - (FRAMES_SIZE * 2) - 15, win_h / 3 - FRAMES_SIZE - TOP_FRAME_SIZE, CONSOLE_COLOR_1);
 
-	scroll = (UI_Scroll_Bar*)window->CreateScrollBar(iPoint(window->rect.x + FRAMES_SIZE, window->rect.y + TOP_FRAME_SIZE), window->rect.x + window->rect.w - (FRAMES_SIZE * 2) - 15, win_h / 3 - FRAMES_SIZE - TOP_FRAME_SIZE, SCROLL_BUTTON_SIZE);
+	scroll = window->CreateScrollBar(iPoint(window->rect.x + FRAMES_SIZE, window->rect.y + TOP_FRAME_SIZE), window->rect.x + window->rect.w - (FRAMES_SIZE * 2) - 15, win_h / 3 - FRAMES_SIZE - TOP_FRAME_SIZE, SCROLL_BUTTON_SIZE);
 
-	button_v_background = (UI_ColoredRect*)window->CreateColoredRect(iPoint(scroll->button_v->rect.x, scroll->min_bar_v), scroll->button_v->rect.w, scroll->rect.h, CONSOLE_COLOR_2);
+	button_v_background = window->CreateColoredRect(iPoint(scroll->button_v->rect.x, scroll->min_bar_v), scroll->button_v->rect.w, scroll->rect.h, CONSOLE_COLOR_2);
 	button_v_background->click_through = true;
-	button_h_background = (UI_ColoredRect*)window->CreateColoredRect(iPoint(scroll->button_v->rect.x, scroll->button_v->rect.y), scroll->button_v->rect.w, scroll->button_v->rect.h, CONSOLE_COLOR_2);
+	button_h_background = window->CreateColoredRect(iPoint(scroll->button_v->rect.x, scroll->button_v->rect.y), scroll->button_v->rect.w, scroll->button_v->rect.h, CONSOLE_COLOR_2);
 	button_h_background->click_through = true;
 
-	input_background = (UI_ColoredRect*)window->CreateColoredRect(iPoint(window->rect.x, scroll->rect.y + scroll->rect.h + FRAMES_SIZE), window->rect.w, FRAMES_SIZE * 2.5f, CONSOLE_COLOR_1);
-	text_input = (UI_Text_Input*)window->CreateTextInput(iPoint(window->rect.x + FRAMES_SIZE * 1.5f, scroll->rect.y + scroll->rect.h + (FRAMES_SIZE*1.5f)), window->rect.w - FRAMES_SIZE * 4, App->font->default_15);
-	input_mark = (UI_Text*)window->CreateText(iPoint(10, scroll->rect.y + scroll->rect.h + (FRAMES_SIZE*1.5f)), App->font->default_15);
+	input_background = window->CreateColoredRect(iPoint(window->rect.x, scroll->rect.y + scroll->rect.h + FRAMES_SIZE), window->rect.w, FRAMES_SIZE * 2.5f, CONSOLE_COLOR_1);
+	text_input = window->CreateTextInput(iPoint(window->rect.x + FRAMES_SIZE * 1.5f, scroll->rect.y + scroll->rect.h + (FRAMES_SIZE*1.5f)), window->rect.w - FRAMES_SIZE * 4, App->font->default_15);
+	input_mark = window->CreateText(iPoint(10, scroll->rect.y + scroll->rect.h + (FRAMES_SIZE*1.5f)), App->font->default_15);
 	input_mark->SetText(">");
 
 	window->SetEnabledAndChilds(false);
