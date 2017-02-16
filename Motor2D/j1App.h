@@ -27,6 +27,7 @@ class j1Gui;
 class j1Console;
 class j1Physics;
 class j1Entity;
+class j1Viewports;
 
 class j1App
 {
@@ -114,6 +115,7 @@ public:
 	j1Console*			console = NULL;
 	j1Physics*			physics = NULL;
 	j1Entity*			entity = NULL;
+	j1Viewports*        view = NULL;
 
 	// Console logs
 	list<string>        logs;

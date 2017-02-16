@@ -10,6 +10,7 @@
 #include "MainScene.h"
 #include "j1Console.h"
 
+#define NUMBER_OF_PLAYERS 4
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -71,10 +72,6 @@ bool j1Scene::Update(float dt)
 
 	if (current_scene != nullptr)
 		ret = current_scene->Update(dt);
-
-	// Blit different layers
-	DoLayerBlit();
-	// ---------------------
 	
 	return ret;
 }
@@ -115,11 +112,6 @@ void j1Scene::ChangeScene(Scene * new_scene)
 	current_scene->Start();
 }
 
-void j1Scene::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, float scale, SDL_RendererFlip flip, double angle, int pivot_x, int pivot_y)
-{
-	layer_blit lblit(texture, pos, section, scale, flip, angle, pivot_x, pivot_y);
-	layer_list.Push(lblit, layer);
-}
 
 void j1Scene::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
@@ -127,13 +119,5 @@ void j1Scene::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtur
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
 }
 
-void j1Scene::DoLayerBlit()
-{
-	while(layer_list.Count() > 0)
-	{
-		layer_blit current;
-		layer_list.Pop(current);
-		App->render->Blit(current.texture, current.pos.x, current.pos.y, &current.section, current.scale, current.flip, current.angle, current.pivot_x, current.pivot_y);
-	}
-}
+
 

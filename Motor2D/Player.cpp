@@ -9,6 +9,7 @@
 #include "Functions.h"
 #include "j1Textures.h"
 #include "p2Log.h"
+#include "j1Viewports.h"
 
 
 Player::Player()
@@ -152,9 +153,9 @@ bool Player::Draw(float dt)
 	}
 	
 	if(flip)
-		App->scene->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 46, player_go->GetPos().y - 25}, player_go->GetCurrentAnimationRect(dt), -1.0f, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 46, player_go->GetPos().y - 25}, player_go->GetCurrentAnimationRect(dt), -1.0f, SDL_FLIP_HORIZONTAL);
 	else
-		App->scene->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 30, player_go->GetPos().y - 25 }, player_go->GetCurrentAnimationRect(dt), -1.0f, SDL_FLIP_NONE);
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 30, player_go->GetPos().y - 25 }, player_go->GetCurrentAnimationRect(dt), -1.0f, SDL_FLIP_NONE);
 
 	return ret;
 }

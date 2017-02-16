@@ -79,6 +79,9 @@
     <ClCompile Include="Parallax.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="j1Viewports.cpp">
+      <Filter>Engine\1. Modules =========</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -188,6 +191,9 @@
     </ClInclude>
     <ClInclude Include="Parallax.h">
       <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Viewports.h">
+      <Filter>Engine\1. Modules =========</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

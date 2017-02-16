@@ -1,5 +1,6 @@
 #include "Parallax.h"
 #include "p2Log.h"
+#include "j1Viewports.h"
 
 #define CHUNKS 8
 
@@ -78,7 +79,7 @@ void Parallax::Update(float dt, fPoint target_pos)
 
 	// Print 
 	for (list<fPoint>::iterator it = chunks.begin(); it != chunks.end(); it++)
-		App->scene->LayerBlit(layer, texture, { (int)floor((*it).x), (int)floor((*it).y) }, rect);
+		App->view->LayerBlit(layer, texture, { (int)floor((*it).x), (int)floor((*it).y) }, rect);
 
 	target = target_pos;
 }
