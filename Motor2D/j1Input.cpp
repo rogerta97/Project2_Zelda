@@ -383,6 +383,7 @@ void j1Input::RemoveController(int id)
 		{
 			DisconectGamePad(id);
 			SDL_GameControllerClose((*it)->pad);
+			RELEASE(*it);
 			gamepads.erase(it);
 			connected_gamepads--;
 		}

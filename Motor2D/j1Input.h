@@ -94,7 +94,7 @@ public:
 	// Return GameController button state
 	j1KeyState GetControllerButton(int pad, int id) const;
 
-	// Return the motion value (form 0 t0 32767) for a joystick direction
+	// Return the motion value (form 0 to 32767) for a joystick direction
 	uint GetControllerJoystickMove(int pad, int id) const;
 
 	// Check if a certain window event happened
