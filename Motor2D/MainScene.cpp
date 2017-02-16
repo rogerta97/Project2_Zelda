@@ -10,6 +10,7 @@
 #include "Parallax.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
+#include "Player.h"
 
 
 MainScene::MainScene()
@@ -30,8 +31,9 @@ bool MainScene::Start()
 	b->type = pbody_type::p_t_world;
 	b->listener = App->scene;
 
-	App->entity->CreateEntity(player);
-
+	test_player = (Player*)App->entity->CreateEntity(player);
+	test_player->SetGamePad(0);
+	
 	return ret;
 }
 

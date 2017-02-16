@@ -34,6 +34,8 @@ public:
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
+	void SetGamePad(int id);
+
 public:
 	GameObject* player_go = nullptr;
 
@@ -42,6 +44,9 @@ public:
 	bool going_up = false;
 
 	float last_height = 0.0f;
+
+private:
+	uint gamepad_num = 20;
 };
 
 #endif

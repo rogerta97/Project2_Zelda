@@ -2,6 +2,7 @@
 #define __j1INPUT_H__
 
 #include "j1Module.h"
+#include <vector>
 
 //#define NUM_KEYS 352
 #define NUM_MOUSE_BUTTONS 5
@@ -12,6 +13,21 @@
 
 struct SDL_Rect;
 struct _SDL_GameController;
+
+enum JOYSTICK_MOVES
+{
+	LEFTJOY_LEFT = 0,
+	LEFTJOY_RIGHT,
+	LEFTJOY_UP,
+	LEFTJOY_DOWN,
+	RIGHTJOY_LEFT,
+	RIGHTJOY_RIGHT,
+	RIGHTJOY_UP,
+	RIGHTJOY_DOWN,
+	LEFT_TRIGGER,
+	RIGHT_TRIGGER,
+	JOY_MOVES_NULL
+};
 
 enum j1EventWindow
 {
@@ -31,9 +47,11 @@ enum j1KeyState
 };
 
 struct GamePad {
-	j1KeyState	gamecontroller_buttons[NUM_CONTROLLER_BUTTONS];
-	int id = -1;
-	_SDL_GameController* pad = nullptr;
+	j1KeyState				gamecontroller_buttons[NUM_CONTROLLER_BUTTONS];
+	uint					joystick_moves[JOY_MOVES_NULL];
+	int						pad_num = -1;
+	int						id = -1;
+	_SDL_GameController*	pad = nullptr;
 };
 
 class j1Input : public j1Module
@@ -67,14 +85,17 @@ public:
 		return keyboard[id];
 	}
 
+	// Return mouse button state
 	j1KeyState GetMouseButtonDown(int id) const
 	{
 		return mouse_buttons[id - 1];
 	}
-	j1KeyState GetControllerButton(int pad, int id) const
-	{
-		return gamepads[pad].gamecontroller_buttons[id];
-	}
+
+	// Return GameController button state
+	j1KeyState GetControllerButton(int pad, int id) const;
+
+	// Return the motion value (form 0 t0 32767) for a joystick direction
+	uint GetControllerJoystickMove(int pad, int id) const;
 
 	// Check if a certain window event happened
 	bool GetWindowEvent(int code);
@@ -83,9 +104,21 @@ public:
 	void GetMousePosition(int &x, int &y);
 	void GetMouseMotion(int& x, int& y);
 
+private:
+
+	void AxisReaction(int pad, int axis, int value);
+	void AddController(int id);
+	void RemoveController(int id);
+
+	void ConnectGamePad(int instanceID);
+	void DisconectGamePad(int instanceID);
+
+public:
+
 	string		input_text;
 
 private:
+
 	bool		windowEvents[WE_COUNT];
 	j1KeyState*	keyboard = nullptr;
 	j1KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
@@ -94,8 +127,9 @@ private:
 	int			mouse_x = 0;
 	int			mouse_y = 0;
 
-	GamePad*	gamepads = nullptr;
+	std::vector<GamePad*>	gamepads;
 	int			connected_gamepads = 0;
+	int			gamepad_connected[MAX_GAMECONTROLLERS];
 };
 
 #endif // __j1INPUT_H__
