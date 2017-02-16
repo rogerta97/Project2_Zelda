@@ -7,6 +7,9 @@
 #define NUM_MOUSE_BUTTONS 5
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
+#define MAX_GAMECONTROLLERS 4
+#define NUM_CONTROLLER_BUTTONS 15
+
 struct SDL_Rect;
 
 enum j1EventWindow
@@ -61,6 +64,10 @@ public:
 	{
 		return mouse_buttons[id - 1];
 	}
+	j1KeyState GetControllerButton(int id) const
+	{
+		return gamecontroller_buttons[id];
+	}
 
 	// Check if a certain window event happened
 	bool GetWindowEvent(int code);
@@ -79,6 +86,8 @@ private:
 	int			mouse_motion_y = 0;
 	int			mouse_x = 0;
 	int			mouse_y = 0;
+
+	j1KeyState	gamecontroller_buttons[NUM_CONTROLLER_BUTTONS];
 };
 
 #endif // __j1INPUT_H__

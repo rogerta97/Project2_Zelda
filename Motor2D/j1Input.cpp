@@ -14,6 +14,7 @@ j1Input::j1Input() : j1Module()
 	keyboard = new j1KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(j1KeyState) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(j1KeyState) * NUM_MOUSE_BUTTONS);
+	memset(gamecontroller_buttons, KEY_IDLE, sizeof(j1KeyState) * NUM_MOUSE_BUTTONS);
 }
 
 // Destructor
@@ -40,6 +41,11 @@ bool j1Input::Awake(pugi::xml_node& config)
 		LOG("Error on SDL_Init");
 	// -----------------------------
 
+	// GameController --------------
+	if(SDL_Init(SDL_INIT_GAMECONTROLLER) != 0)
+		LOG("Error on SDL_Init");
+	// -----------------------------
+
 	return ret;
 }
 
@@ -48,6 +54,19 @@ bool j1Input::Start()
 {
 	LOG("Start module input");
 	SDL_StopTextInput();
+
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		if (SDL_IsGameController(i)) {
+			SDL_GameController *pad = SDL_GameControllerOpen(i);
+
+			if (pad) {
+				SDL_Joystick *joy = SDL_GameControllerGetJoystick(pad);
+				int instanceID = SDL_JoystickInstanceID(joy);
+				LOG("as");
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -83,6 +102,15 @@ bool j1Input::PreUpdate()
 
 		if(mouse_buttons[i] == KEY_UP)
 			mouse_buttons[i] = KEY_IDLE;
+	}
+
+	for (int i = 0; i < NUM_CONTROLLER_BUTTONS; ++i)
+	{
+		if (gamecontroller_buttons[i] == KEY_DOWN)
+			gamecontroller_buttons[i] = KEY_REPEAT;
+
+		if (gamecontroller_buttons[i] == KEY_UP)
+			gamecontroller_buttons[i] = KEY_IDLE;
 	}
 
 	// GUI -------------------------
@@ -145,7 +173,17 @@ bool j1Input::PreUpdate()
 				input_text.insert(input_text.size(), event.text.text);
 			}
 			break;
-
+			case SDL_CONTROLLERBUTTONDOWN:
+			{
+				gamecontroller_buttons[event.cbutton.button] = KEY_DOWN;
+			}
+			break;
+			break;
+			case SDL_CONTROLLERBUTTONUP:
+			{
+				gamecontroller_buttons[event.cbutton.button] = KEY_UP;
+			}
+			break;
 			// ------------------------
 		}
 	}

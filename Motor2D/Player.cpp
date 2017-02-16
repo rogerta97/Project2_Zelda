@@ -96,17 +96,17 @@ bool Player::Update(float dt)
 
 	float speed = (40 * dt);
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT)
 	{
 		player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
 		flip = true;
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT)
 	{
 		player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
 		flip = false;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && on_ground)
+	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetControllerButton(SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && on_ground)
 	{
 		player_go->pbody->body->SetLinearVelocity(b2Vec2(player_go->pbody->body->GetLinearVelocity().x, -10));
 	}
@@ -131,13 +131,13 @@ bool Player::Draw(float dt)
 	{
 		player_go->SetAnimation("idle");
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT)
 			player_go->SetAnimation("walk");
 
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT)
 			player_go->SetAnimation("walk");
 		
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetControllerButton(SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			on_ground = false;
 	}
 
