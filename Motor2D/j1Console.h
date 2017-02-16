@@ -115,7 +115,7 @@ private:
 	UI_ColoredRect*      button_v_background = nullptr;
 	
 
-	std::list<UI_Text*>::iterator currentLabel;
+	int currentLabel = -1;
 
 private:
 	void FastCommands();

@@ -203,6 +203,7 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 		else if ((*it) == "clear") {
 			scroll->ClearElements();
 			labels.clear();
+			currentLabel = -1;
 		}
 		break;
 	case 2:
@@ -438,7 +439,6 @@ void j1Console::AddText(const char * txt, ConsoleTextType type)
 				(*it).element->rect.y -= 20;
 			}
 		}
-		currentLabel = labels.end();
 	}
 }
 
@@ -504,57 +504,64 @@ void j1Console::FastCommands()
 		// Get last command from the commands used
 		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN)
 		{
-			if ((*currentLabel) == NULL)
-				currentLabel = labels.end();
+			if (currentLabel == -1)
+				currentLabel = labels.size()-1;
 
 			// iterator backwards does not work, must change, code crash
-			for (std::list<UI_Text*>::iterator entry = currentLabel; entry != labels.begin(); entry--)
+			int index = currentLabel;
+			std::list<UI_Text*>::iterator entry = labels.begin();
+			std::advance(entry, currentLabel);
+			for (; entry != labels.begin(); entry--)
 			{
-				if ((*entry)->color.r == 255 && (*entry)->color.g == 255 && (*entry)->color.b == 255 && (*entry)->color.a == 255)
+				if ((*entry)->color.r == 235 && (*entry)->color.g == 235 && (*entry)->color.b == 235 && (*entry)->color.a == 255)
 				{
 					if (labels.size() == 1)
 					{
 						text_input->SetTextInput((*entry)->GetText());
-						currentLabel = entry;
 					}
 					else
 					{
-						if (currentLabel != entry)
+						if (currentLabel != index)
 						{
 							text_input->SetTextInput((*entry)->GetText());
-							currentLabel = entry;
+							LOG("%s", (*entry)->GetText());
+							currentLabel = index;
 							break;
 						}
 					}
 				}
+				index--;
 			}
 		}
 
 		// Get first command from the commands used
 		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 		{
-			if ((*currentLabel) == NULL)
-				currentLabel = labels.begin();
+			if (currentLabel == -1)
+				currentLabel = 0;
 
-			for (std::list<UI_Text*>::iterator entry = currentLabel; entry != labels.end(); entry++)
+			int index = currentLabel;
+			std::list<UI_Text*>::iterator entry = labels.begin();
+			std::advance(entry, currentLabel);
+			for (; entry != labels.end(); entry++)
 			{
-				if ((*entry)->color.r == 255 && (*entry)->color.g == 255 && (*entry)->color.b == 255 && (*entry)->color.a == 255)
+				if ((*entry)->color.r == 235 && (*entry)->color.g == 235 && (*entry)->color.b == 235 && (*entry)->color.a == 255)
 				{
 					if (labels.size() == 1)
 					{
 						text_input->SetTextInput((*entry)->GetText());
-						currentLabel = entry;
 					}
 					else
 					{
-						if (currentLabel != entry)
+						if (currentLabel != index)
 						{
 							text_input->SetTextInput((*entry)->GetText());
-							currentLabel = entry;
+							currentLabel = index;
 							break;
 						}
 					}
 				}
+				index++;
 			}
 		}
 	}
