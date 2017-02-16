@@ -262,7 +262,33 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 			else
 				AddText("Invalid framerate", ConsoleTextType::Error);
 		}
-
+	case 3:
+		if ((*it) == "list") {
+			it++;
+			if ((*it) == "commands") {
+				it++;
+				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) {
+					if ((*item)->command_str.find((*it).c_str()) != std::string::npos) {
+						std::ostringstream oss;
+						oss << (*item)->command_str.c_str() << ": " << (*item)->help.c_str() << ".";
+						std::string command_text = oss.str();
+						AddText(command_text.c_str(), Output);
+					}
+				}
+			}
+			else if ((*it) == "cvars") {
+				it++;
+				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) {
+					if ((*item)->cvar_str.find((*it).c_str()) != std::string::npos) {
+						std::ostringstream oss;
+						oss << (*item)->cvar_str.c_str() << ": " << (*item)->help.c_str() << ".";
+						std::string cvar_text = oss.str();
+						AddText(cvar_text.c_str(), Output);
+					}
+				}
+			}
+		}
+		break;
 	default:
 		break;
 	}
