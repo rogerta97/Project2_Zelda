@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
 	<app framerate_cap="">
-		<title name="tonto el que lo lea" />
+		<title name="Project 2 - CatPad" />
 		<organization>UPC</organization>
 	</app>
 	<renderer>
@@ -27,4 +27,7 @@
 	<map>
 		<folder>maps/</folder>
 	</map>
+	<viewports>
+		<set />
+	</viewports>
 </config>
