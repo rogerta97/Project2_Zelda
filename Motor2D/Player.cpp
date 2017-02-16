@@ -97,12 +97,12 @@ bool Player::Update(float dt)
 
 	float speed = (40 * dt);
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_LEFT) > 10000)
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_LEFT) > 12000)
 	{
 		player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
 		flip = true;
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_RIGHT) > 10000)
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_RIGHT) > 12000)
 	{
 		player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
 		flip = false;
@@ -132,10 +132,10 @@ bool Player::Draw(float dt)
 	{
 		player_go->SetAnimation("idle");
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_LEFT) > 10000)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_LEFT) > 12000)
 			player_go->SetAnimation("walk");
 
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_RIGHT) > 10000)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(gamepad_num, LEFTJOY_RIGHT) > 12000)
 			player_go->SetAnimation("walk");
 		
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetControllerButton(gamepad_num, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
