@@ -11,6 +11,7 @@
 #define NUM_CONTROLLER_BUTTONS 15
 
 struct SDL_Rect;
+struct _SDL_GameController;
 
 enum j1EventWindow
 {
@@ -27,6 +28,12 @@ enum j1KeyState
 	KEY_REPEAT,
 	KEY_UP,
 	j1KeyState_null
+};
+
+struct GamePad {
+	j1KeyState	gamecontroller_buttons[NUM_CONTROLLER_BUTTONS];
+	int id = -1;
+	_SDL_GameController* pad = nullptr;
 };
 
 class j1Input : public j1Module
@@ -64,9 +71,9 @@ public:
 	{
 		return mouse_buttons[id - 1];
 	}
-	j1KeyState GetControllerButton(int id) const
+	j1KeyState GetControllerButton(int pad, int id) const
 	{
-		return gamecontroller_buttons[id];
+		return gamepads[pad].gamecontroller_buttons[id];
 	}
 
 	// Check if a certain window event happened
@@ -87,7 +94,8 @@ private:
 	int			mouse_x = 0;
 	int			mouse_y = 0;
 
-	j1KeyState	gamecontroller_buttons[NUM_CONTROLLER_BUTTONS];
+	GamePad*	gamepads = nullptr;
+	int			connected_gamepads = 0;
 };
 
 #endif // __j1INPUT_H__

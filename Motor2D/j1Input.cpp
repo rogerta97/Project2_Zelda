@@ -14,7 +14,11 @@ j1Input::j1Input() : j1Module()
 	keyboard = new j1KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(j1KeyState) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(j1KeyState) * NUM_MOUSE_BUTTONS);
-	memset(gamecontroller_buttons, KEY_IDLE, sizeof(j1KeyState) * NUM_MOUSE_BUTTONS);
+
+	gamepads = new GamePad[4];
+	for (int i = 0; i < MAX_GAMECONTROLLERS; i++) {
+		memset((gamepads + i)->gamecontroller_buttons, KEY_IDLE, sizeof(j1KeyState)*NUM_MOUSE_BUTTONS);
+	}
 }
 
 // Destructor
@@ -62,7 +66,9 @@ bool j1Input::Start()
 			if (pad) {
 				SDL_Joystick *joy = SDL_GameControllerGetJoystick(pad);
 				int instanceID = SDL_JoystickInstanceID(joy);
-				LOG("as");
+				gamepads[i].id = instanceID;
+				gamepads[i].pad = pad;
+				connected_gamepads++;
 			}
 		}
 	}
@@ -104,13 +110,14 @@ bool j1Input::PreUpdate()
 			mouse_buttons[i] = KEY_IDLE;
 	}
 
-	for (int i = 0; i < NUM_CONTROLLER_BUTTONS; ++i)
-	{
-		if (gamecontroller_buttons[i] == KEY_DOWN)
-			gamecontroller_buttons[i] = KEY_REPEAT;
-
-		if (gamecontroller_buttons[i] == KEY_UP)
-			gamecontroller_buttons[i] = KEY_IDLE;
+	for (int pads = 0; pads < connected_gamepads; pads++) {
+		for (int i = 0; i < NUM_CONTROLLER_BUTTONS; ++i) {
+			if (gamepads[pads].gamecontroller_buttons[i] == KEY_DOWN)
+				gamepads[pads].gamecontroller_buttons[i] = KEY_REPEAT;
+						 
+			if (gamepads[pads].gamecontroller_buttons[i] == KEY_UP)
+				gamepads[pads].gamecontroller_buttons[i] = KEY_IDLE;
+		}
 	}
 
 	// GUI -------------------------
@@ -175,13 +182,13 @@ bool j1Input::PreUpdate()
 			break;
 			case SDL_CONTROLLERBUTTONDOWN:
 			{
-				gamecontroller_buttons[event.cbutton.button] = KEY_DOWN;
+				gamepads[event.cbutton.which].gamecontroller_buttons[event.cbutton.button] = KEY_DOWN;
 			}
 			break;
 			break;
 			case SDL_CONTROLLERBUTTONUP:
 			{
-				gamecontroller_buttons[event.cbutton.button] = KEY_UP;
+				gamepads[event.cbutton.which].gamecontroller_buttons[event.cbutton.button] = KEY_UP;
 			}
 			break;
 			// ------------------------
@@ -198,6 +205,12 @@ bool j1Input::PreUpdate()
 // Called before quitting
 bool j1Input::CleanUp()
 {
+	for (int i = 0; i < MAX_GAMECONTROLLERS; i++) {
+		if (gamepads[i].pad != nullptr)
+			SDL_GameControllerClose(gamepads[i].pad);
+	}
+	RELEASE_ARRAY(gamepads);
+
 	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
