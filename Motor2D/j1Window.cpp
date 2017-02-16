@@ -134,7 +134,7 @@ void j1Window::OnCVar(std::list<std::string>& tokens)
 	{
 		if (tokens.size() > 1)
 		{
-			string title;
+			title.clear();
 			list<string>::iterator it = tokens.begin();
 			it++;
 			for (; it != tokens.end(); it++)
@@ -154,7 +154,7 @@ void j1Window::OnCVar(std::list<std::string>& tokens)
 	}
 }
 
-void j1Window::SaveCVar(p2SString & cvar_name, pugi::xml_node & node) const
+void j1Window::SaveCVar(std::string& cvar_name, pugi::xml_node & node) const
 {
 	if (cvar_name == "set_title") {
 		pugi::xml_node app = node.parent().parent().child("app");

@@ -36,7 +36,7 @@ public:
 
 	void OnCVar(std::list<std::string>& tokens);
 
-	void SaveCVar(p2SString& cvar_name, pugi::xml_node& node) const;
+	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
 
 public:
 	//The window we'll be rendering to

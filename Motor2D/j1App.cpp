@@ -412,7 +412,7 @@ bool j1App::SavegameNow() const
 	list<j1Module*>::const_iterator it;
 	for (it = modules.begin(); it != modules.end(); it++)
 	{
-		ret = (*it)->Load(root.child((*it)->name.c_str()));
+		ret = (*it)->Save(root.child((*it)->name.c_str()));
 	}
 
 	if(ret == true)
