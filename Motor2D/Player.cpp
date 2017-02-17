@@ -88,6 +88,8 @@ bool Player::Update(float dt)
 		flip = false;
 	}
 
+	App->view->CenterCamera(camera, player_go->GetPos().x + 23, player_go->GetPos().y + 35);
+
 	return ret;
 }
 
@@ -164,4 +166,5 @@ void Player::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2F
 void Player::SetGamePad(int id)
 {
 	gamepad_num = id;
+	camera = id+1;
 }

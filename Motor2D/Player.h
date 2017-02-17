@@ -47,6 +47,8 @@ public:
 
 private:
 	uint gamepad_num = 20;
+	int camera = 1;
+
 };
 
 #endif

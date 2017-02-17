@@ -141,6 +141,110 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 	return ret;
 }
 
+void j1Viewports::MoveCamera(int id, int x, int y)
+{
+	switch (id)
+	{
+	case 1:
+		camera1.x += x;
+		camera1.y += y;
+		break;
+	case 2:
+		camera2.x += x;
+		camera2.y += y;
+		break;
+	case 3:
+		camera3.x += x;
+		camera3.y += y;
+		break;
+	case 4:
+		camera4.x += x;
+		camera4.y += y;
+		break;
+	default:
+		break;
+	}
+}
+
+void j1Viewports::SetCamera(int id, int x, int y)
+{
+	switch (id)
+	{
+	case 1:
+		camera1.x = x;
+		camera1.y = y;
+		break;
+	case 2:
+		camera2.x = x;
+		camera2.y = y;
+		break;
+	case 3:
+		camera3.x = x;
+		camera3.y = y;
+		break;
+	case 4:
+		camera4.x = x;
+		camera4.y = y;
+		break;
+	default:
+		break;
+	}
+}
+
+void j1Viewports::CenterCamera(int id, int x, int y)
+{
+	switch (number_of_views)
+	{
+	case 1:
+		if (id == 1)
+		{
+			camera1.x = -x + win_w / 2;
+			camera1.y = -y + win_h / 2;
+		}
+		break;
+	case 2:
+		switch (id)
+		{
+		case 1:
+			camera1.x = -x + win_w / 4;
+			camera1.y = -y + win_h / 2;
+			break;
+		case 2:
+			camera2.x = -x + win_w / 4;
+			camera2.y = -y + win_h / 2;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 4:
+		switch (id)
+		{
+		case 1:
+			camera1.x = -x + win_w / 4;
+			camera1.y = -y + win_h / 4;
+			break;		
+		case 2:			
+			camera2.x = -x + win_w / 4;
+			camera2.y = -y + win_h / 4;
+			break;		
+		case 3:			
+			camera3.x = -x + win_w / 4;
+			camera3.y = -y + win_h / 4;
+			break;		
+		case 4:			
+			camera4.x = -x + win_w / 4;
+			camera4.y = -y + win_h / 4;
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
 {
 	layer_blit lblit(texture, pos, section, viewport, scale, _flip, angle, pivot_x, pivot_y);

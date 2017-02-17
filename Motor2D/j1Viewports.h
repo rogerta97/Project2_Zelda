@@ -118,6 +118,10 @@ public:
 	uint GetViews();
 	SDL_Rect GetViewportRect(uint viewport);
 
+	void MoveCamera(int id, int x, int y);
+	void SetCamera(int id, int x, int y);
+	void CenterCamera(int id, int x, int y);
+
 	void OnCommand(std::list<std::string>& tokens);
 
 	void OnCVar(std::list<std::string>& tokens);
