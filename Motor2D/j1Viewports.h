@@ -142,6 +142,12 @@ private:
 	vector<layer_line>   line_list;
 	vector<layer_circle> circle_list;
 
+	// Test
+	p2PQueue<layer_blit> layer_list1;
+	p2PQueue<layer_blit> layer_list2;
+	p2PQueue<layer_blit> layer_list3;
+	p2PQueue<layer_blit> layer_list4;
+
 	// Win Size
 	uint                 win_w = 0, win_h = 0;
 
