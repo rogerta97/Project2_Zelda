@@ -14,10 +14,10 @@ struct layer_blit
 {
 	layer_blit() {};
 
-	layer_blit(SDL_Texture* _texture, iPoint _pos, const SDL_Rect _section, float _scale, SDL_RendererFlip _flip, double _angle, int _pivot_x, int _pivot_y)
+	layer_blit(SDL_Texture* _texture, iPoint _pos, const SDL_Rect _section, int _viewport, float _scale, SDL_RendererFlip _flip, double _angle, int _pivot_x, int _pivot_y)
 	{
 		texture = _texture; pos = _pos; section.x = _section.x;  section.y = _section.y; section.w = _section.w; section.h = _section.h; scale = _scale;
-		flip = _flip; angle = _angle; pivot_x = _pivot_x; pivot_y = _pivot_y;
+		flip = _flip; angle = _angle; pivot_x = _pivot_x; pivot_y = _pivot_y; viewport = _viewport;
 	};
 
 	SDL_Texture*	 texture = nullptr;
@@ -28,6 +28,7 @@ struct layer_blit
 	double           angle = 0;
 	int              pivot_x = 0;
 	int              pivot_y = 0;
+	int				 viewport = 0;
 };
 
 struct layer_quad
@@ -109,7 +110,7 @@ public:
 	bool CleanUp();
 
 	// Blit choosing the layer
-	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, float scale = -1.0f, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
+	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, int viewport = 0, float scale = -1.0f, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
 	void LayerDrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera = true);
 	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
 	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);

@@ -94,9 +94,9 @@ uint j1Viewports::GetViews()
 	return number_of_views;
 }
 
-void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, float scale, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
+void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
 {
-	layer_blit lblit(texture, pos, section, scale, _flip, angle, pivot_x, pivot_y);
+	layer_blit lblit(texture, pos, section, viewport, scale, _flip, angle, pivot_x, pivot_y);
 	layer_list.Push(lblit, layer);
 }
 
@@ -137,7 +137,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if(curr.viewport == 0 || curr.viewport == 1)
+						App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 		
 				for (int i = 0; i < quad_list.size(); i++)
@@ -175,7 +176,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr.viewport == 0 || curr.viewport == 1)
+						App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -202,7 +204,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr.viewport == 0 || curr.viewport == 2)
+						App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -242,7 +245,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr.viewport == 0 || curr.viewport == 1)
+						App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -269,7 +273,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr.viewport == 0 || curr.viewport == 2)
+						App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -296,7 +301,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera3.x, curr.pos.y + camera3.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr.viewport == 0 || curr.viewport == 3)
+						App->render->Blit(curr.texture, curr.pos.x + camera3.x, curr.pos.y + camera3.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -323,7 +329,8 @@ void j1Viewports::DoLayerPrint()
 				for (int i = 0; i < blit.size(); i++)
 				{
 					layer_blit curr = blit.at(i);
-					App->render->Blit(curr.texture, curr.pos.x + camera4.x, curr.pos.y + camera4.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr.viewport == 0 || curr.viewport == 4)
+						App->render->Blit(curr.texture, curr.pos.x + camera4.x, curr.pos.y + camera4.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
