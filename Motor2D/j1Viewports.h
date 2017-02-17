@@ -39,12 +39,12 @@ struct layer_quad
 		rect = { rect }; r = _r; g = _g; b = _b; a = _a; filled = _filled; use_camera = _use_camera;
 	}
 	SDL_Rect rect = NULLRECT;
-	Uint8 r = 0;
-	Uint8 g = 0;
-	Uint8 b = 0;
-	Uint8 a = 0;
-	bool filled;
-	bool use_camera = true;
+	Uint8    r = 0;
+	Uint8    g = 0;
+	Uint8    b = 0;
+	Uint8    a = 0;
+	bool     filled;
+	bool     use_camera = true;
 };
 
 struct layer_line
@@ -54,15 +54,15 @@ struct layer_line
 	{
 		x1 = _x1; y1 = _y1; x2 = _x2; y2 = _y2; r = _r; g = _g; b = _b; a = _a; use_camera = _use_camera;
 	}
-	int x1 = 0;
-	int y1 = 0;
-	int x2 = 0;
-	int y2 = 0;
+	int   x1 = 0;
+	int   y1 = 0;
+	int   x2 = 0;
+	int   y2 = 0;
 	Uint8 r = 0;
 	Uint8 g = 0;
 	Uint8 b = 0;
 	Uint8 a = 255; 
-	bool use_camera = true;
+	bool  use_camera = true;
 };
 
 struct layer_circle
@@ -72,14 +72,14 @@ struct layer_circle
 	{
 		x1 = _x1; y1 = _y1; redius = _redius; r = _r; g = _g; b = _b; a = _a; use_camera = _use_camera;
 	}
-	int x1 = 0;
-	int y1 = 0;
-	int redius = 0;
+	int   x1 = 0;
+	int   y1 = 0;
+	int   redius = 0;
 	Uint8 r = 0;
 	Uint8 g = 0;
 	Uint8 b = 0;
 	Uint8 a = 0;
-	bool use_camera = true;
+	bool  use_camera = true;
 };
 
 class j1Viewports : public j1Module
@@ -137,12 +137,10 @@ public:
 
 private:
 	// Layer Blit list
-	p2PQueue<layer_blit> layer_list;
 	vector<layer_quad>   quad_list;
 	vector<layer_line>   line_list;
 	vector<layer_circle> circle_list;
 
-	// Test
 	p2PQueue<layer_blit> layer_list1;
 	p2PQueue<layer_blit> layer_list2;
 	p2PQueue<layer_blit> layer_list3;
