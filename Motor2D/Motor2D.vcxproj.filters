@@ -234,4 +234,12 @@
       <UniqueIdentifier>{c345333d-c954-4149-b3e0-56eabd84bd48}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\player.xml">
+      <Filter>Engine\4. Entities ==========\Player1</Filter>
+    </Xml>
+    <Xml Include="..\Game\player2.xml">
+      <Filter>Engine\4. Entities ==========\Player2</Filter>
+    </Xml>
+  </ItemGroup>
 </Project>

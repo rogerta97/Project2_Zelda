@@ -144,6 +144,10 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\player.xml" />
+    <Xml Include="..\Game\player2.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
