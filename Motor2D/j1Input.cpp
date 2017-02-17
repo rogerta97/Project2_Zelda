@@ -371,6 +371,7 @@ void j1Input::RemoveController(int id)
 			RELEASE(*it);
 			gamepads.erase(it);
 			connected_gamepads--;
+			break;
 		}
 	}
 }

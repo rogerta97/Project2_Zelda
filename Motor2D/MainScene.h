@@ -22,6 +22,7 @@ public:
 	bool CleanUp();
 
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCommand(std::list<std::string>& tokens);
 
 	GameObject* go = nullptr;
 	Parallax* p1 = nullptr;

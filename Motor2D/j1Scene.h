@@ -41,6 +41,12 @@ public:
 	// Blit choosing the layer
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
+	void OnCommand(std::list<std::string>& tokens);
+
+	void OnCVar(std::list<std::string>& tokens);
+
+	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
+
 public:
 	// Scenes
 	MainScene*           main_scene = nullptr;
