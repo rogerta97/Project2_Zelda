@@ -38,7 +38,34 @@ bool MainScene::Start()
 
 	test_player2 = (Player2*)App->entity->CreateEntity(player2);
 	test_player2->SetGamePad(1);
-	
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+	App->entity->CreateEntity(player2);
+
+
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	return ret;

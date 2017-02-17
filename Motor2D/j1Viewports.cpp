@@ -120,25 +120,16 @@ void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, 
 
 void j1Viewports::DoLayerPrint()
 {
-	vector<layer_blit> blit;
-	while (layer_list.Count() > 0)
-	{
-		layer_blit current;
-		layer_list.Pop(current);
-		blit.push_back(current);
-	}
-
 		// Viewports
 		
 		switch (number_of_views)
 		{
 			case 1:
 			{
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if(curr.viewport == 0 || curr.viewport == 1)
-						App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if(curr->data.viewport == 0 || curr->data.viewport == 1)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 		
 				for (int i = 0; i < quad_list.size(); i++)
@@ -173,11 +164,10 @@ void j1Viewports::DoLayerPrint()
 				// View 1
 				App->render->SetViewPort(view2_1);
 
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if (curr.viewport == 0 || curr.viewport == 1)
-						App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr->data.viewport == 0 || curr->data.viewport == 1)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -201,11 +191,10 @@ void j1Viewports::DoLayerPrint()
 				// View 2
 				App->render->SetViewPort(view2_2);
 
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if (curr.viewport == 0 || curr.viewport == 2)
-						App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr->data.viewport == 0 || curr->data.viewport == 2)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -242,11 +231,10 @@ void j1Viewports::DoLayerPrint()
 				// View 1
 				App->render->SetViewPort(view4_1);
 
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if (curr.viewport == 0 || curr.viewport == 1)
-						App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr->data.viewport == 0 || curr->data.viewport == 1)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -270,11 +258,10 @@ void j1Viewports::DoLayerPrint()
 				// View 2
 				App->render->SetViewPort(view4_2);
 
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if (curr.viewport == 0 || curr.viewport == 2)
-						App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr->data.viewport == 0 || curr->data.viewport == 2)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -298,11 +285,10 @@ void j1Viewports::DoLayerPrint()
 				// View 3
 				App->render->SetViewPort(view4_3);
 
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if (curr.viewport == 0 || curr.viewport == 3)
-						App->render->Blit(curr.texture, curr.pos.x + camera3.x, curr.pos.y + camera3.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr->data.viewport == 0 || curr->data.viewport == 3)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera3.x, curr->data.pos.y + camera3.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -326,11 +312,10 @@ void j1Viewports::DoLayerPrint()
 				// View 4
 				App->render->SetViewPort(view4_4);
 
-				for (int i = 0; i < blit.size(); i++)
+				for (p2PQueue_item<layer_blit>* curr = layer_list.start; curr != nullptr; curr = curr->next)
 				{
-					layer_blit curr = blit.at(i);
-					if (curr.viewport == 0 || curr.viewport == 4)
-						App->render->Blit(curr.texture, curr.pos.x + camera4.x, curr.pos.y + camera4.y, &curr.section, curr.scale, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					if (curr->data.viewport == 0 || curr->data.viewport == 4)
+						App->render->Blit(curr->data.texture, curr->data.pos.x + camera4.x, curr->data.pos.y + camera4.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 				}
 
 				for (int i = 0; i < quad_list.size(); i++)
@@ -356,7 +341,7 @@ void j1Viewports::DoLayerPrint()
 			break;
 		}
 
-		blit.clear();
+		layer_list.Clear();
 		quad_list.clear();
 		line_list.clear();
 		circle_list.clear();
