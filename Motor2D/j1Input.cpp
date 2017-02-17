@@ -43,8 +43,13 @@ bool j1Input::Awake(pugi::xml_node& config)
 	// -----------------------------
 
 	// GameController --------------
+	if (SDL_Init(SDL_INIT_JOYSTICK) != 0)
+		LOG("Error on SDL_Init");
+
 	if(SDL_Init(SDL_INIT_GAMECONTROLLER) != 0)
 		LOG("Error on SDL_Init");
+
+	SDL_GameControllerAddMapping("341a3608000000000000504944564944,Afterglow PS3 Controller,a:b1,b:b2,y:b3,x:b0,start:b9,guide:b12,back:b8,dpup:h0.1,dpleft:h0.8,dpdown:h0.4,dpright:h0.2,leftshoulder:b4,rightshoulder:b5,leftstick:b10,rightstick:b11,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:b6,righttrigger:b7");
 	// -----------------------------
 
 	return ret;
@@ -55,24 +60,6 @@ bool j1Input::Start()
 {
 	LOG("Start module input");
 	SDL_StopTextInput();
-
-	/*for (int i = 0; i < SDL_NumJoysticks(); i++) {
-		if (SDL_IsGameController(i)) {
-			SDL_GameController *pad = SDL_GameControllerOpen(i);
-
-			if (pad) {
-				SDL_Joystick *joy = SDL_GameControllerGetJoystick(pad);
-				int instanceID = SDL_JoystickInstanceID(joy);
-				GamePad* new_pad = new GamePad();
-				new_pad->id = instanceID;
-				memset(new_pad->gamecontroller_buttons, KEY_IDLE, sizeof(j1KeyState)*NUM_CONTROLLER_BUTTONS);
-				memset(new_pad->joystick_moves, 0, sizeof(uint)*JOY_MOVES_NULL);
-				new_pad->pad = pad;
-				gamepads.push_back(new_pad);
-				connected_gamepads++;
-			}
-		}
-	}*/
 
 	return true;
 }
@@ -246,6 +233,8 @@ bool j1Input::CleanUp()
 		RELEASE(*it);
 	}
 	gamepads.clear();
+
+	SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 	// --------------------
 
 	LOG("Quitting SDL event subsystem");

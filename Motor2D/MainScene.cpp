@@ -33,6 +33,9 @@ bool MainScene::Start()
 
 	test_player = (Player*)App->entity->CreateEntity(player);
 	test_player->SetGamePad(0);
+
+	test_player2 = (Player*)App->entity->CreateEntity(player);
+	test_player2->SetGamePad(1);
 	
 	return ret;
 }

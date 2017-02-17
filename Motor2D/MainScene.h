@@ -30,6 +30,7 @@ public:
 
 private:
 	Player* test_player;
+	Player* test_player2;
 
 };
 
