@@ -116,6 +116,7 @@ public:
 	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
 	void SetViews(uint number);
 	uint GetViews();
+	SDL_Rect GetViewportRect(uint viewport);
 
 	void OnCommand(std::list<std::string>& tokens);
 

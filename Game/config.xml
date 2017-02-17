@@ -26,6 +26,7 @@
 	</file_system>
 	<map>
 		<folder>maps/</folder>
+		<draw_margin value="1" />
 	</map>
 	<viewports>
 		<set />

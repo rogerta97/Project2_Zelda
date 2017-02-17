@@ -13,6 +13,7 @@
 #include "CollisionFilters.h"
 #include "Player.h"
 #include "Player2.h"
+#include "j1Map.h"
 
 
 MainScene::MainScene()
@@ -68,6 +69,9 @@ bool MainScene::Start()
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
+	//Load Map
+	App->map->Load("iso_walk.tmx");
+
 	return ret;
 }
 
@@ -82,6 +86,7 @@ bool MainScene::Update(float dt)
 {
 	bool ret = true;
 
+	App->map->Draw();
 
 	return ret;
 }

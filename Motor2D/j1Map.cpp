@@ -5,6 +5,7 @@
 #include "j1FileSystem.h"
 #include "j1Textures.h"
 #include "j1Map.h"
+#include "j1Viewports.h"
 #include <math.h>
 #include "j1Window.h"
 
@@ -42,35 +43,39 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	for(std::list<MapLayer*>::iterator item = data.layers.begin(); item != data.layers.end(); item++)
-	{
-		MapLayer* layer = *item;
-
-		if(layer->properties.Get("Nodraw") != 0)
-			continue;
-
-		int x_ini, x_end;
-		TilesToDraw_x(x_ini, x_end, *item);
-		int count = 0;
-		for(int x = x_ini; x < x_end; ++x)
+	for (int i = 1; i <= App->view->GetViews(); i++) {
+		fit_square = App->view->GetViewportRect(i);
+		for (std::list<MapLayer*>::iterator item = data.layers.begin(); item != data.layers.end(); item++)
 		{
-			int y_ini, y_end;
-			TilesToDraw_y(count, x, x_end, y_ini, y_end, *item);
+			MapLayer* layer = *item;
 
-			for(int y = y_ini; y < y_end; ++y)
+			if (layer->properties.Get("Nodraw") != 0)
+				continue;
+
+			int x_ini, x_end;
+			TilesToDraw_x(x_ini, x_end, *item);
+			int count = 0;
+			for (int x = x_ini; x < x_end; ++x)
 			{
-				int tile_id = layer->Get(x, y);
-				if(tile_id > 0)
+				int y_ini, y_end;
+				TilesToDraw_y(count, x, x_end, y_ini, y_end, *item);
+
+				for (int y = y_ini; y < y_end; ++y)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					int tile_id = layer->Get(x, y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(x, y);
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
 
-					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+						App->view->LayerBlit(1, tileset->texture, pos, r, i); //fps drop a lot !!!!!
+						//App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					}
 				}
+				count++;
 			}
-			count++;
 		}
 	}
 }
@@ -95,7 +100,7 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 	{
 		if(id < (*item)->firstgid)
 		{
-			set = *(item--);
+			set = *(--item);
 			break;
 		}
 		set = *item;
@@ -529,6 +534,9 @@ void j1Map::TilesToDraw_y(int count, int x, int x_end, int & y_ini, int & y_end,
 		}
 		if (y_ini < 0) y_ini = 0;
 		if (y_end > layer->height) y_end = layer->height;
+
+		y_ini = (y_ini - draw_margin >= 0) ? y_ini - draw_margin : 0;
+		y_end = (y_end + draw_margin <= layer->height) ? y_end + draw_margin : layer->height;
 		break;
 	}
 	case MAPTYPE_STAGGERED:

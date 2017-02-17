@@ -94,6 +94,59 @@ uint j1Viewports::GetViews()
 	return number_of_views;
 }
 
+SDL_Rect j1Viewports::GetViewportRect(uint viewport)
+{
+	switch (number_of_views)
+	{
+	case 1:
+	{
+		return{ -camera1.x, -camera1.y,(int)win_w,(int)win_h };
+		break;
+	}
+	case 2:
+	{
+		switch (viewport)
+		{
+		case 1:
+			return{ view2_1 };
+			break;
+		case 2:
+			return view2_2;
+			break;
+		default:
+			return view2_1;
+			break;
+		}
+		break;
+	}
+	case 4:
+	{
+		switch (viewport)
+		{
+		case 1:
+			return view4_1;
+			break;
+		case 2:
+			return view4_2;
+			break;
+		case 3:
+			return view4_3;
+			break;
+		case 4:
+			return view4_4;
+			break;
+		default:
+			return view4_1;
+			break;
+		}
+		break;
+	}
+	default:
+		return { 0,0,(int)win_w,(int)win_h };
+	}
+	return { 0,0,(int)win_w,(int)win_h };
+}
+
 void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
 {
 	layer_blit lblit(texture, pos, section, viewport, scale, _flip, angle, pivot_x, pivot_y);
