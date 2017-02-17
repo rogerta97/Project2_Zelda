@@ -34,7 +34,11 @@ public:
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
+	//Set Gamepad number to this player. id>0
 	void SetGamePad(int id);
+
+	//Set Camera to this player. 1<=id<=4
+	void SetCamera(int id);
 
 public:
 	GameObject* player_go = nullptr;

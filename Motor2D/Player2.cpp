@@ -163,6 +163,13 @@ void Player2::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2
 
 void Player2::SetGamePad(int id)
 {
-	gamepad_num = id;
-	camera = id + 1;
+	gamepad_num = id-1;
+}
+
+void Player2::SetCamera(int id)
+{
+	if (id > 0 && id < 5)
+	{
+		camera = id;
+	}
 }

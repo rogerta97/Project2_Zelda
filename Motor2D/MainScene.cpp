@@ -35,12 +35,15 @@ bool MainScene::Start()
 	b->listener = App->scene;
 
 	test_player = (Player*)App->entity->CreateEntity(player);
-	test_player->SetGamePad(0);
+	test_player->SetGamePad(1);
+	test_player->SetCamera(1);
 
 	test_player2 = (Player2*)App->entity->CreateEntity(player2);
-	test_player2->SetGamePad(1);
+	test_player2->SetGamePad(2);
+	test_player2->SetCamera(2);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
 	App->map->Load("iso_walk.tmx");
@@ -94,8 +97,7 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 			int player, gamepad;
 			player = atoi((++tokens.begin())->c_str());
 			gamepad = atoi(tokens.back().c_str());
-			gamepad--;
-			if (player > 0 && player <= 4 && gamepad>=0 && gamepad < 4)
+			if (player > 0 && player <= 4 && gamepad > 0 && gamepad <= 4)
 			{
 				switch (player)
 				{
@@ -110,6 +112,27 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 			else
 			{
 				LOG("Invalid player or gamepad number");
+			}
+		}
+		else if (tokens.front() == "scene.set_player_camera") {
+			int player, camera;
+			player = atoi((++tokens.begin())->c_str());
+			camera = atoi(tokens.back().c_str());
+			if (player > 0 && player <= 4 && camera > 0 && camera <= 4)
+			{
+				switch (player)
+				{
+				case 1:
+					test_player->SetCamera(camera);
+					break;
+				case 2:
+					test_player2->SetCamera(camera);
+					break;
+				}
+			}
+			else
+			{
+				LOG("Invalid player or camera number");
 			}
 		}
 		break;
