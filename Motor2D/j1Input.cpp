@@ -43,6 +43,7 @@ bool j1Input::Awake(pugi::xml_node& config)
 	// -----------------------------
 
 	// GameController --------------
+	/// To use PS3 Controller install this driver https://github.com/nefarius/ScpToolkit/releases/tag/v1.6.238.16010
 	if(SDL_Init(SDL_INIT_GAMECONTROLLER) != 0)
 		LOG("Error on SDL_Init");
 	// -----------------------------
@@ -55,24 +56,6 @@ bool j1Input::Start()
 {
 	LOG("Start module input");
 	SDL_StopTextInput();
-
-	/*for (int i = 0; i < SDL_NumJoysticks(); i++) {
-		if (SDL_IsGameController(i)) {
-			SDL_GameController *pad = SDL_GameControllerOpen(i);
-
-			if (pad) {
-				SDL_Joystick *joy = SDL_GameControllerGetJoystick(pad);
-				int instanceID = SDL_JoystickInstanceID(joy);
-				GamePad* new_pad = new GamePad();
-				new_pad->id = instanceID;
-				memset(new_pad->gamecontroller_buttons, KEY_IDLE, sizeof(j1KeyState)*NUM_CONTROLLER_BUTTONS);
-				memset(new_pad->joystick_moves, 0, sizeof(uint)*JOY_MOVES_NULL);
-				new_pad->pad = pad;
-				gamepads.push_back(new_pad);
-				connected_gamepads++;
-			}
-		}
-	}*/
 
 	return true;
 }
@@ -246,6 +229,8 @@ bool j1Input::CleanUp()
 		RELEASE(*it);
 	}
 	gamepads.clear();
+
+	SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 	// --------------------
 
 	LOG("Quitting SDL event subsystem");
@@ -386,6 +371,7 @@ void j1Input::RemoveController(int id)
 			RELEASE(*it);
 			gamepads.erase(it);
 			connected_gamepads--;
+			break;
 		}
 	}
 }

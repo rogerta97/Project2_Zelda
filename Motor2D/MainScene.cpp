@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "j1App.h"
 #include "j1Gui.h"
+#include "j1Console.h"
 #include "Parallax.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
@@ -38,6 +39,8 @@ bool MainScene::Start()
 	test_player2 = (Player2*)App->entity->CreateEntity(player2);
 	test_player2->SetGamePad(1);
 	
+	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+
 	return ret;
 }
 
@@ -75,5 +78,38 @@ bool MainScene::CleanUp()
 void MainScene::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 
+}
+
+void MainScene::OnCommand(std::list<std::string>& tokens)
+{
+	switch (tokens.size())
+	{
+	case 3:
+		if (tokens.front() == "scene.set_player_gamepad") {
+			int player, gamepad;
+			player = atoi((++tokens.begin())->c_str());
+			gamepad = atoi(tokens.back().c_str());
+			gamepad--;
+			if (player > 0 && player <= 4 && gamepad>=0 && gamepad < 4)
+			{
+				switch (player)
+				{
+				case 1:
+					test_player->SetGamePad(gamepad);
+					break;
+				case 2:
+					test_player2->SetGamePad(gamepad);
+					break;
+				}
+			}
+			else
+			{
+				LOG("Invalid player or gamepad number");
+			}
+		}
+		break;
+	default:
+		break;
+	}
 }
 

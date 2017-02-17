@@ -119,5 +119,20 @@ void j1Scene::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtur
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
 }
 
+void j1Scene::OnCommand(std::list<std::string>& tokens)
+{
+	current_scene->OnCommand(tokens);
+}
+
+void j1Scene::OnCVar(std::list<std::string>& tokens)
+{
+	current_scene->OnCVar(tokens);
+}
+
+void j1Scene::SaveCVar(std::string & cvar_name, pugi::xml_node & node) const
+{
+	current_scene->SaveCVar(cvar_name,node);
+}
+
 
 
