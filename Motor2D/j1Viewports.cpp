@@ -29,12 +29,12 @@ bool j1Viewports::Start()
 
 	// Viewports ------
 	view2_1 = { 0, 0, (int)win_w / 2, (int)win_h };
-	view2_2 = { (int)win_w / 2, 0, (int)win_w, (int)win_h };
+	view2_2 = { (int)win_w / 2, 0, (int)win_w/2, (int)win_h };
 
 	view4_1 = { 0, 0, (int)win_w / 2, (int)win_h / 2 };
-	view4_2 = { (int)win_w / 2, 0, (int)win_w, (int)win_h / 2 };
-	view4_3 = { 0, (int)win_h / 2, (int)win_w / 2, (int)win_h };
-	view4_4 = { (int)win_w / 2, (int)win_h / 2, (int)win_w, (int)win_h };
+	view4_2 = { (int)win_w / 2, 0, (int)win_w/2, (int)win_h / 2 };
+	view4_3 = { 0, (int)win_h / 2, (int)win_w / 2, (int)win_h/2 };
+	view4_4 = { (int)win_w / 2, (int)win_h / 2, (int)win_w/2, (int)win_h/2 };
 	// -------------
 
 	App->console->AddCVar("viewports.set", this, "Set the number of viewports on screen (1, 2, 4)");

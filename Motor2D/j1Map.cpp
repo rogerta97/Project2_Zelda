@@ -532,11 +532,13 @@ void j1Map::TilesToDraw_y(int count, int x, int x_end, int & y_ini, int & y_end,
 			y_ini = bot_right.y - rev_count;
 			y_end = bot_right.y + (rev_count + 1);
 		}
+
+		y_ini -= draw_margin;
+		y_end += draw_margin;
+
 		if (y_ini < 0) y_ini = 0;
 		if (y_end > layer->height) y_end = layer->height;
 
-		y_ini = (y_ini - draw_margin >= 0) ? y_ini - draw_margin : 0;
-		y_end = (y_end + draw_margin <= layer->height) ? y_end + draw_margin : layer->height;
 		break;
 	}
 	case MAPTYPE_STAGGERED:
