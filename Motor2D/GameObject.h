@@ -69,7 +69,7 @@ public:
 	void AddAnimation(Animation* animation);
 
 	// Loads all animations from an XML
-	void LoadAnimationsFromXML(pugi::xml_node & node);
+	void LoadAnimationsFromXML(pugi::xml_document& doc);
 
 	// Sets an animation
 	void SetAnimation(const char* animation);

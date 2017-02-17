@@ -41,7 +41,7 @@ public:
 	void AddAnimation(Animation* animation);
 
 	// Load Animations from XML
-	void LoadAnimationsFromXML(pugi::xml_node &node);
+	void LoadAnimationsFromXML(pugi::xml_document& doc);
 
 	// Set a current animation
 	void SetAnimation(const char* name);
@@ -52,6 +52,9 @@ public:
 	Animation* GetAnimation(const char* name);
 
 	Animation* GetCurrentAnimation();
+	
+	// Checks if is the current animation by name
+	bool IsCurrentAnimation(const char* name);
 
 private:
 	Animation*           current_animation = nullptr;

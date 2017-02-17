@@ -11,6 +11,7 @@
 #include "j1Entity.h"
 #include "CollisionFilters.h"
 #include "Player.h"
+#include "Player2.h"
 
 
 MainScene::MainScene()
@@ -33,6 +34,9 @@ bool MainScene::Start()
 
 	test_player = (Player*)App->entity->CreateEntity(player);
 	test_player->SetGamePad(0);
+
+	test_player2 = (Player2*)App->entity->CreateEntity(player2);
+	test_player2->SetGamePad(1);
 	
 	return ret;
 }

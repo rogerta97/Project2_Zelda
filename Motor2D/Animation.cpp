@@ -131,16 +131,17 @@ void Animator::AddAnimation(Animation* animation)
 	animations.push_back(animation);
 }
 
-void Animator::LoadAnimationsFromXML(pugi::xml_node & node)
+void Animator::LoadAnimationsFromXML(pugi::xml_document &doc)
 {
-	for (pugi::xml_node anim = node.child("anim"); anim != NULL; anim = anim.next_sibling("anim")) 
+
+	for (pugi::xml_node anim = doc.child("file").child("animations").child("anim"); anim != NULL; anim = anim.next_sibling("anim")) 
 	{
 	    list<SDL_Rect> anim_rects;
 		float speed = anim.attribute("speed").as_float(1.0f);
 		string name = anim.attribute("name").as_string("null");
 		bool loop = anim.attribute("loop").as_bool(true);
 
-		for (pugi::xml_node frame = anim.child("frame"); frame != NULL; frame = frame.next_sibling("frame")) 
+		for (pugi::xml_node frame = anim.child("rect"); frame != NULL; frame = frame.next_sibling("rect")) 
 		{
 			SDL_Rect new_frame = { frame.attribute("x").as_int(0),frame.attribute("y").as_int(0),frame.attribute("w").as_int(0),frame.attribute("h").as_int(0) };
 			anim_rects.push_back(new_frame);
@@ -205,4 +206,14 @@ Animation* Animator::GetCurrentAnimation()
 		current_animation = next_animation;
 
 	return current_animation;
+}
+
+bool Animator::IsCurrentAnimation(const char * name)
+{
+	if (current_animation != nullptr)
+	{
+		if (TextCmp(current_animation->GetName(), name))
+			return true;
+	}
+	return false;
 }

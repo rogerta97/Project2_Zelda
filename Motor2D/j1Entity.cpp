@@ -1,5 +1,6 @@
 #include "j1Entity.h"
 #include "Player.h"
+#include "Player2.h"
 #include "p2Log.h"
 
 j1Entity::j1Entity()
@@ -83,6 +84,9 @@ Entity* j1Entity::CreateEntity(entity_name entity)
 	{
 	case player:
 		ret = new Player();
+		break;
+	case player2:
+		ret = new Player2();
 		break;
 	default:
 		break;

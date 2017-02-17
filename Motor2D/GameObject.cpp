@@ -91,9 +91,9 @@ void GameObject::AddAnimation(Animation* animation)
 	animator->AddAnimation(animation);
 }
 
-void GameObject::LoadAnimationsFromXML(pugi::xml_node & node)
+void GameObject::LoadAnimationsFromXML(pugi::xml_document& doc)
 {
-	animator->LoadAnimationsFromXML(node);
+	animator->LoadAnimationsFromXML(doc);
 }
 
 void GameObject::SetAnimation(const char * animation)

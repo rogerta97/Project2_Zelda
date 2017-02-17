@@ -8,6 +8,7 @@ class GameObject;
 class b2Fixture;
 class Parallax;
 class Player;
+class Player2;
 
 class MainScene : public Scene 
 {
@@ -30,6 +31,7 @@ public:
 
 private:
 	Player* test_player;
+	Player2* test_player2;
 
 };
 

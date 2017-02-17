@@ -1,0 +1,45 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations>
+      <anim speed = "10" name = "run_down" loop = "true">
+	 <rect x = "0" y = "225" w = "48" h = "72"/>
+	 <rect x = "69" y = "228" w = "48" h = "72"/>
+	 <rect x = "210" y = "231" w = "48" h = "72"/>
+         <rect x = "351" y = "228" w = "48" h = "72"/>
+	 <rect x = "420" y = "225" w = "48" h = "72"/>
+	 <rect x = "351" y = "228" w = "48" h = "72"/>
+	 <rect x = "210" y = "231" w = "48" h = "72"/>
+	 <rect x = "69" y = "228" w = "48" h = "72"/>
+      </anim>
+      <anim speed = "10" name = "run_up" loop = "true">
+	 <rect x = "0" y = "300" w = "48" h = "72"/>
+	 <rect x = "69" y = "303" w = "48" h = "72"/>
+	 <rect x = "210" y = "306" w = "48" h = "72"/>
+         <rect x = "351" y = "303" w = "48" h = "72"/>
+	 <rect x = "417" y = "300" w = "48" h = "72"/>
+	 <rect x = "351" y = "303" w = "48" h = "72"/>
+	 <rect x = "210" y = "306" w = "48" h = "72"/>
+	 <rect x = "69" y = "300" w = "48" h = "72"/>
+      </anim>
+      <anim speed = "10" name = "run_lateral" loop = "true">
+	 <rect x = "0" y = "381" w = "49" h = "72"/>
+	 <rect x = "69" y = "378" w = "49" h = "72"/>
+	 <rect x = "210" y = "381" w = "49" h = "72"/>
+         <rect x = "351" y = "381" w = "49" h = "72"/>
+	 <rect x = "417" y = "378" w = "49" h = "72"/>
+	 <rect x = "351" y = "381" w = "49" h = "72"/>
+	 <rect x = "210" y = "381" w = "49" h = "72"/>
+	 <rect x = "69" y = "381" w = "49" h = "72"/>
+      </anim>
+      <anim speed = "10" name = "idle_lateral" loop = "true">
+	 <rect x = "210" y = "381" w = "49" h = "72"/>
+      </anim>
+      <anim speed = "10" name = "idle_up" loop = "true">
+	 <rect x = "210" y = "300" w = "48" h = "72"/>
+      </anim>
+      <anim speed = "10" name = "idle_down" loop = "true">
+	<rect x = "210" y = "225" w = "48" h = "72"/>
+      </anim>
+   </animations>
+</file>
