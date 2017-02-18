@@ -124,6 +124,11 @@ uint j1Window::GetScale() const
 	return scale;
 }
 
+void j1Window::SetScale(uint new_scale)
+{
+	scale = new_scale;
+}
+
 void j1Window::OnCommand(std::list<std::string>& tokens)
 {
 }

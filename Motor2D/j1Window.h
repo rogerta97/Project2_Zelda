@@ -32,6 +32,9 @@ public:
 	// Retrieve window scale
 	uint GetScale() const;
 
+	//Change Render Scale
+	void SetScale(uint new_scale);
+
 	void OnCommand(std::list<std::string>& tokens);
 
 	void OnCVar(std::list<std::string>& tokens);

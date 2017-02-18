@@ -164,6 +164,8 @@ private:
 	SDL_Rect			 view4_3 = NULLRECT;
 	SDL_Rect			 view4_4 = NULLRECT;
 
+	float				 scale = -1.0;
+
 };
 
 #endif // __j1VIEWPORTS_H__

@@ -24,6 +24,7 @@ bool j1Viewports::Start()
 	bool ret = true;
 
 	number_of_views = 1;
+	scale = 2.0f;
 
 	App->win->GetWindowSize(win_w, win_h);
 
@@ -102,7 +103,7 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 	{
 	case 1:
 	{
-		ret = { -camera1.x, -camera1.y,(int)win_w,(int)win_h };
+		ret = { -camera1.x, -camera1.y, view4_1.w, view4_1.h };
 		break;
 	}
 	case 2:
@@ -110,10 +111,10 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 		switch (viewport)
 		{
 		case 1:
-			ret = { -camera1.x, -camera1.y, view2_1.w, view2_1.h };
+			ret = { -camera1.x, -camera1.y, view4_1.w, view2_1.h };
 			break;
 		case 2:
-			ret = { -camera2.x, -camera2.y, view2_2.w, view2_2.h };
+			ret = { -camera2.x, -camera2.y, view4_2.w, view2_2.h };
 			break;
 		}
 		break;
@@ -198,8 +199,8 @@ void j1Viewports::CenterCamera(int id, int x, int y)
 	case 1:
 		if (id == 1)
 		{
-			camera1.x = -x + win_w / 2;
-			camera1.y = -y + win_h / 2;
+			camera1.x = -x + win_w / 4;
+			camera1.y = -y + win_h / 4;
 		}
 		break;
 	case 2:
@@ -304,7 +305,8 @@ void j1Viewports::DoLayerPrint()
 		{
 			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 	
 			for (int i = 0; i < quad_list.size(); i++)
@@ -341,7 +343,8 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -367,7 +370,8 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_blit>* curr = layer_list2.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -406,7 +410,8 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -432,7 +437,8 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_blit>* curr = layer_list2.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -458,7 +464,8 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_blit>* curr = layer_list3.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera3.x, curr->data.pos.y + camera3.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera3.x, curr->data.pos.y + camera3.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -484,7 +491,8 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_blit>* curr = layer_list4.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera4.x, curr->data.pos.y + camera4.y, &curr->data.section, curr->data.scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
+				App->render->Blit(curr->data.texture, curr->data.pos.x + camera4.x, curr->data.pos.y + camera4.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -529,7 +537,7 @@ void j1Viewports::OnCVar(std::list<std::string>& tokens)
 	{
 		list<string>::iterator it = tokens.begin();
 		it++;
-		float value = atof((*it).c_str());
+		int value = atoi((*it).c_str());
 		SetViews(value);
 
 		if (value > 0 && value < 5 && value != 3)
@@ -537,6 +545,20 @@ void j1Viewports::OnCVar(std::list<std::string>& tokens)
 			string output("Number of set viewports to: ");
 			output.insert(output.size(), *it);
 			App->console->AddText(output.c_str(), Output);
+			switch (value)
+			{
+			case 1:
+				scale = 2.0f;
+				break;
+			case 2:
+				scale = 1.0f;
+				break;
+			case 4:
+				scale = 1.0f;
+				break;
+			default:
+				break;
+			}
 		}
 		else
 		{
