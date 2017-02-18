@@ -265,9 +265,13 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 		break;
 	default:
 		layer_list1.Push(lblit, layer);
-		layer_list2.Push(lblit, layer);
-		layer_list3.Push(lblit, layer);
-		layer_list4.Push(lblit, layer);
+		if(number_of_views > 1)
+			layer_list2.Push(lblit, layer);
+		if (number_of_views > 3)
+		{
+			layer_list3.Push(lblit, layer);
+			layer_list4.Push(lblit, layer);
+		}
 		break;
 	}
 }
@@ -513,8 +517,6 @@ void j1Viewports::DoLayerPrint()
 		quad_list.clear();
 		line_list.clear();
 		circle_list.clear();
-
-	
 }
 
 void j1Viewports::OnCommand(std::list<std::string>& tokens)

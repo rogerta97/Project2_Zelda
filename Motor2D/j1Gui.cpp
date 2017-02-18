@@ -430,7 +430,7 @@ UI_Element* j1Gui::CheckClickMove(int x, int y)
 // ---------------------------------------------------------------------
 void j1Gui::DeleteElement(UI_Element* element)
 {
-	if (element == nullptr)
+	if (element == nullptr || element == NULL)
 		return;
 
 	list<UI_Element*> childs;
@@ -464,7 +464,7 @@ void j1Gui::DeleteElement(UI_Element* element)
 				App->gui->elements_list.Push((*ta), (*ta)->layer);
 
 		(*ch)->cleanup();
-		delete((*ch));
+		RELEASE((*ch));
 	}
 }
 
