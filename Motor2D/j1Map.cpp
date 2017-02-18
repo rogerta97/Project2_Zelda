@@ -8,6 +8,7 @@
 #include "j1Viewports.h"
 #include <math.h>
 #include "j1Window.h"
+#include "Functions.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -308,33 +309,33 @@ bool j1Map::LoadMap()
 		data.height = map.attribute("height").as_int();
 		data.tile_width = map.attribute("tilewidth").as_int();
 		data.tile_height = map.attribute("tileheight").as_int();
-		p2SString bg_color(map.attribute("backgroundcolor").as_string());
+		std::string bg_color(map.attribute("backgroundcolor").as_string());
 
 		data.background_color.r = 0;
 		data.background_color.g = 0;
 		data.background_color.b = 0;
 		data.background_color.a = 0;
 
-		if(bg_color.Length() > 0)
+		if(bg_color.length() > 0)
 		{
-			p2SString red, green, blue;
-			bg_color.SubString(1, 2, red);
-			bg_color.SubString(3, 4, green);
-			bg_color.SubString(5, 6, blue);
+			std::string red, green, blue;
+			red = bg_color.substr(1, 2);
+			green = bg_color.substr(3, 2);
+			blue = bg_color.substr(5, 2);
 
 			int v = 0;
 
-			sscanf_s(red.GetString(), "%x", &v);
+			sscanf_s(red.c_str(), "%x", &v);
 			if(v >= 0 && v <= 255) data.background_color.r = v;
 
-			sscanf_s(green.GetString(), "%x", &v);
+			sscanf_s(green.c_str(), "%x", &v);
 			if(v >= 0 && v <= 255) data.background_color.g = v;
 
-			sscanf_s(blue.GetString(), "%x", &v);
+			sscanf_s(blue.c_str(), "%x", &v);
 			if(v >= 0 && v <= 255) data.background_color.b = v;
 		}
 
-		p2SString orientation(map.attribute("orientation").as_string());
+		std::string orientation(map.attribute("orientation").as_string());
 
 		if(orientation == "orthogonal")
 		{
@@ -439,10 +440,27 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		layer->data = new uint[layer->width*layer->height];
 		memset(layer->data, 0, layer->width*layer->height);
 
-		int i = 0;
-		for(pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+		if (TextCmp(layer_data.attribute("encoding").as_string("no_enc"), "csv"))
 		{
-			layer->data[i++] = tile.attribute("gid").as_int(0);
+			std::string data = layer_data.child_value();
+
+			std::list<std::string> tiles;
+			Tokenize(data, ',', tiles);
+
+			int i = 0;
+			for (std::list<std::string>::iterator tile = tiles.begin(); tile != tiles.end(); tile++)
+			{
+				if(*tile != "")
+					layer->data[i++] = atoi(tile->c_str());
+			}
+		}
+		else
+		{
+			int i = 0;
+			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+			{
+				layer->data[i++] = tile.attribute("gid").as_int(0);
+			}
 		}
 	}
 

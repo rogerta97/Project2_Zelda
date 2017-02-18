@@ -225,6 +225,7 @@ bool j1Input::CleanUp()
 {
 	// Clean GamePads ------
 	for (std::vector<GamePad*>::iterator it = gamepads.begin(); it != gamepads.end(); it++) {
+
 		SDL_GameControllerClose((*it)->pad);
 		RELEASE(*it);
 	}
