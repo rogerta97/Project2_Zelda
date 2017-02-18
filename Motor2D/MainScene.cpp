@@ -46,7 +46,7 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
-	App->map->Load("iso_walk.tmx");
+	App->map->Load("zelda_test.tmx");
 
 	return ret;
 }
