@@ -882,7 +882,7 @@ bool UI_Button::update()
 		return false;
 
 	if (App->gui->debug)
-		App->render->DrawQuad(rect, color.r, color.g, color.b, color.a, false);
+		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, false);
 
 	if(print)
 		App->render->Blit(App->gui->atlas, rect.x, rect.y, &curr);
@@ -1157,7 +1157,7 @@ bool UI_Text::update()
 	// ----------------------------
 
 	if (App->gui->debug)
-		App->render->DrawQuad(rect, color.r, color.g, color.b, color.a, false);
+		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, false);
 	
 	if (print)
 	{
@@ -1226,7 +1226,7 @@ bool UI_Image::update()
 		return false;
 
 	if (App->gui->debug)
-		App->render->DrawQuad(rect, color.r, color.g, color.b, color.a, false);
+		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, false);
 	
 	if(print)
 		App->render->Blit(App->gui->atlas, rect.x, rect.y, &image);
@@ -1274,7 +1274,7 @@ bool UI_Text_Input::update()
 		return false;
 
 	if (App->gui->debug)
-		App->render->DrawQuad(rect, color.r, color.g, color.b, color.a, false);
+		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, false);
 
 	 string test = intern_text;
 
@@ -1483,7 +1483,7 @@ void UI_Text_Input::DrawBar()
 	bar.x = rect.x + bar_x;
 	bar.y = rect.y;
 
-	App->render->DrawQuad(bar, color.r, color.g, color.b, color.a, true);
+	App->render->DrawQuad(bar, color.r, color.g, color.b, -1.0f, color.a, true);
 }
 
 void UI_Text_Input::DinamicViewport()
@@ -1639,10 +1639,10 @@ bool UI_Scroll_Bar::update()
 
 	if (App->gui->debug)
 	{
-		App->render->DrawQuad(moving_rect, color.r, color.g, color.b, color.a, false);
-		App->render->DrawQuad(rect, 255, 0, 0, 255, false);
-		App->render->DrawLine(button_v->rect.x + (button_v->rect.w / 2), min_bar_v, button_v->rect.x + (button_v->rect.w / 2), max_bar_v, color.r, color.g, color.b, color.a);
-		App->render->DrawLine(min_bar_h, button_h->rect.y + (button_h->rect.h/2), max_bar_h, button_h->rect.y + (button_h->rect.h / 2), color.r, color.g, color.b, color.a);
+		App->render->DrawQuad(moving_rect, color.r, color.g, color.b, -1.0f, color.a, false);
+		App->render->DrawQuad(rect, 255, 0, 0, -1.0f, 255, false);
+		App->render->DrawLine(button_v->rect.x + (button_v->rect.w / 2), min_bar_v, button_v->rect.x + (button_v->rect.w / 2), max_bar_v, color.r, color.g, color.b, -1.0f, color.a);
+		App->render->DrawLine(min_bar_h, button_h->rect.y + (button_h->rect.h/2), max_bar_h, button_h->rect.y + (button_h->rect.h / 2), color.r, color.g, color.b, -1.0f, color.a);
 	}
 
 	// Viewport -----------
@@ -1945,7 +1945,7 @@ bool UI_ColoredRect::update()
 	if (!enabled)
 		return false;
 
-	App->render->DrawQuad(rect, color.r, color.g, color.b, color.a, filled);
+	App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, filled);
 
 	return true;
 }

@@ -30,10 +30,6 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
-	PhysBody* b = App->physics->CreateStaticRectangle(0, 600, 10000, 50, 1, 1, 0, App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY);
-	b->type = pbody_type::p_t_world;
-	b->listener = App->scene;
-
 	test_player = (Player*)App->entity->CreateEntity(player);
 	test_player->SetGamePad(1);
 	test_player->SetCamera(1);

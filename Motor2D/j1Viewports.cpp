@@ -312,19 +312,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 		
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 		}
@@ -350,19 +350,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			// View 2
@@ -377,19 +377,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 			App->render->ResetViewPort();
 		}
@@ -417,19 +417,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			// View 2
@@ -444,19 +444,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			// View 3
@@ -471,19 +471,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera3.x, curr.rect.y + camera3.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera3.x, curr.rect.y + camera3.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.x2 + camera3.x, curr.y2 + camera3.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.x2 + camera3.x, curr.y2 + camera3.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			// View 4
@@ -498,19 +498,19 @@ void j1Viewports::DoLayerPrint()
 			for (int i = 0; i < quad_list.size(); i++)
 			{
 				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera4.x, curr.rect.y + camera4.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr.rect.x + camera4.x, curr.rect.y + camera4.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
 			{
 				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.x2 + camera4.x, curr.y2 + camera4.y, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawLine(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.x2 + camera4.x, curr.y2 + camera4.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			for (int i = 0; i < circle_list.size(); i++)
 			{
 				layer_circle curr = circle_list.at(i);
-				App->render->DrawCircle(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.redius, curr.r, curr.g, curr.b, curr.a, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
 			App->render->ResetViewPort();
