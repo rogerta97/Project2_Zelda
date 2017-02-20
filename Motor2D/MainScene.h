@@ -34,6 +34,7 @@ private:
 	Player* test_player;
 	Player2* test_player2;
 	Player2* test_player3;
+	Player* test_player4;
 };
 
 

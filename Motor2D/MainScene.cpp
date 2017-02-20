@@ -42,6 +42,10 @@ bool MainScene::Start()
 	test_player3->SetGamePad(3);
 	test_player3->SetCamera(3);
 
+	test_player4 = (Player*)App->entity->CreateEntity(player);
+	test_player4->SetGamePad(4);
+	test_player4->SetCamera(4);
+
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 

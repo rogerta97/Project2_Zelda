@@ -43,10 +43,13 @@ bool j1Window::Awake(pugi::xml_node& config)
 		height = config.child("resolution").attribute("height").as_int(480);
 		scale = config.child("resolution").attribute("scale").as_int(1);
 
-		SDL_DisplayMode dm;
-		SDL_GetDesktopDisplayMode(0, &dm);
-		width = dm.w;
-		height = dm.h;
+		if (fullscreen)
+		{
+			SDL_DisplayMode dm;
+			SDL_GetDesktopDisplayMode(0, &dm);
+			width = dm.w;
+			height = dm.h;
+		}
 
 		if(fullscreen == true)
 		{
