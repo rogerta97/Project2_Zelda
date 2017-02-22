@@ -160,6 +160,8 @@ public:
 	bool				is_ui = true;
 	bool				is_gameplay = true;
 
+	int					viewport = 0;
+
 	// Layers --
 	double				layer = 0;
 	int					blit_layer = 0;

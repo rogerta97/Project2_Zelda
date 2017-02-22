@@ -58,6 +58,7 @@ bool MainScene::Start()
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0);
 
 	exp_bar = main_window->CreateImage(iPoint(screen.w / 2 - 50, 0), SDL_Rect{ 0, 15, 98, 14 });
+	exp_bar->viewport = 1;
 
 	return ret;
 }

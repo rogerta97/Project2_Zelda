@@ -902,7 +902,7 @@ bool UI_Button::update()
 		else
 		{
 			if (is_ui)
-				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, 0, -1.0f, false);
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
 			else
 				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr);
 		}
@@ -1192,7 +1192,7 @@ bool UI_Text::update()
 				else
 				{
 					if(is_ui)
-						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0,0,0,0 }, 0, -1.0f, false);
+						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0,0,0,0 }, viewport, -1.0f, false);
 					else
 						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space));
 				}
@@ -1264,7 +1264,7 @@ bool UI_Image::update()
 		else
 		{
 			if(is_ui)
-				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), image, 0, -1.0f, false);
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), image, viewport, -1.0f, false);
 			else
 				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), image);
 		}
