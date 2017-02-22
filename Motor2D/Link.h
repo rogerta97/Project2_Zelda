@@ -55,8 +55,6 @@ public:
 
 	bool flip = false;
 
-	states state = states_null;
-
 private:
 	uint gamepad_num = 20;
 	int camera = 1;

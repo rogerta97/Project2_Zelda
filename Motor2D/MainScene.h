@@ -2,6 +2,7 @@
 #define _MAINSCENE_H_
 
 #include "Scene.h"
+#include "j1Gui.h"
 #include "j1Render.h"
 
 class GameObject;
@@ -30,7 +31,9 @@ public:
 	fPoint pos;
 
 private:
-	Link* test_player;
+	//UI elements
+	UI_Window* main_window; 
+	UI_Image* exp_bar; 
 };
 
 

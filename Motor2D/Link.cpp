@@ -26,7 +26,7 @@ bool Link::LoadEntity()
 
 	player_go = new GameObject(iPoint(300, 300), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
-	player_go->CreateCollision(iPoint(0, 0), 45, 70, fixture_type::f_t_null);
+	player_go->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
 	player_go->SetListener((j1Module*)App->entity);
 	player_go->SetFixedRotation(true);
 
@@ -43,8 +43,7 @@ bool Link::Start()
 {
 	bool ret = true;
 
-	state = run_down;
-	player_go->SetAnimation("run_down");
+	player_go->SetAnimation("idle_down");
 
 	return ret;
 }
@@ -62,8 +61,6 @@ bool Link::Update(float dt)
 {
 	bool ret = true;
 
-	//float speed = (200 * dt);
-
 	App->view->CenterCamera(camera, player_go->GetPos().x + 23, player_go->GetPos().y + 35);
 
 	return ret;
@@ -74,9 +71,9 @@ bool Link::Draw(float dt)
 	bool ret = true;
 	
 	if(flip)
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 26, player_go->GetPos().y - 35}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 20, player_go->GetPos().y - 23}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 23, player_go->GetPos().y - 35 }, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, SDL_FLIP_NONE);
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 17, player_go->GetPos().y - 23 }, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }

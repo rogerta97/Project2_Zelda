@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "j1Scene.h"
+#include "j1Viewports.h"
 #include "p2Log.h"
 #include "j1Input.h"
 #include "Functions.h"
@@ -31,13 +32,20 @@ bool MainScene::Start()
 	LOG("Start MainScene");
 
 	App->entity->player_manager->AddPlayer(entity_name::link, 1);
-	App->entity->player_manager->AddPlayer(entity_name::link, 2);
+	//App->entity->player_manager->AddPlayer(entity_name::link, 2);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
 	App->map->Load("zelda_test.tmx");
+
+	//Create UI element
+	SDL_Rect screen = App->view->GetViewportRect(1); 
+	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0);
+
+	exp_bar = main_window->CreateImage(iPoint(screen.w / 2 - 50, 0), SDL_Rect{ 0, 15, 98, 14 });
+	exp_bar->viewport = 1;
 
 	return ret;
 }
@@ -93,7 +101,7 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 				switch (player)
 				{
 				case 1:
-					test_player->SetGamePad(gamepad);
+					//test_player->SetGamePad(gamepad);
 					break;
 				}
 			}
@@ -111,7 +119,7 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 				switch (player)
 				{
 				case 1:
-					test_player->SetCamera(camera);
+					//test_player->SetCamera(camera);
 					break;
 				}
 			}

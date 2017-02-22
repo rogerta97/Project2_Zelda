@@ -66,7 +66,7 @@ public:
 	// Gets the atlas texture
 	const void GetAtlas() const;
 
-	UI_Window* UI_CreateWin(iPoint pos, int w, int h, int blit = 0, bool dinamic = false, bool is_ui = true);
+	UI_Window* UI_CreateWin(iPoint pos, int w, int h, int blit = 0, bool is_gameplay = true, bool dinamic = false, bool is_ui = true);
 
 	void GetChilds(UI_Element * element, list<UI_Element*>& visited);
 	void GetParentElements(UI_Element * element, list<UI_Element*>& visited);
@@ -158,6 +158,9 @@ public:
 	bool				enabled = true;
 	bool				click_through = false;
 	bool				is_ui = true;
+	bool				is_gameplay = true;
+
+	int					viewport = 0;
 
 	// Layers --
 	double				layer = 0;
