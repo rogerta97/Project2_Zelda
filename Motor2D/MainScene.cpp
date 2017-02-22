@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "j1Scene.h"
+#include "j1Viewports.h"
 #include "p2Log.h"
 #include "j1Input.h"
 #include "Functions.h"
@@ -51,6 +52,12 @@ bool MainScene::Start()
 
 	//Load Map
 	App->map->Load("zelda_test.tmx");
+
+	//Create UI element
+	SDL_Rect screen = App->view->GetViewportRect(1); 
+	main_window = App->gui->UI_CreateWin(iPoint(screen.x,screen.y),screen.w, screen.h, 0, false, true); 
+
+	exp_bar = main_window->CreateImage(iPoint(500,0), SDL_Rect{0, 15, 98, 14}, false);
 
 	return ret;
 }

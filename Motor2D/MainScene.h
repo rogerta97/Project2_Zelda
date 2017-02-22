@@ -2,6 +2,7 @@
 #define _MAINSCENE_H_
 
 #include "Scene.h"
+#include "j1Gui.h"
 #include "j1Render.h"
 
 class GameObject;
@@ -35,6 +36,10 @@ private:
 	Player2* test_player2;
 	Player2* test_player3;
 	Player* test_player4;
+
+	//UI elements
+	UI_Window* main_window; 
+	UI_Image* exp_bar; 
 };
 
 

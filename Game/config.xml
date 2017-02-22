@@ -11,7 +11,7 @@
 		<default_font file="fonts/open_sans/OpenSans-Regular.ttf" size="24" />
 	</fonts>
 	<gui>
-		<atlas file="gui/sf2.png" />
+		<atlas file="gui/UI_sheet.png" />
 	</gui>
 	<window>
 		<resolution width="1280" height="720" scale="1" />
