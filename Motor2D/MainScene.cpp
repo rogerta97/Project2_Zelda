@@ -11,9 +11,9 @@
 #include "Parallax.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
-#include "Player.h"
-#include "Player2.h"
+#include "Link.h"
 #include "j1Map.h"
+#include "PlayerManager.h"
 
 
 MainScene::MainScene()
@@ -30,21 +30,8 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
-	test_player = (Player*)App->entity->CreateEntity(player);
-	test_player->SetGamePad(1);
-	test_player->SetCamera(1);
-
-	test_player2 = (Player2*)App->entity->CreateEntity(player2);
-	test_player2->SetGamePad(2);
-	test_player2->SetCamera(2);
-
-	test_player3 = (Player2*)App->entity->CreateEntity(player2);
-	test_player3->SetGamePad(3);
-	test_player3->SetCamera(3);
-
-	test_player4 = (Player*)App->entity->CreateEntity(player);
-	test_player4->SetGamePad(4);
-	test_player4->SetCamera(4);
+	App->entity->player_manager->AddPlayer(entity_name::link, 1);
+	App->entity->player_manager->AddPlayer(entity_name::link, 2);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
@@ -108,9 +95,6 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 				case 1:
 					test_player->SetGamePad(gamepad);
 					break;
-				case 2:
-					test_player2->SetGamePad(gamepad);
-					break;
 				}
 			}
 			else
@@ -128,9 +112,6 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 				{
 				case 1:
 					test_player->SetCamera(camera);
-					break;
-				case 2:
-					test_player2->SetCamera(camera);
 					break;
 				}
 			}

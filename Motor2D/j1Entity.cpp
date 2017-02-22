@@ -1,7 +1,7 @@
 #include "j1Entity.h"
-#include "Player.h"
-#include "Player2.h"
+#include "Link.h"
 #include "p2Log.h"
+#include "PlayerManager.h"
 
 j1Entity::j1Entity()
 {
@@ -24,6 +24,9 @@ bool j1Entity::Start()
 {
 	bool ret = true;
 
+	player_manager = new PlayerManager();
+	player_manager->Start();
+
 	return ret;
 }
 
@@ -33,6 +36,8 @@ bool j1Entity::PreUpdate()
 
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PreUpdate();
+
+	player_manager->PreUpdate();
 
 	return ret;
 }
@@ -47,6 +52,8 @@ bool j1Entity::Update(float dt)
 		(*it)->Draw(dt);
 	}
 
+	player_manager->Update(dt);
+
 	return ret;
 }
 
@@ -57,6 +64,8 @@ bool j1Entity::PostUpdate()
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PostUpdate();
 
+	player_manager->PostUpdate();
+
 	return ret;
 }
 
@@ -66,6 +75,10 @@ bool j1Entity::CleanUp()
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->CleanUp();
+
+	player_manager->CleanUp();
+
+	RELEASE(player_manager);
 
 	return ret;
 }
@@ -82,11 +95,8 @@ Entity* j1Entity::CreateEntity(entity_name entity)
 
 	switch (entity)
 	{
-	case player:
-		ret = new Player();
-		break;
-	case player2:
-		ret = new Player2();
+	case link:
+		ret = new Link();
 		break;
 	default:
 		break;

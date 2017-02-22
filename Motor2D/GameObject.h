@@ -69,7 +69,7 @@ public:
 	void AddAnimation(Animation* animation);
 
 	// Loads all animations from an XML
-	void LoadAnimationsFromXML(pugi::xml_document& doc);
+	SDL_Texture* LoadAnimationsFromXML(pugi::xml_document& doc, char* node_name);
 
 	// Sets an animation
 	void SetAnimation(const char* animation);

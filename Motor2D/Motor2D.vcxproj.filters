@@ -64,9 +64,6 @@
     <ClCompile Include="j1Entity.cpp">
       <Filter>Engine\4. Entities ==========</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Engine\4. Entities ==========\Player1</Filter>
-    </ClCompile>
     <ClCompile Include="j1Scene.cpp">
       <Filter>Engine\3. Scenes ==========</Filter>
     </ClCompile>
@@ -82,8 +79,11 @@
     <ClCompile Include="j1Viewports.cpp">
       <Filter>Engine\1. Modules =========</Filter>
     </ClCompile>
-    <ClCompile Include="Player2.cpp">
-      <Filter>Engine\4. Entities ==========\Player2</Filter>
+    <ClCompile Include="Link.cpp">
+      <Filter>Engine\4. Entities ==========\Link</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>Engine\4. Entities ==========</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,9 +180,6 @@
     <ClInclude Include="Entity.h">
       <Filter>Engine\4. Entities ==========</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Engine\4. Entities ==========\Player1</Filter>
-    </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
@@ -198,8 +195,11 @@
     <ClInclude Include="j1Viewports.h">
       <Filter>Engine\1. Modules =========</Filter>
     </ClInclude>
-    <ClInclude Include="Player2.h">
-      <Filter>Engine\4. Entities ==========\Player2</Filter>
+    <ClInclude Include="Link.h">
+      <Filter>Engine\4. Entities ==========\Link</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>Engine\4. Entities ==========</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,19 +227,13 @@
     <Filter Include="Engine\5. Tools ===========\PuguiXML">
       <UniqueIdentifier>{7cb78d67-17cc-45eb-af97-e2106becce7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\4. Entities ==========\Player1">
+    <Filter Include="Engine\4. Entities ==========\Link">
       <UniqueIdentifier>{649f33ab-cba0-4e3f-9d04-df22ae53d381}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\4. Entities ==========\Player2">
-      <UniqueIdentifier>{c345333d-c954-4149-b3e0-56eabd84bd48}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\player.xml">
-      <Filter>Engine\4. Entities ==========\Player1</Filter>
-    </Xml>
-    <Xml Include="..\Game\player2.xml">
-      <Filter>Engine\4. Entities ==========\Player2</Filter>
+    <Xml Include="..\Game\link.xml">
+      <Filter>Engine\4. Entities ==========\Link</Filter>
     </Xml>
   </ItemGroup>
 </Project>

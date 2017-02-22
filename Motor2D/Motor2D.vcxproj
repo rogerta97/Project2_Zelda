@@ -100,8 +100,8 @@
     <ClCompile Include="j1Textures.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="Parallax.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Player2.cpp" />
+    <ClCompile Include="Link.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,15 +138,14 @@
     <ClInclude Include="p2PQueue.h" />
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="Parallax.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Player2.h" />
+    <ClInclude Include="Link.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\player.xml" />
-    <Xml Include="..\Game\player2.xml" />
+    <Xml Include="..\Game\link.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

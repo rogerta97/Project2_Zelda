@@ -131,10 +131,12 @@ void Animator::AddAnimation(Animation* animation)
 	animations.push_back(animation);
 }
 
-void Animator::LoadAnimationsFromXML(pugi::xml_document &doc)
+SDL_Texture* Animator::LoadAnimationsFromXML(pugi::xml_document &doc, char* node_name)
 {
+	pugi::xml_node anim = doc.child("file").child(node_name);
+	SDL_Texture* ret = App->tex->LoadTexture(anim.attribute("texture").as_string(""));
 
-	for (pugi::xml_node anim = doc.child("file").child("animations").child("anim"); anim != NULL; anim = anim.next_sibling("anim")) 
+	for (anim = anim.child("anim"); anim != NULL; anim = anim.next_sibling("anim"))
 	{
 	    list<SDL_Rect> anim_rects;
 		float speed = anim.attribute("speed").as_float(1.0f);
@@ -150,6 +152,8 @@ void Animator::LoadAnimationsFromXML(pugi::xml_document &doc)
 		Animation* animation = new Animation(name.c_str(), anim_rects, speed, loop);
 		AddAnimation(animation);
 	}
+
+	return ret;
 }
 
 void Animator::SetAnimation(const char* name)

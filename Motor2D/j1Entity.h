@@ -5,18 +5,16 @@
 #include "p2Defs.h"
 #include "p2List.h"
 
+class PlayerManager;
 class b2Fixture;
 class PhysBody;
 
 enum entity_name
 {
-	player,
-	player2
+	link,
 };
 
 class Entity;
-class Player;
-class Player2;
 class j1Entity : public j1Module
 {
 public:
@@ -49,7 +47,8 @@ public:
 	Entity* CreateEntity(entity_name entity);
 	void DeleteEntity(Entity* entity);
 
-private:
+public:
+	PlayerManager* player_manager = nullptr;
 
 private:
 	// List with all entities

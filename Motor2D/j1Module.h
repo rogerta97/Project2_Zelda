@@ -9,6 +9,7 @@
 #include "p2SString.h"
 #include <string>
 #include <list>
+#include <queue>
 #include <iostream>
 #include "PugiXml\src\pugixml.hpp"
 

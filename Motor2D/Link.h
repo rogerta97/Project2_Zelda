@@ -1,14 +1,14 @@
-#ifndef _PLAYER2_
-#define _PLAYER2_
+#ifndef _LINK_
+#define _LINK_
 
 #include "Entity.h"
 
 class GameObject;
-class Player2 : public Entity
+class Link : public Entity
 {
 public:
-	Player2();
-	~Player2();
+	Link();
+	~Link();
 
 	// Load animations
 	bool LoadEntity();
@@ -31,6 +31,16 @@ public:
 	// CleanUp
 	bool CleanUp();
 
+	void RunUp(float speed);
+	void RunDown(float speed);
+	void RunLeft(float speed);
+	void RunRight(float speed);
+
+	void IdleUp(float speed);
+	void IdleDown(float speed);
+	void IdleLeft(float speed);
+	void IdleRight(float speed);
+
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
@@ -44,14 +54,13 @@ public:
 	GameObject* player_go = nullptr;
 
 	bool flip = false;
-	bool on_ground = false;
-	bool going_up = false;
 
-	float last_height = 0.0f;
+	states state = states_null;
 
 private:
 	uint gamepad_num = 20;
 	int camera = 1;
+
 };
 
 #endif

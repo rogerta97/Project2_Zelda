@@ -7,8 +7,7 @@
 class GameObject;
 class b2Fixture;
 class Parallax;
-class Player;
-class Player2;
+class Link;
 
 class MainScene : public Scene 
 {
@@ -31,10 +30,7 @@ public:
 	fPoint pos;
 
 private:
-	Player* test_player;
-	Player2* test_player2;
-	Player2* test_player3;
-	Player* test_player4;
+	Link* test_player;
 };
 
 
