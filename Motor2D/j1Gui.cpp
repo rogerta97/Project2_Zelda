@@ -7,9 +7,12 @@
 #include "j1Input.h"
 #include "j1Gui.h"
 #include "Functions.h"
+#include "j1Viewports.h"
 
 #include <iostream> 
 #include <sstream> 
+
+#define LAYER 10
 
 // Class Gui -------------------------
 // -----------------------------------
@@ -183,7 +186,7 @@ const void j1Gui::GetAtlas() const
 // ---------------------------------------------------------------------
 // Create a new Window
 // ---------------------------------------------------------------------
-UI_Window* j1Gui::UI_CreateWin(iPoint pos, int w, int h, int blit, bool _dinamic, bool _is_ui)
+UI_Window* j1Gui::UI_CreateWin(iPoint pos, int w, int h, int blit, bool _is_gameplay, bool _dinamic, bool _is_ui)
 {
 	UI_Window* ret = nullptr;
 	ret = new UI_Window();
@@ -194,6 +197,7 @@ UI_Window* j1Gui::UI_CreateWin(iPoint pos, int w, int h, int blit, bool _dinamic
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
 		ret->is_ui = _is_ui;
+		ret->is_gameplay = _is_gameplay;
 
 		// Layer
 
@@ -697,6 +701,7 @@ UI_Button* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic)
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
 
 		// Layers --
 
@@ -727,6 +732,7 @@ UI_Text* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, bool _
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
 
 		// Layers --
 
@@ -756,6 +762,7 @@ UI_Image* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic)
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
 
 		// Layers --
 
@@ -785,6 +792,8 @@ UI_Text_Input* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bo
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
+		ret->text->is_gameplay = is_gameplay;
 
 		// Layers --
 
@@ -811,6 +820,7 @@ UI_Scroll_Bar * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, i
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
 
 		// Layers --
 
@@ -838,6 +848,7 @@ UI_ColoredRect * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Colo
 		ret->parent_element = this;
 		ret->dinamic = _dinamic;
 		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
 
 		// Layers --
 
@@ -884,8 +895,18 @@ bool UI_Button::update()
 	if (App->gui->debug)
 		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, false);
 
-	if(print)
-		App->render->Blit(App->gui->atlas, rect.x, rect.y, &curr);
+	if (print)
+	{
+		if (!is_gameplay)
+			App->render->Blit(App->gui->atlas, rect.x, rect.y, &curr);
+		else
+		{
+			if (is_ui)
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, 0, -1.0f, false);
+			else
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr);
+		}
+	}
 
 	ChangeButtonStats();
 
@@ -1166,7 +1187,15 @@ bool UI_Text::update()
 		{
 			if (!TextCmp((*it).text.c_str(), ""))
 			{
-				App->render->Blit((*it).texture, rect.x, rect.y + space);
+				if (!is_gameplay)
+					App->render->Blit((*it).texture, rect.x, rect.y + space);
+				else
+				{
+					if(is_ui)
+						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0,0,0,0 }, 0, -1.0f, false);
+					else
+						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space));
+				}
 				space += spacing;
 			}
 		}
@@ -1228,8 +1257,18 @@ bool UI_Image::update()
 	if (App->gui->debug)
 		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, false);
 	
-	if(print)
-		App->render->Blit(App->gui->atlas, rect.x, rect.y, &image);
+	if (print)
+	{
+		if (!is_gameplay)
+			App->render->Blit(App->gui->atlas, rect.x, rect.y, &image);
+		else
+		{
+			if(is_ui)
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), image, 0, -1.0f, false);
+			else
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), image);
+		}
+	}
 
 	return true;
 }

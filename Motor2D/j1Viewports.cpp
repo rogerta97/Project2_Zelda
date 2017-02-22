@@ -246,9 +246,9 @@ void j1Viewports::CenterCamera(int id, int x, int y)
 	}
 }
 
-void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
+void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, bool use_camera, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
 {
-	layer_blit lblit(texture, pos, section, viewport, scale, _flip, angle, pivot_x, pivot_y);
+	layer_blit lblit(texture, pos, section, viewport, scale, use_camera, _flip, angle, pivot_x, pivot_y);
 
 	switch (viewport)
 	{
@@ -306,7 +306,11 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+
 			}
 	
 			for (int i = 0; i < quad_list.size(); i++)
@@ -344,7 +348,11 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -371,7 +379,11 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list2.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -411,7 +423,10 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -438,7 +453,10 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list2.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -465,7 +483,10 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list3.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera3.x, curr->data.pos.y + camera3.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera3.x, curr->data.pos.y + camera3.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)
@@ -492,7 +513,10 @@ void j1Viewports::DoLayerPrint()
 			for (p2PQueue_item<layer_blit>* curr = layer_list4.start; curr != nullptr; curr = curr->next)
 			{
 				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				App->render->Blit(curr->data.texture, curr->data.pos.x + camera4.x, curr->data.pos.y + camera4.y, &curr->data.section, blit_scale, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				if(curr->data.use_camera)
+					App->render->Blit(curr->data.texture, curr->data.pos.x + camera4.x, curr->data.pos.y + camera4.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				else
+					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
 			for (int i = 0; i < quad_list.size(); i++)

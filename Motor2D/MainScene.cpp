@@ -55,9 +55,9 @@ bool MainScene::Start()
 
 	//Create UI element
 	SDL_Rect screen = App->view->GetViewportRect(1); 
-	main_window = App->gui->UI_CreateWin(iPoint(screen.x,screen.y),screen.w, screen.h, 0, false, true); 
+	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0);
 
-	exp_bar = main_window->CreateImage(iPoint(500,0), SDL_Rect{0, 15, 98, 14}, false);
+	exp_bar = main_window->CreateImage(iPoint(screen.w / 2 - 50, 0), SDL_Rect{ 0, 15, 98, 14 });
 
 	return ret;
 }
