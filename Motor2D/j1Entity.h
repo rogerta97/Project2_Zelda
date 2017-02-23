@@ -12,7 +12,7 @@ class PhysBody;
 
 enum entity_name
 {
-	link, minion
+	link, minion, turret, castle
 };
 
 class Entity;

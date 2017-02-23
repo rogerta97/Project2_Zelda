@@ -14,8 +14,6 @@
 
 Link::Link(iPoint pos)
 {
-	bool ret = true;
-
 	player_go = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
 	player_go->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);

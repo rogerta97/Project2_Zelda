@@ -1,0 +1,45 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="textures/link_spritesheet.png">
+      <anim speed = "10" name = "run_down" loop = "true">
+	 <rect x = "0" y = "156" w = "32" h = "48"/>
+	 <rect x = "36" y = "156" w = "32" h = "48"/>
+	 <rect x = "72" y = "156" w = "32" h = "48"/>
+         <rect x = "108" y = "156" w = "32" h = "48"/>
+	 <rect x = "144" y = "156" w = "32" h = "48"/>
+	 <rect x = "180" y = "156" w = "32" h = "48"/>
+	 <rect x = "216" y = "156" w = "32" h = "48"/>
+	 <rect x = "252" y = "156" w = "32" h = "48"/>
+      </anim>
+      <anim speed = "10" name = "run_up" loop = "true">
+	 <rect x = "0" y = "206" w = "34" h = "48"/>
+	 <rect x = "36" y = "206" w = "34" h = "48"/>
+	 <rect x = "72" y = "206" w = "34" h = "48"/>
+         <rect x = "108" y = "206" w = "34" h = "48"/>
+	 <rect x = "144" y = "206" w = "34" h = "48"/>
+	 <rect x = "180" y = "206" w = "34" h = "48"/>
+	 <rect x = "216" y = "206" w = "34" h = "48"/>
+	 <rect x = "252" y = "206" w = "34" h = "48"/>
+      </anim>
+      <anim speed = "10" name = "run_lateral" loop = "true">
+	 <rect x = "0" y = "256" w = "38" h = "45"/>
+	 <rect x = "38" y = "256" w = "36" h = "45"/>
+	 <rect x = "74" y = "256" w = "38" h = "45"/>
+         <rect x = "112" y = "256" w = "38" h = "45"/>
+	 <rect x = "150" y = "256" w = "36" h = "45"/>
+	 <rect x = "186" y = "256" w = "36" h = "45"/>
+	 <rect x = "222" y = "256" w = "36" h = "45"/>
+	 <rect x = "258" y = "256" w = "38" h = "45"/>
+      </anim>
+      <anim speed = "10" name = "idle_lateral" loop = "true">
+	 <rect x = "112" y = "256" w = "38" h = "45"/>
+      </anim>
+      <anim speed = "10" name = "idle_up" loop = "true">
+	 <rect x = "108" y = "206" w = "34" h = "48"/>
+      </anim>
+      <anim speed = "10" name = "idle_down" loop = "true">
+	 <rect x = "108" y = "156" w = "32" h = "48"/>
+      </anim>
+   </animations>
+</file>

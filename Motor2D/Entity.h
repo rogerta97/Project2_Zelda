@@ -142,6 +142,23 @@ public:
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
+	//Set Team if not set already
+	void SetTeam(uint _team) 
+	{
+		if (team == 0) {
+			team = _team;
+		}
+	}
+
+	//Return entity team. 0 if neutral
+	uint GetTeam() const
+	{
+		return team;
+	}
+
+private:
+	uint		team = 0;
+
 public:
 	Stats	    stats;
 	AbilityCds  cds;
