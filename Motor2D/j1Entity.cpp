@@ -88,6 +88,13 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+
+	if (fixtureA->type == fixture_type::f_t_atack && fixtureB->type != fixture_type::f_t_atack)
+	{
+		Entity* entity = FindEntityByBodyType(bodyB->type);
+		entity->hit_by = FindEntityByBodyType(bodyA->type);
+		entity->hit = true;
+	}
 }
 
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)

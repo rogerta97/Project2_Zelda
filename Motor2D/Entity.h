@@ -177,13 +177,12 @@ public:
 	AbilityCds  cds;
 	bool		can_move = false;
 	bool        attacking = false;
+	bool		hit = false;
+	Entity*	    hit_by = nullptr;
 
 protected:
 	iPoint      draw_offset = NULLPOINT;
 	iPoint		restore_draw_offset = NULLPOINT;
-
-	bool		hit = false;
-	Entity*	    hit_by = nullptr;
 };
 
 #endif

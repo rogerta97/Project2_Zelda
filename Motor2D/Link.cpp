@@ -310,17 +310,7 @@ void Link::Ability3()
 
 void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	switch (bodyA->type)
-	{
-	case pbody_type::p_t_link:
-		if (fixtureB->type == fixture_type::f_t_atack)
-		{
-			hit_by = App->entity->FindEntityByBodyType(bodyB->type);
-			hit = true;
-		}
-		break;
-	
-	}
+
 }
 
 void Link::SetCamera(int id)
