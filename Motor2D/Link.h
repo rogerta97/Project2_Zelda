@@ -31,21 +31,28 @@ public:
 	// CleanUp
 	bool CleanUp();
 
-	void RunUp(float speed);
-	void RunDown(float speed);
-	void RunLeft(float speed);
-	void RunRight(float speed);
+	void MoveUp(float speed);
+	void MoveDown(float speed);
+	void MoveLeft(float speed);
+	void MoveRight(float speed);
 
-	void IdleUp(float speed);
-	void IdleDown(float speed);
-	void IdleLeft(float speed);
-	void IdleRight(float speed);
+	void MoveUpRight(float speed);
+	void MoveDownRight(float speed);
+	void MoveUpLeft(float speed);
+	void MoveDownLeft(float speed);
+
+	void RunUp();
+	void RunDown();
+	void RunLeft();
+	void RunRight();
+
+	void IdleUp();
+	void IdleDown();
+	void IdleLeft();
+	void IdleRight();
 
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-
-	//Set Gamepad number to this player. id>0
-	void SetGamePad(int id);
 
 	//Set Camera to this player. 1<=id<=4
 	void SetCamera(int id);
@@ -53,11 +60,9 @@ public:
 public:
 	GameObject* player_go = nullptr;
 
-	bool flip = false;
-
 private:
-	uint gamepad_num = 20;
 	int camera = 1;
+	bool flip = false;
 
 };
 

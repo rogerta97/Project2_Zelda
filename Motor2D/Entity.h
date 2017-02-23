@@ -35,6 +35,31 @@ enum states
 	states_null,
 };
 
+enum movement
+{
+	move_up,
+	move_down,
+	move_left,
+	move_right,
+
+	move_upright,
+	move_downright,
+	move_upleft,
+	move_downleft,
+
+	stop,
+};
+
+class Stats
+{
+public:
+	Stats() {};
+	~Stats() {};
+
+public:
+	int speed = 0;
+};
+
 class Entity
 {
 public:
@@ -51,15 +76,25 @@ public:
 	virtual bool CleanUp() { return true; };
 
 	// Characters
-	virtual void RunUp(float speed) {};
-	virtual void RunDown(float speed) {};
-	virtual void RunLeft(float speed) {};
-	virtual void RunRight(float speed) {}
+	virtual void MoveUp(float speed) {};
+	virtual void MoveDown(float speed) {};
+	virtual void MoveLeft(float speed) {};
+	virtual void MoveRight(float speed) {};
 
-	virtual void IdleUp(float speed) {};
-	virtual void IdleDown(float speed) {};
-	virtual void IdleLeft(float speed) {};
-	virtual void IdleRight(float speed) {};
+	virtual void MoveUpRight(float speed) {};
+	virtual void MoveDownRight(float speed) {};
+	virtual void MoveUpLeft(float speed) {};
+	virtual void MoveDownLeft(float speed) {};
+
+	virtual void RunUp() {};
+	virtual void RunDown() {};
+	virtual void RunLeft() {};
+	virtual void RunRight() {}
+
+	virtual void IdleUp() {};
+	virtual void IdleDown() {};
+	virtual void IdleLeft() {};
+	virtual void IdleRight() {};
 
 	virtual void SetCamera(int index) {};
 
@@ -76,6 +111,7 @@ public:
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
 public:
+	Stats	    stats;
 
 };
 

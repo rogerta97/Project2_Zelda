@@ -13,13 +13,14 @@ class PhysBody;
 struct Player
 {
 	Player() {  };
-	Player(Entity* _player, uint _index)
+	Player(Entity* _entity, uint _index)
 	{
-		player = _player; state = states::idle_down; index = _index;
+		entity = _entity; state = states::idle_down; index = _index;
 	}
-	Entity* player = nullptr;
-	states  state = states_null;
-	uint	index = 0;
+	Entity*  entity = nullptr;
+	states   state = states_null;
+	movement move = stop;
+	uint	 index = 0;
 };
 
 class PlayerManager

@@ -45,6 +45,8 @@ bool Link::Start()
 
 	player_go->SetAnimation("idle_down");
 
+	stats.speed = 200;
+
 	return ret;
 }
 
@@ -96,53 +98,93 @@ bool Link::CleanUp()
 	return ret;
 }
 
-void Link::RunUp(float speed)
+void Link::MoveUp(float speed)
 {
 	player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y - speed });
+}
+
+void Link::MoveDown(float speed)
+{
+	player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y + speed });
+}
+
+void Link::MoveLeft(float speed)
+{
+	player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
+}
+
+void Link::MoveRight(float speed)
+{
+	player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
+}
+
+void Link::MoveUpRight(float speed)
+{
+	fPoint s(speed * cos(45), speed * sin(45));
+	player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y - s.y });
+}
+
+void Link::MoveDownRight(float speed)
+{
+	fPoint s(speed * cos(45), speed * sin(45));
+	player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y + s.y });
+}
+
+void Link::MoveUpLeft(float speed)
+{
+	fPoint s(speed * cos(45), speed * sin(45));
+	player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y - s.y });
+}
+
+void Link::MoveDownLeft(float speed)
+{
+	fPoint s(speed * cos(45), speed * sin(45));
+	player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y + s.y });
+}
+
+void Link::RunUp()
+{
 	player_go->SetAnimation("run_up");
 	flip = false;
 }
 
-void Link::RunDown(float speed)
+void Link::RunDown()
 {
-	player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y + speed });
 	player_go->SetAnimation("run_down");
 	flip = false;
 }
 
-void Link::RunLeft(float speed)
+void Link::RunLeft()
 {
-	player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
 	player_go->SetAnimation("run_lateral");
 	flip = true;
 }
 
-void Link::RunRight(float speed)
+void Link::RunRight()
 {
-	player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
 	player_go->SetAnimation("run_lateral");
 	flip = false;
 }
 
-void Link::IdleUp(float speed)
+void Link::IdleUp()
 {
 	player_go->SetAnimation("idle_up");
 	flip = false;
 }
 
-void Link::IdleDown(float speed)
+void Link::IdleDown()
 {
 	player_go->SetAnimation("idle_down");
 	flip = false;
 }
 
-void Link::IdleLeft(float speed)
+void Link::IdleLeft()
 {
 	player_go->SetAnimation("idle_lateral");
 	flip = true;
 }
 
-void Link::IdleRight(float speed)
+void Link::IdleRight()
 {
 	player_go->SetAnimation("idle_lateral");
 	flip = false;
@@ -159,11 +201,6 @@ void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fix
 		break;
 	
 	}
-}
-
-void Link::SetGamePad(int id)
-{
-	gamepad_num = id-1;
 }
 
 void Link::SetCamera(int id)
