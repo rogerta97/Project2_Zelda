@@ -25,6 +25,8 @@ Link::Link(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
 	player_go->SetTexture(player_go->LoadAnimationsFromXML(doc, "animations"));
+
+	draw_offset = restore_draw_offset = { 13, 26 };
 }
 
 Link::~Link()
@@ -37,7 +39,10 @@ bool Link::Start()
 
 	player_go->SetAnimation("idle_down");
 
+	can_move = true;
 	stats.speed = 200;
+
+	cds = AbilityCds(32, 32, 32, 32, 32, 32, 32, 32);
 
 	return ret;
 }
@@ -57,6 +62,35 @@ bool Link::Update(float dt)
 
 	App->view->CenterCamera(camera, player_go->GetPos().x + 23, player_go->GetPos().y + 35);
 
+	// End atacking
+	if (attacking)
+	{
+		if (player_go->animator->IsCurrentAnimation("basic_atack_up"))
+		{
+			if (player_go->animator->GetCurrentAnimation()->Finished())
+			{
+				player_go->animator->GetCurrentAnimation()->Reset();
+				attacking = false;
+				can_move = true;
+				draw_offset = restore_draw_offset;
+			}
+		}
+		else if (player_go->animator->IsCurrentAnimation("basic_atack_down"))
+		{
+			if (player_go->animator->GetCurrentAnimation()->Finished())
+			{
+				player_go->animator->GetCurrentAnimation()->Reset();
+				attacking = false;
+				can_move = true;
+			}
+		}
+	}
+
+	if (!attacking && !can_move)
+	{
+
+	}
+
 	return ret;
 }
 
@@ -65,9 +99,9 @@ bool Link::Draw(float dt)
 	bool ret = true;
 	
 	if(flip)
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 20, player_go->GetPos().y - 23}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - 17, player_go->GetPos().y - 23 }, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x - 3, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -92,94 +126,172 @@ bool Link::CleanUp()
 
 void Link::MoveUp(float speed)
 {
-	player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y - speed });
+	if(can_move)
+		player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y - speed });
 }
 
 void Link::MoveDown(float speed)
 {
-	player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y + speed });
+	if (can_move)
+		player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y + speed });
 }
 
 void Link::MoveLeft(float speed)
 {
-	player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
+	if (can_move)
+		player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
 }
 
 void Link::MoveRight(float speed)
 {
-	player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
+	if (can_move)
+		player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
 }
 
 void Link::MoveUpRight(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
-	player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y - s.y });
+	if (can_move)
+	{
+		fPoint s(speed * cos(45), speed * sin(45));
+		player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y - s.y });
+	}
 }
 
 void Link::MoveDownRight(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
-	player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y + s.y });
+	if (can_move)
+	{
+		fPoint s(speed * cos(45), speed * sin(45));
+		player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y + s.y });
+	}
 }
 
 void Link::MoveUpLeft(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
-	player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y - s.y });
+	if (can_move)
+	{
+		fPoint s(speed * cos(45), speed * sin(45));
+		player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y - s.y });
+	}
 }
 
 void Link::MoveDownLeft(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
-	player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y + s.y });
+	if (can_move)
+	{
+		fPoint s(speed * cos(45), speed * sin(45));
+		player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y + s.y });
+	}
 }
 
 void Link::RunUp()
 {
-	player_go->SetAnimation("run_up");
-	flip = false;
+	if (can_move)
+	{
+		player_go->SetAnimation("run_up");
+		flip = false;
+	}
 }
 
 void Link::RunDown()
 {
-	player_go->SetAnimation("run_down");
-	flip = false;
+	if (can_move)
+	{
+		player_go->SetAnimation("run_down");
+		flip = false;
+	}
 }
 
 void Link::RunLeft()
 {
-	player_go->SetAnimation("run_lateral");
-	flip = true;
+	if (can_move)
+	{
+		player_go->SetAnimation("run_lateral");
+		flip = true;
+	}
 }
 
 void Link::RunRight()
 {
-	player_go->SetAnimation("run_lateral");
-	flip = false;
+	if (can_move)
+	{
+		player_go->SetAnimation("run_lateral");
+		flip = false;
+	}
 }
 
 void Link::IdleUp()
 {
-	player_go->SetAnimation("idle_up");
-	flip = false;
+	if (can_move)
+	{
+		player_go->SetAnimation("idle_up");
+		flip = false;
+	}
 }
 
 void Link::IdleDown()
 {
-	player_go->SetAnimation("idle_down");
-	flip = false;
+	if (can_move)
+	{
+		player_go->SetAnimation("idle_down");
+		flip = false;
+	}
 }
 
 void Link::IdleLeft()
 {
-	player_go->SetAnimation("idle_lateral");
-	flip = true;
+	if (can_move)
+	{
+		player_go->SetAnimation("idle_lateral");
+		flip = true;
+	}
 }
 
 void Link::IdleRight()
 {
-	player_go->SetAnimation("idle_lateral");
+	if (can_move)
+	{
+		player_go->SetAnimation("idle_lateral");
+		flip = false;
+	}
+}
+
+void Link::BasicAttackUp()
+{
+	player_go->SetAnimation("basic_atack_up");
+	draw_offset = { draw_offset.x, 48 };
+	attacking = true;
+	can_move = false;
 	flip = false;
+}
+
+void Link::BasicAttackDown()
+{
+	player_go->SetAnimation("basic_atack_down");
+	attacking = true;
+	can_move = false;
+	flip = false;
+}
+
+void Link::BasicAttackLeft()
+{
+}
+
+void Link::BasicAttackRight()
+{
+}
+
+
+void Link::Ability1()
+{
+}
+
+void Link::Ability2()
+{
+}
+
+void Link::Ability3()
+{
 }
 
 void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

@@ -55,6 +55,7 @@ private:
 	// List with all entities
 	list<Entity*> entity_list;
 
+
 };
 
 #endif // __j1ENTITY_H__

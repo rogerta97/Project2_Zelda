@@ -48,6 +48,14 @@ public:
 	void IdleLeft();
 	void IdleRight();
 
+	void BasicAttackUp();
+	void BasicAttackDown();
+	void BasicAttackLeft();
+	void BasicAttackRight();
+	void Ability1();
+	void Ability2();
+	void Ability3();
+
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 

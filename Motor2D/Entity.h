@@ -60,6 +60,28 @@ public:
 	int speed = 0;
 };
 
+struct AbilityCds
+{
+	AbilityCds(float _basic_attack_cd = 0, float _basic_attack_duration = 0, float _ability1_cd = 0, float _ability1_duration = 0, 
+		float _ability2_cd = 0, float _ability2_duration = 0, float _ability3_cd = 0, float _ability3_duration = 0)
+	{
+		basic_attack_cd = _basic_attack_cd; basic_attack_duration = _basic_attack_duration; ability1_cd = _ability1_cd; ability1_duration = _ability1_duration; 
+		ability2_cd = _ability2_cd; ability2_duration = _ability2_duration; ability3_cd = _ability3_cd; ability3_duration = _ability3_duration;
+	};
+
+	float basic_attack_cd = 0;
+	float basic_attack_duration = 0;
+
+	float ability1_cd = 0;
+	float ability1_duration = 0;
+
+	float ability2_cd = 0;
+	float ability2_duration = 0;
+
+	float ability3_cd = 0;
+	float ability3_duration = 0;
+};
+
 class Entity
 {
 public:
@@ -95,6 +117,15 @@ public:
 	virtual void IdleLeft() {};
 	virtual void IdleRight() {};
 
+	virtual void BasicAttackUp() {};
+	virtual void BasicAttackDown() {};
+	virtual void BasicAttackLeft() {};
+	virtual void BasicAttackRight() {};
+
+	virtual void Ability1() {};
+	virtual void Ability2() {};
+	virtual void Ability3() {};
+
 	virtual void SetCamera(int index) {};
 
 	virtual iPoint GetPos() const { return{ 0,0 }; }
@@ -113,7 +144,12 @@ public:
 
 public:
 	Stats	    stats;
+	AbilityCds  cds;
+	bool		can_move = false;
+	bool        attacking = false;
 
+	iPoint      draw_offset = NULLPOINT;
+	iPoint		restore_draw_offset = NULLPOINT;
 };
 
 #endif

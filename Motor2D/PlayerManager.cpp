@@ -141,6 +141,15 @@ bool PlayerManager::Update(float dt)
 				players.at(i).state = run_down;
 		}
 
+		// Abilities
+		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+		{
+			if(players.at(i).state == idle_down || players.at(i).state == run_down)
+				players.at(i).state = basic_atack_down;
+			else if (players.at(i).state == idle_up || players.at(i).state == run_up)
+				players.at(i).state = basic_atack_up;
+		}
+
 		// State machines
 
 		// Animations
@@ -179,10 +188,14 @@ bool PlayerManager::Update(float dt)
 			players.at(i).entity->IdleRight();
 			break;
 		case basic_atack_up:
+			players.at(i).entity->BasicAttackUp();
+			players.at(i).state = idle_up;
 			break;
 		case basic_atack_left:
 			break;
 		case basic_atack_down:
+			players.at(i).entity->BasicAttackDown();
+			players.at(i).state = idle_down;
 			break;
 		case basic_atack_right:
 			break;
@@ -241,9 +254,12 @@ bool PlayerManager::CleanUp()
 
 void PlayerManager::AddPlayer(entity_name name, int index, iPoint pos)
 {
-	Player p(App->entity->CreateEntity(name, pos), index-1);
-	p.entity->SetCamera(p.index+1);
-	players.push_back(p);
+	if (players.size() < 3)
+	{
+		Player p(App->entity->CreateEntity(name, pos), index - 1);
+		p.entity->SetCamera(p.index + 1);
+		players.push_back(p);
+	}
 }
 
 void PlayerManager::ChangePlayer(entity_name name, int index)
