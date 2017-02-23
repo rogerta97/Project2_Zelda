@@ -36,7 +36,7 @@ bool Minion::Start()
 
 	game_object->SetAnimation("idle_down");
 
-	stats.speed = 150;
+	stats.speed = 75;
 
 	return ret;
 }
