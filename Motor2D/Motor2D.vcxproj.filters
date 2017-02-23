@@ -85,6 +85,9 @@
     <ClCompile Include="PlayerManager.cpp">
       <Filter>Engine\4. Entities ==========</Filter>
     </ClCompile>
+    <ClCompile Include="Minion.cpp">
+      <Filter>Engine\4. Entities ==========\Minions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -201,6 +204,9 @@
     <ClInclude Include="PlayerManager.h">
       <Filter>Engine\4. Entities ==========</Filter>
     </ClInclude>
+    <ClInclude Include="Minion.h">
+      <Filter>Engine\4. Entities ==========\Minions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -229,6 +235,9 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Link">
       <UniqueIdentifier>{649f33ab-cba0-4e3f-9d04-df22ae53d381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Minions">
+      <UniqueIdentifier>{de09af9a-bea5-4367-81e3-c6bf6e5f9f21}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

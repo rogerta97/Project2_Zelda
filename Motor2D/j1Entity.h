@@ -11,7 +11,7 @@ class PhysBody;
 
 enum entity_name
 {
-	link,
+	link, minion
 };
 
 class Entity;
