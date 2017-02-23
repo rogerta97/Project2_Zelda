@@ -61,9 +61,9 @@ public:
 	int speed = 0;
 };
 
-struct AbilityCds
+struct Abilities
 {
-	AbilityCds(float _basic_attack_cd = 0, float _basic_attack_duration = 0, float _ability1_cd = 0, float _ability1_duration = 0, 
+	Abilities(float _basic_attack_cd = 0, float _basic_attack_duration = 0, float _ability1_cd = 0, float _ability1_duration = 0,
 		float _ability2_cd = 0, float _ability2_duration = 0, float _ability3_cd = 0, float _ability3_duration = 0)
 	{
 		basic_attack_cd = _basic_attack_cd; basic_attack_duration = _basic_attack_duration; ability1_cd = _ability1_cd; ability1_duration = _ability1_duration; 
@@ -174,7 +174,7 @@ private:
 public:
 	GameObject* game_object = nullptr;
 	Stats	    stats;
-	AbilityCds  cds;
+	Abilities   abilities_stats;
 	bool		can_move = false;
 	bool        attacking = false;
 	bool		hit = false;

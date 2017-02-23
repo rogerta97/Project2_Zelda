@@ -41,7 +41,7 @@ bool Link::Start()
 	can_move = true;
 	stats.speed = 200;
 
-	cds = AbilityCds(69, 69, 69, 69, 69, 69, 69, 69);
+	abilities_stats = Abilities(69, 69, 69, 69, 69, 69, 69, 69);
 
 	return ret;
 }
@@ -263,36 +263,48 @@ void Link::IdleRight()
 
 void Link::BasicAttackUp()
 {
-	game_object->SetAnimation("basic_attack_up");
-	draw_offset = { draw_offset.x, 48 };
-	attacking = true;
-	can_move = false;
-	flip = false;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_up");
+		draw_offset = { draw_offset.x, 48 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
 void Link::BasicAttackDown()
 {
-	game_object->SetAnimation("basic_attack_down");
-	attacking = true;
-	can_move = false;
-	flip = false;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_down");
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
 void Link::BasicAttackLeft()
 {
-	game_object->SetAnimation("basic_attack_lateral");
-	draw_offset = { 26, draw_offset.y };
-	attacking = true;
-	can_move = false;
-	flip = true;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_lateral");
+		draw_offset = { 26, draw_offset.y };
+		attacking = true;
+		can_move = false;
+		flip = true;
+	}
 }
 
 void Link::BasicAttackRight()
 {
-	game_object->SetAnimation("basic_attack_lateral");
-	attacking = true;
-	can_move = false;
-	flip = false;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_lateral");
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
 
