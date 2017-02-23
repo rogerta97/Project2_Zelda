@@ -2,6 +2,7 @@
 #include "Link.h"
 #include "p2Log.h"
 #include "PlayerManager.h"
+#include "GameObject.h"
 
 j1Entity::j1Entity()
 {
@@ -118,6 +119,22 @@ void j1Entity::DeleteEntity(Entity* entity)
 	entity->CleanUp();
 	entity_list.remove(entity);
 	RELEASE(entity);
+}
+
+Entity * j1Entity::FindEntityByBodyType(pbody_type type)
+{
+	Entity* ret = nullptr;
+
+	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
+		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody->type)
+		{
+			ret = *it;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 

@@ -9,6 +9,7 @@
 
 class b2Fixture;
 class PhysBody;
+class GameObject;
 
 enum states
 {
@@ -126,6 +127,17 @@ public:
 	virtual void Ability2() {};
 	virtual void Ability3() {};
 
+	bool GotHit(Entity* &entity)
+	{
+		if (hit)
+		{
+			entity = hit_by;
+			hit = false;
+			return true;
+		}
+		return false;
+	};
+
 	virtual void SetCamera(int index) {};
 
 	virtual iPoint GetPos() const { return{ 0,0 }; }
@@ -160,13 +172,18 @@ private:
 	uint		team = 0;
 
 public:
+	GameObject* game_object = nullptr;
 	Stats	    stats;
 	AbilityCds  cds;
 	bool		can_move = false;
 	bool        attacking = false;
 
+protected:
 	iPoint      draw_offset = NULLPOINT;
 	iPoint		restore_draw_offset = NULLPOINT;
+
+	bool		hit = false;
+	Entity*	    hit_by = nullptr;
 };
 
 #endif

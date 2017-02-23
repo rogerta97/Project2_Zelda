@@ -10,19 +10,20 @@
 #include "j1Textures.h"
 #include "p2Log.h"
 #include "j1Viewports.h"
+#include "j1Entity.h"
 
 
 Link::Link(iPoint pos)
 {
-	player_go = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link, 0);
 
-	player_go->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
-	player_go->SetListener((j1Module*)App->entity);
-	player_go->SetFixedRotation(true);
+	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
+	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetFixedRotation(true);
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
-	player_go->SetTexture(player_go->LoadAnimationsFromXML(doc, "animations"));
+	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	draw_offset = restore_draw_offset = { 16, 26 };
 }
@@ -35,7 +36,7 @@ bool Link::Start()
 {
 	bool ret = true;
 
-	player_go->SetAnimation("idle_down");
+	game_object->SetAnimation("idle_down");
 
 	can_move = true;
 	stats.speed = 200;
@@ -58,7 +59,7 @@ bool Link::Update(float dt)
 {
 	bool ret = true;
 
-	App->view->CenterCamera(camera, player_go->GetPos().x + 23, player_go->GetPos().y + 35);
+	App->view->CenterCamera(camera, game_object->GetPos().x + 23, game_object->GetPos().y + 35);
 
 	return ret;
 }
@@ -68,38 +69,38 @@ bool Link::Draw(float dt)
 	bool ret = true;
 	
 	if(flip)
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x - 3, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 
 	// End atacking (It's down the blit because of a reason)
 	if (attacking)
 	{
-		if (player_go->animator->IsCurrentAnimation("basic_attack_up"))
+		if (game_object->animator->IsCurrentAnimation("basic_attack_up"))
 		{
-			if (player_go->animator->GetCurrentAnimation()->Finished())
+			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
-				player_go->animator->GetCurrentAnimation()->Reset();
+				game_object->animator->GetCurrentAnimation()->Reset();
 				attacking = false;
 				can_move = true;
 				draw_offset = restore_draw_offset;
 			}
 		}
-		else if (player_go->animator->IsCurrentAnimation("basic_attack_down"))
+		else if (game_object->animator->IsCurrentAnimation("basic_attack_down"))
 		{
-			if (player_go->animator->GetCurrentAnimation()->Finished())
+			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
-				player_go->animator->GetCurrentAnimation()->Reset();
+				game_object->animator->GetCurrentAnimation()->Reset();
 				attacking = false;
 				can_move = true;
 			}
 		}
-		else if (player_go->animator->IsCurrentAnimation("basic_attack_lateral"))
+		else if (game_object->animator->IsCurrentAnimation("basic_attack_lateral"))
 		{
-			if (player_go->animator->GetCurrentAnimation()->Finished())
+			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
-				player_go->animator->GetCurrentAnimation()->Reset();
+				game_object->animator->GetCurrentAnimation()->Reset();
 				attacking = false;
 				can_move = true;
 				draw_offset = restore_draw_offset;
@@ -131,25 +132,25 @@ bool Link::CleanUp()
 void Link::MoveUp(float speed)
 {
 	if(can_move)
-		player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y - speed });
+		game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });
 }
 
 void Link::MoveDown(float speed)
 {
 	if (can_move)
-		player_go->SetPos({ player_go->fGetPos().x, player_go->fGetPos().y + speed });
+		game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y + speed });
 }
 
 void Link::MoveLeft(float speed)
 {
 	if (can_move)
-		player_go->SetPos({ player_go->fGetPos().x - speed, player_go->fGetPos().y });
+		game_object->SetPos({ game_object->fGetPos().x - speed, game_object->fGetPos().y });
 }
 
 void Link::MoveRight(float speed)
 {
 	if (can_move)
-		player_go->SetPos({ player_go->fGetPos().x + speed, player_go->fGetPos().y });
+		game_object->SetPos({ game_object->fGetPos().x + speed, game_object->fGetPos().y });
 }
 
 void Link::MoveUpRight(float speed)
@@ -157,7 +158,7 @@ void Link::MoveUpRight(float speed)
 	if (can_move)
 	{
 		fPoint s(speed * cos(45), speed * sin(45));
-		player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y - s.y });
+		game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y - s.y });
 	}
 }
 
@@ -166,7 +167,7 @@ void Link::MoveDownRight(float speed)
 	if (can_move)
 	{
 		fPoint s(speed * cos(45), speed * sin(45));
-		player_go->SetPos({ player_go->fGetPos().x + s.x, player_go->fGetPos().y + s.y });
+		game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y + s.y });
 	}
 }
 
@@ -175,7 +176,7 @@ void Link::MoveUpLeft(float speed)
 	if (can_move)
 	{
 		fPoint s(speed * cos(45), speed * sin(45));
-		player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y - s.y });
+		game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y - s.y });
 	}
 }
 
@@ -184,7 +185,7 @@ void Link::MoveDownLeft(float speed)
 	if (can_move)
 	{
 		fPoint s(speed * cos(45), speed * sin(45));
-		player_go->SetPos({ player_go->fGetPos().x - s.x, player_go->fGetPos().y + s.y });
+		game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y + s.y });
 	}
 }
 
@@ -192,7 +193,7 @@ void Link::RunUp()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("run_up");
+		game_object->SetAnimation("run_up");
 		flip = false;
 	}
 }
@@ -201,7 +202,7 @@ void Link::RunDown()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("run_down");
+		game_object->SetAnimation("run_down");
 		flip = false;
 	}
 }
@@ -210,7 +211,7 @@ void Link::RunLeft()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("run_lateral");
+		game_object->SetAnimation("run_lateral");
 		flip = true;
 	}
 }
@@ -219,7 +220,7 @@ void Link::RunRight()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("run_lateral");
+		game_object->SetAnimation("run_lateral");
 		flip = false;
 	}
 }
@@ -228,7 +229,7 @@ void Link::IdleUp()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("idle_up");
+		game_object->SetAnimation("idle_up");
 		flip = false;
 	}
 }
@@ -237,7 +238,7 @@ void Link::IdleDown()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("idle_down");
+		game_object->SetAnimation("idle_down");
 		flip = false;
 	}
 }
@@ -246,7 +247,7 @@ void Link::IdleLeft()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("idle_lateral");
+		game_object->SetAnimation("idle_lateral");
 		flip = true;
 	}
 }
@@ -255,14 +256,14 @@ void Link::IdleRight()
 {
 	if (can_move)
 	{
-		player_go->SetAnimation("idle_lateral");
+		game_object->SetAnimation("idle_lateral");
 		flip = false;
 	}
 }
 
 void Link::BasicAttackUp()
 {
-	player_go->SetAnimation("basic_attack_up");
+	game_object->SetAnimation("basic_attack_up");
 	draw_offset = { draw_offset.x, 48 };
 	attacking = true;
 	can_move = false;
@@ -271,7 +272,7 @@ void Link::BasicAttackUp()
 
 void Link::BasicAttackDown()
 {
-	player_go->SetAnimation("basic_attack_down");
+	game_object->SetAnimation("basic_attack_down");
 	attacking = true;
 	can_move = false;
 	flip = false;
@@ -279,7 +280,7 @@ void Link::BasicAttackDown()
 
 void Link::BasicAttackLeft()
 {
-	player_go->SetAnimation("basic_attack_lateral");
+	game_object->SetAnimation("basic_attack_lateral");
 	draw_offset = { 26, draw_offset.y };
 	attacking = true;
 	can_move = false;
@@ -288,7 +289,7 @@ void Link::BasicAttackLeft()
 
 void Link::BasicAttackRight()
 {
-	player_go->SetAnimation("basic_attack_lateral");
+	game_object->SetAnimation("basic_attack_lateral");
 	attacking = true;
 	can_move = false;
 	flip = false;
@@ -311,9 +312,11 @@ void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fix
 {
 	switch (bodyA->type)
 	{
-	case pbody_type::p_t_player:
-		if (bodyB->type == pbody_type::p_t_world)
+	case pbody_type::p_t_link:
+		if (fixtureB->type == fixture_type::f_t_atack)
 		{
+			hit_by = App->entity->FindEntityByBodyType(bodyB->type);
+			hit = true;
 		}
 		break;
 	
@@ -330,5 +333,5 @@ void Link::SetCamera(int id)
 
 iPoint Link::GetPos() const
 {
-	return player_go->GetPos();
+	return game_object->GetPos();
 }

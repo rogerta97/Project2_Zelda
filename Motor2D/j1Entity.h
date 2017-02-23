@@ -9,6 +9,7 @@
 class PlayerManager;
 class b2Fixture;
 class PhysBody;
+enum class pbody_type;
 
 enum entity_name
 {
@@ -47,6 +48,8 @@ public:
 
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
+
+	Entity* FindEntityByBodyType(pbody_type type);
 
 public:
 	PlayerManager* player_manager = nullptr;
