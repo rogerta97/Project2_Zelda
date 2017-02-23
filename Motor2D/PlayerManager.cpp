@@ -280,3 +280,18 @@ void PlayerManager::ChangePlayer(entity_name name, int index)
 	p.entity->SetCamera(p.index + 1);
 	players.push_back(p);
 }
+
+std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)
+{
+	std::vector<Entity*> ret;
+
+	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if (it->entity->GetTeam() == team)
+		{
+			ret.push_back(it->entity);
+		}
+	}
+
+	return ret;
+}

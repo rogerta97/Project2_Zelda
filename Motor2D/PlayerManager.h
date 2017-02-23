@@ -53,6 +53,8 @@ public:
 	void AddPlayer(entity_name name, int index, iPoint pos);
 	void ChangePlayer(entity_name name, int index);
 
+	std::vector<Entity*> GetTeamPlayers(int team);
+
 private:
 
 private:

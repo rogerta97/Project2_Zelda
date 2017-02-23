@@ -9,6 +9,7 @@ class GameObject;
 class b2Fixture;
 class Parallax;
 class Link;
+class Minion;
 
 class MainScene : public Scene 
 {
@@ -34,6 +35,8 @@ private:
 	//UI elements
 	UI_Window* main_window = nullptr; 
 	UI_Image* exp_bar = nullptr; 
+
+	Minion* test_minion = nullptr;
 };
 
 

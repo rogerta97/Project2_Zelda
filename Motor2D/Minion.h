@@ -18,6 +18,7 @@ enum MINION_MOVE_STATE
 	Move_FollowBasePath,
 	Move_AproachTarget,
 	Move_ReturnToPath,
+	Move_Idle,
 };
 
 class Minion :public Entity 
@@ -83,7 +84,11 @@ private:
 	void SetTargetPath(const std::list<iPoint>* path);
 
 	void PathToTarget();
+	void PathToBasePath();
+
 	bool LookForTarget();
+
+	void Move(int delta_x, int delta_y);
 
 public:
 
@@ -100,10 +105,12 @@ private:
 
 	Entity*				target = nullptr;
 
-	std::list<iPoint>	base_path;
-	std::list<iPoint>	target_path;
+	std::vector<iPoint>	base_path;
+	std::vector<iPoint>	target_path;
 	uint				base_path_index = 0;
 	uint				target_path_index = 0;
+
+	float				speed = 0;
 
 };
 

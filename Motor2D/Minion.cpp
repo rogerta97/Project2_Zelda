@@ -5,6 +5,12 @@
 #include "j1App.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
+#include "PlayerManager.h"
+#include "j1Entity.h"
+#include <vector>
+#include "p2Log.h"
+
+#define Half_Tile 16
 
 Minion::Minion(iPoint pos)
 {
@@ -48,9 +54,12 @@ bool Minion::Update(float dt)
 {
 	bool ret = true;
 
+	speed = stats.speed*dt;
+
 	switch (state)
 	{
 	case Minion_Idle:
+		CheckState();
 		break;
 	case Minion_Move:
 		MinionMove();
@@ -61,6 +70,10 @@ bool Minion::Update(float dt)
 	default:
 		break;
 	}
+
+	iPoint pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+
+	//LOG("min pos: %d %d", pos.x, pos.y);
 
 	return ret;
 }
@@ -219,14 +232,56 @@ bool Minion::MinionMove()
 
 	CheckState();
 
+	iPoint map_pos = App->map->WorldToMap(GetPos().x + Half_Tile, GetPos().y + Half_Tile);
+
 	switch (move_state)
 	{
 	case Move_FollowBasePath:
-		break;
+	{
+		if (base_path_index < base_path.size()-1)
+		{
+			if (GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < 18)
+				base_path_index++;
+		}
+		else
+			move_state = Move_Idle;
+
+		iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
+
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+
+		break; 
+	}
 	case Move_AproachTarget:
+	{
+		if (target_path_index < target_path.size()-1)
+			if (map_pos.DistanceTo(target_path.at(target_path_index)) < 18)
+				target_path_index++;
+
+		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
+
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+
 		break;
+	}
 	case Move_ReturnToPath:
+	{
+		if (target_path_index < target_path.size())
+			if (map_pos.DistanceTo(target_path.at(target_path_index)) < 5)
+				target_path_index++;
+
+		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
+
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+
 		break;
+	}
 	default:
 		break;
 	}
@@ -241,40 +296,62 @@ bool Minion::MinionAttack()
 
 void Minion::CheckState()
 {
-	if (target == nullptr)
+	switch (state)
 	{
-		if (LookForTarget())
-		{
-
-		}
-		else
-		{
-			move_state = Move_FollowBasePath;
-		}
-	}
-	else
+	case Minion_Idle:
+		state = Minion_Move;
+		break;
+	case Minion_Move:
 	{
-		if (false) //check if player is under attack
+		switch (move_state)
 		{
-			//set target to player agressor
-			PathToTarget();
-		}
-		else
-		{
-			if (minion_go->GetPos().DistanceTo(target->GetPos()) < vision_range)
-			{
-				if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
-				{
-					PathToTarget();
-				}
-			}
+		case Move_FollowBasePath:
+			if (LookForTarget())
+				PathToTarget();
+			break;
+		case Move_AproachTarget:
+			if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 3)
+				state = Minion_Attack;
 			else
 			{
-				target_path_index = 0;
-				target_path.clear();
-				move_state = Move_ReturnToPath;
+				if (minion_go->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(base_path.at(base_path_index))<vision_range)
+				{
+					if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
+					{
+						PathToTarget();
+					}
+				}
+				else
+				{
+					target_path_index = 0;
+					target_path.clear();
+					target = nullptr;
+					move_state = Move_ReturnToPath;
+					PathToBasePath();
+				}
 			}
+			break;
+		case Move_ReturnToPath:
+			if (LookForTarget())
+				PathToTarget();
+			if (base_path_index < base_path.size()) {
+				iPoint map_pos = App->map->WorldToMap(GetPos().x - Half_Tile, GetPos().y - Half_Tile);
+				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 5)
+					move_state = Move_FollowBasePath;
+			}
+			break;
+		default:
+			break;
 		}
+		break; 
+	}
+	case Minion_Attack:
+		move_state = Move_ReturnToPath;
+		state = Minion_Move;
+		PathToBasePath();
+		break;
+	default:
+		break;
 	}
 }
 
@@ -294,7 +371,84 @@ void Minion::PathToTarget()
 	move_state = Move_AproachTarget;
 }
 
+void Minion::PathToBasePath()
+{
+	App->pathfinding->CreatePath(GetPos(), base_path.at(base_path_index));
+	SetTargetPath(App->pathfinding->GetLastPath());
+	target_path_index = 0;
+	move_state = Move_ReturnToPath;
+}
+
 bool Minion::LookForTarget()
 {
-	return false;
+	bool ret = false;
+
+	//now only check for players
+	std::vector<Entity*> players;
+	if (GetTeam() == 1)
+		players = App->entity->player_manager->GetTeamPlayers(2);
+	else
+		players = App->entity->player_manager->GetTeamPlayers(1);
+
+	for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
+		{
+			target = *it;
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+void Minion::Move(int delta_x, int delta_y)
+{
+	if (delta_x > 0)
+	{
+		if (delta_y > 0)
+		{
+			MoveDownRight(speed);
+			RunRight();
+		}
+		else if (delta_y < 0)
+		{
+			MoveUpRight(speed);
+			RunRight();
+		}
+		else {
+			MoveRight(speed);
+			RunRight();
+		}
+	}
+	else if (delta_x < 0)
+	{
+		if (delta_y > 0)
+		{
+			MoveDownLeft(speed);
+			RunLeft();
+		}
+		else if (delta_y < 0)
+		{
+			MoveUpLeft(speed);
+			RunLeft();
+		}
+		else {
+			MoveLeft(speed);
+			RunLeft();
+		}
+	}
+	else
+	{
+		if (delta_y > 0)
+		{
+			MoveDown(speed);
+			RunDown();
+		}
+		else if (delta_y < 0)
+		{
+			MoveUp(speed);
+			RunUp();
+		}
+	}
 }

@@ -2,6 +2,7 @@
 #include "Link.h"
 #include "p2Log.h"
 #include "PlayerManager.h"
+#include "Minion.h"
 
 j1Entity::j1Entity()
 {
@@ -97,6 +98,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	{
 	case link:
 		ret = new Link(pos);
+		break;
+	case minion:
+		ret = new Minion(pos);
 		break;
 	default:
 		break;

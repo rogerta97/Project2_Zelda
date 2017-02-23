@@ -15,6 +15,8 @@
 #include "Link.h"
 #include "j1Map.h"
 #include "PlayerManager.h"
+#include "j1Pathfinding.h"
+#include "Minion.h"
 
 
 MainScene::MainScene()
@@ -38,7 +40,29 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
-	App->map->Load("zelda_test2.tmx");
+	if (App->map->Load("zelda_test2.tmx"))
+	{
+		int w, h;
+		uchar* data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &data))
+			App->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+	}
+
+	//Test MInion
+	std::list<iPoint> path;
+
+	App->pathfinding->CreatePath(iPoint(3, 2), iPoint(30, 2));
+
+	for (std::list<iPoint>::const_iterator it = App->pathfinding->GetLastPath()->begin(); it != App->pathfinding->GetLastPath()->end(); it++)
+	{
+		path.push_back(*it);
+	}
+
+	test_minion = (Minion*)App->entity->CreateEntity(minion, iPoint(100, 20));
+	test_minion->SetBasePath(path);
+	test_minion->SetTeam(1);
 
 	//Create UI element
 	SDL_Rect screen = App->view->GetViewportRect(1); 
