@@ -17,7 +17,7 @@ Link::Link(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
+	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
