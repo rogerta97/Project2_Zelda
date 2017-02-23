@@ -32,8 +32,8 @@ public:
 
 private:
 	//UI elements
-	UI_Window* main_window; 
-	UI_Image* exp_bar; 
+	UI_Window* main_window = nullptr; 
+	UI_Image* exp_bar = nullptr; 
 };
 
 
