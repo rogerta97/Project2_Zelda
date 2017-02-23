@@ -62,11 +62,11 @@ bool PlayerManager::Update(float dt)
 		{
 			players.at(i).move = move_right;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, LEFTJOY_UP) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, LEFTJOY_UP) > 6000)
 		{
 			players.at(i).move = move_up;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, LEFTJOY_DOWN) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, LEFTJOY_DOWN) > 6000)
 		{
 			players.at(i).move = move_down;
 		}
@@ -77,14 +77,14 @@ bool PlayerManager::Update(float dt)
 		// --------------------
 
 		// Right Joystick -----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, RIGHTJOY_LEFT) > 12000)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, RIGHTJOY_LEFT) > 22000)
 		{
 			if (players.at(i).move != stop)
 				players.at(i).state = run_left;
 			else
 				players.at(i).state = idle_left;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, RIGHTJOY_RIGHT) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i).index, RIGHTJOY_RIGHT) > 22000)
 		{
 			if (players.at(i).move != stop)
 				players.at(i).state = run_right;
