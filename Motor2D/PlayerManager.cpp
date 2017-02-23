@@ -148,6 +148,10 @@ bool PlayerManager::Update(float dt)
 				players.at(i).state = basic_atack_down;
 			else if (players.at(i).state == idle_up || players.at(i).state == run_up)
 				players.at(i).state = basic_atack_up;
+			if (players.at(i).state == idle_left || players.at(i).state == run_left)
+				players.at(i).state = basic_atack_left;
+			else if (players.at(i).state == idle_right || players.at(i).state == run_right)
+				players.at(i).state = basic_atack_right;
 		}
 
 		// State machines
@@ -192,12 +196,16 @@ bool PlayerManager::Update(float dt)
 			players.at(i).state = idle_up;
 			break;
 		case basic_atack_left:
+			players.at(i).entity->BasicAttackLeft();
+			players.at(i).state = idle_left;
 			break;
 		case basic_atack_down:
 			players.at(i).entity->BasicAttackDown();
 			players.at(i).state = idle_down;
 			break;
 		case basic_atack_right:
+			players.at(i).entity->BasicAttackRight();
+			players.at(i).state = idle_right;
 			break;
 		case states_null:
 			break;

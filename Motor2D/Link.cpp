@@ -24,7 +24,7 @@ Link::Link(iPoint pos)
 	App->LoadXML("link.xml", doc);
 	player_go->SetTexture(player_go->LoadAnimationsFromXML(doc, "animations"));
 
-	draw_offset = restore_draw_offset = { 13, 26 };
+	draw_offset = restore_draw_offset = { 16, 26 };
 }
 
 Link::~Link()
@@ -40,7 +40,7 @@ bool Link::Start()
 	can_move = true;
 	stats.speed = 200;
 
-	cds = AbilityCds(32, 32, 32, 32, 32, 32, 32, 32);
+	cds = AbilityCds(69, 69, 69, 69, 69, 69, 69, 69);
 
 	return ret;
 }
@@ -60,10 +60,23 @@ bool Link::Update(float dt)
 
 	App->view->CenterCamera(camera, player_go->GetPos().x + 23, player_go->GetPos().y + 35);
 
-	// End atacking
+	return ret;
+}
+
+bool Link::Draw(float dt)
+{
+	bool ret = true;
+	
+	if(flip)
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x - 3, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	else
+		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+
+
+	// End atacking (It's down the blit because of a reason)
 	if (attacking)
 	{
-		if (player_go->animator->IsCurrentAnimation("basic_atack_up"))
+		if (player_go->animator->IsCurrentAnimation("basic_attack_up"))
 		{
 			if (player_go->animator->GetCurrentAnimation()->Finished())
 			{
@@ -73,7 +86,7 @@ bool Link::Update(float dt)
 				draw_offset = restore_draw_offset;
 			}
 		}
-		else if (player_go->animator->IsCurrentAnimation("basic_atack_down"))
+		else if (player_go->animator->IsCurrentAnimation("basic_attack_down"))
 		{
 			if (player_go->animator->GetCurrentAnimation()->Finished())
 			{
@@ -82,24 +95,17 @@ bool Link::Update(float dt)
 				can_move = true;
 			}
 		}
+		else if (player_go->animator->IsCurrentAnimation("basic_attack_lateral"))
+		{
+			if (player_go->animator->GetCurrentAnimation()->Finished())
+			{
+				player_go->animator->GetCurrentAnimation()->Reset();
+				attacking = false;
+				can_move = true;
+				draw_offset = restore_draw_offset;
+			}
+		}
 	}
-
-	if (!attacking && !can_move)
-	{
-
-	}
-
-	return ret;
-}
-
-bool Link::Draw(float dt)
-{
-	bool ret = true;
-	
-	if(flip)
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
-	else
-		App->view->LayerBlit(2, player_go->GetTexture(), { player_go->GetPos().x - draw_offset.x - 3, player_go->GetPos().y - draw_offset.y}, player_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -256,7 +262,7 @@ void Link::IdleRight()
 
 void Link::BasicAttackUp()
 {
-	player_go->SetAnimation("basic_atack_up");
+	player_go->SetAnimation("basic_attack_up");
 	draw_offset = { draw_offset.x, 48 };
 	attacking = true;
 	can_move = false;
@@ -265,7 +271,7 @@ void Link::BasicAttackUp()
 
 void Link::BasicAttackDown()
 {
-	player_go->SetAnimation("basic_atack_down");
+	player_go->SetAnimation("basic_attack_down");
 	attacking = true;
 	can_move = false;
 	flip = false;
@@ -273,10 +279,19 @@ void Link::BasicAttackDown()
 
 void Link::BasicAttackLeft()
 {
+	player_go->SetAnimation("basic_attack_lateral");
+	draw_offset = { 26, draw_offset.y };
+	attacking = true;
+	can_move = false;
+	flip = true;
 }
 
 void Link::BasicAttackRight()
 {
+	player_go->SetAnimation("basic_attack_lateral");
+	attacking = true;
+	can_move = false;
+	flip = false;
 }
 
 
