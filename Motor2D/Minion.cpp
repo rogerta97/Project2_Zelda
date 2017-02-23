@@ -14,27 +14,27 @@
 
 Minion::Minion(iPoint pos)
 {
-	minion_go = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
-	minion_go->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
-	minion_go->SetListener((j1Module*)App->entity);
-	minion_go->SetFixedRotation(true);
+	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
+	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetFixedRotation(true);
 
 	pugi::xml_document doc;
 	App->LoadXML("minion.xml", doc);
-	minion_go->SetTexture(minion_go->LoadAnimationsFromXML(doc, "animations"));
+	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 }
 
 Minion::~Minion()
 {
-	RELEASE(minion_go);
+	RELEASE(game_object);
 }
 
 bool Minion::Start()
 {
 	bool ret = true;
 
-	minion_go->SetAnimation("idle_down");
+	game_object->SetAnimation("idle_down");
 
 	stats.speed = 150;
 
@@ -83,9 +83,9 @@ bool Minion::Draw(float dt)
 	bool ret = true;
 
 	if (flip)
-		App->view->LayerBlit(2, minion_go->GetTexture(), { minion_go->GetPos().x - 20, minion_go->GetPos().y - 23 }, minion_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 20, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, minion_go->GetTexture(), { minion_go->GetPos().x - 17, minion_go->GetPos().y - 23 }, minion_go->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 17, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -110,93 +110,93 @@ bool Minion::CleanUp()
 
 void Minion::MoveUp(float speed)
 {
-	minion_go->SetPos({ minion_go->fGetPos().x, minion_go->fGetPos().y - speed });
+	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });
 }
 
 void Minion::MoveDown(float speed)
 {
-	minion_go->SetPos({ minion_go->fGetPos().x, minion_go->fGetPos().y + speed });
+	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y + speed });
 }
 
 void Minion::MoveLeft(float speed)
 {
-	minion_go->SetPos({ minion_go->fGetPos().x - speed, minion_go->fGetPos().y });
+	game_object->SetPos({ game_object->fGetPos().x - speed, game_object->fGetPos().y });
 }
 
 void Minion::MoveRight(float speed)
 {
-	minion_go->SetPos({ minion_go->fGetPos().x + speed, minion_go->fGetPos().y });
+	game_object->SetPos({ game_object->fGetPos().x + speed, game_object->fGetPos().y });
 }
 
 void Minion::MoveUpRight(float speed)
 {
 	fPoint s(speed * cos(45), speed * sin(45));
-	minion_go->SetPos({ minion_go->fGetPos().x + s.x, minion_go->fGetPos().y - s.y });
+	game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y - s.y });
 }
 
 void Minion::MoveDownRight(float speed)
 {
 	fPoint s(speed * cos(45), speed * sin(45));
-	minion_go->SetPos({ minion_go->fGetPos().x + s.x, minion_go->fGetPos().y + s.y });
+	game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y + s.y });
 }
 
 void Minion::MoveUpLeft(float speed)
 {
 	fPoint s(speed * cos(45), speed * sin(45));
-	minion_go->SetPos({ minion_go->fGetPos().x - s.x, minion_go->fGetPos().y - s.y });
+	game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y - s.y });
 }
 
 void Minion::MoveDownLeft(float speed)
 {
 	fPoint s(speed * cos(45), speed * sin(45));
-	minion_go->SetPos({ minion_go->fGetPos().x - s.x, minion_go->fGetPos().y + s.y });
+	game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y + s.y });
 }
 
 void Minion::RunUp()
 {
-	minion_go->SetAnimation("run_up");
+	game_object->SetAnimation("run_up");
 	flip = false;
 }
 
 void Minion::RunDown()
 {
-	minion_go->SetAnimation("run_down");
+	game_object->SetAnimation("run_down");
 	flip = false;
 }
 
 void Minion::RunLeft()
 {
-	minion_go->SetAnimation("run_lateral");
+	game_object->SetAnimation("run_lateral");
 	flip = true;
 }
 
 void Minion::RunRight()
 {
-	minion_go->SetAnimation("run_lateral");
+	game_object->SetAnimation("run_lateral");
 	flip = false;
 }
 
 void Minion::IdleUp()
 {
-	minion_go->SetAnimation("idle_up");
+	game_object->SetAnimation("idle_up");
 	flip = false;
 }
 
 void Minion::IdleDown()
 {
-	minion_go->SetAnimation("idle_down");
+	game_object->SetAnimation("idle_down");
 	flip = false;
 }
 
 void Minion::IdleLeft()
 {
-	minion_go->SetAnimation("idle_lateral");
+	game_object->SetAnimation("idle_lateral");
 	flip = true;
 }
 
 void Minion::IdleRight()
 {
-	minion_go->SetAnimation("idle_lateral");
+	game_object->SetAnimation("idle_lateral");
 	flip = false;
 }
 
@@ -215,7 +215,7 @@ void Minion::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2F
 
 iPoint Minion::GetPos() const
 {
-	return minion_go->GetPos();
+	return game_object->GetPos();
 }
 
 void Minion::SetBasePath(std::list<iPoint>& path)
@@ -314,7 +314,7 @@ void Minion::CheckState()
 				state = Minion_Attack;
 			else
 			{
-				if (minion_go->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(base_path.at(base_path_index))<vision_range)
+				if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(base_path.at(base_path_index))<vision_range)
 				{
 					if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
 					{

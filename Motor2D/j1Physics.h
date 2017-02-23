@@ -56,24 +56,24 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 1.0f, int cat = 1, int mask = 1);
 	PhysBody* CreateStaticCircle(int x, int y, int radius, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1);
 	PhysBody* CreateCircleSensor(int x, int y, int radius, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1);
-	void AddCircleToBody(PhysBody* pbody, int offset_x, int offset_y, int radius, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
-	void AddCircleSensorToBody(PhysBody* pbody, int offset_x, int offset_y, int radius, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
+	b2Fixture* AddCircleToBody(PhysBody* pbody, int offset_x, int offset_y, int radius, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
+	b2Fixture* AddCircleSensorToBody(PhysBody* pbody, int offset_x, int offset_y, int radius, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
 
 	PhysBody* CreateRectangle(int x, int y, int width, int height,  float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 0.0f, int cat = 1, int mask = 1, int angle = 0);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
-	void AddRectangleToBody(PhysBody* pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
-	void AddRectangleSensorToBody(PhysBody* pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
+	b2Fixture* AddRectangleToBody(PhysBody* pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
+	b2Fixture* AddRectangleSensorToBody(PhysBody* pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density = 1.0f, float rest = 0.0f, float friction = 1.0f);
 
 	PhysBody* CreatePolygon(int x, int y, int* points, int size, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 0.0f, int cat = 1, int mask = 1, int angle = 0);
 	PhysBody* CreateStaticPolygon(int x, int y, int* points, int size, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
 	PhysBody* CreatePolygonSensor(int x, int y, int* points, int size, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
-	void AddPolygonToBody(PhysBody* pbody, int offset_x, int offset_y, int* points, int size, fixture_type type, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 0.0f);
+	b2Fixture* AddPolygonToBody(PhysBody* pbody, int offset_x, int offset_y, int* points, int size, fixture_type type, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 0.0f);
 
 	PhysBody* CreateChain(int x, int y, int* points, int size, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
 	PhysBody* CreateStaticChain(int x, int y, int* points, int size, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
 	PhysBody* CreateChainSensor(int x, int y, int* points, int size, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, int cat = 1, int mask = 1, int angle = 0);
-	void AddChainBody(PhysBody* pbody, int x, int y, int* points, int size, fixture_type type, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 1.0f);
+	b2Fixture* AddChainBody(PhysBody* pbody, int x, int y, int* points, int size, fixture_type type, float density = 1.0f, float gravity_scale = 1.0f, float rest = 0.0f, float friction = 1.0f);
 
 	void CleanBodies();
 

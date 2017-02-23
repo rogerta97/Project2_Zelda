@@ -21,6 +21,9 @@ Link::Link(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
+	Ability* basic_atack = new Ability(1, 2);
+	basic_atack->fixture = game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_atack);
+
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -40,8 +43,6 @@ bool Link::Start()
 
 	can_move = true;
 	stats.speed = 200;
-
-	abilities_stats = Abilities(69, 69, 69, 69, 69, 69, 69, 69);
 
 	return ret;
 }
@@ -124,7 +125,9 @@ bool Link::CleanUp()
 {
 	bool ret = true;
 
-
+	// Free abilities
+	for (int i = 0; i < abilities.size(); i++)
+		RELEASE(abilities.at(i));
 
 	return ret;
 }

@@ -9,6 +9,9 @@
 class PlayerManager;
 class b2Fixture;
 class PhysBody;
+class Entity;
+class Ability;
+
 enum class pbody_type;
 
 enum entity_name
@@ -50,6 +53,7 @@ public:
 	void DeleteEntity(Entity* entity);
 
 	Entity* FindEntityByBodyType(pbody_type type);
+	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 
 public:
 	PlayerManager* player_manager = nullptr;

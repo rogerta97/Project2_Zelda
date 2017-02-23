@@ -93,7 +93,6 @@ private:
 public:
 
 private:
-	GameObject*			minion_go = nullptr;
 
 	bool				flip = false;
 

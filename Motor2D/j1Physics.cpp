@@ -155,7 +155,7 @@ PhysBody * j1Physics::CreateCircleSensor(int x, int y, int radius, float density
 	return pbody;
 }
 
-void j1Physics::AddCircleToBody(PhysBody * pbody, int offset_x, int offset_y, int radius, fixture_type type, float density, float rest, float friction)
+b2Fixture* j1Physics::AddCircleToBody(PhysBody * pbody, int offset_x, int offset_y, int radius, fixture_type type, float density, float rest, float friction)
 {
 	b2CircleShape circle;
 	circle.m_radius = PIXEL_TO_METERS(radius);
@@ -169,9 +169,10 @@ void j1Physics::AddCircleToBody(PhysBody * pbody, int offset_x, int offset_y, in
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
+	return fixture;
 }
 
-void j1Physics::AddCircleSensorToBody(PhysBody * pbody, int offset_x, int offset_y, int radius, fixture_type type, float density, float rest, float friction)
+b2Fixture* j1Physics::AddCircleSensorToBody(PhysBody * pbody, int offset_x, int offset_y, int radius, fixture_type type, float density, float rest, float friction)
 {
 	b2CircleShape circle;
 	circle.m_radius = radius;
@@ -185,6 +186,7 @@ void j1Physics::AddCircleSensorToBody(PhysBody * pbody, int offset_x, int offset
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
+	return fixture;
 }
 
 PhysBody* j1Physics::CreateRectangle(int x, int y, int width, int height, float density, float gravity_scale, float rest, float friction, int cat, int mask, int angle)
@@ -356,7 +358,7 @@ PhysBody * j1Physics::CreatePolygonSensor(int x, int y, int * points, int size, 
 	return pbody;
 }
 
-void j1Physics::AddPolygonToBody(PhysBody * pbody, int offset_x, int offset_y, int * points, int size, fixture_type type, float density, float gravity_scale, float rest, float friction)
+b2Fixture* j1Physics::AddPolygonToBody(PhysBody * pbody, int offset_x, int offset_y, int * points, int size, fixture_type type, float density, float gravity_scale, float rest, float friction)
 {
 	b2PolygonShape box;
 	b2Vec2* p = new b2Vec2[size / 2];
@@ -377,6 +379,7 @@ void j1Physics::AddPolygonToBody(PhysBody * pbody, int offset_x, int offset_y, i
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
+	return fixture;
 }
 
 PhysBody* j1Physics::CreateRectangleSensor(int x, int y, int width, int height, float density, float gravity_scale, float rest, int cat, int mask, int angle)
@@ -411,7 +414,7 @@ PhysBody* j1Physics::CreateRectangleSensor(int x, int y, int width, int height, 
 	return pbody;
 }
 
-void j1Physics::AddRectangleToBody(PhysBody * pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density, float rest, float friction)
+b2Fixture* j1Physics::AddRectangleToBody(PhysBody * pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density, float rest, float friction)
 {
 	b2PolygonShape box;
 	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f, b2Vec2(PIXEL_TO_METERS(offset_x), PIXEL_TO_METERS(offset_y)), 0);
@@ -424,9 +427,10 @@ void j1Physics::AddRectangleToBody(PhysBody * pbody, int offset_x, int offset_y,
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
+	return fixture;
 }
 
-void j1Physics::AddRectangleSensorToBody(PhysBody * pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density, float rest, float friction)
+b2Fixture* j1Physics::AddRectangleSensorToBody(PhysBody * pbody, int offset_x, int offset_y, int width, int height, fixture_type type, float density, float rest, float friction)
 {
 	b2PolygonShape box;
 	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f, b2Vec2(PIXEL_TO_METERS(offset_x), PIXEL_TO_METERS(offset_y)), 0);
@@ -439,6 +443,7 @@ void j1Physics::AddRectangleSensorToBody(PhysBody * pbody, int offset_x, int off
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
+	return fixture;
 }
 
 PhysBody* j1Physics::CreateChain(int x, int y, int* points, int size, float density, float gravity_scale, float rest, int cat, int mask, int angle)
@@ -562,7 +567,7 @@ PhysBody* j1Physics::CreateChainSensor(int x, int y, int * points, int size, flo
 	return pbody;
 }
 
-void j1Physics::AddChainBody(PhysBody* pbody, int x, int y, int * points, int size, fixture_type type, float density, float gravity_scale, float rest, float friction)
+b2Fixture* j1Physics::AddChainBody(PhysBody* pbody, int x, int y, int * points, int size, fixture_type type, float density, float gravity_scale, float rest, float friction)
 {
 	b2ChainShape shape;
 	b2Vec2* p = new b2Vec2[size / 2];
@@ -583,6 +588,7 @@ void j1Physics::AddChainBody(PhysBody* pbody, int x, int y, int * points, int si
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
+	return fixture;
 }
 
 b2RevoluteJoint* j1Physics::CreateAtachJoint(PhysBody * body1, PhysBody * body2, int distance_between_x, int distance_between_y, float angle_between)
