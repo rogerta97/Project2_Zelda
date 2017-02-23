@@ -241,6 +241,7 @@ protected:
 
 	void* m_userData;
 
+public:
 	fixture_type type;
 };
 

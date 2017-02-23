@@ -3,6 +3,8 @@
 #include "p2Log.h"
 #include "PlayerManager.h"
 #include "Minion.h"
+#include "GameObject.h"
+
 
 j1Entity::j1Entity()
 {
@@ -88,6 +90,14 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+
+	// Returns GotHit to the entity
+	if (fixtureA->type == fixture_type::f_t_atack && fixtureB->type == fixture_type::f_t_hit_box)
+	{
+		Entity* entity = FindEntityByBodyType(bodyB->type);
+		entity->hit_by = FindEntityByBodyType(bodyA->type);
+		entity->hit = true;
+	}
 }
 
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
@@ -122,6 +132,22 @@ void j1Entity::DeleteEntity(Entity* entity)
 	entity->CleanUp();
 	entity_list.remove(entity);
 	RELEASE(entity);
+}
+
+Entity * j1Entity::FindEntityByBodyType(pbody_type type)
+{
+	Entity* ret = nullptr;
+
+	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
+		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody->type)
+		{
+			ret = *it;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 

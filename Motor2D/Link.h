@@ -65,7 +65,6 @@ public:
 	iPoint GetPos() const;
 
 public:
-	GameObject* player_go = nullptr;
 
 private:
 	int camera = 1;
