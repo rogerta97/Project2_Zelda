@@ -38,14 +38,13 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
-	App->map->Load("zelda_test.tmx");
+	App->map->Load("zelda_test2.tmx");
 
 	//Create UI element
 	SDL_Rect screen = App->view->GetViewportRect(1); 
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0);
 
 	exp_bar = main_window->CreateImage(iPoint(screen.w / 2 - 50, 0), SDL_Rect{ 0, 15, 98, 14 });
-	exp_bar->viewport = 1;
 
 	return ret;
 }
