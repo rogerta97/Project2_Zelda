@@ -89,14 +89,14 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
 }
 
-Entity* j1Entity::CreateEntity(entity_name entity)
+Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 {
 	Entity* ret = nullptr;
 
 	switch (entity)
 	{
 	case link:
-		ret = new Link();
+		ret = new Link(pos);
 		break;
 	default:
 		break;
@@ -104,7 +104,6 @@ Entity* j1Entity::CreateEntity(entity_name entity)
 
 	if (ret != nullptr)
 	{
-		ret->LoadEntity();
 		ret->Start();
 		entity_list.push_back(ret);
 	}

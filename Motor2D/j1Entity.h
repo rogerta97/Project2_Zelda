@@ -4,6 +4,7 @@
 #include "j1Module.h"
 #include "p2Defs.h"
 #include "p2List.h"
+#include "p2Point.h"
 
 class PlayerManager;
 class b2Fixture;
@@ -44,7 +45,7 @@ public:
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	Entity* CreateEntity(entity_name entity);
+	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
 
 public:

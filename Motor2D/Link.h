@@ -7,11 +7,8 @@ class GameObject;
 class Link : public Entity
 {
 public:
-	Link();
+	Link(iPoint pos);
 	~Link();
-
-	// Load animations
-	bool LoadEntity();
 
 	// Start variables
 	bool Start();
@@ -56,6 +53,8 @@ public:
 
 	//Set Camera to this player. 1<=id<=4
 	void SetCamera(int id);
+
+	iPoint GetPos() const;
 
 public:
 	GameObject* player_go = nullptr;

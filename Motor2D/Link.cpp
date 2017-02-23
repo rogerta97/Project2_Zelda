@@ -12,19 +12,11 @@
 #include "j1Viewports.h"
 
 
-Link::Link()
-{
-}
-
-Link::~Link()
-{
-}
-
-bool Link::LoadEntity()
+Link::Link(iPoint pos)
 {
 	bool ret = true;
 
-	player_go = new GameObject(iPoint(300, 300), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
+	player_go = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
 	player_go->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
 	player_go->SetListener((j1Module*)App->entity);
@@ -33,10 +25,10 @@ bool Link::LoadEntity()
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
 	player_go->SetTexture(player_go->LoadAnimationsFromXML(doc, "animations"));
+}
 
-	
-
-	return ret;
+Link::~Link()
+{
 }
 
 bool Link::Start()
@@ -209,4 +201,9 @@ void Link::SetCamera(int id)
 	{
 		camera = id;
 	}
+}
+
+iPoint Link::GetPos() const
+{
+	return player_go->GetPos();
 }

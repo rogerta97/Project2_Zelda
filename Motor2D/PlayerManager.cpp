@@ -239,26 +239,28 @@ bool PlayerManager::CleanUp()
 	return true;
 }
 
-void PlayerManager::AddPlayer(entity_name name, int index)
+void PlayerManager::AddPlayer(entity_name name, int index, iPoint pos)
 {
-	Player p(App->entity->CreateEntity(name), index-1);
+	Player p(App->entity->CreateEntity(name, pos), index-1);
 	p.entity->SetCamera(p.index+1);
 	players.push_back(p);
 }
 
 void PlayerManager::ChangePlayer(entity_name name, int index)
 {
+	iPoint pos;
 	for(vector<Player>::iterator it = players.begin(); it != players.end(); it++)
 	{
 		if ((*it).index == index - 1)
 		{
+			pos = it->entity->GetPos();
 			App->entity->DeleteEntity((*it).entity);
 			players.erase(it);
 			break;
 		}
 	}
 
-	Player p(App->entity->CreateEntity(name), index - 1);
+	Player p(App->entity->CreateEntity(name, pos), index - 1);
 	p.entity->SetCamera(p.index + 1);
 	players.push_back(p);
 }

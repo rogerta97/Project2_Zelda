@@ -50,7 +50,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void AddPlayer(entity_name name, int index);
+	void AddPlayer(entity_name name, int index, iPoint pos);
 	void ChangePlayer(entity_name name, int index);
 
 private:

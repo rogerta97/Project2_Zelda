@@ -67,7 +67,6 @@ public:
 
 	virtual ~Entity() {};
 
-	virtual bool LoadEntity() { return true; };
 	virtual bool Start() { return true; };
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt) { return true; };
@@ -97,6 +96,8 @@ public:
 	virtual void IdleRight() {};
 
 	virtual void SetCamera(int index) {};
+
+	virtual iPoint GetPos() const { return{ 0,0 }; }
 
 	virtual bool Load(pugi::xml_node&)
 	{
