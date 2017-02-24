@@ -73,15 +73,8 @@ bool MainScene::Start()
 	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 15, screen.h / 40), SDL_Rect{ 127, 1, 18, 18 });
 
 	//Creating quests
-	quest_ball = main_window->CreateImage(iPoint(screen.w - 10, screen.h - 10), SDL_Rect{112, 2, 12, 12});
-
 	quest_manager = new QuestManager();
-
-	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 1);
-	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 2);
-	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 3);
-	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 4);
-	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 5);
+	quest_manager->CreateQuest(string("jhsdg"), 1); 
 
 	return ret;
 }

@@ -156,23 +156,6 @@ bool PlayerManager::Update(float dt)
 				players.at(i).state = basic_atack_right;
 		}
 
-		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-		{
-			if(App->scene->task_done < 5)
-				App->scene->task_done++;
-
-			LOG("%d", App->scene->task_done);
-		}
-
-
-		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
-		{
-			if (App->scene->task_done > 0)
-				App->scene->task_done--;
-
-			LOG("%d", App->scene->task_done);
-		}
-
 		
 		// State machines
 

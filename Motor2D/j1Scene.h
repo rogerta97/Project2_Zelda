@@ -50,7 +50,6 @@ public:
 public:
 	// Scenes
 	MainScene*           main_scene = nullptr;
-	int task_done = 0;
 
 private:
 	// Scenes list

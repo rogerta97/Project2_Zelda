@@ -5,20 +5,69 @@
 #include "j1Gui.h"
 #include "SDL\include\SDL.h"
 
-struct Quest
-{
-	Quest(UI_Text* task, UI_Image* image, bool done, SDL_Rect rect_task_done, int id);
+enum objective_type {
+	count,
+	travel,
+};
 
-	bool Update(iPoint placer);
+class QuestObjective 
+{
+public: 
+	QuestObjective(objective_type); 
+
+	~QuestObjective();
+
+	virtual bool Update(); 
+
+	objective_type GetType();
+
+private: 
+	objective_type type;
+
+	bool done = false; 
+};
+
+class TravelObjective : public QuestObjective 
+{
+public: 
+	TravelObjective(); 
+
+	bool Update(); 
+
+	~TravelObjective(); 
+
+private:
+	iPoint destination;
+};
+
+class CountObjective : public QuestObjective 
+{
+	CountObjective();
+
+	~CountObjective();
+
+private:
+	int total;
+	int current; 
+};
+
+
+class Quest
+{
+public: 
+
+	Quest(string& task, int id);
+
+	bool Update();
 
 	~Quest() {};
 
-	bool done = false;
-	SDL_Rect done_rect;
-	UI_Text* task = nullptr;
-	UI_Image* image = nullptr;
-	iPoint ball_pos;
-	int id;
+private: 
+	bool done = false; 
+	vector<QuestObjective*> objectives; 
+	string task;
+	int progress = -1; 
+	int id = -1;
 };
 
 class QuestManager
@@ -48,7 +97,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void CreateQuest(UI_Text* task, UI_Image* image, SDL_Rect rect_task_done, int id);
+	void CreateQuest(string& task, int id);
 
 	int tasks_done = 0;
 
@@ -56,7 +105,10 @@ private:
 
 private:
 	vector<Quest> quest_list;
+	vector<UI_Image*> quest_balls; 
+
 	iPoint placer; 
+	SDL_Rect done_rect;
 
 
 };

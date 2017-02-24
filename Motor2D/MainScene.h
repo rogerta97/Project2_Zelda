@@ -33,13 +33,13 @@ public:
 
 	fPoint pos;
 
-	int tasks_done = 0; 
+	UI_Window* main_window = nullptr;
 
 private:
 
 
 	//UI elements
-	UI_Window* main_window = nullptr; 
+
 
 	UI_Image* exp_bar = nullptr; 
 
