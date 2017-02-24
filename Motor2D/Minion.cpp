@@ -232,7 +232,7 @@ bool Minion::MinionMove()
 
 	CheckState();
 
-	iPoint map_pos = App->map->WorldToMap(GetPos().x + Half_Tile, GetPos().y + Half_Tile);
+	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 
 	switch (move_state)
 	{
@@ -240,7 +240,7 @@ bool Minion::MinionMove()
 	{
 		if (base_path_index < base_path.size()-1)
 		{
-			if (GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < 18)
+			if (map_pos == base_path.at(base_path_index))
 				base_path_index++;
 		}
 		else
@@ -256,9 +256,11 @@ bool Minion::MinionMove()
 	}
 	case Move_AproachTarget:
 	{
-		if (target_path_index < target_path.size()-1)
-			if (map_pos.DistanceTo(target_path.at(target_path_index)) < 18)
+		if (target_path_index < target_path.size() - 1) 
+		{
+			if (map_pos == base_path.at(base_path_index))
 				target_path_index++;
+		}
 
 		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
 		target_pos.y += Half_Tile;
@@ -271,7 +273,7 @@ bool Minion::MinionMove()
 	case Move_ReturnToPath:
 	{
 		if (target_path_index < target_path.size())
-			if (map_pos.DistanceTo(target_path.at(target_path_index)) < 5)
+			if (map_pos == base_path.at(base_path_index))
 				target_path_index++;
 
 		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
@@ -314,7 +316,7 @@ void Minion::CheckState()
 				state = Minion_Attack;
 			else
 			{
-				if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(base_path.at(base_path_index))<vision_range)
+				if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < vision_range)
 				{
 					if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
 					{
@@ -365,7 +367,7 @@ void Minion::SetTargetPath(const std::list<iPoint>* path)
 
 void Minion::PathToTarget()
 {
-	App->pathfinding->CreatePath(GetPos(), target->GetPos());
+	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x,GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y));
 	SetTargetPath(App->pathfinding->GetLastPath());
 	target_path_index = 0;
 	move_state = Move_AproachTarget;
@@ -396,6 +398,7 @@ bool Minion::LookForTarget()
 		{
 			target = *it;
 			ret = true;
+			break;
 		}
 	}
 

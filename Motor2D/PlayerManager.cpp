@@ -263,12 +263,13 @@ bool PlayerManager::CleanUp()
 	return true;
 }
 
-void PlayerManager::AddPlayer(entity_name name, int index, iPoint pos)
+void PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team)
 {
 	if (players.size() < 3)
 	{
 		Player p(App->entity->CreateEntity(name, pos), index - 1);
 		p.entity->SetCamera(p.index + 1);
+		p.entity->SetTeam(team);
 		players.push_back(p);
 	}
 }

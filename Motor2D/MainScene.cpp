@@ -34,7 +34,7 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
-	App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300,20));
+	App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300,20),1);
 	//App->entity->player_manager->AddPlayer(entity_name::link, 2);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
@@ -54,7 +54,7 @@ bool MainScene::Start()
 	//Test MInion
 	std::list<iPoint> path;
 
-	App->pathfinding->CreatePath(iPoint(3, 2), iPoint(30, 2));
+	App->pathfinding->CreatePath(iPoint(3, 2), iPoint(32, 2));
 
 	for (std::list<iPoint>::const_iterator it = App->pathfinding->GetLastPath()->begin(); it != App->pathfinding->GetLastPath()->end(); it++)
 	{

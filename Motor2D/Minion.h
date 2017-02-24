@@ -96,8 +96,8 @@ private:
 
 	bool				flip = false;
 
-	uint				vision_range = 0;
-	uint				attack_range = 0;
+	uint				vision_range = 150;
+	uint				attack_range = 60;
 
 	MINION_STATE		state = Minion_Idle;
 	MINION_MOVE_STATE	move_state = Move_FollowBasePath;
