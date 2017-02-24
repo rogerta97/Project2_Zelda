@@ -78,6 +78,7 @@ public:
 	void CleanBodies();
 
 	void DeleteBody(PhysBody* object);
+	void DeleteFixture(b2Fixture* fixture, PhysBody* object);
 
 	b2RevoluteJoint* CreateAtachJoint(PhysBody* body1, PhysBody* body2, int distance_between_x, int distance_between_y, float angle_between);
 	b2RevoluteJoint* CreateRevoluteJoint(PhysBody* anchor, PhysBody* body, iPoint anchor_offset, iPoint body_offset, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque);

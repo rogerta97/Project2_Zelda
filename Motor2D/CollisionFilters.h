@@ -35,7 +35,7 @@ enum class pbody_type
 enum class fixture_type
 {
 	f_t_null = 0,
-	f_t_atack,
+	f_t_attack,
 	f_t_hit_box,
 	f_t_down_ball
 };

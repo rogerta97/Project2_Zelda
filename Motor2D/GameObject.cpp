@@ -126,6 +126,11 @@ b2Fixture* GameObject::CreateCollisionSensor(iPoint offset, int rad, fixture_typ
 	return App->physics->AddCircleSensorToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
 }
 
+void GameObject::DeleteFixture(b2Fixture * fixture)
+{
+	App->physics->DeleteFixture(fixture, pbody);
+}
+
 void GameObject::SetTexture(SDL_Texture * _texture)
 {
 	if (_texture != nullptr)

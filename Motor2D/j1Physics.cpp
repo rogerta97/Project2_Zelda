@@ -625,6 +625,11 @@ void j1Physics::DeleteBody(PhysBody * object)
 	world->DestroyBody(object->body);
 }
 
+void j1Physics::DeleteFixture(b2Fixture* fixture, PhysBody * object)
+{
+	object->body->DestroyFixture(fixture);
+}
+
 b2RevoluteJoint* j1Physics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, iPoint anchor_offset, iPoint body_offset, bool enable_limit,
 													float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque)
 {

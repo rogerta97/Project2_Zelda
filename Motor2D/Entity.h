@@ -123,7 +123,10 @@ public:
 		{
 			entity = hit_by;
 			ability = hit_ability;
+			hit_by = nullptr;
+			hit_ability = nullptr;
 			hit = false;
+
 			return true;
 		}
 		return false;

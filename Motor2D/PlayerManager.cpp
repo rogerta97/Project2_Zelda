@@ -144,7 +144,7 @@ bool PlayerManager::Update(float dt)
 		}
 
 		// Abilities
-		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 		{
 			if(players.at(i).state == idle_down || players.at(i).state == run_down)
 				players.at(i).state = basic_atack_down;

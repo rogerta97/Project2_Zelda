@@ -21,8 +21,10 @@ Link::Link(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	Ability* basic_atack = new Ability(1, 2);
-	basic_atack->fixture = game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_atack);
+	Ability* basic_atack = new Ability(1, 2); abilities.push_back(basic_atack);
+	Ability* ability1 = new Ability(1, 2);	  abilities.push_back(ability1);
+	Ability* ability2 = new Ability(1, 2);    abilities.push_back(ability2);
+	Ability* ability3 = new Ability(1, 2);    abilities.push_back(ability3);
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
@@ -62,6 +64,13 @@ bool Link::Update(float dt)
 
 	App->view->CenterCamera(camera, game_object->GetPos().x + 23, game_object->GetPos().y + 35);
 
+	Entity* e;
+	Ability* a;
+	if (GotHit(e, a))
+	{
+		LOG("Report this fucking nigger omg");
+	}
+
 	return ret;
 }
 
@@ -69,15 +78,19 @@ bool Link::Draw(float dt)
 {
 	bool ret = true;
 	
+	// Blit
 	if(flip)
 		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
 		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 
+	// -------------
 	// End atacking (It's down the blit because of a reason)
+	// -------------
 	if (attacking)
 	{
+		// Basic atack --------------------
 		if (game_object->animator->IsCurrentAnimation("basic_attack_up"))
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
@@ -86,6 +99,7 @@ bool Link::Draw(float dt)
 				attacking = false;
 				can_move = true;
 				draw_offset = restore_draw_offset;
+				game_object->DeleteFixture(abilities.at(0)->fixture);
 			}
 		}
 		else if (game_object->animator->IsCurrentAnimation("basic_attack_down"))
@@ -95,6 +109,7 @@ bool Link::Draw(float dt)
 				game_object->animator->GetCurrentAnimation()->Reset();
 				attacking = false;
 				can_move = true;
+				game_object->DeleteFixture(abilities.at(0)->fixture);
 			}
 		}
 		else if (game_object->animator->IsCurrentAnimation("basic_attack_lateral"))
@@ -105,8 +120,10 @@ bool Link::Draw(float dt)
 				attacking = false;
 				can_move = true;
 				draw_offset = restore_draw_offset;
+				game_object->DeleteFixture(abilities.at(0)->fixture);
 			}
 		}
+		// -------------------------------
 	}
 
 	return ret;
@@ -273,6 +290,7 @@ void Link::BasicAttackUp()
 		attacking = true;
 		can_move = false;
 		flip = false;
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -30), 10, 40, fixture_type::f_t_attack);
 	}
 }
 
@@ -284,6 +302,7 @@ void Link::BasicAttackDown()
 		attacking = true;
 		can_move = false;
 		flip = false;
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(15, 25), 10, 40, fixture_type::f_t_attack);
 	}
 }
 
@@ -296,6 +315,7 @@ void Link::BasicAttackLeft()
 		attacking = true;
 		can_move = false;
 		flip = true;
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(-10, 0), 40, 10, fixture_type::f_t_attack);
 	}
 }
 
@@ -307,6 +327,7 @@ void Link::BasicAttackRight()
 		attacking = true;
 		can_move = false;
 		flip = false;
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, 0), 40, 10, fixture_type::f_t_attack);
 	}
 }
 

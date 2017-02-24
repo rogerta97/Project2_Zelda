@@ -90,6 +90,9 @@ public:
 	// Adds a circle sensor shape to the current body
 	b2Fixture* CreateCollisionSensor(iPoint offset, int rad, fixture_type type);
 
+	// Deletes a fixutre from the pbody
+	void DeleteFixture(b2Fixture* fixture);
+
 	// Set the texture to be using
 	void SetTexture(SDL_Texture* texture);
 
