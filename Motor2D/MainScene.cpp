@@ -75,6 +75,7 @@ bool MainScene::Start()
 	//Creating quests
 	quest_manager = new QuestManager();
 	quest_manager->CreateQuest(string("jhsdg"), 1); 
+	quest_manager->CreateQuest(string("jhsdg"), 2);
 
 	return ret;
 }

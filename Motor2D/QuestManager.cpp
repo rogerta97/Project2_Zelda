@@ -75,6 +75,7 @@ void QuestManager::CreateQuest(string& task, int id) {
 		Quest* new_quest = new Quest(task, id);	
 		quest_list.push_back(*new_quest);
 		quest_balls.push_back(App->scene->main_scene->main_window->CreateImage(placer, { 112, 2, 12, 12 }, false));
+		placer.y -= 20;
 	}
 
 }
