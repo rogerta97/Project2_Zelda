@@ -61,26 +61,16 @@ public:
 	int speed = 0;
 };
 
-struct AbilityCds
+struct Ability
 {
-	AbilityCds(float _basic_attack_cd = 0, float _basic_attack_duration = 0, float _ability1_cd = 0, float _ability1_duration = 0, 
-		float _ability2_cd = 0, float _ability2_duration = 0, float _ability3_cd = 0, float _ability3_duration = 0)
+	Ability(float _cd, float _duration)
 	{
-		basic_attack_cd = _basic_attack_cd; basic_attack_duration = _basic_attack_duration; ability1_cd = _ability1_cd; ability1_duration = _ability1_duration; 
-		ability2_cd = _ability2_cd; ability2_duration = _ability2_duration; ability3_cd = _ability3_cd; ability3_duration = _ability3_duration;
+		cd = _cd; duration = _duration; cd = _cd; ;
 	};
 
-	float basic_attack_cd = 0;
-	float basic_attack_duration = 0;
-
-	float ability1_cd = 0;
-	float ability1_duration = 0;
-
-	float ability2_cd = 0;
-	float ability2_duration = 0;
-
-	float ability3_cd = 0;
-	float ability3_duration = 0;
+	float cd = 0;
+	float duration = 0;
+	b2Fixture* fixture = nullptr;
 };
 
 class Entity
@@ -127,11 +117,12 @@ public:
 	virtual void Ability2() {};
 	virtual void Ability3() {};
 
-	bool GotHit(Entity* &entity)
+	bool GotHit(Entity* &entity, Ability* &ability)
 	{
 		if (hit)
 		{
 			entity = hit_by;
+			ability = hit_ability;
 			hit = false;
 			return true;
 		}
@@ -172,13 +163,14 @@ private:
 	uint		team = 0;
 
 public:
-	GameObject* game_object = nullptr;
-	Stats	    stats;
-	AbilityCds  cds;
-	bool		can_move = false;
-	bool        attacking = false;
-	bool		hit = false;
-	Entity*	    hit_by = nullptr;
+	GameObject*     game_object = nullptr;
+	Stats	        stats;
+	vector<Ability*> abilities;
+	bool		    can_move = false;
+	bool            attacking = false;
+	bool		    hit = false;
+	Entity*	        hit_by = nullptr;
+	Ability*		hit_ability = nullptr;
 
 protected:
 	iPoint      draw_offset = NULLPOINT;

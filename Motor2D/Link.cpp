@@ -21,6 +21,9 @@ Link::Link(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
+	Ability* basic_atack = new Ability(1, 2);
+	basic_atack->fixture = game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_atack);
+
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -40,8 +43,6 @@ bool Link::Start()
 
 	can_move = true;
 	stats.speed = 200;
-
-	cds = AbilityCds(69, 69, 69, 69, 69, 69, 69, 69);
 
 	return ret;
 }
@@ -124,7 +125,9 @@ bool Link::CleanUp()
 {
 	bool ret = true;
 
-
+	// Free abilities
+	for (int i = 0; i < abilities.size(); i++)
+		RELEASE(abilities.at(i));
 
 	return ret;
 }
@@ -263,36 +266,48 @@ void Link::IdleRight()
 
 void Link::BasicAttackUp()
 {
-	game_object->SetAnimation("basic_attack_up");
-	draw_offset = { draw_offset.x, 48 };
-	attacking = true;
-	can_move = false;
-	flip = false;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_up");
+		draw_offset = { draw_offset.x, 48 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
 void Link::BasicAttackDown()
 {
-	game_object->SetAnimation("basic_attack_down");
-	attacking = true;
-	can_move = false;
-	flip = false;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_down");
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
 void Link::BasicAttackLeft()
 {
-	game_object->SetAnimation("basic_attack_lateral");
-	draw_offset = { 26, draw_offset.y };
-	attacking = true;
-	can_move = false;
-	flip = true;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_lateral");
+		draw_offset = { 26, draw_offset.y };
+		attacking = true;
+		can_move = false;
+		flip = true;
+	}
 }
 
 void Link::BasicAttackRight()
 {
-	game_object->SetAnimation("basic_attack_lateral");
-	attacking = true;
-	can_move = false;
-	flip = false;
+	if (!attacking)
+	{
+		game_object->SetAnimation("basic_attack_lateral");
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
 

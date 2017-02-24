@@ -2,7 +2,10 @@
 #include "Link.h"
 #include "p2Log.h"
 #include "PlayerManager.h"
+#include "Minion.h"
 #include "GameObject.h"
+#include "Entity.h"
+
 
 j1Entity::j1Entity()
 {
@@ -75,7 +78,9 @@ bool j1Entity::CleanUp()
 	bool ret = true;
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
 		ret = (*it)->CleanUp();
+	}
 
 	player_manager->CleanUp();
 
@@ -94,6 +99,7 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 	{
 		Entity* entity = FindEntityByBodyType(bodyB->type);
 		entity->hit_by = FindEntityByBodyType(bodyA->type);
+		entity->hit_ability = FindAbilityByFixture(entity->hit_by, fixtureA);
 		entity->hit = true;
 	}
 }
@@ -106,6 +112,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	{
 	case link:
 		ret = new Link(pos);
+		break;
+	case minion:
+		ret = new Minion(pos);
 		break;
 	default:
 		break;
@@ -138,6 +147,21 @@ Entity * j1Entity::FindEntityByBodyType(pbody_type type)
 		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody->type)
 		{
 			ret = *it;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
+{
+	Ability* ret = nullptr;
+	for (int i = 0; i < entity->abilities.size(); i++)
+	{
+		if (entity->abilities.at(i)->fixture == fixture)
+		{
+			ret = entity->abilities.at(i);
 			break;
 		}
 	}

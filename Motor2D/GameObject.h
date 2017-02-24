@@ -79,16 +79,16 @@ public:
 	SDL_Rect GetCurrentAnimationRect(float dt);
 
 	// Adds a box shape to the current body
-	void CreateCollision(iPoint offset, int width, int height, fixture_type type);
+	b2Fixture* CreateCollision(iPoint offset, int width, int height, fixture_type type);
 
 	// Adds a circle shape to the current body
-	void CreateCollision(iPoint offset, int rad, fixture_type type);
+	b2Fixture* CreateCollision(iPoint offset, int rad, fixture_type type);
 
 	// Adds a box sensor shape to the current body
-	void CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type);
+	b2Fixture* CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type);
 
 	// Adds a circle sensor shape to the current body
-	void CreateCollisionSensor(iPoint offset, int rad, fixture_type type);
+	b2Fixture* CreateCollisionSensor(iPoint offset, int rad, fixture_type type);
 
 	// Set the texture to be using
 	void SetTexture(SDL_Texture* texture);

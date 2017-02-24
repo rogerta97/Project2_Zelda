@@ -1,5 +1,6 @@
 #include "PlayerManager.h"
 #include "j1Viewports.h"
+#include "j1Scene.h"
 #include "j1Input.h"
 #include"p2Log.h"
 
@@ -157,23 +158,22 @@ bool PlayerManager::Update(float dt)
 
 		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 		{
-			if(players.at(i).quests_done < 5)
-				players.at(i).quests_done++; 
+			if(App->scene->task_done < 5)
+				App->scene->task_done++;
 
-			LOG("%d", players.at(i).quests_done);
+			LOG("%d", App->scene->task_done);
 		}
 
 
 		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
 		{
-			if (players.at(i).quests_done > 0)
-				players.at(i).quests_done--;
+			if (App->scene->task_done > 0)
+				App->scene->task_done--;
 
-			LOG("%d", players.at(i).quests_done);
+			LOG("%d", App->scene->task_done);
 		}
 
 		
-
 		// State machines
 
 		// Animations
@@ -307,4 +307,19 @@ void PlayerManager::ChangePlayer(entity_name name, int index)
 	Player p(App->entity->CreateEntity(name, pos), index - 1);
 	p.entity->SetCamera(p.index + 1);
 	players.push_back(p);
+}
+
+std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)
+{
+	std::vector<Entity*> ret;
+
+	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if (it->entity->GetTeam() == team)
+		{
+			ret.push_back(it->entity);
+		}
+	}
+
+	return ret;
 }

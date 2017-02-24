@@ -50,12 +50,14 @@ public:
 
 	void CreateQuest(UI_Text* task, UI_Image* image, SDL_Rect rect_task_done, int id);
 
+	int tasks_done = 0;
+
 private:
 
 private:
 	vector<Quest> quest_list;
 	iPoint placer; 
-	int tasks_done = 0; 
+
 
 };
 

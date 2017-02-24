@@ -19,9 +19,6 @@ struct Player
 		entity = _entity; state = states::idle_down; index = _index;
 	}
 
-	Quest* player_quest = nullptr;
-	int quests_done = 0; 
-
 	Entity*  entity = nullptr;
 	states   state = states_null;
 	movement move = stop;
@@ -57,6 +54,8 @@ public:
 
 	void AddPlayer(entity_name name, int index, iPoint pos);
 	void ChangePlayer(entity_name name, int index);
+
+	std::vector<Entity*> GetTeamPlayers(int team);
 
 private:
 

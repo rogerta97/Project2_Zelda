@@ -200,7 +200,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			{
 				RELEASE(*curr_open);
 			}
-			for (std::list<PathNode*>::iterator curr_close = close.list.begin(); curr_close != open.list.end(); curr_close++)
+			for (std::list<PathNode*>::iterator curr_close = close.list.begin(); curr_close != close.list.end(); curr_close++)
 			{
 				RELEASE(*curr_close);
 			}

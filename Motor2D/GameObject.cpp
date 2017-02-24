@@ -106,24 +106,24 @@ SDL_Rect GameObject::GetCurrentAnimationRect(float dt)
 	return animator->GetCurrentAnimation()->GetAnimationFrame(dt);
 }
 
-void GameObject::CreateCollision(iPoint offset, int width, int height, fixture_type type)
+b2Fixture* GameObject::CreateCollision(iPoint offset, int width, int height, fixture_type type)
 {
-	App->physics->AddRectangleToBody(pbody, offset.x, offset.y, width, height, type, density, 0, friction);
+	return App->physics->AddRectangleToBody(pbody, offset.x, offset.y, width, height, type, density, 0, friction);
 }
 
-void GameObject::CreateCollision(iPoint offset, int rad, fixture_type type)
+b2Fixture* GameObject::CreateCollision(iPoint offset, int rad, fixture_type type)
 {
-	App->physics->AddCircleToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
+	return App->physics->AddCircleToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
 }
 
-void GameObject::CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type)
+b2Fixture* GameObject::CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type)
 {
-	App->physics->AddRectangleSensorToBody(pbody, offset.x, offset.y, width, height, type, density, 0, friction);
+	return App->physics->AddRectangleSensorToBody(pbody, offset.x, offset.y, width, height, type, density, 0, friction);
 }
 
-void GameObject::CreateCollisionSensor(iPoint offset, int rad, fixture_type type)
+b2Fixture* GameObject::CreateCollisionSensor(iPoint offset, int rad, fixture_type type)
 {
-	App->physics->AddCircleSensorToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
+	return App->physics->AddCircleSensorToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
 }
 
 void GameObject::SetTexture(SDL_Texture * _texture)
