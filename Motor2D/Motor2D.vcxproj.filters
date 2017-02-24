@@ -88,6 +88,9 @@
     <ClCompile Include="Minion.cpp">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
     </ClCompile>
+    <ClCompile Include="QuestManager.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -206,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="Minion.h">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestManager.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

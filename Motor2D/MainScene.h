@@ -9,6 +9,7 @@ class GameObject;
 class b2Fixture;
 class Parallax;
 class Link;
+class QuestManager; 
 
 class MainScene : public Scene 
 {
@@ -31,9 +32,18 @@ public:
 	fPoint pos;
 
 private:
+
+
 	//UI elements
 	UI_Window* main_window = nullptr; 
+
 	UI_Image* exp_bar = nullptr; 
+	UI_Image* rupiees = nullptr;
+	UI_Image* quest_ball = nullptr; 
+
+	//Quest Manager
+	QuestManager* quest_manager = nullptr;
+	
 };
 
 

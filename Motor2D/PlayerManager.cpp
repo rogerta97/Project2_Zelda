@@ -1,6 +1,7 @@
 #include "PlayerManager.h"
 #include "j1Viewports.h"
 #include "j1Input.h"
+#include"p2Log.h"
 
 PlayerManager::PlayerManager()
 {
@@ -153,6 +154,25 @@ bool PlayerManager::Update(float dt)
 			else if (players.at(i).state == idle_right || players.at(i).state == run_right)
 				players.at(i).state = basic_atack_right;
 		}
+
+		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+		{
+			if(players.at(i).quests_done < 5)
+				players.at(i).quests_done++; 
+
+			LOG("%d", players.at(i).quests_done);
+		}
+
+
+		if (App->input->GetControllerButton(players.at(i).index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
+		{
+			if (players.at(i).quests_done > 0)
+				players.at(i).quests_done--;
+
+			LOG("%d", players.at(i).quests_done);
+		}
+
+		
 
 		// State machines
 

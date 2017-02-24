@@ -31,6 +31,7 @@ public:
 	// - fixture_type it's an enum that refeers to a b2Fixture from a PhysBody.
 	// - Both pbody and fixture _type are used to know what collides with what on the OnCollision method.
 	// - Both pbody and fixture _type are defined on CollisionFilters.h. 
+
 	GameObject(iPoint pos, int cat, int mask, pbody_type pb_type, float gravity_scale = 1.0f, float density = 1.0f, float friction = 1.0f);
 	~GameObject();
 

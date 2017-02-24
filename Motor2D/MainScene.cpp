@@ -10,6 +10,7 @@
 #include "j1Gui.h"
 #include "j1Console.h"
 #include "Parallax.h"
+#include "QuestManager.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
 #include "Link.h"
@@ -44,7 +45,19 @@ bool MainScene::Start()
 	SDL_Rect screen = App->view->GetViewportRect(1); 
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0);
 
-	exp_bar = main_window->CreateImage(iPoint(screen.w / 2 - 50, 0), SDL_Rect{ 0, 15, 98, 14 });
+	exp_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h/40), SDL_Rect{ 1, 32, 385, 21 });
+	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 15, screen.h / 40), SDL_Rect{ 127, 1, 18, 18 });
+
+	//Creating quests
+	quest_ball = main_window->CreateImage(iPoint(screen.w - 10, screen.h - 10), SDL_Rect{112, 2, 12, 12});
+
+	quest_manager = new QuestManager();
+
+	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 1);
+	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 2);
+	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 3);
+	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 4);
+	quest_manager->CreateQuest(nullptr, quest_ball, SDL_Rect{ 91, 11, 19, 18 }, 5);
 
 	return ret;
 }
@@ -61,6 +74,7 @@ bool MainScene::Update(float dt)
 	bool ret = true;
 
 	App->map->Draw();
+	quest_manager->Update(dt); 
 
 	return ret;
 }

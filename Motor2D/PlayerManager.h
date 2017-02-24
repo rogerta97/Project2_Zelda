@@ -9,6 +9,7 @@
 
 class b2Fixture;
 class PhysBody;
+class Quest; 
 
 struct Player
 {
@@ -17,6 +18,10 @@ struct Player
 	{
 		entity = _entity; state = states::idle_down; index = _index;
 	}
+
+	Quest* player_quest = nullptr;
+	int quests_done = 0; 
+
 	Entity*  entity = nullptr;
 	states   state = states_null;
 	movement move = stop;
