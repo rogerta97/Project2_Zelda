@@ -10,6 +10,7 @@
 class UI_Window;
 class UI_Text;
 class UI_ColoredRect;
+class UI_Button;
 
 // Modules
 class j1Window;
@@ -69,6 +70,8 @@ public:
 
 	void CapFps(float fps);
 	void EndSDL();
+
+	void OpenWebPage(char* url);
 
 private:
 
@@ -153,6 +156,9 @@ private:
 	UI_Window*			debug_window = nullptr;
 	UI_ColoredRect*		debug_colored_rect = nullptr;
 	UI_Text*			debug_text = nullptr;
+	UI_Button*			bug_report_button = nullptr;
+	UI_ColoredRect*		bug_report_button_color = nullptr;
+	UI_Text*			bug_report_text = nullptr;
 
 };
 

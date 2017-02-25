@@ -145,6 +145,12 @@ bool j1App::Start()
 	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 1, false);
 	debug_colored_rect = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 0), 200, 115, { 20, 20, 20, 255 }, true);
 	debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 5), App->font->default_15, 15);
+	
+	bug_report_button_color = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 115), 100, 25, { 20, 20, 20, 255 }, true);
+	bug_report_button = (UI_Button*)debug_window->CreateButton(iPoint(0, 115), 100, 25);
+	bug_report_text = (UI_Text*)debug_window->CreateText(iPoint(5, 115), App->font->default_15, 15);
+	bug_report_text->SetText("Report a bug");
+	bug_report_text->click_through = true;
 
 	PERF_PEEK(ptimer);
 
@@ -460,6 +466,20 @@ void j1App::FrameRateCalculations()
 		SDL_Delay(capped_ms - last_frame_ms);
 	}
 
+	if (bug_report_button->MouseEnter())
+		bug_report_button_color->SetColor({ 30, 30, 30, 255 });
+	else if (bug_report_button->MouseOut())
+		bug_report_button_color->SetColor({ 20, 20, 20, 255 });
+
+	if (bug_report_button->MouseClickEnterLeft())
+		bug_report_button_color->SetColor({ 50, 50, 50, 255 });
+	if (bug_report_button->MouseClickOutLeft())
+	{
+		OpenWebPage("https://github.com/rogerta97/Project2_Zelda/issues");
+		bug_report_button_color->SetColor({ 30, 30, 30, 255 });
+	}
+
+
 	if (debug_mode && !debug_window->enabled)
 		debug_window->SetEnabledAndChilds(true);
 	if(!debug_mode && debug_window->enabled)
@@ -469,4 +489,9 @@ void j1App::FrameRateCalculations()
 void j1App::EndSDL()
 {
 	end_program = true;
+}
+
+void j1App::OpenWebPage(char * url)
+{
+	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWMAXIMIZED);
 }

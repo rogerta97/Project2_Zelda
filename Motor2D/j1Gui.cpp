@@ -553,7 +553,7 @@ int UI_Element::CheckClickOverlap(int x, int y)
 			if (y > elements->data->rect.y && y < elements->data->rect.y + elements->data->rect.h)
 			{
 				// Check if is dinamic
-				if (!elements->data->click_through)
+				if (!elements->data->click_through && elements->data->enabled)
 					contactors.push_back(elements->data);
 			}
 		}
