@@ -34,6 +34,8 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
+	//ShellExecute(NULL, "open", "http://www.invadazoid.com", NULL, NULL, SW_SHOWMAXIMIZED);
+
 	App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300,20), 1);
 	App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(300, 20), 1);
 
