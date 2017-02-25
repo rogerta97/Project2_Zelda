@@ -41,7 +41,7 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
-	if (App->map->Load("zelda_test2.tmx"))
+	if (App->map->Load("zelda_moba.tmx"))
 	{
 		int w, h;
 		uchar* data = NULL;

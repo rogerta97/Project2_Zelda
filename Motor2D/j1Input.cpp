@@ -290,40 +290,48 @@ void j1Input::AxisReaction(int pad, int axis, int value)
 				if (value > 0)
 				{
 					(*it)->joystick_moves[LEFTJOY_RIGHT] = value;
+					(*it)->joystick_moves[LEFTJOY_LEFT] = 0;
 				}
 				else
 				{
 					(*it)->joystick_moves[LEFTJOY_LEFT] = -value;
+					(*it)->joystick_moves[LEFTJOY_RIGHT] = 0;
 				}
 				break;
 			case 1:
 				if (value > 0)
 				{
 					(*it)->joystick_moves[LEFTJOY_DOWN] = value;
+					(*it)->joystick_moves[LEFTJOY_UP] = 0;
 				}
 				else
 				{
 					(*it)->joystick_moves[LEFTJOY_UP] = -value;
+					(*it)->joystick_moves[LEFTJOY_DOWN] = 0;
 				}
 				break;
 			case 2:
 				if (value > 0)
 				{
 					(*it)->joystick_moves[RIGHTJOY_RIGHT] = value;
+					(*it)->joystick_moves[RIGHTJOY_LEFT] = 0;
 				}
 				else
 				{
 					(*it)->joystick_moves[RIGHTJOY_LEFT] = -value;
+					(*it)->joystick_moves[RIGHTJOY_RIGHT] = 0;
 				}
 				break;
 			case 3:
 				if (value > 0)
 				{
 					(*it)->joystick_moves[RIGHTJOY_DOWN] = value;
+					(*it)->joystick_moves[RIGHTJOY_UP] = 0;
 				}
 				else
 				{
 					(*it)->joystick_moves[RIGHTJOY_UP] = -value;
+					(*it)->joystick_moves[RIGHTJOY_DOWN] = 0;
 				}
 				break;
 			case 4:
