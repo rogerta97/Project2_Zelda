@@ -18,6 +18,7 @@
 #include "PlayerManager.h"
 #include "j1Pathfinding.h"
 #include "Minion.h"
+#include "MinionManager.h"
 
 
 MainScene::MainScene()

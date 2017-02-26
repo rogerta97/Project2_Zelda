@@ -91,6 +91,9 @@
     <ClCompile Include="QuestManager.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="MinionManager.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -213,6 +216,9 @@
     <ClInclude Include="QuestManager.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
+    <ClInclude Include="MinionManager.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -249,6 +255,9 @@
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
       <Filter>Engine\4. Entities ==========\Link</Filter>
+    </Xml>
+    <Xml Include="..\Game\GameSettings.xml">
+      <Filter>Engine\2. Components ======</Filter>
     </Xml>
   </ItemGroup>
 </Project>
