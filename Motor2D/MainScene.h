@@ -11,7 +11,7 @@ class Parallax;
 class Link;
 class QuestManager; 
 class Minion;
-
+class MinionManager;
 
 class MainScene : public Scene 
 {
@@ -49,7 +49,7 @@ private:
 	//Quest Manager
 	QuestManager* quest_manager = nullptr;
 
-	Minion* test_minion = nullptr;
+	MinionManager* minion_manager = nullptr;
 
 };
 

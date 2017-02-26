@@ -96,7 +96,7 @@ private:
 
 	bool				flip = false;
 
-	uint				vision_range = 150;
+	uint				vision_range = 50;
 	uint				attack_range = 60;
 
 	MINION_STATE		state = Minion_Idle;

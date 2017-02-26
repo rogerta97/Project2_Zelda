@@ -53,18 +53,7 @@ bool MainScene::Start()
 	}
 
 	//Test MInion
-	std::list<iPoint> path;
-
-	App->pathfinding->CreatePath(iPoint(3, 2), iPoint(32, 2));
-
-	for (std::list<iPoint>::const_iterator it = App->pathfinding->GetLastPath()->begin(); it != App->pathfinding->GetLastPath()->end(); it++)
-	{
-		path.push_back(*it);
-	}
-
-	test_minion = (Minion*)App->entity->CreateEntity(minion, iPoint(100, 20));
-	test_minion->SetBasePath(path);
-	test_minion->SetTeam(1);
+	minion_manager = new MinionManager();
 
 	//Create UI element
 	SDL_Rect screen = App->view->GetViewportRect(1); 
@@ -110,6 +99,8 @@ bool MainScene::CleanUp()
 {
 	bool ret = true;
 
+	RELEASE(quest_manager);
+	RELEASE(minion_manager);
 
 	return ret;
 }

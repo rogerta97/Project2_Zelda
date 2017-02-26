@@ -220,6 +220,23 @@ iPoint Minion::GetPos() const
 
 void Minion::SetBasePath(std::list<iPoint>& path)
 {
+	switch (GetTeam())
+	{
+	case 1:
+		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		{
+			base_path.push_back(*it);
+		}
+		break;
+	case 2:
+		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		{
+			base_path.push_back(*it);
+		}
+		break;
+	default:
+		break;
+	}
 	for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
 	{
 		base_path.push_back(*it);

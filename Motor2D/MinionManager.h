@@ -27,13 +27,15 @@ public:
 	//Starts spawn timer
 	void StartTimer();
 
+	void AddMinions();
+
 private:
 
 public:
 
 private:
-	std::list<Minion*>		team1_minons;
-	std::list<Minion*>		team2_minons;
+	std::list<Minion*>		team1_minions;
+	std::list<Minion*>		team2_minions;
 
 	std::list<iPoint>		minions_path;
 

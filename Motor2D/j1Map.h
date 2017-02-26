@@ -5,7 +5,9 @@
 #include "p2Point.h"
 #include "j1Module.h"
 #include <string>
+#include <vector>
 #include <list>
+#include "j1Render.h"
 
 // ----------------------------------------------------
 struct Properties
@@ -122,6 +124,12 @@ public:
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+
+	// Return World spawn position for team #team minions
+	iPoint GetMinionsSpawn(uint team) const;
+
+	// Return all unsorted points for minions path
+	std::vector<iPoint> GetMinionPath()const;
 
 private:
 
