@@ -76,8 +76,9 @@ public:
 
 private:
 
-	bool MinionMove();
-	bool MinionAttack();
+	void MinionIdle();
+	void MinionMove();
+	void MinionAttack();
 
 	void CheckState();
 
@@ -96,7 +97,7 @@ private:
 
 	bool				flip = false;
 
-	uint				vision_range = 50;
+	uint				vision_range = 150;
 	uint				attack_range = 60;
 
 	MINION_STATE		state = Minion_Idle;
@@ -106,10 +107,12 @@ private:
 
 	std::vector<iPoint>	base_path;
 	std::vector<iPoint>	target_path;
-	uint				base_path_index = 0;
-	uint				target_path_index = 0;
+	int					base_path_index = 0;
+	int					target_path_index = 0;
 
 	float				speed = 0;
+
+	states				anim_state = states_null;
 
 };
 

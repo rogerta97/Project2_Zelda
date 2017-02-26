@@ -59,7 +59,7 @@ bool Minion::Update(float dt)
 	switch (state)
 	{
 	case Minion_Idle:
-		CheckState();
+		MinionIdle();
 		break;
 	case Minion_Move:
 		MinionMove();
@@ -70,10 +70,6 @@ bool Minion::Update(float dt)
 	default:
 		break;
 	}
-
-	iPoint pos = App->map->WorldToMap(GetPos().x, GetPos().y);
-
-	//LOG("min pos: %d %d", pos.x, pos.y);
 
 	return ret;
 }
@@ -156,48 +152,56 @@ void Minion::RunUp()
 {
 	game_object->SetAnimation("run_up");
 	flip = false;
+	anim_state = run_up;
 }
 
 void Minion::RunDown()
 {
 	game_object->SetAnimation("run_down");
 	flip = false;
+	anim_state = run_down;
 }
 
 void Minion::RunLeft()
 {
 	game_object->SetAnimation("run_lateral");
 	flip = true;
+	anim_state = run_left;
 }
 
 void Minion::RunRight()
 {
 	game_object->SetAnimation("run_lateral");
 	flip = false;
+	anim_state = run_right;
 }
 
 void Minion::IdleUp()
 {
 	game_object->SetAnimation("idle_up");
 	flip = false;
+	anim_state = idle_up;
 }
 
 void Minion::IdleDown()
 {
 	game_object->SetAnimation("idle_down");
 	flip = false;
+	anim_state = idle_down;
 }
 
 void Minion::IdleLeft()
 {
 	game_object->SetAnimation("idle_lateral");
 	flip = true;
+	anim_state = idle_left;
 }
 
 void Minion::IdleRight()
 {
 	game_object->SetAnimation("idle_lateral");
 	flip = false;
+	anim_state = idle_right;
 }
 
 void Minion::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -220,33 +224,45 @@ iPoint Minion::GetPos() const
 
 void Minion::SetBasePath(std::list<iPoint>& path)
 {
-	switch (GetTeam())
-	{
-	case 1:
-		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
-		{
-			base_path.push_back(*it);
-		}
-		break;
-	case 2:
-		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
-		{
-			base_path.push_back(*it);
-		}
-		break;
-	default:
-		break;
-	}
 	for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
 	{
 		base_path.push_back(*it);
 	}
 }
 
-bool Minion::MinionMove()
+void Minion::MinionIdle()
 {
-	bool ret = true;
+	CheckState();
 
+	switch (anim_state)
+	{
+	case run_up:
+		IdleUp();
+		break;
+	case run_left:
+		IdleLeft();
+		break;
+	case run_down:
+		IdleDown();
+		break;
+	case run_right:
+		IdleRight();
+		break;
+	case basic_atack_up:
+		break;
+	case basic_atack_left:
+		break;
+	case basic_atack_down:
+		break;
+	case basic_atack_right:
+		break;
+	default:
+		break;
+	}
+}
+
+void Minion::MinionMove()
+{
 	CheckState();
 
 	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
@@ -261,7 +277,10 @@ bool Minion::MinionMove()
 				base_path_index++;
 		}
 		else
-			move_state = Move_Idle;
+		{
+			state = Minion_Idle;
+			break;
+		}
 
 		iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
 		target_pos.y += Half_Tile;
@@ -273,10 +292,15 @@ bool Minion::MinionMove()
 	}
 	case Move_AproachTarget:
 	{
-		if (target_path_index < target_path.size() - 1) 
+		if (target_path_index < target_path.size()-1)
 		{
-			if (map_pos == base_path.at(base_path_index))
+			if (map_pos == target_path.at(target_path_index))
 				target_path_index++;
+		}
+		else
+		{
+			move_state = Move_FollowBasePath;
+			break;
 		}
 
 		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
@@ -289,9 +313,15 @@ bool Minion::MinionMove()
 	}
 	case Move_ReturnToPath:
 	{
-		if (target_path_index < target_path.size())
-			if (map_pos == base_path.at(base_path_index))
+		if (target_path_index < target_path.size()-1)
+		{
+			if (map_pos == target_path.at(target_path_index))
 				target_path_index++;
+		}
+		else {
+			move_state = Move_FollowBasePath;
+			break;
+		}
 
 		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
 		target_pos.y += Half_Tile;
@@ -305,12 +335,11 @@ bool Minion::MinionMove()
 		break;
 	}
 
-	return ret;
 }
 
-bool Minion::MinionAttack()
+void Minion::MinionAttack()
 {
-	return false;
+	CheckState();
 }
 
 void Minion::CheckState()
@@ -318,7 +347,15 @@ void Minion::CheckState()
 	switch (state)
 	{
 	case Minion_Idle:
-		state = Minion_Move;
+		if (base_path_index < base_path.size()-1)
+		{
+			state = Minion_Move;
+			move_state = Move_FollowBasePath;
+		}
+		else {
+			if (LookForTarget())
+				PathToTarget();
+		}
 		break;
 	case Minion_Move:
 	{
@@ -343,7 +380,6 @@ void Minion::CheckState()
 				else
 				{
 					target_path_index = 0;
-					target_path.clear();
 					target = nullptr;
 					move_state = Move_ReturnToPath;
 					PathToBasePath();
@@ -354,8 +390,8 @@ void Minion::CheckState()
 			if (LookForTarget())
 				PathToTarget();
 			if (base_path_index < base_path.size()) {
-				iPoint map_pos = App->map->WorldToMap(GetPos().x - Half_Tile, GetPos().y - Half_Tile);
-				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 5)
+				iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 2)
 					move_state = Move_FollowBasePath;
 			}
 			break;
@@ -385,6 +421,7 @@ void Minion::SetTargetPath(const std::list<iPoint>* path)
 void Minion::PathToTarget()
 {
 	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x,GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y));
+	target_path.clear();
 	SetTargetPath(App->pathfinding->GetLastPath());
 	target_path_index = 0;
 	move_state = Move_AproachTarget;
@@ -392,7 +429,8 @@ void Minion::PathToTarget()
 
 void Minion::PathToBasePath()
 {
-	App->pathfinding->CreatePath(GetPos(), base_path.at(base_path_index));
+	target_path.clear();
+	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), base_path.at(base_path_index));
 	SetTargetPath(App->pathfinding->GetLastPath());
 	target_path_index = 0;
 	move_state = Move_ReturnToPath;
