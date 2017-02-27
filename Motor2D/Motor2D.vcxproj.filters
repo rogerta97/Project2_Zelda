@@ -94,6 +94,9 @@
     <ClCompile Include="MinionManager.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Engine\4. Entities ==========</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">

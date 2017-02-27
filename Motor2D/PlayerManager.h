@@ -52,15 +52,16 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void AddPlayer(entity_name name, int index, iPoint pos, int team);
+	Player* AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar = true);
 	void ChangePlayer(entity_name name, int index);
+	void DeletePlayer(int index);
 
 	std::vector<Entity*> GetTeamPlayers(int team);
 
 private:
 
 private:
-	vector<Player> players;
+	vector<Player*> players;
 
 };
 

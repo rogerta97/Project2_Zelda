@@ -30,7 +30,9 @@ Link::Link(iPoint pos)
 	App->LoadXML("link.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	draw_offset = restore_draw_offset = { 16, 26 };
+	draw_offset = restore_draw_offset = { 16, 26 }; // 
+
+	blit_layer = 2;
 }
 
 Link::~Link()
@@ -71,6 +73,8 @@ bool Link::Update(float dt)
 		LOG("Report this fucking nigger omg");
 	}
 
+	LifeBar(iPoint(60, 5), iPoint(-25, -40));
+
 	return ret;
 }
 
@@ -80,9 +84,9 @@ bool Link::Draw(float dt)
 	
 	// Blit
 	if(flip)
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(blit_layer, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(blit_layer, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 
 	// -------------
@@ -276,7 +280,7 @@ void Link::BasicAttackUp()
 		attacking = true;
 		can_move = false;
 		flip = false;
-		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -30), 10, 40, fixture_type::f_t_attack);
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 10, 40, fixture_type::f_t_attack);
 	}
 }
 
@@ -289,7 +293,7 @@ void Link::BasicAttackDown()
 		attacking = true;
 		can_move = false;
 		flip = false;
-		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(15, 25), 10, 40, fixture_type::f_t_attack);
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, 35), 10, 40, fixture_type::f_t_attack);
 	}
 }
 
@@ -302,7 +306,7 @@ void Link::BasicAttackLeft()
 		attacking = true;
 		can_move = false;
 		flip = true;
-		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(-10, 0), 40, 10, fixture_type::f_t_attack);
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(-30, 0), 40, 10, fixture_type::f_t_attack);
 	}
 }
 
@@ -314,7 +318,7 @@ void Link::BasicAttackRight()
 		attacking = true;
 		can_move = false;
 		flip = false;
-		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, 0), 40, 10, fixture_type::f_t_attack);
+		abilities.at(0)->fixture = game_object->CreateCollisionSensor(iPoint(35, 0), 40, 10, fixture_type::f_t_attack);
 	}
 }
 

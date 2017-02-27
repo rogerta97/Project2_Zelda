@@ -117,20 +117,7 @@ public:
 	virtual void Ability2() {};
 	virtual void Ability3() {};
 
-	bool GotHit(Entity* &entity, Ability* &ability)
-	{
-		if (hit)
-		{
-			entity = hit_by;
-			ability = hit_ability;
-			hit_by = nullptr;
-			hit_ability = nullptr;
-			hit = false;
-
-			return true;
-		}
-		return false;
-	};
+	bool GotHit(Entity* &entity, Ability* &ability);
 
 	virtual void SetCamera(int index) {};
 
@@ -162,6 +149,10 @@ public:
 		return team;
 	}
 
+	void LifeBar(iPoint size, iPoint offset = {0, 0});
+
+private:
+
 private:
 	uint		     team = 0;
 
@@ -171,6 +162,9 @@ public:
 	vector<Ability*> abilities;
 	bool		     can_move = false;
 	bool             attacking = false;
+
+	bool			 show_life_bar = false;
+	int				 blit_layer = 0;
 
 	// Got Hit
 	bool		     hit = false;

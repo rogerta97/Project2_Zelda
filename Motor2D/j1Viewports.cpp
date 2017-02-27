@@ -277,10 +277,35 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 	}
 }
 
-void j1Viewports::LayerDrawQuad(const SDL_Rect & rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera)
+void j1Viewports::LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, int layer, int viewport, bool use_camera)
 {
 	layer_quad q(rect, r, g, b, a, filled, use_camera);
-	quad_list.push_back(q);
+
+	switch (viewport)
+	{
+	case 1:
+		quad_list1.Push(q, layer);
+		break;
+	case 2:
+		quad_list2.Push(q, layer);
+		break;
+	case 3:
+		quad_list3.Push(q, layer);
+		break;
+	case 4:
+		quad_list4.Push(q, layer);
+		break;
+	default:
+		quad_list1.Push(q, layer);
+		if (number_of_views > 1)
+			quad_list2.Push(q, layer);
+		if (number_of_views > 3)
+		{
+			quad_list3.Push(q, layer);
+			quad_list4.Push(q, layer);
+		}
+		break;
+	}
 }
 
 void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
@@ -313,10 +338,9 @@ void j1Viewports::DoLayerPrint()
 
 			}
 	
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 		
 			for (int i = 0; i < line_list.size(); i++)
@@ -355,10 +379,9 @@ void j1Viewports::DoLayerPrint()
 
 			}
 
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -386,10 +409,9 @@ void j1Viewports::DoLayerPrint()
 
 			}
 
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list2.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -429,10 +451,9 @@ void j1Viewports::DoLayerPrint()
 					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -459,10 +480,9 @@ void j1Viewports::DoLayerPrint()
 					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list2.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -489,10 +509,9 @@ void j1Viewports::DoLayerPrint()
 					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list3.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera3.x, curr.rect.y + camera3.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera3.x, curr->data.rect.y + camera3.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -519,10 +538,9 @@ void j1Viewports::DoLayerPrint()
 					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 			}
 
-			for (int i = 0; i < quad_list.size(); i++)
+			for (p2PQueue_item<layer_quad>* curr = quad_list4.start; curr != nullptr; curr = curr->next)
 			{
-				layer_quad curr = quad_list.at(i);
-				App->render->DrawQuad({ curr.rect.x + camera4.x, curr.rect.y + camera4.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawQuad({ curr->data.rect.x + camera4.x, curr->data.rect.y + camera4.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -546,7 +564,12 @@ void j1Viewports::DoLayerPrint()
 		layer_list2.Clear();
 		layer_list3.Clear();
 		layer_list4.Clear();
-		quad_list.clear();
+
+		quad_list1.Clear();
+		quad_list2.Clear();
+		quad_list3.Clear();
+		quad_list4.Clear();
+
 		line_list.clear();
 		circle_list.clear();
 }

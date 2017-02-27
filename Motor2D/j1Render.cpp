@@ -187,6 +187,7 @@ bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, float _
 {
 	bool ret = true;
 	uint scale = _scale;
+
 	if (scale == -1)
 		scale = App->win->GetScale();
 

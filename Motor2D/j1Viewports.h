@@ -16,7 +16,7 @@ struct layer_blit
 
 	layer_blit(SDL_Texture* _texture, iPoint _pos, const SDL_Rect _section, int _viewport, float _scale, bool _use_camera, SDL_RendererFlip _flip, double _angle, int _pivot_x, int _pivot_y)
 	{
-		texture = _texture; pos = _pos; section.x = _section.x;  section.y = _section.y; section.w = _section.w; section.h = _section.h; scale = _scale;
+		texture = _texture; pos = _pos; section = { _section }; scale = _scale;
 		flip = _flip; angle = _angle; pivot_x = _pivot_x; pivot_y = _pivot_y; viewport = _viewport; use_camera = _use_camera;
 	};
 
@@ -35,9 +35,9 @@ struct layer_blit
 struct layer_quad
 {
 	layer_quad() {};
-	layer_quad(const SDL_Rect& _rect, Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a, bool _filled, bool _use_camera)
+	layer_quad(const SDL_Rect _rect, Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a, bool _filled, bool _use_camera)
 	{
-		rect = { rect }; r = _r; g = _g; b = _b; a = _a; filled = _filled; use_camera = _use_camera;
+		rect = { _rect }; r = _r; g = _g; b = _b; a = _a; filled = _filled; use_camera = _use_camera;
 	}
 	SDL_Rect rect = NULLRECT;
 	Uint8    r = 0;
@@ -112,7 +112,7 @@ public:
 
 	// Blit choosing the layer
 	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, int viewport = 0, float scale = -1.0f, bool use_camera = true, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
-	void LayerDrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera = true);
+	void LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, int layer = 0, int viewport = 0, bool use_camera = true);
 	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
 	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
 	void SetViews(uint number);
@@ -142,7 +142,6 @@ public:
 
 private:
 	// Layer Blit list
-	vector<layer_quad>   quad_list;
 	vector<layer_line>   line_list;
 	vector<layer_circle> circle_list;
 
@@ -150,6 +149,11 @@ private:
 	p2PQueue<layer_blit> layer_list2;
 	p2PQueue<layer_blit> layer_list3;
 	p2PQueue<layer_blit> layer_list4;
+
+	p2PQueue<layer_quad> quad_list1;
+	p2PQueue<layer_quad> quad_list2;
+	p2PQueue<layer_quad> quad_list3;
+	p2PQueue<layer_quad> quad_list4;
 
 	// Win Size
 	uint                 win_w = 0, win_h = 0;

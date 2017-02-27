@@ -41,12 +41,12 @@
       <anim speed = "10" name = "idle_down" loop = "true">
 	       <rect x = "108" y = "156" w = "32" h = "48"/>
       </anim>
-     <anim speed = "1" name = "basic_attack_down" loop = "false">
+     <anim speed = "7" name = "basic_attack_down" loop = "false">
          <rect x = "0" y = "324" w = "40" h = "66"/>
          <rect x = "42" y = "319" w = "40" h = "68"/>
          <rect x = "86" y = "313" w = "40" h = "77"/>
      </anim>
-     <anim speed = "1" name = "basic_attack_up" loop = "false">
+     <anim speed = "7" name = "basic_attack_up" loop = "false">
        <rect x = "146" y = "310" w = "40" h = "80"/>
        <rect x = "188" y = "314" w = "40" h = "75"/>
        <rect x = "232" y = "316" w = "40" h = "74"/>

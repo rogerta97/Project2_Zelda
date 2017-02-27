@@ -142,6 +142,9 @@ public:
 
 	bool PutWindowToTop();
 
+	iPoint GetPos();
+	void SetPos(iPoint);
+
 protected:
 
 	// Helper functions

@@ -85,6 +85,7 @@ bool j1Gui::Update(float dt)
 				{
 					(*it)->blit_layer = elements->data->blit_layer;
 					(*it)->is_ui = elements->data->is_ui;
+					(*it)->is_gameplay = elements->data->is_gameplay;
 				}
 			}
 		}
@@ -536,6 +537,25 @@ bool UI_Element::PutWindowToTop()
 	App->gui->ReorderElements();
 
 	return ret;
+}
+
+iPoint UI_Element::GetPos()
+{
+	return iPoint(rect.x, rect.y);
+}
+
+void UI_Element::SetPos(iPoint newpos)
+{
+	list<UI_Element*> childs;
+	App->gui->GetChilds(this, childs);
+
+	iPoint distance(newpos.x - GetPos().x, newpos.y - GetPos().y);
+
+	for (list<UI_Element*>::iterator it = childs.begin(); it != childs.end(); it++)
+	{
+		(*it)->rect.x += distance.x;
+		(*it)->rect.y += distance.y;
+	}
 }
 
 // ---------------------------------------------------------------------
