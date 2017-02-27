@@ -8,6 +8,7 @@
 #include "j1Window.h"
 #include "j1Scene.h"
 #include "MainScene.h"
+#include "MenuScene.h"
 #include "j1Console.h"
 
 #define NUMBER_OF_PLAYERS 4
@@ -41,12 +42,14 @@ bool j1Scene::Start()
 	LOG("Start module scene");
 
 	// Create scenes
+	menu_scene = new MenuScene(); 
+	scenes.push_back(menu_scene);
 	main_scene = new MainScene();
 	scenes.push_back(main_scene);
 	// -------------
 
 	// Starting scene
-	current_scene = main_scene;
+	current_scene = menu_scene;
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();
@@ -96,7 +99,6 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	bool ret = false;
-
 	if (current_scene != nullptr)
 		ret = current_scene->CleanUp();
 

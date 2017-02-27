@@ -40,7 +40,11 @@ public:
 
 	virtual void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const {}
 
-public:
+	virtual bool isDone() { return change_scene; }
+
+protected:
+
+	bool change_scene = false; 
 
 };
 

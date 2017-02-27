@@ -97,6 +97,9 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Engine\4. Entities ==========</Filter>
     </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Engine\3. Scenes ==========\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="MinionManager.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Engine\3. Scenes ==========\Menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -253,6 +259,9 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Minions">
       <UniqueIdentifier>{de09af9a-bea5-4367-81e3-c6bf6e5f9f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\Menu">
+      <UniqueIdentifier>{afcd3f3f-e70b-4587-86b0-e69ab2ba9728}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

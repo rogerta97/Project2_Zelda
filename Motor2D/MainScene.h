@@ -37,10 +37,7 @@ public:
 
 private:
 
-
 	//UI elements
-
-
 	UI_Image* exp_bar = nullptr; 
 
 	UI_Image* rupiees = nullptr;

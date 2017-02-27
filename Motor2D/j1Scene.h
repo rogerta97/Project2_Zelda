@@ -6,6 +6,7 @@
 #include "Scene.h"
 
 struct SDL_Texture;
+class MenuScene; 
 class MainScene;
 
 class j1Scene : public j1Module
@@ -49,6 +50,7 @@ public:
 
 public:
 	// Scenes
+	MenuScene*			 menu_scene = nullptr; 
 	MainScene*           main_scene = nullptr;
 
 private:

@@ -87,7 +87,24 @@ bool j1Viewports::CleanUp()
 void j1Viewports::SetViews(uint number)
 {
 	if (number > 0 && number < 5 && number != 3)
+	{
 		number_of_views = number;
+
+		switch (number)
+		{
+		case 1:
+			scale = 2.0f;
+			break;
+		case 2:
+			scale = 1.0f;
+			break;
+		case 4:
+			scale = 1.0f;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 uint j1Viewports::GetViews()
@@ -592,20 +609,6 @@ void j1Viewports::OnCVar(std::list<std::string>& tokens)
 			string output("Number of set viewports to: ");
 			output.insert(output.size(), *it);
 			App->console->AddText(output.c_str(), Output);
-			switch (value)
-			{
-			case 1:
-				scale = 2.0f;
-				break;
-			case 2:
-				scale = 1.0f;
-				break;
-			case 4:
-				scale = 1.0f;
-				break;
-			default:
-				break;
-			}
 		}
 		else
 		{
