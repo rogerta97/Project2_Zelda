@@ -60,12 +60,14 @@ bool MainScene::Start()
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0);
 
 	exp_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h/40), SDL_Rect{ 1, 32, 385, 21 });
-	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 15, screen.h / 40), SDL_Rect{ 127, 1, 18, 18 });
+	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 15, screen.h / 40), SDL_Rect{ 163, 2, 16, 16 });
 
 	//Creating quests
 	quest_manager = new QuestManager();
 	quest_manager->CreateQuest(string("jhsdg"), 1); 
 	quest_manager->CreateQuest(string("jhsdg"), 2);
+
+	App->view->SetViews(4); 
 
 	return ret;
 }
