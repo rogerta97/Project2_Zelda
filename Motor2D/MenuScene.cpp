@@ -36,6 +36,7 @@ bool MenuScene::Start()
 
 	start_text = menu_window->CreateText(iPoint(screen.w, 165), App->font->default_15, 15);
 	start_text->SetText("NEW GAME");
+	start_text->click_through = true;
 
 	options_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
 
@@ -49,6 +50,7 @@ bool MenuScene::Start()
 
 	options_text = menu_window->CreateText(iPoint(screen.w, 235), App->font->default_15, 15);
 	options_text->SetText("OPTIONS");
+	options_text->click_through = true;
 
 	quit_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
 
@@ -62,6 +64,7 @@ bool MenuScene::Start()
 
 	quit_text = menu_window->CreateText(iPoint(screen.w, 305), App->font->default_15, 15);
 	quit_text->SetText("QUIT GAME");
+	quit_text->click_through = true;
 
 
 	return false;
