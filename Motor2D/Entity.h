@@ -163,21 +163,24 @@ public:
 	}
 
 private:
-	uint		team = 0;
+	uint		     team = 0;
 
 public:
-	GameObject*     game_object = nullptr;
-	Stats	        stats;
+	GameObject*      game_object = nullptr;
+	Stats	         stats;
 	vector<Ability*> abilities;
-	bool		    can_move = false;
-	bool            attacking = false;
-	bool		    hit = false;
-	Entity*	        hit_by = nullptr;
-	Ability*		hit_ability = nullptr;
+	bool		     can_move = false;
+	bool             attacking = false;
+
+	// Got Hit
+	bool		     hit = false;
+	Entity*	         hit_by = nullptr;
+	Ability*		 hit_ability = nullptr;
 
 protected:
-	iPoint      draw_offset = NULLPOINT;
-	iPoint		restore_draw_offset = NULLPOINT;
+	// Draw
+	iPoint           draw_offset = NULLPOINT;
+	iPoint		     restore_draw_offset = NULLPOINT;
 };
 
 #endif

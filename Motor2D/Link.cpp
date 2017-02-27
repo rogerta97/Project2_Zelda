@@ -90,38 +90,24 @@ bool Link::Draw(float dt)
 	// -------------
 	if (attacking)
 	{
+		bool reset = false;
 		// Basic atack --------------------
-		if (game_object->animator->IsCurrentAnimation("basic_attack_up"))
+		if (game_object->animator->IsCurrentAnimation("basic_attack_up") || game_object->animator->IsCurrentAnimation("basic_attack_down") 
+			|| game_object->animator->IsCurrentAnimation("basic_attack_left") || game_object->animator->IsCurrentAnimation("basic_attack_right"))
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
-				game_object->animator->GetCurrentAnimation()->Reset();
-				attacking = false;
-				can_move = true;
-				draw_offset = restore_draw_offset;
+				reset = true;
 				game_object->DeleteFixture(abilities.at(0)->fixture);
 			}
 		}
-		else if (game_object->animator->IsCurrentAnimation("basic_attack_down"))
+
+		if (reset)
 		{
-			if (game_object->animator->GetCurrentAnimation()->Finished())
-			{
-				game_object->animator->GetCurrentAnimation()->Reset();
-				attacking = false;
-				can_move = true;
-				game_object->DeleteFixture(abilities.at(0)->fixture);
-			}
-		}
-		else if (game_object->animator->IsCurrentAnimation("basic_attack_lateral"))
-		{
-			if (game_object->animator->GetCurrentAnimation()->Finished())
-			{
-				game_object->animator->GetCurrentAnimation()->Reset();
-				attacking = false;
-				can_move = true;
-				draw_offset = restore_draw_offset;
-				game_object->DeleteFixture(abilities.at(0)->fixture);
-			}
+			game_object->animator->GetCurrentAnimation()->Reset();
+			attacking = false;
+			can_move = true;
+			draw_offset = restore_draw_offset;
 		}
 		// -------------------------------
 	}
@@ -286,7 +272,7 @@ void Link::BasicAttackUp()
 	if (!attacking)
 	{
 		game_object->SetAnimation("basic_attack_up");
-		draw_offset = { draw_offset.x, 48 };
+		draw_offset = { draw_offset.x, 58 };
 		attacking = true;
 		can_move = false;
 		flip = false;
@@ -299,6 +285,7 @@ void Link::BasicAttackDown()
 	if (!attacking)
 	{
 		game_object->SetAnimation("basic_attack_down");
+		draw_offset = { 22, 24 };
 		attacking = true;
 		can_move = false;
 		flip = false;
@@ -310,8 +297,8 @@ void Link::BasicAttackLeft()
 {
 	if (!attacking)
 	{
-		game_object->SetAnimation("basic_attack_lateral");
-		draw_offset = { 26, draw_offset.y };
+		game_object->SetAnimation("basic_attack_left");
+		draw_offset = { 48, draw_offset.y };
 		attacking = true;
 		can_move = false;
 		flip = true;
@@ -323,7 +310,7 @@ void Link::BasicAttackRight()
 {
 	if (!attacking)
 	{
-		game_object->SetAnimation("basic_attack_lateral");
+		game_object->SetAnimation("basic_attack_right");
 		attacking = true;
 		can_move = false;
 		flip = false;
