@@ -66,14 +66,15 @@ public:
 
 struct Ability
 {
-	Ability(int _damage, float _cd, float _duration)
+	Ability(int _number, int _damage, float _cd, float _duration)
 	{
-		damage = _damage;  cd = _cd; duration = _duration; cd = _cd; ;
+		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd; 
 	};
 
-	float cd = 0;
-	float duration = 0;
-	int damage = 0;
+	int        index = 0;
+	float      cd = 0;
+	float      duration = 0;
+	int        damage = 0;
 	b2Fixture* fixture = nullptr;
 };
 
@@ -138,6 +139,10 @@ public:
 	}
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+
+	void AddAbility(int number, int damage, int cooldow, int duration);
+	Ability* GetAbility(int number);
+	void CleanAbilities();
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 

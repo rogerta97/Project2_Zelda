@@ -21,6 +21,36 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability)
 	return false;
 }
 
+void Entity::AddAbility(int number, int damage, int cooldow, int duration)
+{
+	Ability* ability = new Ability(number, damage, cooldow, duration); abilities.push_back(ability);
+}
+
+Ability * Entity::GetAbility(int number)
+{
+	Ability* ret = nullptr;
+
+	for (int i = 0; i < abilities.size(); i++)
+	{
+		if (number == abilities.at(i)->index)
+		{
+			ret = abilities.at(i);
+			break;
+		}
+	}
+
+	return ret;
+}
+
+void Entity::CleanAbilities()
+{
+	for (int i = 0; i < abilities.size(); i++)
+	{
+		RELEASE(abilities.at(i));
+	}
+	abilities.clear();
+}
+
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
 	if (show_life_bar && game_object != nullptr)
