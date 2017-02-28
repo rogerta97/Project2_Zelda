@@ -466,6 +466,7 @@ void j1App::FrameRateCalculations()
 		SDL_Delay(capped_ms - last_frame_ms);
 	}
 
+	// Report a bug button logic
 	if (bug_report_button->MouseEnter())
 		bug_report_button_color->SetColor({ 30, 30, 30, 255 });
 	else if (bug_report_button->MouseOut())

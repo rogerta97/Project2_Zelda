@@ -59,17 +59,21 @@ public:
 
 public:
 	int speed = 0;
+
+	int max_life = 100;
+	int life = 100;
 };
 
 struct Ability
 {
-	Ability(float _cd, float _duration)
+	Ability(int _damage, float _cd, float _duration)
 	{
-		cd = _cd; duration = _duration; cd = _cd; ;
+		damage = _damage;  cd = _cd; duration = _duration; cd = _cd; ;
 	};
 
 	float cd = 0;
 	float duration = 0;
+	int damage = 0;
 	b2Fixture* fixture = nullptr;
 };
 
@@ -157,12 +161,17 @@ private:
 	uint		     team = 0;
 
 public:
+	// Containers
 	GameObject*      game_object = nullptr;
 	Stats	         stats;
 	vector<Ability*> abilities;
+
+	// States
 	bool		     can_move = false;
 	bool             attacking = false;
+	bool			 is_player = false;
 
+	// Life bar
 	bool			 show_life_bar = false;
 	int				 blit_layer = 0;
 

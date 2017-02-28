@@ -13,6 +13,11 @@ class QuestManager;
 class Minion;
 class MinionManager;
 
+enum GameStates
+{
+
+};
+
 class MainScene : public Scene 
 {
 public:

@@ -9,7 +9,8 @@
 
 class b2Fixture;
 class PhysBody;
-class Quest; 
+class Quest;
+class Entity;
 
 struct Player
 {
@@ -57,6 +58,8 @@ public:
 	void DeletePlayer(int index);
 
 	std::vector<Entity*> GetTeamPlayers(int team);
+	std::vector<int> GetTeamViewports(int team);
+	int GetEntityViewportIfIsPlayer(Entity* entity);
 
 private:
 

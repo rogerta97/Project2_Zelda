@@ -21,10 +21,10 @@ Link::Link(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	Ability* basic_atack = new Ability(1, 2); abilities.push_back(basic_atack);
-	Ability* ability1 = new Ability(1, 2);	  abilities.push_back(ability1);
-	Ability* ability2 = new Ability(1, 2);    abilities.push_back(ability2);
-	Ability* ability3 = new Ability(1, 2);    abilities.push_back(ability3);
+	Ability* basic_atack = new Ability(10, 1, 2); abilities.push_back(basic_atack);
+	Ability* ability1 = new Ability(10, 1, 2);	  abilities.push_back(ability1);
+	Ability* ability2 = new Ability(10, 1, 2);    abilities.push_back(ability2);
+	Ability* ability3 = new Ability(10, 1, 2);    abilities.push_back(ability3);
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
@@ -66,11 +66,15 @@ bool Link::Update(float dt)
 
 	App->view->CenterCamera(camera, game_object->GetPos().x + 23, game_object->GetPos().y + 35);
 
-	Entity* e;
-	Ability* a;
-	if (GotHit(e, a))
+	Entity* entity;
+	Ability* ability;
+	if (GotHit(entity, ability))
 	{
-		LOG("Report this fucking nigger omg");
+		if (entity->GetTeam() != GetTeam())
+		{
+			LOG("hit");
+			stats.life -= ability->damage;
+		}
 	}
 
 	LifeBar(iPoint(60, 5), iPoint(-25, -40));

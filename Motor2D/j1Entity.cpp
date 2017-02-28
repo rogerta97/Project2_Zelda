@@ -97,9 +97,9 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 	// Returns GotHit to the entity
 	if (fixtureA->type == fixture_type::f_t_attack && fixtureB->type == fixture_type::f_t_hit_box)
 	{
-		Entity* entity = FindEntityByBodyType(bodyB->type);
+		Entity* entity = FindEntityByBody(bodyB);
 		if(entity != nullptr)
-			entity->hit_by = FindEntityByBodyType(bodyA->type);
+			entity->hit_by = FindEntityByBody(bodyA);
 		if(entity->hit_by != nullptr)
 			entity->hit_ability = FindAbilityByFixture(entity->hit_by, fixtureA);
 		if(entity->hit_ability != nullptr)
@@ -141,13 +141,13 @@ void j1Entity::DeleteEntity(Entity* entity)
 	RELEASE(entity);
 }
 
-Entity * j1Entity::FindEntityByBodyType(pbody_type type)
+Entity * j1Entity::FindEntityByBody(PhysBody* type)
 {
 	Entity* ret = nullptr;
 
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
-		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody->type)
+		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody)
 		{
 			ret = *it;
 			break;

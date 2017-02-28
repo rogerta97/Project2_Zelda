@@ -265,15 +265,18 @@ bool PlayerManager::CleanUp()
 
 Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar)
 {
+	Player* ret = nullptr;
 	if (players.size() < 3)
 	{
 		Player* p = new Player(App->entity->CreateEntity(name, pos), index - 1);
 		p->entity->SetCamera(p->index + 1);
 		p->entity->SetTeam(team);
 		p->entity->show_life_bar = show_life_bar;
+		p->entity->is_player = true;
 		players.push_back(p);
-		return p;
+		ret = p;
 	}
+	return ret;
 }
 
 void PlayerManager::ChangePlayer(entity_name name, int index)
@@ -324,3 +327,30 @@ std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)
 
 	return ret;
 }
+
+std::vector<int> PlayerManager::GetTeamViewports(int team)
+{
+	std::vector<int> ret;
+
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if ((*it)->entity->GetTeam() == team)
+		{
+			ret.push_back((*it)->index+1);
+		}
+	}
+
+	return ret;
+}
+
+int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
+{
+	for (int i = 0; i < players.size(); i++)
+	{
+		if (players.at(i)->entity == entity)
+		{
+			return players.at(i)->index + 1;
+		}
+	}
+}
+
