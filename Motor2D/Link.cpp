@@ -144,8 +144,10 @@ bool Link::CleanUp()
 
 void Link::MoveUp(float speed)
 {
-	if(can_move)
+	if (can_move)
+	{
 		game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });
+	}
 }
 
 void Link::MoveDown(float speed)
@@ -170,7 +172,7 @@ void Link::MoveUpRight(float speed)
 {
 	if (can_move)
 	{
-		fPoint s(speed * cos(45), speed * sin(45));
+		fPoint s(speed * cos(DEGTORAD*45), speed * sin(DEGTORAD * 45));
 		game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y - s.y });
 	}
 }
@@ -179,7 +181,7 @@ void Link::MoveDownRight(float speed)
 {
 	if (can_move)
 	{
-		fPoint s(speed * cos(45), speed * sin(45));
+		fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 		game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y + s.y });
 	}
 }
@@ -188,7 +190,7 @@ void Link::MoveUpLeft(float speed)
 {
 	if (can_move)
 	{
-		fPoint s(speed * cos(45), speed * sin(45));
+		fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 		game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y - s.y });
 	}
 }
@@ -197,7 +199,7 @@ void Link::MoveDownLeft(float speed)
 {
 	if (can_move)
 	{
-		fPoint s(speed * cos(45), speed * sin(45));
+		fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 		game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y + s.y });
 	}
 }
