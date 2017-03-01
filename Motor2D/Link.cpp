@@ -75,6 +75,8 @@ bool Link::Update(float dt)
 		{
 			LOG("hit");
 			stats.life -= ability->damage;
+			if (stats.life < 0)
+				stats.life = 0;
 		}
 	}
 

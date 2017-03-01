@@ -66,15 +66,17 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 
 		// Rule of thirds
 		life.w = (rect.w*stats.life) / stats.max_life;
+		if (life.w < 0)
+			life.w = 0;
 
 		// Back bar
 		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 10, 0, true);
 
+		// Get the viewports of my team
 		vector<int> my_team = App->entity->player_manager->GetTeamViewports(team);
 
 		int main_view = 0;
 
-		// Get the viewports of my team
 		if (is_player)
 		{
 			main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
@@ -83,14 +85,14 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 		// Print to viewports depending the team
 		for (int viewport = 1; viewport <= App->view->GetViews(); viewport++)
 		{
-			// Current viewport is my viewport
+			// Current viewport is my viewport (yellow)
 			if (viewport == main_view)
 			{
 				App->view->LayerDrawQuad(life, 255, 255, 51, 255, true, 10, viewport, true);
 			}
 			else
 			{
-				// Team viewport
+				// Team printing (blue)
 				bool enemy = true;
 				for (int i = 0; i < my_team.size(); i++)
 				{
@@ -102,7 +104,7 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 					}
 				}
 
-				// Enemy viewport
+				// Enemy printing (red)
 				if(enemy)
 					App->view->LayerDrawQuad(life, 255, 0, 0, 255, true, 10, viewport, true);
 			}
