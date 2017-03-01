@@ -40,6 +40,8 @@ public:
 
 	UI_Window* main_window = nullptr;
 
+	MinionManager* minion_manager = nullptr;
+
 private:
 
 	//UI elements
@@ -50,8 +52,6 @@ private:
 
 	//Quest Manager
 	QuestManager* quest_manager = nullptr;
-
-	MinionManager* minion_manager = nullptr;
 
 };
 

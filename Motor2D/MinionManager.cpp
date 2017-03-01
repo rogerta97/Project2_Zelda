@@ -89,6 +89,18 @@ const std::list<Minion*>& MinionManager::GetMinionList(uint team) const
 
 void MinionManager::KillMinion(Entity * minion)
 {
+	switch (minion->GetTeam())
+	{
+	case 1:
+		team1_minions.remove((Minion*)minion);
+		App->entity->DeleteEntity(minion);
+		break;
+	case 2:
+		team2_minions.remove((Minion*)minion);
+		App->entity->DeleteEntity(minion);
+		break;
+
+	}
 }
 
 void MinionManager::StartTimer()

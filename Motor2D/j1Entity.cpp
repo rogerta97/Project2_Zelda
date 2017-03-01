@@ -38,6 +38,8 @@ bool j1Entity::PreUpdate()
 {
 	bool ret = true;
 
+	RemoveEntities();
+
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PreUpdate();
 
@@ -131,10 +133,7 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 
 void j1Entity::DeleteEntity(Entity* entity)
 {
-	entity->CleanUp();
-	entity->CleanEntity();
-	entity_list.remove(entity);
-	RELEASE(entity);
+	entity->to_delete = true;
 }
 
 void j1Entity::ClearEntities()
@@ -177,6 +176,20 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 	}
 
 	return ret;
+}
+
+void j1Entity::RemoveEntities()
+{
+	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
+		if ((*it)->to_delete == true)
+		{
+			(*it)->CleanUp();
+			(*it)->CleanEntity();
+			RELEASE(*it);
+			entity_list.remove(*it);
+		}
+	}
 }
 
 

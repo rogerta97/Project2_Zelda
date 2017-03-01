@@ -51,6 +51,7 @@ public:
 
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
+
 	void ClearEntities();
 
 	Entity* FindEntityByBody(PhysBody* type);
@@ -62,6 +63,8 @@ public:
 private:
 	// List with all entities
 	list<Entity*> entity_list;
+
+	void RemoveEntities();
 
 
 };

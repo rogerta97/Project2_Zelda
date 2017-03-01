@@ -91,6 +91,11 @@ private:
 
 	void Move(int delta_x, int delta_y);
 
+	void BasicAttackUp();
+	void BasicAttackDown();
+	void BasicAttackLeft();
+	void BasicAttackRight();
+
 public:
 
 private:

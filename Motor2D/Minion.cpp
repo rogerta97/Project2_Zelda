@@ -7,8 +7,12 @@
 #include "j1Pathfinding.h"
 #include "PlayerManager.h"
 #include "j1Entity.h"
+#include "Entity.h"
 #include <vector>
 #include "p2Log.h"
+#include "MinionManager.h"
+#include "j1Scene.h"
+#include "MainScene.h"
 
 #define Half_Tile 16
 
@@ -16,10 +20,12 @@ Minion::Minion(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_null);
+	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
+	AddAbility(0, 5, 69, 69);
+	
 	pugi::xml_document doc;
 	App->LoadXML("minion.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -37,6 +43,9 @@ bool Minion::Start()
 	game_object->SetAnimation("idle_down");
 
 	stats.speed = 75;
+	stats.max_life = stats.life = 50;
+
+	show_life_bar = true;
 
 	return ret;
 }
@@ -69,6 +78,22 @@ bool Minion::Update(float dt)
 		break;
 	default:
 		break;
+	}
+
+	LifeBar(iPoint(20, 3), iPoint(0, 0));
+	
+	Entity* entity = nullptr;
+	Ability* ability = nullptr;
+	if (GotHit(entity, ability))
+	{
+		if (entity->GetTeam() != GetTeam()) 
+		{
+			stats.life -= ability->damage;
+			if (stats.life < 0)
+			{
+				App->scene->main_scene->minion_manager->KillMinion(this);
+			}
+		}
 	}
 
 	return ret;
@@ -340,6 +365,8 @@ void Minion::MinionMove()
 void Minion::MinionAttack()
 {
 	CheckState();
+
+
 }
 
 void Minion::CheckState()
@@ -401,9 +428,29 @@ void Minion::CheckState()
 		break; 
 	}
 	case Minion_Attack:
-		move_state = Move_ReturnToPath;
-		state = Minion_Move;
-		PathToBasePath();
+		if (game_object->animator->IsCurrentAnimation("basic_attack_up") || game_object->animator->IsCurrentAnimation("basic_attack_down")
+			|| game_object->animator->IsCurrentAnimation("basic_attack_left") || game_object->animator->IsCurrentAnimation("basic_attack_right"))
+		{
+			if (game_object->animator->GetCurrentAnimation()->Finished())
+			{
+				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
+				{
+					state = Minion_Move;
+					move_state = Move_AproachTarget;
+				}
+			}
+		}
+		else if (target->to_delete == true)
+		{
+			state = Minion_Move;
+			move_state = Move_ReturnToPath;
+		}
+		else
+		{
+			state = Minion_Move;
+			move_state = Move_ReturnToPath;
+			PathToBasePath();
+		}
 		break;
 	default:
 		break;
@@ -509,4 +556,22 @@ void Minion::Move(int delta_x, int delta_y)
 			RunUp();
 		}
 	}
+}
+
+void Minion::BasicAttackUp()
+{
+	game_object->animator->SetAnimation("basic_attack_up");
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 10, 40, fixture_type::f_t_attack);
+}
+
+void Minion::BasicAttackDown()
+{
+}
+
+void Minion::BasicAttackLeft()
+{
+}
+
+void Minion::BasicAttackRight()
+{
 }

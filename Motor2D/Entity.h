@@ -187,6 +187,9 @@ public:
 	Entity*	         hit_by = nullptr;
 	Ability*		 hit_ability = nullptr;
 
+	// Delete 
+	bool			 to_delete = false;
+	
 protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;
