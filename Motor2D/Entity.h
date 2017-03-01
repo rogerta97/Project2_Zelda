@@ -33,6 +33,9 @@ enum states
 	basic_atack_down,
 	basic_atack_right,
 
+	tower_idle,
+	tower_attack,
+
 	states_null,
 };
 

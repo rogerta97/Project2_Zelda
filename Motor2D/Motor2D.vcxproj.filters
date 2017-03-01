@@ -100,6 +100,9 @@
     <ClCompile Include="MenuScene.cpp">
       <Filter>Engine\3. Scenes ==========\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Tower.cpp">
+      <Filter>Engine\4. Entities ==========\Towers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="MenuScene.h">
       <Filter>Engine\3. Scenes ==========\Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Tower.h">
+      <Filter>Engine\4. Entities ==========\Towers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -263,6 +269,9 @@
     <Filter Include="Engine\3. Scenes ==========\Menu">
       <UniqueIdentifier>{afcd3f3f-e70b-4587-86b0-e69ab2ba9728}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Towers">
+      <UniqueIdentifier>{843a305f-fa8a-40ab-838f-88879c4d9f32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -273,6 +282,9 @@
     </Xml>
     <Xml Include="..\Game\minion.xml">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
+    </Xml>
+    <Xml Include="tower.xml">
+      <Filter>Engine\4. Entities ==========\Towers</Filter>
     </Xml>
   </ItemGroup>
 </Project>
