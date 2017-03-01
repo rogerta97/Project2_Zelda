@@ -67,6 +67,7 @@ public:
 
 	// Load an XML file
 	void LoadXML(const char* path, pugi::xml_document& doc);
+	void UnloadXML(pugi::xml_document& doc);
 
 	void CapFps(float fps);
 	void EndSDL();
@@ -159,7 +160,6 @@ private:
 	UI_Button*			bug_report_button = nullptr;
 	UI_ColoredRect*		bug_report_button_color = nullptr;
 	UI_Text*			bug_report_text = nullptr;
-
 };
 
 extern j1App* App;

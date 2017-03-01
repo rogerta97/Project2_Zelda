@@ -33,11 +33,11 @@ private:
 	UI_Button* options_button = nullptr; 
 	UI_Button* quit_button = nullptr; 
 
-	list<UI_Button*> button_list; 
-
 	UI_Text* start_text = nullptr; 
 	UI_Text* options_text = nullptr;
 	UI_Text* quit_text = nullptr;
+
+	vector<UI_Button*> button_list;
 
 };
 

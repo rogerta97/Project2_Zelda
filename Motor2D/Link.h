@@ -67,7 +67,7 @@ public:
 public:
 
 private:
-	int camera = 1;
+	int  camera = 1;
 	bool flip = false;
 
 };

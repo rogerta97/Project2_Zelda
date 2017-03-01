@@ -77,14 +77,9 @@ bool j1Entity::CleanUp()
 {
 	bool ret = true;
 
-	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-	{
-		ret = (*it)->CleanUp();
-	}
+	ClearEntities();
 
 	player_manager->CleanUp();
-
-	RELEASE(player_manager);
 
 	return ret;
 }
@@ -137,8 +132,20 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 void j1Entity::DeleteEntity(Entity* entity)
 {
 	entity->CleanUp();
+	entity->CleanEntity();
 	entity_list.remove(entity);
 	RELEASE(entity);
+}
+
+void j1Entity::ClearEntities()
+{
+	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
+		(*it)->CleanUp();
+		(*it)->CleanEntity();
+		RELEASE(*it);
+	}
+	entity_list.clear();
 }
 
 Entity * j1Entity::FindEntityByBody(PhysBody* type)

@@ -260,7 +260,11 @@ bool PlayerManager::PostUpdate()
 
 bool PlayerManager::CleanUp()
 {
-	return true;
+	bool ret = true;
+
+	ClearPlayers();
+
+	return ret;
 }
 
 Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar)
@@ -311,6 +315,15 @@ void PlayerManager::DeletePlayer(int index)
 			break;
 		}
 	}
+}
+
+void PlayerManager::ClearPlayers()
+{
+	for (int i = 0; i < players.size(); i++)
+	{
+		RELEASE(players.at(i));
+	}
+	players.clear();
 }
 
 std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)

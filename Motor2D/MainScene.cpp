@@ -19,6 +19,7 @@
 #include "j1Pathfinding.h"
 #include "Minion.h"
 #include "MinionManager.h"
+#include "Scene.h"
 
 
 MainScene::MainScene()
@@ -89,6 +90,12 @@ bool MainScene::Update(float dt)
 	App->map->Draw();
 	quest_manager->Update(dt); 
 
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
+	}
+
 	return ret;
 }
 
@@ -106,6 +113,15 @@ bool MainScene::CleanUp()
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
+	App->entity->player_manager->ClearPlayers();
+	App->entity->ClearEntities();
+
+	// Free UI
+	if (App->scene->GetCurrentScene() != App->scene->main_scene)
+	{
+		App->gui->DeleteElement(main_window);
+	}
+	// -------
 
 	return ret;
 }

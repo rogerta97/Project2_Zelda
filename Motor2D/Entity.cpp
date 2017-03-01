@@ -6,6 +6,12 @@
 
 #define LIFE_BAR_COLOR_1 {30, 30, 30, 255}
 
+void Entity::CleanEntity()
+{
+	RELEASE(game_object);
+	CleanAbilities();
+}
+
 bool Entity::GotHit(Entity *& entity, Ability *& ability)
 {
 	if (hit)

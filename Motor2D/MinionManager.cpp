@@ -5,6 +5,7 @@
 #include "j1Entity.h"
 #include "Minion.h"
 
+// Coment code, ty
 MinionManager::MinionManager()
 {
 	pugi::xml_document doc;
@@ -67,8 +68,11 @@ MinionManager::~MinionManager()
 
 bool MinionManager::Update()
 {
+	bool ret = true;
 
-	return true;
+
+
+	return ret;	return true;
 }
 
 const std::list<Minion*>& MinionManager::GetMinionList(uint team) const

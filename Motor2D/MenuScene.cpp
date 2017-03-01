@@ -22,9 +22,12 @@ bool MenuScene::Start()
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
+	// Triforce
 	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
 
+	// Start ---
 	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
+	button_list.push_back(start_button);
 
 	start_button->AddImage("idle", { 657, 7, 223, 57 }); 
 	start_button->AddImage("above", { 428, 65, 219, 57 });
@@ -32,13 +35,14 @@ bool MenuScene::Start()
 
 	start_button->SetImage("idle"); 
 
-	button_list.push_back(start_button); 
-
 	start_text = menu_window->CreateText(iPoint(screen.w, 165), App->font->default_15, 15);
 	start_text->SetText("NEW GAME");
 	start_text->click_through = true;
+	// ---------
 
+	// Options -
 	options_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
+	button_list.push_back(options_button);
 
 	options_button->AddImage("idle", { 657, 7, 223, 57 });
 	options_button->AddImage("above", { 428, 65, 219, 57 });
@@ -46,13 +50,14 @@ bool MenuScene::Start()
 
 	options_button->SetImage("clicked");
 
-	button_list.push_back(options_button);
-
 	options_text = menu_window->CreateText(iPoint(screen.w, 235), App->font->default_15, 15);
 	options_text->SetText("OPTIONS");
 	options_text->click_through = true;
+	// ---------
 
+	// Quit ---
 	quit_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
+	button_list.push_back(quit_button);
 
 	quit_button->AddImage("idle", { 657, 7, 223, 57 });
 	quit_button->AddImage("above", { 428, 65, 219, 57 });
@@ -60,12 +65,10 @@ bool MenuScene::Start()
 
 	quit_button->SetImage("above");
 
-	button_list.push_back(quit_button);
-
 	quit_text = menu_window->CreateText(iPoint(screen.w, 305), App->font->default_15, 15);
 	quit_text->SetText("QUIT GAME");
 	quit_text->click_through = true;
-
+	// ---------
 
 	return false;
 }
@@ -78,23 +81,24 @@ bool MenuScene::PreUpdate()
 bool MenuScene::Update(float dt)
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
+	{
 		App->scene->ChangeScene(App->scene->main_scene); 
 	}
 
-	for (list<UI_Button*>::iterator it = button_list.begin(); it != button_list.end(); it++) 
+	for(int i = 0; i<button_list.size(); i++)
 	{
-		if ((*it)->MouseEnter())
-			(*it)->SetImage("above");
+		if (button_list.at(i)->MouseEnter())
+			button_list.at(i)->SetImage("above");
 
-		else if ((*it)->MouseOut())
-			(*it)->SetImage("idle");
+		else if (button_list.at(i)->MouseOut())
+			button_list.at(i)->SetImage("idle");
 
-		if ((*it)->MouseClickEnterLeft())
-			(*it)->SetImage("clicked");
+		if (button_list.at(i)->MouseClickEnterLeft())
+			button_list.at(i)->SetImage("clicked");
 
-		if ((*it)->MouseClickOutLeft())
-			(*it)->SetImage("above");
+		if (button_list.at(i)->MouseClickOutLeft())
+			button_list.at(i)->SetImage("above");
 	}
 
 	if(start_button->MouseClickEnterLeft())
@@ -110,8 +114,12 @@ bool MenuScene::PostUpdate()
 
 bool MenuScene::CleanUp()
 {
+	// Free UI
+	if(App->scene->GetCurrentScene() != App->scene->menu_scene)
+		App->gui->DeleteElement(menu_window);
+	// -------
 
-	App->gui->DeleteElement(menu_window); 
+	button_list.clear();
 	
 	return false;
 }

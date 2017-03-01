@@ -3,6 +3,7 @@
 
 #include "p2Defs.h"
 #include "p2Log.h"
+#include "Functions.h"
 
 #include "j1Window.h"
 #include "j1Input.h"
@@ -20,6 +21,7 @@
 #include "j1Physics.h"
 #include "j1Entity.h"
 #include "j1Viewports.h"
+#
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -354,6 +356,11 @@ void j1App::LoadXML(const char * path, pugi::xml_document & doc)
 		LOG("Succes loading '%s'", path);
 
 	RELEASE(buf);
+}
+
+void j1App::UnloadXML(pugi::xml_document & doc)
+{
+	doc.reset();
 }
 
 void j1App::CapFps(float fps)

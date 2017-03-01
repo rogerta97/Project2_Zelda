@@ -38,6 +38,7 @@ public:
 
 	// Change scene
 	void ChangeScene(Scene* new_scene);
+	Scene* GetCurrentScene();
 
 	// Blit choosing the layer
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);

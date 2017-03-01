@@ -109,9 +109,15 @@ void j1Scene::ChangeScene(Scene * new_scene)
 {
 	LOG("Changing current scene");
 
-	current_scene->CleanUp();
+	Scene* last_scene = current_scene;
 	current_scene = new_scene;
+	last_scene->CleanUp();
 	current_scene->Start();
+}
+
+Scene * j1Scene::GetCurrentScene()
+{
+	return current_scene;
 }
 
 

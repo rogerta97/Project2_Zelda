@@ -27,7 +27,7 @@ Minion::Minion(iPoint pos)
 
 Minion::~Minion()
 {
-	RELEASE(game_object);
+
 }
 
 bool Minion::Start()

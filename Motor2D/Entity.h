@@ -122,6 +122,8 @@ public:
 	virtual void Ability2() {};
 	virtual void Ability3() {};
 
+	void CleanEntity();
+
 	bool GotHit(Entity* &entity, Ability* &ability);
 
 	virtual void SetCamera(int index) {};

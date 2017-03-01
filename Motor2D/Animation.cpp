@@ -123,7 +123,7 @@ Animator::Animator()
 Animator::~Animator()
 {
 	for (list<Animation*>::iterator it = animations.begin(); it != animations.end(); it++)
-		delete (*it);
+		RELEASE(*it);
 }
 
 void Animator::AddAnimation(Animation* animation)

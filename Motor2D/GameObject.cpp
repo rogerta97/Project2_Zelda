@@ -17,6 +17,7 @@ GameObject::GameObject(iPoint _pos, int _cat, int _mask, pbody_type pb_type, flo
 GameObject::~GameObject()
 {
 	App->physics->DeleteBody(pbody);
+	RELEASE(animator);
 }
 
 iPoint GameObject::GetPos()
@@ -141,6 +142,7 @@ SDL_Texture * GameObject::GetTexture()
 {
 	return texture;
 }
+
 
 
 

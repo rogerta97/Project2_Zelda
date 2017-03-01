@@ -29,6 +29,7 @@ Link::Link(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 16, 26 }; // 
 
@@ -135,9 +136,6 @@ bool Link::PostUpdate()
 bool Link::CleanUp()
 {
 	bool ret = true;
-
-	// Free abilities
-	CleanAbilities();
 
 	return ret;
 }

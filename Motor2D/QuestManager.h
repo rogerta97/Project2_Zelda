@@ -5,11 +5,14 @@
 #include "j1Gui.h"
 #include "SDL\include\SDL.h"
 
-enum objective_type {
+enum objective_type
+{
 	count,
 	travel,
+	o_t_null,
 };
 
+// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class QuestObjective 
 {
 public: 
@@ -22,11 +25,11 @@ public:
 	objective_type GetType();
 
 private: 
-	objective_type type;
-
-	bool done = false; 
+	objective_type type = o_t_null;
+	bool           done = false; 
 };
 
+// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class TravelObjective : public QuestObjective 
 {
 public: 
@@ -40,6 +43,7 @@ private:
 	iPoint destination;
 };
 
+// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class CountObjective : public QuestObjective 
 {
 	CountObjective();
@@ -47,11 +51,12 @@ class CountObjective : public QuestObjective
 	~CountObjective();
 
 private:
-	int total;
-	int current; 
+	int total = 0;
+	int current = 0; 
 };
 
 
+// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class Quest
 {
 public: 
@@ -63,11 +68,11 @@ public:
 	~Quest() {};
 
 private: 
-	bool done = false; 
+	bool                    done = false; 
 	vector<QuestObjective*> objectives; 
-	string task;
-	int progress = -1; 
-	int id = -1;
+	string                  task;
+	int                     progress = -1; 
+	int                     id = -1;
 };
 
 class QuestManager
@@ -104,13 +109,11 @@ public:
 private:
 
 private:
-	vector<Quest> quest_list;
+	vector<Quest>     quest_list;
 	vector<UI_Image*> quest_balls; 
 
-	iPoint placer; 
-	SDL_Rect done_rect;
-
-
+	iPoint            placer = NULLPOINT; 
+	SDL_Rect          done_rect = NULLRECT;
 };
 
 #endif

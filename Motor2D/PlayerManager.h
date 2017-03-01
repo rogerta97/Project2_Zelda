@@ -56,6 +56,7 @@ public:
 	Player* AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar = true);
 	void ChangePlayer(entity_name name, int index);
 	void DeletePlayer(int index);
+	void ClearPlayers();
 
 	std::vector<Entity*> GetTeamPlayers(int team);
 	std::vector<int> GetTeamViewports(int team);
