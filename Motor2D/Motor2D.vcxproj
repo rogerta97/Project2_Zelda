@@ -156,6 +156,7 @@
   <ItemGroup>
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\minion.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

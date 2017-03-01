@@ -18,9 +18,9 @@
 
 Minion::Minion(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), 30, 40, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
@@ -366,7 +366,7 @@ void Minion::MinionAttack()
 {
 	CheckState();
 
-
+	FaceTarget();
 }
 
 void Minion::CheckState()
@@ -574,4 +574,24 @@ void Minion::BasicAttackLeft()
 
 void Minion::BasicAttackRight()
 {
+}
+
+void Minion::FaceTarget()
+{
+	iPoint delta;
+	iPoint pos = GetPos();
+	iPoint target_pos = target->GetPos();
+
+	delta.x = pos.x - target_pos.x;
+	delta.y = pos.y - target_pos.y;
+
+	iPoint hitbox_diff = target->game_object->GetHitBoxSize();
+	hitbox_diff.x += game_object->GetHitBoxSize().x;
+	hitbox_diff.y += game_object->GetHitBoxSize().y;
+
+	hitbox_diff.x /= 2;
+	hitbox_diff.y /= 2;
+
+
+	
 }

@@ -32,7 +32,7 @@ public:
 	// - Both pbody and fixture _type are used to know what collides with what on the OnCollision method.
 	// - Both pbody and fixture _type are defined on CollisionFilters.h. 
 
-	GameObject(iPoint pos, int cat, int mask, pbody_type pb_type, float gravity_scale = 1.0f, float density = 1.0f, float friction = 1.0f);
+	GameObject(iPoint pos, iPoint size, int cat, int mask, pbody_type pb_type, float gravity_scale = 1.0f, float density = 1.0f, float friction = 1.0f);
 	~GameObject();
 
 	// Return the position in pixels of the GameObject
@@ -99,6 +99,9 @@ public:
 	// Returns the texture
 	SDL_Texture* GetTexture();
 
+	// Return hit box size. NULLPOINT if not found
+	iPoint GetHitBoxSize() const;
+
 private:
 
 public:
@@ -112,6 +115,8 @@ private:
 	float          restitution = 0.0f;
 	int			   cat = 0;
 	int		       mask = 0;
+
+	iPoint		   hitbox_size = NULLPOINT;
 
 	SDL_Texture*   texture = nullptr;
 };

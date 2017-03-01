@@ -96,6 +96,8 @@ private:
 	void BasicAttackLeft();
 	void BasicAttackRight();
 
+	void FaceTarget();
+
 public:
 
 private:

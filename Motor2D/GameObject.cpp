@@ -4,14 +4,16 @@
 #include "p2Defs.h"
 #include "j1Physics.h"
 #include "Functions.h" 
+#include "CollisionFilters.h"
 
-GameObject::GameObject(iPoint _pos, int _cat, int _mask, pbody_type pb_type, float _gravity_scale,  float _density, float _friction) : gravity_scale(_gravity_scale), density(_density), friction(_friction), cat(_cat), mask(_mask)
+GameObject::GameObject(iPoint _pos, iPoint _size, int _cat, int _mask, pbody_type pb_type, float _gravity_scale,  float _density, float _friction) : gravity_scale(_gravity_scale), density(_density), friction(_friction), cat(_cat), mask(_mask)
 {
 	animator = new Animator();
 	pbody = App->physics->CreateCircleSensor(_pos.x, _pos.y, 5, _density, _gravity_scale, 0, cat, mask);
 	pbody->body->SetType(b2_dynamicBody);
 	pbody->body->SetSleepingAllowed(false);
 	pbody->type = pb_type;
+	hitbox_size = _size;
 }
 
 GameObject::~GameObject()
@@ -141,6 +143,11 @@ void GameObject::SetTexture(SDL_Texture * _texture)
 SDL_Texture * GameObject::GetTexture()
 {
 	return texture;
+}
+
+iPoint GameObject::GetHitBoxSize() const
+{
+	return hitbox_size;
 }
 
 
