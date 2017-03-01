@@ -208,6 +208,9 @@ bool j1Map::CleanUp()
 bool j1Map::Load(const char* file_name)
 {
 	bool ret = true;
+
+	LOG("Loading map: '%s'", file_name);
+
 	p2SString tmp("%s%s", folder.c_str(), file_name);
 
 	char* buf;

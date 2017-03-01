@@ -111,6 +111,14 @@ bool Link::Draw(float dt)
 			}
 		}
 
+		if (game_object->animator->IsCurrentAnimation("spin_attack"))
+		{
+			if (game_object->animator->GetCurrentAnimation()->Finished())
+			{
+				reset = true;
+			}
+		}
+
 		if (reset)
 		{
 			game_object->animator->GetCurrentAnimation()->Reset();
@@ -325,17 +333,31 @@ void Link::BasicAttackRight()
 	}
 }
 
-
-void Link::Ability1()
+void Link::Ability1Up()
 {
+	if (!attacking)
+	{
+		draw_offset = { 44, 60 };
+		game_object->SetAnimation("spin_attack");
+		attacking = true;
+		can_move = false;
+		flip = false;
+	}
 }
 
-void Link::Ability2()
+void Link::Ability1Down()
 {
+	Ability1Up();
 }
 
-void Link::Ability3()
+void Link::Ability1Left()
 {
+	Ability1Up();
+}
+
+void Link::Ability1Right()
+{
+	Ability1Up();
 }
 
 void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

@@ -71,7 +71,7 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("jhsdg"), 1); 
 	quest_manager->CreateQuest(string("jhsdg"), 2);
 
-	App->console->AddText("viewports.set 4", Input);
+	//App->console->AddText("viewports.set 1", Input);
 
 	return ret;
 }

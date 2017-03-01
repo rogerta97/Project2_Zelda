@@ -155,6 +155,17 @@ bool PlayerManager::Update(float dt)
 			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
 				players.at(i)->state = basic_atack_right;
 		}
+		else if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		{
+			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
+				players.at(i)->state = ability1_down;
+			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
+				players.at(i)->state = ability1_up;
+			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->state = ability1_left;
+			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
+				players.at(i)->state = ability1_right;
+		}
 
 		
 		// State machines
@@ -208,6 +219,22 @@ bool PlayerManager::Update(float dt)
 			break;
 		case basic_atack_right:
 			players.at(i)->entity->BasicAttackRight();
+			players.at(i)->state = idle_right;
+			break;
+		case ability1_up:
+			players.at(i)->entity->Ability1Up();
+			players.at(i)->state = idle_up;
+			break;
+		case ability1_left:
+			players.at(i)->entity->Ability1Down();
+			players.at(i)->state = idle_left;
+			break;
+		case ability1_down:
+			players.at(i)->entity->Ability1Left();
+			players.at(i)->state = idle_down;
+			break;
+		case ability1_right:
+			players.at(i)->entity->Ability1Right();
 			players.at(i)->state = idle_right;
 			break;
 		case states_null:

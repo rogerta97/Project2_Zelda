@@ -33,6 +33,11 @@ enum states
 	basic_atack_down,
 	basic_atack_right,
 
+	ability1_up,
+	ability1_left,
+	ability1_down,
+	ability1_right,
+
 	tower_idle,
 	tower_attack,
 
@@ -121,7 +126,10 @@ public:
 	virtual void BasicAttackLeft() {};
 	virtual void BasicAttackRight() {};
 
-	virtual void Ability1() {};
+	virtual void Ability1Up() {};
+	virtual void Ability1Down() {};
+	virtual void Ability1Left() {};
+	virtual void Ability1Right() {};
 	virtual void Ability2() {};
 	virtual void Ability3() {};
 
