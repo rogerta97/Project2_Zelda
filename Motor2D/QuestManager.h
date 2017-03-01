@@ -110,7 +110,8 @@ private:
 
 private:
 	vector<Quest>     quest_list;
-	vector<UI_Image*> quest_balls; 
+
+	vector<UI_Image*> abilitie_icons; 
 
 	iPoint            placer = NULLPOINT; 
 	SDL_Rect          done_rect = NULLRECT;
