@@ -8,6 +8,9 @@
 #include "p2Log.h"
 
 
+#define QUEST_NUMBER 4
+
+
 //	QUEST  -----------------------------------------
 Quest::Quest(string& task, int id) 
 {
@@ -28,7 +31,7 @@ QuestManager::QuestManager()
 	tasks_done = 0; 
 
 	SDL_Rect screen = App->view->GetViewportRect(1);
-	placer = iPoint(screen.w - 20, screen.h - 20);
+	placer = iPoint(screen.w - 30, screen.h - 30);
 }
 
 QuestManager::~QuestManager() 
@@ -61,11 +64,20 @@ bool QuestManager::PreUpdate()
 bool QuestManager::Update(float dt) 
 {
 	bool ret = true;
+
+
 	
+	// Update Quests ----- 
+
 	for (int i = 0; i < quest_list.size(); i++)
 	{
 		quest_list.at(i).Update();
 	}
+
+	//// Print each type ----
+	//for (int i = 0; i < QUEST_NUMBER; i++) {
+	//	//abilitie_icons.at(i)->; 
+	//}
 
 	return ret;
 }
@@ -74,8 +86,6 @@ bool QuestManager::Update(float dt)
 bool QuestManager::PostUpdate() 
 { 
 	bool ret = true;
-
-
 
 	return ret; 
 }
@@ -96,8 +106,8 @@ void QuestManager::CreateQuest(string& task, int id)
 	{
 		Quest* new_quest = new Quest(task, id);	
 		quest_list.push_back(*new_quest);
-		quest_balls.push_back(App->scene->main_scene->main_window->CreateImage(placer, { 112, 2, 12, 12 }, false));
-		placer.y -= 20;
+		abilitie_icons.push_back(App->scene->main_scene->main_window->CreateImage(placer, { 182, 78, 25 ,25 }, false));
+		placer.y -= 35; 
 	}
 }
 

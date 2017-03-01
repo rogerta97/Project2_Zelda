@@ -36,8 +36,8 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
-	Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300,20), 1);
-	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(300, 20), 2);
+	Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300, 700), 1);
+	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(300, 700), 2);
 	//Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, 3, iPoint(300, 20), 2);
 	//Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, 4, iPoint(300, 20), 1);
 
@@ -63,13 +63,16 @@ bool MainScene::Start()
 	SDL_Rect screen = App->view->GetViewportRect(1); 
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 
-	exp_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), SDL_Rect{ 1, 32, 385, 21 });
-	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 15, screen.h / 40), SDL_Rect{ 163, 2, 16, 16 });
+	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), SDL_Rect{ 36, 32, 385, 23 });
+	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 20, screen.h / 40), SDL_Rect{ 48, 4, 24, 24 });
+	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), SDL_Rect{ 182, 78, 47, 47 });
 
 	//Creating quests
 	quest_manager = new QuestManager();
-	quest_manager->CreateQuest(string("jhsdg"), 1); 
-	quest_manager->CreateQuest(string("jhsdg"), 2);
+	quest_manager->CreateQuest(string("Test"), 1); 
+	quest_manager->CreateQuest(string("Test"), 2);
+	quest_manager->CreateQuest(string("Test"), 3);
+	quest_manager->CreateQuest(string("Test"), 4);
 
 	//App->console->AddText("viewports.set 1", Input);
 
