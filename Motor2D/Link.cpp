@@ -22,7 +22,7 @@ Link::Link(iPoint pos)
 	game_object->SetFixedRotation(true);
 
 	AddAbility(0, 10, 1, 2);
-	AddAbility(1, 10, 1, 2);
+	AddAbility(1, 15, 1, 2);
 	AddAbility(2, 10, 1, 2);
 	AddAbility(3, 10, 1, 2);
 
@@ -116,6 +116,7 @@ bool Link::Draw(float dt)
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
 				reset = true;
+				game_object->DeleteFixture(abilities.at(1)->fixture);
 			}
 		}
 
@@ -342,6 +343,7 @@ void Link::Ability1Up()
 		attacking = true;
 		can_move = false;
 		flip = false;
+		GetAbility(1)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	}
 }
 

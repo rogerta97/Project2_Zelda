@@ -175,8 +175,8 @@ b2Fixture* j1Physics::AddCircleToBody(PhysBody * pbody, int offset_x, int offset
 b2Fixture* j1Physics::AddCircleSensorToBody(PhysBody * pbody, int offset_x, int offset_y, int radius, fixture_type type, float density, float rest, float friction)
 {
 	b2CircleShape circle;
-	circle.m_radius = radius;
-	circle.m_p = b2Vec2(offset_x, offset_y);
+	circle.m_radius = PIXEL_TO_METERS(radius);
+	circle.m_p = b2Vec2(PIXEL_TO_METERS(offset_x), PIXEL_TO_METERS(offset_y));
 
 	b2FixtureDef fd;
 	fd.shape = &circle;
@@ -770,7 +770,7 @@ bool j1Physics::PostUpdate()
 					pos_x = (PIXELS_PER_METER * pos.x) + sin(-b->GetAngle() - ((angle_between - 90) * DEGTORAD)) * (dist) + App->render->camera.x;
 					pos_y = (PIXELS_PER_METER * pos.y) + cos(-b->GetAngle() - ((angle_between - 90) * DEGTORAD)) * (dist) + App->render->camera.y;
 					
-					App->view->LayerDrawCircle(pos_x, pos_y, METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+					App->view->LayerDrawCircle(pos_x, pos_y, METERS_TO_PIXELS(shape->m_radius*2), 255, 255, 255);
 
 				}
 				break;
