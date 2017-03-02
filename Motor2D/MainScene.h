@@ -45,9 +45,10 @@ public:
 private:
 
 	//UI elements
-	UI_Image* progress_bar = nullptr; 
-	UI_Image* rupiees = nullptr;
-	UI_Image* minimap_icon = nullptr;
+	UI_Image*			progress_bar = nullptr; 
+	UI_Image*			rupiees_img = nullptr;
+	UI_Image*			minimap_icon = nullptr;
+	UI_Text*			rupiees_numb = nullptr; 
 
 	//Quest Manager
 	QuestManager* quest_manager = nullptr;

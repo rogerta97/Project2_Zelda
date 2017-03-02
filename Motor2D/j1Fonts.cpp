@@ -35,6 +35,11 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 		int size = conf.child("default_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
 		default = Load(path, size);
 		default_15 = Load(path, 15);
+
+		path = conf.child("game_font").attribute("file").as_string(DEFAULT_FONT); 
+		size = conf.child("game_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
+		game_font = Load(path, size); 
+
 	}
 
 	return ret;

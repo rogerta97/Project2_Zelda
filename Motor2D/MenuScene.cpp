@@ -35,7 +35,7 @@ bool MenuScene::Start()
 
 	start_button->SetImage("idle"); 
 
-	start_text = menu_window->CreateText(iPoint(screen.w, 165), App->font->default_15, 15);
+	start_text = menu_window->CreateText(iPoint(screen.w, 160), App->font->game_font);
 	start_text->SetText("NEW GAME");
 	start_text->click_through = true;
 	// ---------
@@ -50,7 +50,7 @@ bool MenuScene::Start()
 
 	options_button->SetImage("clicked");
 
-	options_text = menu_window->CreateText(iPoint(screen.w, 235), App->font->default_15, 15);
+	options_text = menu_window->CreateText(iPoint(screen.w, 230), App->font->game_font);
 	options_text->SetText("OPTIONS");
 	options_text->click_through = true;
 	// ---------
@@ -65,7 +65,7 @@ bool MenuScene::Start()
 
 	quit_button->SetImage("above");
 
-	quit_text = menu_window->CreateText(iPoint(screen.w, 305), App->font->default_15, 15);
+	quit_text = menu_window->CreateText(iPoint(screen.w, 300), App->font->game_font);
 	quit_text->SetText("QUIT GAME");
 	quit_text->click_through = true;
 	// ---------

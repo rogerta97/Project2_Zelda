@@ -37,6 +37,7 @@ public:
 	std::list<_TTF_Font*>	fonts;
 	_TTF_Font*			    default = nullptr;
 	_TTF_Font*			    default_15 = nullptr;
+	_TTF_Font*				game_font = nullptr; 
 };
 
 

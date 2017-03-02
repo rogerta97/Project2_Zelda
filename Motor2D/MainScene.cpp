@@ -64,7 +64,9 @@ bool MainScene::Start()
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 
 	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), SDL_Rect{ 36, 32, 385, 23 });
-	rupiees = main_window->CreateImage(iPoint(screen.w /50 + 20, screen.h / 40), SDL_Rect{ 48, 4, 24, 24 });
+	rupiees_img = main_window->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), SDL_Rect{ 49, 5, 17, 17});
+	rupiees_numb = main_window->CreateText(iPoint(rupiees_img->GetPos().x, rupiees_img->GetPos().y + 30), App->font->game_font, 0, false); 
+	rupiees_numb->SetText("0"); 
 	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), SDL_Rect{ 182, 78, 47, 47 });
 
 	//Creating quests
