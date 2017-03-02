@@ -106,6 +106,9 @@
     <ClCompile Include="j1Spell.cpp">
       <Filter>Engine\5. Spells ===========</Filter>
     </ClCompile>
+    <ClCompile Include="Spell.cpp">
+      <Filter>Engine\5. Spells ===========</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -238,6 +241,9 @@
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
     <ClInclude Include="j1Spell.h">
+      <Filter>Engine\5. Spells ===========</Filter>
+    </ClInclude>
+    <ClInclude Include="Spell.h">
       <Filter>Engine\5. Spells ===========</Filter>
     </ClInclude>
   </ItemGroup>

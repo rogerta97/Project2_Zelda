@@ -109,6 +109,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="QuestManager.cpp" />
+    <ClCompile Include="Spell.cpp" />
     <ClCompile Include="Tower.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="QuestManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Spell.h" />
     <ClInclude Include="Tower.h" />
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,7 @@ enum class pbody_type;
 enum spell_name
 {
 	s_n_null,
+	boomerang,
 
 };
 
