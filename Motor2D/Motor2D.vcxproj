@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Boomerang.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Functions.h" />

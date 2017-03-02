@@ -54,8 +54,6 @@ public:
 		return team;
 	}
 
-	void LifeBar(iPoint size, iPoint offset = { 0, 0 });
-
 private:
 
 private:

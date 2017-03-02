@@ -246,6 +246,9 @@
     <ClInclude Include="Spell.h">
       <Filter>Engine\5. Spells ===========</Filter>
     </ClInclude>
+    <ClInclude Include="Boomerang.h">
+      <Filter>Engine\5. Spells ===========\Boomerang</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -289,6 +292,9 @@
     </Filter>
     <Filter Include="Engine\6. Tools ===========\PuguiXML">
       <UniqueIdentifier>{7cb78d67-17cc-45eb-af97-e2106becce7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\Boomerang">
+      <UniqueIdentifier>{ce4ed5b5-dac9-43aa-b307-6d794956f0df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
