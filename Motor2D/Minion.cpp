@@ -42,7 +42,7 @@ bool Minion::Start()
 
 	game_object->SetAnimation("idle_down");
 
-	stats.speed = 75;
+	stats.speed = 45;
 	stats.max_life = stats.life = 50;
 
 	show_life_bar = true;
@@ -80,7 +80,7 @@ bool Minion::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(20, 3), iPoint(0, 0));
+	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 	
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -151,25 +151,25 @@ void Minion::MoveRight(float speed)
 
 void Minion::MoveUpRight(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
+	fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 	game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y - s.y });
 }
 
 void Minion::MoveDownRight(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
+	fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 	game_object->SetPos({ game_object->fGetPos().x + s.x, game_object->fGetPos().y + s.y });
 }
 
 void Minion::MoveUpLeft(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
+	fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 	game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y - s.y });
 }
 
 void Minion::MoveDownLeft(float speed)
 {
-	fPoint s(speed * cos(45), speed * sin(45));
+	fPoint s(speed * cos(DEGTORAD * 45), speed * sin(DEGTORAD * 45));
 	game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y + s.y });
 }
 
