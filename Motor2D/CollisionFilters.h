@@ -28,7 +28,8 @@ enum class pbody_type
 	p_t_null = 0,
 	p_t_link,
 	p_t_world,
-	p_t_npc
+	p_t_npc,
+	p_t_tower,
 };
 
 // Fixture enum
@@ -37,7 +38,6 @@ enum class fixture_type
 	f_t_null = 0,
 	f_t_attack,
 	f_t_hit_box,
-	f_t_down_ball
 };
 
 #endif // !_COLLISIONFILTERS__H__

@@ -47,7 +47,7 @@ bool Link::Start()
 	game_object->SetAnimation("idle_down");
 
 	can_move = true;
-	stats.speed = 200;
+	stats.speed = 160;
 
 	return ret;
 }

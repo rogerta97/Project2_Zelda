@@ -15,7 +15,7 @@
 
 Tower::Tower(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_H, TOWER_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_H, TOWER_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -121,12 +121,15 @@ void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2F
 {
 	switch (bodyA->type)
 	{
-	case pbody_type::p_t_npc:
-		if (bodyB->type == pbody_type::p_t_link)
+	case pbody_type::p_t_tower:
+		if (fixtureB->type == fixture_type::f_t_hit_box)
 		{
-		}
-		else if (bodyB->type == pbody_type::p_t_npc)
-		{
+			if (bodyB->type == pbody_type::p_t_link)
+			{
+			}
+			else if (bodyB->type == pbody_type::p_t_npc)
+			{
+			}
 		}
 		break;
 
