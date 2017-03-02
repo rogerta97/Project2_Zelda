@@ -1,5 +1,5 @@
-#ifndef __j1ENTITY_H__
-#define __j1ENTITY_H__
+#ifndef __j1SPELL_H__
+#define __j1SPELL_H__
 
 #include "j1Module.h"
 #include "p2Defs.h"
@@ -14,20 +14,22 @@ class Ability;
 
 enum class pbody_type;
 
-enum entity_name
+enum spell_name
 {
-	e_n_null, link, minion, turret, castle
+	s_n_null,
+
 };
 
+class Spell;
 class Entity;
-class j1Entity : public j1Module
+class j1Spell : public j1Module
 {
 public:
 
-	j1Entity();
+	j1Spell();
 
 	// Destructor
-	virtual ~j1Entity();
+	virtual ~j1Spell();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -49,24 +51,23 @@ public:
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	Entity* CreateEntity(entity_name entity, iPoint pos);
-	void DeleteEntity(Entity* entity);
+	Spell* CreateSpell(spell_name entity, iPoint pos, Entity* owner);
+	void DeleteSpell(Spell* entity);
 
-	void ClearEntities();
+	void ClearSpells();
 
-	Entity* FindEntityByBody(PhysBody* type);
-	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
+	//Entity* FindEntityByBody(PhysBody* type);
+	//Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 
 public:
-	PlayerManager* player_manager = nullptr;
 
 private:
 	// List with all entities
-	list<Entity*> entity_list;
+	list<Spell*> spell_list;
 
-	void RemoveEntities();
+	void RemoveSpells();
 
 
 };
 
-#endif // __j1ENTITY_H__
+#endif // __j1SPELL_H__

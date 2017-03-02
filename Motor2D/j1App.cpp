@@ -21,7 +21,7 @@
 #include "j1Physics.h"
 #include "j1Entity.h"
 #include "j1Viewports.h"
-#
+#include "j1Spell.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -43,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	physics = new j1Physics();
 	entity = new j1Entity();
 	view = new j1Viewports();
+	spell = new j1Spell();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -57,6 +58,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(physics);
 	AddModule(console);
 	AddModule(entity);
+	AddModule(spell);
 	AddModule(view);
 
 	// Scene

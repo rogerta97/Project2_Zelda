@@ -23,7 +23,7 @@
       <Filter>Engine\1. Modules =========</Filter>
     </ClCompile>
     <ClCompile Include="PugiXml\src\pugixml.cpp">
-      <Filter>Engine\5. Tools ===========\PuguiXML</Filter>
+      <Filter>Engine\6. Tools ===========\PuguiXML</Filter>
     </ClCompile>
     <ClCompile Include="j1Map.cpp">
       <Filter>Engine\1. Modules =========</Filter>
@@ -32,10 +32,10 @@
       <Filter>Engine\1. Modules =========</Filter>
     </ClCompile>
     <ClCompile Include="j1Timer.cpp">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClCompile>
     <ClCompile Include="j1PerfTimer.cpp">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClCompile>
     <ClCompile Include="j1Fonts.cpp">
       <Filter>Engine\1. Modules =========</Filter>
@@ -56,10 +56,10 @@
       <Filter>Engine\1. Modules =========</Filter>
     </ClCompile>
     <ClCompile Include="p2Log.cpp">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClCompile>
     <ClCompile Include="j1Entity.cpp">
       <Filter>Engine\4. Entities ==========</Filter>
@@ -82,17 +82,8 @@
     <ClCompile Include="Link.cpp">
       <Filter>Engine\4. Entities ==========\Link</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerManager.cpp">
-      <Filter>Engine\4. Entities ==========</Filter>
-    </ClCompile>
     <ClCompile Include="Minion.cpp">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
-    </ClCompile>
-    <ClCompile Include="QuestManager.cpp">
-      <Filter>Engine\2. Components ======</Filter>
-    </ClCompile>
-    <ClCompile Include="MinionManager.cpp">
-      <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Engine\4. Entities ==========</Filter>
@@ -102,6 +93,18 @@
     </ClCompile>
     <ClCompile Include="Tower.cpp">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="MinionManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Spell.cpp">
+      <Filter>Engine\5. Spells ===========</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,10 +133,10 @@
       <Filter>Engine\1. Modules =========</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugiconfig.hpp">
-      <Filter>Engine\5. Tools ===========\PuguiXML</Filter>
+      <Filter>Engine\6. Tools ===========\PuguiXML</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugixml.hpp">
-      <Filter>Engine\5. Tools ===========\PuguiXML</Filter>
+      <Filter>Engine\6. Tools ===========\PuguiXML</Filter>
     </ClInclude>
     <ClInclude Include="j1Map.h">
       <Filter>Engine\1. Modules =========</Filter>
@@ -142,10 +145,10 @@
       <Filter>Engine\1. Modules =========</Filter>
     </ClInclude>
     <ClInclude Include="j1Timer.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="j1PerfTimer.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="j1Fonts.h">
       <Filter>Engine\1. Modules =========</Filter>
@@ -169,28 +172,28 @@
       <Filter>Engine\1. Modules =========</Filter>
     </ClInclude>
     <ClInclude Include="p2Defs.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="p2DynArray.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="p2List.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="p2Log.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="p2Point.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="p2PQueue.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="p2SString.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="Functions.h">
-      <Filter>Engine\5. Tools ===========</Filter>
+      <Filter>Engine\6. Tools ===========</Filter>
     </ClInclude>
     <ClInclude Include="j1Entity.h">
       <Filter>Engine\4. Entities ==========</Filter>
@@ -216,23 +219,26 @@
     <ClInclude Include="Link.h">
       <Filter>Engine\4. Entities ==========\Link</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerManager.h">
-      <Filter>Engine\4. Entities ==========</Filter>
-    </ClInclude>
     <ClInclude Include="Minion.h">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
-    </ClInclude>
-    <ClInclude Include="QuestManager.h">
-      <Filter>Engine\2. Components ======</Filter>
-    </ClInclude>
-    <ClInclude Include="MinionManager.h">
-      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
     <ClInclude Include="MenuScene.h">
       <Filter>Engine\3. Scenes ==========\Menu</Filter>
     </ClInclude>
     <ClInclude Include="Tower.h">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="MinionManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Spell.h">
+      <Filter>Engine\5. Spells ===========</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,12 +260,6 @@
     <Filter Include="Engine\4. Entities ==========">
       <UniqueIdentifier>{1fe24bf0-1db6-45b2-aa68-fef0607a5a12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\5. Tools ===========">
-      <UniqueIdentifier>{42c748be-4a37-49de-970f-5be811d06b38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\5. Tools ===========\PuguiXML">
-      <UniqueIdentifier>{7cb78d67-17cc-45eb-af97-e2106becce7b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\4. Entities ==========\Link">
       <UniqueIdentifier>{649f33ab-cba0-4e3f-9d04-df22ae53d381}</UniqueIdentifier>
     </Filter>
@@ -271,6 +271,18 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Towers">
       <UniqueIdentifier>{843a305f-fa8a-40ab-838f-88879c4d9f32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\2. Components ======\Managers">
+      <UniqueIdentifier>{c5630d73-913f-493b-9d9b-07dbfa6569b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========">
+      <UniqueIdentifier>{8a97f8fe-717b-4301-947d-3625656831e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\6. Tools ===========">
+      <UniqueIdentifier>{42c748be-4a37-49de-970f-5be811d06b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\6. Tools ===========\PuguiXML">
+      <UniqueIdentifier>{7cb78d67-17cc-45eb-af97-e2106becce7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
