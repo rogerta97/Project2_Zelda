@@ -48,6 +48,7 @@ private:
 	UI_Image*			progress_bar = nullptr; 
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
+	list<UI_Image*>		habilities; 
 	UI_Text*			rupiees_numb = nullptr; 
 
 	//Quest Manager

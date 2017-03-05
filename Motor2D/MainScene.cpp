@@ -68,6 +68,10 @@ bool MainScene::Start()
 	rupiees_numb = main_window->CreateText(iPoint(rupiees_img->GetPos().x, rupiees_img->GetPos().y + 30), App->font->game_font, 0, false); 
 	rupiees_numb->SetText("0"); 
 	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), SDL_Rect{ 182, 78, 47, 47 });
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w  - 90 , screen.h - 100), SDL_Rect{ 182, 78, 35, 35 }));
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w - 90, screen.h - 60), SDL_Rect{ 182, 78, 35, 35 }));
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), SDL_Rect{ 182, 78, 35, 35 }));
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), SDL_Rect{ 182, 78, 35, 35 }));
 
 	//Creating quests
 	quest_manager = new QuestManager();
