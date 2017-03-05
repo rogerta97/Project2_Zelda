@@ -143,50 +143,159 @@ bool PlayerManager::Update(float dt)
 				players.at(i)->state = run_down;
 		}
 
-		// Abilities
-		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+		// Abilities PRESS
+		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
 		{
 			if(players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->state = basic_atack_down;
+				players.at(i)->show = shows::show_basic_atack_down;
 			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->state = basic_atack_up;
-			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->state = basic_atack_left;
+				players.at(i)->show = shows::show_basic_atack_up;
+			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->show = shows::show_basic_atack_left;
 			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->state = basic_atack_right;
+				players.at(i)->show = shows::show_basic_atack_right;
 		}
-		else if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		else if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
 		{
 			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->state = ability1_down;
+				players.at(i)->show = shows::show_ability1_down;
 			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->state = ability1_up;
-			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->state = ability1_left;
+				players.at(i)->show = shows::show_ability1_up;
+			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->show = shows::show_ability1_left;
 			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->state = ability1_right;
+				players.at(i)->show = shows::show_ability1_right;
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, RIGHT_TRIGGER) > 22000 || App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+		else if (App->input->GetControllerJoystickMove(players.at(i)->index, RIGHT_TRIGGER) > 22000)
 		{
 			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->state = ability2_down;
+				players.at(i)->show = shows::show_ability2_down;
 			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->state = ability2_up;
-			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->state = ability2_left;
+				players.at(i)->show = shows::show_ability2_up;
+			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->show = shows::show_ability2_left;
 			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->state = ability2_right;
+				players.at(i)->show = shows::show_ability2_right;
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFT_TRIGGER) > 22000 || App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFT_TRIGGER) > 22000)
 		{
 			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->state = ability3_down;
+				players.at(i)->show = shows::show_ability3_down;
 			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->state = ability3_up;
-			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->state = ability3_left;
+				players.at(i)->show = shows::show_ability3_up;
+			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->show = shows::show_ability3_left;
 			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->state = ability3_right;
+				players.at(i)->show = shows::show_ability3_right;
+		}
+
+		// Abilities RELEASE
+		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE)
+		{
+			if (players.at(i)->show != shows::show_null)
+			{
+				if (players.at(i)->show == shows::show_basic_atack_down)
+				{
+					players.at(i)->state = basic_atack_down;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_basic_atack_up)
+				{
+					players.at(i)->state = basic_atack_up;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_basic_atack_left)
+				{
+					players.at(i)->state = basic_atack_left;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_basic_atack_right)
+				{
+					players.at(i)->state = basic_atack_right;
+					players.at(i)->show = shows::show_null;
+				}
+			}
+		}
+
+		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
+		{
+			if (players.at(i)->show != shows::show_null)
+			{
+				if (players.at(i)->show == shows::show_ability1_down)
+				{
+					players.at(i)->state = ability1_down;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability1_up)
+				{
+					players.at(i)->state = ability1_up;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability1_left)
+				{
+					players.at(i)->state = ability1_left;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability1_right)
+				{
+					players.at(i)->state = ability1_right;
+					players.at(i)->show = shows::show_null;
+				}
+			}
+		}
+
+		if (App->input->GetControllerJoystickMove(players.at(i)->index, RIGHT_TRIGGER) < 22000)
+		{
+			if (players.at(i)->show != shows::show_null)
+			{
+				if (players.at(i)->show == shows::show_ability2_down)
+				{
+					players.at(i)->state = ability2_down;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability2_up)
+				{
+					players.at(i)->state = ability2_up;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability2_left)
+				{
+					players.at(i)->state = ability2_left;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability2_right)
+				{
+					players.at(i)->state = ability2_right;
+					players.at(i)->show = shows::show_null;
+				}
+			}
+		}
+
+		if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFT_TRIGGER) < 22000)
+		{
+			if (players.at(i)->show != shows::show_null)
+			{
+				if (players.at(i)->show == shows::show_ability3_down)
+				{
+					players.at(i)->state = ability3_down;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability3_up)
+				{
+					players.at(i)->state = ability3_up;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability3_left)
+				{
+					players.at(i)->state = ability3_left;
+					players.at(i)->show = shows::show_null;
+				}
+				else if (players.at(i)->show == shows::show_ability3_right)
+				{
+					players.at(i)->state = ability3_right;
+					players.at(i)->show = shows::show_null;
+				}
+			}
 		}
 
 		
@@ -327,6 +436,59 @@ bool PlayerManager::Update(float dt)
 			players.at(i)->entity->MoveDownRight(speed);
 			break;
 		case stop:
+			break;
+		}
+
+		// Show
+		switch (players.at(i)->show)
+		{
+		case show_basic_atack_up:
+			players.at(i)->entity->ShowBasicAttackUp();
+			break;
+		case show_basic_atack_left:
+			players.at(i)->entity->ShowBasicAttackLeft();
+			break;
+		case show_basic_atack_down:
+			players.at(i)->entity->ShowBasicAttackDown();
+			break;
+		case show_basic_atack_right:
+			players.at(i)->entity->ShowBasicAttackRight();
+			break;
+		case show_ability1_up:
+			players.at(i)->entity->ShowAbility1Up();
+			break;
+		case show_ability1_left:
+			players.at(i)->entity->ShowAbility1Down();
+			break;
+		case show_ability1_down:
+			players.at(i)->entity->ShowAbility1Left();
+			break;
+		case show_ability1_right:
+			players.at(i)->entity->ShowAbility1Right();
+			break;
+		case show_ability2_up:
+			players.at(i)->entity->ShowAbility2Up();
+			break;
+		case show_ability2_left:
+			players.at(i)->entity->ShowAbility2Left();
+			break;
+		case show_ability2_down:
+			players.at(i)->entity->ShowAbility2Down();
+			break;
+		case show_ability2_right:
+			players.at(i)->entity->ShowAbility2Right();
+			break;
+		case show_ability3_up:
+			players.at(i)->entity->ShowAbility3Up();
+			break;
+		case show_ability3_left:
+			players.at(i)->entity->ShowAbility3Down();
+			break;
+		case show_ability3_down:
+			players.at(i)->entity->ShowAbility3Left();
+			break;
+		case show_ability3_right:
+			players.at(i)->entity->ShowAbility3Right();
 			break;
 		}
 	}

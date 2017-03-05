@@ -13,6 +13,7 @@
 #include "j1Entity.h"
 #include "j1Spell.h"
 #include "Boomerang.h"
+#include "PlayerManager.h"
 
 
 Link::Link(iPoint pos)
@@ -338,6 +339,24 @@ void Link::BasicAttackRight()
 	}
 }
 
+void Link::ShowBasicAttackUp()
+{
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ (int)game_object->fGetPos().x - 13, (int)game_object->fGetPos().y - 55, 10, 35 }, 255, 255, 255, 150, false, blit_layer - 2, main_view, true);
+}
+
+void Link::ShowBasicAttackDown()
+{
+}
+
+void Link::ShowBasicAttackLeft()
+{
+}
+
+void Link::ShowBasicAttackRight()
+{
+}
+
 void Link::Ability1Up()
 {
 	if (!attacking)
@@ -364,6 +383,22 @@ void Link::Ability1Left()
 void Link::Ability1Right()
 {
 	Ability1Up();
+}
+
+void Link::ShowAbility1Up()
+{
+}
+
+void Link::ShowAbility1Down()
+{
+}
+
+void Link::ShowAbility1Left()
+{
+}
+
+void Link::ShowAbility1Right()
+{
 }
 
 void Link::Ability2Up()
@@ -394,6 +429,22 @@ void Link::Ability2Right()
 	GetAbility(3)->fixture = s->hit_box;
 }
 
+void Link::ShowAbility2Up()
+{
+}
+
+void Link::ShowAbility2Down()
+{
+}
+
+void Link::ShowAbility2Left()
+{
+}
+
+void Link::ShowAbility2Right()
+{
+}
+
 void Link::Ability3Up()
 {
 }
@@ -407,6 +458,22 @@ void Link::Ability3Left()
 }
 
 void Link::Ability3Right()
+{
+}
+
+void Link::ShowAbility3Up()
+{
+}
+
+void Link::ShowAbility3Down()
+{
+}
+
+void Link::ShowAbility3Left()
+{
+}
+
+void Link::ShowAbility3Right()
 {
 }
 

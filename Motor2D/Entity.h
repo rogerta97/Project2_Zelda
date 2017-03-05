@@ -54,6 +54,30 @@ enum states
 	states_null,
 };
 
+enum shows
+{
+	show_null,
+	show_basic_atack_up,
+	show_basic_atack_left,
+	show_basic_atack_down,
+	show_basic_atack_right,
+
+	show_ability1_up,
+	show_ability1_left,
+	show_ability1_down,
+	show_ability1_right,
+
+	show_ability2_up,
+	show_ability2_left,
+	show_ability2_down,
+	show_ability2_right,
+
+	show_ability3_up,
+	show_ability3_left,
+	show_ability3_down,
+	show_ability3_right,
+};
+
 enum movement
 {
 	move_up,
@@ -136,20 +160,40 @@ public:
 	virtual void BasicAttackLeft() {};
 	virtual void BasicAttackRight() {};
 
+	virtual void ShowBasicAttackUp() {};
+	virtual void ShowBasicAttackDown() {};
+	virtual void ShowBasicAttackLeft() {};
+	virtual void ShowBasicAttackRight() {};
+
 	virtual void Ability1Up() {};
 	virtual void Ability1Down() {};
 	virtual void Ability1Left() {};
 	virtual void Ability1Right() {};
+
+	virtual void ShowAbility1Up() {};
+	virtual void ShowAbility1Down() {};
+	virtual void ShowAbility1Left() {};
+	virtual void ShowAbility1Right() {};
 
 	virtual void Ability2Up() {};
 	virtual void Ability2Down() {};
 	virtual void Ability2Left() {};
 	virtual void Ability2Right() {};
 
+	virtual void ShowAbility2Up() {};
+	virtual void ShowAbility2Down() {};
+	virtual void ShowAbility2Left() {};
+	virtual void ShowAbility2Right() {};
+
 	virtual void Ability3Up() {};
 	virtual void Ability3Down() {};
 	virtual void Ability3Left() {};
 	virtual void Ability3Right() {};
+
+	virtual void ShowAbility3Up() {};
+	virtual void ShowAbility3Down() {};
+	virtual void ShowAbility3Left() {};
+	virtual void ShowAbility3Right() {};
 
 	void CleanEntity();
 

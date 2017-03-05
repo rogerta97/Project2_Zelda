@@ -53,20 +53,40 @@ public:
 	void BasicAttackLeft();
 	void BasicAttackRight();
 
+	void ShowBasicAttackUp();
+	void ShowBasicAttackDown();
+	void ShowBasicAttackLeft();
+	void ShowBasicAttackRight();
+
 	void Ability1Up();
 	void Ability1Down();
 	void Ability1Left();
 	void Ability1Right();
+
+	void ShowAbility1Up();
+	void ShowAbility1Down();
+	void ShowAbility1Left();
+	void ShowAbility1Right();
 
 	void Ability2Up();
 	void Ability2Down();
 	void Ability2Left();
 	void Ability2Right();
 
+	void ShowAbility2Up();
+	void ShowAbility2Down();
+	void ShowAbility2Left();
+	void ShowAbility2Right();
+
 	void Ability3Up();
 	void Ability3Down();
 	void Ability3Left();
 	void Ability3Right();
+
+	void ShowAbility3Up();
+	void ShowAbility3Down();
+	void ShowAbility3Left();
+	void ShowAbility3Right();
 
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);

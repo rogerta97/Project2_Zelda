@@ -21,7 +21,8 @@ struct Player
 	}
 
 	Entity*  entity = nullptr;
-	states   state = states_null;
+	states   state = states::states_null;
+	shows	 show = shows::show_null;
 	movement move = stop;
 	uint	 index = 0;
 };
