@@ -1,5 +1,6 @@
 #include "j1Spell.h"
 #include "Spell.h"
+#include "Boomerang.h"
 
 j1Spell::j1Spell()
 {
@@ -85,9 +86,13 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 	switch (spell)
 	{
 	case boomerang:
+		ret = new Boomerang(pos);
 		break;
 	}
 
+	ret->owner = owner;
+	ret->Start();
+	spell_list.push_back(ret);
 	return ret;
 }
 

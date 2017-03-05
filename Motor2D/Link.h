@@ -58,6 +58,16 @@ public:
 	void Ability1Left();
 	void Ability1Right();
 
+	void Ability2Up();
+	void Ability2Down();
+	void Ability2Left();
+	void Ability2Right();
+
+	void Ability3Up();
+	void Ability3Down();
+	void Ability3Left();
+	void Ability3Right();
+
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 

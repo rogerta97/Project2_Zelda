@@ -76,6 +76,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Tower.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\minion.xml" />

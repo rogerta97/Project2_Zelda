@@ -109,6 +109,9 @@
     <ClCompile Include="Spell.cpp">
       <Filter>Engine\5. Spells ===========</Filter>
     </ClCompile>
+    <ClCompile Include="Boomerang.cpp">
+      <Filter>Engine\5. Spells ===========\Boomerang</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -309,6 +312,9 @@
     </Xml>
     <Xml Include="tower.xml">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
+    </Xml>
+    <Xml Include="..\Game\boomerang.xml">
+      <Filter>Engine\5. Spells ===========\Boomerang</Filter>
     </Xml>
   </ItemGroup>
 </Project>

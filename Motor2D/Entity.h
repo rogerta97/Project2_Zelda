@@ -38,6 +38,16 @@ enum states
 	ability1_down,
 	ability1_right,
 
+	ability2_up,
+	ability2_left,
+	ability2_down,
+	ability2_right,
+
+	ability3_up,
+	ability3_left,
+	ability3_down,
+	ability3_right,
+
 	tower_idle,
 	tower_attack,
 
@@ -130,8 +140,16 @@ public:
 	virtual void Ability1Down() {};
 	virtual void Ability1Left() {};
 	virtual void Ability1Right() {};
-	virtual void Ability2() {};
-	virtual void Ability3() {};
+
+	virtual void Ability2Up() {};
+	virtual void Ability2Down() {};
+	virtual void Ability2Left() {};
+	virtual void Ability2Right() {};
+
+	virtual void Ability3Up() {};
+	virtual void Ability3Down() {};
+	virtual void Ability3Left() {};
+	virtual void Ability3Right() {};
 
 	void CleanEntity();
 

@@ -1,0 +1,12 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="textures/link_spritesheet.png">
+      <anim speed = "10" name = "spin" loop = "true">
+	      <rect x = "0" y = "1306" w = "20" h = "20"/>
+        <rect x = "22" y = "1306" w = "20" h = "20"/>
+        <rect x = "44" y = "1306" w = "20" h = "20"/>
+        <rect x = "66" y = "1306" w = "20" h = "20"/>
+      </anim>
+   </animations>
+</file>

@@ -61,10 +61,9 @@ public:
 	//Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 
 public:
+	list<Spell*> spell_list;
 
 private:
-	// List with all entities
-	list<Spell*> spell_list;
 
 	void RemoveSpells();
 

@@ -40,6 +40,8 @@ public:
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
+	virtual void Set() {};
+
 	//Set Team if not set already
 	void SetTeam(uint _team)
 	{
@@ -62,8 +64,8 @@ private:
 public:
 	// Containers
 	GameObject*      game_object = nullptr;
-	Stats	         stats;
 	Entity*			 owner = nullptr;
+	b2Fixture*		 hit_box = nullptr;
 
 	// Delete 
 	bool			 to_delete = false;

@@ -11,11 +11,13 @@
 #include "p2Log.h"
 #include "j1Viewports.h"
 #include "j1Entity.h"
+#include "j1Spell.h"
+#include "Boomerang.h"
 
 
 Link::Link(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y),iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -362,6 +364,50 @@ void Link::Ability1Left()
 void Link::Ability1Right()
 {
 	Ability1Up();
+}
+
+void Link::Ability2Up()
+{
+	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
+	s->Set(direction::up);
+	GetAbility(3)->fixture = s->hit_box;
+}
+
+void Link::Ability2Down()
+{
+	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
+	s->Set(direction::down);
+	GetAbility(3)->fixture = s->hit_box;
+}
+
+void Link::Ability2Left()
+{
+	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
+	s->Set(direction::left);
+	GetAbility(3)->fixture = s->hit_box;
+}
+
+void Link::Ability2Right()
+{
+	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
+	s->Set(direction::right);
+	GetAbility(3)->fixture = s->hit_box;
+}
+
+void Link::Ability3Up()
+{
+}
+
+void Link::Ability3Down()
+{
+}
+
+void Link::Ability3Left()
+{
+}
+
+void Link::Ability3Right()
+{
 }
 
 void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

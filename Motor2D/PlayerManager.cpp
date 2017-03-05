@@ -166,6 +166,28 @@ bool PlayerManager::Update(float dt)
 			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
 				players.at(i)->state = ability1_right;
 		}
+		else if (App->input->GetControllerJoystickMove(players.at(i)->index, RIGHT_TRIGGER) > 22000 || App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+		{
+			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
+				players.at(i)->state = ability2_down;
+			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
+				players.at(i)->state = ability2_up;
+			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->state = ability2_left;
+			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
+				players.at(i)->state = ability2_right;
+		}
+		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFT_TRIGGER) > 22000 || App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		{
+			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
+				players.at(i)->state = ability3_down;
+			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
+				players.at(i)->state = ability3_up;
+			if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
+				players.at(i)->state = ability3_left;
+			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
+				players.at(i)->state = ability3_right;
+		}
 
 		
 		// State machines
@@ -235,6 +257,38 @@ bool PlayerManager::Update(float dt)
 			break;
 		case ability1_right:
 			players.at(i)->entity->Ability1Right();
+			players.at(i)->state = idle_right;
+			break;
+		case ability2_up:
+			players.at(i)->entity->Ability2Up();
+			players.at(i)->state = idle_up;
+			break;
+		case ability2_left:
+			players.at(i)->entity->Ability2Left();
+			players.at(i)->state = idle_left;
+			break;
+		case ability2_down:
+			players.at(i)->entity->Ability2Down();
+			players.at(i)->state = idle_down;
+			break;
+		case ability2_right:
+			players.at(i)->entity->Ability2Right();
+			players.at(i)->state = idle_right;
+			break;
+		case ability3_up:
+			players.at(i)->entity->Ability3Up();
+			players.at(i)->state = idle_up;
+			break;
+		case ability3_left:
+			players.at(i)->entity->Ability3Down();
+			players.at(i)->state = idle_left;
+			break;
+		case ability3_down:
+			players.at(i)->entity->Ability3Left();
+			players.at(i)->state = idle_down;
+			break;
+		case ability3_right:
+			players.at(i)->entity->Ability3Right();
 			players.at(i)->state = idle_right;
 			break;
 		case states_null:

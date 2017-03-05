@@ -6,18 +6,28 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "j1Physics.h"
 #include "Animation.h"
+#include "Spell.h"
 #include "Entity.h"
 
 class b2Fixture;
 class PhysBody;
 class GameObject;
 
-class Boomerang
+enum direction
+{
+	null,
+	up,
+	down,
+	left,
+	right,
+};
+
+class Boomerang : public Spell
 {
 public:
-	Boomerang() {};
+	Boomerang(iPoint pos);
 
-	virtual ~Boomerang() {};
+	virtual ~Boomerang();
 
 	bool Start();
 	bool PreUpdate();
@@ -40,9 +50,11 @@ public:
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
+	void Set(direction dir);
 
 private:
-
+	direction dir = direction::null;
+	int				range = 0;
 
 };
 

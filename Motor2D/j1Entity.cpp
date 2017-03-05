@@ -5,6 +5,8 @@
 #include "Minion.h"
 #include "GameObject.h"
 #include "Entity.h"
+#include "Spell.h"
+#include "j1Spell.h"
 
 
 j1Entity::j1Entity()
@@ -151,11 +153,22 @@ Entity * j1Entity::FindEntityByBody(PhysBody* type)
 {
 	Entity* ret = nullptr;
 
+	// Look on entities
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
 		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody)
 		{
 			ret = *it;
+			break;
+		}
+	}
+
+	// Look on Spells
+	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	{
+		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody)
+		{
+			ret = (*it)->owner;
 			break;
 		}
 	}
