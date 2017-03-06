@@ -316,11 +316,11 @@
     <Xml Include="..\Game\minion.xml">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
     </Xml>
-    <Xml Include="tower.xml">
-      <Filter>Engine\4. Entities ==========\Towers</Filter>
-    </Xml>
     <Xml Include="..\Game\boomerang.xml">
       <Filter>Engine\5. Spells ===========\Boomerang</Filter>
+    </Xml>
+    <Xml Include="..\Game\tower.xml">
+      <Filter>Engine\4. Entities ==========\Towers</Filter>
     </Xml>
   </ItemGroup>
 </Project>

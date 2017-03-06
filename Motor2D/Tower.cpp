@@ -21,11 +21,11 @@
 Tower::Tower(iPoint pos) 
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_H, TOWER_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
-
+	
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
-
+	game_object->SetKinematic();
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -40,7 +40,7 @@ bool Tower::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("idle");
+	game_object->SetAnimation("tower_idle");
 
 	stats.max_life = stats.life = 300;
 
@@ -73,7 +73,7 @@ bool Tower::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(20, 3), iPoint(0, 0));
+	LifeBar(iPoint(64, 4), iPoint(-32, -92));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -96,8 +96,10 @@ bool Tower::Draw(float dt)
 {
 	bool ret = true;
 
-	//App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 17, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
+	if (App->debug_mode)
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
 	return ret;
 }
 
@@ -117,7 +119,7 @@ bool Tower::CleanUp()
 
 void Tower::Idle()
 {
-	game_object->SetAnimation("idle");
+	game_object->SetAnimation("tower_idle");
 	flip = false;
 	anim_state = tower_idle;
 }

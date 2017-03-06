@@ -62,7 +62,7 @@ private:
 
 	bool				flip = false;
 
-	uint				attack_range = 100;
+	uint				attack_range = 150;
 
 	TOWER_STATE			state = Tower_Idle;
 

@@ -1,7 +1,7 @@
 <!-- Config file for the game -->
 
 <file>
-   <animations texture ="textures/link_spritesheet.png">
+   <animations texture ="textures/towersminions_sheet.png">
       <anim speed = "10" name = "run_down" loop = "true">
 	 <rect x = "352" y = "160" w = "64" h = "64"/>
 	 <rect x = "416" y = "160" w = "64" h = "64"/>
