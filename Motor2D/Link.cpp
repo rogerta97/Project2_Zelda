@@ -26,7 +26,7 @@ Link::Link(iPoint pos)
 
 	AddAbility(0, 10, 1, 2);
 	AddAbility(1, 15, 1, 2);
-	AddAbility(2, 10, 1, 2, "boomerang");
+	AddAbility(2, 10, 1, 2, "boomerang"); // Name references to the Spell name
 	AddAbility(3, 10, 1, 2);
 
 	pugi::xml_document doc;
@@ -342,19 +342,25 @@ void Link::BasicAttackRight()
 void Link::ShowBasicAttackUp()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ (int)game_object->fGetPos().x - 13, (int)game_object->fGetPos().y - 55, 10, 35 }, 255, 255, 255, 150, false, blit_layer - 2, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 13, game_object->GetPos().y - 55, 10, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackDown()
 {
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 5, game_object->GetPos().y + 20, 10, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackLeft()
 {
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x -50 , game_object->GetPos().y - 4, 35, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackRight()
 {
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 20, game_object->GetPos().y - 4, 35, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::Ability1Up()
@@ -387,18 +393,23 @@ void Link::Ability1Right()
 
 void Link::ShowAbility1Up()
 {
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	//App->view->LayerDrawCircle( game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility1Down()
 {
+	ShowAbility1Up();
 }
 
 void Link::ShowAbility1Left()
 {
+	ShowAbility1Up();
 }
 
 void Link::ShowAbility1Right()
 {
+	ShowAbility1Up();
 }
 
 void Link::Ability2Up()

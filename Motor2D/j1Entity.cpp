@@ -113,7 +113,7 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 		if (entity->hit_ability != nullptr)
 			entity->hit = true;
 
-		// If not ability found, check it by ability name
+		// If not ability found, check it by Spell and ability names
 		else
 			entity->hit_ability = FindAbilityBySpellBody(bodyA);
 
