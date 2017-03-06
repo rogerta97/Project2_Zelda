@@ -119,9 +119,13 @@ bool Tower::CleanUp()
 
 void Tower::Idle()
 {
-	game_object->SetAnimation("tower_idle");
 	flip = false;
 	anim_state = tower_idle;
+}
+
+void Tower::Attack()
+{
+
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -152,12 +156,9 @@ void Tower::TowerIdle()
 {
 	CheckTowerState();
 
-	switch (anim_state)
+	switch (state)
 	{
-	case tower_idle:
-		Idle();
-		break;
-	case tower_attack:
+	case Tower_Idle:
 		Idle();
 		break;
 	default:
@@ -168,6 +169,8 @@ void Tower::TowerIdle()
 void Tower::TowerAttack()
 {
 	CheckTowerState();
+	Attack();
+
 }
 
 void Tower::CheckTowerState()
@@ -184,17 +187,16 @@ void Tower::CheckTowerState()
 	case Tower_Attack:
 		if (game_object->animator->IsCurrentAnimation("tower_attack"))
 		{
-			if (game_object->animator->GetCurrentAnimation()->Finished())
-			{
 				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
 				{
 					state = Tower_Idle;
+					game_object->SetAnimation("tower_idle");
 				}
-			}
 		}
 		else if (target->to_delete == true)
 		{
 			state = Tower_Idle;
+			game_object->SetAnimation("tower_idle");
 		}
 		break;
 	default:

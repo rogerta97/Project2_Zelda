@@ -115,6 +115,9 @@
     <ClCompile Include="TowerManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="TowerAttack.cpp">
+      <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -258,6 +261,9 @@
     <ClInclude Include="TowerManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="TowerAttack.h">
+      <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -304,6 +310,9 @@
     </Filter>
     <Filter Include="Engine\5. Spells ===========\Boomerang">
       <UniqueIdentifier>{ce4ed5b5-dac9-43aa-b307-6d794956f0df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\TowerAttack">
+      <UniqueIdentifier>{88246e0f-14f1-4c8e-8f33-19a270f5f84a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

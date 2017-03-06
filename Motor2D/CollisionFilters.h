@@ -31,6 +31,7 @@ enum class pbody_type
 	p_t_world,
 	p_t_npc,
 	p_t_tower,
+	p_t_tower_attack,
 };
 
 // Fixture enum

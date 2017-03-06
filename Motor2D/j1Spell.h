@@ -18,6 +18,7 @@ enum spell_name
 {
 	s_n_null,
 	boomerang,
+	t_attack,
 
 };
 

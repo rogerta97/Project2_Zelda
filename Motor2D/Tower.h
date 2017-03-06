@@ -39,7 +39,7 @@ public:
 	// CleanUp
 	bool CleanUp();
 
-	void Idle();
+	
 
 
 	// On Collision
@@ -53,6 +53,9 @@ private:
 
 	void TowerIdle();
 	void TowerAttack();
+
+	void Idle();
+	void Attack();
 
 	void CheckTowerState();
 
