@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <file>
   <minions>
-    <wave_time sec="5"/>
+    <wave_time sec="30"/>
     <minion_time_difference sec="1"/>
-    <minions_wave amount="2"/>
-    <first_wave_delay sec="10"/>
+    <minions_wave amount="1"/>
+    <first_wave_delay sec="5"/>
   </minions>
 </file>

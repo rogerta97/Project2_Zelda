@@ -8,7 +8,7 @@ TowerManager::TowerManager()
 {
 	Tower* t = (Tower*)App->entity->CreateEntity(tower, { 511,735 });
 	t->SetTeam(2);
-	team1_towers.push_back(t);
+	team2_towers.push_back(t);
 }
 
 TowerManager::~TowerManager()

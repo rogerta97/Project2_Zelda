@@ -25,7 +25,7 @@
       </anim>
      <anim speed = "10" name = "basic_attack_down" loop = "false">
        <rect x = "352" y = "64" w = "64" h = "74"/>
-       <rect x = "416" y = "64" w = "64" h = "64"/>
+       <rect x = "416" y = "64" w = "64" h = "74"/>
      </anim>
      <anim speed = "10" name = "basic_attack_up" loop = "false">
        <rect x = "480" y = "64" w = "64" h = "64"/>

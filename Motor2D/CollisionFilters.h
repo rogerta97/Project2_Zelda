@@ -40,6 +40,7 @@ enum class fixture_type
 	f_t_null = 0,
 	f_t_attack,
 	f_t_hit_box,
+	f_t_minion_hit_sensor,
 };
 
 #endif // !_COLLISIONFILTERS__H__

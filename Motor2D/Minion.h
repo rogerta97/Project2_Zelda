@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include <list>
+#include "j1Timer.h"
 
 class GameObject;
 
@@ -97,6 +98,9 @@ private:
 	void BasicAttackRight();
 
 	void FaceTarget();
+	void Attack();
+
+	void SetIdleAnim();
 
 public:
 
@@ -120,6 +124,8 @@ private:
 	float				speed = 0;
 
 	states				anim_state = states_null;
+
+	j1Timer				cd_timer;
 
 };
 

@@ -13,6 +13,8 @@
 #include "MinionManager.h"
 #include "j1Scene.h"
 #include "MainScene.h"
+#include "Tower.h"
+#include "TowerManager.h"
 
 #define Half_Tile 16
 
@@ -24,11 +26,14 @@ Minion::Minion(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	AddAbility(0, 5, 69, 69);
+	AddAbility(0, 5, 1, 69);
 	
 	pugi::xml_document doc;
 	App->LoadXML("minion.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+	App->UnloadXML(doc);
+
+	cd_timer.Start();
 }
 
 Minion::~Minion()
@@ -104,9 +109,9 @@ bool Minion::Draw(float dt)
 	bool ret = true;
 
 	if (flip)
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 20, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 17, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -234,9 +239,7 @@ void Minion::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2F
 	switch (bodyA->type)
 	{
 	case pbody_type::p_t_npc:
-		if (bodyB->type == pbody_type::p_t_world)
-		{
-		}
+		
 		break;
 
 	}
@@ -259,31 +262,7 @@ void Minion::MinionIdle()
 {
 	CheckState();
 
-	switch (anim_state)
-	{
-	case run_up:
-		IdleUp();
-		break;
-	case run_left:
-		IdleLeft();
-		break;
-	case run_down:
-		IdleDown();
-		break;
-	case run_right:
-		IdleRight();
-		break;
-	case basic_atack_up:
-		break;
-	case basic_atack_left:
-		break;
-	case basic_atack_down:
-		break;
-	case basic_atack_right:
-		break;
-	default:
-		break;
-	}
+	SetIdleAnim();
 }
 
 void Minion::MinionMove()
@@ -366,7 +345,13 @@ void Minion::MinionAttack()
 {
 	CheckState();
 
-	FaceTarget();
+	//FaceTarget();
+
+	if (cd_timer.ReadSec()>abilities.at(0)->cd)
+	{
+		Attack();
+		cd_timer.Start();
+	}
 }
 
 void Minion::CheckState()
@@ -393,7 +378,7 @@ void Minion::CheckState()
 				PathToTarget();
 			break;
 		case Move_AproachTarget:
-			if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 3)
+			if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4)
 				state = Minion_Attack;
 			else
 			{
@@ -414,8 +399,6 @@ void Minion::CheckState()
 			}
 			break;
 		case Move_ReturnToPath:
-			if (LookForTarget())
-				PathToTarget();
 			if (base_path_index < base_path.size()) {
 				iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 2)
@@ -433,23 +416,25 @@ void Minion::CheckState()
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
+				if (abilities.at(0)->fixture != nullptr)
+				{
+					game_object->DeleteFixture(abilities.at(0)->fixture);
+					abilities.at(0)->fixture = nullptr;
+				}
+
 				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
 				{
 					state = Minion_Move;
 					move_state = Move_AproachTarget;
 				}
+				game_object->animator->GetCurrentAnimation()->Reset();
+				SetIdleAnim();
 			}
 		}
 		else if (target->to_delete == true)
 		{
 			state = Minion_Move;
 			move_state = Move_ReturnToPath;
-		}
-		else
-		{
-			state = Minion_Move;
-			move_state = Move_ReturnToPath;
-			PathToBasePath();
 		}
 		break;
 	default:
@@ -487,20 +472,60 @@ bool Minion::LookForTarget()
 {
 	bool ret = false;
 
-	//now only check for players
-	std::vector<Entity*> players;
+	//Chack for enemy minion
+	std::list<Minion*> minions;
 	if (GetTeam() == 1)
-		players = App->entity->player_manager->GetTeamPlayers(2);
+		minions = App->scene->main_scene->minion_manager->GetMinionList(2);
 	else
-		players = App->entity->player_manager->GetTeamPlayers(1);
+		minions = App->scene->main_scene->minion_manager->GetMinionList(1);
 
-	for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
+	for (std::list<Minion*>::iterator it = minions.begin(); it != minions.end(); it++)
 	{
 		if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 		{
 			target = *it;
 			ret = true;
 			break;
+		}
+	}
+
+	//Chack for towers
+	if (target == nullptr)
+	{
+		std::list<Tower*> towers;
+		if (GetTeam() == 1)
+			towers = App->scene->main_scene->tower_manager->GetTowerList(2);
+		else
+			towers = App->scene->main_scene->tower_manager->GetTowerList(1);
+
+		for (std::list<Tower*>::iterator it = towers.begin(); it != towers.end(); it++)
+		{
+			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
+			{
+				target = *it;
+				ret = true;
+				break;
+			}
+		}
+	}
+
+	//Check for Players
+	if (target == nullptr)
+	{
+		std::vector<Entity*> players;
+		if (GetTeam() == 1)
+			players = App->entity->player_manager->GetTeamPlayers(2);
+		else
+			players = App->entity->player_manager->GetTeamPlayers(1);
+
+		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
+		{
+			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
+			{
+				target = *it;
+				ret = true;
+				break;
+			}
 		}
 	}
 
@@ -561,19 +586,30 @@ void Minion::Move(int delta_x, int delta_y)
 void Minion::BasicAttackUp()
 {
 	game_object->animator->SetAnimation("basic_attack_up");
-	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 10, 40, fixture_type::f_t_attack);
+	anim_state = basic_atack_up;
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, -25), 6, 10, fixture_type::f_t_attack);
 }
 
 void Minion::BasicAttackDown()
 {
+	game_object->animator->SetAnimation("basic_attack_down");
+	anim_state = basic_atack_down;
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-10, 25), 6, 10, fixture_type::f_t_attack);
+	draw_offset.y = 10;
 }
 
 void Minion::BasicAttackLeft()
 {
+	game_object->animator->SetAnimation("basic_attack_left");
+	anim_state = basic_atack_left;
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-23, 0), 15, 6, fixture_type::f_t_attack);
 }
 
 void Minion::BasicAttackRight()
 {
+	game_object->animator->SetAnimation("basic_attack_right");
+	anim_state = basic_atack_right;
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(23, 0), 15, 6, fixture_type::f_t_attack);
 }
 
 void Minion::FaceTarget()
@@ -592,6 +628,64 @@ void Minion::FaceTarget()
 	hitbox_diff.x /= 2;
 	hitbox_diff.y /= 2;
 
-
+	delta -= hitbox_diff;
 	
 }
+
+void Minion::Attack()
+{
+	switch (anim_state)
+	{
+	case run_up:
+	case idle_up:
+	case basic_atack_up:
+		BasicAttackUp();
+		break;
+	case run_left:
+	case idle_left:
+	case basic_atack_left:
+		BasicAttackLeft();
+		break;
+	case run_down:
+	case idle_down:
+	case basic_atack_down:
+		BasicAttackDown();
+		break;
+	case run_right:
+	case idle_right:
+	case basic_atack_right:
+		BasicAttackRight();
+		break;
+	default:
+		break;
+	}
+}
+
+	void Minion::SetIdleAnim()
+	{
+		switch (anim_state)
+		{
+		case run_up:
+		case idle_up:
+		case basic_atack_up:
+			IdleUp();
+			break;
+		case run_left:
+		case idle_left:
+		case basic_atack_left:
+			IdleLeft();
+			break;
+		case run_down:
+		case idle_down:
+		case basic_atack_down:
+			IdleDown();
+			break;
+		case run_right:
+		case idle_right:
+		case basic_atack_right:
+			IdleRight();
+			break;
+		default:
+			break;
+		}
+	}
