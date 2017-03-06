@@ -1,0 +1,19 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/towersminions_sheet.png">
+    <anim speed = "10" name = "tower_idle" loop = "true">
+      <rect x = "64" y = "0" w = "64" h = "128"/>
+    </anim>
+    <anim speed = "10" name = "tower_attack" loop = "true">
+     <rect x = "64" y = "128" w = "64" h = "128"/>
+    </anim>
+    <!-- LEFT SIDE TOWER, UNCOMMENT WHEN IMPLEMENTED
+   <anim speed = "10" name = "tower2_idle" loop = "true">
+      <rect x = "128" y = "0" w = "64" h = "128"/>
+    </anim>
+    <anim speed = "10" name = "tower2_attack" loop = "true">
+     <rect x = "128" y = "128" w = "64" h = "128"/>
+    </anim> -->
+  </animations>
+</file>
