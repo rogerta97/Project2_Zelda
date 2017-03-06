@@ -15,6 +15,8 @@ Boomerang::Boomerang(iPoint pos)
 	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
+
+	name = "boomerang";
 }
 
 Boomerang::~Boomerang()

@@ -108,9 +108,10 @@ public:
 
 struct Ability
 {
-	Ability(int _number, int _damage, float _cd, float _duration)
+	Ability(int _number, int _damage, float _cd, float _duration, char* _name)
 	{
-		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd; 
+		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd;
+		name = _name;
 	};
 
 	int        index = 0;
@@ -118,6 +119,7 @@ struct Ability
 	float      duration = 0;
 	int        damage = 0;
 	b2Fixture* fixture = nullptr;
+	string     name;
 };
 
 class Entity
@@ -215,7 +217,7 @@ public:
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	void AddAbility(int number, int damage, int cooldow, int duration);
+	void AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
 	Ability* GetAbility(int number);
 	void CleanAbilities();
 

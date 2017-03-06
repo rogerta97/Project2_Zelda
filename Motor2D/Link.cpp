@@ -26,7 +26,7 @@ Link::Link(iPoint pos)
 
 	AddAbility(0, 10, 1, 2);
 	AddAbility(1, 15, 1, 2);
-	AddAbility(2, 10, 1, 2);
+	AddAbility(2, 10, 1, 2, "boomerang");
 	AddAbility(3, 10, 1, 2);
 
 	pugi::xml_document doc;
@@ -405,28 +405,28 @@ void Link::Ability2Up()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
 	s->Set(direction::up);
-	GetAbility(3)->fixture = s->hit_box;
+	GetAbility(3);
 }
 
 void Link::Ability2Down()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
 	s->Set(direction::down);
-	GetAbility(3)->fixture = s->hit_box;
+	GetAbility(3);
 }
 
 void Link::Ability2Left()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
 	s->Set(direction::left);
-	GetAbility(3)->fixture = s->hit_box;
+	GetAbility(3);
 }
 
 void Link::Ability2Right()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
 	s->Set(direction::right);
-	GetAbility(3)->fixture = s->hit_box;
+	GetAbility(3);
 }
 
 void Link::ShowAbility2Up()

@@ -56,6 +56,7 @@ public:
 
 	Entity* FindEntityByBody(PhysBody* type);
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
+	Ability* FindAbilityBySpellBody(PhysBody* spell);
 
 public:
 	PlayerManager* player_manager = nullptr;

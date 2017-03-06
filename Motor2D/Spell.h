@@ -70,10 +70,14 @@ public:
 	// Delete 
 	bool			 to_delete = false;
 
+	// Name
+	string			 name;
+
 protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;
 	iPoint		     restore_draw_offset = NULLPOINT;
+
 };
 
 #endif // _SPELL_

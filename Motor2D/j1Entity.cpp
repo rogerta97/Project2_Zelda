@@ -8,6 +8,7 @@
 #include "Spell.h"
 #include "j1Spell.h"
 #include "Tower.h"
+#include "Functions.h"
 
 
 j1Entity::j1Entity()
@@ -97,12 +98,27 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 	// Returns GotHit to the entity
 	if (fixtureA->type == fixture_type::f_t_attack && fixtureB->type == fixture_type::f_t_hit_box)
 	{
+		// Find the entity that got hit
 		Entity* entity = FindEntityByBody(bodyB);
+
+		// Find the entity that hits
 		if(entity != nullptr)
 			entity->hit_by = FindEntityByBody(bodyA);
+
+		// Find the ability that hits with
 		if(entity->hit_by != nullptr)
 			entity->hit_ability = FindAbilityByFixture(entity->hit_by, fixtureA);
-		if(entity->hit_ability != nullptr)
+
+		// If ability found return true
+		if (entity->hit_ability != nullptr)
+			entity->hit = true;
+
+		// If not ability found, check it by ability name
+		else
+			entity->hit_ability = FindAbilityBySpellBody(bodyA);
+
+		// If ability found return true
+		if (entity->hit_ability != nullptr)
 			entity->hit = true;
 	}
 }
@@ -153,14 +169,14 @@ void j1Entity::ClearEntities()
 	entity_list.clear();
 }
 
-Entity * j1Entity::FindEntityByBody(PhysBody* type)
+Entity * j1Entity::FindEntityByBody(PhysBody* body)
 {
 	Entity* ret = nullptr;
 
 	// Look on entities
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
-		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody)
+		if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
 		{
 			ret = *it;
 			break;
@@ -170,7 +186,7 @@ Entity * j1Entity::FindEntityByBody(PhysBody* type)
 	// Look on Spells
 	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 	{
-		if ((*it)->game_object != nullptr && type == (*it)->game_object->pbody)
+		if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
 		{
 			ret = (*it)->owner;
 			break;
@@ -193,6 +209,31 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 	}
 
 	return ret;
+}
+
+Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
+{
+	Spell* sp = nullptr;
+	// Look on Spells
+	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	{
+		if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+		{
+			sp = (*it);
+			break;
+		}
+	}
+
+	if (sp != nullptr)
+	{
+		for (vector<Ability*>::iterator it = sp->owner->abilities.begin(); it != sp->owner->abilities.end(); it++)
+		{
+			if (TextCmp((*it)->name.c_str(), sp->name.c_str()))
+			{
+				return *it;
+			}
+		}
+	}
 }
 
 void j1Entity::RemoveEntities()
