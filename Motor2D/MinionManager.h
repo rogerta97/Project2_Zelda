@@ -19,7 +19,7 @@ public:
 	bool Update();
 
 	//Return a list that contains all team #team minions. 1 or 2 teams.
-	const std::list<Minion*>& GetMinionList(uint team) const;
+	std::list<Minion*>& GetMinionList(uint team);
 
 	//Delete a minion form their team list
 	void KillMinion(Entity* minion);

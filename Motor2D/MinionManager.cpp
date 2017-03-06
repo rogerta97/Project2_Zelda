@@ -75,7 +75,7 @@ bool MinionManager::Update()
 	return ret;	return true;
 }
 
-const std::list<Minion*>& MinionManager::GetMinionList(uint team) const
+std::list<Minion*>& MinionManager::GetMinionList(uint team)
 {
 	if (team == 1) 
 	{

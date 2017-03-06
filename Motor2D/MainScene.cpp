@@ -20,6 +20,8 @@
 #include "Minion.h"
 #include "MinionManager.h"
 #include "Scene.h"
+#include "TowerManager.h"
+
 
 
 MainScene::MainScene()
@@ -56,8 +58,11 @@ bool MainScene::Start()
 		RELEASE_ARRAY(data);
 	}
 
-	//Test MInion
+	//Test Minion
 	minion_manager = new MinionManager();
+
+	//Test Tower
+	tower_manager = new TowerManager();
 
 	//Create UI element
 	SDL_Rect screen = App->view->GetViewportRect(1); 
@@ -122,6 +127,7 @@ bool MainScene::CleanUp()
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
+	RELEASE(tower_manager);
 	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
 

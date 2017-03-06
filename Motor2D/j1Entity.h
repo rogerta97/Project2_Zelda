@@ -16,7 +16,7 @@ enum class pbody_type;
 
 enum entity_name
 {
-	e_n_null, link, minion, turret, castle
+	e_n_null, link, minion, tower, castle
 };
 
 class Entity;

@@ -112,6 +112,7 @@
     <ClCompile Include="QuestManager.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="TowerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="Tower.h" />
+    <ClInclude Include="TowerManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\boomerang.xml" />

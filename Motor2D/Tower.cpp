@@ -9,11 +9,16 @@
 #include "j1Entity.h"
 #include <vector>
 #include "p2Log.h"
+#include "TowerManager.h"
+#include "MinionManager.h"
+#include "MainScene.h"
+#include "j1Scene.h"
+#include "Minion.h"
 
-#define TOWER_H 100
-#define TOWER_W 100
+#define TOWER_H 64
+#define TOWER_W 64
 
-Tower::Tower(iPoint pos)
+Tower::Tower(iPoint pos) 
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_H, TOWER_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
 
@@ -77,9 +82,9 @@ bool Tower::Update(float dt)
 		if (entity->GetTeam() != GetTeam())
 		{
 			stats.life -= ability->damage;
-			if (stats.life < 0)
+			if (stats.life <= 0)
 			{
-				//tower destroyed
+				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
 	}
@@ -91,7 +96,7 @@ bool Tower::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 17, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	//App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 17, game_object->GetPos().y - 23 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -168,9 +173,9 @@ void Tower::CheckTowerState()
 	switch (state)
 	{
 	case Tower_Idle:
-		if (false)
+		if (LookForTarget())
 		{
-
+			state = Tower_Attack;
 		}
 		break;
 
@@ -193,5 +198,50 @@ void Tower::CheckTowerState()
 	default:
 		break;
 	}
+}
+
+bool Tower::LookForTarget()
+{
+	bool ret = false;
+
+	//check for minions
+	std::list<Minion*> minions;
+
+	if (GetTeam() == 1)
+		minions = App->scene->main_scene->minion_manager->GetMinionList(2);
+	else
+		minions = App->scene->main_scene->minion_manager->GetMinionList(1);
+
+	for (std::list<Minion*>::iterator it = minions.begin(); it != minions.end(); it++)
+	{
+		if (GetPos().DistanceTo((*it)->GetPos()) < attack_range)
+		{
+			target = *it;
+			ret = true;
+			break;
+		}
+	}
+	//check for players
+	if (target == nullptr)
+	{
+		std::vector<Entity*> players;
+
+		if (GetTeam() == 1)
+			players = App->entity->player_manager->GetTeamPlayers(2);
+		else
+			players = App->entity->player_manager->GetTeamPlayers(1);
+
+		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
+		{
+			if (GetPos().DistanceTo((*it)->GetPos()) < attack_range)
+			{
+				target = *it;
+				ret = true;
+				break;
+			}
+		}
+	}
+	
+	return ret;
 }
 

@@ -56,13 +56,13 @@ private:
 
 	void CheckTowerState();
 
+	bool LookForTarget();
 
 private:
 
 	bool				flip = false;
 
-	uint				vision_range = 300;
-	uint				attack_range = 250;
+	uint				attack_range = 100;
 
 	TOWER_STATE			state = Tower_Idle;
 

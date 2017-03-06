@@ -12,6 +12,7 @@ class Link;
 class QuestManager; 
 class Minion;
 class MinionManager;
+class TowerManager;
 
 enum GameStates
 {
@@ -41,6 +42,8 @@ public:
 	UI_Window* main_window = nullptr;
 
 	MinionManager* minion_manager = nullptr;
+
+	TowerManager* tower_manager = nullptr;
 
 private:
 

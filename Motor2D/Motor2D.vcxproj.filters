@@ -112,6 +112,9 @@
     <ClCompile Include="Boomerang.cpp">
       <Filter>Engine\5. Spells ===========\Boomerang</Filter>
     </ClCompile>
+    <ClCompile Include="TowerManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -251,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="Boomerang.h">
       <Filter>Engine\5. Spells ===========\Boomerang</Filter>
+    </ClInclude>
+    <ClInclude Include="TowerManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

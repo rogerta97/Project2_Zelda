@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Spell.h"
 #include "j1Spell.h"
+#include "Tower.h"
 
 
 j1Entity::j1Entity()
@@ -117,6 +118,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case minion:
 		ret = new Minion(pos);
+		break;
+	case tower:
+		ret = new Tower(pos);
 		break;
 	default:
 		break;
