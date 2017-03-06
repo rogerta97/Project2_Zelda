@@ -9,6 +9,15 @@
 class Minion;
 class Entity;
 
+enum minion_manager_state
+{
+	null,
+	game_start,
+	spawn_minions,
+	wait_between_minions,
+	wait_wave,
+};
+
 class MinionManager 
 {
 public:
@@ -45,11 +54,12 @@ private:
 	uint					minions_wave = 0.0f;
 	float					first_wave_delay = 0.0f;
 
-	bool					spawn_wave = false;
-	bool					first_wave = true;
+	int						minion_num = 0;
 
 	iPoint					team1_spawn = NULLPOINT;
 	iPoint					team2_spawn = NULLPOINT;
+
+	minion_manager_state	state = null;
 };
 
 #endif // !_MINION_MANAGER_H_

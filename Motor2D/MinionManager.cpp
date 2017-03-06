@@ -58,7 +58,8 @@ MinionManager::MinionManager()
 		i++;
 	}
 
-	AddMinions();
+	state = game_start;
+	StartTimer();
 
 }
 
@@ -70,9 +71,46 @@ bool MinionManager::Update()
 {
 	bool ret = true;
 
+	switch (state)
+	{
+	case game_start:
+		if (spawn_timer.ReadSec() > first_wave_delay) 
+		{
+			state = spawn_minions;
+			StartTimer();
+		}
+		break;
+	case spawn_minions:
+		AddMinions();
+		minion_num++;
+		state = wait_between_minions;
+		StartTimer();
+		break;
+	case wait_wave:
+		if (spawn_timer.ReadSec() > wave_time)
+		{
+			state = spawn_minions;
+		}
+		break;
+	case wait_between_minions:
+		if (minion_num < minions_wave)
+		{
+			if (spawn_timer.ReadSec() > minion_time_difference)
+			{
+				state = spawn_minions;
+			}
+		}
+		else
+		{
+			state = wait_wave;
+			minion_num = 0;
+		}
+		break;
+	default:
+		break;
+	}
 
-
-	return ret;	return true;
+	return ret;
 }
 
 std::list<Minion*>& MinionManager::GetMinionList(uint team)
@@ -105,6 +143,7 @@ void MinionManager::KillMinion(Entity * minion)
 
 void MinionManager::StartTimer()
 {
+	spawn_timer.Start();
 }
 
 void MinionManager::AddMinions()

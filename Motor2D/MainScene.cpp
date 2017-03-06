@@ -110,6 +110,8 @@ bool MainScene::Update(float dt)
 		App->view->SetViews(1);
 	}
 
+	minion_manager->Update();
+
 	return ret;
 }
 
