@@ -26,6 +26,7 @@ Tower::Tower(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
+
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
