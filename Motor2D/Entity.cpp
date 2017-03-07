@@ -1,5 +1,7 @@
 #include "Entity.h"
 #include "j1Viewports.h"
+#include "j1Scene.h"
+#include "MainScene.h"
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
@@ -110,5 +112,24 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 			}
 		}
 	}
+}
+
+void Entity::ProgressBar()
+{
+
+	//Update the position of the princess
+	progress_limit = App->scene->main_scene->princess->GetPos();
+
+	for (int viewport = 1; viewport <= App->view->GetViews(); viewport++)
+	{
+
+
+
+
+
+	}
+
+
+
 }
 

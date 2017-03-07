@@ -68,15 +68,16 @@ bool MainScene::Start()
 	SDL_Rect screen = App->view->GetViewportRect(1); 
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 
-	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), SDL_Rect{ 36, 32, 385, 23 });
-	rupiees_img = main_window->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), SDL_Rect{ 49, 5, 17, 17});
+	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 36, 32, 385, 23 });
+	princess = main_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 5) , {141, 4, 20, 25});
+	rupiees_img = main_window->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 49, 5, 17, 17});
 	rupiees_numb = main_window->CreateText(iPoint(rupiees_img->GetPos().x, rupiees_img->GetPos().y + 30), App->font->game_font, 0, false); 
 	rupiees_numb->SetText("0"); 
-	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), SDL_Rect{ 182, 78, 47, 47 });
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w  - 90 , screen.h - 100), SDL_Rect{ 182, 78, 35, 35 }));
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w - 90, screen.h - 60), SDL_Rect{ 182, 78, 35, 35 }));
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), SDL_Rect{ 182, 78, 35, 35 }));
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), SDL_Rect{ 182, 78, 35, 35 }));
+	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w  - 90 , screen.h - 100), { 182, 78, 35, 35 }));
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), { 182, 78, 35, 35 }));
+	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), { 182, 78, 35, 35 }));
 
 	//Creating quests
 	quest_manager = new QuestManager();
@@ -85,7 +86,7 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("Test"), 3);
 	quest_manager->CreateQuest(string("Test"), 4);
 
-	//App->console->AddText("viewports.set 1", Input);
+	App->console->AddText("viewports.set 4", Input);
 
 	return ret;
 }

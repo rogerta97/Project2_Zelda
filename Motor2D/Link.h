@@ -99,8 +99,8 @@ public:
 public:
 
 private:
-	int  camera = 1;
-	bool flip = false;
+	int		camera = 1;
+	bool	flip = false;
 
 };
 

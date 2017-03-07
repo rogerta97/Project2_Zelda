@@ -83,6 +83,7 @@ bool Link::Update(float dt)
 	}
 
 	LifeBar(iPoint(60, 5), iPoint(-25, -40));
+	ProgressBar(); 
 
 	return ret;
 }
@@ -499,6 +500,7 @@ void Link::SetCamera(int id)
 		camera = id;
 	}
 }
+
 
 iPoint Link::GetPos() const
 {
