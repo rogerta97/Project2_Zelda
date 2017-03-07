@@ -3,8 +3,8 @@
 <file>
    <animations texture ="textures/towersminions_sheet.png">
       <anim speed = "10" name = "run_down" loop = "true">
-	 <rect x = "352" y = "160" w = "64" h = "64"/>
-	 <rect x = "416" y = "160" w = "64" h = "64"/>
+	    <rect x = "352" y = "160" w = "64" h = "64"/>
+	    <rect x = "416" y = "160" w = "64" h = "64"/>
       </anim>
       <anim speed = "10" name = "run_up" loop = "true">
         <rect x = "480" y = "160" w = "64" h = "64"/>
@@ -15,7 +15,7 @@
         <rect x = "288" y = "160" w = "64" h = "64"/>
       </anim>
       <anim speed = "10" name = "idle_lateral" loop = "true">
-        <rect x = "244" y = "160" w = "64" h = "64"/>
+        <rect x = "224" y = "160" w = "64" h = "64"/>
       </anim>
       <anim speed = "10" name = "idle_up" loop = "true">
         <rect x = "480" y = "160" w = "64" h = "64"/>
@@ -26,19 +26,22 @@
      <anim speed = "10" name = "basic_attack_down" loop = "false">
        <rect x = "352" y = "64" w = "64" h = "74"/>
        <rect x = "416" y = "64" w = "64" h = "74"/>
+       <rect x = "416" y = "64" w = "64" h = "74"/>
      </anim>
      <anim speed = "10" name = "basic_attack_up" loop = "false">
        <rect x = "480" y = "64" w = "64" h = "64"/>
        <rect x = "544" y = "64" w = "64" h = "64"/>
+       <rect x = "544" y = "64" w = "64" h = "64"/>
      </anim>
      <anim speed = "10" name = "basic_attack_right" loop = "false">
-       <rect x = "244" y = "64" w = "64" h = "64"/>
+       <rect x = "224" y = "64" w = "64" h = "64"/>
+       <rect x = "288" y = "64" w = "64" h = "64"/>
        <rect x = "288" y = "64" w = "64" h = "64"/>
      </anim>
      <anim speed = "10" name = "basic_attack_left" loop = "false">
-       <rect x = "40" y = "395" w = "70" h = "45"/>
-       <rect x = "89" y = "395" w = "100" h = "45"/>
-       <rect x = "187" y = "395" w = "100" h = "45"/>
+       <rect x = "224" y = "64" w = "64" h = "64"/>
+       <rect x = "288" y = "64" w = "64" h = "64"/>
+       <rect x = "288" y = "64" w = "64" h = "64"/>
      </anim>
    </animations>
 </file>
