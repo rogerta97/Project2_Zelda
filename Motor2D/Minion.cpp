@@ -489,8 +489,8 @@ bool Minion::LookForTarget()
 		}
 	}
 
-	//Chack for towers
-	if (target == nullptr)
+	//Check for towers
+	/*if (ret == false)
 	{
 		std::list<Tower*> towers;
 		if (GetTeam() == 1)
@@ -507,10 +507,10 @@ bool Minion::LookForTarget()
 				break;
 			}
 		}
-	}
+	}*/
 
 	//Check for Players
-	if (target == nullptr)
+	if (ret == false)
 	{
 		std::vector<Entity*> players;
 		if (GetTeam() == 1)
@@ -629,6 +629,8 @@ void Minion::FaceTarget()
 	hitbox_diff.y /= 2;
 
 	delta -= hitbox_diff;
+
+	
 	
 }
 
