@@ -90,8 +90,20 @@ public:
 
 	void ChangeCVarMaxArgs(const char* name, int args);
 
+
+
+private:
 	// Loads logs and adds them to the console
 	void LoadLogs();
+
+	void FastCommands();
+	void Log(std::string text, SDL_Color color);
+
+	bool FindCommand(std::string command, Command*& com) const;
+	bool CheckCommandArguments(int num_args, Command* com) const;
+
+	bool FindCVar(std::string cvar, CVar*& var) const;
+	bool CheckCVarArguments(int num_args, CVar* var) const;
 
 public:
 	bool                 ready = false;
@@ -114,21 +126,9 @@ private:
 	UI_ColoredRect*      button_h_background = nullptr;
 	UI_ColoredRect*      button_v_background = nullptr;
 	
-
 	int currentLabel = -1;
 
-private:
-	void FastCommands();
-	void Log(std::string text, SDL_Color color);
-
-	bool FindCommand(std::string command, Command*& com) const;
-	bool CheckCommandArguments(int num_args, Command* com) const;
-
-	bool FindCVar(std::string cvar, CVar*& var) const;
-	bool CheckCVarArguments(int num_args, CVar* var) const;
-
 	bool stay_bottom = true;
-
 };
 
 
