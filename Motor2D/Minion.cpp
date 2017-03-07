@@ -93,7 +93,9 @@ bool Minion::Update(float dt)
 	{
 		if (entity->GetTeam() != GetTeam()) 
 		{
+			LOG("hit");
 			stats.life -= ability->damage;
+
 			if (stats.life <= 0)
 			{
 				App->scene->main_scene->minion_manager->KillMinion(this);

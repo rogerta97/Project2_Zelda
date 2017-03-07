@@ -513,7 +513,7 @@ bool PlayerManager::CleanUp()
 Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar)
 {
 	Player* ret = nullptr;
-	if (players.size() < 3)
+	if (players.size() <= 3)
 	{
 		Player* p = new Player(App->entity->CreateEntity(name, pos), index - 1);
 		p->entity->SetCamera(p->index + 1);
