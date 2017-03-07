@@ -40,8 +40,6 @@ public:
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	virtual void Set() {};
-
 	//Set Team if not set already
 	void SetTeam(uint _team)
 	{
