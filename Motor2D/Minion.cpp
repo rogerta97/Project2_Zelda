@@ -197,6 +197,7 @@ void Minion::RunLeft()
 	game_object->SetAnimation("run_lateral");
 	flip = true;
 	anim_state = run_left;
+	draw_offset.x = 8;
 }
 
 void Minion::RunRight()
@@ -204,6 +205,7 @@ void Minion::RunRight()
 	game_object->SetAnimation("run_lateral");
 	flip = false;
 	anim_state = run_right;
+	draw_offset.x = -8;
 }
 
 void Minion::IdleUp()
@@ -225,6 +227,7 @@ void Minion::IdleLeft()
 	game_object->SetAnimation("idle_lateral");
 	flip = true;
 	anim_state = idle_left;
+	draw_offset.x = 8;
 }
 
 void Minion::IdleRight()
@@ -232,6 +235,7 @@ void Minion::IdleRight()
 	game_object->SetAnimation("idle_lateral");
 	flip = false;
 	anim_state = idle_right;
+	draw_offset.x = -8;
 }
 
 void Minion::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -268,6 +272,7 @@ void Minion::MinionIdle()
 void Minion::MinionMove()
 {
 	CheckState();
+	draw_offset.SetToZero();
 
 	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 
@@ -428,6 +433,7 @@ void Minion::CheckState()
 					move_state = Move_AproachTarget;
 				}
 				game_object->animator->GetCurrentAnimation()->Reset();
+				draw_offset.SetToZero();
 				SetIdleAnim();
 			}
 		}
@@ -587,14 +593,14 @@ void Minion::BasicAttackUp()
 {
 	game_object->animator->SetAnimation("basic_attack_up");
 	anim_state = basic_atack_up;
-	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, -25), 6, 10, fixture_type::f_t_attack);
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, -25), 5, 10, fixture_type::f_t_attack);
 }
 
 void Minion::BasicAttackDown()
 {
 	game_object->animator->SetAnimation("basic_attack_down");
 	anim_state = basic_atack_down;
-	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-10, 25), 6, 10, fixture_type::f_t_attack);
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-10, 25), 5, 10, fixture_type::f_t_attack);
 	draw_offset.y = 10;
 }
 
@@ -602,14 +608,16 @@ void Minion::BasicAttackLeft()
 {
 	game_object->animator->SetAnimation("basic_attack_left");
 	anim_state = basic_atack_left;
-	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-23, 0), 15, 6, fixture_type::f_t_attack);
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-23, 11), 15, 5, fixture_type::f_t_attack);
+	draw_offset.x = 8;
 }
 
 void Minion::BasicAttackRight()
 {
 	game_object->animator->SetAnimation("basic_attack_right");
 	anim_state = basic_atack_right;
-	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(23, 0), 15, 6, fixture_type::f_t_attack);
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(23, 11), 15, 5, fixture_type::f_t_attack);
+	draw_offset.x = -8;
 }
 
 void Minion::FaceTarget()
