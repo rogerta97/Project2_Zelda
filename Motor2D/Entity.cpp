@@ -118,18 +118,16 @@ void Entity::ProgressBar()
 {
 
 	//Update the position of the princess
-	progress_limit = App->scene->main_scene->princess->GetPos();
+	//progress_limit = App->scene->main_scene->princess->GetPos();
 
-	for (int viewport = 1; viewport <= App->view->GetViews(); viewport++)
-	{
-
-
+	//for (int viewport = 1; viewport <= App->view->GetViews(); viewport++)
+	//{
 
 
 
-	}
 
 
+	//}
 
 }
 
