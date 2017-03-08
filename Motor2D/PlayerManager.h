@@ -34,7 +34,7 @@ public:
 	PlayerManager();
 
 	// Destructor
-	virtual ~PlayerManager();
+	~PlayerManager();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);

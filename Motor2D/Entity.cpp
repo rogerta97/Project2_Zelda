@@ -34,7 +34,7 @@ void Entity::AddAbility(int number, int damage, int cooldow, int duration, char*
 	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability);
 }
 
-Ability * Entity::GetAbility(int number)
+Ability* Entity::GetAbility(int number)
 {
 	Ability* ret = nullptr;
 

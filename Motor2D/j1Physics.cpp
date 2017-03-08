@@ -770,7 +770,7 @@ bool j1Physics::PostUpdate()
 					pos_x = (PIXELS_PER_METER * pos.x) + sin(-b->GetAngle() - ((angle_between - 90) * DEGTORAD)) * (dist) + App->render->camera.x;
 					pos_y = (PIXELS_PER_METER * pos.y) + cos(-b->GetAngle() - ((angle_between - 90) * DEGTORAD)) * (dist) + App->render->camera.y;
 					
-					App->view->LayerDrawCircle(pos_x, pos_y, METERS_TO_PIXELS(shape->m_radius*2), 255, 255, 255);
+					App->view->LayerDrawCircle(pos_x, pos_y, METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
 
 				}
 				break;

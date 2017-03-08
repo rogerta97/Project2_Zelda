@@ -78,9 +78,9 @@ struct PathNode
 	int CalculateF(const iPoint& destination);
 
 	// -----------
-	int g;
-	int h;
-	iPoint pos;
+	int g = 0;
+	int h = 0;
+	iPoint pos = NULLPOINT;
 	const PathNode* parent; // needed to reconstruct the path in the end
 };
 
