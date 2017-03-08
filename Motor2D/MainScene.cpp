@@ -39,9 +39,9 @@ bool MainScene::Start()
 	LOG("Start MainScene");
 
 	Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300, 700), 1);
-	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(300, 700), 2);
-	Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, 3, iPoint(300, 20), 2);
-	Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, 4, iPoint(300, 20), 1);
+	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(400, 700), 2);
+	Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, 3, iPoint(500, 700), 2);
+	Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, 4, iPoint(600, 700), 1);
 
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
@@ -85,7 +85,7 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("Test"), 3);
 	quest_manager->CreateQuest(string("Test"), 4);
 
-	//App->console->AddText("viewports.set 1", Input);
+	App->console->AddText("viewports.set 4", Input);
 
 	return ret;
 }
