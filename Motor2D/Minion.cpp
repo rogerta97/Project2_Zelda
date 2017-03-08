@@ -363,6 +363,13 @@ void Minion::MinionAttack()
 
 void Minion::CheckState()
 {
+	if (target != nullptr)
+	{
+		if (target->to_delete == true)
+		{
+			target = nullptr;
+		}
+	}
 	switch (state)
 	{
 	case Minion_Idle:
@@ -385,23 +392,33 @@ void Minion::CheckState()
 				PathToTarget();
 			break;
 		case Move_AproachTarget:
-			if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4)
-				state = Minion_Attack;
+			if (target == nullptr)
+			{
+				target_path_index = 0;
+				target = nullptr;
+				move_state = Move_ReturnToPath;
+				PathToBasePath();
+			}
 			else
 			{
-				if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < vision_range)
-				{
-					if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
-					{
-						PathToTarget();
-					}
-				}
+				if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4)
+					state = Minion_Attack;
 				else
 				{
-					target_path_index = 0;
-					target = nullptr;
-					move_state = Move_ReturnToPath;
-					PathToBasePath();
+					if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < vision_range)
+					{
+						if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
+						{
+							PathToTarget();
+						}
+					}
+					else
+					{
+						target_path_index = 0;
+						target = nullptr;
+						move_state = Move_ReturnToPath;
+						PathToBasePath();
+					}
 				}
 			}
 			break;
@@ -418,6 +435,14 @@ void Minion::CheckState()
 		break; 
 	}
 	case Minion_Attack:
+		if (target == nullptr)
+		{
+			target_path_index = 0;
+			target = nullptr;
+			move_state = Move_ReturnToPath;
+			PathToBasePath();
+			break;
+		}
 		if (game_object->animator->IsCurrentAnimation("basic_attack_up") || game_object->animator->IsCurrentAnimation("basic_attack_down")
 			|| game_object->animator->IsCurrentAnimation("basic_attack_left") || game_object->animator->IsCurrentAnimation("basic_attack_right"))
 		{
@@ -497,7 +522,7 @@ bool Minion::LookForTarget()
 		}
 	}
 
-	//Check for towers
+
 	/*if (ret == false)
 	{
 		std::list<Tower*> towers;

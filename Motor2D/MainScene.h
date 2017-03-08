@@ -37,6 +37,7 @@ public:
 public:
 	UI_Window*			main_window = nullptr;
 
+
 	MinionManager*		minion_manager = nullptr;
 
 	TowerManager*	    tower_manager = nullptr;
