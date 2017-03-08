@@ -115,11 +115,19 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 
 		// If not ability found, check it by Spell and ability names
 		else
+		{
 			entity->hit_ability = FindAbilityBySpellBody(bodyA);
 
-		// If ability found return true
-		if (entity->hit_ability != nullptr)
-			entity->hit = true;
+			// If ability found return true
+			if (entity->hit_ability != nullptr)
+				entity->hit = true;
+		}
+
+		if (!entity->hit_by)
+		{
+			entity->hit_by = nullptr;
+			entity->hit_ability = nullptr;
+		}
 	}
 }
 
@@ -244,8 +252,8 @@ void j1Entity::RemoveEntities()
 		{
 			(*it)->CleanUp();
 			(*it)->CleanEntity();
-			RELEASE(*it);
 			entity_list.remove(*it);
+			RELEASE(*it);
 		}
 	}
 }

@@ -236,9 +236,10 @@ public:
 	}
 
 	void LifeBar(iPoint size, iPoint offset = {0, 0});
+	void ProgressBar(); 
 
 private:
-
+	
 private:
 	uint		     team = 0;
 
@@ -256,6 +257,9 @@ public:
 	// Life bar
 	bool			 show_life_bar = false;
 	int				 blit_layer = 0;
+
+	//Progress bar
+	iPoint  progress_limit = iPoint(0, 0);
 
 	// Got Hit
 	bool		     hit = false;
