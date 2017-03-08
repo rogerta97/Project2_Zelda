@@ -44,7 +44,7 @@ struct layer_quad
 	Uint8    g = 0;
 	Uint8    b = 0;
 	Uint8    a = 0;
-	bool     filled;
+	bool     filled = false;
 	bool     use_camera = true;
 };
 

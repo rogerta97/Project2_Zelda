@@ -58,9 +58,6 @@ public:
 
 	void ClearSpells();
 
-	//Entity* FindEntityByBody(PhysBody* type);
-	//Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
-
 public:
 	list<Spell*> spell_list;
 

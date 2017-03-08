@@ -21,21 +21,21 @@ public:
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
 
-	fPoint pos;
+public:
+	fPoint			   pos = NULLPOINT;
 
-	UI_Window* menu_window = nullptr;
+	UI_Window*		   menu_window = nullptr;
 
 private:
+	UI_Image*		   triforce = nullptr;
 
-	UI_Image* triforce = nullptr;
+	UI_Button*		   start_button = nullptr;
+	UI_Button*		   options_button = nullptr; 
+	UI_Button*		   quit_button = nullptr; 
 
-	UI_Button* start_button = nullptr;
-	UI_Button* options_button = nullptr; 
-	UI_Button* quit_button = nullptr; 
-
-	UI_Text* start_text = nullptr; 
-	UI_Text* options_text = nullptr;
-	UI_Text* quit_text = nullptr;
+	UI_Text*		   start_text = nullptr; 
+	UI_Text*		   options_text = nullptr;
+	UI_Text*           quit_text = nullptr;
 
 	vector<UI_Button*> button_list;
 

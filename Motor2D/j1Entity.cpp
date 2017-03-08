@@ -95,32 +95,38 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
 
-	// Returns GotHit to the entity
+	// Returns GotHit to the entity --------
 	if (fixtureA->type == fixture_type::f_t_attack && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		// Find the entity that got hit
 		Entity* entity = FindEntityByBody(bodyB);
 
 		// Find the entity that hits
-		if(entity != nullptr)
+		if (entity != nullptr)
+		{
 			entity->hit_by = FindEntityByBody(bodyA);
 
-		// Find the ability that hits with
-		if(entity->hit_by != nullptr)
-			entity->hit_ability = FindAbilityByFixture(entity->hit_by, fixtureA);
+			// Find the ability that hits with
+			if (entity->hit_by != nullptr)
+			{
+				entity->hit_ability = FindAbilityByFixture(entity->hit_by, fixtureA);
 
-		// If ability found return true
-		if (entity->hit_ability != nullptr)
-			entity->hit = true;
+				// If ability found return true
+				if (entity->hit_ability != nullptr)
+				{
+					entity->hit = true;
+				}
 
-		// If not ability found, check it by Spell and ability names
-		else
-		{
-			entity->hit_ability = FindAbilityBySpellBody(bodyA);
+				// If not ability found, check it by Spell and ability names
+				else
+				{
+					entity->hit_ability = FindAbilityBySpellBody(bodyA);
 
-			// If ability found return true
-			if (entity->hit_ability != nullptr)
-				entity->hit = true;
+					// If ability found return true
+					if (entity->hit_ability != nullptr)
+						entity->hit = true;
+				}
+			}
 		}
 
 		if (!entity->hit_by)
@@ -129,6 +135,7 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 			entity->hit_ability = nullptr;
 		}
 	}
+	// ------------------------------------
 }
 
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
@@ -222,7 +229,7 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 {
 	Spell* sp = nullptr;
-	// Look on Spells
+
 	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 	{
 		if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)

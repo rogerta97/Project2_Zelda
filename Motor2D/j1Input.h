@@ -46,7 +46,8 @@ enum j1KeyState
 	j1KeyState_null
 };
 
-struct GamePad {
+struct GamePad 
+{
 	j1KeyState				gamecontroller_buttons[NUM_CONTROLLER_BUTTONS];
 	uint					joystick_moves[JOY_MOVES_NULL];
 	int						pad_num = -1;

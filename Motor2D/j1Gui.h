@@ -36,6 +36,11 @@ struct TTF_Font;
 class UI_Element;
 class UI_Window;
 class UI_Text;
+class UI_Button;
+class UI_Image;
+class UI_Scroll_Bar;
+class UI_ColoredRect;
+class UI_Text_Input;
 
 class j1Gui : public j1Module
 {
@@ -123,7 +128,6 @@ public:
 	~UI_Element();
 
 	virtual bool update();
-
 	virtual bool cleanup();
 
 	// Enable function
@@ -188,9 +192,34 @@ private:
 // ---------------------------
 // --------------------------- Element
 
+// -----------------------------------
+// Window ----------------------------
 
+class UI_Window : public UI_Element
+{
+public:
+	UI_Window();
+	~UI_Window();
 
+	bool update();
 
+	void Set(iPoint pos, int w, int h);
+
+	UI_Button* CreateButton(iPoint _pos, int w, int h, bool dinamic = false);
+	UI_Text* CreateText(iPoint pos, _TTF_Font* font, int spacing = 0, bool dinamic = false, uint r = 255, uint g = 255, uint b = 255);
+	UI_Image* CreateImage(iPoint pos, SDL_Rect image, bool dinamic = false);
+	UI_Text_Input* CreateTextInput(iPoint pos, int w, _TTF_Font* font, bool dinamic = false, uint r = 255, uint g = 255, uint b = 255);
+	UI_Scroll_Bar* CreateScrollBar(iPoint pos, int view_w, int view_h, int button_size = 11, bool dinamic = false);
+	UI_ColoredRect* CreateColoredRect(iPoint pos, int view_w, int view_h, SDL_Color color, bool filled = true, bool dinamic = false);
+
+public:
+
+private:
+
+};
+
+// ----------------------------
+// ---------------------------- Window
 
 // -----------------------------------
 // Button ----------------------------
@@ -467,35 +496,5 @@ private:
 
 // ----------------------
 // ---------------------- Colored Rect
-
-// -----------------------------------
-// Window ----------------------------
-
-
-class UI_Window : public UI_Element
-{
-public:
-	UI_Window();
-	~UI_Window();
-
-	bool update();
-
-	void Set(iPoint pos, int w, int h);
-
-	UI_Button* CreateButton(iPoint _pos, int w, int h, bool dinamic = false);
-	UI_Text* CreateText(iPoint pos, _TTF_Font* font, int spacing = 0, bool dinamic = false, uint r = 255, uint g = 255, uint b = 255);
-	UI_Image* CreateImage(iPoint pos, SDL_Rect image, bool dinamic = false);
-	UI_Text_Input* CreateTextInput(iPoint pos, int w, _TTF_Font* font, bool dinamic = false, uint r = 255, uint g = 255, uint b = 255);
-	UI_Scroll_Bar* CreateScrollBar(iPoint pos, int view_w, int view_h, int button_size = 11, bool dinamic = false);
-	UI_ColoredRect* CreateColoredRect(iPoint pos, int view_w, int view_h, SDL_Color color, bool filled = true, bool dinamic = false);
-
-public:
-
-private:
-
-};
-
-// ----------------------------
-// ---------------------------- Window
 
 #endif // !_j1GUI_H__
