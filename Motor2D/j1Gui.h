@@ -36,6 +36,11 @@ struct TTF_Font;
 class UI_Element;
 class UI_Window;
 class UI_Text;
+class UI_Button;
+class UI_Image;
+class UI_Scroll_Bar;
+class UI_ColoredRect;
+class UI_Text_Input;
 
 class j1Gui : public j1Module
 {

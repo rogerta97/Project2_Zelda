@@ -12,7 +12,6 @@ enum objective_type
 	o_t_null,
 };
 
-// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class QuestObjective 
 {
 public: 
@@ -29,7 +28,6 @@ private:
 	bool           done = false; 
 };
 
-// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class TravelObjective : public QuestObjective 
 {
 public: 
@@ -43,7 +41,6 @@ private:
 	iPoint destination;
 };
 
-// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class CountObjective : public QuestObjective 
 {
 	CountObjective();
@@ -56,7 +53,6 @@ private:
 };
 
 
-// That does not need to be a class !!!!!!!!!!!!!!!!!!!!!!!!!!!
 class Quest
 {
 public: 
@@ -82,7 +78,7 @@ public:
 	QuestManager();
 
 	// Destructor
-	virtual ~QuestManager();
+	~QuestManager();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -104,9 +100,8 @@ public:
 
 	void CreateQuest(string& task, int id);
 
+public:
 	int tasks_done = 0;
-
-private:
 
 private:
 	vector<Quest>     quest_list;

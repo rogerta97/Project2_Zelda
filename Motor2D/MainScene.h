@@ -34,29 +34,22 @@ public:
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
 
-	GameObject* go = nullptr;
-	Parallax* p1 = nullptr;
+public:
+	UI_Window*			main_window = nullptr;
 
-	fPoint pos;
+	MinionManager*		minion_manager = nullptr;
 
-	UI_Window* main_window = nullptr;
+	TowerManager*	    tower_manager = nullptr;
 
-	MinionManager* minion_manager = nullptr;
-
-	TowerManager* tower_manager = nullptr;
+	QuestManager*		quest_manager = nullptr;
 
 private:
-
 	//UI elements
 	UI_Image*			progress_bar = nullptr; 
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
+	UI_Text*			rupiees_numb = nullptr;
 	list<UI_Image*>		habilities; 
-	UI_Text*			rupiees_numb = nullptr; 
-
-	//Quest Manager
-	QuestManager* quest_manager = nullptr;
-
 };
 
 

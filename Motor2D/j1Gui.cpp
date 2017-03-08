@@ -1163,6 +1163,7 @@ void UI_Text::SetText(string _text)
 		tex_str_list.push_back(ts);
 	}
 }
+
 string UI_Text::GetText()
 {
 	string ret;
