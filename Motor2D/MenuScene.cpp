@@ -83,7 +83,7 @@ bool MenuScene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
 	{
-		App->scene->ChangeScene(App->scene->main_scene); 
+		App->scene->ChangeScene((Scene*)App->scene->team_select); 
 	}
 
 	for(int i = 0; i<button_list.size(); i++)
