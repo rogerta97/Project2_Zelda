@@ -29,15 +29,23 @@ public:
 private:
 	UI_Image*		   triforce = nullptr;
 
+	UI_Image*		   cursor_1 = nullptr; 
+	UI_Image*		   cursor_2 = nullptr;
+
+	UI_Button*		   current_button = nullptr; 
+
 	UI_Button*		   start_button = nullptr;
 	UI_Button*		   options_button = nullptr; 
+	UI_Button*		   credits_button = nullptr;
 	UI_Button*		   quit_button = nullptr; 
 
 	UI_Text*		   start_text = nullptr; 
 	UI_Text*		   options_text = nullptr;
+	UI_Text*		   credits_text = nullptr; 
 	UI_Text*           quit_text = nullptr;
 
 	vector<UI_Button*> button_list;
+	vector<UI_Image*>  cursors;
 
 };
 

@@ -114,20 +114,5 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 	}
 }
 
-void Entity::ProgressBar()
-{
 
-	//Update the position of the princess
-	//progress_limit = App->scene->main_scene->princess->GetPos();
-
-	//for (int viewport = 1; viewport <= App->view->GetViews(); viewport++)
-	//{
-
-
-
-
-
-	//}
-
-}
 
