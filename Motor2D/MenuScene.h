@@ -6,6 +6,14 @@
 #include "j1Gui.h"
 #include "j1Render.h"
 
+enum button_action 
+{
+	START,
+	OPTIONS,
+	CREDITS,
+	QUIT
+};
+
 class MenuScene : public Scene
 {
 public:
@@ -32,7 +40,7 @@ private:
 	UI_Image*		   cursor_1 = nullptr; 
 	UI_Image*		   cursor_2 = nullptr;
 
-	UI_Button*		   current_button = nullptr; 
+	button_action	   current_button = START; 
 
 	UI_Button*		   start_button = nullptr;
 	UI_Button*		   options_button = nullptr; 

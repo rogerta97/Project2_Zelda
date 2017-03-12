@@ -6,12 +6,7 @@
 #include "j1Scene.h"
 #include "p2Log.h"
 
-enum button_action {
-	START,
-	OPTIONS,
-	CREDITS,
-	QUIT
-};
+
 
 MenuScene::MenuScene()
 {
@@ -95,21 +90,20 @@ bool MenuScene::Start()
 	quit_text->click_through = true;
 
 	// ---------
-	current_button = start_button; 
 
 	// Cursor --
-	cursor_1 = menu_window->CreateImage(iPoint(current_button->GetPos().x - 70, current_button->GetPos().y + 2), { 36, 57, 57, 52 }, false);
-	cursor_2 = menu_window->CreateImage(iPoint(current_button->GetPos().x + current_button->rect.w + 5, current_button->GetPos().y + 2), { 36, 57, 57, 52 }, false);
+	cursor_1 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2), { 36, 57, 57, 52 }, false);
+	cursor_2 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x + button_list.at(current_button)->rect.w + 5, button_list.at(current_button)->GetPos().y + 2), { 36, 57, 57, 52 }, false);
 
 	cursors.push_back(cursor_1); 
 	cursors.push_back(cursor_2);
 
-	return false;
+	return true;
 }
 
 bool MenuScene::PreUpdate()
 {
-	return false;
+	return true;
 }
 
 bool MenuScene::Update(float dt)
@@ -120,57 +114,56 @@ bool MenuScene::Update(float dt)
 		App->scene->ChangeScene(App->scene->main_scene); 
 	}
 
-	// Getting current position of the mouse
-	int cursor_pos = -1; 
-	for (vector<UI_Button*>::iterator it = button_list.begin(); it != button_list.end(); it++) 
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN && current_button < 3) 
 	{
-		cursor_pos++;
-		if ((*it) == current_button)
-			break; 
+		int current_button_int = current_button;
+		current_button_int++; 
+		
+		current_button = static_cast<button_action> (current_button_int);
+	
 	}
 
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN && cursor_pos < 3) 
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && current_button > 0)
 	{
-		current_button = button_list.at(++cursor_pos); 
+		int current_button_int = current_button;
+		current_button_int--;
+
+		current_button = static_cast<button_action> (current_button_int);
 	}
 
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && cursor_pos > 0) 
-	{
-		current_button = button_list.at(--cursor_pos);
-	}
+	cursors.at(0)->SetPos(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2));
+	cursors.at(1)->SetPos(iPoint(button_list.at(current_button)->GetPos().x + button_list.at(current_button)->rect.w + 5, button_list.at(current_button)->GetPos().y + 2));
 
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) 
+	return true;
+}
+
+bool MenuScene::PostUpdate()
+{
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 	{
 
-		switch (cursor_pos)
+		switch (current_button)
 		{
 		case START:
 			App->scene->ChangeScene(App->scene->main_scene);
 			break;
 
 		case OPTIONS:
-			
+
 			break;
 
 		case CREDITS:
-			
+
 			break;
 
 		case QUIT:
-			App->console->AddText("quit", Input); 
-			break; 
+			App->console->AddText("quit", Input);
+			break;
 		}
 	}
 
-	cursors.at(0)->SetPos(iPoint(current_button->GetPos().x - 70, current_button->GetPos().y + 2));
-	cursors.at(1)->SetPos(iPoint(current_button->GetPos().x + current_button->rect.w + 5, current_button->GetPos().y + 2));
-
-	return false;
-}
-
-bool MenuScene::PostUpdate()
-{
-	return false;
+	return true;
 }
 
 bool MenuScene::CleanUp()
@@ -182,7 +175,7 @@ bool MenuScene::CleanUp()
 
 	button_list.clear();
 	
-	return false;
+	return true;
 }
 
 void MenuScene::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
