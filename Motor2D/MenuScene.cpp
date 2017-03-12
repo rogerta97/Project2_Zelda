@@ -149,15 +149,15 @@ bool MenuScene::Update(float dt)
 			break;
 
 		case OPTIONS:
-			App->scene->ChangeScene(App->scene->main_scene);
+			
 			break;
 
 		case CREDITS:
-			App->scene->ChangeScene(App->scene->main_scene);
+			
 			break;
 
 		case QUIT:
-			App->console->AddText("quit"); 
+			App->console->AddText("quit", Input); 
 			break; 
 		}
 	}
