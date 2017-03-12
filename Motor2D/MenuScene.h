@@ -11,7 +11,10 @@ enum button_action
 	START,
 	OPTIONS,
 	CREDITS,
-	QUIT
+	QUIT,
+	FX,
+	MUSIC
+
 };
 
 class MenuScene : public Scene
@@ -28,6 +31,9 @@ public:
 
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
+
+	void GoOptions();
+	void GoMenu(); 
 
 public:
 	fPoint			   pos = NULLPOINT;
@@ -47,13 +53,21 @@ private:
 	UI_Button*		   credits_button = nullptr;
 	UI_Button*		   quit_button = nullptr; 
 
+	UI_Button*		   fx_button = nullptr;
+	UI_Button*		   music_button = nullptr;
+
 	UI_Text*		   start_text = nullptr; 
 	UI_Text*		   options_text = nullptr;
 	UI_Text*		   credits_text = nullptr; 
 	UI_Text*           quit_text = nullptr;
 
+	UI_Text*		   fx_text = nullptr;
+	UI_Text*		   music_text = nullptr;
+
 	vector<UI_Button*> button_list;
 	vector<UI_Image*>  cursors;
+
+	bool			   is_options = false; 
 
 };
 
