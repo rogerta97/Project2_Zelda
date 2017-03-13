@@ -61,15 +61,28 @@ private:
 	UI_Text*				team_num_view3 = nullptr;
 	UI_Text*				team_num_view4 = nullptr;
 
+	UI_Text*				ready_text1 = nullptr;
+	UI_Text*				ready_text2 = nullptr;
+	UI_Text*				ready_text3 = nullptr;
+	UI_Text*				ready_text4 = nullptr;
+
+	UI_Text*				set_ready_text1 = nullptr;
+	UI_Text*				set_ready_text2 = nullptr;
+	UI_Text*				set_ready_text3 = nullptr;
+	UI_Text*				set_ready_text4 = nullptr;
+
 	std::vector<UI_Image*>	pads;
 	std::vector<UI_Image*>	middle_pads;
 	std::vector<UI_Text*>	team_nums;
+	std::vector<UI_Text*>	ready_texts;
+	std::vector<UI_Text*>	set_ready_texts;
 
 	uint					team1_members = 0;
 	uint					team2_members = 0;
 
 	bool					positioned[4] = { false,false,false,false };
 	bool					fixed[4] = { false,false,false,false };
+	bool					ready[4] = { false,false,false,false };
 
 };
 
