@@ -44,8 +44,6 @@ public:
 
 	QuestManager*		quest_manager = nullptr;
 
-	UI_Image*			princess = nullptr;
-
 private:
 	//UI elements
 	UI_Image*			progress_bar = nullptr; 
