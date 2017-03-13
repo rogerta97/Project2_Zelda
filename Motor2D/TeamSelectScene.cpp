@@ -292,7 +292,10 @@ bool TeamSelectScene::PostUpdate()
 
 bool TeamSelectScene::CleanUp()
 {
-	App->gui->DeleteElement(window);
+	// Free UI
+	if (App->scene->GetCurrentScene() != App->scene->team_select)
+		App->gui->DeleteElement(window);
+	// -------
 
 	return true;
 }
