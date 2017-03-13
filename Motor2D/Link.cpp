@@ -78,7 +78,7 @@ bool Link::Update(float dt)
 	if (GotHit(entity, ability, spell))
 	{
 		// Enemy attacks
-		if (entity->GetTeam() != GetTeam())
+		if (entity != nullptr && entity->GetTeam() != GetTeam())
 		{
 			stats.life -= ability->damage;
 			if (stats.life < 0)
