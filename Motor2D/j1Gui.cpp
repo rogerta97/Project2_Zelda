@@ -620,7 +620,7 @@ void UI_Element::AddChild(UI_Element * _child)
 }
 
 // ---------------------------------------------------------------------
-// Adds both childs one to the other to avoid the overlaping check.
+// Adds both childs one to the other to avoid the overlaping check. (Deprecated?)
 // ---------------------------------------------------------------------
 void UI_Element::AddChildBoth(UI_Element * _child)
 {
@@ -883,6 +883,34 @@ UI_ColoredRect * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Colo
 	return ret;
 }
 
+UI_Check_Box * UI_Window::CreateCheckBox(iPoint pos, int w, int h, SDL_Rect pressed, SDL_Rect idle, bool multiple_choices, bool _dinamic)
+{
+	UI_Check_Box* ret = nullptr;
+	ret = new UI_Check_Box();
+
+	if (ret != nullptr)
+	{
+		ret->type = ui_check_box;
+		ret->Set(pos, w, h, pressed, idle, multiple_choices);
+		ret->parent = this;
+		ret->parent_element = this;
+		ret->dinamic = _dinamic;
+		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
+
+		// Layers --
+
+		ret->layer = childs.size() + layer + 1;
+
+		// ---------
+
+		App->gui->elements_list.Push(ret, ret->layer);
+		childs.push_back((UI_Element*)ret);
+	}
+
+	return ret;
+}
+
 // -----------------------------------
 // ---------------------------- Window
 
@@ -919,13 +947,13 @@ bool UI_Button::update()
 	{
 		if (!is_gameplay)
 			App->render->Blit(App->gui->atlas, rect.x, rect.y, &curr);
-		else
-		{
-			if (is_ui)
-				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
-			else
-				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr);
-		}
+		//else
+		//{
+		//	if (is_ui)
+		//		App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
+		//	else
+		//		App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr);
+		//}
 	}
 
 	ChangeButtonStats();
@@ -1213,7 +1241,7 @@ bool UI_Text::update()
 				else
 				{
 					if(is_ui)
-						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0,0,0,0 }, viewport, -1.0f, false);
+						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0, 0, rect.w, rect.h }, viewport, -1.0f, false);
 					else
 						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space));
 				}
@@ -1640,6 +1668,12 @@ bool UI_Text_Input::MouseClick()
 	return false;
 }
 
+// -----------------------------------
+// ------------------------ Text Input
+
+// -----------------------------------
+// Scroll Bar ------------------------
+
 UI_Scroll_Bar::UI_Scroll_Bar()
 {
 }
@@ -1983,6 +2017,12 @@ void UI_Scroll_Bar::MoveBarH()
 	}
 }
 
+// -----------------------------------
+// ------------------------ Scroll Bar
+
+// -----------------------------------
+// Colored Rect ----------------------
+
 UI_ColoredRect::UI_ColoredRect()
 {
 }
@@ -2014,3 +2054,179 @@ void UI_ColoredRect::SetColor(SDL_Color _color)
 {
 	color = _color;
 }
+
+// -----------------------------------
+// ---------------------- Colored Rect
+
+// -----------------------------------
+// Check Box -------------------------
+
+UI_Check_Box::UI_Check_Box()
+{
+}
+
+UI_Check_Box::~UI_Check_Box()
+{
+}
+
+void UI_Check_Box::Set(iPoint pos, int w, int h, SDL_Rect _pressed, SDL_Rect _idle, bool _multiple_choice)
+{
+	rect = { pos.x , pos.y, w, h };
+	pressed = { _pressed }; idle = { _idle };
+	multiple_choice = _multiple_choice;
+}
+
+bool UI_Check_Box::update()
+{
+	if (!enabled)
+		return false;
+
+	// Debug
+	if (App->gui->debug)
+	{
+		App->render->DrawQuad(rect, 255, 255, 255, -1.0f, 255, false);
+
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i)->checked)
+			{
+				App->render->DrawQuad({ check_box_list.at(i)->button->rect}, 255, 255, 255, -1.0f, 255, true);
+			}
+		}
+	}
+
+	// Print
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		SDL_Rect button = NULLRECT;
+
+		if (check_box_list.at(i)->checked)
+			button = pressed;
+		else
+			button = idle;
+		
+		if (!is_gameplay)
+			App->render->Blit(App->gui->atlas, check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y, &button);
+		
+		else
+		{
+			if (is_ui)
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button, viewport, -1.0f, false);
+			else
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button);
+		}
+	}
+
+	CheckControl();
+
+	return true;
+}
+
+bool UI_Check_Box::cleanup()
+{
+	for (int i = 0; i < check_box_list.size(); i++)
+		RELEASE(check_box_list.at(i));
+
+	return true;
+}
+
+void UI_Check_Box::AddBox(iPoint pos, int size_w, int size_h, char * name)
+{
+	check_box* cb = new check_box(pos, size_w, size_h);
+	cb->button->layer = layer + 1;
+	cb->button->blit_layer = blit_layer;
+	App->gui->elements_list.Push((UI_Element*)cb->button, cb->button->layer);
+	childs.push_back(cb->button);
+	check_box_list.push_back(cb);
+}
+
+bool UI_Check_Box::GetBox(char * name)
+{
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		if (TextCmp(check_box_list.at(i)->name, name))
+		{
+			return check_box_list.at(i)->checked;
+			break;
+		}
+	}
+
+	return false;
+}
+
+void UI_Check_Box::SetBox(bool set, char * name)
+{
+	check_box* curr = nullptr;
+	bool change = false;
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		if (TextCmp(check_box_list.at(i)->name, name))
+		{
+			check_box_list.at(i)->checked = set;
+			change = true;
+			break;
+		}
+	}
+
+	if (!multiple_choice && change && curr->checked)
+	{
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i) != curr)
+				check_box_list.at(i)->checked = false;
+		}
+	}
+}
+
+void UI_Check_Box::SetBox(bool set, int _i)
+{
+	check_box* curr = nullptr;
+	bool change = false;
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		if (i == _i)
+		{
+			check_box_list.at(i)->checked = set;
+			change = true;
+			break;
+		}
+	}
+
+	if (!multiple_choice && change && curr->checked)
+	{
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i) != curr)
+				check_box_list.at(i)->checked = false;
+		}
+	}
+}
+
+void UI_Check_Box::CheckControl()
+{
+	check_box* curr = nullptr;
+	bool change = false;
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		curr = check_box_list.at(i);
+		if (curr->button->MouseClickEnterLeft())
+		{
+			curr->checked = !curr->checked;
+			change = true;
+			break;
+		}
+	}
+
+	if (!multiple_choice && change && curr->checked)
+	{
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i) != curr)
+				check_box_list.at(i)->checked = false;
+		}
+	}
+
+}
+
+
+
