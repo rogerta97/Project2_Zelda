@@ -13,11 +13,11 @@ class TeamSelectScene;
 
 struct player_info
 {
-	uint			player = 5;
 	uint			gamepad = 5;
 	uint			viewport = 5;
+	uint			team = 3;
+	uint			player = 5;
 	entity_name		character = e_n_null;
-
 };
 
 class j1Scene : public j1Module
