@@ -2154,6 +2154,54 @@ bool UI_Check_Box::GetBox(char * name)
 	return false;
 }
 
+void UI_Check_Box::SetBox(bool set, char * name)
+{
+	check_box* curr = nullptr;
+	bool change = false;
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		if (TextCmp(check_box_list.at(i)->name, name))
+		{
+			check_box_list.at(i)->checked = set;
+			change = true;
+			break;
+		}
+	}
+
+	if (!multiple_choice && change && curr->checked)
+	{
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i) != curr)
+				check_box_list.at(i)->checked = false;
+		}
+	}
+}
+
+void UI_Check_Box::SetBox(bool set, int _i)
+{
+	check_box* curr = nullptr;
+	bool change = false;
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		if (i == _i)
+		{
+			check_box_list.at(i)->checked = set;
+			change = true;
+			break;
+		}
+	}
+
+	if (!multiple_choice && change && curr->checked)
+	{
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i) != curr)
+				check_box_list.at(i)->checked = false;
+		}
+	}
+}
+
 void UI_Check_Box::CheckControl()
 {
 	check_box* curr = nullptr;
@@ -2179,5 +2227,6 @@ void UI_Check_Box::CheckControl()
 	}
 
 }
+
 
 

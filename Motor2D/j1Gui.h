@@ -532,17 +532,19 @@ public:
 
 	void AddBox(iPoint pos, int size_w, int size_h, char* name);
 	bool GetBox(char* name);
+	void SetBox(bool set, char* name);
+	void SetBox(bool set, int i);
 
 private:
 	void CheckControl();
 
 private:
 	vector<check_box*> check_box_list;
-	int				  size_w = 0;
-	int				  size_h = 0;
-	bool		      multiple_choice = false;
-	SDL_Rect		  pressed = NULLRECT;
-	SDL_Rect		  idle = NULLRECT;
+	int				   size_w = 0;
+	int				   size_h = 0;
+	bool		       multiple_choice = false;
+	SDL_Rect		   pressed = NULLRECT;
+	SDL_Rect		   idle = NULLRECT;
 
 };
 
