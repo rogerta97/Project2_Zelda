@@ -11,6 +11,7 @@ class b2Fixture;
 class PhysBody;
 class Entity;
 class Ability;
+class Spell;
 
 enum class pbody_type;
 
@@ -51,12 +52,12 @@ public:
 
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
-
 	void ClearEntities();
 
 	Entity* FindEntityByBody(PhysBody* type);
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 	Ability* FindAbilityBySpellBody(PhysBody* spell);
+	Spell* FindSpellByBody(PhysBody* spell);
 
 public:
 	PlayerManager* player_manager = nullptr;
