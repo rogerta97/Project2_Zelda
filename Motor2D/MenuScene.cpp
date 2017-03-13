@@ -128,6 +128,9 @@ bool MenuScene::Start()
 	cursors.push_back(cursor_1); 
 	cursors.push_back(cursor_2);
 
+	UI_Check_Box* cb = menu_window->CreateCheckBox(iPoint(300, 300), 100, 100);
+	cb->AddBox(iPoint(320, 320), 20, 20, "uo");
+
 	return true;
 }
 

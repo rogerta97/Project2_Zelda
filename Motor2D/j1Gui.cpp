@@ -883,6 +883,34 @@ UI_ColoredRect * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Colo
 	return ret;
 }
 
+UI_Check_Box * UI_Window::CreateCheckBox(iPoint pos, int w, int h, SDL_Rect pressed, SDL_Rect idle, bool multiple_choices, bool _dinamic)
+{
+	UI_Check_Box* ret = nullptr;
+	ret = new UI_Check_Box();
+
+	if (ret != nullptr)
+	{
+		ret->type = ui_check_box;
+		ret->Set(pos, w, h, pressed, idle, multiple_choices);
+		ret->parent = this;
+		ret->parent_element = this;
+		ret->dinamic = _dinamic;
+		ret->started_dinamic = _dinamic;
+		ret->is_gameplay = is_gameplay;
+
+		// Layers --
+
+		ret->layer = childs.size() + layer + 1;
+
+		// ---------
+
+		App->gui->elements_list.Push(ret, ret->layer);
+		childs.push_back((UI_Element*)ret);
+	}
+
+	return ret;
+}
+
 // -----------------------------------
 // ---------------------------- Window
 
@@ -1640,6 +1668,12 @@ bool UI_Text_Input::MouseClick()
 	return false;
 }
 
+// -----------------------------------
+// ------------------------ Text Input
+
+// -----------------------------------
+// Scroll Bar ------------------------
+
 UI_Scroll_Bar::UI_Scroll_Bar()
 {
 }
@@ -1983,6 +2017,12 @@ void UI_Scroll_Bar::MoveBarH()
 	}
 }
 
+// -----------------------------------
+// ------------------------ Scroll Bar
+
+// -----------------------------------
+// Colored Rect ----------------------
+
 UI_ColoredRect::UI_ColoredRect()
 {
 }
@@ -2014,3 +2054,70 @@ void UI_ColoredRect::SetColor(SDL_Color _color)
 {
 	color = _color;
 }
+
+// -----------------------------------
+// ---------------------- Colored Rect
+
+// -----------------------------------
+// Check Box -------------------------
+
+UI_Check_Box::UI_Check_Box()
+{
+}
+
+UI_Check_Box::~UI_Check_Box()
+{
+}
+
+void UI_Check_Box::Set(iPoint pos, int w, int h, SDL_Rect _pressed, SDL_Rect _idle, bool _multiple_choice)
+{
+	rect = { pos.x , pos.y, w, h };
+	pressed = { _pressed }; idle = { _idle };
+	multiple_choice = _multiple_choice;
+}
+
+bool UI_Check_Box::update()
+{
+	bool ret = true;
+
+	if (App->gui->debug)
+	{
+		App->render->DrawQuad(rect, 255, 255, 255, -1.0f, 255, false);
+
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i).checked)
+			{
+				App->render->DrawQuad(check_box_list.at(i).rect, 255, 255, 255, -1.0f, 255, true);
+			}
+		}
+	}
+
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		check_box curr = check_box_list.at(i);
+		if (curr.button->MouseClickEnterLeft())
+		{
+			curr.checked = !curr.checked;
+		}
+	}
+
+	return ret;
+}
+
+void UI_Check_Box::AddBox(iPoint pos, int size_w, int size_h, char * name)
+{
+	check_box cb(pos, size_w, size_h);
+	cb.button->layer = layer + 1;
+	cb.button->blit_layer = blit_layer;
+	App->gui->elements_list.Push((UI_Element*)cb.button, cb.button->layer);
+	childs.push_back(cb.button);
+	check_box_list.push_back(cb);
+}
+
+bool UI_Check_Box::GetBox(char * name)
+{
+	return false;
+}
+
+
