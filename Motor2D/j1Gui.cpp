@@ -620,7 +620,7 @@ void UI_Element::AddChild(UI_Element * _child)
 }
 
 // ---------------------------------------------------------------------
-// Adds both childs one to the other to avoid the overlaping check.
+// Adds both childs one to the other to avoid the overlaping check. (Deprecated?)
 // ---------------------------------------------------------------------
 void UI_Element::AddChildBoth(UI_Element * _child)
 {
@@ -947,13 +947,13 @@ bool UI_Button::update()
 	{
 		if (!is_gameplay)
 			App->render->Blit(App->gui->atlas, rect.x, rect.y, &curr);
-		else
-		{
-			if (is_ui)
-				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
-			else
-				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr);
-		}
+		//else
+		//{
+		//	if (is_ui)
+		//		App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
+		//	else
+		//		App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(rect.x, rect.y), curr);
+		//}
 	}
 
 	ChangeButtonStats();
@@ -1241,7 +1241,7 @@ bool UI_Text::update()
 				else
 				{
 					if(is_ui)
-						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0,0,0,0 }, viewport, -1.0f, false);
+						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0, 0, rect.w, rect.h }, viewport, -1.0f, false);
 					else
 						App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space));
 				}
@@ -2081,6 +2081,7 @@ bool UI_Check_Box::update()
 	if (!enabled)
 		return false;
 
+	// Debug
 	if (App->gui->debug)
 	{
 		App->render->DrawQuad(rect, 255, 255, 255, -1.0f, 255, false);
@@ -2094,15 +2095,29 @@ bool UI_Check_Box::update()
 		}
 	}
 
-	CheckControl();
-
+	// Print
 	for (int i = 0; i < check_box_list.size(); i++)
 	{
+		SDL_Rect button = NULLRECT;
+
 		if (check_box_list.at(i)->checked)
-			App->render->Blit(App->gui->atlas, check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y, &pressed);
+			button = pressed;
 		else
-			App->render->Blit(App->gui->atlas, check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y, &idle);
+			button = idle;
+		
+		if (!is_gameplay)
+			App->render->Blit(App->gui->atlas, check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y, &button);
+		
+		else
+		{
+			if (is_ui)
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button, viewport, -1.0f, false);
+			else
+				App->view->LayerBlit(LAYER, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button);
+		}
 	}
+
+	CheckControl();
 
 	return true;
 }
