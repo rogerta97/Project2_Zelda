@@ -2078,7 +2078,8 @@ void UI_Check_Box::Set(iPoint pos, int w, int h, SDL_Rect _pressed, SDL_Rect _id
 
 bool UI_Check_Box::update()
 {
-	bool ret = true;
+	if (!enabled)
+		return false;
 
 	if (App->gui->debug)
 	{
@@ -2086,38 +2087,82 @@ bool UI_Check_Box::update()
 
 		for (int i = 0; i < check_box_list.size(); i++)
 		{
-			if (check_box_list.at(i).checked)
+			if (check_box_list.at(i)->checked)
 			{
-				App->render->DrawQuad(check_box_list.at(i).rect, 255, 255, 255, -1.0f, 255, true);
+				App->render->DrawQuad({ check_box_list.at(i)->button->rect}, 255, 255, 255, -1.0f, 255, true);
 			}
 		}
 	}
 
+	CheckControl();
+
 	for (int i = 0; i < check_box_list.size(); i++)
 	{
-		check_box curr = check_box_list.at(i);
-		if (curr.button->MouseClickEnterLeft())
-		{
-			curr.checked = !curr.checked;
-		}
+		if (check_box_list.at(i)->checked)
+			App->render->Blit(App->gui->atlas, check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y, &pressed);
+		else
+			App->render->Blit(App->gui->atlas, check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y, &idle);
 	}
 
-	return ret;
+	return true;
+}
+
+bool UI_Check_Box::cleanup()
+{
+	for (int i = 0; i < check_box_list.size(); i++)
+		RELEASE(check_box_list.at(i));
+
+	return true;
 }
 
 void UI_Check_Box::AddBox(iPoint pos, int size_w, int size_h, char * name)
 {
-	check_box cb(pos, size_w, size_h);
-	cb.button->layer = layer + 1;
-	cb.button->blit_layer = blit_layer;
-	App->gui->elements_list.Push((UI_Element*)cb.button, cb.button->layer);
-	childs.push_back(cb.button);
+	check_box* cb = new check_box(pos, size_w, size_h);
+	cb->button->layer = layer + 1;
+	cb->button->blit_layer = blit_layer;
+	App->gui->elements_list.Push((UI_Element*)cb->button, cb->button->layer);
+	childs.push_back(cb->button);
 	check_box_list.push_back(cb);
 }
 
 bool UI_Check_Box::GetBox(char * name)
 {
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		if (TextCmp(check_box_list.at(i)->name, name))
+		{
+			return check_box_list.at(i)->checked;
+			break;
+		}
+	}
+
 	return false;
+}
+
+void UI_Check_Box::CheckControl()
+{
+	check_box* curr = nullptr;
+	bool change = false;
+	for (int i = 0; i < check_box_list.size(); i++)
+	{
+		curr = check_box_list.at(i);
+		if (curr->button->MouseClickEnterLeft())
+		{
+			curr->checked = !curr->checked;
+			change = true;
+			break;
+		}
+	}
+
+	if (!multiple_choice && change && curr->checked)
+	{
+		for (int i = 0; i < check_box_list.size(); i++)
+		{
+			if (check_box_list.at(i) != curr)
+				check_box_list.at(i)->checked = false;
+		}
+	}
+
 }
 
 

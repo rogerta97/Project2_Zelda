@@ -508,14 +508,13 @@ struct check_box
 	check_box() {};
 	check_box(iPoint pos, int size_w, int size_h) 
 	{
-		rect = { pos.x, pos.y, size_w, size_h };
 		button = new UI_Button();
 		button->Set(pos, size_w, size_h);
+		checked = false;
 	};
 	~check_box() {};
 
 	bool        checked = false;
-	SDL_Rect    rect = NULLRECT;
 	UI_Button*  button = nullptr;
 	char*       name;
 };
@@ -529,18 +528,21 @@ public:
 	void Set(iPoint pos, int w, int h, SDL_Rect pressed, SDL_Rect idle, bool multiple_choice = false);
 
 	bool update();
+	bool cleanup();
 
 	void AddBox(iPoint pos, int size_w, int size_h, char* name);
 	bool GetBox(char* name);
 
 private:
-	vector<check_box> check_box_list;
+	void CheckControl();
+
+private:
+	vector<check_box*> check_box_list;
 	int				  size_w = 0;
 	int				  size_h = 0;
 	bool		      multiple_choice = false;
 	SDL_Rect		  pressed = NULLRECT;
 	SDL_Rect		  idle = NULLRECT;
-
 
 };
 
