@@ -157,8 +157,7 @@ bool MenuScene::Update(float dt)
 				current_button_int++;
 
 				current_button = static_cast<button_action> (current_button_int);
-			}
-			
+			}	
 		}
 	}
 
@@ -207,7 +206,7 @@ bool MenuScene::PostUpdate()
 		switch (current_button)
 		{
 		case START:
-			App->scene->ChangeScene(App->scene->main_scene);
+			App->scene->ChangeScene((Scene*)App->scene->team_select);
 			break;
 
 		case OPTIONS:
