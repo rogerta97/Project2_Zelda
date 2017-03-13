@@ -120,6 +120,7 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 				// If not ability found, check it by Spell and ability names
 				else
 				{
+					entity->hit_spell = FindSpellByBody(bodyA);
 					entity->hit_ability = FindAbilityBySpellBody(bodyA);
 
 					// If ability found return true
@@ -133,6 +134,7 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 		{
 			entity->hit_by = nullptr;
 			entity->hit_ability = nullptr;
+			entity->hit_spell = nullptr;
 		}
 	}
 	// ------------------------------------
@@ -168,19 +170,11 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	return ret;
 }
 
-void j1Entity::DeleteEntity(Entity* entity)
-{
-	entity->to_delete = true;
-}
-
 void j1Entity::ClearEntities()
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-	{
-		(*it)->CleanUp();
-		(*it)->CleanEntity();
-		RELEASE(*it);
-	}
+		(*it)->to_delete = true;
+	
 	entity_list.clear();
 }
 
@@ -230,14 +224,7 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 {
 	Spell* sp = nullptr;
 
-	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
-	{
-		if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
-		{
-			sp = (*it);
-			break;
-		}
-	}
+	sp = FindSpellByBody(spell);
 
 	if (sp != nullptr)
 	{
@@ -249,6 +236,27 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 			}
 		}
 	}
+}
+
+Spell * j1Entity::FindSpellByBody(PhysBody * spell)
+{
+	Spell* ret = nullptr;
+
+	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	{
+		if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+		{
+			ret = (*it);
+			break;
+		}
+	}
+
+	return ret;
+}
+
+void j1Entity::DeleteEntity(Entity* entity)
+{
+	entity->to_delete = true;
 }
 
 void j1Entity::RemoveEntities()

@@ -114,7 +114,7 @@ public:
 	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, int viewport = 0, float scale = -1.0f, bool use_camera = true, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
 	void LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, int layer = 0, int viewport = 0, bool use_camera = true);
 	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
-	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
+	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, int layer = 0, int viewport = 0, bool use_camera = true);
 	void SetViews(uint number);
 	uint GetViews();
 	SDL_Rect GetViewportRect(uint viewport);
@@ -143,7 +143,6 @@ public:
 private:
 	// Layer Blit list
 	vector<layer_line>   line_list;
-	vector<layer_circle> circle_list;
 
 	p2PQueue<layer_blit> layer_list1;
 	p2PQueue<layer_blit> layer_list2;
@@ -154,6 +153,11 @@ private:
 	p2PQueue<layer_quad> quad_list2;
 	p2PQueue<layer_quad> quad_list3;
 	p2PQueue<layer_quad> quad_list4;
+
+	p2PQueue<layer_circle> circle_list1;
+	p2PQueue<layer_circle> circle_list2;
+	p2PQueue<layer_circle> circle_list3;
+	p2PQueue<layer_circle> circle_list4;
 
 	// Win Size
 	uint                 win_w = 0, win_h = 0;

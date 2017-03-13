@@ -10,6 +10,7 @@
 class b2Fixture;
 class PhysBody;
 class GameObject;
+class Spell;
 
 enum states
 {
@@ -198,8 +199,9 @@ public:
 	virtual void ShowAbility3Right() {};
 
 	void CleanEntity();
+	void CleanAbilities();
 
-	bool GotHit(Entity* &entity, Ability* &ability);
+	bool GotHit(Entity* &entity, Ability* &ability, Spell* &spell);
 
 	virtual void SetCamera(int index) {};
 
@@ -219,7 +221,6 @@ public:
 
 	void AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
 	Ability* GetAbility(int number);
-	void CleanAbilities();
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 
@@ -235,8 +236,7 @@ public:
 		return team;
 	}
 
-	void LifeBar(iPoint size, iPoint offset = {0, 0});
-	void ProgressBar(); 
+	void LifeBar(iPoint size, iPoint offset = { 0, 0 }); 
 
 private:
 	
@@ -265,6 +265,7 @@ public:
 	bool		     hit = false;
 	Entity*	         hit_by = nullptr;
 	Ability*		 hit_ability = nullptr;
+	Spell*			 hit_spell = nullptr;
 
 	// Delete 
 	bool			 to_delete = false;

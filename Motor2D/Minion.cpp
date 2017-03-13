@@ -89,9 +89,10 @@ bool Minion::Update(float dt)
 	
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
-	if (GotHit(entity, ability))
+	Spell* spell = nullptr;
+	if (GotHit(entity, ability, spell))
 	{
-		if (entity->GetTeam() != GetTeam()) 
+		if (entity != nullptr && entity->GetTeam() != GetTeam())
 		{
 			LOG("hit");
 			stats.life -= ability->damage;

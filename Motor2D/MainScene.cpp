@@ -48,7 +48,7 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	//Load Map
-	if (App->map->Load("zelda_moba.tmx"))
+	if (App->map->Load("zelda_moba2.tmx"))
 	{
 		int w, h;
 		uchar* data = NULL;
@@ -69,7 +69,7 @@ bool MainScene::Start()
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 
 	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 36, 32, 385, 23 });
-	princess = main_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 5) , {141, 4, 20, 25});
+	//princess = main_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 5) , {141, 4, 20, 25});
 	rupiees_img = main_window->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 49, 5, 17, 17});
 	rupiees_numb = main_window->CreateText(iPoint(rupiees_img->GetPos().x, rupiees_img->GetPos().y + 30), App->font->game_font, 0, false); 
 	rupiees_numb->SetText("0"); 
