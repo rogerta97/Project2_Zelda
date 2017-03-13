@@ -1,7 +1,10 @@
 #include "Boomerang.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
+#include "p2Log.h"
 
+#define ACCELERATION -300
+#define TIME 1.5f
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_boomerang, 0);
@@ -17,6 +20,9 @@ Boomerang::Boomerang(iPoint pos)
 	draw_offset = restore_draw_offset = { 7, 9 };
 
 	name = "boomerang";
+
+	starting_pos = pos;
+	timer.Start();
 }
 
 Boomerang::~Boomerang()
@@ -27,7 +33,6 @@ bool Boomerang::Start()
 {
 	bool ret = true;
 
-	range = 300;
 	game_object->SetAnimation("spin");
 
 	return ret;
@@ -46,7 +51,13 @@ bool Boomerang::Update(float dt)
 {
 	bool ret = true;
 
-	float speed = 100 * dt;
+	initial_speed = ((range - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
+
+	float speed = ((initial_speed) + (ACCELERATION * timer.ReadSec())) * dt;
+
+	if (!can_delete && speed < 0)
+		can_delete = true;
+	//LOG("initial speed: %f, range: %d, current speed: %f", initial_speed, range, speed);
 
 	switch (dir)
 	{
@@ -100,7 +111,13 @@ void Boomerang::CleanSpell()
 {
 }
 
-void Boomerang::Set(direction _dir)
+void Boomerang::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+
+}
+
+void Boomerang::Set(direction _dir, int _range)
 {
 	dir = _dir;
+	range = _range;
 }

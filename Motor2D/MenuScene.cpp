@@ -138,12 +138,6 @@ bool MenuScene::PreUpdate()
 
 bool MenuScene::Update(float dt)
 {
-	
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
-	{
-		App->scene->ChangeScene(App->scene->main_scene); 
-	}
-
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
 	{
 		if (is_options) 
@@ -196,6 +190,10 @@ bool MenuScene::Update(float dt)
 	cursors.at(0)->SetPos(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2));
 	cursors.at(1)->SetPos(iPoint(button_list.at(current_button)->GetPos().x + button_list.at(current_button)->rect.w + 5, button_list.at(current_button)->GetPos().y + 2));
 	
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		App->scene->ChangeScene(App->scene->main_scene);
+	}
 
 	return true;
 }

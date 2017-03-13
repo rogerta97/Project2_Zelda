@@ -10,18 +10,29 @@
 
 void Entity::CleanEntity()
 {
-	RELEASE(game_object);
 	CleanAbilities();
+	RELEASE(game_object);
 }
 
-bool Entity::GotHit(Entity *& entity, Ability *& ability)
+void Entity::CleanAbilities()
+{
+	for (int i = 0; i < abilities.size(); i++)
+	{
+		RELEASE(abilities.at(i));
+	}
+	abilities.clear();
+}
+
+bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 {
 	if (hit)
 	{
 		entity = hit_by;
 		ability = hit_ability;
+		spell = hit_spell;
 		hit_by = nullptr;
 		hit_ability = nullptr;
+		hit_spell = nullptr;
 		hit = false;
 
 		return true;
@@ -48,15 +59,6 @@ Ability* Entity::GetAbility(int number)
 	}
 
 	return ret;
-}
-
-void Entity::CleanAbilities()
-{
-	for (int i = 0; i < abilities.size(); i++)
-	{
-		RELEASE(abilities.at(i));
-	}
-	abilities.clear();
 }
 
 void Entity::LifeBar(iPoint size, iPoint offset)

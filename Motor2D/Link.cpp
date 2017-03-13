@@ -15,6 +15,8 @@
 #include "Boomerang.h"
 #include "PlayerManager.h"
 
+#define ABILITY2GROWSPEED 150
+#define ABILITY2MAXRANGE 150
 
 Link::Link(iPoint pos)
 {
@@ -68,17 +70,32 @@ bool Link::Update(float dt)
 {
 	bool ret = true;
 
-	App->view->CenterCamera(camera, game_object->GetPos().x + 23, game_object->GetPos().y + 35);
+	App->view->CenterCamera(camera, game_object->GetPos().x, game_object->GetPos().y);
 
-	Entity* entity;
-	Ability* ability;
-	if (GotHit(entity, ability))
+	Entity* entity = nullptr;
+	Ability* ability = nullptr;
+	Spell* spell = nullptr;
+	if (GotHit(entity, ability, spell))
 	{
+		// Enemy attacks
 		if (entity->GetTeam() != GetTeam())
 		{
 			stats.life -= ability->damage;
 			if (stats.life < 0)
 				stats.life = 0;
+		}
+
+		// Friendly attacks
+		else
+		{
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				if (spell->owner == this)
+				{
+					if(spell->can_delete)
+						App->spell->DeleteSpell(spell);
+				}
+			}
 		}
 	}
 
@@ -393,7 +410,7 @@ void Link::Ability1Right()
 void Link::ShowAbility1Up()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	//App->view->LayerDrawCircle( game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawCircle( game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility1Down()
@@ -414,45 +431,65 @@ void Link::ShowAbility1Right()
 void Link::Ability2Up()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
-	s->Set(direction::up);
-	GetAbility(3);
+	s->Set(direction::up, (int)ability2_power);
+	ability2_power = 0;
 }
 
 void Link::Ability2Down()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
-	s->Set(direction::down);
-	GetAbility(3);
+	s->Set(direction::down, (int)ability2_power);
+	ability2_power = 0;
 }
 
 void Link::Ability2Left()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
-	s->Set(direction::left);
-	GetAbility(3);
+	s->Set(direction::left, (int)ability2_power);
+	ability2_power = 0;
 }
 
 void Link::Ability2Right()
 {
 	Boomerang* s = (Boomerang*)App->spell->CreateSpell(spell_name::boomerang, game_object->GetPos(), this);
-	s->Set(direction::right);
-	GetAbility(3);
+	s->Set(direction::right, (int)ability2_power);
+	ability2_power = 0;
 }
 
 void Link::ShowAbility2Up()
 {
+	if(ability2_power < ABILITY2MAXRANGE)
+		ability2_power += ABILITY2GROWSPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 15, 25, -35 - (int)ability2_power }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Down()
 {
+	if (ability2_power < ABILITY2MAXRANGE)
+		ability2_power += ABILITY2GROWSPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, 35 + (int)ability2_power }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Left()
 {
+	if (ability2_power < ABILITY2MAXRANGE)
+		ability2_power += ABILITY2GROWSPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, -35 - (int)ability2_power, -25}, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Right()
 {
+	if (ability2_power < ABILITY2MAXRANGE)
+		ability2_power += ABILITY2GROWSPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, 35 + (int)ability2_power, -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::Ability3Up()

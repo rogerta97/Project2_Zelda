@@ -67,6 +67,7 @@ public:
 
 	// Delete 
 	bool			 to_delete = false;
+	bool			can_delete = false;
 
 	// Name
 	string			 name;
