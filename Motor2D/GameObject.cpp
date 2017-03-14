@@ -18,8 +18,6 @@ GameObject::GameObject(iPoint _pos, iPoint _size, int _cat, int _mask, pbody_typ
 
 GameObject::~GameObject()
 {
-	App->physics->DeleteBody(pbody);
-	RELEASE(animator);
 }
 
 iPoint GameObject::GetPos()
@@ -148,6 +146,12 @@ SDL_Texture * GameObject::GetTexture()
 iPoint GameObject::GetHitBoxSize() const
 {
 	return hitbox_size;
+}
+
+void GameObject::CleanUp()
+{
+	App->physics->DeleteBody(pbody);
+	RELEASE(animator);
 }
 
 

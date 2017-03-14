@@ -11,6 +11,7 @@
 void Entity::CleanEntity()
 {
 	CleanAbilities();
+	game_object->CleanUp();
 	RELEASE(game_object);
 }
 
