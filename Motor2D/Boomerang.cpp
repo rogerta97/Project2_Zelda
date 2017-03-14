@@ -3,8 +3,9 @@
 #include "j1Viewports.h"
 #include "p2Log.h"
 
-#define ACCELERATION -300
-#define TIME 1.5f
+#define ACCELERATION -900
+#define TIME 1.0f
+#define DESTRUCTION_TIME 2
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_boomerang, 0);
@@ -21,8 +22,9 @@ Boomerang::Boomerang(iPoint pos)
 
 	name = "boomerang";
 
-	starting_pos = pos;
 	timer.Start();
+
+	range = BOOMERANG_RANGE;
 }
 
 Boomerang::~Boomerang()
@@ -51,13 +53,20 @@ bool Boomerang::Update(float dt)
 {
 	bool ret = true;
 
+	// Speed calculations
 	initial_speed = ((range - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
 
 	float speed = ((initial_speed) + (ACCELERATION * timer.ReadSec())) * dt;
 
+	// Can be taken when is returning
 	if (!can_delete && speed < 0)
 		can_delete = true;
+
 	//LOG("initial speed: %f, range: %d, current speed: %f", initial_speed, range, speed);
+
+	// Reducing speed when boomerang returns
+	if (can_delete)
+		speed = speed * 0.5;
 
 	switch (dir)
 	{
@@ -76,6 +85,9 @@ bool Boomerang::Update(float dt)
 	default:
 		break;
 	}
+
+	if (timer.ReadSec() > DESTRUCTION_TIME)
+		App->spell->DeleteSpell(this);
 
 	return ret;
 }
@@ -116,8 +128,7 @@ void Boomerang::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA,
 
 }
 
-void Boomerang::Set(direction _dir, int _range)
+void Boomerang::Set(direction _dir)
 {
 	dir = _dir;
-	range = _range;
 }

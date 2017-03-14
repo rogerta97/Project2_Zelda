@@ -101,9 +101,6 @@ public:
 private:
 	int		camera = 1;
 	bool	flip = false;
-
-	float   ability2_power = 0;
-
 };
 
 #endif

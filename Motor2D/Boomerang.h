@@ -14,6 +14,8 @@ class b2Fixture;
 class PhysBody;
 class GameObject;
 
+#define BOOMERANG_RANGE 130
+
 enum direction
 {
 	null,
@@ -51,14 +53,13 @@ public:
 
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	void Set(direction dir, int range);
+	void Set(direction dir);
 
 private:
 	direction dir = direction::null;
 	int				range = 0;
 	float			initial_speed = 0;
 
-	iPoint		    starting_pos = NULLPOINT;
 	j1Timer			timer;
 
 };
