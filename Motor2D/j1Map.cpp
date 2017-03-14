@@ -696,13 +696,13 @@ void j1Map::GetPlayerSpawnPoints(uint team, vector<iPoint>& spawns)
 						switch (team)
 						{
 						case 1:
-							if (relative_id == 6)
+							if (relative_id == 5)
 							{
 								spawns.push_back(MapToWorld(x, y));
 							}
 							break;
 						case 2:
-							if (relative_id == 5)
+							if (relative_id == 4)
 							{
 								spawns.push_back(MapToWorld(x, y));
 							}
