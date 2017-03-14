@@ -671,6 +671,54 @@ iPoint j1Map::GetMinionsSpawn(uint team) const
 	return ret;
 }
 
+void j1Map::GetPlayerSpawnPoints(uint team, vector<iPoint>& spawns)
+{
+	std::list<MapLayer*>::const_iterator item;
+
+	for (std::list<MapLayer*>::const_iterator item = data.layers.begin(); item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+						switch (team)
+						{
+						case 1:
+							if (relative_id == 6)
+							{
+								spawns.push_back(MapToWorld(x, y));
+							}
+							break;
+						case 2:
+							if (relative_id == 5)
+							{
+								spawns.push_back(MapToWorld(x, y));
+							}
+							break;
+						default:
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
 std::vector<iPoint> j1Map::GetMinionPath() const
 {
 	std::vector<iPoint> ret;

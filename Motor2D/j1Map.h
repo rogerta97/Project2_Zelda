@@ -128,6 +128,9 @@ public:
 	// Return World spawn position for team #team minions
 	iPoint GetMinionsSpawn(uint team) const;
 
+	// Return World spawn position for team players
+	void GetPlayerSpawnPoints(uint team, vector<iPoint> &spawns);
+
 	// Return all unsorted points for minions path
 	std::vector<iPoint> GetMinionPath()const;
 

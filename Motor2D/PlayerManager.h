@@ -54,7 +54,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	Player* AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar = true);
+	Player* AddPlayer(entity_name name, int index, iPoint pos, int team, bool on_spawn = true, int show_life_bar = true);
 	void ChangePlayer(entity_name name, int index);
 	void DeletePlayer(int index);
 	void ClearPlayers();
@@ -62,11 +62,14 @@ public:
 	std::vector<Entity*> GetTeamPlayers(int team);
 	std::vector<int> GetTeamViewports(int team);
 	int GetEntityViewportIfIsPlayer(Entity* entity);
+	bool CheckIfSpawnPointIsUsed(int team, iPoint pos);
 
 private:
 
 private:
 	vector<Player*> players;
+	vector<iPoint> spawn_points_used_team1;
+	vector<iPoint> spawn_points_used_team2;
 
 };
 
