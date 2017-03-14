@@ -11,6 +11,7 @@
 #include "MenuScene.h"
 #include "j1Console.h"
 #include "TeamSelectScene.h"
+#include "CharacterSelectionScene.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -49,6 +50,9 @@ bool j1Scene::Start()
 	scenes.push_back(main_scene);
 	team_select = new TeamSelectScene();
 	scenes.push_back(team_select);
+	charselect_screen = new CharacterSelectionScene();
+	scenes.push_back(charselect_screen); 
+
 	// -------------
 
 	// Starting scene

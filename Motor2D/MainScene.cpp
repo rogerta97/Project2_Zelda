@@ -22,8 +22,6 @@
 #include "Scene.h"
 #include "TowerManager.h"
 
-
-
 MainScene::MainScene()
 {
 }
