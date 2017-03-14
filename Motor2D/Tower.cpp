@@ -14,6 +14,8 @@
 #include "MainScene.h"
 #include "j1Scene.h"
 #include "Minion.h"
+#include "j1Spell.h"
+#include "TowerAttack.h"
 
 #define TOWER_H 64
 #define TOWER_W 64
@@ -26,6 +28,8 @@ Tower::Tower(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
+
+	AddAbility(0, 30, 3, 20, "t_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
@@ -127,7 +131,7 @@ void Tower::Idle()
 
 void Tower::Attack()
 {
-
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, -25), 5, 10, fixture_type::f_t_attack);
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -171,7 +175,13 @@ void Tower::TowerIdle()
 void Tower::TowerAttack()
 {
 	CheckTowerState();
-	Attack();
+
+	if (tower_cd_timer.ReadSec()>abilities.at(0)->cd)
+	{
+		Attack();
+		tower_cd_timer.Start();
+	}
+	
 
 }
 

@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "Spell.h"
 #include "Entity.h"
+#include "j1Spell.h"
 
 class b2Fixture;
 class PhysBody;
@@ -40,14 +41,14 @@ public:
 		return true;
 	}
 
-	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
 	
 
 private:
 	
 	int				range = 0;
-
+	iPoint		    starting_pos = NULLPOINT;
 };
 
 #endif // _TOWERATTACK_H

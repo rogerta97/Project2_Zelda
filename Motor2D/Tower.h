@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include <list>
+#include "j1Timer.h"
 
 class GameObject;
 
@@ -66,6 +67,8 @@ private:
 	Entity*				target = nullptr;
 
 	states				anim_state = states_null;
+
+	j1Timer				tower_cd_timer;
 
 };
 

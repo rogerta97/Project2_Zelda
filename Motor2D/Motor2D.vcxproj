@@ -173,6 +173,7 @@
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\minion.xml" />
     <Xml Include="..\Game\tower.xml" />
+    <Xml Include="..\Game\towerattack.xml\towerattack.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
