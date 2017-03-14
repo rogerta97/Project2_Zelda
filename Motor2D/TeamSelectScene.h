@@ -51,6 +51,26 @@ private:
 	UI_Image*				pad_3 = nullptr;
 	UI_Image*				pad_4 = nullptr;
 
+	UI_Image*				rb_view1 = nullptr;
+	UI_Image*				rb_view2 = nullptr;
+	UI_Image*				rb_view3 = nullptr;
+	UI_Image*				rb_view4 = nullptr;
+
+	UI_Image*				lb_view1 = nullptr;
+	UI_Image*				lb_view2 = nullptr;
+	UI_Image*				lb_view3 = nullptr;
+	UI_Image*				lb_view4 = nullptr;
+
+	UI_Image*				team1_view1 = nullptr;
+	UI_Image*				team1_view2 = nullptr;
+	UI_Image*				team1_view3 = nullptr;
+	UI_Image*				team1_view4 = nullptr;
+
+	UI_Image*				team2_view1 = nullptr;
+	UI_Image*				team2_view2 = nullptr;
+	UI_Image*				team2_view3 = nullptr;
+	UI_Image*				team2_view4 = nullptr;
+
 	UI_Text*				team_view1 = nullptr;
 	UI_Text*				team_view2 = nullptr;
 	UI_Text*				team_view3 = nullptr;
