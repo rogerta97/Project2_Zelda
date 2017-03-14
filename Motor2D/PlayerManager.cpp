@@ -507,6 +507,8 @@ bool PlayerManager::CleanUp()
 	bool ret = true;
 
 	ClearPlayers();
+	spawn_points_used_team1.clear();
+	spawn_points_used_team2.clear();
 
 	return ret;
 }
@@ -639,7 +641,10 @@ bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
 		for (int i = 0; i < spawn_points_used_team1.size(); i++)
 		{
 			if (spawn_points_used_team1.at(i) == pos)
+			{
+				spawn_points_used_team1.push_back(pos);
 				return true;
+			}
 		}
 		return false;
 		break;
@@ -647,7 +652,10 @@ bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
 		for (int i = 0; i < spawn_points_used_team2.size(); i++)
 		{
 			if (spawn_points_used_team2.at(i) == pos)
+			{
+				spawn_points_used_team2.push_back(pos);
 				return true;
+			}
 		}
 		return false;
 		break;
