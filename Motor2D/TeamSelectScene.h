@@ -23,7 +23,7 @@ public:
 
 
 private:
-
+	void DrawScreenSeparation();
 
 public:
 
