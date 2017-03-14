@@ -10,6 +10,7 @@
 #include "MainScene.h"
 #include "MenuScene.h"
 #include "j1Console.h"
+#include "TeamSelectScene.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -46,6 +47,8 @@ bool j1Scene::Start()
 	scenes.push_back(menu_scene);
 	main_scene = new MainScene();
 	scenes.push_back(main_scene);
+	team_select = new TeamSelectScene();
+	scenes.push_back(team_select);
 	// -------------
 
 	// Starting scene
@@ -53,6 +56,11 @@ bool j1Scene::Start()
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();
+
+	players[0].player = players[0].gamepad = 1;
+	players[1].player = players[1].gamepad = 2;
+	players[2].player = players[2].gamepad = 3;
+	players[3].player = players[3].gamepad = 4;
 
 	return ret;
 }

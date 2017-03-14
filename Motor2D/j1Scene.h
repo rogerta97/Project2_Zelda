@@ -4,10 +4,21 @@
 #include "j1Module.h"
 #include "j1Gui.h"
 #include "Scene.h"
+#include "j1Entity.h"
 
 struct SDL_Texture;
 class MenuScene; 
 class MainScene;
+class TeamSelectScene;
+
+struct player_info
+{
+	uint			gamepad = 5;
+	uint			viewport = 5;
+	uint			team = 3;
+	uint			player = 5;
+	entity_name		character = e_n_null;
+};
 
 class j1Scene : public j1Module
 {
@@ -53,6 +64,9 @@ public:
 	// Scenes
 	MenuScene*			 menu_scene = nullptr; 
 	MainScene*           main_scene = nullptr;
+	TeamSelectScene*	 team_select = nullptr;
+
+	player_info			 players[4];
 
 private:
 	// Scenes list

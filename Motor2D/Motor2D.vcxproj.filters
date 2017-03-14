@@ -118,6 +118,9 @@
     <ClCompile Include="TowerAttack.cpp">
       <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
     </ClCompile>
+    <ClCompile Include="TeamSelectScene.cpp">
+      <Filter>Engine\3. Scenes ==========\TeamSelectScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -264,6 +267,9 @@
     <ClInclude Include="TowerAttack.h">
       <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
     </ClInclude>
+    <ClInclude Include="TeamSelectScene.h">
+      <Filter>Engine\3. Scenes ==========\TeamSelectScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -313,6 +319,9 @@
     </Filter>
     <Filter Include="Engine\5. Spells ===========\TowerAttack">
       <UniqueIdentifier>{88246e0f-14f1-4c8e-8f33-19a270f5f84a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\TeamSelectScene">
+      <UniqueIdentifier>{f6bdd670-c432-4a39-9b4b-35c15004b406}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

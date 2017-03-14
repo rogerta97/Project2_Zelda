@@ -37,7 +37,7 @@ public:
 public:
 	UI_Window*			main_window = nullptr;
 
-
+	UI_Image*			princess = nullptr;
 	MinionManager*		minion_manager = nullptr;
 
 	TowerManager*	    tower_manager = nullptr;
@@ -49,6 +49,7 @@ private:
 	UI_Image*			progress_bar = nullptr; 
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
+	
 	UI_Text*			rupiees_numb = nullptr;
 	list<UI_Image*>		habilities; 
 };

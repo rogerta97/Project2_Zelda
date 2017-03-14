@@ -16,7 +16,7 @@ struct layer_blit
 
 	layer_blit(SDL_Texture* _texture, iPoint _pos, const SDL_Rect _section, int _viewport, float _scale, bool _use_camera, SDL_RendererFlip _flip, double _angle, int _pivot_x, int _pivot_y)
 	{
-		texture = _texture; pos = _pos; section = { _section }; scale = _scale;
+		texture = _texture; pos = _pos; section = {_section }; scale = _scale;
 		flip = _flip; angle = _angle; pivot_x = _pivot_x; pivot_y = _pivot_y; viewport = _viewport; use_camera = _use_camera;
 	};
 
