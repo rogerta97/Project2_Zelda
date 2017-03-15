@@ -47,7 +47,7 @@ public:
 
 private:
 	void TowerIdle();
-	void TowerAttack();
+	void DoAttack();
 
 	void Idle();
 	void Attack();

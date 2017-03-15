@@ -15,6 +15,7 @@
 #include "j1Scene.h"
 #include "Minion.h"
 #include "j1Spell.h"
+#include "Spell.h"
 #include "TowerAttack.h"
 
 #define TOWER_H 64
@@ -72,7 +73,7 @@ bool Tower::Update(float dt)
 		TowerIdle();
 		break;
 	case Tower_Attack:
-		TowerAttack();
+		DoAttack();
 		break;
 	default:
 		break;
@@ -131,7 +132,7 @@ void Tower::Idle()
 
 void Tower::Attack()
 {
-	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, -25), 5, 10, fixture_type::f_t_attack);
+	TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -172,7 +173,7 @@ void Tower::TowerIdle()
 	}
 }
 
-void Tower::TowerAttack()
+void Tower::DoAttack()
 {
 	CheckTowerState();
 
