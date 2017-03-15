@@ -55,6 +55,8 @@ private:
 	
 	UI_Text*			rupiees_numb = nullptr;
 	list<UI_Image*>		habilities; 
+
+	vector<PhysBody*>	map_collisions;
 };
 
 

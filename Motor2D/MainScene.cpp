@@ -147,6 +147,14 @@ bool MainScene::CleanUp()
 	}
 	// -------
 
+	// Delete Map Collisions
+	for (std::vector<PhysBody*>::iterator it = map_collisions.begin(); it != map_collisions.end(); it++)
+	{
+		App->physics->DeleteBody(*it);
+	}
+	map_collisions.clear();
+	// -------
+
 	return ret;
 }
 
@@ -227,7 +235,7 @@ void MainScene::CreateMapCollisions()
 				i++;
 			}
 		}
-		App->physics->CreateStaticChain(0, 0, points, num_points);
+		map_collisions.push_back(App->physics->CreateStaticChain(0, 0, points, num_points));
 		RELEASE_ARRAY(points);
 	}
 
