@@ -2,7 +2,8 @@
 #include "j1Viewports.h"
 #include "j1Scene.h"
 #include "j1Input.h"
-#include"p2Log.h"
+#include "p2Log.h"
+#include "j1Map.h"
 
 PlayerManager::PlayerManager()
 {
@@ -506,16 +507,37 @@ bool PlayerManager::CleanUp()
 	bool ret = true;
 
 	ClearPlayers();
+	spawn_points_used_team1.clear();
+	spawn_points_used_team2.clear();
 
 	return ret;
 }
 
-Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar)
+Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, bool on_spawn, int show_life_bar)
 {
 	Player* ret = nullptr;
+
 	if (players.size() <= 3)
 	{
-		Player* p = new Player(App->entity->CreateEntity(name, pos), index - 1);
+		iPoint position = pos;
+
+		// Searching for avaliable spawn points
+		if(on_spawn)
+		{
+			vector<iPoint> spawn_points;
+			App->map->GetPlayerSpawnPoints(team, spawn_points);
+			for (int i = 0; i < spawn_points.size(); i++)
+			{
+				if (!CheckIfSpawnPointIsUsed(team, spawn_points.at(i)))
+				{
+					position = spawn_points.at(i);
+					break;
+				}
+			}
+		}
+
+		// Create player
+		Player* p = new Player(App->entity->CreateEntity(name, position), index - 1);
 		p->entity->SetCamera(p->index + 1);
 		p->entity->SetTeam(team);
 		p->entity->show_life_bar = show_life_bar;
@@ -523,6 +545,7 @@ Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int te
 		players.push_back(p);
 		ret = p;
 	}
+
 	return ret;
 }
 
@@ -607,6 +630,37 @@ int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 		{
 			return players.at(i)->index + 1;
 		}
+	}
+}
+
+bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
+{
+	switch (team)
+	{
+	case 1:
+		for (int i = 0; i < spawn_points_used_team1.size(); i++)
+		{
+			if (spawn_points_used_team1.at(i) == pos)
+			{
+				spawn_points_used_team1.push_back(pos);
+				return true;
+			}
+		}
+		return false;
+		break;
+	case 2:
+		for (int i = 0; i < spawn_points_used_team2.size(); i++)
+		{
+			if (spawn_points_used_team2.at(i) == pos)
+			{
+				spawn_points_used_team2.push_back(pos);
+				return true;
+			}
+		}
+		return false;
+		break;
+	default:
+		break;
 	}
 }
 

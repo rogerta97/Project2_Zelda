@@ -26,15 +26,13 @@ bool MenuScene::Start()
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
 	// Triforce
-	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
+//	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
 
 	// Start ---
 	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
 	button_list.push_back(start_button);
 
-	start_button->AddImage("idle", { 657, 7, 223, 57 }); 
-	start_button->AddImage("above", { 428, 65, 219, 57 });
-	start_button->AddImage("clicked", { 428, 6, 220, 57 });
+	start_button->AddImage("idle", { 128, 52, 220, 55 }); 
 
 	start_button->SetImage("idle"); 
 
@@ -48,9 +46,8 @@ bool MenuScene::Start()
 	options_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
 	button_list.push_back(options_button);
 
-	options_button->AddImage("idle", { 657, 7, 223, 57 });
-	options_button->AddImage("above", { 428, 65, 219, 57 });
-	options_button->AddImage("clicked", { 428, 6, 220, 57 });
+	options_button->AddImage("idle", { 128, 52, 220, 55 });
+
 
 	options_button->SetImage("idle");
 
@@ -60,9 +57,8 @@ bool MenuScene::Start()
 
 	fx_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
 
-	fx_button->AddImage("idle", { 657, 7, 223, 57 });
-	fx_button->AddImage("above", { 428, 65, 219, 57 });
-	fx_button->AddImage("clicked", { 428, 6, 220, 57 });
+	fx_button->AddImage("idle", { 128, 52, 220, 55 });
+
 
 	fx_button->SetImage("idle");
 
@@ -74,9 +70,8 @@ bool MenuScene::Start()
 
 	music_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
 
-	music_button->AddImage("idle", { 657, 7, 223, 57 });
-	music_button->AddImage("above", { 428, 65, 219, 57 });
-	music_button->AddImage("clicked", { 428, 6, 220, 57 });
+	music_button->AddImage("idle", { 128, 52, 220, 55 });
+
 
 	music_button->SetImage("idle");
 
@@ -92,9 +87,7 @@ bool MenuScene::Start()
 	credits_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
 	button_list.push_back(credits_button); 
 
-	credits_button->AddImage("idle", { 657, 7, 223, 57 });
-	credits_button->AddImage("above", { 428, 65, 219, 57 });
-	credits_button->AddImage("clicked", { 428, 6, 220, 57 });
+	credits_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	credits_button->SetImage("idle");
 
@@ -107,9 +100,7 @@ bool MenuScene::Start()
 	quit_button = menu_window->CreateButton(iPoint(screen.w - 70, 360), 223, 60, false);
 	button_list.push_back(quit_button);
 
-	quit_button->AddImage("idle", { 657, 7, 223, 57 });
-	quit_button->AddImage("above", { 428, 65, 219, 57 });
-	quit_button->AddImage("clicked", { 428, 6, 220, 57 });
+	quit_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	quit_button->SetImage("idle");
 
@@ -122,11 +113,19 @@ bool MenuScene::Start()
 	button_list.push_back(music_button); 
 
 	// Cursor --
-	cursor_1 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2), { 36, 57, 57, 52 }, false);
-	cursor_2 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x + button_list.at(current_button)->rect.w + 5, button_list.at(current_button)->GetPos().y + 2), { 36, 57, 57, 52 }, false);
+	cursor_1 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2), {80, 52, 48, 48 }, false);
+	cursor_2 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x + button_list.at(current_button)->rect.w + 5, button_list.at(current_button)->GetPos().y + 2), { 80, 52, 48, 48 }, false);
 
 	cursors.push_back(cursor_1); 
 	cursors.push_back(cursor_2);
+
+	// Checkbox test
+	UI_Check_Box* cb = menu_window->CreateCheckBox(iPoint(300, 300), 100, 100, {166, 5, 11, 9}, {181, 5, 11, 9 }, false, true);
+	cb->AddBox(iPoint(320, 320), 20, 20, "test1");
+	cb->AddBox(iPoint(320, 340), 20, 20, "test2");
+	cb->AddBox(iPoint(320, 360), 20, 20, "test3");
+	cb->AddBox(iPoint(320, 380), 20, 20, "test4");
+	//cb->GetBox("test1");
 
 	return true;
 }
@@ -157,8 +156,7 @@ bool MenuScene::Update(float dt)
 				current_button_int++;
 
 				current_button = static_cast<button_action> (current_button_int);
-			}
-			
+			}	
 		}
 	}
 
@@ -207,7 +205,7 @@ bool MenuScene::PostUpdate()
 		switch (current_button)
 		{
 		case START:
-			App->scene->ChangeScene(App->scene->main_scene);
+			App->scene->ChangeScene((Scene*)App->scene->team_select);
 			break;
 
 		case OPTIONS:

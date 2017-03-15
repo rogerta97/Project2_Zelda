@@ -5,12 +5,14 @@
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
+#include "Functions.h"
 
 #define LIFE_BAR_COLOR_1 {30, 30, 30, 255}
 
 void Entity::CleanEntity()
 {
 	CleanAbilities();
+	game_object->CleanUp();
 	RELEASE(game_object);
 }
 
@@ -59,6 +61,43 @@ Ability* Entity::GetAbility(int number)
 	}
 
 	return ret;
+}
+
+Ability * Entity::GetAbilityByName(const char* name)
+{
+	Ability* ret = nullptr;
+
+	for (int i = 0; i < abilities.size(); i++)
+	{
+		if (TextCmp(name, abilities.at(i)->name.c_str()))
+		{
+			ret = abilities.at(i);
+			break;
+		}
+	}
+
+	return ret;
+}
+
+int Entity::GetLife()
+{
+	return stats.life;
+}
+
+void Entity::DealDamage(int damage)
+{
+	if (stats.life > 0)
+		stats.life -= damage;
+	if (stats.life < 0)
+		stats.life = 0;
+}
+
+void Entity::Heal(int heal)
+{
+	if (stats.life > 0)
+		stats.life += heal;
+	if (stats.life > stats.max_life)
+		stats.life = stats.max_life;
 }
 
 void Entity::LifeBar(iPoint size, iPoint offset)

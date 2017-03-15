@@ -102,6 +102,9 @@ public:
 	// Return hit box size. NULLPOINT if not found
 	iPoint GetHitBoxSize() const;
 
+	// Need to call to celan GameObject
+	void CleanUp();
+
 private:
 
 public:
