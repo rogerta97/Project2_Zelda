@@ -16,6 +16,7 @@
 #include "Tower.h"
 #include "TowerManager.h"
 
+
 #define Half_Tile 16
 
 Minion::Minion(iPoint pos)
@@ -90,16 +91,30 @@ bool Minion::Update(float dt)
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
-	if (GotHit(entity, ability, spell))
+
+	if (GotHit(entity, ability, spell) && stats.life)
 	{
+		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			LOG("hit");
-			stats.life -= ability->damage;
+			DealDamage(ability->damage * ability->damage_multiplicator);
 
-			if (stats.life <= 0)
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
-				App->scene->main_scene->minion_manager->KillMinion(this);
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1));
+			}
+		}
+
+		// Friendly attacks
+		else
+		{
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				if (spell->owner == this)
+				{
+					if (spell->can_delete)
+						App->spell->DeleteSpell(spell);
+				}
 			}
 		}
 	}

@@ -73,14 +73,17 @@ bool Link::Update(float dt)
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
-	if (GotHit(entity, ability, spell))
+	if (GotHit(entity, ability, spell) && stats.life)
 	{
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			stats.life -= ability->damage;
-			if (stats.life < 0)
-				stats.life = 0;
+			DealDamage(ability->damage * ability->damage_multiplicator);
+
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1));
+			}
 		}
 
 		// Friendly attacks
@@ -453,26 +456,31 @@ void Link::Ability2Right()
 void Link::ShowAbility2Up()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 15, 25, -35 - BOOMERANG_RANGE }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85, 25, (int)(BOOMERANG_RANGE * 0.5) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85 - (int)(BOOMERANG_RANGE * 0.5), 25, (int)(BOOMERANG_RANGE * 0.5) }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Down()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, 35 + BOOMERANG_RANGE }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(BOOMERANG_RANGE * 0.5) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15 + (int)(BOOMERANG_RANGE * 0.5), 25, (int)(BOOMERANG_RANGE * 0.5) }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
+
 }
 
 void Link::ShowAbility2Left()
 {
 
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, -35 - BOOMERANG_RANGE, -25}, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 75, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25}, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 - (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Right()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, 35 + BOOMERANG_RANGE, -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 12 + (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::Ability3Up()

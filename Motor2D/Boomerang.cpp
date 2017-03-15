@@ -2,9 +2,10 @@
 #include "GameObject.h"
 #include "j1Viewports.h"
 #include "p2Log.h"
+#include "Entity.h"
 
-#define ACCELERATION -900
-#define TIME 1.0f
+#define ACCELERATION -1300
+#define TIME 0.65f
 #define DESTRUCTION_TIME 2
 Boomerang::Boomerang(iPoint pos)
 {
@@ -24,7 +25,7 @@ Boomerang::Boomerang(iPoint pos)
 
 	timer.Start();
 
-	range = BOOMERANG_RANGE;
+	starting_pos = pos;
 }
 
 Boomerang::~Boomerang()
@@ -54,7 +55,7 @@ bool Boomerang::Update(float dt)
 	bool ret = true;
 
 	// Speed calculations
-	initial_speed = ((range - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
+	initial_speed = ((BOOMERANG_RANGE - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
 
 	float speed = ((initial_speed) + (ACCELERATION * timer.ReadSec())) * dt;
 
@@ -67,6 +68,30 @@ bool Boomerang::Update(float dt)
 	// Reducing speed when boomerang returns
 	if (can_delete)
 		speed = speed * 0.5;
+
+	// Reduce damage and slow
+	if (!can_delete)
+	{
+		if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) < BOOMERANG_RANGE * 0.5f)
+		{
+			stats.stun_duration = 1.0f;
+			stats.damage_multiplicator = 1.3f;
+		}
+		else if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) > BOOMERANG_RANGE * 0.5f)
+		{
+			stats.stun_duration = 0.0f;
+			stats.damage_multiplicator = 0.7f;
+			stats.slow_duration = 1.0f;
+			stats.slow_force = 0.5f;
+		}
+	}
+	else
+	{
+		stats.stun_duration = 0.0f;
+		stats.damage_multiplicator = 0.7f;
+		stats.slow_duration = 0.0f;
+		stats.slow_force = 0.0f;
+	}
 
 	switch (dir)
 	{
@@ -113,8 +138,6 @@ bool Boomerang::PostUpdate()
 bool Boomerang::CleanUp()
 {
 	bool ret = true;
-
-
 
 	return ret;
 }
