@@ -12,13 +12,16 @@ class UI_Window;
 
 
 
-struct card 
-{
-	entity_name	 entit_name = e_n_null;
 
-	UI_Image*	 image = nullptr;
-	UI_Image*	 background = nullptr;	
+struct char_select_view
+{	
+	vector<UI_Image*>   char_images;
+	vector<UI_Image*>	back_images; 
+	UI_Image*			name_background = nullptr; 
+	UI_Text*			name = nullptr; 
+	UI_Button*			character_info = nullptr; 
 };
+
 
 class CharacterSelectionScene : public Scene
 {
@@ -33,14 +36,14 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
-	void AddCard(card* new_card); 
+	void CreateScene(uint w, uint h); 
 
 	UI_Window* window = nullptr; 
 
 
 private:
 
-	//first position is the big one and second is the little one
+	char_select_view viewport[4]; 
 
 	// Ganon
 	SDL_Rect		ganon_rects[2];
@@ -54,10 +57,7 @@ private:
 	// Background
 	SDL_Rect		backgrounds_rects[2];
 
-	list<card*>		list_cards; 
-
-	// Position of the cards respectively 
-	iPoint			positions[3]; 
+	vector<iPoint>			positions;
 
 public:
 
