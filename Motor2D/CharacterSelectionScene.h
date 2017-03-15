@@ -11,15 +11,20 @@ class UI_Text;
 class UI_Window;
 
 
-
-
 struct char_select_view
 {	
-	vector<UI_Image*>   char_images;
-	vector<UI_Image*>	back_images; 
-	UI_Image*			name_background = nullptr; 
-	UI_Text*			name = nullptr; 
-	UI_Button*			character_info = nullptr; 
+	vector<UI_Image*>      char_images;
+	vector<UI_Image*>	   back_images; 
+
+	UI_Image*			   name_background = nullptr; 
+	UI_Text*			   name = nullptr; 
+	UI_Image*			   character_info = nullptr; 
+};
+
+struct character_info
+{
+	entity_name	 character = e_n_null; 
+	string		 name; 
 };
 
 
@@ -37,13 +42,16 @@ public:
 	bool CleanUp();
 
 	void CreateScene(uint w, uint h); 
+	void MoveCard(int pad, const char* direction); 
 
 	UI_Window* window = nullptr; 
 
 
 private:
 
-	char_select_view viewport[4]; 
+	char_select_view	viewport[4]; 
+
+	list<character_info> char_view_1; 
 
 	// Ganon
 	SDL_Rect		ganon_rects[2];
