@@ -36,7 +36,7 @@ bool CharacterSelectionScene::Start()
 	uint w, h; 
 	App->win->GetWindowSize(w, h); 
 
-	App->gui->UI_CreateWin(iPoint(0,0), w, h, 2, false); 
+	window = App->gui->UI_CreateWin(iPoint(0,0), w, h, 2, false); 
 
 	card* ganon_card = new card; 
 	ganon_card->entit_name = ganon;
