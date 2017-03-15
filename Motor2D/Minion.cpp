@@ -99,22 +99,9 @@ bool Minion::Update(float dt)
 		{
 			DealDamage(ability->damage * ability->damage_multiplicator);
 
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			if (stats.life <=0)
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1));
-			}
-		}
-
-		// Friendly attacks
-		else
-		{
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
-			{
-				if (spell->owner == this)
-				{
-					if (spell->can_delete)
-						App->spell->DeleteSpell(spell);
-				}
+				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}
 	}
@@ -454,8 +441,8 @@ void Minion::CheckState()
 		if (target == nullptr)
 		{
 			target_path_index = 0;
-			target = nullptr;
 			move_state = Move_ReturnToPath;
+			state = Minion_Move;
 			PathToBasePath();
 			break;
 		}
@@ -484,6 +471,7 @@ void Minion::CheckState()
 		{
 			state = Minion_Move;
 			move_state = Move_ReturnToPath;
+			PathToBasePath();
 		}
 		break;
 	default:
@@ -501,20 +489,32 @@ void Minion::SetTargetPath(const std::list<iPoint>* path)
 
 void Minion::PathToTarget()
 {
-	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x,GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y));
-	target_path.clear();
-	SetTargetPath(App->pathfinding->GetLastPath());
-	target_path_index = 0;
-	move_state = Move_AproachTarget;
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y)) > 0)
+	{
+		target_path.clear();
+		SetTargetPath(App->pathfinding->GetLastPath());
+		target_path_index = 0;
+		move_state = Move_AproachTarget;
+	}
+	else 
+	{
+		PathToBasePath();
+	}
 }
 
 void Minion::PathToBasePath()
 {
-	target_path.clear();
-	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), base_path.at(base_path_index));
-	SetTargetPath(App->pathfinding->GetLastPath());
-	target_path_index = 0;
-	move_state = Move_ReturnToPath;
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), base_path.at(base_path_index)) > 0)
+	{
+		target_path.clear();
+		SetTargetPath(App->pathfinding->GetLastPath());
+		target_path_index = 0;
+		move_state = Move_ReturnToPath;
+	}
+	else
+	{
+		move_state = Move_FollowBasePath;
+	}
 }
 
 bool Minion::LookForTarget()
