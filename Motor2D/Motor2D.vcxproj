@@ -171,6 +171,7 @@
     <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\minion.xml" />
     <Xml Include="..\Game\tower.xml" />
   </ItemGroup>
