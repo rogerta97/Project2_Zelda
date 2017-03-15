@@ -34,6 +34,9 @@ public:
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
 
+private:
+	void CreateMapCollisions();
+
 public:
 	UI_Window*			main_window = nullptr;
 

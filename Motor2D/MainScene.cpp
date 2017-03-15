@@ -21,6 +21,7 @@
 #include "MinionManager.h"
 #include "Scene.h"
 #include "TowerManager.h"
+#include "Functions.h"
 
 
 
@@ -90,6 +91,8 @@ bool MainScene::Start()
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+
+	CreateMapCollisions();
 
 	return ret;
 }
@@ -197,5 +200,37 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 	default:
 		break;
 	}
+}
+
+void MainScene::CreateMapCollisions()
+{
+	pugi::xml_document doc;
+	App->LoadXML("MapCollisions.xml", doc);
+	pugi::xml_node collisions = doc.child("collisions");
+	
+	for(pugi::xml_node chain = collisions.child("chain");chain != NULL;chain = chain.next_sibling("chain"))
+	{
+		string points_string = chain.child_value();
+		int num_points = chain.attribute("vertex").as_int();
+		int* points = new int[num_points];
+		std::list<string> points_list;
+		Tokenize(points_string, ',', points_list);
+		int i = 0;
+		for (std::list<string>::iterator it = points_list.begin(); it != points_list.end(); it++)
+		{
+			if (i >= num_points)
+				break;
+
+			if (*it != "")
+			{
+				*(points + i) = stoi(*it);
+				i++;
+			}
+		}
+		App->physics->CreateStaticChain(0, 0, points, num_points);
+		RELEASE_ARRAY(points);
+	}
+
+	
 }
 
