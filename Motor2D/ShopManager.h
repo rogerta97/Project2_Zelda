@@ -50,6 +50,8 @@ public:
 private:
 	UI_Window*		shop_window = nullptr;
 
+	shop*			shops[4] = { nullptr,nullptr,nullptr };
+
 
 };
 
