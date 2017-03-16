@@ -40,7 +40,11 @@ bool PlayerManager::Update(float dt)
 		// Left Joystick -------
 
 			// Diagonal moves
-		if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_UP) > 12000)
+		if (players.at(i)->entity->stuned)
+		{
+			players.at(i)->move = stop;
+		}
+		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_UP) > 12000)
 		{
 			players.at(i)->move = move_upleft;
 		}
@@ -298,7 +302,6 @@ bool PlayerManager::Update(float dt)
 				}
 			}
 		}
-
 		
 		// State machines
 

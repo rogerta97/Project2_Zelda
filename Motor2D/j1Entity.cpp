@@ -66,6 +66,7 @@ bool j1Entity::Update(float dt)
 	player_manager->Update(dt);
 
 	SlowEntities();
+	StunEntities();
 
 	return ret;
 }
@@ -291,6 +292,14 @@ void j1Entity::SlowEntities()
 
 void j1Entity::StunEntities()
 {
+	for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end(); it++)
+	{
+		if ((*it).time <= (*it).timer.ReadSec())
+		{
+			(*it).entity->stuned = false;
+			stuned_entities.remove(*it);
+		}
+	}
 }
 
 

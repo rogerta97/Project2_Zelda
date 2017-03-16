@@ -109,6 +109,9 @@ void Entity::Slow(float speed_multiplicator, float time)
 
 void Entity::Stun(float time)
 {
+	stuned = true;
+	stun s(time, this);
+	App->entity->stuned_entities.push_back(s);
 }
 
 void Entity::LifeBar(iPoint size, iPoint offset)

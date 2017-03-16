@@ -71,20 +71,25 @@ bool Minion::Update(float dt)
 
 	speed = stats.speed*dt;
 
-	switch (state)
+	if (!stuned)
 	{
-	case Minion_Idle:
-		MinionIdle();
-		break;
-	case Minion_Move:
-		MinionMove();
-		break;
-	case Minion_Attack:
-		MinionAttack();
-		break;
-	default:
-		break;
+		switch (state)
+		{
+		case Minion_Idle:
+			MinionIdle();
+			break;
+		case Minion_Move:
+			MinionMove();
+			break;
+		case Minion_Attack:
+			MinionAttack();
+			break;
+		default:
+			break;
+		}
 	}
+	else
+		SetIdleAnim();
 
 	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 	
@@ -105,6 +110,8 @@ bool Minion::Update(float dt)
 
 				if (spell->stats.slow_duration > 0)
 					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
 			}
 
 			if (stats.life <=0)

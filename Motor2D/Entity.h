@@ -270,6 +270,7 @@ public:
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
+	bool			 stuned = false;
 
 	// Life bar
 	bool			 show_life_bar = false;

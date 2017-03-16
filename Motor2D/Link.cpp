@@ -86,6 +86,8 @@ bool Link::Update(float dt)
 
 				if (spell->stats.slow_duration > 0)
 					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
 			}
 		}
 

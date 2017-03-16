@@ -45,6 +45,29 @@ public:
 	j1Timer timer;
 };
 
+class stun
+{
+public:
+	stun() {};
+	stun(float _time, Entity* _entity)
+	{
+		time = _time; entity = _entity;
+		timer.Start();
+	};
+	~stun() {};
+
+	bool operator==(stun s)
+	{
+		if (time == s.time && entity == s.entity)
+			return true;
+		return false;
+	}
+
+	float   time = 0.0f;
+	Entity* entity = nullptr;
+	j1Timer timer;
+};
+
 class Entity;
 class j1Entity : public j1Module
 {
@@ -93,6 +116,7 @@ public:
 	PlayerManager* player_manager = nullptr;
 
 	list<slow>     slowed_entities;
+	list<stun>     stuned_entities;
 
 private:
 	// List with all entities
