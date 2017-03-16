@@ -40,23 +40,28 @@ bool CharacterSelectionScene::Update(float dt)
 	{
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN) 
 		{
+			
 			MoveCard(i, "right");
 
-			int a = char_view_1.size()/2;
+			int a = char_view[i].size()/2;
 
 			int j = 0; 
-			for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+
+
+
+			// Update images 
+			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
 			{
 				switch ((*it).character)
 				{
 				case link:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->image = link_rects[0];
+						viewport[i].char_images.at(j++)->image = link_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->image = link_rects[1];
+						viewport[i].char_images.at(j++)->image = link_rects[1];
 					}
 
 
@@ -64,22 +69,22 @@ bool CharacterSelectionScene::Update(float dt)
 				case navi:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->image = navi_rects[0];
+						viewport[i].char_images.at(j++)->image = navi_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->image = navi_rects[1];
+						viewport[i].char_images.at(j++)->image = navi_rects[1];
 					}
 					break;
 
 				case ganon:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->image = ganon_rects[0];
+						viewport[i].char_images.at(j++)->image = ganon_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->image = ganon_rects[1];
+						viewport[i].char_images.at(j++)->image = ganon_rects[1];
 					}
 					break;
 				}
@@ -90,21 +95,23 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			MoveCard(i, "left");
 
-			int a = char_view_1.size() / 2;
+			int a = char_view[i].size() / 2;
 
 			int j = 0;
-			for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+
+			// Update images
+			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
 			{
 				switch ((*it).character)
 				{
 				case link:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->image = link_rects[0];
+						viewport[i].char_images.at(j++)->image = link_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->image = link_rects[1];
+						viewport[i].char_images.at(j++)->image = link_rects[1];
 					}
 
 
@@ -112,32 +119,32 @@ bool CharacterSelectionScene::Update(float dt)
 				case navi:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->image = navi_rects[0];
+						viewport[i].char_images.at(j++)->image = navi_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->image = navi_rects[1];
+						viewport[i].char_images.at(j++)->image = navi_rects[1];
 					}
 					break;
 
 				case ganon:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->image = ganon_rects[0];
+						viewport[i].char_images.at(j++)->image = ganon_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->image = ganon_rects[1];
+						viewport[i].char_images.at(j++)->image = ganon_rects[1];
 					}
 					break;
 				}
 			}
 		}
 
-		int center_pos = char_view_1.size() / 2;
+		int center_pos = char_view[i].size() / 2;
 		int count = 0;
 
-		for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+		for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
 		{
 			if (count++ == center_pos) {
 				viewport[i].name->SetText(it->name);
@@ -146,23 +153,25 @@ bool CharacterSelectionScene::Update(float dt)
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_REPEAT)
 		{
-			int center_pos = char_view_1.size() / 2;
+			int center_pos = char_view[i].size() / 2;
 			int count = 0;
 
-			for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+
+			// Update images
+			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
 			{
 				if (count++ == center_pos) {
 					switch (it->character) 
 					{
 					case link: 
-						EnableInfo(link, 0); 
+						EnableInfo(link, i); 
 							break; 
 					case ganon:
-						EnableInfo(ganon, 0);
+						EnableInfo(ganon, i);
 						break;
 
 					case navi:
-						EnableInfo(navi, 0);
+						EnableInfo(navi, i);
 						break;
 					}
 				}
@@ -170,7 +179,7 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
 		{
-			DisableInfo(0); 
+			DisableInfo(i); 
 		}
 	}
 
@@ -179,6 +188,13 @@ bool CharacterSelectionScene::Update(float dt)
 
 bool CharacterSelectionScene::PostUpdate()
 {
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN) 
+	{
+		App->scene->ChangeScene((Scene*)App->scene->main_scene); 
+	}
+
+
 	return true;
 }
 
@@ -312,22 +328,27 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	}
 
 
-	character_info d; 
+	for (int i = 0; i < 4; i++) 
+	{
+		character_info d;
 
-	d.character = ganon;
-	d.name = "ganon";
+		d.character = ganon;
+		d.name = "ganon";
 
-	char_view_1.push_back(d); 
+		char_view[i].push_back(d);
 
-	d.character = link;
-	d.name = "link";
+		d.character = link;
+		d.name = "link";
 
-	char_view_1.push_back(d);
+		char_view[i].push_back(d);
 
-	d.character = navi;
-	d.name = "navi";
+		d.character = navi;
+		d.name = "navi";
 
-	char_view_1.push_back(d);
+		char_view[i].push_back(d);
+
+	}
+	
 
 	info_window win; 
 
@@ -423,16 +444,16 @@ void CharacterSelectionScene::MoveCard(int pad, const char * direction)
 	
 	if (direction == "right") 
 	{
-		character_info first = char_view_1.front();
-		char_view_1.pop_front();
-		char_view_1.push_back(first);
+		character_info first = char_view[pad].front();
+		char_view[pad].pop_front();
+		char_view[pad].push_back(first);
 
 	}
 	else if(direction == "left")
 	{
-		character_info last = char_view_1.back();
-		char_view_1.pop_back();
-		char_view_1.push_front(last);
+		character_info last = char_view[pad].back();
+		char_view[pad].pop_back();
+		char_view[pad].push_front(last);
 	}
 }
 

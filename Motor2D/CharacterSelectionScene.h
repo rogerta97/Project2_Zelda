@@ -62,21 +62,23 @@ private:
 	char_select_view			viewport[4]; 
 
 	list<info_window>			info_container; 
-	list<character_info>		char_view_1; 
+
+	list<character_info>		char_view[4]; 
+
 
 	// Ganon
-	SDL_Rect		ganon_rects[2];
+	SDL_Rect					ganon_rects[2];
 
 	// Navi
-	SDL_Rect		navi_rects[2];
+	SDL_Rect					navi_rects[2];
 
 	// Link
-	SDL_Rect		link_rects[2];
+	SDL_Rect					link_rects[2];
 
 	// Background
-	SDL_Rect		backgrounds_rects[2];
+	SDL_Rect					backgrounds_rects[2];
 
-	vector<iPoint>			positions;
+	vector<iPoint>				positions;
 
 public:
 
