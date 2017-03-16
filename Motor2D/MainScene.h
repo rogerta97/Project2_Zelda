@@ -13,6 +13,7 @@ class QuestManager;
 class Minion;
 class MinionManager;
 class TowerManager;
+class ShopManager;
 
 enum GameStates
 {
@@ -46,6 +47,8 @@ public:
 	TowerManager*	    tower_manager = nullptr;
 
 	QuestManager*		quest_manager = nullptr;
+
+	ShopManager*		shop_manager = nullptr;
 
 private:
 	//UI elements

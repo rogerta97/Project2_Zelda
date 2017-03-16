@@ -352,5 +352,11 @@
     <Xml Include="..\Game\MapCollisions.xml">
       <Filter>Engine\3. Scenes ==========\MainScene</Filter>
     </Xml>
+    <Xml Include="..\Game\Items.xml">
+      <Filter>Engine\2. Components ======</Filter>
+    </Xml>
+    <Xml Include="..\Game\Shop_config.xml">
+      <Filter>Engine\2. Components ======</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

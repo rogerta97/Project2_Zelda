@@ -22,7 +22,7 @@
 #include "Scene.h"
 #include "TowerManager.h"
 #include "Functions.h"
-
+#include "ShopManager.h"
 
 
 MainScene::MainScene()
@@ -112,6 +112,9 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	CreateMapCollisions();
+
+	shop_manager = new ShopManager();
+	shop_manager->Start();
 
 	return ret;
 }
