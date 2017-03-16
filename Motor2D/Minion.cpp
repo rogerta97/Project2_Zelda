@@ -101,7 +101,7 @@ bool Minion::Update(float dt)
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Abilities control their own damage mutiplicator
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
 			}
 
 			if (stats.life <=0)
