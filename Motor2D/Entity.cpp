@@ -100,6 +100,20 @@ void Entity::Heal(int heal)
 		stats.life = stats.max_life;
 }
 
+void Entity::Slow(float speed_multiplicator, float time)
+{
+	stats.speed *= speed_multiplicator;
+	slow s(time, this);
+	App->entity->slowed_entities.push_back(s);
+}
+
+void Entity::Stun(float time)
+{
+	stuned = true;
+	stun s(time, this);
+	App->entity->stuned_entities.push_back(s);
+}
+
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
 	if (show_life_bar && game_object != nullptr)

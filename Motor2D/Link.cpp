@@ -50,7 +50,7 @@ bool Link::Start()
 	game_object->SetAnimation("idle_down");
 
 	can_move = true;
-	stats.speed = 160;
+	stats.speed = stats.restore_speed = 160;
 
 	return ret;
 }
@@ -83,6 +83,11 @@ bool Link::Update(float dt)
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
 				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1));
+
+				if (spell->stats.slow_duration > 0)
+					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
 			}
 		}
 
