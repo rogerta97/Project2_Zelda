@@ -51,10 +51,29 @@ bool MainScene::Start()
 	}
 
 	LOG("Loading Players");
-	Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300, 700), 1);
-	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(400, 700), 1);
-	Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, 3, iPoint(500, 700), 2);
-	Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, 4, iPoint(600, 700), 2);
+	bool def = false;
+	for (int i = 0; i < 4; i++)
+	{
+		if (App->scene->players[i].character == e_n_null)
+		{
+			def = true;
+			break;
+		}
+	}
+	if (!def)
+	{
+		Player* p1 = App->entity->player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
+		Player* p2 = App->entity->player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
+		Player* p3 = App->entity->player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
+		Player* p4 = App->entity->player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
+	}
+	else
+	{
+		Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
+		Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
+		Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
+		Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
+	}
 
 	//Test Minion
 	LOG("Creating minion manager");

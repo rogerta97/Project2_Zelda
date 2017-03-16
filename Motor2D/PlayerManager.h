@@ -15,16 +15,17 @@ class Entity;
 struct Player
 {
 	Player() {  };
-	Player(Entity* _entity, uint _index)
+	Player(Entity* _entity, uint _controller_index, uint _viewport)
 	{
-		entity = _entity; state = states::idle_down; index = _index;
+		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
 	}
 
 	Entity*  entity = nullptr;
 	states   state = states::states_null;
 	shows	 show = shows::show_null;
 	movement move = stop;
-	uint	 index = 0;
+	uint	 controller_index = 0;
+	uint	 viewport = 0;
 };
 
 class PlayerManager
@@ -54,8 +55,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	Player* AddPlayer(entity_name name, int index, iPoint pos, int team, bool on_spawn = true, int show_life_bar = true);
-	void ChangePlayer(entity_name name, int index);
+	Player* AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn = true, int show_life_bar = true);
+	void ChangePlayer(entity_name name, int controller_index, int viewport);
 	void DeletePlayer(int index);
 	void ClearPlayers();
 

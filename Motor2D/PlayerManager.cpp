@@ -46,36 +46,36 @@ bool PlayerManager::Update(float dt)
 		{
 			curr_player->move = stop;
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_UP) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 		{
 			curr_player->move = move_upleft;
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_UP) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 		{
 			curr_player->move = move_upright;
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_DOWN) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 		{
 			curr_player->move = move_downleft;
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_DOWN) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 		{
 			curr_player->move = move_downright;
 		}
 			// Normal moves
-		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_LEFT) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
 		{
 			curr_player->move = move_left;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_RIGHT) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
 		{
 			curr_player->move = move_right;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_UP) > 6000)
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
 		{
 			curr_player->move = move_up;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, LEFTJOY_DOWN) > 6000)
+		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
 		{
 			curr_player->move = move_down;
 		}
@@ -86,28 +86,28 @@ bool PlayerManager::Update(float dt)
 		// --------------------
 
 		// Right Joystick -----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, RIGHTJOY_LEFT) > 22000)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_LEFT) > 22000)
 		{
 			if (curr_player->move != stop)
 				curr_player->state = run_left;
 			else
 				curr_player->state = idle_left;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, RIGHTJOY_RIGHT) > 22000)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_RIGHT) > 22000)
 		{
 			if (curr_player->move != stop)
 				curr_player->state = run_right;
 			else
 				curr_player->state = idle_right;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, RIGHTJOY_UP) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_UP) > 12000)
 		{
 			if (curr_player->move != stop)
 				curr_player->state = run_up;
 			else
 				curr_player->state = idle_up;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->index, RIGHTJOY_DOWN) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_DOWN) > 12000)
 		{
 			if (curr_player->move != stop)
 				curr_player->state = run_down;
@@ -151,7 +151,7 @@ bool PlayerManager::Update(float dt)
 		}
 
 		// Abilities PRESS
-		if (App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
 		{
 			if(curr_player->state == idle_down || curr_player->state == run_down)
 				curr_player->show = shows::show_basic_atack_down;
@@ -162,7 +162,7 @@ bool PlayerManager::Update(float dt)
 			else if (curr_player->state == idle_right || curr_player->state == run_right)
 				curr_player->show = shows::show_basic_atack_right;
 		}
-		else if (App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
+		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
 		{
 			if (curr_player->state == idle_down || curr_player->state == run_down)
 				curr_player->show = shows::show_ability1_down;
@@ -173,7 +173,7 @@ bool PlayerManager::Update(float dt)
 			else if (curr_player->state == idle_right || curr_player->state == run_right)
 				curr_player->show = shows::show_ability1_right;
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->index, RIGHT_TRIGGER) > 22000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
 		{
 			if (curr_player->state == idle_down || curr_player->state == run_down)
 				curr_player->show = shows::show_ability2_down;
@@ -184,7 +184,7 @@ bool PlayerManager::Update(float dt)
 			else if (curr_player->state == idle_right || curr_player->state == run_right)
 				curr_player->show = shows::show_ability2_right;
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->index, LEFT_TRIGGER) > 22000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
 		{
 			if (curr_player->state == idle_down || curr_player->state == run_down)
 				curr_player->show = shows::show_ability3_down;
@@ -197,7 +197,7 @@ bool PlayerManager::Update(float dt)
 		}
 
 		// Abilities RELEASE
-		if (App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE && !curr_player->entity->stuned)
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE && !curr_player->entity->stuned)
 		{
 			if (curr_player->show != shows::show_null)
 			{
@@ -224,7 +224,7 @@ bool PlayerManager::Update(float dt)
 			}
 		}
 
-		if (App->input->GetControllerButton(curr_player->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
 		{
 			if (curr_player->show != shows::show_null)
 			{
@@ -251,7 +251,7 @@ bool PlayerManager::Update(float dt)
 			}
 		}
 
-		if (App->input->GetControllerJoystickMove(curr_player->index, RIGHT_TRIGGER) < 22000)
+		if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) < 22000)
 		{
 			if (curr_player->show != shows::show_null)
 			{
@@ -278,7 +278,7 @@ bool PlayerManager::Update(float dt)
 			}
 		}
 
-		if (App->input->GetControllerJoystickMove(curr_player->index, LEFT_TRIGGER) < 22000)
+		if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) < 22000)
 		{
 			if (curr_player->show != shows::show_null)
 			{
@@ -518,7 +518,7 @@ bool PlayerManager::CleanUp()
 	return ret;
 }
 
-Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, bool on_spawn, int show_life_bar)
+Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn, int show_life_bar)
 {
 	Player* ret = nullptr;
 
@@ -542,8 +542,8 @@ Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int te
 		}
 
 		// Create player
-		Player* p = new Player(App->entity->CreateEntity(name, position), index - 1);
-		p->entity->SetCamera(p->index + 1);
+		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport);
+		p->entity->SetCamera(p->viewport);
 		p->entity->SetTeam(team);
 		p->entity->show_life_bar = show_life_bar;
 		p->entity->is_player = true;
@@ -554,12 +554,12 @@ Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int te
 	return ret;
 }
 
-void PlayerManager::ChangePlayer(entity_name name, int index)
+void PlayerManager::ChangePlayer(entity_name name, int controller_index, int viewport)
 {
 	iPoint pos;
 	for(vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
-		if ((*it)->index == index - 1)
+		if ((*it)->controller_index == controller_index - 1)
 		{
 			pos = (*it)->entity->GetPos();
 			App->entity->DeleteEntity((*it)->entity);
@@ -569,16 +569,16 @@ void PlayerManager::ChangePlayer(entity_name name, int index)
 		}
 	}
 
-	Player* p = new Player(App->entity->CreateEntity(name, pos), index - 1);
-	p->entity->SetCamera(p->index + 1);
+	Player* p = new Player(App->entity->CreateEntity(name, pos), controller_index - 1, viewport);
+	p->entity->SetCamera(p->controller_index + 1);
 	players.push_back(p);
 }
 
-void PlayerManager::DeletePlayer(int index)
+void PlayerManager::DeletePlayer(int controller_index)
 {
 	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
-		if ((*it)->index == index - 1)
+		if ((*it)->controller_index == controller_index - 1)
 		{
 			players.erase(it);
 			App->entity->DeleteEntity((*it)->entity);
@@ -620,7 +620,7 @@ std::vector<int> PlayerManager::GetTeamViewports(int team)
 	{
 		if ((*it)->entity->GetTeam() == team)
 		{
-			ret.push_back((*it)->index+1);
+			ret.push_back((*it)->controller_index+1);
 		}
 	}
 
@@ -633,7 +633,7 @@ int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 	{
 		if (players.at(i)->entity == entity)
 		{
-			return players.at(i)->index + 1;
+			return players.at(i)->viewport;
 		}
 	}
 }

@@ -6,7 +6,7 @@
 
 #define ACCELERATION -1300
 #define TIME 0.65f
-#define DESTRUCTION_TIME 2
+#define DESTRUCTION_TIME 1.8f
 #define SLOW_TIME 1.5f
 #define SLOW_MULTIPLICATOR 0.5f
 Boomerang::Boomerang(iPoint pos)
