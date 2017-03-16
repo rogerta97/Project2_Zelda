@@ -48,7 +48,7 @@ bool Minion::Start()
 
 	game_object->SetAnimation("idle_down");
 
-	stats.speed = 45;
+	stats.speed = stats.restore_speed = 45;
 	stats.max_life = stats.life = 50;
 
 	show_life_bar = true;
@@ -102,6 +102,9 @@ bool Minion::Update(float dt)
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
 				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+				if (spell->stats.slow_duration > 0)
+					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
 			}
 
 			if (stats.life <=0)

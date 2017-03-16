@@ -105,6 +105,7 @@ public:
 
 public:
 	int speed = 0;
+	int restore_speed = 0;
 
 	int max_life = 100;
 	int life = 100;

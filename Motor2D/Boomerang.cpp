@@ -7,6 +7,8 @@
 #define ACCELERATION -1300
 #define TIME 0.65f
 #define DESTRUCTION_TIME 2
+#define SLOW_TIME 1.5f
+#define SLOW_MULTIPLICATOR 0.5f
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_boomerang, 0);
@@ -81,8 +83,8 @@ bool Boomerang::Update(float dt)
 		{
 			stats.stun_duration = 0.0f;
 			stats.damage_multiplicator = 0.7f;
-			stats.slow_duration = 1.0f;
-			stats.slow_force = 0.5f;
+			stats.slow_duration = SLOW_TIME;
+			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
 		}
 	}
 	else
@@ -90,7 +92,7 @@ bool Boomerang::Update(float dt)
 		stats.stun_duration = 0.0f;
 		stats.damage_multiplicator = 0.7f;
 		stats.slow_duration = 0.0f;
-		stats.slow_force = 0.0f;
+		stats.slow_multiplicator = 0.0f;
 	}
 
 	switch (dir)

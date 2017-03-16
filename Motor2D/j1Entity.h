@@ -5,6 +5,7 @@
 #include "p2Defs.h"
 #include "p2List.h"
 #include "p2Point.h"
+#include "j1Timer.h"
 
 class PlayerManager;
 class b2Fixture;
@@ -12,12 +13,36 @@ class PhysBody;
 class Entity;
 class Ability;
 class Spell;
+class j1Timer;
 
 enum class pbody_type;
 
 enum entity_name
 {
 	e_n_null, link, minion, tower, castle
+};
+
+class slow
+{
+public:
+	slow() {};
+	slow(float _time, Entity* _entity) 
+	{
+		time = _time; entity = _entity;
+		timer.Start();
+	};
+	~slow() {};
+
+	bool operator==(slow s)
+	{
+		if (time == s.time && entity == s.entity)
+			return true;
+		return false;
+	}
+
+	float   time = 0.0f;
+	Entity* entity = nullptr;
+	j1Timer timer;
 };
 
 class Entity;
@@ -59,16 +84,19 @@ public:
 	Ability* FindAbilityBySpellBody(PhysBody* spell);
 	Spell* FindSpellByBody(PhysBody* spell);
 
+private:
+	void RemoveEntities();
+	void SlowEntities();
+	void StunEntities();
+
 public:
 	PlayerManager* player_manager = nullptr;
 
+	list<slow>     slowed_entities;
+
 private:
 	// List with all entities
-	list<Entity*> entity_list;
-
-	void RemoveEntities();
-
-
+	list<Entity*>  entity_list;
 };
 
 #endif // __j1ENTITY_H__
