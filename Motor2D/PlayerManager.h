@@ -6,6 +6,7 @@
 #include "p2List.h"
 #include "Entity.h"
 #include "j1Entity.h"
+#include "Item.h"
 
 class b2Fixture;
 class PhysBody;
@@ -25,6 +26,8 @@ struct Player
 	shows	 show = shows::show_null;
 	movement move = stop;
 	uint	 index = 0;
+	Item*	 items[3] = { nullptr,nullptr,nullptr };
+
 };
 
 class PlayerManager

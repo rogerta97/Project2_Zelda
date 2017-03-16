@@ -121,6 +121,9 @@
     <ClCompile Include="TeamSelectScene.cpp">
       <Filter>Engine\3. Scenes ==========\TeamSelectScene</Filter>
     </ClCompile>
+    <ClCompile Include="ShopManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -269,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="TeamSelectScene.h">
       <Filter>Engine\3. Scenes ==========\TeamSelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
