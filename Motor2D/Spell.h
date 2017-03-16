@@ -17,7 +17,7 @@ struct personal_stats
 {
 	float damage_multiplicator = 0.0f;
 	float slow_duration = 0.0f;
-	float slow_force = 0.0f;
+	float slow_multiplicator = 0.0f;
 	float stun_duration = 0.0f;
 };
 

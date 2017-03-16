@@ -105,6 +105,7 @@ public:
 
 public:
 	int speed = 0;
+	int restore_speed = 0;
 
 	int max_life = 100;
 	int life = 100;
@@ -269,6 +270,7 @@ public:
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
+	bool			 stuned = false;
 
 	// Life bar
 	bool			 show_life_bar = false;
