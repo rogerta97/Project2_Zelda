@@ -99,6 +99,11 @@ bool Minion::Update(float dt)
 		{
 			DealDamage(ability->damage * ability->damage_multiplicator);
 
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Abilities control their own damage mutiplicator
+			}
+
 			if (stats.life <=0)
 			{
 				App->scene->main_scene->minion_manager->KillMinion(this);
