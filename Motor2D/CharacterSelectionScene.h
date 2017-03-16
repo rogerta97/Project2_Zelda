@@ -10,15 +10,23 @@ class UI_Image;
 class UI_Text;
 class UI_Window;
 
+struct info_window
+{
+	entity_name			name = e_n_null; 
+	vector<UI_Image*>	habilites; 
+	vector<UI_Text*>	description;
+};
 
 struct char_select_view
 {	
-	vector<UI_Image*>      char_images;
-	vector<UI_Image*>	   back_images; 
+	vector<UI_Image*>   char_images;
+	vector<UI_Image*>	back_images; 
 
-	UI_Image*			   name_background = nullptr; 
-	UI_Text*			   name = nullptr; 
-	UI_Image*			   info_button = nullptr; 
+	UI_Image*			name_background = nullptr; 
+	UI_Text*			name = nullptr; 
+	UI_Image*			info_button = nullptr; 
+	UI_Image*			info_back = nullptr;
+
 };
 
 struct character_info
@@ -43,15 +51,18 @@ public:
 
 	void CreateScene(uint w, uint h); 
 	void MoveCard(int pad, const char* direction); 
+	void EnableInfo(entity_name character, int viewport_num);
+	void DisableInfo(int viewport_num);
 
 	UI_Window*		window = nullptr; 
 	UI_Window*		player_info_window = nullptr; 
 
 private:
 
-	char_select_view	viewport[4]; 
+	char_select_view			viewport[4]; 
 
-	list<character_info> char_view_1; 
+	list<info_window>			info_container; 
+	list<character_info>		char_view_1; 
 
 	// Ganon
 	SDL_Rect		ganon_rects[2];

@@ -140,8 +140,37 @@ bool CharacterSelectionScene::Update(float dt)
 		for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
 		{
 			if (count++ == center_pos) {
-				viewport[0].name->SetText(it->name);
+				viewport[i].name->SetText(it->name);
 			}
+		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_REPEAT)
+		{
+			int center_pos = char_view_1.size() / 2;
+			int count = 0;
+
+			for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+			{
+				if (count++ == center_pos) {
+					switch (it->character) 
+					{
+					case link: 
+						EnableInfo(link, 0); 
+							break; 
+					case ganon:
+						EnableInfo(ganon, 0);
+						break;
+
+					case navi:
+						EnableInfo(navi, 0);
+						break;
+					}
+				}
+			}
+		}
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
+		{
+			DisableInfo(0); 
 		}
 	}
 
@@ -180,6 +209,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	positions.push_back(iPoint(positions[6].x + 90, positions[6].y + 10));
 	positions.push_back(iPoint(550, 300));
+	positions.push_back(iPoint(30, 30));
 
 	//---
 	// viewport 2 ---
@@ -196,6 +226,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, positions[6].y + 10));
 	positions.push_back(iPoint(w / 2 + 550, 300));
+	positions.push_back(iPoint(w / 2 + 30, 30));
 
 	//---
 
@@ -213,6 +244,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	positions.push_back(iPoint( positions[6].x + 90, h / 2 + positions[6].y + 10));
 	positions.push_back(iPoint( 550, h / 2 + 300));
+	positions.push_back(iPoint(30, h / 2 + 30));
 
 	// --
 
@@ -230,6 +262,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, h / 2 + positions[6].y + 10));
 	positions.push_back(iPoint(w / 2 + 550, h / 2 + 300));
+	positions.push_back(iPoint(w / 2 + 30, h / 2 + 30));
 
 	// ---
 
@@ -273,8 +306,11 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 		//Setting info button
 		viewport[i].info_button = window->CreateImage(positions[pos_count++], {284, 195, 40, 40}, false);
-		
+
+		viewport[i].info_back = window->CreateImage(positions[pos_count++], { 10, 295, 484, 327 }, false);
+		viewport[i].info_back->enabled = false; 
 	}
+
 
 	character_info d; 
 
@@ -292,7 +328,94 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	d.name = "navi";
 
 	char_view_1.push_back(d);
+
+	info_window win; 
+
+// Link info ----
+
+	win.name = link; 
+
+	win.habilites.push_back(window->CreateImage(iPoint(60, 70), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 120), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 200), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 270), { 284, 195, 40, 40 }, false));
 	
+	win.description.push_back(window->CreateText(iPoint(110, 70), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(0)->SetText("Basic Attack    Frontal smash with the sword"); 
+	win.description.push_back(window->CreateText(iPoint(110, 120), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(1)->SetText("Sword Swing    Link swings his sword around him and\n damage all nearby enemies");
+	win.description.push_back(window->CreateText(iPoint(110, 200), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(2)->SetText("Boomerang    Link shoots his boomerang, catch it\n when it comes back!");
+	win.description.push_back(window->CreateText(iPoint(110, 270), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(3)->SetText("Charge    Link will run to target location ignoring\n collisions and damaging all enemies he touches.");
+
+	info_container.push_back(win); 
+
+	win.habilites.clear(); 
+	win.description.clear(); 
+
+// ----
+
+// Ganon info ----
+
+	win.name = ganon;
+
+	win.habilites.push_back(window->CreateImage(iPoint(60, 70), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 120), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 200), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 270), { 284, 195, 40, 40 }, false));
+
+	win.description.push_back(window->CreateText(iPoint(110, 70), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(0)->SetText("Basic Attack    Frontal smash with the trident");
+	win.description.push_back(window->CreateText(iPoint(110, 130), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(1)->SetText("Bat    Ganon shoot a bat to target direction");
+	win.description.push_back(window->CreateText(iPoint(110, 200), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(2)->SetText("Flame Shield     Ganon puts a shield to himself and\n summon 3 fire orbs that orbit around him. ");
+	win.description.push_back(window->CreateText(iPoint(110, 270), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(3)->SetText("Evil Jump    Ganaon jumps to a target position and\n stuns all enemies on the area.");
+
+	info_container.push_back(win);
+
+	win.habilites.clear();
+	win.description.clear();
+
+// ----
+
+// navi info ----
+
+	win.name = navi;
+
+	win.habilites.push_back(window->CreateImage(iPoint(60, 70), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 120), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 200), { 284, 195, 40, 40 }, false));
+	win.habilites.push_back(window->CreateImage(iPoint(60, 270), { 284, 195, 40, 40 }, false));
+
+	win.description.push_back(window->CreateText(iPoint(110, 70), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(0)->SetText("Basic Attack    Navi shoots an energy ball in front\n of her that hits the first enemy hit");
+	win.description.push_back(window->CreateText(iPoint(110, 130), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(1)->SetText("Watch Out!    Navi heals allies around her. Range is\n displayed as a circle with Navi as centre.");
+	win.description.push_back(window->CreateText(iPoint(110, 200), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(2)->SetText("Blink     Navi uses her magic energy to teleport a\n small distance in front of her.");
+	win.description.push_back(window->CreateText(iPoint(110, 270), App->font->game_font_12, 25, false, 255, 255, 255));
+	win.description.at(3)->SetText("Hey Listen!    disable enemy players view for 3\n seconds");
+
+	info_container.push_back(win);
+
+// ----
+
+	for (list<info_window>::iterator it = info_container.begin(); it != info_container.end(); it++) 
+	{
+		it->habilites.at(0)->enabled = false; 
+		it->habilites.at(1)->enabled = false;
+		it->habilites.at(2)->enabled = false;
+		it->habilites.at(3)->enabled = false;
+
+		it->description.at(0)->enabled = false;
+		it->description.at(1)->enabled = false;
+		it->description.at(2)->enabled = false;
+		it->description.at(3)->enabled = false;
+	};
+
 }
 
 void CharacterSelectionScene::MoveCard(int pad, const char * direction)
@@ -311,8 +434,47 @@ void CharacterSelectionScene::MoveCard(int pad, const char * direction)
 		char_view_1.pop_back();
 		char_view_1.push_front(last);
 	}
+}
 
+void CharacterSelectionScene::EnableInfo(entity_name character, int viewport_num)
+{
+	for (list<info_window>::iterator it = info_container.begin(); it != info_container.end(); it++)
+	{
+		if (it->name == character) 
+		{
+			it->habilites.at(0)->enabled = true;
+			it->habilites.at(1)->enabled = true;
+			it->habilites.at(2)->enabled = true;
+			it->habilites.at(3)->enabled = true;
 
+			it->description.at(0)->enabled = true;
+			it->description.at(1)->enabled = true;
+			it->description.at(2)->enabled = true;
+			it->description.at(3)->enabled = true;
+		}
 
+	};
 
+	viewport[viewport_num].info_back->enabled = true;
+}
+
+void CharacterSelectionScene::DisableInfo(int viewport_num)
+{
+	for (list<info_window>::iterator it = info_container.begin(); it != info_container.end(); it++)
+	{
+		
+			it->habilites.at(0)->enabled = false;
+			it->habilites.at(1)->enabled = false;
+			it->habilites.at(2)->enabled = false;
+			it->habilites.at(3)->enabled = false;
+
+			it->description.at(0)->enabled = false;
+			it->description.at(1)->enabled = false;
+			it->description.at(2)->enabled = false;
+			it->description.at(3)->enabled = false;
+		
+
+		viewport[viewport_num].info_back->enabled = false;
+	
+	};
 }
