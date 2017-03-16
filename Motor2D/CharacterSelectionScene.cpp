@@ -52,11 +52,11 @@ bool CharacterSelectionScene::Update(float dt)
 				case link:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->rect = link_rects[0];
+						viewport[0].char_images.at(j++)->image = link_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->rect = link_rects[1];
+						viewport[0].char_images.at(j++)->image = link_rects[1];
 					}
 
 
@@ -64,25 +64,83 @@ bool CharacterSelectionScene::Update(float dt)
 				case navi:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->rect = navi_rects[0];
+						viewport[0].char_images.at(j++)->image = navi_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->rect = navi_rects[1];
+						viewport[0].char_images.at(j++)->image = navi_rects[1];
 					}
 					break;
 
 				case ganon:
 					if (j != a)
 					{
-						viewport[0].char_images.at(j++)->rect = ganon_rects[0];
+						viewport[0].char_images.at(j++)->image = ganon_rects[0];
 					}
 					else
 					{
-						viewport[0].char_images.at(j++)->rect = ganon_rects[1];
+						viewport[0].char_images.at(j++)->image = ganon_rects[1];
 					}
 					break;
 				}
+			}
+		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN)
+		{
+			MoveCard(i, "left");
+
+			int a = char_view_1.size() / 2;
+
+			int j = 0;
+			for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+			{
+				switch ((*it).character)
+				{
+				case link:
+					if (j != a)
+					{
+						viewport[0].char_images.at(j++)->image = link_rects[0];
+					}
+					else
+					{
+						viewport[0].char_images.at(j++)->image = link_rects[1];
+					}
+
+
+					break;
+				case navi:
+					if (j != a)
+					{
+						viewport[0].char_images.at(j++)->image = navi_rects[0];
+					}
+					else
+					{
+						viewport[0].char_images.at(j++)->image = navi_rects[1];
+					}
+					break;
+
+				case ganon:
+					if (j != a)
+					{
+						viewport[0].char_images.at(j++)->image = ganon_rects[0];
+					}
+					else
+					{
+						viewport[0].char_images.at(j++)->image = ganon_rects[1];
+					}
+					break;
+				}
+			}
+		}
+
+		int center_pos = char_view_1.size() / 2;
+		int count = 0;
+
+		for (list<character_info>::iterator it = char_view_1.begin(); it != char_view_1.end(); it++)
+		{
+			if (count++ == center_pos) {
+				viewport[0].name->SetText(it->name);
 			}
 		}
 	}
@@ -121,7 +179,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w/4 - 120, 220));
 
 	positions.push_back(iPoint(positions[6].x + 90, positions[6].y + 10));
-	positions.push_back(iPoint(400, 300));
+	positions.push_back(iPoint(550, 300));
 
 	//---
 	// viewport 2 ---
@@ -137,7 +195,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + (w / 4 - 120), 220));
 
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, positions[6].y + 10));
-	positions.push_back(iPoint(w / 2 + 400, 300));
+	positions.push_back(iPoint(w / 2 + 550, 300));
 
 	//---
 
@@ -154,7 +212,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint( (w / 4 - 120), h / 2 + 220));
 
 	positions.push_back(iPoint( positions[6].x + 90, h / 2 + positions[6].y + 10));
-	positions.push_back(iPoint( 400, h / 2 + 300));
+	positions.push_back(iPoint( 550, h / 2 + 300));
 
 	// --
 
@@ -171,7 +229,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + (w / 4 - 120), h / 2 + 220));
 
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, h / 2 + positions[6].y + 10));
-	positions.push_back(iPoint(w / 2 + 400, h / 2 + 300));
+	positions.push_back(iPoint(w / 2 + 550, h / 2 + 300));
 
 	// ---
 
@@ -203,31 +261,30 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 		//Setting the characters image
 		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], ganon_rects[0], false));
 
-		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], navi_rects[1], false));
+		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], link_rects[1], false));
 
-		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], link_rects[0], false));
+		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], navi_rects[0], false));
 
 		//Setting name background
 		viewport[i].name_background = window->CreateImage(positions[pos_count++], { 128, 52, 220, 55 }, false);
 
 		//Setting the initial name 
 		viewport[i].name = window->CreateText(positions[pos_count++], App->font->game_font, 0, false, 255, 255, 255);
-		viewport[i].name->SetText("link");
 
 		//Setting info button
-		viewport[i].character_info = window->CreateImage(positions[pos_count++], {128, 52, 220, 55}, false);
+		viewport[i].info_button = window->CreateImage(positions[pos_count++], {284, 195, 40, 40}, false);
 		
 	}
 
 	character_info d; 
 
-	d.character = link; 
-	d.name = "link"; 
+	d.character = ganon;
+	d.name = "ganon";
 
 	char_view_1.push_back(d); 
 
-	d.character = ganon;
-	d.name = "ganon";
+	d.character = link;
+	d.name = "link";
 
 	char_view_1.push_back(d);
 
@@ -236,28 +293,26 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	char_view_1.push_back(d);
 	
-
-
 }
 
 void CharacterSelectionScene::MoveCard(int pad, const char * direction)
 {
 	
-	SDL_Rect joker;
-
 	if (direction == "right") 
 	{
-		// first <-> second
-
-		character_info last = *char_view_1.end(); 
-		char_view_1.pop_back();
-
-		char_view_1.push_front(last); 
+		character_info first = char_view_1.front();
+		char_view_1.pop_front();
+		char_view_1.push_back(first);
 
 	}
 	else if(direction == "left")
 	{
-		
+		character_info last = char_view_1.back();
+		char_view_1.pop_back();
+		char_view_1.push_front(last);
 	}
+
+
+
 
 }

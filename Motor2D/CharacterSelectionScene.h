@@ -18,7 +18,7 @@ struct char_select_view
 
 	UI_Image*			   name_background = nullptr; 
 	UI_Text*			   name = nullptr; 
-	UI_Image*			   character_info = nullptr; 
+	UI_Image*			   info_button = nullptr; 
 };
 
 struct character_info
@@ -44,8 +44,8 @@ public:
 	void CreateScene(uint w, uint h); 
 	void MoveCard(int pad, const char* direction); 
 
-	UI_Window* window = nullptr; 
-
+	UI_Window*		window = nullptr; 
+	UI_Window*		player_info_window = nullptr; 
 
 private:
 
