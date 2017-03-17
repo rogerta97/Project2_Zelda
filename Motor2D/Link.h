@@ -4,6 +4,7 @@
 #include "Entity.h"
 
 class GameObject;
+
 class Link : public Entity
 {
 public:
@@ -98,6 +99,9 @@ public:
 
 	iPoint GetPos() const;
 
+private:
+	void CreateAbility3Test();
+	void DeleteAbility3Test();
 public:
 
 private:
@@ -105,8 +109,19 @@ private:
 	bool	flip = false;
 
 	// Ability 3
-	float	ability3_range = 0.0f;
-	iPoint  ability3_end = NULLPOINT;
+	float	    ability3_range = 0.0f;
+	iPoint      ability3_end_up = NULLPOINT;
+	iPoint      ability3_end_down = NULLPOINT;
+	iPoint      ability3_end_left = NULLPOINT;
+	iPoint      ability3_end_right = NULLPOINT;
+	bool		get_up = true;
+	bool		get_down = true;
+	bool		get_left = true;
+	bool		get_right = true;
+	GameObject* ability3_test_up = nullptr;
+	GameObject* ability3_test_down = nullptr;
+	GameObject* ability3_test_left = nullptr;
+	GameObject* ability3_test_right = nullptr;
 };
 
 #endif

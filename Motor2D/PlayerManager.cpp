@@ -488,10 +488,10 @@ bool PlayerManager::Update(float dt)
 			curr_player->entity->ShowAbility3Up();
 			break;
 		case show_ability3_left:
-			curr_player->entity->ShowAbility3Down();
+			curr_player->entity->ShowAbility3Left();
 			break;
 		case show_ability3_down:
-			curr_player->entity->ShowAbility3Left();
+			curr_player->entity->ShowAbility3Down();
 			break;
 		case show_ability3_right:
 			curr_player->entity->ShowAbility3Right();
