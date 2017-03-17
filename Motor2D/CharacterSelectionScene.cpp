@@ -209,11 +209,13 @@ bool CharacterSelectionScene::Update(float dt)
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN) 
 		{
-			player_ready[i] = true;
+			if(player_ready[i] != true)
+				viewport[i].ready_text->SetPos(iPoint(viewport[i].ready_text->GetPos().x + 70, viewport[i].ready_text->GetPos().y));
 
+			player_ready[i] = true;
 	
 			viewport[i].ready_text->SetText("READY"); 
-			viewport[i].ready_text->SetPos(iPoint(viewport[i].ready_text->GetPos().x + 70, viewport[i].ready_text->GetPos().y));
+			
 			
 		}
 	}
