@@ -50,7 +50,8 @@ bool Link::Start()
 	game_object->SetAnimation("idle_down");
 
 	can_move = true;
-	stats.speed = stats.restore_speed = 160;
+	stats.base_speed = stats.speed = stats.restore_speed = 160;
+	stats.base_power = stats.power = 10;
 
 	return ret;
 }

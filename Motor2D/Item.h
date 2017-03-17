@@ -6,8 +6,8 @@
 class Item
 {
 public:
-	Item(const char* name, int power = 0, int hp = 0, int speed = 0, SDL_Rect image_rect = {0,0,0,0}, Item* upgrade = nullptr) :
-		name(name), power(power), hp(hp), speed(speed), image_rect(image_rect), upgrade(upgrade)	{	}
+	Item(const char* name, int power = 0, int hp = 0, int speed = 0, int price = 0, const char* description = nullptr, SDL_Rect image_rect = { 0,0,0,0 }, Item* upgrade = nullptr) :
+		name(name), power(power), hp(hp), speed(speed), price(price), description(description), image_rect(image_rect), upgrade(upgrade)	{	}
 
 private:
 
@@ -17,10 +17,14 @@ public:
 	int			power = 0;
 	int			hp = 0;
 	int			speed = 0;
+	int			price = 0;
+
+	string		description;
 
 	SDL_Rect	image_rect = NULLRECT;
 
 	Item*		upgrade = nullptr;
+	Item*		upgrade_from = nullptr;
 
 private:
 

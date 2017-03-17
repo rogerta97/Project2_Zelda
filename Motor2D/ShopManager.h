@@ -10,25 +10,40 @@ class UI_Window;
 
 struct item_info
 {
-	Item*		item;
-	UI_Image*	item_image;
+	Item*		item = nullptr;
+	UI_Image*	item_image = nullptr;
 };
 
 struct shop
 {
-	UI_Image*			background;
+	UI_Image*			background = nullptr;
 	vector<item_info>	items;
 
-	UI_Text*			power;
-	UI_Text*			hp;
-	UI_Text*			speed;
-	UI_Text*			upgrade;
+	UI_Text*			power = nullptr;
+	UI_Text*			hp = nullptr;
+	UI_Text*			speed = nullptr;
+	UI_Text*			upgrade = nullptr;
+	UI_Text*			upgrade_from = nullptr;
+	UI_Text*			item_text = nullptr;
+	UI_Text*			item_name = nullptr;
+	UI_Text*			price = nullptr;
 
-	UI_Text*			power_num;
-	UI_Text*			hp_num;
-	UI_Text*			speed_num;
+	UI_Text*			power_num = nullptr;
+	UI_Text*			hp_num = nullptr;
+	UI_Text*			speed_num = nullptr;
 
-	UI_Image*			upgrade_item;
+	UI_Image*			upgrade_item = nullptr;
+	UI_Image*			upgrade_from_item = nullptr;
+
+	UI_Text*			shop_title = nullptr;
+
+	UI_Image*			selector = nullptr;
+	int					selected_item = 0;
+
+	UI_Image*			buy_icon = nullptr;
+	bool				item_selected = false;
+
+	bool				active = false;
 };
 
 class ShopManager
@@ -44,11 +59,16 @@ public:
 	bool CleanUp();
 
 private:
+	void ChangeShopState(int view);
+
+	void UpdateItemInfo(int view);
 
 public:
+	UI_Window*		shop_window = nullptr;
 
 private:
-	UI_Window*		shop_window = nullptr;
+
+	shop*			shops[4] = { nullptr,nullptr,nullptr };
 
 
 };

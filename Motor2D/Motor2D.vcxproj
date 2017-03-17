@@ -173,9 +173,11 @@
   <ItemGroup>
     <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
+    <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\minion.xml" />
+    <Xml Include="..\Game\Shop_config.xml" />
     <Xml Include="..\Game\tower.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

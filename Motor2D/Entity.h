@@ -104,11 +104,16 @@ public:
 	~Stats() {};
 
 public:
+	int base_speed = 0;
 	int speed = 0;
 	int restore_speed = 0;
 
+	int base_hp = 100;
 	int max_life = 100;
 	int life = 100;
+
+	int base_power = 0;
+	int power = 0;	
 };
 
 struct Ability
@@ -254,6 +259,9 @@ public:
 	}
 
 	void LifeBar(iPoint size, iPoint offset = { 0, 0 }); 
+
+	//Update Stats
+	void UpdateStats(int extra_power, int extra_hp, int extra_speed);
 
 private:
 	

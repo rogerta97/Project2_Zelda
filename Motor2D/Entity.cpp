@@ -169,5 +169,12 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 	}
 }
 
+void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
+{
+	stats.power = stats.base_power + extra_power;
+	stats.speed = stats.restore_speed = stats.base_speed + extra_speed;
+	stats.max_life = stats.base_hp + extra_hp;
+}
+
 
 
