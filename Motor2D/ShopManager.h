@@ -25,7 +25,7 @@ struct shop
 	UI_Text*			upgrade = nullptr;
 	UI_Text*			upgrade_from = nullptr;
 	UI_Text*			item_text = nullptr;
-	UI_Image*			rupee = nullptr;
+	UI_Text*			item_name = nullptr;
 	UI_Text*			price = nullptr;
 
 	UI_Text*			power_num = nullptr;
@@ -38,6 +38,10 @@ struct shop
 	UI_Text*			shop_title = nullptr;
 
 	UI_Image*			selector = nullptr;
+	int					selected_item = 0;
+
+	UI_Image*			buy_icon = nullptr;
+	bool				item_selected = false;
 };
 
 class ShopManager
@@ -53,6 +57,7 @@ public:
 	bool CleanUp();
 
 private:
+	void ChangeShopState(int view);
 
 public:
 

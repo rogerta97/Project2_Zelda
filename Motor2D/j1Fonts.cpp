@@ -39,6 +39,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 		path = conf.child("game_font").attribute("file").as_string(DEFAULT_FONT); 
 		size = conf.child("game_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
 		game_font = Load(path, size); 
+		game_font_small = Load(path, 10);
 
 	}
 

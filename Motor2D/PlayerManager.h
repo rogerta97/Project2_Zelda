@@ -67,10 +67,11 @@ public:
 	int GetEntityViewportIfIsPlayer(Entity* entity);
 	bool CheckIfSpawnPointIsUsed(int team, iPoint pos);
 
-private:
+public:
+	vector<Player*> players;
 
 private:
-	vector<Player*> players;
+	
 	vector<iPoint> spawn_points_used_team1;
 	vector<iPoint> spawn_points_used_team2;
 

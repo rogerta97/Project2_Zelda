@@ -140,6 +140,7 @@ bool MainScene::Update(float dt)
 	}
 
 	minion_manager->Update();
+	shop_manager->Update();
 
 	return ret;
 }
@@ -155,10 +156,13 @@ bool MainScene::PostUpdate()
 bool MainScene::CleanUp()
 {
 	bool ret = true;
+	shop_manager->CleanUp();
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
 	RELEASE(tower_manager);
+	RELEASE(shop_manager);
+
 	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
 
