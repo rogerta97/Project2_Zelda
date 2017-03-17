@@ -334,7 +334,7 @@ bool TeamSelectScene::PostUpdate()
 
 	//FOR TESTING
 	if(App->input->GetControllerButton(0,SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
-		App->scene->ChangeScene((Scene*)App->scene->main_scene);
+		App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
 
 
 

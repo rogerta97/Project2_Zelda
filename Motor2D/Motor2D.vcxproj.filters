@@ -121,6 +121,9 @@
     <ClCompile Include="TeamSelectScene.cpp">
       <Filter>Engine\3. Scenes ==========\TeamSelectScene</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSelectionScene.cpp">
+      <Filter>Engine\3. Scenes ==========\CharacterSelection</Filter>
+    </ClCompile>
     <ClCompile Include="ShopManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
@@ -273,6 +276,9 @@
     <ClInclude Include="TeamSelectScene.h">
       <Filter>Engine\3. Scenes ==========\TeamSelectScene</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterSelectionScene.h">
+      <Filter>Engine\3. Scenes ==========\CharacterSelection</Filter>
+	</ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
@@ -331,6 +337,9 @@
     </Filter>
     <Filter Include="Engine\3. Scenes ==========\TeamSelectScene">
       <UniqueIdentifier>{f6bdd670-c432-4a39-9b4b-35c15004b406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\CharacterSelection">
+      <UniqueIdentifier>{20ba1de4-2920-493b-83f2-4edabc19fe22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
