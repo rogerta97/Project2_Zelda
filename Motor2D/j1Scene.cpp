@@ -131,8 +131,17 @@ Scene * j1Scene::GetCurrentScene()
 
 void j1Scene::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for(list<Scene*>::iterator it = scenes.begin(); it != scenes.end(); it++)
-		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+	current_scene->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+}
+
+void j1Scene::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	current_scene->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+}
+
+void j1Scene::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	current_scene->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
 }
 
 void j1Scene::OnCommand(std::list<std::string>& tokens)

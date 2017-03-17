@@ -15,6 +15,7 @@ Boomerang::Boomerang(iPoint pos)
 	hit_box = game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
+	game_object->pbody->body->SetBullet(true);
 
 	pugi::xml_document doc;
 	App->LoadXML("boomerang.xml", doc);

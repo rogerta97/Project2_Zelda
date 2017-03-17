@@ -15,6 +15,9 @@
 #include "Boomerang.h"
 #include "PlayerManager.h"
 
+#define ABILITY3_MAX_RANGE 200
+#define ABILITY3_GROW_SPEED 1.0f
+
 
 Link::Link(iPoint pos)
 {
@@ -490,39 +493,55 @@ void Link::ShowAbility2Right()
 
 void Link::Ability3Up()
 {
+	ability3_range = 0;
 }
 
 void Link::Ability3Down()
 {
+	ability3_range = 0;
 }
 
 void Link::Ability3Left()
 {
+	ability3_range = 0;
 }
 
 void Link::Ability3Right()
 {
+	ability3_range = 0;
 }
 
 void Link::ShowAbility3Up()
 {
+	ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 }
 
 void Link::ShowAbility3Down()
 {
+	ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 }
 
 void Link::ShowAbility3Left()
 {
+	ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 }
 
 void Link::ShowAbility3Right()
 {
+	ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 }
 
 void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 
+}
+
+void Link::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+}
+
+void Link::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
 }
 
 void Link::SetCamera(int id)

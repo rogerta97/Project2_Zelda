@@ -85,6 +85,16 @@ public:
 
 	}
 
+	virtual void OnCollisionEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB)
+	{
+
+	}
+
+	virtual void OnCollisionOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB)
+	{
+
+	}
+
 	virtual void OnCommand(std::list<std::string>& tokens) {
 
 	}

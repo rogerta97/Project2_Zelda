@@ -90,6 +90,8 @@ public:
 
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	//Set Camera to this player. 1<=id<=4
 	void SetCamera(int id);
@@ -101,6 +103,10 @@ public:
 private:
 	int		camera = 1;
 	bool	flip = false;
+
+	// Ability 3
+	float	ability3_range = 0.0f;
+	iPoint  ability3_end = NULLPOINT;
 };
 
 #endif
