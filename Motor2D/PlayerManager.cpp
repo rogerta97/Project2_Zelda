@@ -669,3 +669,48 @@ bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
 	}
 }
 
+void Player::BuyItem(Item * item, int price)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			if (item->upgrade_from == items[i])
+			{
+				items[i] = item;
+				break;
+			}
+		}
+		else
+		{
+			items[i] = item;
+			break;
+		}
+	}
+
+	rupees -= price;
+
+	int extra_power = 0, extra_hp = 0, extra_speed = 0;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (items[i] == nullptr)
+		{
+			break;
+		}
+		extra_hp += items[i]->hp;
+		extra_power += items[i]->power;
+		extra_speed += items[i]->speed;
+	}
+
+	entity->UpdateStats(extra_power, extra_hp, extra_speed);
+
+	UpdateRupees();
+}
+
+void Player::UpdateRupees()
+{
+	string r;
+	r = std::to_string(rupees);
+	rupees_num->SetText(r);
+}

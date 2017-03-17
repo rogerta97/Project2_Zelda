@@ -56,7 +56,6 @@ private:
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
 	
-	UI_Text*			rupiees_numb = nullptr;
 	list<UI_Image*>		habilities; 
 
 	vector<PhysBody*>	map_collisions;

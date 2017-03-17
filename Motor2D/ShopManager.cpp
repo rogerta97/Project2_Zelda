@@ -140,11 +140,11 @@ bool ShopManager::Start()
 		int x = (win_w / 4 - 10) + (i % 2)*win_w / 2;
 		int y = (win_h / 4) + (i / 2)*win_h / 2;
 
-		shops[i]->upgrade_item = shop_window->CreateImage(iPoint(x, y), NULLRECT);
+		shops[i]->upgrade_from_item = shop_window->CreateImage(iPoint(x, y), NULLRECT);
 
 		x += 145;
 
-		shops[i]->upgrade_from_item = shop_window->CreateImage(iPoint(x, y), NULLRECT);
+		shops[i]->upgrade_item = shop_window->CreateImage(iPoint(x, y), NULLRECT);
 	}
 	// -----
 
@@ -230,6 +230,9 @@ bool ShopManager::Start()
 	shop_window->SetEnabledAndChilds(false);
 	shop_window->enabled = true;
 
+	App->UnloadXML(shop_config);
+	App->UnloadXML(items_doc);
+
 	return true;
 }
 
@@ -241,6 +244,92 @@ bool ShopManager::Update()
 		{
 			ChangeShopState((*it)->viewport-1);
 		}
+
+		if(shops[(*it)->viewport - 1]->active)
+		{
+			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item < shops[(*it)->viewport - 1]->items.size() - 2 && !shops[(*it)->viewport - 1]->item_selected)
+			{
+				shops[(*it)->viewport - 1]->selected_item += 2;
+				UpdateItemInfo((*it)->viewport - 1);
+			}
+
+			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item > 1 && !shops[(*it)->viewport - 1]->item_selected)
+			{
+				shops[(*it)->viewport - 1]->selected_item -= 2;
+				UpdateItemInfo((*it)->viewport - 1);
+			}
+
+			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN&& shops[(*it)->viewport - 1]->selected_item < shops[(*it)->viewport - 1]->items.size() - 1 && !shops[(*it)->viewport - 1]->item_selected)
+			{
+				shops[(*it)->viewport - 1]->selected_item += 1;
+				UpdateItemInfo((*it)->viewport - 1);
+			}
+
+			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item > 0 && !shops[(*it)->viewport - 1]->item_selected)
+			{
+				shops[(*it)->viewport - 1]->selected_item -= 1;
+				UpdateItemInfo((*it)->viewport - 1);
+			}
+
+			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			{
+				if (shops[(*it)->viewport - 1]->item_selected)
+				{
+					int final_price = shops[(*it)->viewport - 1]->items[shops[(*it)->viewport - 1]->selected_item].item->price;
+
+					bool can_buy = false;
+
+					//Check if there is a free item slot
+					for (int i = 0; i < 3; i++)
+					{
+						if ((*it)->items[i] == nullptr)
+						{
+							can_buy = true;
+							break;
+						}
+					}
+
+					//Check if the item is an upgrade 
+					if (shops[(*it)->viewport - 1]->items[shops[(*it)->viewport - 1]->selected_item].item->upgrade_from != nullptr)
+					{
+						for (int i = 0; i < 3; i++)
+						{
+							if ((*it)->items[i] == shops[(*it)->viewport - 1]->items[shops[(*it)->viewport - 1]->selected_item].item->upgrade_from)
+							{
+								final_price -= (*it)->items[i]->price;
+								can_buy = true;
+								break;
+							}
+						}
+					}
+
+					if(can_buy && (*it)->rupees >= final_price)
+						(*it)->BuyItem(shops[(*it)->viewport - 1]->items[shops[(*it)->viewport - 1]->selected_item].item, final_price);
+					
+					shops[(*it)->viewport - 1]->selected_item = 0;
+
+					UpdateItemInfo((*it)->viewport - 1);
+
+					shops[(*it)->viewport - 1]->item_selected = false;
+
+				}
+				else
+				{
+					shops[(*it)->viewport - 1]->item_selected = true;
+					shops[(*it)->viewport - 1]->selector->SetPos(shops[(*it)->viewport - 1]->buy_icon->GetPos());
+				}
+			}
+
+			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+			{
+				if (shops[(*it)->viewport - 1]->item_selected)
+				{
+					shops[(*it)->viewport - 1]->item_selected = false;
+					shops[(*it)->viewport - 1]->selector->SetPos(shops[(*it)->viewport - 1]->items[shops[(*it)->viewport - 1]->selected_item].item_image->GetPos());
+				}
+			}
+		}
+
 	}
 
 	return true;
@@ -302,4 +391,56 @@ void ShopManager::ChangeShopState(int view)
 		shops[view]->upgrade_from_item->enabled = !shops[view]->upgrade_from_item->enabled;
 
 	shops[view]->selected_item = 0;
+	
+	UpdateItemInfo(view);
+
+	shops[view]->active = !shops[view]->active;
+	shops[view]->item_selected = false;
+}
+
+void ShopManager::UpdateItemInfo(int view)
+{
+	string text;
+	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->power);
+	shops[view]->power_num->SetText(text);
+
+	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->hp);
+	shops[view]->hp_num->SetText(text);
+
+	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->speed);
+	shops[view]->speed_num->SetText(text);
+
+	shops[view]->item_name->SetText(shops[view]->items[shops[view]->selected_item].item->name);
+
+	shops[view]->item_text->SetText(shops[view]->items[shops[view]->selected_item].item->description);
+
+	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->price);
+	shops[view]->price->SetText(text);
+
+	if (shops[view]->items[shops[view]->selected_item].item->upgrade == nullptr)
+	{
+		shops[view]->upgrade->enabled = false;
+		shops[view]->upgrade_item->enabled = false;
+	}
+	else
+	{
+		shops[view]->upgrade->enabled = true;
+		shops[view]->upgrade_item->enabled = true;
+		shops[view]->upgrade_item->image = shops[view]->items[shops[view]->selected_item].item->upgrade->image_rect;
+	}
+
+	if (shops[view]->items[shops[view]->selected_item].item->upgrade_from == nullptr)
+	{
+		shops[view]->upgrade_from->enabled = false;
+		shops[view]->upgrade_from_item->enabled = false;
+	}
+	else
+	{
+		shops[view]->upgrade_from->enabled = true;
+		shops[view]->upgrade_from_item->enabled = true;
+		shops[view]->upgrade_from_item->image = shops[view]->items[shops[view]->selected_item].item->upgrade_from->image_rect;
+	}
+
+	shops[view]->selector->SetPos(shops[view]->items[shops[view]->selected_item].item_image->GetPos());
+
 }

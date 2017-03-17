@@ -42,6 +42,8 @@ struct shop
 
 	UI_Image*			buy_icon = nullptr;
 	bool				item_selected = false;
+
+	bool				active = false;
 };
 
 class ShopManager
@@ -59,10 +61,12 @@ public:
 private:
 	void ChangeShopState(int view);
 
+	void UpdateItemInfo(int view);
+
 public:
+	UI_Window*		shop_window = nullptr;
 
 private:
-	UI_Window*		shop_window = nullptr;
 
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
 
