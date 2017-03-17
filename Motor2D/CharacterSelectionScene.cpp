@@ -215,8 +215,14 @@ bool CharacterSelectionScene::Update(float dt)
 			player_ready[i] = true;
 	
 			viewport[i].ready_text->SetText("READY"); 
-			
-			
+						
+		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) 
+		{
+			player_ready[i] = false;
+			viewport[i].ready_text->SetPos(iPoint(viewport[i].ready_text->GetPos().x - 70, viewport[i].ready_text->GetPos().y));
+			viewport[i].ready_text->SetText("Press START when ready");
 		}
 	}
 
