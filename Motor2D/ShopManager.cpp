@@ -4,6 +4,8 @@
 #include "j1Entity.h"
 #include "PlayerManager.h"
 #include "j1Input.h"
+#include "j1App.h"
+#include "j1Scene.h"
 
 ShopManager::ShopManager()
 {
@@ -246,7 +248,10 @@ bool ShopManager::Update()
 
 bool ShopManager::CleanUp()
 {
-	App->gui->DeleteElement(shop_window);
+	// Free UI
+	if (App->scene->GetCurrentScene() != (Scene*)App->scene->main_scene)
+		App->gui->DeleteElement(shop_window);
+	// -------
 
 	//Release items
 	for (std::vector<item_info>::iterator it = shops[0]->items.begin(); it != shops[0]->items.end(); it++)
