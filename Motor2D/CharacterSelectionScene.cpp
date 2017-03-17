@@ -50,8 +50,6 @@ bool CharacterSelectionScene::Update(float dt)
 
 			int j = 0; 
 
-
-
 			// Update images 
 			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
 			{
@@ -169,6 +167,7 @@ bool CharacterSelectionScene::Update(float dt)
 					{
 					case link:
 						EnableInfo(link, i, w, h);
+						
 
 						break;
 					case ganon:
@@ -207,6 +206,16 @@ bool CharacterSelectionScene::Update(float dt)
 			}
 		
 		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN) 
+		{
+			player_ready[i] = true;
+
+	
+			viewport[i].ready_text->SetText("READY"); 
+			viewport[i].ready_text->SetPos(iPoint(viewport[i].ready_text->GetPos().x + 70, viewport[i].ready_text->GetPos().y));
+			
+		}
 	}
 
 	return true;
@@ -217,7 +226,14 @@ bool CharacterSelectionScene::PostUpdate()
 
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN) 
 	{
-		App->scene->ChangeScene((Scene*)App->scene->main_scene); 
+		App->scene->ChangeScene((Scene*)App->scene->main_scene);
+	}
+
+	change_scene = AllReady();
+
+	if(change_scene)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 
 
@@ -231,8 +247,6 @@ bool CharacterSelectionScene::CleanUp()
 
 	return true;
 }
-
-
 
 void CharacterSelectionScene::CreateScene(uint w, uint h)
 {
@@ -252,6 +266,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(positions[6].x + 90, positions[6].y + 10));
 	positions.push_back(iPoint(550, 300));
 	positions.push_back(iPoint(30, 30));
+	positions.push_back(iPoint(w/5 - 60, h/4 + 125));
 
 	//---
 	// viewport 2 ---
@@ -269,6 +284,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, positions[6].y + 10));
 	positions.push_back(iPoint(w / 2 + 550, 300));
 	positions.push_back(iPoint(w / 2 + 30, 30));
+	positions.push_back(iPoint(w / 2 + positions[10].x, positions[10].y));
 
 	//---
 
@@ -287,6 +303,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint( positions[6].x + 90, h / 2 + positions[6].y + 10));
 	positions.push_back(iPoint( 550, h / 2 + 300));
 	positions.push_back(iPoint(30, h / 2 + 30));
+	positions.push_back(iPoint(positions[10].x, h / 2 + positions[10].y));
 
 	// --
 
@@ -305,6 +322,7 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, h / 2 + positions[6].y + 10));
 	positions.push_back(iPoint(w / 2 + 550, h / 2 + 300));
 	positions.push_back(iPoint(w / 2 + 30, h / 2 + 30));
+	positions.push_back(iPoint(w / 2 + positions[10].x, h / 2 + positions[10].y));
 
 	// ---
 
@@ -321,6 +339,11 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	link_rects[1] = SDL_Rect{ 972, 20, 97, 125 };
 	link_rects[0] = SDL_Rect{ 996, 169, 55, 80 };
+
+	player_ready[0] = false; 
+	player_ready[1] = false;
+	player_ready[2] = false;
+	player_ready[3] = false;
 
 	int pos_count = 0; 
 
@@ -349,8 +372,13 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 		//Setting info button
 		viewport[i].info_button = window->CreateImage(positions[pos_count++], {284, 195, 40, 40}, false);
 
+		// Setting info of the characters
 		viewport[i].info_back = window->CreateImage(positions[pos_count++], { 10, 295, 484, 327 }, false);
 		viewport[i].info_back->enabled = false; 
+
+		// Setting ready text
+		viewport[i].ready_text = window->CreateText(positions[pos_count++], App->font->game_font, 0, false, 255, 255, 255);
+		viewport[i].ready_text->SetText("Press START when ready"); 
 	}
 
 
@@ -359,17 +387,17 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 		character_info d;
 
 		d.character = ganon;
-		d.name = "ganon";
+		d.name = "GANON";
 
 		char_view[i].push_back(d);
 
 		d.character = link;
-		d.name = "link";
+		d.name = "LINK";
 
 		char_view[i].push_back(d);
 
 		d.character = navi;
-		d.name = "navi";
+		d.name ="NAVI";
 
 		char_view[i].push_back(d);
 
@@ -403,7 +431,6 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 
 	}
 	
-
 	win.habilites.clear(); 
 	win.description.clear(); 
 
@@ -575,6 +602,7 @@ void CharacterSelectionScene::EnableInfo(entity_name character, int viewport_num
 	};
 
 	viewport[viewport_num].info_back->enabled = true;
+	viewport[viewport_num].ready_text->enabled = false;
 }
 
 void CharacterSelectionScene::DisableInfo(entity_name character, int viewport_num)
@@ -595,9 +623,25 @@ void CharacterSelectionScene::DisableInfo(entity_name character, int viewport_nu
 			it->description.at(3)->enabled = false;
 
 			viewport[viewport_num].info_back->enabled = false;
+			viewport[viewport_num].ready_text->enabled = true;
 		}
 			
 		
 	
 	};
+}
+
+bool CharacterSelectionScene::AllReady()
+{
+	bool ret = true;
+
+	for (int i = 0; i < 4; i++) 
+	{
+		if (player_ready[i] == false) 
+		{
+			ret = false;
+			break;
+		}		 
+	}
+	return ret;
 }

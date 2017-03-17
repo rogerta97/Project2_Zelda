@@ -26,6 +26,7 @@ struct char_select_view
 	UI_Text*			name = nullptr; 
 	UI_Image*			info_button = nullptr; 
 	UI_Image*			info_back = nullptr;
+	UI_Text*			ready_text = false; 
 
 };
 
@@ -53,9 +54,9 @@ public:
 	void MoveCard(int pad, const char* direction); 
 	void EnableInfo(entity_name character, int viewport_num, uint w, uint h);
 	void DisableInfo(entity_name character, int viewport_num);
+	bool AllReady();
 
 	UI_Window*		window = nullptr; 
-	UI_Window*		player_info_window = nullptr; 
 
 private:
 
@@ -79,6 +80,9 @@ private:
 	SDL_Rect					backgrounds_rects[2];
 
 	vector<iPoint>				positions;
+
+	bool						player_ready[4]; 
+	bool						change_scene = false; 
 
 
 
