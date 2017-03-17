@@ -6,25 +6,53 @@
 #include "p2List.h"
 #include "Entity.h"
 #include "j1Entity.h"
+#include "Item.h"
+#include "j1Window.h"
+#include "j1Fonts.h"
+#include "j1Scene.h"
+#include "j1Gui.h"
+#include "MainScene.h"
+#include "ShopManager.h"
 
 class b2Fixture;
 class PhysBody;
 class Quest;
 class Entity;
 
-struct Player
+class Player
 {
+public:
 	Player() {  };
-	Player(Entity* _entity, uint _index)
+	Player(Entity* _entity, uint _controller_index, uint _viewport)
 	{
-		entity = _entity; state = states::idle_down; index = _index;
+		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
+		uint win_w, win_h;
+		App->win->GetWindowSize(win_w, win_h);
+		int x = 20 + ((viewport - 1) % 2)*win_w / 2;
+		int y = 30 + ((viewport - 1) / 2)*win_h / 2;
+		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
+		UpdateRupees();
 	}
+
+	void BuyItem(Item* item, int price);
+
+private:
+	void UpdateRupees();
+
+public:
 
 	Entity*  entity = nullptr;
 	states   state = states::states_null;
 	shows	 show = shows::show_null;
 	movement move = stop;
-	uint	 index = 0;
+
+	Item*	 items[3] = { nullptr,nullptr,nullptr };
+
+	uint	 controller_index = 0;
+	uint	 viewport = 0;
+
+	UI_Text* rupees_num = nullptr;
+	uint	 rupees = 20000;
 };
 
 class PlayerManager
@@ -54,8 +82,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	Player* AddPlayer(entity_name name, int index, iPoint pos, int team, bool on_spawn = true, int show_life_bar = true);
-	void ChangePlayer(entity_name name, int index);
+	Player* AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn = true, int show_life_bar = true);
+	void ChangePlayer(entity_name name, int controller_index, int viewport);
 	void DeletePlayer(int index);
 	void ClearPlayers();
 
@@ -64,10 +92,11 @@ public:
 	int GetEntityViewportIfIsPlayer(Entity* entity);
 	bool CheckIfSpawnPointIsUsed(int team, iPoint pos);
 
-private:
+public:
+	vector<Player*> players;
 
 private:
-	vector<Player*> players;
+	
 	vector<iPoint> spawn_points_used_team1;
 	vector<iPoint> spawn_points_used_team2;
 

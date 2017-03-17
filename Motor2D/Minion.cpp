@@ -16,6 +16,7 @@
 #include "Tower.h"
 #include "TowerManager.h"
 
+
 #define Half_Tile 16
 
 Minion::Minion(iPoint pos)
@@ -47,7 +48,7 @@ bool Minion::Start()
 
 	game_object->SetAnimation("idle_down");
 
-	stats.speed = 45;
+	stats.speed = stats.restore_speed = 45;
 	stats.max_life = stats.life = 50;
 
 	show_life_bar = true;
@@ -70,34 +71,50 @@ bool Minion::Update(float dt)
 
 	speed = stats.speed*dt;
 
-	switch (state)
+	if (!stuned)
 	{
-	case Minion_Idle:
-		MinionIdle();
-		break;
-	case Minion_Move:
-		MinionMove();
-		break;
-	case Minion_Attack:
-		MinionAttack();
-		break;
-	default:
-		break;
+		switch (state)
+		{
+		case Minion_Idle:
+			MinionIdle();
+			break;
+		case Minion_Move:
+			MinionMove();
+			break;
+		case Minion_Attack:
+			MinionAttack();
+			break;
+		default:
+			break;
+		}
 	}
+	else
+		SetIdleAnim();
 
 	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 	
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
-	if (GotHit(entity, ability, spell))
+
+	if (GotHit(entity, ability, spell) && stats.life)
 	{
+		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			LOG("hit");
-			stats.life -= ability->damage;
+			DealDamage(ability->damage * ability->damage_multiplicator);
 
-			if (stats.life <= 0)
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+				if (spell->stats.slow_duration > 0)
+					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
+			}
+
+			if (stats.life <=0)
 			{
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
@@ -439,8 +456,8 @@ void Minion::CheckState()
 		if (target == nullptr)
 		{
 			target_path_index = 0;
-			target = nullptr;
 			move_state = Move_ReturnToPath;
+			state = Minion_Move;
 			PathToBasePath();
 			break;
 		}
@@ -469,6 +486,7 @@ void Minion::CheckState()
 		{
 			state = Minion_Move;
 			move_state = Move_ReturnToPath;
+			PathToBasePath();
 		}
 		break;
 	default:
@@ -486,20 +504,32 @@ void Minion::SetTargetPath(const std::list<iPoint>* path)
 
 void Minion::PathToTarget()
 {
-	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x,GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y));
-	target_path.clear();
-	SetTargetPath(App->pathfinding->GetLastPath());
-	target_path_index = 0;
-	move_state = Move_AproachTarget;
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y)) > 0)
+	{
+		target_path.clear();
+		SetTargetPath(App->pathfinding->GetLastPath());
+		target_path_index = 0;
+		move_state = Move_AproachTarget;
+	}
+	else 
+	{
+		PathToBasePath();
+	}
 }
 
 void Minion::PathToBasePath()
 {
-	target_path.clear();
-	App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), base_path.at(base_path_index));
-	SetTargetPath(App->pathfinding->GetLastPath());
-	target_path_index = 0;
-	move_state = Move_ReturnToPath;
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), base_path.at(base_path_index)) > 0)
+	{
+		target_path.clear();
+		SetTargetPath(App->pathfinding->GetLastPath());
+		target_path_index = 0;
+		move_state = Move_ReturnToPath;
+	}
+	else
+	{
+		move_state = Move_FollowBasePath;
+	}
 }
 
 bool Minion::LookForTarget()

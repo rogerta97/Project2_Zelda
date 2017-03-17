@@ -12,6 +12,7 @@ GameObject::GameObject(iPoint _pos, iPoint _size, int _cat, int _mask, pbody_typ
 	pbody = App->physics->CreateCircleSensor(_pos.x, _pos.y, 2, _density, _gravity_scale, 0, cat, mask);
 	pbody->body->SetType(b2_dynamicBody);
 	pbody->body->SetSleepingAllowed(false);
+	pbody->body->SetBullet(true);
 	pbody->type = pb_type;
 	hitbox_size = _size;
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shop>
+  <selector x="416" y="235" w="40" h="40"/>
+  <background x="10" y="295" w="484" h="327"/>
+  <buy_icon x="456" y="235" w="40" h="40"/>
+</shop>

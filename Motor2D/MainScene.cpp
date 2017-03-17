@@ -21,6 +21,10 @@
 #include "MinionManager.h"
 #include "Scene.h"
 #include "TowerManager.h"
+#include "Functions.h"
+#include "ShopManager.h"
+
+
 
 MainScene::MainScene()
 {
@@ -47,11 +51,33 @@ bool MainScene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	shop_manager = new ShopManager();
+	shop_manager->Start();
+
 	LOG("Loading Players");
-	Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300, 700), 1);
-	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(400, 700), 2);
-	Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, 3, iPoint(500, 700), 2);
-	Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, 4, iPoint(600, 700), 1);
+	bool def = false;
+	for (int i = 0; i < 4; i++)
+	{
+		if (App->scene->players[i].character == e_n_null)
+		{
+			def = true;
+			break;
+		}
+	}
+	if (!def)
+	{
+		Player* p1 = App->entity->player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
+		Player* p2 = App->entity->player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
+		Player* p3 = App->entity->player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
+		Player* p4 = App->entity->player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
+	}
+	else
+	{
+		Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
+		Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
+		Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
+		Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
+	}
 
 	//Test Minion
 	LOG("Creating minion manager");
@@ -62,14 +88,12 @@ bool MainScene::Start()
 	tower_manager = new TowerManager();
 
 	//Create UI element
-	SDL_Rect screen = App->view->GetViewportRect(1); 
+	SDL_Rect screen = App->view->GetViewportRect(1);
 	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 
 	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), {0, 28, 385, 24 });
 	princess = main_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 5) , { 0,0,32,28 });
 	rupiees_img = main_window->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 32, 0, 16, 16});
-	rupiees_numb = main_window->CreateText(iPoint(rupiees_img->GetPos().x, rupiees_img->GetPos().y + 30), App->font->game_font, 0, false); 
-	rupiees_numb->SetText("0"); 
 	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
 	habilities.push_back(main_window->CreateImage(iPoint(screen.w  - 90 , screen.h - 100), { 182, 78, 35, 35 }));
 	habilities.push_back(main_window->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
@@ -88,6 +112,8 @@ bool MainScene::Start()
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+
+	CreateMapCollisions();
 
 	return ret;
 }
@@ -113,6 +139,7 @@ bool MainScene::Update(float dt)
 	}
 
 	minion_manager->Update();
+	shop_manager->Update();
 
 	return ret;
 }
@@ -128,10 +155,13 @@ bool MainScene::PostUpdate()
 bool MainScene::CleanUp()
 {
 	bool ret = true;
+	shop_manager->CleanUp();
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
 	RELEASE(tower_manager);
+	RELEASE(shop_manager);
+
 	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
 
@@ -140,6 +170,14 @@ bool MainScene::CleanUp()
 	{
 		App->gui->DeleteElement(main_window);
 	}
+	// -------
+
+	// Delete Map Collisions
+	for (std::vector<PhysBody*>::iterator it = map_collisions.begin(); it != map_collisions.end(); it++)
+	{
+		App->physics->DeleteBody(*it);
+	}
+	map_collisions.clear();
 	// -------
 
 	return ret;
@@ -195,5 +233,37 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 	default:
 		break;
 	}
+}
+
+void MainScene::CreateMapCollisions()
+{
+	pugi::xml_document doc;
+	App->LoadXML("MapCollisions.xml", doc);
+	pugi::xml_node collisions = doc.child("collisions");
+	
+	for(pugi::xml_node chain = collisions.child("chain");chain != NULL;chain = chain.next_sibling("chain"))
+	{
+		string points_string = chain.child_value();
+		int num_points = chain.attribute("vertex").as_int();
+		int* points = new int[num_points];
+		std::list<string> points_list;
+		Tokenize(points_string, ',', points_list);
+		int i = 0;
+		for (std::list<string>::iterator it = points_list.begin(); it != points_list.end(); it++)
+		{
+			if (i >= num_points)
+				break;
+
+			if (*it != "")
+			{
+				*(points + i) = stoi(*it);
+				i++;
+			}
+		}
+		map_collisions.push_back(App->physics->CreateStaticChain(0, 0, points, num_points));
+		RELEASE_ARRAY(points);
+	}
+
+	
 }
 

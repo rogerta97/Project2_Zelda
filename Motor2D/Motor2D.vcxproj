@@ -111,6 +111,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="QuestManager.cpp" />
+    <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1FileSystem.h" />
@@ -163,6 +165,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="QuestManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShopManager.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
@@ -172,8 +175,11 @@
   <ItemGroup>
     <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
+    <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\minion.xml" />
+    <Xml Include="..\Game\Shop_config.xml" />
     <Xml Include="..\Game\tower.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

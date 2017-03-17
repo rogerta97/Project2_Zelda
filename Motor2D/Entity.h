@@ -6,6 +6,9 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "j1Physics.h"
 #include "Animation.h"
+#include "Functions.h"
+#include "Spell.h"
+#include "j1Spell.h"
 
 class b2Fixture;
 class PhysBody;
@@ -101,10 +104,16 @@ public:
 	~Stats() {};
 
 public:
+	int base_speed = 0;
 	int speed = 0;
+	int restore_speed = 0;
 
+	int base_hp = 100;
 	int max_life = 100;
 	int life = 100;
+
+	int base_power = 0;
+	int power = 0;	
 };
 
 struct Ability
@@ -118,7 +127,13 @@ struct Ability
 	int        index = 0;
 	float      cd = 0;
 	float      duration = 0;
-	int        damage = 0;
+
+	float      damage = 0.0f;
+	float	   damage_multiplicator = 1.0f;
+	float      slow_duration = 0.0f;
+	float	   slow_force = 1.0f;
+	float	   stun_duration = 0.0f;
+
 	b2Fixture* fixture = nullptr;
 	string     name;
 };
@@ -221,6 +236,13 @@ public:
 
 	void AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
 	Ability* GetAbility(int number);
+	Ability* GetAbilityByName(const char* name);
+
+	int  GetLife();
+	void DealDamage(int damage);
+	void Heal(int heal);
+	void Slow(float speed_multiplicator, float time);
+	void Stun(float time);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 
@@ -238,6 +260,9 @@ public:
 
 	void LifeBar(iPoint size, iPoint offset = { 0, 0 }); 
 
+	//Update Stats
+	void UpdateStats(int extra_power, int extra_hp, int extra_speed);
+
 private:
 	
 private:
@@ -246,13 +271,14 @@ private:
 public:
 	// Containers
 	GameObject*      game_object = nullptr;
-	Stats	         stats;
 	vector<Ability*> abilities;
+	Stats	         stats;
 
 	// States
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
+	bool			 stuned = false;
 
 	// Life bar
 	bool			 show_life_bar = false;
@@ -274,6 +300,8 @@ protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;
 	iPoint		     restore_draw_offset = NULLPOINT;
+
+	j1Timer			 stun_slow_timer;
 };
 
 #endif

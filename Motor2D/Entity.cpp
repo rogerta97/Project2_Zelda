@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
+#include "Functions.h"
 
 #define LIFE_BAR_COLOR_1 {30, 30, 30, 255}
 
@@ -62,6 +63,57 @@ Ability* Entity::GetAbility(int number)
 	return ret;
 }
 
+Ability * Entity::GetAbilityByName(const char* name)
+{
+	Ability* ret = nullptr;
+
+	for (int i = 0; i < abilities.size(); i++)
+	{
+		if (TextCmp(name, abilities.at(i)->name.c_str()))
+		{
+			ret = abilities.at(i);
+			break;
+		}
+	}
+
+	return ret;
+}
+
+int Entity::GetLife()
+{
+	return stats.life;
+}
+
+void Entity::DealDamage(int damage)
+{
+	if (stats.life > 0)
+		stats.life -= damage;
+	if (stats.life < 0)
+		stats.life = 0;
+}
+
+void Entity::Heal(int heal)
+{
+	if (stats.life > 0)
+		stats.life += heal;
+	if (stats.life > stats.max_life)
+		stats.life = stats.max_life;
+}
+
+void Entity::Slow(float speed_multiplicator, float time)
+{
+	stats.speed *= speed_multiplicator;
+	slow s(time, this);
+	App->entity->slowed_entities.push_back(s);
+}
+
+void Entity::Stun(float time)
+{
+	stuned = true;
+	stun s(time, this);
+	App->entity->stuned_entities.push_back(s);
+}
+
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
 	if (show_life_bar && game_object != nullptr)
@@ -115,6 +167,13 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 			}
 		}
 	}
+}
+
+void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
+{
+	stats.power = stats.base_power + extra_power;
+	stats.speed = stats.restore_speed = stats.base_speed + extra_speed;
+	stats.max_life = stats.base_hp + extra_hp;
 }
 
 

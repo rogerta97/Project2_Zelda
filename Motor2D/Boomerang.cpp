@@ -2,9 +2,13 @@
 #include "GameObject.h"
 #include "j1Viewports.h"
 #include "p2Log.h"
+#include "Entity.h"
 
-#define ACCELERATION -300
-#define TIME 1.5f
+#define ACCELERATION -1300
+#define TIME 0.65f
+#define DESTRUCTION_TIME 1.8f
+#define SLOW_TIME 1.5f
+#define SLOW_MULTIPLICATOR 0.5f
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_boomerang, 0);
@@ -21,8 +25,9 @@ Boomerang::Boomerang(iPoint pos)
 
 	name = "boomerang";
 
-	starting_pos = pos;
 	timer.Start();
+
+	starting_pos = pos;
 }
 
 Boomerang::~Boomerang()
@@ -51,13 +56,44 @@ bool Boomerang::Update(float dt)
 {
 	bool ret = true;
 
-	initial_speed = ((range - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
+	// Speed calculations
+	initial_speed = ((BOOMERANG_RANGE - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
 
 	float speed = ((initial_speed) + (ACCELERATION * timer.ReadSec())) * dt;
 
+	// Can be taken when is returning
 	if (!can_delete && speed < 0)
 		can_delete = true;
+
 	//LOG("initial speed: %f, range: %d, current speed: %f", initial_speed, range, speed);
+
+	// Reducing speed when boomerang returns
+	if (can_delete)
+		speed = speed * 0.5;
+
+	// Reduce damage and slow
+	if (!can_delete)
+	{
+		if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) < BOOMERANG_RANGE * 0.5f)
+		{
+			stats.stun_duration = 1.0f;
+			stats.damage_multiplicator = 1.3f;
+		}
+		else if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) > BOOMERANG_RANGE * 0.5f)
+		{
+			stats.stun_duration = 0.0f;
+			stats.damage_multiplicator = 0.7f;
+			stats.slow_duration = SLOW_TIME;
+			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
+		}
+	}
+	else
+	{
+		stats.stun_duration = 0.0f;
+		stats.damage_multiplicator = 0.7f;
+		stats.slow_duration = 0.0f;
+		stats.slow_multiplicator = 0.0f;
+	}
 
 	switch (dir)
 	{
@@ -76,6 +112,9 @@ bool Boomerang::Update(float dt)
 	default:
 		break;
 	}
+
+	if (timer.ReadSec() > DESTRUCTION_TIME)
+		App->spell->DeleteSpell(this);
 
 	return ret;
 }
@@ -102,8 +141,6 @@ bool Boomerang::CleanUp()
 {
 	bool ret = true;
 
-
-
 	return ret;
 }
 
@@ -116,8 +153,7 @@ void Boomerang::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA,
 
 }
 
-void Boomerang::Set(direction _dir, int _range)
+void Boomerang::Set(direction _dir)
 {
 	dir = _dir;
-	range = _range;
 }

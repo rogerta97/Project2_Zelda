@@ -13,6 +13,7 @@ class QuestManager;
 class Minion;
 class MinionManager;
 class TowerManager;
+class ShopManager;
 
 enum GameStates
 {
@@ -34,6 +35,9 @@ public:
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
 
+private:
+	void CreateMapCollisions();
+
 public:
 	UI_Window*			main_window = nullptr;
 
@@ -44,14 +48,17 @@ public:
 
 	QuestManager*		quest_manager = nullptr;
 
+	ShopManager*		shop_manager = nullptr;
+
 private:
 	//UI elements
 	UI_Image*			progress_bar = nullptr; 
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
 	
-	UI_Text*			rupiees_numb = nullptr;
 	list<UI_Image*>		habilities; 
+
+	vector<PhysBody*>	map_collisions;
 };
 
 
