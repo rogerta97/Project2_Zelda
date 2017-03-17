@@ -51,8 +51,8 @@ public:
 
 	void CreateScene(uint w, uint h); 
 	void MoveCard(int pad, const char* direction); 
-	void EnableInfo(entity_name character, int viewport_num);
-	void DisableInfo(int viewport_num);
+	void EnableInfo(entity_name character, int viewport_num, uint w, uint h);
+	void DisableInfo(entity_name character, int viewport_num);
 
 	UI_Window*		window = nullptr; 
 	UI_Window*		player_info_window = nullptr; 
@@ -61,7 +61,7 @@ private:
 
 	char_select_view			viewport[4]; 
 
-	list<info_window>			info_container; 
+	list<info_window>			info_container[4]; 
 
 	list<character_info>		char_view[4]; 
 
@@ -79,6 +79,8 @@ private:
 	SDL_Rect					backgrounds_rects[2];
 
 	vector<iPoint>				positions;
+
+
 
 public:
 
