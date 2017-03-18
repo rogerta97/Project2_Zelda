@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "j1App.h"
 #include "j1Scene.h"
+#include "j1Map.h"
 
 ShopManager::ShopManager()
 {
@@ -256,6 +257,10 @@ bool ShopManager::Start()
 	shop_window->SetEnabledAndChilds(false);
 	shop_window->enabled = true;
 
+	//Get shop positions
+	team_shop[0] = App->map->GetShopPosition(1);
+	team_shop[1] = App->map->GetShopPosition(2);
+
 	App->UnloadXML(shop_config);
 	App->UnloadXML(items_doc);
 
@@ -266,9 +271,9 @@ bool ShopManager::Update()
 {
 	for (std::vector<Player*>::iterator it = App->entity->player_manager->players.begin(); it != App->entity->player_manager->players.end(); it++)
 	{
-		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
+		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
-			ChangeShopState((*it)->viewport-1);
+			ChangeShopState((*it)->viewport - 1);
 		}
 
 		if(shops[(*it)->viewport - 1]->active)

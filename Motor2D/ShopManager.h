@@ -75,6 +75,8 @@ private:
 
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
 
+	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };
+
 
 };
 
