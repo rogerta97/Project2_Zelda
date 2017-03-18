@@ -7,6 +7,7 @@
 class UI_Image;
 class UI_Text;
 class UI_Window;
+class Player;
 
 struct item_info
 {
@@ -35,7 +36,9 @@ struct shop
 	UI_Image*			upgrade_item = nullptr;
 	UI_Image*			upgrade_from_item = nullptr;
 
-	UI_Text*			shop_title = nullptr;
+	UI_Text*			own_items_text = nullptr;
+
+	UI_Image*			player_items[3] = { nullptr,nullptr,nullptr };
 
 	UI_Image*			selector = nullptr;
 	int					selected_item = 0;
@@ -62,6 +65,8 @@ private:
 	void ChangeShopState(int view);
 
 	void UpdateItemInfo(int view);
+
+	void UpdatePlayerItems(int view, Player* player);
 
 public:
 	UI_Window*		shop_window = nullptr;

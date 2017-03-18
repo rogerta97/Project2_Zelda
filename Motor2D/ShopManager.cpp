@@ -82,7 +82,7 @@ bool ShopManager::Start()
 		for (int i = 0; i < 4; i++)
 		{
 			int x = (win_w / 4 - 180) + (i % 2)*win_w / 2 + (item_num % 2) * 45;
-			int y = (win_h / 4 - 90) + (i / 2)*win_h / 2 + (item_num / 2) * 45;
+			int y = (win_h / 4 - 120) + (i / 2)*win_h / 2 + (item_num / 2) * 45;
 			new_item.item_image = shop_window->CreateImage(iPoint(x, y), rect);
 			shops[i]->items.push_back(new_item);
 		}
@@ -227,6 +227,32 @@ bool ShopManager::Start()
 	}
 	// -----
 
+	//own items text
+	for (int i = 0; i < 4; i++)
+	{
+		int x = (win_w / 4 - 180) + (i % 2)*win_w / 2;
+		int y = (win_h / 4 + 60) + (i / 2)*win_h / 2;
+
+		shops[i]->own_items_text = shop_window->CreateText(iPoint(x, y), App->font->game_font_12);
+		shops[i]->own_items_text->SetText("Your Items");
+		shops[i]->own_items_text->enabled = false;
+	}
+	//
+
+	//Player items images
+	for (int i = 0; i < 4; i++)
+	{
+		int x = (win_w / 4 - 205) + (i % 2)*win_w / 2;
+		int y = (win_h / 4 + 100) + (i / 2)*win_h / 2;
+
+		for (int j = 0; j < 3; j++)
+		{
+			shops[i]->player_items[j] = shop_window->CreateImage(iPoint(x, y), { 0,0,0,0 });
+			shops[i]->player_items[j]->enabled = false;
+			x += 45;
+		}
+	}
+
 	shop_window->SetEnabledAndChilds(false);
 	shop_window->enabled = true;
 
@@ -303,8 +329,11 @@ bool ShopManager::Update()
 						}
 					}
 
-					if(can_buy && (*it)->rupees >= final_price)
+					if (can_buy && (*it)->rupees >= final_price)
+					{
 						(*it)->BuyItem(shops[(*it)->viewport - 1]->items[shops[(*it)->viewport - 1]->selected_item].item, final_price);
+						UpdatePlayerItems((*it)->viewport - 1, *it);
+					}
 					
 					shops[(*it)->viewport - 1]->selected_item = 0;
 
@@ -372,10 +401,16 @@ void ShopManager::ChangeShopState(int view)
 	shops[view]->power_num->enabled = !shops[view]->power_num->enabled;
 	shops[view]->hp_num->enabled = !shops[view]->hp_num->enabled;
 	shops[view]->speed_num->enabled = !shops[view]->speed_num->enabled;
+	shops[view]->own_items_text->enabled = !shops[view]->own_items_text->enabled;
 
 	for (std::vector<item_info>::iterator it = shops[view]->items.begin(); it != shops[view]->items.end(); it++)
 	{
 		it->item_image->enabled = !it->item_image->enabled;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		shops[view]->player_items[i]->enabled = !shops[view]->player_items[i]->enabled;
 	}
 
 	if (shops[view]->upgrade->enabled)
@@ -443,4 +478,15 @@ void ShopManager::UpdateItemInfo(int view)
 
 	shops[view]->selector->SetPos(shops[view]->items[shops[view]->selected_item].item_image->GetPos());
 
+}
+
+void ShopManager::UpdatePlayerItems(int view, Player * player)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (player->items[i] == nullptr)
+			break;
+
+		shops[view]->player_items[i]->image = player->items[i]->image_rect;
+	}
 }
