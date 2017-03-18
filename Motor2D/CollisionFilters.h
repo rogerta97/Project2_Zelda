@@ -34,11 +34,6 @@ enum class pbody_type
 	p_t_npc,
 	p_t_tower,
 	p_t_tower_attack,
-
-	p_t_link_ability3_up,
-	p_t_link_ability3_down,
-	p_t_link_ability3_left,
-	p_t_link_ability3_right,
 };
 
 // Fixture enum
