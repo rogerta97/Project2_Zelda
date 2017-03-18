@@ -269,6 +269,7 @@ public:
 	Stats	         stats;
 
 	// States
+	bool			 disable_controller = false;
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;

@@ -14,6 +14,8 @@
 #include "j1Spell.h"
 #include "Boomerang.h"
 #include "PlayerManager.h"
+#include "j1Pathfinding.h"
+#include "j1Map.h"
 
 #define ABILITY3_MAX_RANGE 200
 #define ABILITY3_GROW_SPEED 105.0f
@@ -111,6 +113,47 @@ bool Link::Update(float dt)
 
 	LifeBar(iPoint(60, 5), iPoint(-25, -40));
 
+	// Ability3 movement
+	if (ab3_dir != ability3_dir::a3_direction_null && disable_controller)
+	{
+		iPoint target = NULLPOINT;
+		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+
+		switch (ab3_dir)
+		{
+		case ability3_dir::a3_up:
+			target = ability3_end_up;
+			break;
+		case ability3_dir::a3_down:
+			target = ability3_end_down;
+			break;
+		case ability3_dir::a3_left:
+			target = ability3_end_left;
+			break;
+		case ability3_dir::a3_right:
+			target = ability3_end_right;
+			break;
+				
+		}
+
+		App->view->LayerDrawCircle(target.x, target.y, 3, 255, 255, 255, 255, 99);
+		float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y);
+		MoveAngle(300, angle - 180);
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) < 20)
+		{
+			Ability1Up();
+			// Reset
+			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
+			ab3_dir = ability3_dir::a3_direction_null;
+			ability3_end_up = NULLPOINT;
+			ability3_end_down = NULLPOINT;
+			ability3_end_left = NULLPOINT;
+			ability3_end_right = NULLPOINT;
+			disable_controller = false;
+		}
+	}
+
 	return ret;
 }
 
@@ -178,6 +221,13 @@ bool Link::CleanUp()
 	bool ret = true;
 
 	return ret;
+}
+
+void Link::MoveAngle(float speed, float angle)
+{
+	float sp = speed * App->GetDT();
+	fPoint s(sp * cos(DEGTORAD *angle), sp * sin(DEGTORAD * angle));
+	game_object->SetPos({ game_object->fGetPos().x - s.x, game_object->fGetPos().y - s.y });
 }
 
 void Link::MoveUp(float speed)
@@ -479,7 +529,6 @@ void Link::ShowAbility2Down()
 
 void Link::ShowAbility2Left()
 {
-
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 75, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25}, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 - (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
@@ -494,7 +543,8 @@ void Link::ShowAbility2Right()
 
 void Link::Ability3Up()
 {
-
+	disable_controller = true;
+	ab3_dir = ability3_dir::a3_up;
 
 	ability3_range = 0;
 	DeleteAbility3Test();
@@ -502,7 +552,8 @@ void Link::Ability3Up()
 
 void Link::Ability3Down()
 {
-
+	disable_controller = true;
+	ab3_dir = ability3_dir::a3_down;
 
 	ability3_range = 0;
 	DeleteAbility3Test();
@@ -510,7 +561,8 @@ void Link::Ability3Down()
 
 void Link::Ability3Left()
 {
-
+	disable_controller = true;
+	ab3_dir = ability3_dir::a3_left;
 
 	ability3_range = 0;
 	DeleteAbility3Test();
@@ -518,7 +570,8 @@ void Link::Ability3Left()
 
 void Link::Ability3Right()
 {
-
+	disable_controller = true;
+	ab3_dir = ability3_dir::a3_right;
 
 	ability3_range = 0;
 	DeleteAbility3Test();
@@ -526,7 +579,6 @@ void Link::Ability3Right()
 
 void Link::ShowAbility3Up()
 {
-
 	if(ability3_range<=ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
@@ -564,50 +616,12 @@ void Link::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fix
 
 void Link::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	switch(bodyB->type)
-	{ 
-	case pbody_type::p_t_world:
-		{
-			switch (bodyA->type)
-			{
-			case pbody_type::p_t_link_ability3_up:
-				get_up = false;
-				break;
-			case pbody_type::p_t_link_ability3_down:
-				get_down = false;
-				break;
-			case pbody_type::p_t_link_ability3_left:
-				get_left = false;
-				break;
-			case pbody_type::p_t_link_ability3_right:
-				get_right = false;
-				break;
-			}
-		}
-		break;
-	}
+
 }
 
 void Link::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (bodyA->type == pbody_type::p_t_world)
-	{
-		switch (bodyB->type)
-		{
-		case pbody_type::p_t_link_ability3_up:
-			get_up = true;
-			break;
-		case pbody_type::p_t_link_ability3_down:
-			get_down = true;
-			break;
-		case pbody_type::p_t_link_ability3_left:
-			get_left = true;
-			break;
-		case pbody_type::p_t_link_ability3_right:
-			get_right = true;
-			break;
-		}
-	}
+
 }
 
 void Link::SetCamera(int id)
@@ -626,54 +640,52 @@ iPoint Link::GetPos() const
 
 void Link::CreateAbility3Test()
 {
-	if (ability3_test_up == nullptr)
-	{
-		ability3_test_up = new GameObject(GetPos(), GetPos(), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link_ability3_up, 0);
-		ability3_test_up->SetListener((j1Module*)App->entity);
-		ability3_test_down = new GameObject(GetPos(), GetPos(), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link_ability3_down, 0);
-		ability3_test_down->SetListener((j1Module*)App->entity);
-		ability3_test_left = new GameObject(GetPos(), GetPos(), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link_ability3_left, 0);
-		ability3_test_left->SetListener((j1Module*)App->entity);
-		ability3_test_right = new GameObject(GetPos(), GetPos(), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link_ability3_right, 0);
-		ability3_test_right->SetListener((j1Module*)App->entity);
-	}
-	else
-	{
-		ability3_test_up->SetPos(fPoint(GetPos().x, GetPos().y - ability3_range));
-		if (get_up)
-			ability3_end_up = iPoint(GetPos().x, GetPos().y - ability3_range);
+	//App->pathfinding->IsWalkable(App->map->WorldToMap(punt))
 
-		ability3_test_down->SetPos(fPoint(GetPos().x, GetPos().y + ability3_range));
-		if (get_down)
-			ability3_end_down = iPoint(GetPos().x, GetPos().y + ability3_range);
+	if (ability3_end_up == iPoint(0, 0))
+		ability3_end_up = GetPos();
 
-		ability3_test_left->SetPos(fPoint(GetPos().x - ability3_range, GetPos().y));
-		if (get_left)
-			ability3_end_left = iPoint(GetPos().x - ability3_range, GetPos().y);
+	if (ability3_end_down == iPoint(0, 0))
+		ability3_end_down = GetPos();
 
-		ability3_test_right->SetPos(fPoint(GetPos().x + ability3_range, GetPos().y));
-		if (get_right)
-			ability3_end_right = iPoint(GetPos().x + ability3_range, GetPos().y);
-	}
+	if (ability3_end_left == iPoint(0, 0))
+		ability3_end_left = GetPos();
 
+	if (ability3_end_right == iPoint(0, 0))
+		ability3_end_right = GetPos();
+
+
+	ability3_point_up = iPoint(GetPos().x, GetPos().y - ability3_range);
+	App->view->LayerDrawCircle(ability3_point_up.x, ability3_point_up.y, 3, 255, 255, 255, 255, 99);
+	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_up.x, ability3_point_up.y)))
+		ability3_end_up = iPoint(GetPos().x, GetPos().y - ability3_range);
+
+	ability3_point_down = iPoint(GetPos().x, GetPos().y + ability3_range);
+	App->view->LayerDrawCircle(ability3_point_down.x, ability3_point_down.y, 3, 255, 255, 255, 255, 99);
+	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_down.x, ability3_point_down.y)))
+		ability3_end_down = iPoint(GetPos().x, GetPos().y + ability3_range);
+
+	ability3_point_left = iPoint(GetPos().x - ability3_range, GetPos().y);
+	App->view->LayerDrawCircle(ability3_point_left.x, ability3_point_left.y, 3, 255, 255, 255, 255, 99);
+	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_left.x, ability3_point_left.y)))
+		ability3_end_left = iPoint(GetPos().x - ability3_range, GetPos().y);
+
+	ability3_point_right = iPoint(GetPos().x + ability3_range, GetPos().y);
+	App->view->LayerDrawCircle(ability3_point_right.x, ability3_point_right.y, 3, 255, 255, 255, 255, 99);
+	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_right.x, ability3_point_right.y)))
+		ability3_end_right = iPoint(GetPos().x + ability3_range, GetPos().y);
+	
 }
 
 void Link::DeleteAbility3Test()
 {
-	if (ability3_test_up != nullptr)
-	{
-		ability3_test_up->CleanUp();
-		RELEASE(ability3_test_up);
-		ability3_test_down->CleanUp();
-		RELEASE(ability3_test_down);
-		ability3_test_left->CleanUp();
-		RELEASE(ability3_test_left);
-		ability3_test_right->CleanUp();
-		RELEASE(ability3_test_right);
-	}
-
-	ability3_end_up = NULLPOINT;
-	ability3_end_down = NULLPOINT;
-	ability3_end_left = NULLPOINT;
-	ability3_end_right = NULLPOINT;
+	ability3_point_up = NULLPOINT;
+	ability3_point_down = NULLPOINT;
+	ability3_point_left = NULLPOINT;
+	ability3_point_right = NULLPOINT;
+	get_up = true;
+	get_down = true;
+	get_left = true;
+	get_right = true;
+	
 }

@@ -5,6 +5,16 @@
 
 class GameObject;
 
+enum ability3_dir
+{
+	a3_up,
+	a3_down,
+	a3_left,
+	a3_right,
+	a3_direction_null
+};
+
+
 class Link : public Entity
 {
 public:
@@ -28,6 +38,8 @@ public:
 
 	// CleanUp
 	bool CleanUp();
+
+	void MoveAngle(float speed, float angle);
 
 	void MoveUp(float speed);
 	void MoveDown(float speed);
@@ -109,19 +121,20 @@ private:
 	bool	flip = false;
 
 	// Ability 3
-	float	    ability3_range = 0.0f;
-	iPoint      ability3_end_up = NULLPOINT;
-	iPoint      ability3_end_down = NULLPOINT;
-	iPoint      ability3_end_left = NULLPOINT;
-	iPoint      ability3_end_right = NULLPOINT;
-	bool		get_up = true;
-	bool		get_down = true;
-	bool		get_left = true;
-	bool		get_right = true;
-	GameObject* ability3_test_up = nullptr;
-	GameObject* ability3_test_down = nullptr;
-	GameObject* ability3_test_left = nullptr;
-	GameObject* ability3_test_right = nullptr;
+	float        ability3_range = 0.0f;
+	iPoint       ability3_point_up = NULLPOINT;
+	iPoint       ability3_point_down = NULLPOINT;
+	iPoint       ability3_point_left = NULLPOINT;
+	iPoint       ability3_point_right = NULLPOINT;
+	iPoint       ability3_end_up = NULLPOINT;
+	iPoint       ability3_end_down = NULLPOINT;
+	iPoint       ability3_end_left = NULLPOINT;
+	iPoint       ability3_end_right = NULLPOINT;
+	bool		 get_up = true;
+	bool		 get_down = true;
+	bool		 get_left = true;
+	bool		 get_right = true;
+	ability3_dir ab3_dir = ability3_dir::a3_direction_null;
 };
 
 #endif
