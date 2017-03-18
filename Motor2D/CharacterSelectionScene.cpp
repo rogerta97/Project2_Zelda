@@ -41,28 +41,28 @@ bool CharacterSelectionScene::Update(float dt)
 	
 	for (int i = 0; i < 4; i++) 
 	{
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN) 
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad-1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN) 
 		{
 	
-			MoveCard(i, "right");
+			MoveCard(App->scene->players[i].viewport - 1, "right");
 
-			int a = char_view[i].size()/2;
+			int a = char_view[App->scene->players[i].viewport - 1].size()/2;
 
 			int j = 0; 
 
 			// Update images 
-			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
+			for (list<character_info>::iterator it = char_view[App->scene->players[i].viewport - 1].begin(); it != char_view[i].end(); it++)
 			{
 				switch ((*it).character)
 				{
 				case link:
 					if (j != a)
 					{
-						viewport[i].char_images.at(j++)->image = link_rects[0];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = link_rects[0];
 					}
 					else
 					{
-						viewport[i].char_images.at(j++)->image = link_rects[1];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = link_rects[1];
 					}
 
 
@@ -70,49 +70,49 @@ bool CharacterSelectionScene::Update(float dt)
 				case navi:
 					if (j != a)
 					{
-						viewport[i].char_images.at(j++)->image = navi_rects[0];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = navi_rects[0];
 					}
 					else
 					{
-						viewport[i].char_images.at(j++)->image = navi_rects[1];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = navi_rects[1];
 					}
 					break;
 
 				case ganon:
 					if (j != a)
 					{
-						viewport[i].char_images.at(j++)->image = ganon_rects[0];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = ganon_rects[0];
 					}
 					else
 					{
-						viewport[i].char_images.at(j++)->image = ganon_rects[1];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = ganon_rects[1];
 					}
 					break;
 				}
 			}
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN)
 		{
 			MoveCard(i, "left");
 
-			int a = char_view[i].size() / 2;
+			int a = char_view[App->scene->players[i].viewport - 1].size() / 2;
 
 			int j = 0;
 
 			// Update images
-			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
+			for (list<character_info>::iterator it = char_view[App->scene->players[i].viewport - 1].begin(); it != char_view[i].end(); it++)
 			{
 				switch ((*it).character)
 				{
 				case link:
 					if (j != a)
 					{
-						viewport[i].char_images.at(j++)->image = link_rects[0];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = link_rects[0];
 					}
 					else
 					{
-						viewport[i].char_images.at(j++)->image = link_rects[1];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = link_rects[1];
 					}
 
 
@@ -120,63 +120,64 @@ bool CharacterSelectionScene::Update(float dt)
 				case navi:
 					if (j != a)
 					{
-						viewport[i].char_images.at(j++)->image = navi_rects[0];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = navi_rects[0];
 					}
 					else
 					{
-						viewport[i].char_images.at(j++)->image = navi_rects[1];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = navi_rects[1];
 					}
 					break;
 
 				case ganon:
 					if (j != a)
 					{
-						viewport[i].char_images.at(j++)->image = ganon_rects[0];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = ganon_rects[0];
 					}
 					else
 					{
-						viewport[i].char_images.at(j++)->image = ganon_rects[1];
+						viewport[App->scene->players[i].viewport - 1].char_images.at(j++)->image = ganon_rects[1];
 					}
 					break;
 				}
 			}
 		}
 
-		int center_pos = char_view[i].size() / 2;
+		int center_pos = char_view[App->scene->players[i].viewport - 1].size() / 2;
 		int count = 0;
 
-		for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
+		for (list<character_info>::iterator it = char_view[App->scene->players[i].viewport - 1].begin(); it != char_view[App->scene->players[i].viewport - 1].end(); it++)
 		{
-			if (count++ == center_pos) {
-				viewport[i].name->SetText(it->name);
+			if (count++ == center_pos) 
+			{
+				viewport[App->scene->players[i].viewport - 1].name->SetText(it->name);
 			}
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 		{
-			int center_pos = char_view[i].size() / 2;
+			int center_pos = char_view[App->scene->players[i].viewport - 1].size() / 2;
 			int count = 0;
 
 
 			// Update images
 		
-			for (list<character_info>::iterator it = char_view[i].begin(); it != char_view[i].end(); it++)
+			for (list<character_info>::iterator it = char_view[App->scene->players[i].viewport - 1].begin(); it != char_view[App->scene->players[i].viewport - 1].end(); it++)
 			{
 				if (count++ == center_pos) {
 					switch (it->character)
 					{
 					case link:
-						EnableInfo(link, i, w, h);
+						EnableInfo(link, App->scene->players[i].viewport - 1, w, h);
 						
 
 						break;
 					case ganon:
-						EnableInfo(ganon, i, w, h);
+						EnableInfo(ganon, App->scene->players[i].viewport - 1, w, h);
 
 						break;
 
 					case navi:
-						EnableInfo(navi, i, w, h);
+						EnableInfo(navi, App->scene->players[i].viewport - 1, w, h);
 
 						break;
 					}
@@ -184,22 +185,22 @@ bool CharacterSelectionScene::Update(float dt)
 			}
 				
 		}
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
 		{
-			for (list<info_window>::iterator it = info_container[i].begin(); it != info_container[i].end(); it++)
+			for (list<info_window>::iterator it = info_container[App->scene->players[i].viewport - 1].begin(); it != info_container[App->scene->players[i].viewport - 1].end(); it++)
 			{
 		
 					switch (it->name)
 					{
 					case link:
-						DisableInfo(link, i);
+						DisableInfo(link, App->scene->players[i].viewport - 1);
 						break;
 					case ganon:
-						DisableInfo(ganon, i);
+						DisableInfo(ganon, App->scene->players[i].viewport - 1);
 						break;
 
 					case navi:
-						DisableInfo(navi, i);
+						DisableInfo(navi, App->scene->players[i].viewport - 1);
 						break;
 					}
 				
@@ -207,22 +208,22 @@ bool CharacterSelectionScene::Update(float dt)
 		
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN) 
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
 		{
 			if(player_ready[i] != true)
-				viewport[i].ready_text->SetPos(iPoint(viewport[i].ready_text->GetPos().x + 70, viewport[i].ready_text->GetPos().y));
+				viewport[App->scene->players[i].viewport - 1].ready_text->SetPos(iPoint(viewport[App->scene->players[i].viewport - 1].ready_text->GetPos().x + 70, viewport[App->scene->players[i].viewport - 1].ready_text->GetPos().y));
 
-			player_ready[i] = true;
+			player_ready[App->scene->players[i].viewport - 1] = true;
 	
-			viewport[i].ready_text->SetText("READY"); 
+			viewport[App->scene->players[i].viewport - 1].ready_text->SetText("READY");
 						
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) 
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 		{
-			player_ready[i] = false;
-			viewport[i].ready_text->SetPos(iPoint(viewport[i].ready_text->GetPos().x - 70, viewport[i].ready_text->GetPos().y));
-			viewport[i].ready_text->SetText("Press START when ready");
+			player_ready[App->scene->players[i].viewport - 1] = false;
+			viewport[App->scene->players[i].viewport - 1].ready_text->SetPos(iPoint(viewport[App->scene->players[i].viewport - 1].ready_text->GetPos().x - 70, viewport[App->scene->players[i].viewport - 1].ready_text->GetPos().y));
+			viewport[App->scene->players[i].viewport - 1].ready_text->SetText("Press START when ready");
 		}
 	}
 
