@@ -79,6 +79,18 @@ void j1Spell::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtur
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
 }
 
+void j1Spell::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+}
+
+void j1Spell::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+}
+
 Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 {
 	Spell* ret = nullptr;

@@ -16,10 +16,12 @@ struct collision_filters
 	// Category (1, 2, 4, 8, 16, 32, 64 ... 2^n)
 	short int CATEGORY_PLAYER = 0x0001;
 	short int CATEGORY_SCENERY = 0x0002;
+	short int CATEGORY_NONCOLLISIONABLE = 0x0004;
 
 	// Mask
 	short int MASK_PLAYER = CATEGORY_SCENERY;
 	short int MASK_SCENERY = -1;
+	short int MASK_NONCOLLISIONABLE = 0;
 };
 
 // PhysBody enum
@@ -32,6 +34,11 @@ enum class pbody_type
 	p_t_npc,
 	p_t_tower,
 	p_t_tower_attack,
+
+	p_t_link_ability3_up,
+	p_t_link_ability3_down,
+	p_t_link_ability3_left,
+	p_t_link_ability3_right,
 };
 
 // Fixture enum

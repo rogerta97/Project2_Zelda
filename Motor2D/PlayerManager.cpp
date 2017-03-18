@@ -37,6 +37,10 @@ bool PlayerManager::Update(float dt)
 	{
 		Player* curr_player = players.at(i);
 
+		// Disable controller input
+		if (curr_player->entity->disable_controller)
+			continue;
+
 		// Input
 
 		// Left Joystick -------
@@ -395,11 +399,11 @@ bool PlayerManager::Update(float dt)
 			curr_player->state = idle_up;
 			break;
 		case ability3_left:
-			curr_player->entity->Ability3Down();
+			curr_player->entity->Ability3Left();
 			curr_player->state = idle_left;
 			break;
 		case ability3_down:
-			curr_player->entity->Ability3Left();
+			curr_player->entity->Ability3Down();
 			curr_player->state = idle_down;
 			break;
 		case ability3_right:
@@ -488,10 +492,10 @@ bool PlayerManager::Update(float dt)
 			curr_player->entity->ShowAbility3Up();
 			break;
 		case show_ability3_left:
-			curr_player->entity->ShowAbility3Down();
+			curr_player->entity->ShowAbility3Left();
 			break;
 		case show_ability3_down:
-			curr_player->entity->ShowAbility3Left();
+			curr_player->entity->ShowAbility3Down();
 			break;
 		case show_ability3_right:
 			curr_player->entity->ShowAbility3Right();

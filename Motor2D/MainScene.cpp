@@ -260,7 +260,10 @@ void MainScene::CreateMapCollisions()
 				i++;
 			}
 		}
-		map_collisions.push_back(App->physics->CreateStaticChain(0, 0, points, num_points));
+		PhysBody* b = App->physics->CreateStaticChain(0, 0, points, num_points, 1, 0, 0.0f, App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY);
+		b->type = pbody_type::p_t_world;
+
+		map_collisions.push_back(b);
 		RELEASE_ARRAY(points);
 	}
 

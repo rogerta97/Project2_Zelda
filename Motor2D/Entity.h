@@ -233,6 +233,8 @@ public:
 	}
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
 	void AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
 	Ability* GetAbility(int number);
@@ -275,6 +277,7 @@ public:
 	Stats	         stats;
 
 	// States
+	bool			 disable_controller = false;
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
