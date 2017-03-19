@@ -30,7 +30,7 @@ Tower::Tower(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	AddAbility(0, 30, 3, 20, "t_attack");
+	AddAbility(0, 50, 3, 20, "t_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
@@ -48,7 +48,7 @@ bool Tower::Start()
 
 	game_object->SetAnimation("tower_idle");
 
-	stats.max_life = stats.life = 300;
+	stats.max_life = stats.life = 400;
 
 	show_life_bar = true;
 
