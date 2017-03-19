@@ -86,3 +86,8 @@ void TowerAttack::CleanSpell()
 
 }
 
+void TowerAttack::SetTarget(Entity * target)
+{
+	
+}
+

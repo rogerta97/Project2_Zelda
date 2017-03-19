@@ -9,6 +9,7 @@
 #include "Spell.h"
 #include "Entity.h"
 #include "j1Spell.h"
+#include "Functions.h"
 
 class b2Fixture;
 class PhysBody;
@@ -43,7 +44,7 @@ public:
 
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	
+	void SetTarget(Entity* target);
 
 private:
 	

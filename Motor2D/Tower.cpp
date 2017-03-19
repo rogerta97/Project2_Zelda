@@ -132,7 +132,8 @@ void Tower::Idle()
 
 void Tower::Attack()
 {
-	TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
+	if (LookForTarget())
+		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
