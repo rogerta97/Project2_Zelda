@@ -24,7 +24,7 @@ struct path_joint
 class PhysBody
 {
 public:
-	PhysBody() : listener(NULL), body(NULL)
+	PhysBody() : body(NULL)
 	{}
 
 	void GetPosition(int& x, int &y) const;
@@ -37,7 +37,7 @@ public:
 	int        width = 0;
 	int        height = 0;
 	b2Body*    body = nullptr;
-	j1Module*  listener = nullptr;
+	std::vector<j1Module*>  listeners;
 	pbody_type type = pbody_type::p_t_null;
 };
 
