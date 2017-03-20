@@ -30,7 +30,7 @@ Tower::Tower(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	AddAbility(0, 50, 3, 20, "t_attack");
+	AddAbility(0, 50, 3, 2, "t_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
@@ -132,8 +132,11 @@ void Tower::Idle()
 
 void Tower::Attack()
 {
-	if (LookForTarget())
-		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
+	game_object->SetAnimation("tower_attack");
+	anim_state = tower_attack;
+
+	TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
+	ta->SetTarget(target);
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -201,11 +204,11 @@ void Tower::CheckTowerState()
 	case Tower_Attack:
 		if (game_object->animator->IsCurrentAnimation("tower_attack"))
 		{
-				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
-				{
+			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
+			{
 					state = Tower_Idle;
 					game_object->SetAnimation("tower_idle");
-				}
+			}
 		}
 		else if (target->to_delete == true)
 		{

@@ -21,7 +21,7 @@ class TowerAttack : public Spell
 public:
 	TowerAttack(iPoint pos);
 
-	virtual ~TowerAttack();
+	~TowerAttack();
 
 	bool Start();
 	bool PreUpdate();
@@ -42,14 +42,13 @@ public:
 		return true;
 	}
 
-	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	void SetTarget(Entity* target);
 
 private:
-	
-	int				range = 0;
-	iPoint		    starting_pos = NULLPOINT;
+	bool			reached = false;
+	Entity*			target = nullptr;
 };
 
 #endif // _TOWERATTACK_H

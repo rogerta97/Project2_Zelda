@@ -3,6 +3,7 @@
 #include "j1Viewports.h"
 
 
+
 TowerAttack::TowerAttack(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_tower_attack, 0);
@@ -17,8 +18,6 @@ TowerAttack::TowerAttack(iPoint pos)
 	draw_offset = restore_draw_offset = { 7, 9 };
 
 	name = "t_attack";
-
-	starting_pos = pos;
 }
 
 TowerAttack::~TowerAttack()
@@ -29,7 +28,7 @@ bool TowerAttack::Start()
 {
 	bool ret = true;
 
-	range = 150;
+	
 	game_object->SetAnimation("projectile");
 
 	return ret;
@@ -48,8 +47,21 @@ bool TowerAttack::Update(float dt)
 {
 	bool ret = true;
 
-	float speed = 100 * dt;
+	float speed = 170 * dt;
 
+	float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
+
+	fPoint t;
+
+	if (game_object->GetPos().x > target->GetPos().x)
+		t = { speed * cos(DEGTORAD * initial_angle) ,speed * sin(DEGTORAD * initial_angle) };
+	else
+		t = { speed * cos(DEGTORAD * initial_angle) ,speed * sin(DEGTORAD * initial_angle) };
+
+	game_object->SetPos({ game_object->GetPos().x + t.x, game_object->GetPos().y + t.y });
+	
+	if (reached)
+		App->spell->DeleteSpell(this);
 
 	return ret;
 }
@@ -67,7 +79,7 @@ bool TowerAttack::PostUpdate()
 {
 	bool ret = true;
 
-
+	
 
 	return ret;
 }
@@ -86,8 +98,17 @@ void TowerAttack::CleanSpell()
 
 }
 
-void TowerAttack::SetTarget(Entity * target)
+void TowerAttack::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	
+	if (game_object->pbody == bodyA && bodyB == target->game_object->pbody)
+	{
+		reached = true;
+	}
+		
+}
+
+void TowerAttack::SetTarget(Entity * _target)
+{
+	target = _target;
 }
 
