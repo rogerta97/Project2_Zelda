@@ -190,7 +190,7 @@ bool MainScene::Update(float dt)
 	minion_manager->Update();
 	shop_manager->Update();
 
-	// UI Control
+	// UI Control -----------
 
 	for (int i = 0; i < App->entity->player_manager->players.size(); i++)
 	{
@@ -337,7 +337,7 @@ bool MainScene::Update(float dt)
 		}
 	}
 
-	// ----------
+	// --------------
 
 	return ret;
 }
