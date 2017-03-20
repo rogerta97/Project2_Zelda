@@ -15,7 +15,7 @@ bool j1Spell::Awake(pugi::xml_node &)
 {
 	bool ret = true;
 
-
+	name = "spell";
 
 	return ret;
 }

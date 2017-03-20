@@ -76,7 +76,7 @@ void GameObject::SetGravityScale(float _gravity_scale)
 
 void GameObject::SetListener(j1Module * scene)
 {
-	pbody->listeners.push_back(scene);
+	pbody->listener = scene;
 }
 
 void GameObject::SetCatMask(int cat, int mask)

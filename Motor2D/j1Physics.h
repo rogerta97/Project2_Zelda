@@ -37,7 +37,7 @@ public:
 	int        width = 0;
 	int        height = 0;
 	b2Body*    body = nullptr;
-	std::vector<j1Module*>  listeners;
+	j1Module*  listener = nullptr;
 	pbody_type type = pbody_type::p_t_null;
 };
 

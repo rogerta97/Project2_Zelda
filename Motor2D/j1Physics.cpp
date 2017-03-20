@@ -61,21 +61,11 @@ bool j1Physics::PreUpdate()
 			b2Fixture* fA = c->GetFixtureA();
 			b2Fixture* fB = c->GetFixtureB();
 
-			if (pb1 && pb2 && !pb1->listeners.empty())
-			{
-				for (std::vector<j1Module*>::iterator it = pb1->listeners.begin(); it != pb1->listeners.end(); it++)
-				{
-					(*it)->OnCollision(pb1, pb2, fA, fB);
-				}
-			}
+			if (pb1 && pb2 && pb1->listener)
+				pb1->listener->OnCollision(pb1, pb2, fA, fB);
 
-			if (pb1 && pb2 && !pb2->listeners.empty())
-			{
-				for (std::vector<j1Module*>::iterator it = pb2->listeners.begin(); it != pb2->listeners.end(); it++)
-				{
-					(*it)->OnCollision(pb1, pb2, fA, fB);
-				}
-			}
+			if (pb1 && pb2 && pb2->listener)
+				pb2->listener->OnCollision(pb2, pb1, fB, fA);
 		}
 	}
 
@@ -998,21 +988,11 @@ void j1Physics::BeginContact(b2Contact* contact)
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if(physA && !physA->listeners.empty())
-	{
-		for (std::vector<j1Module*>::iterator it = physA->listeners.begin(); it != physA->listeners.end(); it++)
-		{
-			(*it)->OnCollisionEnter(physA, physB, fixtureB, fixtureA);
-		}
-	}
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
 
-	if(physB && physB->listeners.empty())
-	{
-		for (std::vector<j1Module*>::iterator it = physB->listeners.begin(); it != physB->listeners.end(); it++)
-		{
-			(*it)->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
-		}
-	}
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
 }
 
 void j1Physics::EndContact(b2Contact * contact)
@@ -1023,19 +1003,9 @@ void j1Physics::EndContact(b2Contact * contact)
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if (physA && !physA->listeners.empty())
-	{
-		for (std::vector<j1Module*>::iterator it = physA->listeners.begin(); it != physA->listeners.end(); it++)
-		{
-			(*it)->OnCollisionOut(physA, physB, fixtureB, fixtureA);
-		}
-	}
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollisionOut(physA, physB, fixtureA, fixtureB);
 
-	if (physB && physB->listeners.empty())
-	{
-		for (std::vector<j1Module*>::iterator it = physB->listeners.begin(); it != physB->listeners.end(); it++)
-		{
-			(*it)->OnCollisionOut(physB, physA, fixtureB, fixtureA);
-		}
-	}
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollisionOut(physB, physA, fixtureB, fixtureA);
 }
