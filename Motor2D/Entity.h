@@ -122,6 +122,7 @@ struct Ability
 	{
 		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd;
 		name = _name;
+		cd_timer.SubstractTimeFromStart(_cd);
 	};
 
 	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed)

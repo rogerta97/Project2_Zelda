@@ -59,25 +59,25 @@ private:
 	UI_Image*			progress_bar_1 = nullptr; 
 	UI_Image*			rupiees_img_1 = nullptr;
 	UI_Image*			minimap_icon_1 = nullptr;
-	list<UI_Image*>		habilities_1; 
+	vector<UI_Image*>	habilities_1;
 
 	// P2
 	UI_Image*			progress_bar_2 = nullptr;
 	UI_Image*			rupiees_img_2 = nullptr;
 	UI_Image*			minimap_icon_2 = nullptr;
-	list<UI_Image*>		habilities_2;
+	vector<UI_Image*>	habilities_2;
 
 	// P3
 	UI_Image*			progress_bar_3 = nullptr;
 	UI_Image*			rupiees_img_3 = nullptr;
 	UI_Image*			minimap_icon_3 = nullptr;
-	list<UI_Image*>		habilities_3;
+	vector<UI_Image*>	habilities_3;
 
 	// P4
 	UI_Image*			progress_bar_4 = nullptr;
 	UI_Image*			rupiees_img_4 = nullptr;
 	UI_Image*			minimap_icon_4 = nullptr;
-	list<UI_Image*>		habilities_4;
+	vector<UI_Image*>   habilities_4;
 
 	vector<PhysBody*>	map_collisions;
 };

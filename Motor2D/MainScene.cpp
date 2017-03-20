@@ -89,8 +89,12 @@ bool MainScene::Start()
 	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
 
-	//Create UI 
+	//Create UI ---------
 	SDL_Rect screen = App->view->GetViewportRect(1);
+	iPoint ability1_pos = { screen.w  - 90 , screen.h - 100};
+	iPoint ability2_pos = { screen.w / 50 + 30, screen.h - 100 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 60 };
+	iPoint ability4_pos = { screen.w / 50 + 30, screen.h - 60 };
 
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -100,10 +104,10 @@ bool MainScene::Start()
 	rupiees_img_1 = main_window_1->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 32, 0, 16, 16});
 	minimap_icon_1 = main_window_1->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
 
-	habilities_1.push_back(main_window_1->CreateImage(iPoint(screen.w  - 90 , screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_1.push_back(main_window_1->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
-	habilities_1.push_back(main_window_1->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_1.push_back(main_window_1->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
 	// Player2
 	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -113,10 +117,10 @@ bool MainScene::Start()
 	rupiees_img_2 = main_window_2->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
 	minimap_icon_2 = main_window_2->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
 
-	habilities_2.push_back(main_window_2->CreateImage(iPoint(screen.w - 90, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_2.push_back(main_window_2->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
-	habilities_2.push_back(main_window_2->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_2.push_back(main_window_2->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
 	// Player3
 	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -126,10 +130,10 @@ bool MainScene::Start()
 	rupiees_img_3 = main_window_3->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
 	minimap_icon_3 = main_window_3->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
 
-	habilities_3.push_back(main_window_3->CreateImage(iPoint(screen.w - 90, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_3.push_back(main_window_3->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
-	habilities_3.push_back(main_window_3->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_3.push_back(main_window_3->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
 	// Player4
 	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -139,11 +143,12 @@ bool MainScene::Start()
 	rupiees_img_4 = main_window_4->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
 	minimap_icon_4 = main_window_4->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
 
-	habilities_4.push_back(main_window_4->CreateImage(iPoint(screen.w - 90, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_4.push_back(main_window_4->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
-	habilities_4.push_back(main_window_4->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities_4.push_back(main_window_4->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
+	// ------------------
 
 	//Creating quests
 	quest_manager = new QuestManager();
@@ -184,6 +189,155 @@ bool MainScene::Update(float dt)
 
 	minion_manager->Update();
 	shop_manager->Update();
+
+	// UI Control
+
+	for (int i = 0; i < App->entity->player_manager->players.size(); i++)
+	{
+		Player* curr_player = App->entity->player_manager->players.at(i);
+
+		switch (curr_player->viewport)
+		{
+		case 1:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_1.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_1.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_1.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_1.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		case 2:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_2.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_2.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_2.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_2.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		case 3:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_3.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_3.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_3.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_3.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		case 4:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_4.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_4.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_4.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_4.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		}
+	}
+
+	// ----------
 
 	return ret;
 }
