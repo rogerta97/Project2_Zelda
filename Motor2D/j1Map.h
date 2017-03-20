@@ -137,6 +137,9 @@ public:
 	// Return all unsorted points for minions path
 	std::vector<iPoint> GetMinionPath()const;
 
+	//World spawn position for towers
+	std::vector<iPoint> GetTowerSpawns(uint team) const;
+
 private:
 
 	bool LoadMap();
