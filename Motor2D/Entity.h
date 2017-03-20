@@ -135,6 +135,8 @@ struct Ability
 		return cd_timer.ReadSec() >= cd;
 	}
 
+	float GetCdTimeLeft();
+
 	int        index = 0;
 	float      cd = 0;
 	float      duration = 0;

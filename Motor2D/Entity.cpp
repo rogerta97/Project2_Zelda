@@ -180,5 +180,12 @@ void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 	stats.max_life = stats.base_hp + extra_hp;
 }
 
+float Ability::GetCdTimeLeft()
+{
+	float ret = cd - cd_timer.ReadSec();
 
+	if (ret < 0)
+		ret = 0;
 
+	return ret;
+}
