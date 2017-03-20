@@ -7,12 +7,13 @@
 #include "j1Physics.h"
 #include "Animation.h"
 #include "Spell.h"
-#include "Entity.h"
-#include "j1Spell.h"
 
 class b2Fixture;
 class PhysBody;
 class GameObject;
+class Spell;
+
+#define BOOMERANG_RANGE 170
 
 enum direction
 {
@@ -51,14 +52,13 @@ public:
 
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	void Set(direction dir, int range);
+	void Set(direction dir);
 
 private:
 	direction dir = direction::null;
-	int				range = 0;
 	float			initial_speed = 0;
+	iPoint			starting_pos = NULLPOINT;
 
-	iPoint		    starting_pos = NULLPOINT;
 	j1Timer			timer;
 
 };

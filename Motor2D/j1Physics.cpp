@@ -49,7 +49,7 @@ bool j1Physics::Start()
 // 
 bool j1Physics::PreUpdate()
 {
-	world->Step(App->GetDT(), 6, 2);
+	world->Step(App->GetDT(), 30, 10);
 
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
@@ -63,6 +63,9 @@ bool j1Physics::PreUpdate()
 
 			if(pb1 && pb2 && pb1->listener)
 				pb1->listener->OnCollision(pb1, pb2, fA, fB);
+
+			if (pb1 && pb2 && pb2->listener)
+				pb2->listener->OnCollision(pb2, pb1, fB, fA);
 		}
 	}
 
@@ -979,15 +982,30 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 
 void j1Physics::BeginContact(b2Contact* contact)
 {
-	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+ 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
 	if(physA && physA->listener != NULL)
-		physA->listener->OnCollision(physA, physB, fixtureA, fixtureB);
+		physA->listener->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
 
 	if(physB && physB->listener != NULL)
-		physB->listener->OnCollision(physB, physA, fixtureB, fixtureA);
+		physB->listener->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
+}
+
+void j1Physics::EndContact(b2Contact * contact)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	b2Fixture* fixtureA = contact->GetFixtureA();
+	b2Fixture* fixtureB = contact->GetFixtureB();
+
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollisionOut(physB, physA, fixtureB, fixtureA);
 }

@@ -21,6 +21,8 @@
 #include "MinionManager.h"
 #include "Scene.h"
 #include "TowerManager.h"
+#include "Functions.h"
+#include "ShopManager.h"
 
 
 
@@ -38,15 +40,6 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
-	Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, 1, iPoint(300, 700), 1);
-	Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, 2, iPoint(400, 700), 2);
-	Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, 3, iPoint(500, 700), 2);
-	Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, 4, iPoint(600, 700), 1);
-
-
-	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
-	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
-
 	//Load Map
 	if (App->map->Load("zelda_moba2.tmx"))
 	{
@@ -58,26 +51,104 @@ bool MainScene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	// Shop Manager
+	shop_manager = new ShopManager();
+	shop_manager->Start();
+
+	// Loading Players
+	LOG("Loading Players");
+	bool def = false;
+	for (int i = 0; i < 4; i++)
+	{
+		if (App->scene->players[i].character == e_n_null)
+		{
+			def = true;
+			break;
+		}
+	}
+	if (!def)
+	{
+		Player* p1 = App->entity->player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
+		Player* p2 = App->entity->player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
+		Player* p3 = App->entity->player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
+		Player* p4 = App->entity->player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
+	}
+	else
+	{
+		Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
+		Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
+		Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
+		Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
+	}
+
 	//Test Minion
+	LOG("Creating minion manager");
 	minion_manager = new MinionManager();
 
 	//Test Tower
+	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
 
-	//Create UI element
-	SDL_Rect screen = App->view->GetViewportRect(1); 
-	main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	//Create UI ---------
+	SDL_Rect screen = App->view->GetViewportRect(1);
+	iPoint ability1_pos = { screen.w  - 90 , screen.h - 100};
+	iPoint ability2_pos = { screen.w / 50 + 30, screen.h - 100 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 60 };
+	iPoint ability4_pos = { screen.w / 50 + 30, screen.h - 60 };
 
-	progress_bar = main_window->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 36, 32, 385, 23 });
-	//princess = main_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 5) , {141, 4, 20, 25});
-	rupiees_img = main_window->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 49, 5, 17, 17});
-	rupiees_numb = main_window->CreateText(iPoint(rupiees_img->GetPos().x, rupiees_img->GetPos().y + 30), App->font->game_font, 0, false); 
-	rupiees_numb->SetText("0"); 
-	minimap_icon = main_window->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w  - 90 , screen.h - 100), { 182, 78, 35, 35 }));
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w - 90, screen.h - 60), { 182, 78, 35, 35 }));
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 100), { 182, 78, 35, 35 }));
-	habilities.push_back(main_window->CreateImage(iPoint(screen.w / 50 + 30, screen.h - 60), { 182, 78, 35, 35 }));
+	// Player1
+	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_1->viewport = 1;
+	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), {0, 28, 385, 24 });
+	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5) , { 0,0,32,28 });
+	rupiees_img_1 = main_window_1->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 32, 0, 16, 16});
+	minimap_icon_1 = main_window_1->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+
+	habilities_1.push_back(main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// Player2
+	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_2->viewport = 2;
+	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_2 = main_window_2->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
+	minimap_icon_2 = main_window_2->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+
+	habilities_2.push_back(main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// Player3
+	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_3->viewport = 3;
+	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_3 = main_window_3->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
+	minimap_icon_3 = main_window_3->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+
+	habilities_3.push_back(main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// Player4
+	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_4->viewport = 4;
+	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_4 = main_window_4->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
+	minimap_icon_4 = main_window_4->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+
+	habilities_4.push_back(main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// ------------------
 
 	//Creating quests
 	quest_manager = new QuestManager();
@@ -87,6 +158,11 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("Test"), 4);
 
 	App->console->AddText("viewports.set 4", Input);
+
+	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+
+	CreateMapCollisions();
 
 	return ret;
 }
@@ -112,6 +188,156 @@ bool MainScene::Update(float dt)
 	}
 
 	minion_manager->Update();
+	shop_manager->Update();
+
+	// UI Control -----------
+
+	for (int i = 0; i < App->entity->player_manager->players.size(); i++)
+	{
+		Player* curr_player = App->entity->player_manager->players.at(i);
+
+		switch (curr_player->viewport)
+		{
+		case 1:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_1.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_1.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_1.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_1.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_1.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		case 2:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_2.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_2.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_2.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_2.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_2.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		case 3:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_3.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_3.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_3.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_3.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_3.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		case 4:
+			if (curr_player->entity->GetAbility(0)->CdCompleted())
+			{
+				habilities_4.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(0)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(1)->CdCompleted())
+			{
+				habilities_4.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(1)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(2)->CdCompleted())
+			{
+				habilities_4.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(2)->ChangeImage(NULLRECT);
+			}
+			if (curr_player->entity->GetAbility(3)->CdCompleted())
+			{
+				habilities_4.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+			}
+			else
+			{
+				habilities_4.at(3)->ChangeImage(NULLRECT);
+			}
+			break;
+		}
+	}
+
+	// --------------
 
 	return ret;
 }
@@ -127,18 +353,32 @@ bool MainScene::PostUpdate()
 bool MainScene::CleanUp()
 {
 	bool ret = true;
+	shop_manager->CleanUp();
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
 	RELEASE(tower_manager);
+	RELEASE(shop_manager);
+
 	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
 
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)
 	{
-		App->gui->DeleteElement(main_window);
+		App->gui->DeleteElement(main_window_1);
+		App->gui->DeleteElement(main_window_2);
+		App->gui->DeleteElement(main_window_3);
+		App->gui->DeleteElement(main_window_4);
 	}
+	// -------
+
+	// Delete Map Collisions
+	for (std::vector<PhysBody*>::iterator it = map_collisions.begin(); it != map_collisions.end(); it++)
+	{
+		App->physics->DeleteBody(*it);
+	}
+	map_collisions.clear();
 	// -------
 
 	return ret;
@@ -194,5 +434,40 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 	default:
 		break;
 	}
+}
+
+void MainScene::CreateMapCollisions()
+{
+	pugi::xml_document doc;
+	App->LoadXML("MapCollisions.xml", doc);
+	pugi::xml_node collisions = doc.child("collisions");
+	
+	for(pugi::xml_node chain = collisions.child("chain");chain != NULL;chain = chain.next_sibling("chain"))
+	{
+		string points_string = chain.child_value();
+		int num_points = chain.attribute("vertex").as_int();
+		int* points = new int[num_points];
+		std::list<string> points_list;
+		Tokenize(points_string, ',', points_list);
+		int i = 0;
+		for (std::list<string>::iterator it = points_list.begin(); it != points_list.end(); it++)
+		{
+			if (i >= num_points)
+				break;
+
+			if (*it != "")
+			{
+				*(points + i) = stoi(*it);
+				i++;
+			}
+		}
+		PhysBody* b = App->physics->CreateStaticChain(0, 0, points, num_points, 1, 0, 0.0f, App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY);
+		b->type = pbody_type::p_t_world;
+
+		map_collisions.push_back(b);
+		RELEASE_ARRAY(points);
+	}
+
+	
 }
 

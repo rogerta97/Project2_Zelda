@@ -46,6 +46,8 @@ private:
 	UI_Image*		   cursor_1 = nullptr; 
 	UI_Image*		   cursor_2 = nullptr;
 
+	UI_Image*		   princess = nullptr;
+
 	button_action	   current_button = START; 
 
 	UI_Button*		   start_button = nullptr;

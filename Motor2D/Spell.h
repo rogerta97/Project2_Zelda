@@ -11,6 +11,15 @@
 class b2Fixture;
 class PhysBody;
 class GameObject;
+class Entity;
+
+struct personal_stats
+{
+	float damage_multiplicator = 0.0f;
+	float slow_duration = 0.0f;
+	float slow_multiplicator = 0.0f;
+	float stun_duration = 0.0f;
+};
 
 class Spell
 {
@@ -39,6 +48,8 @@ public:
 	}
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
 	//Set Team if not set already
 	void SetTeam(uint _team)
@@ -72,6 +83,7 @@ public:
 	// Name
 	string			 name;
 
+	personal_stats   stats;
 protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;

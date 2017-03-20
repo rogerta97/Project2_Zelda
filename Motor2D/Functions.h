@@ -15,7 +15,7 @@
 // -----------------------------------------
 // -----------------------------------------
 
-// Returns the angle from two points
+// Returns the angle between two points in degrees
 float AngleFromTwoPoints(float x1, float y1, float x2, float y2);
 
 // Returns the distance from two points(can be a negative distance)

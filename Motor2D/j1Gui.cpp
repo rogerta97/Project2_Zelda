@@ -86,6 +86,7 @@ bool j1Gui::Update(float dt)
 					(*it)->blit_layer = elements->data->blit_layer;
 					(*it)->is_ui = elements->data->is_ui;
 					(*it)->is_gameplay = elements->data->is_gameplay;
+					(*it)->viewport = elements->data->viewport;
 				}
 			}
 		}
@@ -731,6 +732,7 @@ UI_Button* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic)
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 	return ret;
 }
@@ -762,6 +764,7 @@ UI_Text* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, bool _
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 	return ret;
 }
@@ -792,6 +795,7 @@ UI_Image* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic)
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 	return ret;
 }
@@ -823,6 +827,7 @@ UI_Text_Input* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bo
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 	return ret;
 }
@@ -850,6 +855,7 @@ UI_Scroll_Bar * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, i
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 
 	return ret;
@@ -878,6 +884,7 @@ UI_ColoredRect * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Colo
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 
 	return ret;
@@ -906,6 +913,7 @@ UI_Check_Box * UI_Window::CreateCheckBox(iPoint pos, int w, int h, SDL_Rect pres
 
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
+		App->gui->start = true;
 	}
 
 	return ret;

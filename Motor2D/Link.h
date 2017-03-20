@@ -4,6 +4,17 @@
 #include "Entity.h"
 
 class GameObject;
+
+enum ability3_dir
+{
+	a3_up,
+	a3_down,
+	a3_left,
+	a3_right,
+	a3_direction_null
+};
+
+
 class Link : public Entity
 {
 public:
@@ -27,6 +38,8 @@ public:
 
 	// CleanUp
 	bool CleanUp();
+
+	void MoveAngle(float speed, float angle);
 
 	void MoveUp(float speed);
 	void MoveDown(float speed);
@@ -90,20 +103,38 @@ public:
 
 	// On Collision
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	//Set Camera to this player. 1<=id<=4
 	void SetCamera(int id);
 
 	iPoint GetPos() const;
 
+private:
+	void CreateAbility3Test();
+	void DeleteAbility3Test();
 public:
 
 private:
 	int		camera = 1;
 	bool	flip = false;
 
-	float   ability2_power = 0;
-
+	// Ability 3
+	float        ability3_range = 0.0f;
+	iPoint       ability3_point_up = NULLPOINT;
+	iPoint       ability3_point_down = NULLPOINT;
+	iPoint       ability3_point_left = NULLPOINT;
+	iPoint       ability3_point_right = NULLPOINT;
+	iPoint       ability3_end_up = NULLPOINT;
+	iPoint       ability3_end_down = NULLPOINT;
+	iPoint       ability3_end_left = NULLPOINT;
+	iPoint       ability3_end_right = NULLPOINT;
+	bool		 get_up = true;
+	bool		 get_down = true;
+	bool		 get_left = true;
+	bool		 get_right = true;
+	ability3_dir ab3_dir = ability3_dir::a3_direction_null;
 };
 
 #endif

@@ -9,6 +9,7 @@
 struct SDL_Texture;
 class MenuScene; 
 class MainScene;
+class CharacterSelectionScene; 
 class TeamSelectScene;
 
 struct player_info
@@ -53,6 +54,8 @@ public:
 
 	// Blit choosing the layer
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollisionEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollisionOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	void OnCommand(std::list<std::string>& tokens);
 
@@ -62,19 +65,20 @@ public:
 
 public:
 	// Scenes
-	MenuScene*			 menu_scene = nullptr; 
-	MainScene*           main_scene = nullptr;
-	TeamSelectScene*	 team_select = nullptr;
+	MenuScene*					 menu_scene = nullptr; 
+	MainScene*					 main_scene = nullptr;
+	CharacterSelectionScene*	 charselect_screen = nullptr; 
+	TeamSelectScene*			 team_select = nullptr;
 
-	player_info			 players[4];
+	player_info					 players[4];
 
 private:
 	// Scenes list
-	list<Scene*>         scenes;
+	list<Scene*>				 scenes;
 
 	// Current scene
-	Scene*               current_scene = nullptr;
-
+	Scene*						 current_scene = nullptr;
+		
 };
 
 #endif // __j1SCENE_H__

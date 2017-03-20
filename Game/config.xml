@@ -12,7 +12,7 @@
     <game_font file ="fonts/ALTTP_font.ttf" size ="15"/>
 	</fonts>
 	<gui>
-		<atlas file="gui/UI_sheet.png" />
+		<atlas file="gui/UI_sheet_final.png" />
 	</gui>
 	<window>
 		<resolution width="1280" height="720" scale="1" />

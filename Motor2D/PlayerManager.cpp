@@ -2,7 +2,8 @@
 #include "j1Viewports.h"
 #include "j1Scene.h"
 #include "j1Input.h"
-#include"p2Log.h"
+#include "p2Log.h"
+#include "j1Map.h"
 
 PlayerManager::PlayerManager()
 {
@@ -34,287 +35,324 @@ bool PlayerManager::Update(float dt)
 
 	for (int i = 0; i < players.size(); i++)
 	{
+		Player* curr_player = players.at(i);
+
+		// Disable controller input
+		if (curr_player->entity->disable_controller)
+			continue;
+
 		// Input
 
 		// Left Joystick -------
 
 			// Diagonal moves
-		if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_UP) > 12000)
+		if (curr_player->entity->stuned)
 		{
-			players.at(i)->move = move_upleft;
+			curr_player->move = stop;
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_UP) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 		{
-			players.at(i)->move = move_upright;
+			curr_player->move = move_upleft;
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_DOWN) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 		{
-			players.at(i)->move = move_downleft;
+			curr_player->move = move_upright;
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_DOWN) > 12000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 		{
-			players.at(i)->move = move_downright;
+			curr_player->move = move_downleft;
+		}
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+		{
+			curr_player->move = move_downright;
 		}
 			// Normal moves
-		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_LEFT) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
 		{
-			players.at(i)->move = move_left;
+			curr_player->move = move_left;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_RIGHT) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
 		{
-			players.at(i)->move = move_right;
+			curr_player->move = move_right;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_UP) > 6000)
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
 		{
-			players.at(i)->move = move_up;
+			curr_player->move = move_up;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, LEFTJOY_DOWN) > 6000)
+		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
 		{
-			players.at(i)->move = move_down;
+			curr_player->move = move_down;
 		}
 		else
 		{
-			players.at(i)->move = stop;
+			curr_player->move = stop;
 		}
 		// --------------------
 
 		// Right Joystick -----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, RIGHTJOY_LEFT) > 22000)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_LEFT) > 22000)
 		{
-			if (players.at(i)->move != stop)
-				players.at(i)->state = run_left;
+			if (curr_player->move != stop)
+				curr_player->state = run_left;
 			else
-				players.at(i)->state = idle_left;
+				curr_player->state = idle_left;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, RIGHTJOY_RIGHT) > 22000)
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_RIGHT) > 22000)
 		{
-			if (players.at(i)->move != stop)
-				players.at(i)->state = run_right;
+			if (curr_player->move != stop)
+				curr_player->state = run_right;
 			else
-				players.at(i)->state = idle_right;
+				curr_player->state = idle_right;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, RIGHTJOY_UP) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_UP) > 12000)
 		{
-			if (players.at(i)->move != stop)
-				players.at(i)->state = run_up;
+			if (curr_player->move != stop)
+				curr_player->state = run_up;
 			else
-				players.at(i)->state = idle_up;
+				curr_player->state = idle_up;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_REPEAT || App->input->GetControllerJoystickMove(players.at(i)->index, RIGHTJOY_DOWN) > 12000)
+		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_DOWN) > 12000)
 		{
-			if (players.at(i)->move != stop)
-				players.at(i)->state = run_down;
+			if (curr_player->move != stop)
+				curr_player->state = run_down;
 			else
-				players.at(i)->state = idle_down;
+				curr_player->state = idle_down;
 		}
 		// --------------------
 
 		// Run to idle when not moving
-		else if (players.at(i)->state == run_left)
+		else if (curr_player->state == run_left)
 		{
-			players.at(i)->state = idle_left;
+			curr_player->state = idle_left;
 		}
-		else if (players.at(i)->state == run_right)
+		else if (curr_player->state == run_right)
 		{
-			players.at(i)->state = idle_right;
+			curr_player->state = idle_right;
 		}
-		else if (players.at(i)->state == run_up)
+		else if (curr_player->state == run_up)
 		{
-			players.at(i)->state = idle_up;
+			curr_player->state = idle_up;
 		}
-		else if (players.at(i)->state == run_down)
+		else if (curr_player->state == run_down)
 		{
-			players.at(i)->state = idle_down;
+			curr_player->state = idle_down;
 		}
 
 		// Idle to run when moving
-		if (players.at(i)->move != stop)
+		if (curr_player->move != stop)
 		{
-			if (players.at(i)->state == idle_left)
-				players.at(i)->state = run_left;
+			if (curr_player->state == idle_left)
+				curr_player->state = run_left;
 
-			else if (players.at(i)->state == idle_right)
-				players.at(i)->state = run_right;
+			else if (curr_player->state == idle_right)
+				curr_player->state = run_right;
 
-			else if (players.at(i)->state == idle_up)
-				players.at(i)->state = run_up;
+			else if (curr_player->state == idle_up)
+				curr_player->state = run_up;
 
-			else if (players.at(i)->state == idle_down)
-				players.at(i)->state = run_down;
+			else if (curr_player->state == idle_down)
+				curr_player->state = run_down;
 		}
 
 		// Abilities PRESS
-		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
 		{
-			if(players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->show = shows::show_basic_atack_down;
-			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->show = shows::show_basic_atack_up;
-			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->show = shows::show_basic_atack_left;
-			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->show = shows::show_basic_atack_right;
+			if (IsAbilityCdCompleted(curr_player, 1))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_basic_atack_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_basic_atack_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_basic_atack_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_basic_atack_right;
+			}
 		}
-		else if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
+		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
 		{
-			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->show = shows::show_ability1_down;
-			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->show = shows::show_ability1_up;
-			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->show = shows::show_ability1_left;
-			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->show = shows::show_ability1_right;
+			if (IsAbilityCdCompleted(curr_player, 2))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability1_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability1_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability1_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability1_right;
+			}
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, RIGHT_TRIGGER) > 22000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
 		{
-			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->show = shows::show_ability2_down;
-			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->show = shows::show_ability2_up;
-			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->show = shows::show_ability2_left;
-			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->show = shows::show_ability2_right;
+			if (IsAbilityCdCompleted(curr_player, 3))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability2_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability2_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability2_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability2_right;
+			}
 		}
-		else if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFT_TRIGGER) > 22000)
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
 		{
-			if (players.at(i)->state == idle_down || players.at(i)->state == run_down)
-				players.at(i)->show = shows::show_ability3_down;
-			else if (players.at(i)->state == idle_up || players.at(i)->state == run_up)
-				players.at(i)->show = shows::show_ability3_up;
-			else if (players.at(i)->state == idle_left || players.at(i)->state == run_left)
-				players.at(i)->show = shows::show_ability3_left;
-			else if (players.at(i)->state == idle_right || players.at(i)->state == run_right)
-				players.at(i)->show = shows::show_ability3_right;
+			if (IsAbilityCdCompleted(curr_player, 4))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability3_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability3_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability3_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability3_right;
+			}
 		}
 
 		// Abilities RELEASE
-		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE)
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE && !curr_player->entity->stuned)
 		{
-			if (players.at(i)->show != shows::show_null)
+			if (curr_player->show != shows::show_null)
 			{
-				if (players.at(i)->show == shows::show_basic_atack_down)
+				if (curr_player->show == shows::show_basic_atack_down)
 				{
-					players.at(i)->state = basic_atack_down;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = basic_atack_down;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
-				else if (players.at(i)->show == shows::show_basic_atack_up)
+				else if (curr_player->show == shows::show_basic_atack_up)
 				{
-					players.at(i)->state = basic_atack_up;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = basic_atack_up;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
-				else if (players.at(i)->show == shows::show_basic_atack_left)
+				else if (curr_player->show == shows::show_basic_atack_left)
 				{
-					players.at(i)->state = basic_atack_left;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = basic_atack_left;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
-				else if (players.at(i)->show == shows::show_basic_atack_right)
+				else if (curr_player->show == shows::show_basic_atack_right)
 				{
-					players.at(i)->state = basic_atack_right;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = basic_atack_right;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
 			}
 		}
 
-		if (App->input->GetControllerButton(players.at(i)->index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
 		{
-			if (players.at(i)->show != shows::show_null)
+			if (curr_player->show != shows::show_null)
 			{
-				if (players.at(i)->show == shows::show_ability1_down)
+				if (curr_player->show == shows::show_ability1_down)
 				{
-					players.at(i)->state = ability1_down;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability1_down;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
-				else if (players.at(i)->show == shows::show_ability1_up)
+				else if (curr_player->show == shows::show_ability1_up)
 				{
-					players.at(i)->state = ability1_up;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability1_up;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
-				else if (players.at(i)->show == shows::show_ability1_left)
+				else if (curr_player->show == shows::show_ability1_left)
 				{
-					players.at(i)->state = ability1_left;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability1_left;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
-				else if (players.at(i)->show == shows::show_ability1_right)
+				else if (curr_player->show == shows::show_ability1_right)
 				{
-					players.at(i)->state = ability1_right;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability1_right;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
 			}
 		}
 
-		if (App->input->GetControllerJoystickMove(players.at(i)->index, RIGHT_TRIGGER) < 22000)
+		if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) < 22000)
 		{
-			if (players.at(i)->show != shows::show_null)
+			if (curr_player->show != shows::show_null)
 			{
-				if (players.at(i)->show == shows::show_ability2_down)
+				if (curr_player->show == shows::show_ability2_down)
 				{
-					players.at(i)->state = ability2_down;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability2_down;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
-				else if (players.at(i)->show == shows::show_ability2_up)
+				else if (curr_player->show == shows::show_ability2_up)
 				{
-					players.at(i)->state = ability2_up;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability2_up;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
-				else if (players.at(i)->show == shows::show_ability2_left)
+				else if (curr_player->show == shows::show_ability2_left)
 				{
-					players.at(i)->state = ability2_left;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability2_left;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
-				else if (players.at(i)->show == shows::show_ability2_right)
+				else if (curr_player->show == shows::show_ability2_right)
 				{
-					players.at(i)->state = ability2_right;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability2_right;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
 			}
 		}
 
-		if (App->input->GetControllerJoystickMove(players.at(i)->index, LEFT_TRIGGER) < 22000)
+		if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) < 22000)
 		{
-			if (players.at(i)->show != shows::show_null)
+			if (curr_player->show != shows::show_null)
 			{
-				if (players.at(i)->show == shows::show_ability3_down)
+				if (curr_player->show == shows::show_ability3_down)
 				{
-					players.at(i)->state = ability3_down;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability3_down;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
-				else if (players.at(i)->show == shows::show_ability3_up)
+				else if (curr_player->show == shows::show_ability3_up)
 				{
-					players.at(i)->state = ability3_up;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability3_up;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
-				else if (players.at(i)->show == shows::show_ability3_left)
+				else if (curr_player->show == shows::show_ability3_left)
 				{
-					players.at(i)->state = ability3_left;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability3_left;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
-				else if (players.at(i)->show == shows::show_ability3_right)
+				else if (curr_player->show == shows::show_ability3_right)
 				{
-					players.at(i)->state = ability3_right;
-					players.at(i)->show = shows::show_null;
+					curr_player->state = ability3_right;
+					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
 			}
 		}
-
 		
 		// State machines
 
 		// Animations
-		switch (players.at(i)->state)
+		switch (curr_player->state)
 		{
 		case run_up:
-			players.at(i)->entity->RunUp();
+			curr_player->entity->RunUp();
 			break;
 		case run_left:
-			players.at(i)->entity->RunLeft();
+			curr_player->entity->RunLeft();
 			break;
 		case run_down:
-			players.at(i)->entity->RunDown();
+			curr_player->entity->RunDown();
 			break;
 		case run_right:
-			players.at(i)->entity->RunRight();
+			curr_player->entity->RunRight();
 			break;
 		case walk_up:
 			break;
@@ -325,80 +363,80 @@ bool PlayerManager::Update(float dt)
 		case walk_right:
 			break;
 		case idle_up:
-			players.at(i)->entity->IdleUp();
+			curr_player->entity->IdleUp();
 			break;
 		case idle_left:
-			players.at(i)->entity->IdleLeft();
+			curr_player->entity->IdleLeft();
 			break;
 		case idle_down:
-			players.at(i)->entity->IdleDown();
+			curr_player->entity->IdleDown();
 			break;
 		case idle_right:
-			players.at(i)->entity->IdleRight();
+			curr_player->entity->IdleRight();
 			break;
 		case basic_atack_up:
-			players.at(i)->entity->BasicAttackUp();
-			players.at(i)->state = idle_up;
+			curr_player->entity->BasicAttackUp();
+			curr_player->state = idle_up;
 			break;
 		case basic_atack_left:
-			players.at(i)->entity->BasicAttackLeft();
-			players.at(i)->state = idle_left;
+			curr_player->entity->BasicAttackLeft();
+			curr_player->state = idle_left;
 			break;
 		case basic_atack_down:
-			players.at(i)->entity->BasicAttackDown();
-			players.at(i)->state = idle_down;
+			curr_player->entity->BasicAttackDown();
+			curr_player->state = idle_down;
 			break;
 		case basic_atack_right:
-			players.at(i)->entity->BasicAttackRight();
-			players.at(i)->state = idle_right;
+			curr_player->entity->BasicAttackRight();
+			curr_player->state = idle_right;
 			break;
 		case ability1_up:
-			players.at(i)->entity->Ability1Up();
-			players.at(i)->state = idle_up;
+			curr_player->entity->Ability1Up();
+			curr_player->state = idle_up;
 			break;
 		case ability1_left:
-			players.at(i)->entity->Ability1Down();
-			players.at(i)->state = idle_left;
+			curr_player->entity->Ability1Down();
+			curr_player->state = idle_left;
 			break;
 		case ability1_down:
-			players.at(i)->entity->Ability1Left();
-			players.at(i)->state = idle_down;
+			curr_player->entity->Ability1Left();
+			curr_player->state = idle_down;
 			break;
 		case ability1_right:
-			players.at(i)->entity->Ability1Right();
-			players.at(i)->state = idle_right;
+			curr_player->entity->Ability1Right();
+			curr_player->state = idle_right;
 			break;
 		case ability2_up:
-			players.at(i)->entity->Ability2Up();
-			players.at(i)->state = idle_up;
+			curr_player->entity->Ability2Up();
+			curr_player->state = idle_up;
 			break;
 		case ability2_left:
-			players.at(i)->entity->Ability2Left();
-			players.at(i)->state = idle_left;
+			curr_player->entity->Ability2Left();
+			curr_player->state = idle_left;
 			break;
 		case ability2_down:
-			players.at(i)->entity->Ability2Down();
-			players.at(i)->state = idle_down;
+			curr_player->entity->Ability2Down();
+			curr_player->state = idle_down;
 			break;
 		case ability2_right:
-			players.at(i)->entity->Ability2Right();
-			players.at(i)->state = idle_right;
+			curr_player->entity->Ability2Right();
+			curr_player->state = idle_right;
 			break;
 		case ability3_up:
-			players.at(i)->entity->Ability3Up();
-			players.at(i)->state = idle_up;
+			curr_player->entity->Ability3Up();
+			curr_player->state = idle_up;
 			break;
 		case ability3_left:
-			players.at(i)->entity->Ability3Down();
-			players.at(i)->state = idle_left;
+			curr_player->entity->Ability3Left();
+			curr_player->state = idle_left;
 			break;
 		case ability3_down:
-			players.at(i)->entity->Ability3Left();
-			players.at(i)->state = idle_down;
+			curr_player->entity->Ability3Down();
+			curr_player->state = idle_down;
 			break;
 		case ability3_right:
-			players.at(i)->entity->Ability3Right();
-			players.at(i)->state = idle_right;
+			curr_player->entity->Ability3Right();
+			curr_player->state = idle_right;
 			break;
 		case states_null:
 			break;
@@ -407,88 +445,88 @@ bool PlayerManager::Update(float dt)
 		}
 
 		// Movement
-		float speed = (players.at(i)->entity->stats.speed * dt);
+		float speed = (curr_player->entity->stats.speed * dt);
 
-		switch (players.at(i)->move)
+		switch (curr_player->move)
 		{
 		case move_up:
-			players.at(i)->entity->MoveUp(speed);
+			curr_player->entity->MoveUp(speed);
 			break;
 		case move_down:
-			players.at(i)->entity->MoveDown(speed);
+			curr_player->entity->MoveDown(speed);
 			break;
 		case move_left:
-			players.at(i)->entity->MoveLeft(speed);
+			curr_player->entity->MoveLeft(speed);
 			break;
 		case move_right:
-			players.at(i)->entity->MoveRight(speed);
+			curr_player->entity->MoveRight(speed);
 			break;
 		case move_upleft:
-			players.at(i)->entity->MoveUpLeft(speed);
+			curr_player->entity->MoveUpLeft(speed);
 			break;
 		case move_upright:
-			players.at(i)->entity->MoveUpRight(speed);
+			curr_player->entity->MoveUpRight(speed);
 			break;
 		case move_downleft:
-			players.at(i)->entity->MoveDownLeft(speed);
+			curr_player->entity->MoveDownLeft(speed);
 			break;
 		case move_downright:
-			players.at(i)->entity->MoveDownRight(speed);
+			curr_player->entity->MoveDownRight(speed);
 			break;
 		case stop:
 			break;
 		}
 
 		// Show
-		switch (players.at(i)->show)
+		switch (curr_player->show)
 		{
 		case show_basic_atack_up:
-			players.at(i)->entity->ShowBasicAttackUp();
+			curr_player->entity->ShowBasicAttackUp();
 			break;
 		case show_basic_atack_left:
-			players.at(i)->entity->ShowBasicAttackLeft();
+			curr_player->entity->ShowBasicAttackLeft();
 			break;
 		case show_basic_atack_down:
-			players.at(i)->entity->ShowBasicAttackDown();
+			curr_player->entity->ShowBasicAttackDown();
 			break;
 		case show_basic_atack_right:
-			players.at(i)->entity->ShowBasicAttackRight();
+			curr_player->entity->ShowBasicAttackRight();
 			break;
 		case show_ability1_up:
-			players.at(i)->entity->ShowAbility1Up();
+			curr_player->entity->ShowAbility1Up();
 			break;
 		case show_ability1_left:
-			players.at(i)->entity->ShowAbility1Down();
+			curr_player->entity->ShowAbility1Down();
 			break;
 		case show_ability1_down:
-			players.at(i)->entity->ShowAbility1Left();
+			curr_player->entity->ShowAbility1Left();
 			break;
 		case show_ability1_right:
-			players.at(i)->entity->ShowAbility1Right();
+			curr_player->entity->ShowAbility1Right();
 			break;
 		case show_ability2_up:
-			players.at(i)->entity->ShowAbility2Up();
+			curr_player->entity->ShowAbility2Up();
 			break;
 		case show_ability2_left:
-			players.at(i)->entity->ShowAbility2Left();
+			curr_player->entity->ShowAbility2Left();
 			break;
 		case show_ability2_down:
-			players.at(i)->entity->ShowAbility2Down();
+			curr_player->entity->ShowAbility2Down();
 			break;
 		case show_ability2_right:
-			players.at(i)->entity->ShowAbility2Right();
+			curr_player->entity->ShowAbility2Right();
 			break;
 		case show_ability3_up:
-			players.at(i)->entity->ShowAbility3Up();
+			curr_player->entity->ShowAbility3Up();
 			break;
 		case show_ability3_left:
-			players.at(i)->entity->ShowAbility3Down();
+			curr_player->entity->ShowAbility3Left();
 			break;
 		case show_ability3_down:
-			players.at(i)->entity->ShowAbility3Left();
+			curr_player->entity->ShowAbility3Down();
 			break;
 		case show_ability3_right:
-			players.at(i)->entity->ShowAbility3Right();
+			curr_player->entity->ShowAbility3Right();
 			break;
 		}
 	}
@@ -506,32 +544,54 @@ bool PlayerManager::CleanUp()
 	bool ret = true;
 
 	ClearPlayers();
+	spawn_points_used_team1.clear();
+	spawn_points_used_team2.clear();
 
 	return ret;
 }
 
-Player* PlayerManager::AddPlayer(entity_name name, int index, iPoint pos, int team, int show_life_bar)
+Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn, int show_life_bar)
 {
 	Player* ret = nullptr;
+
 	if (players.size() <= 3)
 	{
-		Player* p = new Player(App->entity->CreateEntity(name, pos), index - 1);
-		p->entity->SetCamera(p->index + 1);
+		iPoint position = pos;
+
+		// Searching for avaliable spawn points
+		if(on_spawn)
+		{
+			vector<iPoint> spawn_points;
+			App->map->GetPlayerSpawnPoints(team, spawn_points);
+			for (int i = 0; i < spawn_points.size(); i++)
+			{
+				if (!CheckIfSpawnPointIsUsed(team, spawn_points.at(i)))
+				{
+					position = spawn_points.at(i);
+					break;
+				}
+			}
+		}
+
+		// Create player
+		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport);
+		p->entity->SetCamera(p->viewport);
 		p->entity->SetTeam(team);
 		p->entity->show_life_bar = show_life_bar;
 		p->entity->is_player = true;
 		players.push_back(p);
 		ret = p;
 	}
+
 	return ret;
 }
 
-void PlayerManager::ChangePlayer(entity_name name, int index)
+void PlayerManager::ChangePlayer(entity_name name, int controller_index, int viewport)
 {
 	iPoint pos;
 	for(vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
-		if ((*it)->index == index - 1)
+		if ((*it)->controller_index == controller_index - 1)
 		{
 			pos = (*it)->entity->GetPos();
 			App->entity->DeleteEntity((*it)->entity);
@@ -541,16 +601,16 @@ void PlayerManager::ChangePlayer(entity_name name, int index)
 		}
 	}
 
-	Player* p = new Player(App->entity->CreateEntity(name, pos), index - 1);
-	p->entity->SetCamera(p->index + 1);
+	Player* p = new Player(App->entity->CreateEntity(name, pos), controller_index - 1, viewport);
+	p->entity->SetCamera(p->controller_index + 1);
 	players.push_back(p);
 }
 
-void PlayerManager::DeletePlayer(int index)
+void PlayerManager::DeletePlayer(int controller_index)
 {
 	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
-		if ((*it)->index == index - 1)
+		if ((*it)->controller_index == controller_index - 1)
 		{
 			players.erase(it);
 			App->entity->DeleteEntity((*it)->entity);
@@ -592,7 +652,7 @@ std::vector<int> PlayerManager::GetTeamViewports(int team)
 	{
 		if ((*it)->entity->GetTeam() == team)
 		{
-			ret.push_back((*it)->index+1);
+			ret.push_back((*it)->controller_index+1);
 		}
 	}
 
@@ -605,8 +665,100 @@ int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 	{
 		if (players.at(i)->entity == entity)
 		{
-			return players.at(i)->index + 1;
+			return players.at(i)->viewport;
 		}
 	}
 }
 
+bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
+{
+	switch (team)
+	{
+	case 1:
+		for (int i = 0; i < spawn_points_used_team1.size(); i++)
+		{
+			if (spawn_points_used_team1.at(i) == pos)
+			{
+				spawn_points_used_team1.push_back(pos);
+				return true;
+			}
+		}
+		return false;
+		break;
+	case 2:
+		for (int i = 0; i < spawn_points_used_team2.size(); i++)
+		{
+			if (spawn_points_used_team2.at(i) == pos)
+			{
+				spawn_points_used_team2.push_back(pos);
+				return true;
+			}
+		}
+		return false;
+		break;
+	default:
+		break;
+	}
+}
+
+bool PlayerManager::IsAbilityCdCompleted(Player* player, int ability)
+{
+	bool ret = false;
+
+	if(player->entity->GetAbility(ability - 1) != nullptr)
+		ret = player->entity->GetAbility(ability - 1)->CdCompleted();
+
+	return ret;
+}
+
+void PlayerManager::ResetAbilityTimer(Player* player, int ability)
+{
+	if (player->entity->GetAbility(ability - 1) != nullptr)
+		player->entity->GetAbility(ability - 1)->cd_timer.Start();
+}
+
+void Player::BuyItem(Item * item, int price)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			if (item->upgrade_from == items[i])
+			{
+				items[i] = item;
+				break;
+			}
+		}
+		else
+		{
+			items[i] = item;
+			break;
+		}
+	}
+
+	rupees -= price;
+
+	int extra_power = 0, extra_hp = 0, extra_speed = 0;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (items[i] == nullptr)
+		{
+			break;
+		}
+		extra_hp += items[i]->hp;
+		extra_power += items[i]->power;
+		extra_speed += items[i]->speed;
+	}
+
+	entity->UpdateStats(extra_power, extra_hp, extra_speed);
+
+	UpdateRupees();
+}
+
+void Player::UpdateRupees()
+{
+	string r;
+	r = std::to_string(rupees);
+	rupees_num->SetText(r);
+}

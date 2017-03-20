@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<file>  <!--Items must be ordered the more expensive first-->
+  <item id="0">
+    <name>Triforce</name>
+    <description>Just true heros can use Triforce powers.</description>
+    <power value="30"/>
+    <hp value="30"/>
+    <speed value="30"/>
+    <price rupees="1000"/>
+    <upgrade id="-1"/>
+    <rect x="647" y="444" w="40" h="40"/>
+  </item>
+  <item id="1">
+    <name>Bomb</name>
+    <description></description>
+    <power value="50"/>
+    <hp value="0"/>
+    <speed value="0"/>
+    <price rupees="400"/>
+    <upgrade id="-1"/>
+    <rect x="725" y="330" w="40" h="40"/>
+  </item>
+  <item id="2">
+    <name>Big Shield</name>
+    <description></description>
+    <power value="0"/>
+    <hp value="50"/>
+    <speed value="0"/>
+    <price rupees="500"/>
+    <upgrade id="-1"/>
+    <upgrade_from id="5"/>
+    <rect x="687" y="368" w="40" h="40"/>
+  </item>
+  <item id="3">
+    <name>Master Sword</name>
+    <description></description>
+    <power value="50"/>
+    <hp value="0"/>
+    <speed value="0"/>
+    <price rupees="500"/>
+    <upgrade id="-1"/>
+    <upgrade_from id="6"/>
+    <rect x="687" y="404" w="40" h="40"/>
+  </item>
+  <item id="4">
+    <name>SUMHC Boots</name>
+    <description></description>
+    <power value="0"/>
+    <hp value="0"/>
+    <speed value="50"/>
+    <price rupees="500"/>
+    <upgrade id="-1"/>
+    <upgrade_from id="7"/>
+    <rect x="687" y="330" w="40" h="40"/>
+  </item>
+  <item id="5">
+    <name>Shield</name>
+    <description></description>
+    <power value="0"/>
+    <hp value="20"/>
+    <speed value="0"/>
+    <price rupees="200"/>
+    <upgrade id="2"/>
+    <rect x="647" y="368" w="40" h="40"/>
+  </item>
+  <item id="6">
+    <name>Sword</name>
+    <description></description>
+    <power value="20"/>
+    <hp value="0"/>
+    <speed value="0"/>
+    <price rupees="200"/>
+    <upgrade id="3"/>
+    <rect x="647" y="404" w="40" h="40"/>
+  </item>
+  <item id="7">
+    <name>Boots</name>
+    <description></description>
+    <power value="0"/>
+    <hp value="0"/>
+    <speed value="20"/>
+    <price rupees="200"/>
+    <upgrade id="4"/>
+    <rect x="647" y="330" w="40" h="40"/>
+  </item>
+</file>
