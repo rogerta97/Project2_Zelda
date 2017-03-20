@@ -202,14 +202,12 @@ void Tower::CheckTowerState()
 		break;
 
 	case Tower_Attack:
-		if (game_object->animator->IsCurrentAnimation("tower_attack"))
+		if (GetPos().DistanceTo(target->GetPos()) > attack_range)
 		{
-			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
-			{
-					state = Tower_Idle;
-					game_object->SetAnimation("tower_idle");
-			}
+			state = Tower_Idle;
+			game_object->SetAnimation("tower_idle");
 		}
+		
 		else if (target->to_delete == true)
 		{
 			state = Tower_Idle;
