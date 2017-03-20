@@ -128,6 +128,9 @@ public:
 	// Return World spawn position for team #team minions
 	iPoint GetMinionsSpawn(uint team) const;
 
+	//Return shop position in world cordinates
+	iPoint GetShopPosition(uint team) const;
+
 	// Return World spawn position for team players
 	void GetPlayerSpawnPoints(uint team, vector<iPoint> &spawns);
 

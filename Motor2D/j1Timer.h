@@ -14,6 +14,7 @@ public:
 	void Start();
 	uint32 Read() const;
 	float ReadSec() const;
+	void SubstractTimeFromStart(float sec);
 
 private:
 	uint32	started_at;

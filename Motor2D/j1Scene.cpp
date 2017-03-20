@@ -11,6 +11,7 @@
 #include "MenuScene.h"
 #include "j1Console.h"
 #include "TeamSelectScene.h"
+#include "CharacterSelectionScene.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -49,6 +50,9 @@ bool j1Scene::Start()
 	scenes.push_back(main_scene);
 	team_select = new TeamSelectScene();
 	scenes.push_back(team_select);
+	charselect_screen = new CharacterSelectionScene();
+	scenes.push_back(charselect_screen); 
+
 	// -------------
 
 	// Starting scene
@@ -131,8 +135,17 @@ Scene * j1Scene::GetCurrentScene()
 
 void j1Scene::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for(list<Scene*>::iterator it = scenes.begin(); it != scenes.end(); it++)
-		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+	current_scene->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+}
+
+void j1Scene::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	current_scene->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+}
+
+void j1Scene::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	current_scene->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
 }
 
 void j1Scene::OnCommand(std::list<std::string>& tokens)

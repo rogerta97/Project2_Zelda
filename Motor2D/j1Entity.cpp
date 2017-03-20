@@ -9,6 +9,7 @@
 #include "j1Spell.h"
 #include "Tower.h"
 #include "Functions.h"
+#include "j1Timer.h"
 
 
 j1Entity::j1Entity()
@@ -64,6 +65,9 @@ bool j1Entity::Update(float dt)
 
 	player_manager->Update(dt);
 
+	SlowEntities();
+	StunEntities();
+
 	return ret;
 }
 
@@ -94,6 +98,12 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+}
+
+void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
 
 	// Returns GotHit to the entity --------
 	if (fixtureA->type == fixture_type::f_t_attack && fixtureB->type == fixture_type::f_t_hit_box)
@@ -139,6 +149,12 @@ void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 		}
 	}
 	// ------------------------------------
+}
+
+void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
 }
 
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
@@ -270,6 +286,30 @@ void j1Entity::RemoveEntities()
 			(*it)->CleanEntity();
 			entity_list.remove(*it);
 			RELEASE(*it);
+		}
+	}
+}
+
+void j1Entity::SlowEntities()
+{
+	for(list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end(); it++)
+	{
+		if ((*it).time <= (*it).timer.ReadSec())
+		{
+			(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
+			slowed_entities.remove(*it);
+		}
+	}
+}
+
+void j1Entity::StunEntities()
+{
+	for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end(); it++)
+	{
+		if ((*it).time <= (*it).timer.ReadSec())
+		{
+			(*it).entity->stuned = false;
+			stuned_entities.remove(*it);
 		}
 	}
 }

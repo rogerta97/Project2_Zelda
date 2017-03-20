@@ -17,7 +17,7 @@ struct personal_stats
 {
 	float damage_multiplicator = 0.0f;
 	float slow_duration = 0.0f;
-	float slow_force = 0.0f;
+	float slow_multiplicator = 0.0f;
 	float stun_duration = 0.0f;
 };
 
@@ -48,6 +48,8 @@ public:
 	}
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
 	//Set Team if not set already
 	void SetTeam(uint _team)

@@ -6,13 +6,16 @@
 
 #define ACCELERATION -1300
 #define TIME 0.65f
-#define DESTRUCTION_TIME 2
+#define DESTRUCTION_TIME 1.8f
+#define SLOW_TIME 1.5f
+#define SLOW_MULTIPLICATOR 0.5f
 Boomerang::Boomerang(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_boomerang, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_boomerang, 0);
 	hit_box = game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
+	game_object->pbody->body->SetBullet(true);
 
 	pugi::xml_document doc;
 	App->LoadXML("boomerang.xml", doc);
@@ -81,8 +84,8 @@ bool Boomerang::Update(float dt)
 		{
 			stats.stun_duration = 0.0f;
 			stats.damage_multiplicator = 0.7f;
-			stats.slow_duration = 1.0f;
-			stats.slow_force = 0.5f;
+			stats.slow_duration = SLOW_TIME;
+			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
 		}
 	}
 	else
@@ -90,7 +93,7 @@ bool Boomerang::Update(float dt)
 		stats.stun_duration = 0.0f;
 		stats.damage_multiplicator = 0.7f;
 		stats.slow_duration = 0.0f;
-		stats.slow_force = 0.0f;
+		stats.slow_multiplicator = 0.0f;
 	}
 
 	switch (dir)

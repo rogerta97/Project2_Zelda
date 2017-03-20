@@ -82,9 +82,13 @@ void GameObject::SetListener(j1Module * scene)
 void GameObject::SetCatMask(int cat, int mask)
 {
 	b2Filter data;
-	data.categoryBits = cat;
-	data.maskBits = mask;
-	pbody->body->GetFixtureList()->SetFilterData(data);
+	data.categoryBits = mask;
+	data.maskBits = cat;
+
+	for (b2Fixture* f = pbody->body->GetFixtureList(); f; f = f->GetNext())
+	{
+		f->SetFilterData(data);
+	}
 }
 
 void GameObject::AddAnimation(Animation* animation)

@@ -333,9 +333,22 @@ bool TeamSelectScene::PostUpdate()
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 
 	//FOR TESTING
-	if(App->input->GetControllerButton(0,SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
-		App->scene->ChangeScene((Scene*)App->scene->main_scene);
-
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			App->scene->players[i].viewport = App->scene->players[i].player;
+			if (i < 2)
+			{
+				App->scene->players[i].team = 1;
+			}
+			else
+			{
+				App->scene->players[i].team = 2;
+			}
+		}
+		App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
+	}
 
 
 	return true;

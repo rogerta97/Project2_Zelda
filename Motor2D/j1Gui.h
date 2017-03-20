@@ -103,9 +103,10 @@ public:
 	// Debug when F1
 	bool				   debug = false;
 
-private:
+	// Start code
 	bool				   start = true;
 
+private:
 	// Movement
 	bool				   moving = false;
 	int					   mouse_x = 0;

@@ -106,7 +106,7 @@ void QuestManager::CreateQuest(string& task, int id)
 	{
 		Quest* new_quest = new Quest(task, id);	
 		quest_list.push_back(*new_quest);
-		abilitie_icons.push_back(App->scene->main_scene->main_window->CreateImage(placer, { 182, 78, 25 ,25 }, false));
+		abilitie_icons.push_back(App->scene->main_scene->main_window_1->CreateImage(placer, { 182, 78, 25 ,25 }, false));
 		placer.y -= 35; 
 	}
 }

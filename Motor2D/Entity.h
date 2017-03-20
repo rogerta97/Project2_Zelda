@@ -104,10 +104,16 @@ public:
 	~Stats() {};
 
 public:
+	int base_speed = 0;
 	int speed = 0;
+	int restore_speed = 0;
 
+	int base_hp = 100;
 	int max_life = 100;
 	int life = 100;
+
+	int base_power = 0;
+	int power = 0;	
 };
 
 struct Ability
@@ -116,7 +122,20 @@ struct Ability
 	{
 		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd;
 		name = _name;
+		cd_timer.SubstractTimeFromStart(_cd);
 	};
+
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed)
+	{
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable;
+	}
+
+	bool CdCompleted()
+	{
+		return cd_timer.ReadSec() >= cd;
+	}
+
+	float GetCdTimeLeft();
 
 	int        index = 0;
 	float      cd = 0;
@@ -130,6 +149,11 @@ struct Ability
 
 	b2Fixture* fixture = nullptr;
 	string     name;
+
+	j1Timer    cd_timer;
+
+	SDL_Rect   ability_avaliable_pressed = NULLRECT;
+	SDL_Rect   ablility_avaliable = NULLRECT;
 };
 
 class Entity
@@ -227,8 +251,10 @@ public:
 	}
 
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	void AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
+	Ability* AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
 	Ability* GetAbility(int number);
 	Ability* GetAbilityByName(const char* name);
 
@@ -254,6 +280,9 @@ public:
 
 	void LifeBar(iPoint size, iPoint offset = { 0, 0 }); 
 
+	//Update Stats
+	void UpdateStats(int extra_power, int extra_hp, int extra_speed);
+
 private:
 	
 private:
@@ -266,9 +295,11 @@ public:
 	Stats	         stats;
 
 	// States
+	bool			 disable_controller = false;
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
+	bool			 stuned = false;
 
 	// Life bar
 	bool			 show_life_bar = false;

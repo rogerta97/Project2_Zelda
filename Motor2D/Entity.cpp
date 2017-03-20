@@ -42,9 +42,13 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 	return false;
 }
 
-void Entity::AddAbility(int number, int damage, int cooldow, int duration, char* name)
+Ability* Entity::AddAbility(int number, int damage, int cooldow, int duration, char* name)
 {
-	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability);
+	Ability* ret = nullptr;
+
+	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability); ret = ability;
+
+	return ability;
 }
 
 Ability* Entity::GetAbility(int number)
@@ -98,6 +102,20 @@ void Entity::Heal(int heal)
 		stats.life += heal;
 	if (stats.life > stats.max_life)
 		stats.life = stats.max_life;
+}
+
+void Entity::Slow(float speed_multiplicator, float time)
+{
+	stats.speed *= speed_multiplicator;
+	slow s(time, this);
+	App->entity->slowed_entities.push_back(s);
+}
+
+void Entity::Stun(float time)
+{
+	stuned = true;
+	stun s(time, this);
+	App->entity->stuned_entities.push_back(s);
 }
 
 void Entity::LifeBar(iPoint size, iPoint offset)
@@ -155,5 +173,19 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 	}
 }
 
+void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
+{
+	stats.power = stats.base_power + extra_power;
+	stats.speed = stats.restore_speed = stats.base_speed + extra_speed;
+	stats.max_life = stats.base_hp + extra_hp;
+}
 
+float Ability::GetCdTimeLeft()
+{
+	float ret = cd - cd_timer.ReadSec();
 
+	if (ret < 0)
+		ret = 0;
+
+	return ret;
+}

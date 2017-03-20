@@ -33,3 +33,8 @@ float j1Timer::ReadSec() const
 {
 	return float(SDL_GetTicks() - started_at) / 1000.0f;
 }
+
+void j1Timer::SubstractTimeFromStart(float sec)
+{
+	started_at -= (sec * 1000);
+}
