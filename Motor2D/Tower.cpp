@@ -135,7 +135,7 @@ void Tower::Attack()
 	game_object->SetAnimation("tower_attack");
 	anim_state = tower_attack;
 
-	TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
+	TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
 	ta->SetTarget(target);
 }
 
