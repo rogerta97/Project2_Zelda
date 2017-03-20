@@ -14,6 +14,9 @@
 #include "MainScene.h"
 #include "j1Scene.h"
 #include "Minion.h"
+#include "j1Spell.h"
+#include "Spell.h"
+#include "TowerAttack.h"
 
 #define TOWER_H 64
 #define TOWER_W 64
@@ -26,6 +29,8 @@ Tower::Tower(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
+
+	AddAbility(0, 50, 3, 2, "t_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
@@ -43,7 +48,7 @@ bool Tower::Start()
 
 	game_object->SetAnimation("tower_idle");
 
-	stats.max_life = stats.life = 300;
+	stats.max_life = stats.life = 400;
 
 	show_life_bar = true;
 
@@ -68,7 +73,7 @@ bool Tower::Update(float dt)
 		TowerIdle();
 		break;
 	case Tower_Attack:
-		TowerAttack();
+		DoAttack();
 		break;
 	default:
 		break;
@@ -127,7 +132,11 @@ void Tower::Idle()
 
 void Tower::Attack()
 {
+	game_object->SetAnimation("tower_attack");
+	anim_state = tower_attack;
 
+	TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, game_object->GetPos(), this);
+	ta->SetTarget(target);
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -168,10 +177,16 @@ void Tower::TowerIdle()
 	}
 }
 
-void Tower::TowerAttack()
+void Tower::DoAttack()
 {
 	CheckTowerState();
-	Attack();
+
+	if (tower_cd_timer.ReadSec()>abilities.at(0)->cd)
+	{
+		Attack();
+		tower_cd_timer.Start();
+	}
+	
 
 }
 
@@ -189,11 +204,11 @@ void Tower::CheckTowerState()
 	case Tower_Attack:
 		if (game_object->animator->IsCurrentAnimation("tower_attack"))
 		{
-				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
-				{
+			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
+			{
 					state = Tower_Idle;
 					game_object->SetAnimation("tower_idle");
-				}
+			}
 		}
 		else if (target->to_delete == true)
 		{

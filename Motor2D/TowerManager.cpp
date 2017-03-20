@@ -6,9 +6,20 @@
 
 TowerManager::TowerManager()
 {
-	Tower* t = (Tower*)App->entity->CreateEntity(tower, { 511,735 });
-	t->SetTeam(2);
-	team2_towers.push_back(t);
+	//LEFT-TO-RIGHT
+	Tower* t1 = (Tower*)App->entity->CreateEntity(tower, { 1216,385 });
+	t1->SetTeam(1);
+	team1_towers.push_back(t1);
+	Tower* t2 = (Tower*)App->entity->CreateEntity(tower, { 2048,510 });
+	t2->SetTeam(1);
+	team1_towers.push_back(t2);
+
+	Tower* t3 = (Tower*)App->entity->CreateEntity(tower, { 2687,510 });
+	t3->SetTeam(2);
+	team2_towers.push_back(t3);
+	Tower* t4 = (Tower*)App->entity->CreateEntity(tower, { 3580,380 });
+	t4->SetTeam(2);
+	team2_towers.push_back(t4);
 }
 
 TowerManager::~TowerManager()

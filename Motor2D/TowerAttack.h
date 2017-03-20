@@ -8,6 +8,8 @@
 #include "Animation.h"
 #include "Spell.h"
 #include "Entity.h"
+#include "j1Spell.h"
+#include "Functions.h"
 
 class b2Fixture;
 class PhysBody;
@@ -19,7 +21,7 @@ class TowerAttack : public Spell
 public:
 	TowerAttack(iPoint pos);
 
-	virtual ~TowerAttack();
+	~TowerAttack();
 
 	bool Start();
 	bool PreUpdate();
@@ -40,14 +42,13 @@ public:
 		return true;
 	}
 
-	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	
+	void SetTarget(Entity* target);
 
 private:
-	
-	int				range = 0;
-
+	bool			reached = false;
+	Entity*			target = nullptr;
 };
 
 #endif // _TOWERATTACK_H

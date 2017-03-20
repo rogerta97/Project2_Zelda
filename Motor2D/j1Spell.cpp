@@ -1,6 +1,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "Boomerang.h"
+#include "TowerAttack.h"
 
 j1Spell::j1Spell()
 {
@@ -100,7 +101,11 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 	case boomerang:
 		ret = new Boomerang(pos);
 		break;
+	case t_attack:
+		ret = new TowerAttack(pos);
+		break;
 	}
+	
 
 	ret->owner = owner;
 	ret->Start();
