@@ -157,47 +157,59 @@ bool PlayerManager::Update(float dt)
 		// Abilities PRESS
 		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
 		{
-			if(curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_basic_atack_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_basic_atack_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_basic_atack_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_basic_atack_right;
+			if (IsAbilityCdCompleted(curr_player, 1))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_basic_atack_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_basic_atack_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_basic_atack_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_basic_atack_right;
+			}
 		}
 		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_ability1_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_ability1_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_ability1_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_ability1_right;
+			if (IsAbilityCdCompleted(curr_player, 2))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability1_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability1_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability1_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability1_right;
+			}
 		}
 		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_ability2_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_ability2_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_ability2_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_ability2_right;
+			if (IsAbilityCdCompleted(curr_player, 3))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability2_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability2_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability2_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability2_right;
+			}
 		}
 		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_ability3_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_ability3_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_ability3_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_ability3_right;
+			if (IsAbilityCdCompleted(curr_player, 4))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability3_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability3_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability3_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability3_right;
+			}
 		}
 
 		// Abilities RELEASE
@@ -209,21 +221,25 @@ bool PlayerManager::Update(float dt)
 				{
 					curr_player->state = basic_atack_down;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
 				else if (curr_player->show == shows::show_basic_atack_up)
 				{
 					curr_player->state = basic_atack_up;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
 				else if (curr_player->show == shows::show_basic_atack_left)
 				{
 					curr_player->state = basic_atack_left;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
 				else if (curr_player->show == shows::show_basic_atack_right)
 				{
 					curr_player->state = basic_atack_right;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 1);
 				}
 			}
 		}
@@ -236,21 +252,25 @@ bool PlayerManager::Update(float dt)
 				{
 					curr_player->state = ability1_down;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
 				else if (curr_player->show == shows::show_ability1_up)
 				{
 					curr_player->state = ability1_up;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
 				else if (curr_player->show == shows::show_ability1_left)
 				{
 					curr_player->state = ability1_left;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
 				else if (curr_player->show == shows::show_ability1_right)
 				{
 					curr_player->state = ability1_right;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 2);
 				}
 			}
 		}
@@ -263,21 +283,25 @@ bool PlayerManager::Update(float dt)
 				{
 					curr_player->state = ability2_down;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
 				else if (curr_player->show == shows::show_ability2_up)
 				{
 					curr_player->state = ability2_up;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
 				else if (curr_player->show == shows::show_ability2_left)
 				{
 					curr_player->state = ability2_left;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
 				else if (curr_player->show == shows::show_ability2_right)
 				{
 					curr_player->state = ability2_right;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 3);
 				}
 			}
 		}
@@ -290,21 +314,25 @@ bool PlayerManager::Update(float dt)
 				{
 					curr_player->state = ability3_down;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
 				else if (curr_player->show == shows::show_ability3_up)
 				{
 					curr_player->state = ability3_up;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
 				else if (curr_player->show == shows::show_ability3_left)
 				{
 					curr_player->state = ability3_left;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
 				else if (curr_player->show == shows::show_ability3_right)
 				{
 					curr_player->state = ability3_right;
 					curr_player->show = shows::show_null;
+					ResetAbilityTimer(curr_player, 4);
 				}
 			}
 		}
@@ -671,6 +699,22 @@ bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
 	default:
 		break;
 	}
+}
+
+bool PlayerManager::IsAbilityCdCompleted(Player* player, int ability)
+{
+	bool ret = false;
+
+	if(player->entity->GetAbility(ability - 1) != nullptr)
+		ret = player->entity->GetAbility(ability - 1)->CdCompleted();
+
+	return ret;
+}
+
+void PlayerManager::ResetAbilityTimer(Player* player, int ability)
+{
+	if (player->entity->GetAbility(ability - 1) != nullptr)
+		player->entity->GetAbility(ability - 1)->cd_timer.Start();
 }
 
 void Player::BuyItem(Item * item, int price)

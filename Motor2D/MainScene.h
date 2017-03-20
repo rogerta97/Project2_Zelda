@@ -39,24 +39,45 @@ private:
 	void CreateMapCollisions();
 
 public:
-	UI_Window*			main_window = nullptr;
+	UI_Window*			main_window_1 = nullptr;
+	UI_Image*			princess_1 = nullptr;
+	UI_Window*			main_window_2 = nullptr;
+	UI_Image*			princess_2 = nullptr;
+	UI_Window*			main_window_3 = nullptr;
+	UI_Image*			princess_3 = nullptr;
+	UI_Window*			main_window_4 = nullptr;
+	UI_Image*			princess_4 = nullptr;
 
-	UI_Image*			princess = nullptr;
 	MinionManager*		minion_manager = nullptr;
-
 	TowerManager*	    tower_manager = nullptr;
-
 	QuestManager*		quest_manager = nullptr;
-
 	ShopManager*		shop_manager = nullptr;
 
 private:
 	//UI elements
-	UI_Image*			progress_bar = nullptr; 
-	UI_Image*			rupiees_img = nullptr;
-	UI_Image*			minimap_icon = nullptr;
-	
-	list<UI_Image*>		habilities; 
+	// P1
+	UI_Image*			progress_bar_1 = nullptr; 
+	UI_Image*			rupiees_img_1 = nullptr;
+	UI_Image*			minimap_icon_1 = nullptr;
+	list<UI_Image*>		habilities_1; 
+
+	// P2
+	UI_Image*			progress_bar_2 = nullptr;
+	UI_Image*			rupiees_img_2 = nullptr;
+	UI_Image*			minimap_icon_2 = nullptr;
+	list<UI_Image*>		habilities_2;
+
+	// P3
+	UI_Image*			progress_bar_3 = nullptr;
+	UI_Image*			rupiees_img_3 = nullptr;
+	UI_Image*			minimap_icon_3 = nullptr;
+	list<UI_Image*>		habilities_3;
+
+	// P4
+	UI_Image*			progress_bar_4 = nullptr;
+	UI_Image*			rupiees_img_4 = nullptr;
+	UI_Image*			minimap_icon_4 = nullptr;
+	list<UI_Image*>		habilities_4;
 
 	vector<PhysBody*>	map_collisions;
 };

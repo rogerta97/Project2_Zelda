@@ -42,9 +42,13 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 	return false;
 }
 
-void Entity::AddAbility(int number, int damage, int cooldow, int duration, char* name)
+Ability* Entity::AddAbility(int number, int damage, int cooldow, int duration, char* name)
 {
-	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability);
+	Ability* ret = nullptr;
+
+	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability); ret = ability;
+
+	return ability;
 }
 
 Ability* Entity::GetAbility(int number)

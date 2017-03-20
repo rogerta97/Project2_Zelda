@@ -124,6 +124,16 @@ struct Ability
 		name = _name;
 	};
 
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed)
+	{
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable;
+	}
+
+	bool CdCompleted()
+	{
+		return cd_timer.ReadSec() >= cd;
+	}
+
 	int        index = 0;
 	float      cd = 0;
 	float      duration = 0;
@@ -136,6 +146,11 @@ struct Ability
 
 	b2Fixture* fixture = nullptr;
 	string     name;
+
+	j1Timer    cd_timer;
+
+	SDL_Rect   ability_avaliable_pressed = NULLRECT;
+	SDL_Rect   ablility_avaliable = NULLRECT;
 };
 
 class Entity
@@ -236,7 +251,7 @@ public:
 	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	void AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
+	Ability* AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
 	Ability* GetAbility(int number);
 	Ability* GetAbilityByName(const char* name);
 
