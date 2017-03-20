@@ -9,7 +9,7 @@
     <speed value="30"/>
     <price rupees="1000"/>
     <upgrade id="-1"/>
-    <rect x="377" y="235" w="40" h="40"/>
+    <rect x="647" y="444" w="40" h="40"/>
   </item>
   <item id="1">
     <name>Bomb</name>
@@ -19,7 +19,7 @@
     <speed value="0"/>
     <price rupees="400"/>
     <upgrade id="-1"/>
-    <rect x="338" y="235" w="40" h="40"/>
+    <rect x="725" y="330" w="40" h="40"/>
   </item>
   <item id="2">
     <name>Big Shield</name>
@@ -30,7 +30,7 @@
     <price rupees="500"/>
     <upgrade id="-1"/>
     <upgrade_from id="5"/>
-    <rect x="441" y="196" w="40" h="40"/>
+    <rect x="687" y="368" w="40" h="40"/>
   </item>
   <item id="3">
     <name>Master Sword</name>
@@ -41,7 +41,7 @@
     <price rupees="500"/>
     <upgrade id="-1"/>
     <upgrade_from id="6"/>
-    <rect x="299" y="235" w="40" h="40"/>
+    <rect x="687" y="404" w="40" h="40"/>
   </item>
   <item id="4">
     <name>SUMHC Boots</name>
@@ -52,7 +52,7 @@
     <price rupees="500"/>
     <upgrade id="-1"/>
     <upgrade_from id="7"/>
-    <rect x="363" y="196" w="40" h="40"/>
+    <rect x="687" y="330" w="40" h="40"/>
   </item>
   <item id="5">
     <name>Shield</name>
@@ -62,7 +62,7 @@
     <speed value="0"/>
     <price rupees="200"/>
     <upgrade id="2"/>
-    <rect x="402" y="196" w="40" h="40"/>
+    <rect x="647" y="368" w="40" h="40"/>
   </item>
   <item id="6">
     <name>Sword</name>
@@ -72,7 +72,7 @@
     <speed value="0"/>
     <price rupees="200"/>
     <upgrade id="3"/>
-    <rect x="260" y="235" w="40" h="40"/>
+    <rect x="647" y="404" w="40" h="40"/>
   </item>
   <item id="7">
     <name>Boots</name>
@@ -82,6 +82,6 @@
     <speed value="20"/>
     <price rupees="200"/>
     <upgrade id="4"/>
-    <rect x="324" y="196" w="40" h="40"/>
+    <rect x="647" y="330" w="40" h="40"/>
   </item>
 </file>
