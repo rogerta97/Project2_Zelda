@@ -136,7 +136,15 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 
 					// If ability found return true
 					if (entity->hit_ability != nullptr)
-						entity->hit = true;
+					{
+						if (entity->hit_spell->target == nullptr)
+							entity->hit = true;
+						else
+						{
+							if(entity->hit_spell->target == entity)
+								entity->hit = true;
+						}
+					}
 				}
 			}
 		}

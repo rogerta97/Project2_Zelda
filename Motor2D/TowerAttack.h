@@ -48,7 +48,6 @@ public:
 
 private:
 	bool			reached = false;
-	Entity*			target = nullptr;
 };
 
 #endif // _TOWERATTACK_H
