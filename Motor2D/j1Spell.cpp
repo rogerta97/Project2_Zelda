@@ -139,8 +139,8 @@ void j1Spell::RemoveSpells()
 			{
 				(*it)->CleanUp();
 				(*it)->CleanSpell();
-				it = spell_list.erase(it);
 				RELEASE(*it);
+				it = spell_list.erase(it);
 			}
 			else
 				++it;

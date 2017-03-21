@@ -291,8 +291,8 @@ void j1Entity::RemoveEntities()
 			{
 				(*it)->CleanUp();
 				(*it)->CleanEntity();
-				it = entity_list.erase(it);
 				RELEASE(*it);
+				it = entity_list.erase(it);
 			}
 			else
 				++it;
