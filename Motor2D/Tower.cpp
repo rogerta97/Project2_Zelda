@@ -70,6 +70,7 @@ bool Tower::Update(float dt)
 	{
 	case Tower_Idle:
 		Idle();
+		target = nullptr;
 		if (LookForTarget())
 		{
 			state = Tower_Attack;
@@ -81,8 +82,6 @@ bool Tower::Update(float dt)
 			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
 			{
 				state = Tower_Idle;
-				game_object->SetAnimation("tower_idle");
-				target = nullptr;
 			}
 			else
 			{
@@ -92,7 +91,6 @@ bool Tower::Update(float dt)
 		else
 		{
 			state = Tower_Idle;
-			game_object->SetAnimation("tower_idle");
 		}
 		break;
 	default:
