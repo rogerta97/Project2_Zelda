@@ -46,13 +46,9 @@ public:
 	iPoint GetPos() const;
 
 private:
-	void TowerIdle();
 	void DoAttack();
 
 	void Idle();
-	void Attack();
-
-	void CheckTowerState();
 
 	bool LookForTarget();
 
@@ -67,8 +63,6 @@ private:
 	Entity*				target = nullptr;
 
 	states				anim_state = states_null;
-
-	j1Timer				tower_cd_timer;
 
 };
 
