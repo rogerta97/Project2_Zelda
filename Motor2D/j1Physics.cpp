@@ -169,6 +169,9 @@ b2Fixture* j1Physics::AddCircleToBody(PhysBody * pbody, int offset_x, int offset
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -186,10 +189,14 @@ b2Fixture* j1Physics::AddCircleSensorToBody(PhysBody * pbody, int offset_x, int 
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = true;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
 	return fixture;
+
 }
 
 PhysBody* j1Physics::CreateRectangle(int x, int y, int width, int height, float density, float gravity_scale, float rest, float friction, int cat, int mask, int angle)
@@ -379,6 +386,9 @@ b2Fixture* j1Physics::AddPolygonToBody(PhysBody * pbody, int offset_x, int offse
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -427,6 +437,9 @@ b2Fixture* j1Physics::AddRectangleToBody(PhysBody * pbody, int offset_x, int off
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -443,6 +456,9 @@ b2Fixture* j1Physics::AddRectangleSensorToBody(PhysBody * pbody, int offset_x, i
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = true;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -588,6 +604,9 @@ b2Fixture* j1Physics::AddChainBody(PhysBody* pbody, int x, int y, int * points, 
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);

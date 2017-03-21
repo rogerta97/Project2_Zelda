@@ -143,9 +143,10 @@ bool Link::Update(float dt)
 
 		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) < 20)
 		{
+			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
+
 			Ability1Up();
 			// Reset
-			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
 			ab3_dir = ability3_dir::a3_direction_null;
 			ability3_end_up = NULLPOINT;
 			ability3_end_down = NULLPOINT;
