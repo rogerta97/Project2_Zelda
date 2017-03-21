@@ -131,14 +131,19 @@ void j1Spell::ClearSpells()
 
 void j1Spell::RemoveSpells()
 {
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+	if (!spell_list.empty())
 	{
-		if ((*it)->to_delete == true)
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end();)
 		{
-			(*it)->CleanUp();
-			(*it)->CleanSpell();
-			RELEASE(*it);
-			spell_list.remove(*it);
+			if ((*it)->to_delete == true)
+			{
+				(*it)->CleanUp();
+				(*it)->CleanSpell();
+				it = spell_list.erase(it);
+				RELEASE(*it);
+			}
+			else
+				++it;
 		}
 	}
 }
