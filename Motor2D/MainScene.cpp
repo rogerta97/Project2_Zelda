@@ -41,7 +41,7 @@ bool MainScene::Start()
 	LOG("Start MainScene");
 
 	//Load Map
-	if (App->map->Load("zelda_moba2.tmx"))
+	if (App->map->Load("zelda_moba.tmx"))
 	{
 		int w, h;
 		uchar* data = NULL;
