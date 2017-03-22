@@ -1019,7 +1019,7 @@ void j1Physics::BeginContact(b2Contact* contact)
 			physA->listeners.at(i)->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
 	}
 
-	if (physA && physB && !physA->listeners.empty())
+	if (physA && physB && !physB->listeners.empty())
 	{
 		for (int i = 0; i<physB->listeners.size(); i++)
 			physB->listeners.at(i)->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
@@ -1040,7 +1040,7 @@ void j1Physics::EndContact(b2Contact * contact)
 			physA->listeners.at(i)->OnCollisionOut(physA, physB, fixtureA, fixtureB);
 	}
 
-	if (physA && physB && !physA->listeners.empty())
+	if (physA && physB && !physB->listeners.empty())
 	{
 		for (int i = 0; i<physB->listeners.size(); i++)
 			physB->listeners.at(i)->OnCollisionOut(physB, physA, fixtureB, fixtureA);
