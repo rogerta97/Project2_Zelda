@@ -61,11 +61,17 @@ bool j1Physics::PreUpdate()
 			b2Fixture* fA = c->GetFixtureA();
 			b2Fixture* fB = c->GetFixtureB();
 
-			if (pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2, fA, fB);
+			if (pb1 && pb2 && !pb1->listeners.empty())
+			{
+				for(int i = 0; i<pb1->listeners.size(); i++)
+					pb1->listeners.at(i)->OnCollision(pb1, pb2, fA, fB);
+			}
 
-			if (pb1 && pb2 && pb2->listener)
-				pb2->listener->OnCollision(pb2, pb1, fB, fA);
+			if (pb1 && pb2 && !pb2->listeners.empty())
+			{
+				for (int i = 0; i<pb2->listeners.size(); i++)
+					pb2->listeners.at(i)->OnCollision(pb2, pb1, fB, fA);
+			}
 		}
 	}
 
@@ -1007,11 +1013,17 @@ void j1Physics::BeginContact(b2Contact* contact)
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if (physA && physA->listener != NULL)
-		physA->listener->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
+	if (physA && physB && !physA->listeners.empty())
+	{
+		for (int i = 0; i<physA->listeners.size(); i++)
+			physA->listeners.at(i)->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
+	}
 
-	if (physB && physB->listener != NULL)
-		physB->listener->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
+	if (physA && physB && !physA->listeners.empty())
+	{
+		for (int i = 0; i<physB->listeners.size(); i++)
+			physB->listeners.at(i)->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
+	}
 }
 
 void j1Physics::EndContact(b2Contact * contact)
@@ -1022,9 +1034,15 @@ void j1Physics::EndContact(b2Contact * contact)
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if (physA && physA->listener != NULL)
-		physA->listener->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+	if (physA && physB && !physA->listeners.empty())
+	{
+		for (int i = 0; i<physA->listeners.size(); i++)
+			physA->listeners.at(i)->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+	}
 
-	if (physB && physB->listener != NULL)
-		physB->listener->OnCollisionOut(physB, physA, fixtureB, fixtureA);
+	if (physA && physB && !physA->listeners.empty())
+	{
+		for (int i = 0; i<physB->listeners.size(); i++)
+			physB->listeners.at(i)->OnCollisionOut(physB, physA, fixtureB, fixtureA);
+	}
 }

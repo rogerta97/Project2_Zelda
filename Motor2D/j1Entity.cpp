@@ -159,11 +159,6 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 		}
 	}
 	// ------------------------------------
-
-	if (bodyA->type == pbody_type::p_t_tower_attack)
-	{
-		App->spell->OnCollision(bodyA, bodyB, fixtureA, fixtureB);
-	}
 }
 
 void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

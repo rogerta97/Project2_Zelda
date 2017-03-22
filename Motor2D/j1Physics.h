@@ -34,11 +34,12 @@ public:
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
 public:
-	int        width = 0;
-	int        height = 0;
-	b2Body*    body = nullptr;
-	j1Module*  listener = nullptr;
-	pbody_type type = pbody_type::p_t_null;
+	int				  width = 0;
+	int				  height = 0;
+	b2Body*			  body = nullptr;
+	vector<j1Module*> listeners;
+	j1Module*		  listener = nullptr;
+	pbody_type		  type = pbody_type::p_t_null;
 };
 
 // Module --------------------------------------
@@ -98,7 +99,6 @@ public:
 	void EndContact(b2Contact* contact);
 
 private:
-
 	bool			debug = false;
 	b2World*	    world = nullptr;
 	b2MouseJoint*   mouse_joint = nullptr;
