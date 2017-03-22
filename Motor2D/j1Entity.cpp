@@ -336,7 +336,7 @@ void j1Entity::StunEntities()
 			if ((*it).time <= (*it).timer.ReadSec())
 			{
 				(*it).entity->stuned = false;
-				stuned_entities.erase(it);
+				it = stuned_entities.erase(it);
 			}
 			else
 				++it;
