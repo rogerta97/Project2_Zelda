@@ -367,7 +367,6 @@
     <Xml Include="..\Game\Shop_config.xml">
       <Filter>Engine\2. Components ======</Filter>
     </Xml>
-    <Xml Include="..\Game\towerattack.xml\towerattack.xml" />
     <Xml Include="..\Game\towerattack.xml">
       <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
     </Xml>
