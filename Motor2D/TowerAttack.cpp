@@ -48,21 +48,28 @@ bool TowerAttack::Update(float dt)
 {
 	bool ret = true;
 
-	float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
-
-	float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
-
-	fPoint t;
-
-	if (game_object->GetPos().x > target->GetPos().x)
-		t = { speed * cos(DEGTORAD * initial_angle) ,speed * sin(DEGTORAD * initial_angle) };
+	if (game_object->animator->IsCurrentAnimation("destroy"))
+	{
+		if(game_object->animator->GetCurrentAnimation()->Finished())
+			App->spell->DeleteSpell(this);
+	}
 	else
-		t = { speed * cos(DEGTORAD * initial_angle) ,speed * sin(DEGTORAD * initial_angle) };
+	{
 
-	game_object->SetPos({ game_object->GetPos().x + t.x, game_object->GetPos().y + t.y });
-	
-	if (reached)
-		App->spell->DeleteSpell(this);
+		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
+
+		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
+
+		fPoint t;
+
+		if (game_object->GetPos().x > target->GetPos().x)
+			t = { speed * cos(DEGTORAD * initial_angle) ,speed * sin(DEGTORAD * initial_angle) };
+		else
+			t = { speed * cos(DEGTORAD * initial_angle) ,speed * sin(DEGTORAD * initial_angle) };
+
+		game_object->SetPos({ game_object->GetPos().x + t.x, game_object->GetPos().y + t.y });
+
+	}
 
 	return ret;
 }
@@ -71,7 +78,7 @@ bool TowerAttack::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 9, game_object->GetPos().y - draw_offset.y - 7 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 
 	return ret;
 }
@@ -103,7 +110,8 @@ void TowerAttack::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixture
 {
 	if (game_object->pbody == bodyA && bodyB == target->game_object->pbody)
 	{
-		reached = true;
+		game_object->SetAnimation("destroy");
+		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 	}
 		
 }
