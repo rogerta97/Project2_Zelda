@@ -2,7 +2,8 @@
 #include "GameObject.h"
 #include "j1Viewports.h"
 
-
+#define INITIAL_SPEED 150
+#define ACCELERATION 100
 
 TowerAttack::TowerAttack(iPoint pos)
 {
@@ -47,7 +48,7 @@ bool TowerAttack::Update(float dt)
 {
 	bool ret = true;
 
-	float speed = 170 * dt;
+	float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
 
 	float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
 

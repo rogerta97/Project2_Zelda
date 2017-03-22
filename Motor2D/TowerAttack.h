@@ -48,6 +48,7 @@ public:
 
 private:
 	bool			reached = false;
+	j1Timer			timer;
 };
 
 #endif // _TOWERATTACK_H
