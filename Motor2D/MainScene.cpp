@@ -91,10 +91,10 @@ bool MainScene::Start()
 
 	//Create UI ---------
 	SDL_Rect screen = App->view->GetViewportRect(1);
-	iPoint ability1_pos = { screen.w  - 90 , screen.h - 100};
-	iPoint ability2_pos = { screen.w / 50 + 30, screen.h - 100 };
-	iPoint ability3_pos = { screen.w - 90, screen.h - 60 };
-	iPoint ability4_pos = { screen.w / 50 + 30, screen.h - 60 };
+	iPoint ability1_pos = { screen.w  - 120 , screen.h - 126};
+	iPoint ability2_pos = { (screen.w / 50), screen.h - 126 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
+	iPoint ability4_pos = { (screen.w) / 50, screen.h - 76 };
 
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);

@@ -34,7 +34,7 @@ Link::Link(iPoint pos)
 	Ability* a1 = AddAbility(0, 10, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 });
 	Ability* a2 = AddAbility(1, 15, 1, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 });
 	Ability* a3 = AddAbility(2, 10, 1, 2, "boomerang");  a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }); // Name references to the Spell name
-	Ability* a4 = AddAbility(3, 10, 1, 2);			     a4->SetImages({ 481, 187, 48, 73 }, { 529, 187, 48, 73 });
+	Ability* a4 = AddAbility(3, 10, 1, 2);			     a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 });
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
