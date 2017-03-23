@@ -18,9 +18,9 @@
 #include "j1Map.h"
 
 #define ABILITY3_MAX_RANGE 200
-#define ABILITY3_GROW_SPEED 105.0f
+#define ABILITY3_GROW_SPEED 205.0f
 #define ABILITY3_MOVE_SPEED 50
-#define ABILITY3_MOVE_SAFE_OFFSET 20
+#define ABILITY3_MOVE_SAFE_OFFSET 15
 
 
 Link::Link(iPoint pos)
@@ -132,7 +132,7 @@ bool Link::Update(float dt)
 			if(find)
 				target.y += ABILITY3_MOVE_SAFE_OFFSET;
 			else
-				target.y -= ABILITY3_MOVE_SAFE_OFFSET;
+				target.y -= (ABILITY3_MOVE_SAFE_OFFSET * 2);
 			break;
 		case ability3_dir::a3_down:
 			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_down.x, ability3_point_down.y)))
@@ -145,7 +145,7 @@ bool Link::Update(float dt)
 			if (find)
 				target.y -= ABILITY3_MOVE_SAFE_OFFSET;
 			else
-				target.y += ABILITY3_MOVE_SAFE_OFFSET;
+				target.y += (ABILITY3_MOVE_SAFE_OFFSET * 2);
 			break;
 		case ability3_dir::a3_left:
 			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_left.x, ability3_point_left.y)))
@@ -157,7 +157,7 @@ bool Link::Update(float dt)
 			if(find)
 				target.x += ABILITY3_MOVE_SAFE_OFFSET;
 			else
-				target.x -= ABILITY3_MOVE_SAFE_OFFSET;
+				target.x -= (ABILITY3_MOVE_SAFE_OFFSET * 2);
 
 			break;
 		case ability3_dir::a3_right:
@@ -171,7 +171,7 @@ bool Link::Update(float dt)
 			if (find)
 				target.x -= ABILITY3_MOVE_SAFE_OFFSET;
 			else
-				target.x += ABILITY3_MOVE_SAFE_OFFSET;
+				target.x += (ABILITY3_MOVE_SAFE_OFFSET*2);
 			break;
 				
 		}
@@ -624,6 +624,9 @@ void Link::ShowAbility3Up()
 	if(ability3_range<=ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, -(int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+
 	CreateAbility3Test();
 }
 
@@ -631,6 +634,9 @@ void Link::ShowAbility3Down()
 {
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, (int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
 }
@@ -640,6 +646,9 @@ void Link::ShowAbility3Left()
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 10, game_object->GetPos().y - 18, -(int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+
 	CreateAbility3Test();
 }
 
@@ -647,6 +656,9 @@ void Link::ShowAbility3Right()
 {
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 10, game_object->GetPos().y - 18, (int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
 }
@@ -683,16 +695,12 @@ iPoint Link::GetPos() const
 void Link::CreateAbility3Test()
 {
 	ability3_point_up = iPoint(GetPos().x, GetPos().y - ability3_range);
-	App->view->LayerDrawCircle(ability3_point_up.x, ability3_point_up.y, 3, 255, 255, 255, 255, 99);
 
 	ability3_point_down = iPoint(GetPos().x, GetPos().y + ability3_range);
-	App->view->LayerDrawCircle(ability3_point_down.x, ability3_point_down.y, 3, 255, 255, 255, 255, 99);
 
 	ability3_point_left = iPoint(GetPos().x - ability3_range, GetPos().y);
-	App->view->LayerDrawCircle(ability3_point_left.x, ability3_point_left.y, 3, 255, 255, 255, 255, 99);
 
 	ability3_point_right = iPoint(GetPos().x + ability3_range, GetPos().y);
-	App->view->LayerDrawCircle(ability3_point_right.x, ability3_point_right.y, 3, 255, 255, 255, 255, 99);
 }
 
 void Link::DeleteAbility3Test()
