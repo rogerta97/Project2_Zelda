@@ -559,18 +559,10 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 
 		// Searching for avaliable spawn points
-		if(on_spawn)
+		if (on_spawn)
 		{
-			vector<iPoint> spawn_points;
-			App->map->GetPlayerSpawnPoints(team, spawn_points);
-			for (int i = 0; i < spawn_points.size(); i++)
-			{
-				if (!CheckIfSpawnPointIsUsed(team, spawn_points.at(i)))
-				{
-					position = spawn_points.at(i);
-					break;
-				}
-			}
+			position = GetFreePlayerSpawn(team);
+			position += {16, 8};
 		}
 
 		// Create player
@@ -670,35 +662,61 @@ int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 	}
 }
 
-bool PlayerManager::CheckIfSpawnPointIsUsed(int team, iPoint pos)
+iPoint PlayerManager::GetFreePlayerSpawn(int team)
 {
-	switch (team)
-	{
-	case 1:
-		for (int i = 0; i < spawn_points_used_team1.size(); i++)
+	iPoint ret = NULLPOINT;
+
+	vector<iPoint> spawn_points;
+	App->map->GetPlayerSpawnPoints(team, spawn_points);
+
+	for (int i = 0; i < spawn_points.size(); i++)
+	{    
+		ret = spawn_points.at(i);
+
+		switch (team)
 		{
-			if (spawn_points_used_team1.at(i) == pos)
+		case 1:
+			if (spawn_points_used_team1.empty())
 			{
-				spawn_points_used_team1.push_back(pos);
-				return true;
+				spawn_points_used_team1.push_back(ret);
+				return ret;
 			}
-		}
-		return false;
-		break;
-	case 2:
-		for (int i = 0; i < spawn_points_used_team2.size(); i++)
-		{
-			if (spawn_points_used_team2.at(i) == pos)
+
+			for (int t1 = 0; t1 < spawn_points_used_team1.size(); t1++)
 			{
-				spawn_points_used_team2.push_back(pos);
-				return true;
+				if (spawn_points_used_team1.at(t1) == ret)
+					ret = NULLPOINT;
+				else
+				{
+					spawn_points_used_team1.push_back(ret);
+					return ret;
+				}
 			}
+			break;
+		case 2:
+ 			if (spawn_points_used_team2.empty())
+			{
+				spawn_points_used_team2.push_back(ret);
+				return ret;
+			}
+
+			for (int t2 = 0; t2 < spawn_points_used_team2.size(); t2++)
+			{
+				if (spawn_points_used_team2.at(t2) == ret)
+					ret = NULLPOINT;
+				else
+				{
+					spawn_points_used_team2.push_back(ret);
+					return ret;
+				}
+			}
+			break;
+		default:
+			break;
 		}
-		return false;
-		break;
-	default:
-		break;
 	}
+
+	return ret;
 }
 
 bool PlayerManager::IsAbilityCdCompleted(Player* player, int ability)
