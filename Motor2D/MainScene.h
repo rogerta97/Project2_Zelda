@@ -37,6 +37,7 @@ public:
 
 private:
 	void CreateMapCollisions();
+	void DrawScreenSeparation();
 
 public:
 	UI_Window*			main_window_1 = nullptr;
