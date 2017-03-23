@@ -216,6 +216,7 @@ bool CharacterSelectionScene::Update(float dt)
 			player_ready[App->scene->players[i].viewport - 1] = true;
 	
 			viewport[App->scene->players[i].viewport - 1].ready_text->SetText("READY");
+			//App->scene->players[i].character = 
 						
 		}
 
@@ -354,17 +355,10 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	player_ready[2] = false;
 	player_ready[3] = false;
 
-	int pos_count = 0; 
+	int pos_count = 3; 
 
-	for (int i = 0; i < 4; i++) {
-
-		//Setting the background card image
-		viewport[i].back_images.push_back(window->CreateImage(positions[pos_count++], backgrounds_rects[0], false));
-
-		viewport[i].back_images.push_back(window->CreateImage(positions[pos_count++], backgrounds_rects[1], false));
-
-		viewport[i].back_images.push_back(window->CreateImage(positions[pos_count++], backgrounds_rects[0], false));
-
+	for (int i = 0; i < 4; i++)
+	{
 		//Setting the characters image
 		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], ganon_rects[0], false));
 
@@ -388,6 +382,8 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 		// Setting ready text
 		viewport[i].ready_text = window->CreateText(positions[pos_count++], App->font->game_font, 0, false, 255, 255, 255);
 		viewport[i].ready_text->SetText("Press START when ready"); 
+
+		pos_count += 3;
 	}
 
 
