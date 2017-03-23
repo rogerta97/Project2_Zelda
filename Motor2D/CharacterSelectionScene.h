@@ -58,6 +58,9 @@ public:
 	UI_Window*		window = nullptr; 
 
 private:
+	void DrawScreenSeparation();
+
+private:
 
 	char_select_view			viewport[4]; 
 

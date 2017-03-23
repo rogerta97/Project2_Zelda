@@ -340,6 +340,8 @@ bool MainScene::Update(float dt)
 
 	// --------------
 
+	//DrawScreenSeparation();
+
 	return ret;
 }
 
@@ -470,5 +472,23 @@ void MainScene::CreateMapCollisions()
 	}
 
 	
+}
+
+void MainScene::DrawScreenSeparation()
+{
+	uint win_w, win_h;
+	App->win->GetWindowSize(win_w, win_h);
+
+	for (uint y = 0; y < win_h - 2; y += 2)
+	{
+		App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, y), { 130,0,4,2 });
+	}
+
+	for (uint x = 0; x < win_w - 2; x += 2)
+	{
+		App->view->LayerBlit(20, App->gui->atlas, iPoint(x, win_h / 4 - 4), { 130,2,2,4 });
+	}
+
+	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
 }
 

@@ -4,6 +4,7 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Scene.h"
+#include "j1Viewports.h"
 
 #define CHARACTER_NUM 3
 
@@ -228,6 +229,8 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 	}
 
+	DrawScreenSeparation();
+
 	return true;
 }
 
@@ -267,9 +270,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(230, 70));
 	positions.push_back(iPoint(425, 100));
 
-	positions.push_back(iPoint(positions[0].x + 12, positions[0].y + 10));
-	positions.push_back(iPoint(positions[1].x + 20, positions[1].y + 20));
-	positions.push_back(iPoint(positions[2].x + 12, positions[2].y + 10));
+	positions.push_back(iPoint(positions[0].x + 12, positions[0].y - 10));
+	positions.push_back(iPoint(positions[1].x + 20, positions[1].y ));
+	positions.push_back(iPoint(positions[2].x + 12, positions[2].y - 10));
 
 	positions.push_back(iPoint(w/4 - 120, 220));
 
@@ -285,9 +288,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + 230, 70));
 	positions.push_back(iPoint(w / 2 + 425, 100));
 
-	positions.push_back(iPoint(w / 2 + positions[0].x + 12, positions[0].y + 10));
-	positions.push_back(iPoint(w / 2 + positions[1].x + 20, positions[1].y + 20));
-	positions.push_back(iPoint(w / 2 + positions[2].x + 12, positions[2].y + 10));
+	positions.push_back(iPoint(w / 2 + positions[0].x + 12, positions[0].y - 10));
+	positions.push_back(iPoint(w / 2 + positions[1].x + 20, positions[1].y));
+	positions.push_back(iPoint(w / 2 + positions[2].x + 12, positions[2].y - 10));
 
 	positions.push_back(iPoint(w / 2 + (w / 4 - 120), 220));
 
@@ -304,9 +307,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint( 230, h / 2 + 70));
 	positions.push_back(iPoint( 425, h / 2 + 100));
 
-	positions.push_back(iPoint( positions[0].x + 12, h / 2 + positions[0].y + 10));
-	positions.push_back(iPoint( positions[1].x + 20, h / 2 + positions[1].y + 20));
-	positions.push_back(iPoint( positions[2].x + 12, h / 2 + positions[2].y + 10));
+	positions.push_back(iPoint( positions[0].x + 12, h / 2 + positions[0].y - 10));
+	positions.push_back(iPoint(positions[1].x + 20, h / 2 + positions[1].y));
+	positions.push_back(iPoint(positions[2].x + 12, h / 2 + positions[2].y - 10));
 
 	positions.push_back(iPoint( (w / 4 - 120), h / 2 + 220));
 
@@ -323,9 +326,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + 230, h / 2 + 70));
 	positions.push_back(iPoint(w / 2 + 425, h / 2 + 100));
 
-	positions.push_back(iPoint(w / 2 + positions[0].x + 12, h / 2 + positions[0].y + 10));
-	positions.push_back(iPoint(w / 2 + positions[1].x + 20, h / 2 + positions[1].y + 20));
-	positions.push_back(iPoint(w / 2 + positions[2].x + 12, h / 2 + positions[2].y + 10));
+	positions.push_back(iPoint(w / 2 + positions[0].x + 12, h / 2 + positions[0].y - 10));
+	positions.push_back(iPoint(w / 2 + positions[1].x + 20, h / 2 + positions[1].y ));
+	positions.push_back(iPoint(w / 2 + positions[2].x + 12, h / 2 + positions[2].y - 10));
 
 	positions.push_back(iPoint(w / 2 + (w / 4 - 120), h / 2 + 220));
 
@@ -342,13 +345,13 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	backgrounds_rects[1] = SDL_Rect{ 549, 4, 135, 179 };
 
 	ganon_rects[1] = SDL_Rect{ 116, 294, 116, 147 };
-	ganon_rects[0] = SDL_Rect{ 536, 445, 94, 90 };
+	ganon_rects[0] = SDL_Rect{ 421, 445, 74, 90 };
 
 	navi_rects[1] = SDL_Rect{ 232, 294, 116, 147 };
-	navi_rects[0] = SDL_Rect{ 442, 445, 94, 90 };
+	navi_rects[0] = SDL_Rect{ 495, 445, 74, 90 };
 
 	link_rects[1] = SDL_Rect{ 0, 294, 116, 147 };
-	link_rects[0] = SDL_Rect{348, 445, 94, 90 };
+	link_rects[0] = SDL_Rect{348, 445, 74, 90 };
 
 	player_ready[0] = false; 
 	player_ready[1] = false;
@@ -649,4 +652,22 @@ bool CharacterSelectionScene::AllReady()
 		}		 
 	}
 	return ret;
+}
+
+void CharacterSelectionScene::DrawScreenSeparation()
+{
+	uint win_w, win_h;
+	App->win->GetWindowSize(win_w, win_h);
+
+	for (uint y = 0; y < win_h - 2; y += 2)
+	{
+		App->view->LayerBlit(1, App->gui->atlas, iPoint(win_w / 4 - 2, y), { 130,0,4,2 });
+	}
+
+	for (uint x = 0; x < win_w - 2; x += 2)
+	{
+		App->view->LayerBlit(1, App->gui->atlas, iPoint(x, win_h / 4 - 4), { 130,2,2,4 });
+	}
+
+	App->view->LayerBlit(1, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
 }
