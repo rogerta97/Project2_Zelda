@@ -117,6 +117,7 @@
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
+    <ClCompile Include="Zelda.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
+    <ClInclude Include="Zelda.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\boomerang.xml" />
