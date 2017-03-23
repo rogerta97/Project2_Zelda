@@ -1,4 +1,9 @@
-version: v0.3.autorelease-{build}
+version: v0.4.autorelease-{build}
+branches:
+  only:
+  - master
+  - development
+skip_tags: true
 configuration:
 - Debug
 - Release
