@@ -41,7 +41,7 @@ bool MainScene::Start()
 	LOG("Start MainScene");
 
 	//Load Map
-	if (App->map->Load("zelda_moba2.tmx"))
+	if (App->map->Load("zelda_moba.tmx"))
 	{
 		int w, h;
 		uchar* data = NULL;
@@ -91,18 +91,24 @@ bool MainScene::Start()
 
 	//Create UI ---------
 	SDL_Rect screen = App->view->GetViewportRect(1);
-	iPoint ability1_pos = { screen.w  - 90 , screen.h - 100};
-	iPoint ability2_pos = { screen.w / 50 + 30, screen.h - 100 };
-	iPoint ability3_pos = { screen.w - 90, screen.h - 60 };
-	iPoint ability4_pos = { screen.w / 50 + 30, screen.h - 60 };
+	iPoint ability1_pos = { screen.w  - 120 , screen.h - 126};
+	iPoint ability2_pos = { (screen.w / 50), screen.h - 126 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
+	iPoint ability4_pos = { (screen.w) / 50, screen.h - 76 };
+
+	iPoint rupiees_pos = { screen.w / 50 + 15 , screen.h / 40 + 5 };
+	SDL_Rect rupiees_rect = { 32, 0, 16, 16 };
+
+	iPoint minimap_pos = { screen.w - 58, 5 };
+	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
 
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_1->viewport = 1;
 	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), {0, 28, 385, 24 });
 	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5) , { 0,0,32,28 });
-	rupiees_img_1 = main_window_1->CreateImage(iPoint(screen.w /50 + 15 , screen.h / 40 + 5), { 32, 0, 16, 16});
-	minimap_icon_1 = main_window_1->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
 
 	habilities_1.push_back(main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_1.push_back(main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
@@ -114,8 +120,8 @@ bool MainScene::Start()
 	main_window_2->viewport = 2;
 	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
 	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_2 = main_window_2->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
-	minimap_icon_2 = main_window_2->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
 
 	habilities_2.push_back(main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_2.push_back(main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
@@ -127,8 +133,8 @@ bool MainScene::Start()
 	main_window_3->viewport = 3;
 	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
 	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_3 = main_window_3->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
-	minimap_icon_3 = main_window_3->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
 
 	habilities_3.push_back(main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_3.push_back(main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
@@ -140,8 +146,8 @@ bool MainScene::Start()
 	main_window_4->viewport = 4;
 	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
 	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_4 = main_window_4->CreateImage(iPoint(screen.w / 50 + 15, screen.h / 40 + 5), { 32, 0, 16, 16 });
-	minimap_icon_4 = main_window_4->CreateImage(iPoint(screen.w - 50, 5), { 182, 78, 47, 47 });
+	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
 
 	habilities_4.push_back(main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_4.push_back(main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
@@ -339,6 +345,8 @@ bool MainScene::Update(float dt)
 
 	// --------------
 
+	//DrawScreenSeparation();
+
 	return ret;
 }
 
@@ -469,5 +477,23 @@ void MainScene::CreateMapCollisions()
 	}
 
 	
+}
+
+void MainScene::DrawScreenSeparation()
+{
+	uint win_w, win_h;
+	App->win->GetWindowSize(win_w, win_h);
+
+	for (uint y = 0; y < win_h - 2; y += 2)
+	{
+		App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, y), { 130,0,4,2 });
+	}
+
+	for (uint x = 0; x < win_w - 2; x += 2)
+	{
+		App->view->LayerBlit(20, App->gui->atlas, iPoint(x, win_h / 4 - 4), { 130,2,2,4 });
+	}
+
+	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
 }
 

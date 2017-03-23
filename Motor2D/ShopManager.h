@@ -36,8 +36,6 @@ struct shop
 	UI_Image*			upgrade_item = nullptr;
 	UI_Image*			upgrade_from_item = nullptr;
 
-	UI_Text*			own_items_text = nullptr;
-
 	UI_Image*			player_items[3] = { nullptr,nullptr,nullptr };
 
 	UI_Image*			selector = nullptr;

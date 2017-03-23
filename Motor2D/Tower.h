@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include <list>
+#include "j1Timer.h"
 
 class GameObject;
 
@@ -45,13 +46,9 @@ public:
 	iPoint GetPos() const;
 
 private:
-	void TowerIdle();
-	void TowerAttack();
+	void DoAttack();
 
 	void Idle();
-	void Attack();
-
-	void CheckTowerState();
 
 	bool LookForTarget();
 

@@ -61,11 +61,17 @@ bool j1Physics::PreUpdate()
 			b2Fixture* fA = c->GetFixtureA();
 			b2Fixture* fB = c->GetFixtureB();
 
-			if(pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2, fA, fB);
+			if (pb1 && pb2 && !pb1->listeners.empty())
+			{
+				for(int i = 0; i<pb1->listeners.size(); i++)
+					pb1->listeners.at(i)->OnCollision(pb1, pb2, fA, fB);
+			}
 
-			if (pb1 && pb2 && pb2->listener)
-				pb2->listener->OnCollision(pb2, pb1, fB, fA);
+			if (pb1 && pb2 && !pb2->listeners.empty())
+			{
+				for (int i = 0; i<pb2->listeners.size(); i++)
+					pb2->listeners.at(i)->OnCollision(pb2, pb1, fB, fA);
+			}
 		}
 	}
 
@@ -169,6 +175,9 @@ b2Fixture* j1Physics::AddCircleToBody(PhysBody * pbody, int offset_x, int offset
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -186,10 +195,14 @@ b2Fixture* j1Physics::AddCircleSensorToBody(PhysBody * pbody, int offset_x, int 
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = true;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
 	return fixture;
+
 }
 
 PhysBody* j1Physics::CreateRectangle(int x, int y, int width, int height, float density, float gravity_scale, float rest, float friction, int cat, int mask, int angle)
@@ -379,6 +392,9 @@ b2Fixture* j1Physics::AddPolygonToBody(PhysBody * pbody, int offset_x, int offse
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -427,6 +443,9 @@ b2Fixture* j1Physics::AddRectangleToBody(PhysBody * pbody, int offset_x, int off
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -443,6 +462,9 @@ b2Fixture* j1Physics::AddRectangleSensorToBody(PhysBody * pbody, int offset_x, i
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = true;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -588,6 +610,9 @@ b2Fixture* j1Physics::AddChainBody(PhysBody* pbody, int x, int y, int * points, 
 	fd.density = density;
 	fd.friction = friction;
 	fd.isSensor = false;
+	fd.filter.categoryBits = pbody->body->GetFixtureList()->GetFilterData().categoryBits;
+	fd.filter.maskBits = pbody->body->GetFixtureList()->GetFilterData().maskBits;
+	fd.filter.groupIndex = pbody->body->GetFixtureList()->GetFilterData().groupIndex;
 
 	b2Fixture* fixture = pbody->body->CreateFixture(&fd);
 	fixture->SetFixtureType(type);
@@ -988,11 +1013,17 @@ void j1Physics::BeginContact(b2Contact* contact)
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if(physA && physA->listener != NULL)
-		physA->listener->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
+	if (physA && physB && !physA->listeners.empty())
+	{
+		for (int i = 0; i<physA->listeners.size(); i++)
+			physA->listeners.at(i)->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
+	}
 
-	if(physB && physB->listener != NULL)
-		physB->listener->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
+	if (physA && physB && !physB->listeners.empty())
+	{
+		for (int i = 0; i<physB->listeners.size(); i++)
+			physB->listeners.at(i)->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
+	}
 }
 
 void j1Physics::EndContact(b2Contact * contact)
@@ -1003,9 +1034,15 @@ void j1Physics::EndContact(b2Contact * contact)
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if (physA && physA->listener != NULL)
-		physA->listener->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+	if (physA && physB && !physA->listeners.empty())
+	{
+		for (int i = 0; i<physA->listeners.size(); i++)
+			physA->listeners.at(i)->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+	}
 
-	if (physB && physB->listener != NULL)
-		physB->listener->OnCollisionOut(physB, physA, fixtureB, fixtureA);
+	if (physA && physB && !physB->listeners.empty())
+	{
+		for (int i = 0; i<physB->listeners.size(); i++)
+			physB->listeners.at(i)->OnCollisionOut(physB, physA, fixtureB, fixtureA);
+	}
 }

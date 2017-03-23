@@ -238,7 +238,7 @@ void j1Gui::GetChilds(UI_Element * element, list<UI_Element*>& visited)
 	int end = 0;
 	while (!frontier.empty())
 	{
-		for (list<UI_Element*>::iterator fr = frontier.begin(); fr != frontier.end(); fr++)
+		for (list<UI_Element*>::iterator fr = frontier.begin(); fr != frontier.end();)
 		{
 			list<UI_Element*>::iterator find = std::find(visited.begin(), visited.end(), *fr);
 			if (find == visited.end() && *fr != element)
@@ -249,7 +249,7 @@ void j1Gui::GetChilds(UI_Element * element, list<UI_Element*>& visited)
 					frontier.push_back(*ch);
 				}
 			}
-			frontier.erase(fr);
+			fr = frontier.erase(fr);
 		}
 	}
 
@@ -446,10 +446,10 @@ void j1Gui::DeleteElement(UI_Element* element)
 	for (list<UI_Element*>::iterator ch = childs.begin(); ch != childs.end(); ch++)
 	{
 		if (*ch == nullptr && (*ch)->parent->childs.size() > 0)
-			(*ch)->parent->childs.remove(*ch);
+			(*ch)->parent->childs.erase(ch);
 
 		if ((*ch)->parent_element != nullptr && (*ch)->parent_element->childs.size() > 0)
-			(*ch)->parent_element->childs.remove(*ch);
+			(*ch)->parent_element->childs.erase(ch);
 
 		if ((*ch)->type == ui_window && windows.size() > 0)
 			windows.remove((UI_Window*)*ch);
@@ -1795,14 +1795,16 @@ void UI_Scroll_Bar::AddElement(UI_Element * element)
 
 void UI_Scroll_Bar::DeleteScrollElement(UI_Element * element)
 {
-	for (list<scroll_element>::iterator it = elements.begin(); it != elements.end(); it++)
+	for (list<scroll_element>::iterator it = elements.begin(); it != elements.end();)
 	{
 		if ((*it).element == element)
 		{
-			elements.remove(*it);
+			it = elements.erase(it);
 			App->gui->DeleteElement(element);
 			break;
 		}
+		else
+			++it;
 	}
 }
 
@@ -1810,12 +1812,8 @@ void UI_Scroll_Bar::ClearElements()
 {
 	while (!elements.empty())
 	{
-		for (list<scroll_element>::iterator it = elements.begin(); it != elements.end(); it++)
-		{
-			App->gui->DeleteElement((*it).element);
-			elements.remove(*it);
-			break;
-		}
+		list<scroll_element>::iterator it = elements.begin();
+		elements.erase(it);
 	}
 	
 	elements.clear();

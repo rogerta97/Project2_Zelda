@@ -6,9 +6,24 @@
 
 TowerManager::TowerManager()
 {
-	Tower* t = (Tower*)App->entity->CreateEntity(tower, { 511,735 });
-	t->SetTeam(2);
-	team2_towers.push_back(t);
+	//Team 1 towers
+	std::vector<iPoint> tower_positions1 = App->map->GetTowerSpawns(1);
+	Tower* t1 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[0]);
+	t1->SetTeam(1);
+	team1_towers.push_back(t1);
+	Tower* t2 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[1]);
+	t2->SetTeam(1);
+	team1_towers.push_back(t2);
+	//Team 2 towers
+	std::vector<iPoint> tower_positions2 = App->map->GetTowerSpawns(2);
+	Tower* t3 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[0]);
+	t3->SetTeam(2);
+	team2_towers.push_back(t3);
+	Tower* t4 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[1]);
+	t4->SetTeam(2);
+	team2_towers.push_back(t4);
+
+	//to-improve: using for loop to create towers inside
 }
 
 TowerManager::~TowerManager()

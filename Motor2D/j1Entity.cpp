@@ -136,7 +136,17 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 
 					// If ability found return true
 					if (entity->hit_ability != nullptr)
-						entity->hit = true;
+					{
+						// Check if it has target
+						if (entity->hit_spell->target == nullptr)
+							entity->hit = true;
+						else
+						{
+							// Check that this hits the target
+							if(entity->hit_spell->target == entity)
+								entity->hit = true;
+						}
+					}
 				}
 			}
 		}
@@ -278,38 +288,53 @@ void j1Entity::DeleteEntity(Entity* entity)
 
 void j1Entity::RemoveEntities()
 {
-	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	if (!entity_list.empty())
 	{
-		if ((*it)->to_delete == true)
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end();)
 		{
-			(*it)->CleanUp();
-			(*it)->CleanEntity();
-			entity_list.remove(*it);
-			RELEASE(*it);
+			if ((*it)->to_delete == true)
+			{
+				(*it)->CleanUp();
+				(*it)->CleanEntity();
+				RELEASE(*it);
+				it = entity_list.erase(it);
+			}
+			else
+				++it;
 		}
 	}
 }
 
 void j1Entity::SlowEntities()
 {
-	for(list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end(); it++)
+	if (!slowed_entities.empty())
 	{
-		if ((*it).time <= (*it).timer.ReadSec())
+		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
 		{
-			(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
-			slowed_entities.remove(*it);
+			if ((*it).time <= (*it).timer.ReadSec())
+			{
+				(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
+				it = slowed_entities.erase(it);
+			}
+			else
+				++it;
 		}
 	}
 }
 
 void j1Entity::StunEntities()
 {
-	for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end(); it++)
+	if (!stuned_entities.empty())
 	{
-		if ((*it).time <= (*it).timer.ReadSec())
+		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
 		{
-			(*it).entity->stuned = false;
-			stuned_entities.remove(*it);
+			if ((*it).time <= (*it).timer.ReadSec())
+			{
+				(*it).entity->stuned = false;
+				it = stuned_entities.erase(it);
+			}
+			else
+				++it;
 		}
 	}
 }

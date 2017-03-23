@@ -20,7 +20,6 @@ struct info_window
 struct char_select_view
 {	
 	vector<UI_Image*>   char_images;
-	vector<UI_Image*>	back_images; 
 
 	UI_Image*			name_background = nullptr; 
 	UI_Text*			name = nullptr; 
@@ -57,6 +56,9 @@ public:
 	bool AllReady();
 
 	UI_Window*		window = nullptr; 
+
+private:
+	void DrawScreenSeparation();
 
 private:
 

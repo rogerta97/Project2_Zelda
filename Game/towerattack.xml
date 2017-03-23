@@ -1,0 +1,15 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/towersminions_sheet.png">
+    <anim speed = "10" name = "projectile" loop = "true">
+      <rect x = "0" y = "257" w = "32" h = "32"/>
+      <rect x = "32" y = "257" w = "32" h = "32"/>
+    </anim>
+    <anim speed = "20" name = "destroy" loop = "true">
+      <rect x = "64" y = "257" w = "32" h = "32"/>
+      <rect x = "98" y = "257" w = "32" h = "32"/>
+      <rect x = "128" y = "257" w = "32" h = "32"/>
+    </anim>
+  </animations>
+</file>

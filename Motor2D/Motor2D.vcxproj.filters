@@ -278,7 +278,7 @@
     </ClInclude>
     <ClInclude Include="CharacterSelectionScene.h">
       <Filter>Engine\3. Scenes ==========\CharacterSelection</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
@@ -366,6 +366,9 @@
     </Xml>
     <Xml Include="..\Game\Shop_config.xml">
       <Filter>Engine\2. Components ======</Filter>
+    </Xml>
+    <Xml Include="..\Game\towerattack.xml">
+      <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
     </Xml>
   </ItemGroup>
 </Project>

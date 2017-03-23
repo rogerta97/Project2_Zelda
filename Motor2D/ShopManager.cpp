@@ -68,16 +68,10 @@ bool ShopManager::Start()
 		int hp = item.child("hp").attribute("value").as_int(0);
 		int speed = item.child("speed").attribute("value").as_int(0);
 		int price = item.child("price").attribute("rupees").as_int(0);
-		int upgrade = item.child("upgrade").attribute("id").as_int(-1);
 
 		rect = { item.child("rect").attribute("x").as_int(),item.child("rect").attribute("y").as_int(),item.child("rect").attribute("w").as_int(),item.child("rect").attribute("h").as_int() };
 
 		Item* upgrade_item = nullptr;
-
-		if (upgrade >= 0)
-		{
-			upgrade_item = shops[0]->items.at(upgrade).item;
-		}
 
 		new_item.item = new Item(item.child("name").child_value(), power, hp, speed, price, item.child("description").child_value(), rect, upgrade_item);
 		for (int i = 0; i < 4; i++)
@@ -95,12 +89,22 @@ bool ShopManager::Start()
 	for (pugi::xml_node item = file_node.child("item"); item != NULL; item = item.next_sibling("item"))
 	{
 		int upgrade_from = item.child("upgrade_from").attribute("id").as_int(-1);
+		int upgrade = item.child("upgrade").attribute("id").as_int(-1);
 
 		if (upgrade_from >= 0)
 		{
 			for (int i = 0; i < 4; i++)
 			{
 				shops[i]->items[item_num].item->upgrade_from = shops[i]->items[upgrade_from].item;
+			}
+		}
+
+
+		if (upgrade >= 0)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				shops[i]->items[item_num].item->upgrade = shops[i]->items[upgrade].item;
 			}
 		}
 		item_num++;
@@ -227,18 +231,6 @@ bool ShopManager::Start()
 		shops[i]->upgrade->enabled = false;
 	}
 	// -----
-
-	//own items text
-	for (int i = 0; i < 4; i++)
-	{
-		int x = (win_w / 4 - 180) + (i % 2)*win_w / 2;
-		int y = (win_h / 4 + 60) + (i / 2)*win_h / 2;
-
-		shops[i]->own_items_text = shop_window->CreateText(iPoint(x, y), App->font->game_font_12);
-		shops[i]->own_items_text->SetText("Your Items");
-		shops[i]->own_items_text->enabled = false;
-	}
-	//
 
 	//Player items images
 	for (int i = 0; i < 4; i++)
@@ -406,7 +398,6 @@ void ShopManager::ChangeShopState(int view)
 	shops[view]->power_num->enabled = !shops[view]->power_num->enabled;
 	shops[view]->hp_num->enabled = !shops[view]->hp_num->enabled;
 	shops[view]->speed_num->enabled = !shops[view]->speed_num->enabled;
-	shops[view]->own_items_text->enabled = !shops[view]->own_items_text->enabled;
 
 	for (std::vector<item_info>::iterator it = shops[view]->items.begin(); it != shops[view]->items.end(); it++)
 	{

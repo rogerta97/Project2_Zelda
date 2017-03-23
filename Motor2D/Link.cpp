@@ -18,8 +18,9 @@
 #include "j1Map.h"
 
 #define ABILITY3_MAX_RANGE 200
-#define ABILITY3_GROW_SPEED 105.0f
+#define ABILITY3_GROW_SPEED 205.0f
 #define ABILITY3_MOVE_SPEED 50
+#define ABILITY3_MOVE_SAFE_OFFSET 15
 
 
 Link::Link(iPoint pos)
@@ -33,7 +34,7 @@ Link::Link(iPoint pos)
 	Ability* a1 = AddAbility(0, 10, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 });
 	Ability* a2 = AddAbility(1, 15, 1, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 });
 	Ability* a3 = AddAbility(2, 10, 1, 2, "boomerang");  a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }); // Name references to the Spell name
-	Ability* a4 = AddAbility(3, 10, 1, 2);			     a4->SetImages({ 481, 187, 48, 73 }, { 529, 187, 48, 73 });
+	Ability* a4 = AddAbility(3, 10, 1, 2);			     a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 });
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
@@ -119,20 +120,58 @@ bool Link::Update(float dt)
 	{
 		iPoint target = NULLPOINT;
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
-
 		switch (ab3_dir)
 		{
 		case ability3_dir::a3_up:
-			target = ability3_end_up;
+			while(!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_up.x, ability3_point_up.y)))
+			{
+				ability3_point_up = iPoint(ability3_point_up.x, ability3_point_up.y + 30);
+				find = true;
+			}
+			target = ability3_point_up;
+			if(find)
+				target.y += ABILITY3_MOVE_SAFE_OFFSET;
+			else
+				target.y -= (ABILITY3_MOVE_SAFE_OFFSET * 2);
 			break;
 		case ability3_dir::a3_down:
-			target = ability3_end_down;
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_down.x, ability3_point_down.y)))
+			{
+				ability3_point_down = iPoint(ability3_point_down.x, ability3_point_down.y - 30);
+				find = true;
+			}
+			target = ability3_point_down;
+
+			if (find)
+				target.y -= ABILITY3_MOVE_SAFE_OFFSET;
+			else
+				target.y += (ABILITY3_MOVE_SAFE_OFFSET * 2);
 			break;
 		case ability3_dir::a3_left:
-			target = ability3_end_left;
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_left.x, ability3_point_left.y)))
+			{
+				ability3_point_left = iPoint(ability3_point_left.x + 30, ability3_point_left.y);
+				find = true;
+			}
+			target = ability3_point_left;
+			if(find)
+				target.x += ABILITY3_MOVE_SAFE_OFFSET;
+			else
+				target.x -= (ABILITY3_MOVE_SAFE_OFFSET * 2);
+
 			break;
 		case ability3_dir::a3_right:
-			target = ability3_end_right;
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_right.x, ability3_point_right.y)))
+			{
+				ability3_point_right = iPoint(ability3_point_right.x - 30, ability3_point_right.y);
+				find = true;
+			}
+			App->view->LayerDrawCircle(target.x, target.y, 3, 255, 255, 255, 255, 99);
+			target = ability3_point_right;
+			if (find)
+				target.x -= ABILITY3_MOVE_SAFE_OFFSET;
+			else
+				target.x += (ABILITY3_MOVE_SAFE_OFFSET*2);
 			break;
 				
 		}
@@ -143,15 +182,17 @@ bool Link::Update(float dt)
 
 		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) < 20)
 		{
+			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
+
 			Ability1Up();
 			// Reset
-			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
 			ab3_dir = ability3_dir::a3_direction_null;
-			ability3_end_up = NULLPOINT;
-			ability3_end_down = NULLPOINT;
-			ability3_end_left = NULLPOINT;
-			ability3_end_right = NULLPOINT;
+			ability3_point_up = NULLPOINT;
+			ability3_point_down = NULLPOINT;
+			ability3_point_left = NULLPOINT;
+			ability3_point_right = NULLPOINT;
 			disable_controller = false;
+			find = false;
 		}
 	}
 
@@ -583,6 +624,9 @@ void Link::ShowAbility3Up()
 	if(ability3_range<=ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, -(int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+
 	CreateAbility3Test();
 }
 
@@ -590,6 +634,9 @@ void Link::ShowAbility3Down()
 {
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, (int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
 }
@@ -599,6 +646,9 @@ void Link::ShowAbility3Left()
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 10, game_object->GetPos().y - 18, -(int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+
 	CreateAbility3Test();
 }
 
@@ -606,6 +656,9 @@ void Link::ShowAbility3Right()
 {
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
+
+	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 10, game_object->GetPos().y - 18, (int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
 }
@@ -641,49 +694,17 @@ iPoint Link::GetPos() const
 
 void Link::CreateAbility3Test()
 {
-	//App->pathfinding->IsWalkable(App->map->WorldToMap(punt))
-
-	if (ability3_end_up == iPoint(0, 0))
-		ability3_end_up = GetPos();
-
-	if (ability3_end_down == iPoint(0, 0))
-		ability3_end_down = GetPos();
-
-	if (ability3_end_left == iPoint(0, 0))
-		ability3_end_left = GetPos();
-
-	if (ability3_end_right == iPoint(0, 0))
-		ability3_end_right = GetPos();
-
-
 	ability3_point_up = iPoint(GetPos().x, GetPos().y - ability3_range);
-	App->view->LayerDrawCircle(ability3_point_up.x, ability3_point_up.y, 3, 255, 255, 255, 255, 99);
-	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_up.x, ability3_point_up.y)))
-		ability3_end_up = iPoint(GetPos().x, GetPos().y - ability3_range);
 
 	ability3_point_down = iPoint(GetPos().x, GetPos().y + ability3_range);
-	App->view->LayerDrawCircle(ability3_point_down.x, ability3_point_down.y, 3, 255, 255, 255, 255, 99);
-	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_down.x, ability3_point_down.y)))
-		ability3_end_down = iPoint(GetPos().x, GetPos().y + ability3_range);
 
 	ability3_point_left = iPoint(GetPos().x - ability3_range, GetPos().y);
-	App->view->LayerDrawCircle(ability3_point_left.x, ability3_point_left.y, 3, 255, 255, 255, 255, 99);
-	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_left.x, ability3_point_left.y)))
-		ability3_end_left = iPoint(GetPos().x - ability3_range, GetPos().y);
 
 	ability3_point_right = iPoint(GetPos().x + ability3_range, GetPos().y);
-	App->view->LayerDrawCircle(ability3_point_right.x, ability3_point_right.y, 3, 255, 255, 255, 255, 99);
-	if (App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_right.x, ability3_point_right.y)))
-		ability3_end_right = iPoint(GetPos().x + ability3_range, GetPos().y);
-	
 }
 
 void Link::DeleteAbility3Test()
 {
-	ability3_point_up = NULLPOINT;
-	ability3_point_down = NULLPOINT;
-	ability3_point_left = NULLPOINT;
-	ability3_point_right = NULLPOINT;
 	get_up = true;
 	get_down = true;
 	get_left = true;

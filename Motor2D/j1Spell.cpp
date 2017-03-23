@@ -1,6 +1,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "Boomerang.h"
+#include "TowerAttack.h"
 
 j1Spell::j1Spell()
 {
@@ -14,7 +15,7 @@ bool j1Spell::Awake(pugi::xml_node &)
 {
 	bool ret = true;
 
-
+	name = "spell";
 
 	return ret;
 }
@@ -100,7 +101,11 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 	case boomerang:
 		ret = new Boomerang(pos);
 		break;
+	case t_attack:
+		ret = new TowerAttack(pos);
+		break;
 	}
+	
 
 	ret->owner = owner;
 	ret->Start();
@@ -126,14 +131,19 @@ void j1Spell::ClearSpells()
 
 void j1Spell::RemoveSpells()
 {
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+	if (!spell_list.empty())
 	{
-		if ((*it)->to_delete == true)
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end();)
 		{
-			(*it)->CleanUp();
-			(*it)->CleanSpell();
-			RELEASE(*it);
-			spell_list.remove(*it);
+			if ((*it)->to_delete == true)
+			{
+				(*it)->CleanUp();
+				(*it)->CleanSpell();
+				RELEASE(*it);
+				it = spell_list.erase(it);
+			}
+			else
+				++it;
 		}
 	}
 }

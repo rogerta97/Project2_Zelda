@@ -4,6 +4,7 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Scene.h"
+#include "j1Viewports.h"
 
 #define CHARACTER_NUM 3
 
@@ -216,6 +217,7 @@ bool CharacterSelectionScene::Update(float dt)
 			player_ready[App->scene->players[i].viewport - 1] = true;
 	
 			viewport[App->scene->players[i].viewport - 1].ready_text->SetText("READY");
+			//App->scene->players[i].character = 
 						
 		}
 
@@ -226,6 +228,8 @@ bool CharacterSelectionScene::Update(float dt)
 			viewport[App->scene->players[i].viewport - 1].ready_text->SetText("Press START when ready");
 		}
 	}
+
+	DrawScreenSeparation();
 
 	return true;
 }
@@ -266,9 +270,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(230, 70));
 	positions.push_back(iPoint(425, 100));
 
-	positions.push_back(iPoint(positions[0].x + 12, positions[0].y + 10));
-	positions.push_back(iPoint(positions[1].x + 20, positions[1].y + 20));
-	positions.push_back(iPoint(positions[2].x + 12, positions[2].y + 10));
+	positions.push_back(iPoint(positions[0].x + 12, positions[0].y - 10));
+	positions.push_back(iPoint(positions[1].x + 20, positions[1].y ));
+	positions.push_back(iPoint(positions[2].x + 12, positions[2].y - 10));
 
 	positions.push_back(iPoint(w/4 - 120, 220));
 
@@ -284,14 +288,14 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + 230, 70));
 	positions.push_back(iPoint(w / 2 + 425, 100));
 
-	positions.push_back(iPoint(w / 2 + positions[0].x + 12, positions[0].y + 10));
-	positions.push_back(iPoint(w / 2 + positions[1].x + 20, positions[1].y + 20));
-	positions.push_back(iPoint(w / 2 + positions[2].x + 12, positions[2].y + 10));
+	positions.push_back(iPoint(w / 2 + positions[0].x + 12, positions[0].y - 10));
+	positions.push_back(iPoint(w / 2 + positions[1].x + 20, positions[1].y));
+	positions.push_back(iPoint(w / 2 + positions[2].x + 12, positions[2].y - 10));
 
 	positions.push_back(iPoint(w / 2 + (w / 4 - 120), 220));
 
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, positions[6].y + 10));
-	positions.push_back(iPoint(w / 2 + 550, 300));
+	positions.push_back(iPoint(w / 2 + 520, 300));
 	positions.push_back(iPoint(w / 2 + 30, 30));
 	positions.push_back(iPoint(w / 2 + positions[10].x, positions[10].y));
 
@@ -303,9 +307,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint( 230, h / 2 + 70));
 	positions.push_back(iPoint( 425, h / 2 + 100));
 
-	positions.push_back(iPoint( positions[0].x + 12, h / 2 + positions[0].y + 10));
-	positions.push_back(iPoint( positions[1].x + 20, h / 2 + positions[1].y + 20));
-	positions.push_back(iPoint( positions[2].x + 12, h / 2 + positions[2].y + 10));
+	positions.push_back(iPoint( positions[0].x + 12, h / 2 + positions[0].y - 10));
+	positions.push_back(iPoint(positions[1].x + 20, h / 2 + positions[1].y));
+	positions.push_back(iPoint(positions[2].x + 12, h / 2 + positions[2].y - 10));
 
 	positions.push_back(iPoint( (w / 4 - 120), h / 2 + 220));
 
@@ -322,14 +326,14 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	positions.push_back(iPoint(w / 2 + 230, h / 2 + 70));
 	positions.push_back(iPoint(w / 2 + 425, h / 2 + 100));
 
-	positions.push_back(iPoint(w / 2 + positions[0].x + 12, h / 2 + positions[0].y + 10));
-	positions.push_back(iPoint(w / 2 + positions[1].x + 20, h / 2 + positions[1].y + 20));
-	positions.push_back(iPoint(w / 2 + positions[2].x + 12, h / 2 + positions[2].y + 10));
+	positions.push_back(iPoint(w / 2 + positions[0].x + 12, h / 2 + positions[0].y - 10));
+	positions.push_back(iPoint(w / 2 + positions[1].x + 20, h / 2 + positions[1].y ));
+	positions.push_back(iPoint(w / 2 + positions[2].x + 12, h / 2 + positions[2].y - 10));
 
 	positions.push_back(iPoint(w / 2 + (w / 4 - 120), h / 2 + 220));
 
 	positions.push_back(iPoint(w / 2 + positions[6].x + 90, h / 2 + positions[6].y + 10));
-	positions.push_back(iPoint(w / 2 + 550, h / 2 + 300));
+	positions.push_back(iPoint(w / 2 + 520, h / 2 + 300));
 	positions.push_back(iPoint(w / 2 + 30, h / 2 + 30));
 	positions.push_back(iPoint(w / 2 + positions[10].x, h / 2 + positions[10].y));
 
@@ -340,31 +344,24 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	backgrounds_rects[0] = SDL_Rect{ 410, 26, 108, 137 };
 	backgrounds_rects[1] = SDL_Rect{ 549, 4, 135, 179 };
 
-	ganon_rects[1] = SDL_Rect{ 714, 18, 98, 128 };
-	ganon_rects[0] = SDL_Rect{ 733, 170, 55, 75 };
+	ganon_rects[1] = SDL_Rect{ 116, 294, 116, 147 };
+	ganon_rects[0] = SDL_Rect{ 421, 445, 74, 90 };
 
-	navi_rects[1] = SDL_Rect{ 836, 19, 97, 125 };
-	navi_rects[0] = SDL_Rect{ 860, 168, 55, 80 };
+	navi_rects[1] = SDL_Rect{ 232, 294, 116, 147 };
+	navi_rects[0] = SDL_Rect{ 495, 445, 74, 90 };
 
-	link_rects[1] = SDL_Rect{ 972, 20, 97, 125 };
-	link_rects[0] = SDL_Rect{ 996, 169, 55, 80 };
+	link_rects[1] = SDL_Rect{ 0, 294, 116, 147 };
+	link_rects[0] = SDL_Rect{348, 445, 74, 90 };
 
 	player_ready[0] = false; 
 	player_ready[1] = false;
 	player_ready[2] = false;
 	player_ready[3] = false;
 
-	int pos_count = 0; 
+	int pos_count = 3; 
 
-	for (int i = 0; i < 4; i++) {
-
-		//Setting the background card image
-		viewport[i].back_images.push_back(window->CreateImage(positions[pos_count++], backgrounds_rects[0], false));
-
-		viewport[i].back_images.push_back(window->CreateImage(positions[pos_count++], backgrounds_rects[1], false));
-
-		viewport[i].back_images.push_back(window->CreateImage(positions[pos_count++], backgrounds_rects[0], false));
-
+	for (int i = 0; i < 4; i++)
+	{
 		//Setting the characters image
 		viewport[i].char_images.push_back(window->CreateImage(positions[pos_count++], ganon_rects[0], false));
 
@@ -379,15 +376,17 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 		viewport[i].name = window->CreateText(positions[pos_count++], App->font->game_font, 0, false, 255, 255, 255);
 
 		//Setting info button
-		viewport[i].info_button = window->CreateImage(positions[pos_count++], {284, 195, 40, 40}, false);
+		viewport[i].info_button = window->CreateImage(positions[pos_count++], {324, 195, 95, 42}, false);
 
 		// Setting info of the characters
-		viewport[i].info_back = window->CreateImage(positions[pos_count++], { 10, 295, 484, 327 }, false);
+		viewport[i].info_back = window->CreateImage(positions[pos_count++], { 656, 595, 470, 325 }, false);
 		viewport[i].info_back->enabled = false; 
 
 		// Setting ready text
 		viewport[i].ready_text = window->CreateText(positions[pos_count++], App->font->game_font, 0, false, 255, 255, 255);
 		viewport[i].ready_text->SetText("Press START when ready"); 
+
+		pos_count += 3;
 	}
 
 
@@ -653,4 +652,22 @@ bool CharacterSelectionScene::AllReady()
 		}		 
 	}
 	return ret;
+}
+
+void CharacterSelectionScene::DrawScreenSeparation()
+{
+	uint win_w, win_h;
+	App->win->GetWindowSize(win_w, win_h);
+
+	for (uint y = 0; y < win_h - 2; y += 2)
+	{
+		App->view->LayerBlit(1, App->gui->atlas, iPoint(win_w / 4 - 2, y), { 130,0,4,2 });
+	}
+
+	for (uint x = 0; x < win_w - 2; x += 2)
+	{
+		App->view->LayerBlit(1, App->gui->atlas, iPoint(x, win_h / 4 - 4), { 130,2,2,4 });
+	}
+
+	App->view->LayerBlit(1, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
 }

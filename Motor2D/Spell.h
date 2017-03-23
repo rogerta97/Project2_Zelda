@@ -74,6 +74,7 @@ public:
 	// Containers
 	GameObject*      game_object = nullptr;
 	Entity*			 owner = nullptr;
+	Entity*			 target = nullptr;
 	b2Fixture*		 hit_box = nullptr;
 
 	// Delete 

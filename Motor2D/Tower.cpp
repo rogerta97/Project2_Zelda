@@ -14,6 +14,9 @@
 #include "MainScene.h"
 #include "j1Scene.h"
 #include "Minion.h"
+#include "j1Spell.h"
+#include "Spell.h"
+#include "TowerAttack.h"
 
 #define TOWER_H 64
 #define TOWER_W 64
@@ -26,6 +29,8 @@ Tower::Tower(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
+
+	AddAbility(0, 50, 2.5f, 2, "t_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
@@ -43,7 +48,7 @@ bool Tower::Start()
 
 	game_object->SetAnimation("tower_idle");
 
-	stats.max_life = stats.life = 300;
+	stats.max_life = stats.life = 400;
 
 	show_life_bar = true;
 
@@ -61,14 +66,32 @@ bool Tower::Update(float dt)
 {
 	bool ret = true;
 
-
 	switch (state)
 	{
 	case Tower_Idle:
-		TowerIdle();
+		Idle();
+		target = nullptr;
+		if (LookForTarget())
+		{
+			state = Tower_Attack;
+		}
 		break;
 	case Tower_Attack:
-		TowerAttack();
+		if (target != nullptr && !target->to_delete)
+		{
+			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
+			{
+				state = Tower_Idle;
+			}
+			else
+			{
+				DoAttack();
+			}
+		}
+		else
+		{
+			state = Tower_Idle;
+		}
 		break;
 	default:
 		break;
@@ -102,6 +125,7 @@ bool Tower::Draw(float dt)
 
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
+
 	return ret;
 }
 
@@ -119,90 +143,30 @@ bool Tower::CleanUp()
 	return ret;
 }
 
-void Tower::Idle()
-{
-	flip = false;
-	anim_state = tower_idle;
-}
-
-void Tower::Attack()
-{
-
-}
-
-void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
-{
-	switch (bodyA->type)
-	{
-	case pbody_type::p_t_tower:
-		if (fixtureB->type == fixture_type::f_t_hit_box)
-		{
-			if (bodyB->type == pbody_type::p_t_link)
-			{
-			}
-			else if (bodyB->type == pbody_type::p_t_npc)
-			{
-			}
-		}
-		break;
-
-	}
-}
-
 iPoint Tower::GetPos() const
 {
 	return game_object->GetPos();
 }
 
-void Tower::TowerIdle()
-{
-	CheckTowerState();
-
-	switch (state)
-	{
-	case Tower_Idle:
-		Idle();
-		break;
-	default:
-		break;
-	}
+void Tower::Idle()
+{	
+	game_object->SetAnimation("tower_idle");
 }
 
-void Tower::TowerAttack()
+void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	CheckTowerState();
-	Attack();
-
 }
 
-void Tower::CheckTowerState()
+void Tower::DoAttack()
 {
-	switch (state)
+	if (abilities.at(0)->CdCompleted())
 	{
-	case Tower_Idle:
-		if (LookForTarget())
-		{
-			state = Tower_Attack;
-		}
-		break;
+		game_object->SetAnimation("tower_attack");
+		anim_state = tower_attack;
 
-	case Tower_Attack:
-		if (game_object->animator->IsCurrentAnimation("tower_attack"))
-		{
-				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
-				{
-					state = Tower_Idle;
-					game_object->SetAnimation("tower_idle");
-				}
-		}
-		else if (target->to_delete == true)
-		{
-			state = Tower_Idle;
-			game_object->SetAnimation("tower_idle");
-		}
-		break;
-	default:
-		break;
+		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
+		ta->SetTarget(target);
+		abilities.at(0)->cd_timer.Start();
 	}
 }
 
@@ -227,6 +191,7 @@ bool Tower::LookForTarget()
 			break;
 		}
 	}
+
 	//check for players
 	if (target == nullptr)
 	{
