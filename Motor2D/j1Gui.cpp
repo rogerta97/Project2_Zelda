@@ -2138,7 +2138,7 @@ bool UI_Check_Box::cleanup()
 
 void UI_Check_Box::AddBox(iPoint pos, int size_w, int size_h, char * name)
 {
-	check_box* cb = new check_box(pos, size_w, size_h);
+	check_box* cb = new check_box(pos, size_w, size_h, name);
 	cb->button->layer = layer + 1;
 	cb->button->blit_layer = blit_layer;
 	App->gui->elements_list.Push((UI_Element*)cb->button, cb->button->layer);
