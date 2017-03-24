@@ -75,6 +75,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AestheticsManager.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Trunk.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AestheticsManager.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="CharacterSelectionScene.h" />

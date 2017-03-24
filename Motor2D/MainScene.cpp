@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "j1App.h"
 #include "j1Gui.h"
+#include "AestheticsManager.h"
 #include "j1Console.h"
 #include "Parallax.h"
 #include "QuestManager.h"
@@ -170,8 +171,9 @@ bool MainScene::Start()
 
 	CreateMapCollisions();
 
-	App->entity->CreateEntity(trunk, App->map->GetTrunkPosition());
-
+	aest_manager = new AestheticsManager(); 
+	aest_manager->Start(); 
+	
 	return ret;
 }
 

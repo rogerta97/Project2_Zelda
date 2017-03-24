@@ -13,6 +13,7 @@ class Link;
 class QuestManager; 
 class Minion;
 class MinionManager;
+class AestheticsManager;
 class TowerManager;
 class ShopManager;
 
@@ -54,6 +55,7 @@ public:
 	TowerManager*	    tower_manager = nullptr;
 	QuestManager*		quest_manager = nullptr;
 	ShopManager*		shop_manager = nullptr;
+	AestheticsManager*  aest_manager = nullptr;
 
 private:
 	//UI elements
