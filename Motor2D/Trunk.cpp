@@ -22,7 +22,7 @@ Trunk::Trunk(iPoint _pos)
 
 bool Trunk::Draw(float dt)
 {
-	App->view->LayerBlit(2, game_object->GetTexture(), game_object->GetPos(), game_object->GetCurrentAnimationRect(dt));
+	App->view->LayerBlit(2200, game_object->GetTexture(), game_object->GetPos(), game_object->GetCurrentAnimationRect(dt));
 
 	return false;
 }
