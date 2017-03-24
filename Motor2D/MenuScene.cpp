@@ -83,9 +83,13 @@ bool MenuScene::Start()
 
 	//Check Box 
 
-	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true, false);
+	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
 	options_checkbox->AddBox(iPoint(screen.w + 99, screen.h / 2 + 45), 44, 44, "fx");
 	options_checkbox->AddBox(iPoint(screen.w + 99, screen.h / 2 + 115), 44, 44, "music");
+
+	options_checkbox->SetBox(true, "fx"); 
+	options_checkbox->SetBox(true, "music");
+
 	options_checkbox->enabled = false;
 	
 	// ---------

@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "j1Gui.h"
+#include "Trunk.h"
 #include "j1Render.h"
 
 class GameObject;
@@ -79,6 +80,9 @@ private:
 	UI_Image*			rupiees_img_4 = nullptr;
 	UI_Image*			minimap_icon_4 = nullptr;
 	vector<UI_Image*>   habilities_4;
+
+	// Trunk
+	Trunk*				map_trunk = nullptr; 
 
 	vector<PhysBody*>	map_collisions;
 };

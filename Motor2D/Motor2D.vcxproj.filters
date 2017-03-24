@@ -127,6 +127,9 @@
     <ClCompile Include="ShopManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Trunk.cpp">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -285,6 +288,9 @@
     <ClInclude Include="ShopManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Trunk.h">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -341,6 +347,9 @@
     <Filter Include="Engine\3. Scenes ==========\CharacterSelection">
       <UniqueIdentifier>{20ba1de4-2920-493b-83f2-4edabc19fe22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Trunk">
+      <UniqueIdentifier>{6cc80d32-975d-4155-bd20-c9a79fc86820}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -369,6 +378,9 @@
     </Xml>
     <Xml Include="..\Game\towerattack.xml">
       <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\trunk.xml">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
     </Xml>
   </ItemGroup>
 </Project>

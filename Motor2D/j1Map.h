@@ -128,6 +128,9 @@ public:
 	// Return World spawn position for team #team minions
 	iPoint GetMinionsSpawn(uint team) const;
 
+	// Retun trunk's position
+	iPoint GetTrunkPosition() const;
+
 	//Return shop position in world cordinates
 	iPoint GetShopPosition(uint team) const;
 

@@ -117,6 +117,7 @@
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
+    <ClCompile Include="Trunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
+    <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\boomerang.xml" />
@@ -184,6 +186,7 @@
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Game\trunk.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

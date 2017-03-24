@@ -170,6 +170,8 @@ bool MainScene::Start()
 
 	CreateMapCollisions();
 
+	App->entity->CreateEntity(trunk, App->map->GetTrunkPosition());
+
 	return ret;
 }
 
