@@ -186,6 +186,7 @@
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Game\zelda.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
