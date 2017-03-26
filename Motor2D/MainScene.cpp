@@ -358,7 +358,12 @@ bool MainScene::Update(float dt)
 	{
 		App->scene->ChangeScene(App->scene->menu_scene);
 	}
-		// ------
+	// ------
+
+	//Update progress bar
+	if(winner == 0)
+		UpdateProgressBar();
+	// ------
 
 	//DrawScreenSeparation();
 
@@ -474,6 +479,21 @@ void MainScene::EndGame(int _winner)
 	winner = _winner;
 
 	game_timer.Start();
+}
+
+void MainScene::UpdateProgressBar()
+{
+	iPoint zelda_pos = App->map->WorldToMap(zelda_manager->GetZeldaPos().x, zelda_manager->GetZeldaPos().y);
+
+	float percentage = (zelda_pos.x-27) * 100 / 95;
+	percentage /= 100;
+
+	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
+
+	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 5 });
+	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 5 });
+	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 5 });
+	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 5 });
 }
 
 void MainScene::CreateMapCollisions()

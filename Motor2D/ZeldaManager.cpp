@@ -47,3 +47,8 @@ void ZeldaManager::CleanUp()
 {
 	App->entity->DeleteEntity(zelda);
 }
+
+iPoint ZeldaManager::GetZeldaPos()
+{
+	return zelda->GetPos();
+}

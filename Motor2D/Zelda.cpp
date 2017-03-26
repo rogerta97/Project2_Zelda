@@ -121,42 +121,39 @@ void Zelda::SetPath(std::vector<iPoint>& path)
 
 void Zelda::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (active)
+	if (bodyA == game_object->pbody && fixtureA->type == fixture_type::f_t_zelda_area)
 	{
-		if (bodyA == game_object->pbody && fixtureA->type == fixture_type::f_t_zelda_area)
+		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
+			int team = App->entity->player_manager->GetPlayerTeamFromBody(bodyB);
+
+			Player* contact_palyer = App->entity->player_manager->GetPlayerFromBody(bodyB);
+
+			bool found = false;
+
+			for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
 			{
-				int team = App->entity->player_manager->GetPlayerTeamFromBody(bodyB);
-
-				Player* contact_palyer = App->entity->player_manager->GetPlayerFromBody(bodyB);
-
-				bool found = false;
-
-				for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
+				if (*it == contact_palyer)
 				{
-					if (*it == contact_palyer)
-					{
-						found = true;
-						break;
-					}
+					found = true;
+					break;
+				}
 
-				}
-				if (!found)
+			}
+			if (!found)
+			{
+				switch (team)
 				{
-					switch (team)
-					{
-					case 1:
-						team1_players++;
-						break;
-					case 2:
-						team2_players++;
-						break;
-					default:
-						break;
-					}
-					counted_players.push_back(contact_palyer);
+				case 1:
+					team1_players++;
+					break;
+				case 2:
+					team2_players++;
+					break;
+				default:
+					break;
 				}
+				counted_players.push_back(contact_palyer);
 			}
 		}
 	}
@@ -164,41 +161,38 @@ void Zelda::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 
 void Zelda::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (active) 
+	if (bodyA == game_object->pbody && fixtureA->type == fixture_type::f_t_zelda_area)
 	{
-		if (bodyA == game_object->pbody && fixtureA->type == fixture_type::f_t_zelda_area)
+		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
+			int team = App->entity->player_manager->GetPlayerTeamFromBody(bodyB);
+
+			Player* contact_palyer = App->entity->player_manager->GetPlayerFromBody(bodyB);
+
+			bool found = false;
+
+			for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
 			{
-				int team = App->entity->player_manager->GetPlayerTeamFromBody(bodyB);
-
-				Player* contact_palyer = App->entity->player_manager->GetPlayerFromBody(bodyB);
-
-				bool found = false;
-
-				for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
+				if (*it == contact_palyer)
 				{
-					if (*it == contact_palyer)
-					{
-						found = true;
-						counted_players.erase(it);
-						break;
-					}
-
+					found = true;
+					counted_players.erase(it);
+					break;
 				}
-				if (found)
+
+			}
+			if (found)
+			{
+				switch (team)
 				{
-					switch (team)
-					{
-					case 1:
-						team1_players--;
-						break;
-					case 2:
-						team2_players--;
-						break;
-					default:
-						break;
-					}
+				case 1:
+					team1_players--;
+					break;
+				case 2:
+					team2_players--;
+					break;
+				default:
+					break;
 				}
 			}
 		}

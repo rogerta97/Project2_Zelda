@@ -42,6 +42,8 @@ public:
 	void OnCommand(std::list<std::string>& tokens);
 
 	void EndGame(int winner);
+	void UpdateProgressBar();
+
 
 private:
 	void CreateMapCollisions();
