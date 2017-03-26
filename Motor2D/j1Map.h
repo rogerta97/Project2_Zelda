@@ -157,6 +157,9 @@ public:
 	//Return Zelda position in world cordinates
 	iPoint GetZeldaPosition() const;
 
+	//Return base position in world cordinates
+	iPoint GetBasePosition(uint team) const;
+
 private:
 
 	bool LoadMap();

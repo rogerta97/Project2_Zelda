@@ -1091,3 +1091,57 @@ iPoint j1Map::GetZeldaPosition() const
 
 	return ret;
 }
+
+iPoint j1Map::GetBasePosition(uint team) const
+{
+	iPoint ret(-1, -1);
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+						switch (team)
+						{
+						case 1:
+							if (relative_id == 19)
+							{
+								ret = MapToWorld(x, y);
+							}
+							break;
+						case 2:
+							if (relative_id == 20)
+							{
+								ret = MapToWorld(x, y);
+							}
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				if (ret != iPoint(-1, -1))
+					break;
+			}
+			if (ret != iPoint(-1, -1))
+				break;
+		}
+	}
+
+	return ret;
+}
