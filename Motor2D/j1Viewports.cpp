@@ -331,9 +331,9 @@ void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g
 	line_list.push_back(l);
 }
 
-void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int layer, int viewport, bool use_camera)
+void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int layer, int viewport, bool filled, bool use_camera)
 {
-	layer_circle c(x1, y1, redius, r, g, b, a, use_camera);
+	layer_circle c(x1, y1, redius, r, g, b, a, filled, use_camera);
 
 	switch (viewport)
 	{
@@ -393,7 +393,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 		}
@@ -433,7 +433,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			// View 2
@@ -462,7 +462,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list2.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera2.x, curr->data.y1 + camera2.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera2.x, curr->data.y1 + camera2.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			App->render->ResetViewPort();
@@ -504,7 +504,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			// View 2
@@ -532,7 +532,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list2.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera2.x, curr->data.y1 + camera2.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera2.x, curr->data.y1 + camera2.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			// View 3
@@ -560,7 +560,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list3.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera3.x, curr->data.y1 + camera3.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera3.x, curr->data.y1 + camera3.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			// View 4
@@ -588,7 +588,7 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_circle>* curr = circle_list4.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawCircle(curr->data.x1 + camera4.x, curr->data.y1 + camera4.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.use_camera);
+				App->render->DrawCircle(curr->data.x1 + camera4.x, curr->data.y1 + camera4.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			App->render->ResetViewPort();

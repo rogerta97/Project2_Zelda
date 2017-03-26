@@ -5,6 +5,7 @@
 #include "j1Gui.h"
 #include "Trunk.h"
 #include "j1Render.h"
+#include "j1Timer.h"
 
 class GameObject;
 class b2Fixture;
@@ -16,6 +17,9 @@ class MinionManager;
 class AestheticsManager;
 class TowerManager;
 class ShopManager;
+class ZeldaManager;
+
+class Zelda;
 
 enum GameStates
 {
@@ -34,8 +38,14 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	j1Timer* GetGameTimer();
+
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
+
+	void EndGame(int winner);
+	void UpdateProgressBar();
+
 
 private:
 	void CreateMapCollisions();
@@ -87,6 +97,14 @@ private:
 	Trunk*				map_trunk = nullptr; 
 
 	vector<PhysBody*>	map_collisions;
+
+	//Testing
+	j1Timer				game_timer;
+	ZeldaManager*		zelda_manager = nullptr;
+
+	uint				end_delay = 10;
+
+	uint				winner = 0;
 };
 
 

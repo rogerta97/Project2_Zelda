@@ -240,7 +240,7 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
-bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, float _scale, Uint8 a, bool use_camera) const
+bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, float _scale, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
 	uint scale = _scale;
@@ -251,17 +251,36 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, f
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
 	int result = -1;
-	SDL_Point points[360];
 
-	float factor = (float)M_PI / 180.0f;
-
-	for(uint i = 0; i < 360; ++i)
+	if (!filled)
 	{
-		points[i].x = (int)(x * scale + radius * cos(i * factor));
-		points[i].y = (int)(y * scale + radius * sin(i * factor));
-	}
+		SDL_Point points[360];
 
-	result = SDL_RenderDrawPoints(renderer, points, 360);
+		float factor = (float)M_PI / 180.0f;
+
+		for (uint i = 0; i < 360; ++i)
+		{
+			points[i].x = (int)(x * scale + radius * cos(i * factor));
+			points[i].y = (int)(y * scale + radius * sin(i * factor));
+		}
+
+		result = SDL_RenderDrawPoints(renderer, points, 360);
+	}
+	else
+	{
+		for (int w = 0; w < radius * 2; w++)
+		{
+			for (int h = 0; h < radius * 2; h++)
+			{
+				int dx = radius - w; // horizontal offset
+				int dy = radius - h; // vertical offset
+				if ((dx*dx + dy*dy) <= (radius * radius))
+				{
+					result = SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+				}
+			}
+		}
+	}
 
 	if(result != 0)
 	{
