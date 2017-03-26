@@ -512,7 +512,7 @@ void Link::Ability1Right()
 void Link::ShowAbility1Up()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle( game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, true);
+	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, true, true);
 }
 
 void Link::ShowAbility1Down()

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <file>
-  <animations texture ="textures/towersminions_sheet.png">
+  <radius value="200"/>
+  <area x="0" y="51" w="400" h="400"/>
+  <activation_time sec="60"/>
+  <animations texture ="textures/zelda_spritesheet.png">
     <anim speed = "10" name = "walk_up" loop = "true">
       <rect x = "266" y = "2" w = "34" h = "48"/>
       <rect x = "302" y = "2" w = "34" h = "48"/>

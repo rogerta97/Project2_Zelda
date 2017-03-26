@@ -4,6 +4,17 @@
 #include "Entity.h"
 #include "j1Timer.h"
 
+enum zelda_states
+{
+	z_s_wait,
+	z_s_move_to_path,
+	z_s_idle,
+	z_s_move,
+	z_s_null,
+};
+
+class j1Timer;
+
 class Zelda : public Entity
 {
 public:
@@ -17,6 +28,13 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	// Set Timer if not defined previously
+	// Return true if set.
+	bool SetTimer(j1Timer* timer);
+
+	void SetInitialPath(std::vector<iPoint>& path);
+	void SetPath(std::vector<iPoint>& path);
+
 private:
 
 	void MoveUp(float speed);
@@ -29,10 +47,32 @@ private:
 	void MoveUpLeft(float speed);
 	void MoveDownLeft(float speed);
 
+	void CheckState();
+
 public:
 
 private:
+	uint				team1_players = 0;
+	uint				team2_players = 0;
 
+	bool				flip = false;
+
+	int					radius = 0;
+
+	SDL_Rect			area_image = NULLRECT;
+
+	zelda_states		state = z_s_null;
+
+	j1Timer*			game_timer = nullptr;
+
+	std::vector<iPoint> main_path;
+	uint				path_pos = 0;
+
+	std::vector<iPoint> initial_path;
+	uint				initial_path_pos = 0;
+
+	bool				active = false;
+	uint				activation_time = 0;
 };
 
 

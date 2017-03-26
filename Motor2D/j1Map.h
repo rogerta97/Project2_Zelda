@@ -140,6 +140,15 @@ public:
 	//World spawn position for towers
 	std::vector<iPoint> GetTowerSpawns(uint team) const;
 
+	// Return all unsorted Zelda initial path points
+	std::vector<iPoint> GetZeldaInitPath()const;
+
+	// Return all unsorted Zelda path points
+	std::vector<iPoint> GetZeldaPath()const;
+
+	//Return Zelda position in world cordinates
+	iPoint GetZeldaPosition() const;
+
 private:
 
 	bool LoadMap();

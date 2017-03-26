@@ -130,6 +130,9 @@
     <ClCompile Include="Zelda.cpp">
       <Filter>Engine\4. Entities ==========\Zelda</Filter>
     </ClCompile>
+    <ClCompile Include="ZeldaManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -290,6 +293,9 @@
     </ClInclude>
     <ClInclude Include="Zelda.h">
       <Filter>Engine\4. Entities ==========\Zelda</Filter>
+    </ClInclude>
+    <ClInclude Include="ZeldaManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

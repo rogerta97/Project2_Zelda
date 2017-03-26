@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "j1Gui.h"
 #include "j1Render.h"
+#include "j1Timer.h"
 
 class GameObject;
 class b2Fixture;
@@ -14,6 +15,9 @@ class Minion;
 class MinionManager;
 class TowerManager;
 class ShopManager;
+class ZeldaManager;
+
+class Zelda;
 
 enum GameStates
 {
@@ -31,6 +35,8 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+
+	j1Timer* GetGameTimer();
 
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
@@ -81,6 +87,10 @@ private:
 	vector<UI_Image*>   habilities_4;
 
 	vector<PhysBody*>	map_collisions;
+
+	//Testing
+	j1Timer				game_timer;
+	ZeldaManager*		zelda_manager = nullptr;
 };
 
 
