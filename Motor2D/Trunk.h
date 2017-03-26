@@ -18,8 +18,6 @@ public:
 
 	~Trunk(); 
 
-private: 
-
 
 };
 

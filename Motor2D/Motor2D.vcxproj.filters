@@ -145,6 +145,9 @@
     <ClCompile Include="BaseManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Trees.cpp">
+      <Filter>Engine\4. Entities ==========\Trees</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -321,6 +324,9 @@
     <ClInclude Include="BaseManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Trees.h">
+      <Filter>Engine\4. Entities ==========\Trees</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -386,6 +392,9 @@
     <Filter Include="Engine\4. Entities ==========\Base">
       <UniqueIdentifier>{8ba32828-9068-476d-ab52-fca59de55bab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Trees">
+      <UniqueIdentifier>{822fa593-6faf-4b89-a983-8bf0f08b5c7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -423,6 +432,9 @@
     </Xml>
     <Xml Include="..\Game\base.xml">
       <Filter>Engine\4. Entities ==========\Base</Filter>
+    </Xml>
+    <Xml Include="..\Game\Trees.xml">
+      <Filter>Engine\4. Entities ==========\Trees</Filter>
     </Xml>
   </ItemGroup>
 </Project>

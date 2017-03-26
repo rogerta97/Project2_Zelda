@@ -9,6 +9,8 @@
 #include <list>
 #include "j1Render.h"
 
+struct TreeNode; 
+
 // ----------------------------------------------------
 struct Properties
 {
@@ -130,6 +132,9 @@ public:
 
 	// Retun trunk's position
 	iPoint GetTrunkPosition() const;
+
+	// Fills the trees list
+	bool GetTreesPosition(vector<TreeNode*>& trees_pos);
 
 	//Return shop position in world cordinates
 	iPoint GetShopPosition(uint team) const;

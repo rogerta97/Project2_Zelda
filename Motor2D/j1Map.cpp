@@ -3,6 +3,8 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1FileSystem.h"
+#include "j1Entity.h"
+#include "AestheticsManager.h"
 #include "j1Textures.h"
 #include "j1Map.h"
 #include "j1Viewports.h"
@@ -709,6 +711,67 @@ iPoint j1Map::GetTrunkPosition() const
 		}
 	}
 
+	return ret;
+}
+
+bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
+{	
+	bool ret = true; 
+
+	TreeNode* new_tree = new TreeNode; 
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						switch (relative_id) 
+						{
+						case 7: 
+							new_tree->tree_pos = MapToWorld(x, y); 
+							new_tree->type = greentree; 							
+							break;
+
+						case 10:
+							new_tree->tree_pos = MapToWorld(x, y);
+							new_tree->type = yellowtree;
+							break;
+
+						case 12:
+							new_tree->tree_pos = MapToWorld(x, y);
+							new_tree->type = purpletree;
+							break; 
+
+						default: 
+							ret = false; 
+							break; 
+						}	
+
+						trees_pos.push_back(new_tree); 
+					}
+				}
+			}
+		}		
+	}
+	
 	return ret;
 }
 

@@ -39,7 +39,8 @@ enum class pbody_type
 	p_t_npc,
 	p_t_tower,
 	p_t_tower_attack,
-	p_t_trunk
+	p_t_trunk,
+	p_t_tree
 };
 
 // Fixture enum
