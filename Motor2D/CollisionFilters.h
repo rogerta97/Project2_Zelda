@@ -33,7 +33,7 @@ struct collision_filters
 enum class pbody_type
 {
 	p_t_null = 0,
-	p_t_link,
+	p_t_player,
 	p_t_boomerang,
 	p_t_world,
 	p_t_npc,

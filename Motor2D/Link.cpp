@@ -25,7 +25,7 @@
 
 Link::Link(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_link, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -512,7 +512,7 @@ void Link::Ability1Right()
 void Link::ShowAbility1Up()
 {
 	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, true, true);
+	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, false, true);
 }
 
 void Link::ShowAbility1Down()

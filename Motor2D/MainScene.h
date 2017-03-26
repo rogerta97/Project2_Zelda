@@ -41,6 +41,8 @@ public:
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCommand(std::list<std::string>& tokens);
 
+	void EndGame(int winner);
+
 private:
 	void CreateMapCollisions();
 	void DrawScreenSeparation();
@@ -91,6 +93,10 @@ private:
 	//Testing
 	j1Timer				game_timer;
 	ZeldaManager*		zelda_manager = nullptr;
+
+	uint				end_delay = 10;
+
+	uint				winner = 0;
 };
 
 

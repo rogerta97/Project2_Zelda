@@ -23,7 +23,7 @@
 #include "TowerManager.h"
 #include "Functions.h"
 #include "ShopManager.h"
-
+#include "MenuScene.h"
 #include "ZeldaManager.h"
 
 MainScene::MainScene()
@@ -353,6 +353,13 @@ bool MainScene::Update(float dt)
 
 	// --------------
 
+	//End Game
+	if (winner != 0 && game_timer.ReadSec() > end_delay)
+	{
+		App->scene->ChangeScene(App->scene->menu_scene);
+	}
+		// ------
+
 	//DrawScreenSeparation();
 
 	return ret;
@@ -369,12 +376,15 @@ bool MainScene::PostUpdate()
 bool MainScene::CleanUp()
 {
 	bool ret = true;
+
 	shop_manager->CleanUp();
+	zelda_manager->CleanUp();
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
 	RELEASE(tower_manager);
 	RELEASE(shop_manager);
+	RELEASE(zelda_manager);
 
 	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
@@ -455,6 +465,15 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 	default:
 		break;
 	}
+}
+
+void MainScene::EndGame(int _winner)
+{
+	App->entity->player_manager->DisableInput(0);
+
+	winner = _winner;
+
+	game_timer.Start();
 }
 
 void MainScene::CreateMapCollisions()

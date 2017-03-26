@@ -97,6 +97,15 @@ public:
 
 	void ResetAbilityTimer(Player* player, int ability);
 
+	int GetPlayerTeamFromBody(PhysBody* body);
+	Player* GetPlayerFromBody(PhysBody* body);
+
+	//Disable player input. 0 to disable all
+	void DisableInput(int player);
+
+	//Allow player input. 0 to allow all
+	void AllowInput(int player);
+
 public:
 	vector<Player*> players;
 

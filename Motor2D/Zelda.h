@@ -10,10 +10,12 @@ enum zelda_states
 	z_s_move_to_path,
 	z_s_idle,
 	z_s_move,
+	z_s_end_game,
 	z_s_null,
 };
 
 class j1Timer;
+class Player;
 
 class Zelda : public Entity
 {
@@ -35,6 +37,11 @@ public:
 	void SetInitialPath(std::vector<iPoint>& path);
 	void SetPath(std::vector<iPoint>& path);
 
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+
+	iPoint GetPos() const;
+
 private:
 
 	void MoveUp(float speed);
@@ -47,32 +54,51 @@ private:
 	void MoveUpLeft(float speed);
 	void MoveDownLeft(float speed);
 
+	void WalkUp();
+	void WalkRight();
+	void WalkLeft();
+	void WalkDown();
+
 	void CheckState();
+
+	void MoveState();
+	void MoveToPathState();
+
+	void SetIdle();
+	void Move(int delta_x, int delta_y);
+
+
 
 public:
 
 private:
-	uint				team1_players = 0;
-	uint				team2_players = 0;
+	uint					team1_players = 0;
+	uint					team2_players = 0;
 
-	bool				flip = false;
+	std::vector<Player*>	counted_players;
 
-	int					radius = 0;
+	int						radius = 0;
 
-	SDL_Rect			area_image = NULLRECT;
+	SDL_Rect				area_image = NULLRECT;
 
-	zelda_states		state = z_s_null;
+	zelda_states			state = z_s_null;
 
-	j1Timer*			game_timer = nullptr;
+	j1Timer*				game_timer = nullptr;
 
-	std::vector<iPoint> main_path;
-	uint				path_pos = 0;
+	std::vector<iPoint>		main_path;
+	int						path_pos = 0;
+		
+	std::vector<iPoint>		initial_path;
+	int						initial_path_pos = 0;
 
-	std::vector<iPoint> initial_path;
-	uint				initial_path_pos = 0;
+	bool					active = false;
+	uint					activation_time = 0;
 
-	bool				active = false;
-	uint				activation_time = 0;
+	states					anim_state = states_null;
+
+	float					speed = 0;
+
+	int						direction = 0;
 };
 
 

@@ -42,3 +42,8 @@ ZeldaManager::ZeldaManager()
 ZeldaManager::~ZeldaManager()
 {
 }
+
+void ZeldaManager::CleanUp()
+{
+	App->entity->DeleteEntity(zelda);
+}

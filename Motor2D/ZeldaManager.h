@@ -9,6 +9,8 @@ public:
 	ZeldaManager();
 	~ZeldaManager();
 
+	void CleanUp();
+
 private:
 
 public:
