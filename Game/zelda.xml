@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<file>
+  <radius value="200"/>
+  <area x="0" y="51" w="400" h="400"/>
+  <activation_time sec="10"/>
+  <speed value="25"/>
+  <animations texture ="textures/zelda_spritesheet.png">
+    <anim speed = "5" name = "walk_up" loop = "true">
+      <rect x = "266" y = "2" w = "34" h = "48"/>
+      <rect x = "302" y = "2" w = "34" h = "48"/>
+    </anim>
+    <anim speed = "5" name = "walk_down" loop = "true">
+      <rect x = "188" y = "2" w = "36" h = "48"/>
+      <rect x = "226" y = "2" w = "36" h = "48"/>
+    </anim>
+    <anim speed = "5" name = "walk_left" loop = "true">
+      <rect x = "118" y = "2" w = "32" h = "48"/>
+      <rect x = "152" y = "2" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "5" name = "walk_right" loop = "true">
+      <rect x = "46" y = "2" w = "32" h = "48"/>
+      <rect x = "80" y = "2" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "5" name = "idle_up" loop = "true">
+      <rect x = "302" y = "2" w = "34" h = "48"/>
+    </anim>
+    <anim speed = "5" name = "idle_down" loop = "true">
+      <rect x = "2" y = "2" w = "44" h = "48"/>
+    </anim>
+    <anim speed = "10" name = "idle_right" loop = "true">
+      <rect x = "46" y = "2" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "10" name = "idle_left" loop = "true">
+      <rect x = "118" y = "2" w = "32" h = "48"/>
+    </anim>
+  </animations>
+</file>

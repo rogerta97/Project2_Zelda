@@ -969,3 +969,125 @@ std::vector<iPoint> j1Map::GetTowerSpawns(uint team) const
 
 	return ret;
 }
+
+std::vector<iPoint> j1Map::GetZeldaInitPath() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 16)
+						{
+							ret.push_back(iPoint(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+std::vector<iPoint> j1Map::GetZeldaPath() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 17)
+						{
+							ret.push_back(iPoint(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+iPoint j1Map::GetZeldaPosition() const
+{
+	iPoint ret(-1, -1);
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+						
+						if (relative_id == 15)
+						{
+							ret = MapToWorld(x, y);
+						}
+					}
+				}
+				if (ret != iPoint(-1, -1))
+					break;
+			}
+			if (ret != iPoint(-1, -1))
+				break;
+		}
+	}
+
+	return ret;
+}

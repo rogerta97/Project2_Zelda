@@ -22,6 +22,14 @@ void AestheticsManager::Start()
 	{
 		switch (trees_pos.at(z)->type)
 		{
+		case greentree:
+			break; 
+
+		case greentree:
+			break;
+
+		case greentree:
+			break;
 
 		}
 	}

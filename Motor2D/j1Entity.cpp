@@ -12,6 +12,7 @@
 #include "Tower.h"
 #include "Functions.h"
 #include "j1Timer.h"
+#include "Zelda.h"
 
 
 j1Entity::j1Entity()
@@ -184,6 +185,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	case tower:
 		ret = new Tower(pos);
 		break;
+	case zelda:
+		ret = new Zelda(pos);
+    break;
 	case trunk:
 		ret = new Trunk(pos);
 		break;

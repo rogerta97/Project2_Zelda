@@ -4,6 +4,7 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Map.h"
+#include "GameObject.h"
 
 PlayerManager::PlayerManager()
 {
@@ -733,6 +734,54 @@ void PlayerManager::ResetAbilityTimer(Player* player, int ability)
 {
 	if (player->entity->GetAbility(ability - 1) != nullptr)
 		player->entity->GetAbility(ability - 1)->cd_timer.Start();
+}
+
+int PlayerManager::GetPlayerTeamFromBody(PhysBody * body)
+{
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if ((*it)->entity->game_object->pbody == body)
+		{
+			return (*it)->entity->GetTeam();
+		}
+	}
+	return 0;
+}
+
+Player * PlayerManager::GetPlayerFromBody(PhysBody * body)
+{
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if ((*it)->entity->game_object->pbody == body)
+		{
+			return (*it);
+		}
+	}
+	return nullptr;
+}
+
+void PlayerManager::DisableInput(int player)
+{
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if ((*it)->controller_index == player)
+			(*it)->entity->disable_controller = true;
+
+		if(player == 0)
+			(*it)->entity->disable_controller = true;
+	}
+}
+
+void PlayerManager::AllowInput(int player)
+{
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	{
+		if ((*it)->controller_index == player)
+			(*it)->entity->disable_controller = false;
+
+		if (player == 0)
+			(*it)->entity->disable_controller = false;
+	}
 }
 
 void Player::BuyItem(Item * item, int price)
