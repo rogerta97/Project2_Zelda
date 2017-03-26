@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "j1App.h"
 #include "j1Gui.h"
+#include "AestheticsManager.h"
 #include "j1Console.h"
 #include "Parallax.h"
 #include "QuestManager.h"
@@ -170,14 +171,12 @@ bool MainScene::Start()
 
 	CreateMapCollisions();
 
-
-
-	//Testing
 	game_timer.Start();
-	
+  
 	zelda_manager = new ZeldaManager();
-
-
+  
+	aest_manager = new AestheticsManager(); 
+	aest_manager->Start(); 
 	return ret;
 }
 

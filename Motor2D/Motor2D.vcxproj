@@ -75,6 +75,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AestheticsManager.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
@@ -119,8 +120,10 @@
     <ClCompile Include="TowerManager.cpp" />
     <ClCompile Include="Zelda.cpp" />
     <ClCompile Include="ZeldaManager.cpp" />
+    <ClCompile Include="Trunk.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AestheticsManager.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
@@ -175,6 +178,7 @@
     <ClInclude Include="TowerManager.h" />
     <ClInclude Include="Zelda.h" />
     <ClInclude Include="ZeldaManager.h" />
+    <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\boomerang.xml" />
@@ -189,6 +193,7 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\Game\zelda.xml" />
+    <Xml Include="..\Game\trunk.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

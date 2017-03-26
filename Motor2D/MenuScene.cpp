@@ -20,7 +20,7 @@ bool MenuScene::Start()
 {
 	bool ret = false;
 
-	change_scene = false; 
+	change_scene = false;
 
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
@@ -32,9 +32,9 @@ bool MenuScene::Start()
 	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
 	button_list.push_back(start_button);
 
-	start_button->AddImage("idle", { 128, 52, 220, 55 }); 
+	start_button->AddImage("idle", { 128, 52, 220, 55 });
 
-	start_button->SetImage("idle"); 
+	start_button->SetImage("idle");
 
 	start_text = menu_window->CreateText(iPoint(screen.w, 160), App->font->game_font);
 	start_text->SetText("NEW GAME");
@@ -62,11 +62,11 @@ bool MenuScene::Start()
 
 	fx_button->SetImage("idle");
 
-	fx_button->enabled = false; 
+	fx_button->enabled = false;
 
 	fx_text = menu_window->CreateText(iPoint(screen.w, 230), App->font->game_font);
 	fx_text->SetText("FX");
-	fx_text->enabled = false; 
+	fx_text->enabled = false;
 
 	music_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
 
@@ -78,9 +78,20 @@ bool MenuScene::Start()
 	music_button->enabled = false;
 
 	music_text = menu_window->CreateText(iPoint(screen.w, 300), App->font->game_font);
-	music_text->SetText("MUSIC"); 
+	music_text->SetText("MUSIC");
 	music_text->enabled = false;
 
+	//Check Box 
+
+	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
+	options_checkbox->AddBox(iPoint(screen.w + 99, screen.h / 2 + 45), 44, 44, "fx");
+	options_checkbox->AddBox(iPoint(screen.w + 99, screen.h / 2 + 115), 44, 44, "music");
+
+	options_checkbox->SetBox(true, "fx"); 
+	options_checkbox->SetBox(true, "music");
+
+	options_checkbox->enabled = false;
+	
 	// ---------
 
 	// Credits --
@@ -198,7 +209,6 @@ bool MenuScene::Update(float dt)
 
 bool MenuScene::PostUpdate()
 {
-
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 	{
 
@@ -222,11 +232,11 @@ bool MenuScene::PostUpdate()
 			break;
 
 		case FX:
-			LOG("fx");
+			options_checkbox->SetBox(!options_checkbox->GetBox("fx"), "fx");
 			break; 
 
 		case MUSIC:
-			LOG("music"); 
+			options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
 			break; 
 
 		}
@@ -278,6 +288,7 @@ void MenuScene::GoOptions()
 	music_button->enabled = true; 
 	fx_text->enabled = true; 
 	music_text->enabled = true; 
+	options_checkbox->enabled = true; 
 
 	current_button = FX; 
 }
@@ -297,6 +308,7 @@ void MenuScene::GoMenu()
 	music_button->enabled = false;
 	fx_text->enabled = false;
 	music_text->enabled = false;
+	options_checkbox->enabled = false;
 
 	current_button = START;
 }

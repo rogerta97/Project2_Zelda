@@ -90,7 +90,7 @@ public:
 	std::vector<Entity*> GetTeamPlayers(int team);
 	std::vector<int> GetTeamViewports(int team);
 	int GetEntityViewportIfIsPlayer(Entity* entity);
-	bool CheckIfSpawnPointIsUsed(int team, iPoint pos);
+	iPoint GetFreePlayerSpawn(int team);
 
 	// Ability goes from 1 to 4
 	bool IsAbilityCdCompleted(Player* player, int ability);
@@ -110,7 +110,6 @@ public:
 	vector<Player*> players;
 
 private:
-	
 	vector<iPoint> spawn_points_used_team1;
 	vector<iPoint> spawn_points_used_team2;
 };

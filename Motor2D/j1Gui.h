@@ -507,10 +507,11 @@ private:
 struct check_box
 {
 	check_box() {};
-	check_box(iPoint pos, int size_w, int size_h) 
+	check_box(iPoint pos, int size_w, int size_h, const char* name2) 
 	{
 		button = new UI_Button();
 		button->Set(pos, size_w, size_h);
+		name = (char*)name2;
 		checked = false;
 	};
 	~check_box() {};

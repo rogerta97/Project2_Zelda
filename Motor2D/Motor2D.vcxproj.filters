@@ -133,6 +133,12 @@
     <ClCompile Include="ZeldaManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Trunk.cpp">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </ClCompile>
+    <ClCompile Include="AestheticsManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -297,6 +303,12 @@
     <ClInclude Include="ZeldaManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Trunk.h">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </ClInclude>
+    <ClInclude Include="AestheticsManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -356,6 +368,9 @@
     <Filter Include="Engine\4. Entities ==========\Zelda">
       <UniqueIdentifier>{a098f2b5-d279-41f1-b97a-5fe19ec85576}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Trunk">
+      <UniqueIdentifier>{6cc80d32-975d-4155-bd20-c9a79fc86820}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -387,6 +402,9 @@
     </Xml>
     <Xml Include="..\Game\zelda.xml">
       <Filter>Engine\4. Entities ==========\Zelda</Filter>
+    </Xml>
+    <Xml Include="..\Game\trunk.xml">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
     </Xml>
   </ItemGroup>
 </Project>

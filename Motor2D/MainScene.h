@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "j1Gui.h"
+#include "Trunk.h"
 #include "j1Render.h"
 #include "j1Timer.h"
 
@@ -13,6 +14,7 @@ class Link;
 class QuestManager; 
 class Minion;
 class MinionManager;
+class AestheticsManager;
 class TowerManager;
 class ShopManager;
 class ZeldaManager;
@@ -63,6 +65,7 @@ public:
 	TowerManager*	    tower_manager = nullptr;
 	QuestManager*		quest_manager = nullptr;
 	ShopManager*		shop_manager = nullptr;
+	AestheticsManager*  aest_manager = nullptr;
 
 private:
 	//UI elements
@@ -89,6 +92,9 @@ private:
 	UI_Image*			rupiees_img_4 = nullptr;
 	UI_Image*			minimap_icon_4 = nullptr;
 	vector<UI_Image*>   habilities_4;
+
+	// Trunk
+	Trunk*				map_trunk = nullptr; 
 
 	vector<PhysBody*>	map_collisions;
 

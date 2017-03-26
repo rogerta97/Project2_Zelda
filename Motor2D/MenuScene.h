@@ -1,7 +1,6 @@
 #ifndef _MENUSCENE_H_
 #define _MENUSCENE_H_
 
-
 #include "Scene.h"
 #include "j1Gui.h"
 #include "j1Render.h"
@@ -65,6 +64,8 @@ private:
 
 	UI_Text*		   fx_text = nullptr;
 	UI_Text*		   music_text = nullptr;
+
+	UI_Check_Box*	   options_checkbox = nullptr; 
 
 	vector<UI_Button*> button_list;
 	vector<UI_Image*>  cursors;

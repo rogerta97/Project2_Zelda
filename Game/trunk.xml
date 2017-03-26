@@ -1,0 +1,9 @@
+<!-- Config file for the game -->
+
+<file>
+	<animations texture ="maps/Wood.png">
+      <anim speed = "10" name = "main" loop = "true">
+		<rect x = "0" y = "0" w = "76" h = "146"/>
+      </anim> 
+   </animations>
+</file>
