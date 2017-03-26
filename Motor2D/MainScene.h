@@ -18,8 +18,8 @@ class AestheticsManager;
 class TowerManager;
 class ShopManager;
 class ZeldaManager;
+class BaseManager;
 
-class Zelda;
 
 enum GameStates
 {
@@ -66,6 +66,8 @@ public:
 	QuestManager*		quest_manager = nullptr;
 	ShopManager*		shop_manager = nullptr;
 	AestheticsManager*  aest_manager = nullptr;
+	ZeldaManager*		zelda_manager = nullptr;
+	BaseManager*		base_manager = nullptr;
 
 private:
 	//UI elements
@@ -98,13 +100,13 @@ private:
 
 	vector<PhysBody*>	map_collisions;
 
-	//Testing
 	j1Timer				game_timer;
-	ZeldaManager*		zelda_manager = nullptr;
 
 	uint				end_delay = 10;
 
 	uint				winner = 0;
+
+
 };
 
 

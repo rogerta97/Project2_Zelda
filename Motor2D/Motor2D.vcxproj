@@ -77,6 +77,8 @@
   <ItemGroup>
     <ClCompile Include="AestheticsManager.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Base.cpp" />
+    <ClCompile Include="BaseManager.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -125,6 +127,8 @@
   <ItemGroup>
     <ClInclude Include="AestheticsManager.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Base.h" />
+    <ClInclude Include="BaseManager.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="CollisionFilters.h" />
@@ -181,6 +185,7 @@
     <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Game\base.xml" />
     <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\Items.xml" />
@@ -192,7 +197,9 @@
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\Game\zelda.xml" />
+    <Xml Include="..\Game\zelda.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Game\trunk.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

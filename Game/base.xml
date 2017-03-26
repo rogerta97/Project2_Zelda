@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<file>
+  <animations texture ="textures/Base_entity.png">
+    <anim speed = "1" name = "idle" loop = "true">
+      <rect x = "0" y = "0" w = "121" h = "145"/>
+      <rect x = "121" y = "0" w = "121" h = "145"/>
+      <rect x = "0" y = "145" w = "121" h = "145"/>
+      <rect x = "121" y = "145" w = "121" h = "145"/>
+    </anim>
+  </animations>
+</file>

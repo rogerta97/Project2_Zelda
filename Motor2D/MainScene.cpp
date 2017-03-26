@@ -26,6 +26,7 @@
 #include "ShopManager.h"
 #include "MenuScene.h"
 #include "ZeldaManager.h"
+#include "BaseManager.h"
 
 MainScene::MainScene()
 {
@@ -177,6 +178,9 @@ bool MainScene::Start()
   
 	aest_manager = new AestheticsManager(); 
 	aest_manager->Start(); 
+
+	base_manager = new BaseManager();
+
 	return ret;
 }
 
@@ -383,12 +387,14 @@ bool MainScene::CleanUp()
 
 	shop_manager->CleanUp();
 	zelda_manager->CleanUp();
+	base_manager->CleanUp();
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
 	RELEASE(tower_manager);
 	RELEASE(shop_manager);
 	RELEASE(zelda_manager);
+	RELEASE(base_manager);
 
 	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
