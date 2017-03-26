@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Spell.h"
 #include "Trunk.h"
+#include "Trees.h"
 #include "j1Spell.h"
 #include "Tower.h"
 #include "Functions.h"
@@ -185,6 +186,10 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case trunk:
 		ret = new Trunk(pos);
+		break;
+	case greentree:
+		ret = new Tree(pos);
+		
 		break;
 	default:
 		break;

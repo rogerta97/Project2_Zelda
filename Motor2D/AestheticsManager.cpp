@@ -15,6 +15,20 @@ void AestheticsManager::Start()
 {
 	trunk_entity = App->entity->CreateEntity(trunk, App->map->GetTrunkPosition()); 
 
+	App->map->GetTreesPosition(trees_pos); 
+
+	int z = 0; 
+	while(z < trees_pos.size())
+	{
+		switch (trees_pos.at(z)->type)
+		{
+
+		}
+	}
+
+
+
+
 }
 
 void AestheticsManager::CleanUp()
