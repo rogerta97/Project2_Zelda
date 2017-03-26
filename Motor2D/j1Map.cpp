@@ -747,17 +747,17 @@ bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
 						{
 						case 7: 
 							new_tree->tree_pos = MapToWorld(x, y); 
-							new_tree->type = greentree; 							
+							//new_tree->type = greentree; 							
 							break;
 
 						case 10:
 							new_tree->tree_pos = MapToWorld(x, y);
-							new_tree->type = yellowtree;
+							//new_tree->type = yellowtree;
 							break;
 
 						case 12:
 							new_tree->tree_pos = MapToWorld(x, y);
-							new_tree->type = purpletree;
+							//new_tree->type = purpletree;
 							break; 
 
 						default: 

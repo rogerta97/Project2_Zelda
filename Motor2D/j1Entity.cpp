@@ -194,8 +194,8 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case base:
 		ret = new Base(pos);
-    break;
-	case greentree:
+		break;
+	case tree:
 		ret = new Tree(pos);
 		break;
 	default:
