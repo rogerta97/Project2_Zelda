@@ -84,7 +84,7 @@ bool Zelda::Draw(float dt)
 	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 22, game_object->GetPos().y - draw_offset.y - 24 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	
 	if(active)
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - radius, game_object->GetPos().y - radius}, area_image, 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(4, game_object->GetTexture(), { game_object->GetPos().x - radius, game_object->GetPos().y - radius}, area_image, 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return true;
 }

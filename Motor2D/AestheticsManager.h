@@ -8,6 +8,7 @@
 
 class Entity;
 class Tree;
+class Eyes;
 
 enum tree_color
 {
@@ -33,11 +34,16 @@ public:
 	void CleanUp(); 
 
 private:
-	
-	Entity*						trunk_entity = nullptr; 
+	//Trunk
+	Entity*					trunk_entity = nullptr; 
+
+	//Trees
 	std::vector<Tree*>		trees_entity;
 
-	std::vector<TreeNode*>		trees_nodes; 
+	std::vector<TreeNode*>	trees_nodes; 
+
+	//Eyes
+	std::vector<Eyes*>		eyes;
 
 };
 

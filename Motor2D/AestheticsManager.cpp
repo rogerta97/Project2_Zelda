@@ -3,6 +3,7 @@
 #include "Trees.h"
 #include "j1App.h"
 #include "j1Entity.h"
+#include "Eyes.h"
 
 AestheticsManager::AestheticsManager()
 {
@@ -14,8 +15,11 @@ AestheticsManager::~AestheticsManager()
 
 void AestheticsManager::Start()
 {
+	//Trunk
 	trunk_entity = App->entity->CreateEntity(trunk, App->map->GetTrunkPosition()); 
-	
+	// -----
+
+	//Trees
 	App->map->GetTreesPosition(trees_nodes); 
 	
 	int z = 0; 
@@ -41,14 +45,36 @@ void AestheticsManager::Start()
 
 		z++; 	
 	}
+	// -----
 
+	//Eyes
+	std::vector<iPoint> eyes_positions = App->map->GetEyesPositions();
 
-
+	for (std::vector<iPoint>::iterator it = eyes_positions.begin(); it != eyes_positions.end(); ++it)
+	{
+		eyes.push_back((Eyes*)App->entity->CreateEntity(entity_name::eyes, *it));
+	}
+	// -----
 
 }
 
 void AestheticsManager::CleanUp()
 {
+	//Clear Trees
+	for (std::vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
+	{
+		App->entity->DeleteEntity(*it);
+		it = trees_entity.erase(it);
+	}
+	// -----
+
+	//Clear Eyes
+	for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end(); ++it)
+	{
+		App->entity->DeleteEntity(*it);
+		it = eyes.erase(it);
+	}
+	// -----
 }
 
 

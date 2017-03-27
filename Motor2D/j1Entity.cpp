@@ -14,6 +14,7 @@
 #include "j1Timer.h"
 #include "Zelda.h"
 #include "Base.h"
+#include "Eyes.h"
 
 
 j1Entity::j1Entity()
@@ -197,6 +198,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case tree:
 		ret = new Tree(pos);
+		break;
+	case eyes:
+		ret = new Eyes(pos);
 		break;
 	default:
 		break;

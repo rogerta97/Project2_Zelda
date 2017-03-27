@@ -160,6 +160,9 @@ public:
 	//Return base position in world cordinates
 	iPoint GetBasePosition(uint team) const;
 
+	// Return eyes coordinates
+	std::vector<iPoint> GetEyesPositions()const;
+
 private:
 
 	bool LoadMap();
