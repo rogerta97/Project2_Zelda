@@ -601,6 +601,9 @@ b2Fixture* j1Physics::AddChainBody(PhysBody* pbody, int x, int y, int * points, 
 	{
 		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+
+		p[i].x += PIXEL_TO_METERS(x); 
+		p[i].y += PIXEL_TO_METERS(y);
 	}
 
 	shape.CreateLoop(p, size / 2);
