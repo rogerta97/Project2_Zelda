@@ -151,6 +151,12 @@
     <ClCompile Include="Eyes.cpp">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
     </ClCompile>
+    <ClCompile Include="JungleCampManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Snakes.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -333,6 +339,12 @@
     <ClInclude Include="Eyes.h">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
     </ClInclude>
+    <ClInclude Include="JungleCampManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Snakes.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -404,6 +416,9 @@
     <Filter Include="Engine\4. Entities ==========\Eyes">
       <UniqueIdentifier>{ccac2d89-38c0-4829-a422-d4b18372492a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Jungle Camps">
+      <UniqueIdentifier>{e88e1269-dac3-4cd5-9e6e-db0aa7223f3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -447,6 +462,9 @@
     </Xml>
     <Xml Include="..\Game\eyes.xml">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
+    </Xml>
+    <Xml Include="snakes.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </Xml>
   </ItemGroup>
 </Project>

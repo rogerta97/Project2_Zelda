@@ -19,6 +19,7 @@ class TowerManager;
 class ShopManager;
 class ZeldaManager;
 class BaseManager;
+class JungleCampManager;
 
 
 enum GameStates
@@ -68,6 +69,7 @@ public:
 	AestheticsManager*  aest_manager = nullptr;
 	ZeldaManager*		zelda_manager = nullptr;
 	BaseManager*		base_manager = nullptr;
+	JungleCampManager*	jungleCamp_manager = nullptr;
 
 private:
 	//UI elements

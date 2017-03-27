@@ -27,6 +27,7 @@
 #include "MenuScene.h"
 #include "ZeldaManager.h"
 #include "BaseManager.h"
+#include "JungleCampManager.h"
 
 MainScene::MainScene()
 {
@@ -90,6 +91,9 @@ bool MainScene::Start()
 	//Test Tower
 	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
+
+	//Test Jungle Camp
+	jungleCamp_manager = new JungleCampManager();
 
 	//Create UI ---------
 	SDL_Rect screen = App->view->GetViewportRect(1);

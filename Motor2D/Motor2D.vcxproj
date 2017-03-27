@@ -101,6 +101,7 @@
     <ClCompile Include="j1Spell.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Viewports.cpp" />
+    <ClCompile Include="JungleCampManager.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
     <ClCompile Include="MenuScene.cpp" />
@@ -116,6 +117,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="QuestManager.cpp" />
     <ClCompile Include="ShopManager.cpp" />
+    <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -151,6 +153,7 @@
     <ClInclude Include="j1Spell.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Viewports.h" />
+    <ClInclude Include="JungleCampManager.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
     <ClInclude Include="MenuScene.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="QuestManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
+    <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
@@ -209,6 +213,7 @@
     </Xml>
     <Xml Include="..\Game\Trees.xml" />
     <Xml Include="..\Game\trunk.xml" />
+    <Xml Include="snakes.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

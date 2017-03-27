@@ -1,0 +1,25 @@
+#ifndef _JUNGLE_CAMP_MANAGER_H_
+#define _JUNGLE_CAMP_MANAGER_H_
+
+#include <list>
+#include "p2Defs.h"
+#include "p2Point.h"
+
+class Snakes;
+class Entity;
+
+class JungleCampManager
+{
+public:
+	JungleCampManager();
+	~JungleCampManager();
+
+	bool Update();
+
+
+private:
+	
+
+};
+
+#endif // !_JUNGLE_CAMP_MANAGER_H_
