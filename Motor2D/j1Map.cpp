@@ -718,8 +718,6 @@ bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
 {	
 	bool ret = true; 
 
-	TreeNode* new_tree = new TreeNode; 
-
 	std::list<MapLayer*>::const_iterator item;
 	item = data.layers.begin();
 
@@ -743,21 +741,26 @@ bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
 					{
 						int relative_id = id - tileset->firstgid;
 
+						TreeNode* new_tree = new TreeNode;
+
 						switch (relative_id) 
 						{
 						case 7: 
 							new_tree->tree_pos = MapToWorld(x, y); 
-							//new_tree->type = greentree; 							
+							new_tree->color = green_tree; 
+							trees_pos.push_back(new_tree);
 							break;
 
 						case 10:
 							new_tree->tree_pos = MapToWorld(x, y);
-							//new_tree->type = yellowtree;
+							new_tree->color = yellow_tree;
+							trees_pos.push_back(new_tree);
 							break;
 
 						case 12:
 							new_tree->tree_pos = MapToWorld(x, y);
-							//new_tree->type = purpletree;
+							new_tree->color = purple_tree;
+							trees_pos.push_back(new_tree);
 							break; 
 
 						default: 
@@ -765,7 +768,7 @@ bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
 							break; 
 						}	
 
-						trees_pos.push_back(new_tree); 
+						
 					}
 				}
 			}

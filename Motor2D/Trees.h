@@ -20,11 +20,7 @@ public:
 
 	~Tree();
 
-	entity_name type;
-
-private:
-	
-
+	tree_color type;
 
 };
 

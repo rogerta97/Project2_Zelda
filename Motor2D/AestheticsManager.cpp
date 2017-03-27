@@ -13,26 +13,30 @@ AestheticsManager::~AestheticsManager()
 
 void AestheticsManager::Start()
 {
-	//trunk_entity = App->entity->CreateEntity(trunk, App->map->GetTrunkPosition()); 
-	//
-	//App->map->GetTreesPosition(trees_pos); 
-	//
-	//int z = 0; 
-	//while(z < trees_pos.size())
-	//{
-		/*switch (trees_pos.at(z)->type)
+	trunk_entity = App->entity->CreateEntity(trunk, App->map->GetTrunkPosition()); 
+	
+	App->map->GetTreesPosition(trees_nodes); 
+	
+	int z = 0; 
+	while(z < trees_nodes.size())
+	{
+
+ 		switch (trees_nodes.at(z)->color) 
 		{
-		case greentree:
+		case green_tree:
+			
 			break; 
 
-		case greentree:
+		case yellow_tree:
 			break;
 
-		case greentree:
+		case purple_tree:
 			break;
 
-		}*/
-	//}
+		}
+
+		z++; 	
+	}
 
 
 

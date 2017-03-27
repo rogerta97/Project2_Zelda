@@ -19,10 +19,7 @@ Tree::Tree(iPoint pos)
 
 bool Tree::Draw(float dt)
 {
-	switch(type)
-	{
 	
-	}
 	
 	return true; 
 }

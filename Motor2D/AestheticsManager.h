@@ -9,7 +9,7 @@
 class Entity;
 class Tree;
 
-enum tree_type
+enum tree_color
 {
 	green_tree, 
 	yellow_tree, 
@@ -19,7 +19,7 @@ enum tree_type
 struct TreeNode
 {
 	iPoint			tree_pos; 
-	entity_name		type; 
+	tree_color		color; 
 };
 
 class AestheticsManager
@@ -37,7 +37,7 @@ private:
 	Entity*						trunk_entity = nullptr; 
 	std::vector<Entity*>		trees_entity;
 
-	std::vector<TreeNode*>		trees_pos; 
+	std::vector<TreeNode*>		trees_nodes; 
 
 };
 
