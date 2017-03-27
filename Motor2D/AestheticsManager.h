@@ -35,7 +35,7 @@ public:
 private:
 	
 	Entity*						trunk_entity = nullptr; 
-	std::vector<Entity*>		trees_entity;
+	std::vector<Tree*>		trees_entity;
 
 	std::vector<TreeNode*>		trees_nodes; 
 

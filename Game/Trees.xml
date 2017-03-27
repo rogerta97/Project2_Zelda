@@ -1,10 +1,15 @@
 <!-- Config file for the game -->
 
 <file>
-  <texture name = "maps/Tree_entity.png"/>
-  <rects>
-    <green x ="0" y ="0" w ="128" h ="160"/>
-    <yellow x ="128" y ="0" w ="128" h ="160"/>
-    <purple x ="0" y ="160" w ="128" h ="160"/>
-  </rects>
+  <animations texture ="maps/Tree_entity.png">
+    <anim speed = "10" name = "green" loop = "true">
+      <rect x ="0" y ="0" w ="128" h ="160"/>
+    </anim>
+    <anim speed = "10" name = "yellow" loop = "true">
+      <rect x ="128" y ="0" w ="128" h ="160"/>
+    </anim>
+    <anim speed = "10" name = "purple" loop = "true">
+      <rect x ="0" y ="160" w ="128" h ="160"/>
+    </anim>
+  </animations>
 </file>

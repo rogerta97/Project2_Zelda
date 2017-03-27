@@ -18,6 +18,8 @@ public:
 	// CleanUp
 	bool CleanUp();
 
+	void SetTreeColor(const char* color); 
+
 	~Tree();
 
 	tree_color type;
