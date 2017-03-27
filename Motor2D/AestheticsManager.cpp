@@ -1,6 +1,7 @@
 #include "AestheticsManager.h"
 #include "j1Map.h"
 #include "Trees.h"
+#include "Bushes.h"
 #include "j1App.h"
 #include "j1Entity.h"
 #include "Eyes.h"
@@ -40,10 +41,30 @@ void AestheticsManager::Start()
 		case purple_tree:
 			trees_entity.at(z)->SetTreeColor("purple");
 			break;
-
 		}
-
 		z++; 	
+	}
+	// -----
+
+	// Bushes 
+	App->map->GetBushesPosition(bushes_nodes);
+
+	 z = 0;
+	while (z < bushes_nodes.size())
+	{
+		bushes_entity.push_back((Bush*)App->entity->CreateEntity(bush, bushes_nodes.at(z)->bush_pos));
+
+		switch (bushes_nodes.at(z)->color)
+		{
+		case green_bush:
+			bushes_entity.at(z)->SetBushColor("green");
+			break;
+
+		case purple_bush:
+			bushes_entity.at(z)->SetBushColor("purple");
+			break;
+		}
+		z++;
 	}
 	// -----
 

@@ -7,6 +7,7 @@
 #include "p2Point.h"
 
 class Entity;
+class Bush; 
 class Tree;
 class Eyes;
 
@@ -17,10 +18,22 @@ enum tree_color
 	purple_tree
 };
 
+enum bush_color
+{
+	green_bush,
+	purple_bush
+};
+
 struct TreeNode
 {
 	iPoint			tree_pos; 
 	tree_color		color; 
+};
+
+struct BushNode
+{
+	iPoint			bush_pos;
+	bush_color		color;
 };
 
 class AestheticsManager
@@ -34,15 +47,20 @@ public:
 	void CleanUp(); 
 
 private:
-	//Trunk
+	// Trunk
 	Entity*					trunk_entity = nullptr; 
 
-	//Trees
+	// Trees
 	std::vector<Tree*>		trees_entity;
 
 	std::vector<TreeNode*>	trees_nodes; 
 
-	//Eyes
+	// Bushes 
+	std::vector<Bush*>		bushes_entity;
+
+	std::vector<BushNode*>	bushes_nodes;
+
+	// Eyes
 	std::vector<Eyes*>		eyes;
 
 };

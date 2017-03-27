@@ -151,6 +151,9 @@
     <ClCompile Include="Eyes.cpp">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
     </ClCompile>
+    <ClCompile Include="Bushes.cpp">
+      <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="Eyes.h">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
     </ClInclude>
+    <ClInclude Include="Bushes.h">
+      <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -404,6 +410,9 @@
     <Filter Include="Engine\4. Entities ==========\Eyes">
       <UniqueIdentifier>{ccac2d89-38c0-4829-a422-d4b18372492a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Bushes">
+      <UniqueIdentifier>{9ef085b3-7b82-40a9-b487-3f78df6b41e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -447,6 +456,9 @@
     </Xml>
     <Xml Include="..\Game\eyes.xml">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
+    </Xml>
+    <Xml Include="..\Game\bush.xml">
+      <Filter>Engine\4. Entities ==========\Bushes</Filter>
     </Xml>
   </ItemGroup>
 </Project>

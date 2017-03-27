@@ -5,6 +5,7 @@
 #include "Minion.h"
 #include "GameObject.h"
 #include "Entity.h"
+#include "Bushes.h"
 #include "Spell.h"
 #include "Trunk.h"
 #include "Trees.h"
@@ -201,6 +202,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case eyes:
 		ret = new Eyes(pos);
+		break;
+	case bush:
+		ret = new Bush(pos);
 		break;
 	default:
 		break;
