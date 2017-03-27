@@ -16,9 +16,10 @@ public:
 
 	bool Update();
 
+	void KillJungleCamp(Entity* camp);
 
 private:
-	
+	std::list<Entity*>		camps;
 
 };
 

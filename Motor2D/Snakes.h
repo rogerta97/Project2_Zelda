@@ -46,11 +46,10 @@ public:
 	iPoint GetPos() const;
 
 private:
-	/*void DoAttack();
+	void DoAttack();
 
-	void Idle();
 
-	bool LookForTarget();*/
+	bool LookForTarget();
 
 private:
 
