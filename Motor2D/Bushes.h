@@ -18,6 +18,9 @@ public:
 	void SetBushColor(const char* color); 
 	void SetMiddle(bush_color type);
 
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB); 
+
 	// CleanUp
 	bool CleanUp();
 
