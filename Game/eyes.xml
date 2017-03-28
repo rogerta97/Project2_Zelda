@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<file>
+  <animations texture ="maps/Eyes_entity.png">
+    <anim speed = "1" name = "idle" loop = "true">
+      <rect x = "0" y = "0" w = "64" h = "64"/>
+      <rect x = "64" y = "0" w = "64" h = "64"/>
+      <rect x = "128" y = "0" w = "64" h = "64"/>
+      <rect x = "192" y = "0" w = "64" h = "64"/>
+    </anim>
+  </animations>
+</file>

@@ -122,6 +122,11 @@ b2Fixture* GameObject::CreateCollision(iPoint offset, int rad, fixture_type type
 	return App->physics->AddCircleToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
 }
 
+b2Fixture* GameObject::CreateCollision(iPoint offset, int* data, int size, fixture_type type)
+{
+	return App->physics->AddChainBody(pbody, offset.x, offset.y, data, size, type, density, 0, friction);
+}
+
 b2Fixture* GameObject::CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type)
 {
 	return App->physics->AddRectangleSensorToBody(pbody, offset.x, offset.y, width, height, type, density, 0, friction);

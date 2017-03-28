@@ -5,6 +5,7 @@
 #include "Minion.h"
 #include "GameObject.h"
 #include "Entity.h"
+#include "Bushes.h"
 #include "Spell.h"
 #include "Trunk.h"
 #include "Trees.h"
@@ -14,6 +15,7 @@
 #include "j1Timer.h"
 #include "Zelda.h"
 #include "Base.h"
+#include "Eyes.h"
 
 
 j1Entity::j1Entity()
@@ -197,6 +199,12 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case tree:
 		ret = new Tree(pos);
+		break;
+	case eyes:
+		ret = new Eyes(pos);
+		break;
+	case bush:
+		ret = new Bush(pos);
 		break;
 	default:
 		break;

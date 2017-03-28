@@ -18,13 +18,11 @@ public:
 	// CleanUp
 	bool CleanUp();
 
+	void SetTreeColor(const char* color); 
+
 	~Tree();
 
-	entity_name type;
-
-private:
-	
-
+	tree_color		type;
 
 };
 

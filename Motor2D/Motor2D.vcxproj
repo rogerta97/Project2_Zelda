@@ -80,8 +80,10 @@
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseManager.cpp" />
     <ClCompile Include="Boomerang.cpp" />
+    <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Eyes.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="j1Console.cpp" />
@@ -131,9 +133,11 @@
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="Boomerang.h" />
+    <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Eyes.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Item.h" />
@@ -187,8 +191,12 @@
     <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\base.xml" />
+    <Xml Include="..\Game\base.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Game\boomerang.xml" />
+    <Xml Include="..\Game\bush.xml" />
+    <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />

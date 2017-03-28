@@ -40,7 +40,8 @@ enum class pbody_type
 	p_t_tower,
 	p_t_tower_attack,
 	p_t_trunk,
-	p_t_tree
+	p_t_tree,
+	p_t_bush
 };
 
 // Fixture enum
@@ -51,6 +52,7 @@ enum class fixture_type
 	f_t_hit_box,
 	f_t_minion_hit_sensor,
 	f_t_zelda_area,
+	f_t_aesthetics
 };
 
 #endif // !_COLLISIONFILTERS__H__

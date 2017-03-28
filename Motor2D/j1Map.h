@@ -10,6 +10,7 @@
 #include "j1Render.h"
 
 struct TreeNode; 
+struct BushNode; 
 
 // ----------------------------------------------------
 struct Properties
@@ -136,6 +137,9 @@ public:
 	// Fills the trees list
 	bool GetTreesPosition(vector<TreeNode*>& trees_pos);
 
+	// Fills the bushes list
+	bool GetBushesPosition(vector<BushNode*>& bush_pos);
+
 	//Return shop position in world cordinates
 	iPoint GetShopPosition(uint team) const;
 
@@ -159,6 +163,9 @@ public:
 
 	//Return base position in world cordinates
 	iPoint GetBasePosition(uint team) const;
+
+	// Return eyes coordinates
+	std::vector<iPoint> GetEyesPositions()const;
 
 private:
 
