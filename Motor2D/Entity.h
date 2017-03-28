@@ -55,8 +55,9 @@ enum states
 	tower_idle,
 	tower_attack,
 
-	snake_idle,
-	snake_attack,
+	snake_up,
+	snake_lateral,
+	snake_down,	
 
 	states_null,
 };

@@ -67,8 +67,8 @@ bool Snakes::Update(float dt)
 	switch (state)
 	{
 	case Snake_Idle:
-		game_object->SetAnimation("snake_idle");
-		anim_state = snake_idle;
+		game_object->SetAnimation("snake_down");
+		anim_state = snake_down;
 		target = nullptr;
 		if (LookForTarget() && is_attacked)
 		{
@@ -153,9 +153,6 @@ void Snakes::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
-		game_object->SetAnimation("snake_attack");
-		anim_state = snake_attack;
-
 		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 		sp->SetTarget(target);
 		abilities.at(0)->cd_timer.Start();
