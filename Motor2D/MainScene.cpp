@@ -83,6 +83,10 @@ bool MainScene::Start()
 		Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
 	}
 
+	// Disable player input until level is loaded
+	App->entity->player_manager->DisableInput(0);
+	// ----
+
 	//Test Minion
 	LOG("Creating minion manager");
 	minion_manager = new MinionManager();
@@ -180,6 +184,11 @@ bool MainScene::Start()
 	aest_manager->Start(); 
 
 	base_manager = new BaseManager();
+
+
+	// Allow player input once the level is loaded
+	App->entity->player_manager->AllowInput(0);
+	// ----
 
 	return ret;
 }
