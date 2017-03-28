@@ -24,6 +24,7 @@ public:
 	~Bush();
 
 	bool		is_middle = false; 
+	bool		is_moving = false; 
 };
 
 #endif

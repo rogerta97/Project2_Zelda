@@ -27,7 +27,7 @@ bool Bush::Draw(float dt)
 
 	if (is_middle == false)
 		offset = 5; 
-	
+
 	App->view->LayerBlit(game_object->fGetPos().y, game_object->GetTexture(), iPoint(game_object->GetPos().x, game_object->GetPos().y + offset), game_object->GetCurrentAnimationRect(dt));
 
 	return false;

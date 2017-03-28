@@ -111,6 +111,13 @@ void AestheticsManager::CleanUp()
 		it = eyes.erase(it);
 	}
 	// -----
+
+	//Clear bushes
+	for (std::vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
+	{
+		App->entity->DeleteEntity(*it);
+		it = bushes_entity.erase(it);
+	}
 }
 
 
