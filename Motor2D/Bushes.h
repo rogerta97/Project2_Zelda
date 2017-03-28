@@ -4,6 +4,7 @@
 #define _BUSHES_H_
 
 #include "Entity.h"
+#include "AestheticsManager.h"
 
 class Bush : public Entity
 {
@@ -15,14 +16,14 @@ public:
 	bool Draw(float dt);
 
 	void SetBushColor(const char* color); 
-	bool IsInside(); 
+	void SetMiddle(bush_color type);
 
 	// CleanUp
 	bool CleanUp();
 
 	~Bush();
 
-	bool		player_inside; 
+	bool		is_middle = false; 
 };
 
 #endif

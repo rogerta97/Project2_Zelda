@@ -14,19 +14,21 @@ Bush::Bush(iPoint _pos)
 
 	iPoint w_h(file.child("coords").child("rect").attribute("w").as_int(0), file.child("coords").child("rect").attribute("h").as_int(0));
 
-	game_object = new GameObject(iPoint(_pos.x + 10, _pos.y), w_h, App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_SCENERY, pbody_type::p_t_bush, 0);
+	game_object = new GameObject(iPoint(_pos.x, _pos.y), w_h, App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_SCENERY, pbody_type::p_t_bush, 0);
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	game_object->SetAnimation("green");
+
 }
 
 
 bool Bush::Draw(float dt)
 {
+	int offset = 0; 
 
-		App->view->LayerBlit(game_object->fGetPos().y, game_object->GetTexture(), iPoint(game_object->GetPos().x - 10, game_object->GetPos().y + 13), game_object->GetCurrentAnimationRect(dt));
-
-		//App->view->LayerBlit(1, game_object->GetTexture(), iPoint(game_object->GetPos().x - 10, game_object->GetPos().y + 13), game_object->GetCurrentAnimationRect(dt));
+	if (is_middle == false)
+		offset = 5; 
+	
+	App->view->LayerBlit(game_object->fGetPos().y, game_object->GetTexture(), iPoint(game_object->GetPos().x, game_object->GetPos().y + offset), game_object->GetCurrentAnimationRect(dt));
 
 	return false;
 }
@@ -36,11 +38,14 @@ void Bush::SetBushColor(const char * color)
 	game_object->SetAnimation(color);
 }
 
-bool Bush::IsInside()
+void Bush::SetMiddle(bush_color type)
 {
-	
+	if (type == green_bush || type == purple_bush)
+		is_middle = false;
 
-	return false;
+	else
+		is_middle = true;
+
 }
 
 bool Bush::CleanUp()

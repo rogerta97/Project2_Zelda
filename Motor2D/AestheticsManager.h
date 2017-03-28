@@ -21,7 +21,9 @@ enum tree_color
 enum bush_color
 {
 	green_bush,
-	purple_bush
+	purple_bush,
+	green_half_bush,
+	purple_half_bush
 };
 
 struct TreeNode

@@ -778,7 +778,7 @@ bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
 	return ret;
 }
 
-bool j1Map::GetBushesPosition(vector<BushNode*>& bush_pos)
+bool j1Map::GetBushesPosition(vector<BushNode*>& bush_list)
 {
 	bool ret = true;
 
@@ -806,19 +806,26 @@ bool j1Map::GetBushesPosition(vector<BushNode*>& bush_pos)
 						int relative_id = id - tileset->firstgid;
 
 						BushNode* new_bush = new BushNode;
+						BushNode* new_half_bush = new BushNode; 
 
 						switch (relative_id)
 						{
 						case 8:
 							new_bush->bush_pos = MapToWorld(x, y);
 							new_bush->color = green_bush;
-							bush_pos.push_back(new_bush);
+							bush_list.push_back(new_bush);
+							new_half_bush->bush_pos = iPoint(new_bush->bush_pos.x, new_bush->bush_pos.y + 13);
+							new_half_bush->color = green_half_bush;
+							bush_list.push_back(new_half_bush);
 							break;
 
 						case 9:
 							new_bush->bush_pos = MapToWorld(x, y);
 							new_bush->color = purple_bush;
-							bush_pos.push_back(new_bush);
+							bush_list.push_back(new_bush);
+							new_half_bush->bush_pos = iPoint(new_bush->bush_pos.x, new_bush->bush_pos.y + 13);
+							new_half_bush->color = purple_half_bush;
+							bush_list.push_back(new_half_bush);
 							break;
 
 						default:

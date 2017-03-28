@@ -1,6 +1,7 @@
 #include "AestheticsManager.h"
 #include "j1Map.h"
 #include "Trees.h"
+#include "GameObject.h"
 #include "Bushes.h"
 #include "j1App.h"
 #include "j1Entity.h"
@@ -52,16 +53,30 @@ void AestheticsManager::Start()
 	 z = 0;
 	while (z < bushes_nodes.size())
 	{
-		bushes_entity.push_back((Bush*)App->entity->CreateEntity(bush, bushes_nodes.at(z)->bush_pos));
+		bushes_entity.push_back((Bush*)App->entity->CreateEntity(bush, iPoint(bushes_nodes.at(z)->bush_pos.x, bushes_nodes.at(z)->bush_pos.y)));
 
 		switch (bushes_nodes.at(z)->color)
 		{
 		case green_bush:
+			bushes_entity.at(z)->game_object->SetPos(fPoint(bushes_entity.at(z)->game_object->GetPos().x, bushes_entity.at(z)->game_object->GetPos().y - 5));
 			bushes_entity.at(z)->SetBushColor("green");
+			bushes_entity.at(z)->SetMiddle(green_bush);
 			break;
 
 		case purple_bush:
+			bushes_entity.at(z)->game_object->SetPos(fPoint(bushes_entity.at(z)->game_object->GetPos().x, bushes_entity.at(z)->game_object->GetPos().y - 5));
 			bushes_entity.at(z)->SetBushColor("purple");
+			bushes_entity.at(z)->SetMiddle(purple_bush);
+			break;
+
+		case green_half_bush:
+			bushes_entity.at(z)->SetBushColor("green_half");
+			bushes_entity.at(z)->SetMiddle(green_half_bush);
+			break;
+
+		case purple_half_bush:
+			bushes_entity.at(z)->SetBushColor("purple_half");
+			bushes_entity.at(z)->SetMiddle(purple_half_bush);
 			break;
 		}
 		z++;
