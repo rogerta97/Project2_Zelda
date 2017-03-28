@@ -16,8 +16,8 @@
 #include "Spell.h"
 #include "SnakePoison.h"
 
-#define SNAKE_H 64
-#define SNAKE_W 64
+#define SNAKE_H 32
+#define SNAKE_W 32
 
 Snakes::Snakes(iPoint pos)
 {
@@ -44,7 +44,7 @@ bool Snakes::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("snake_idle");
+	game_object->SetAnimation("snake_down");
 
 	stats.max_life = stats.life = 40;
 
@@ -122,10 +122,10 @@ bool Snakes::Draw(float dt)
 {
 	bool ret = true;
 
-	/*App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 32, game_object->GetPos().y - 96 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);*/
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
 
 	return ret;
 }

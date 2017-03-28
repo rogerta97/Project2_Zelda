@@ -77,7 +77,7 @@ bool SnakePoison::Draw(float dt)
 {
 	bool ret = true;
 
-	//App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 9, game_object->GetPos().y - draw_offset.y - 7 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 9, game_object->GetPos().y - draw_offset.y - 7 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 
 	return ret;
 }

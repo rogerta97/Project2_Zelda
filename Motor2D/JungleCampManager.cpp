@@ -7,7 +7,7 @@
 JungleCampManager::JungleCampManager()
 {
 	//first test
-	Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 1000,1000 });
+	Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 1000,930 });
 	camps.push_back(s1);
 	
 }
