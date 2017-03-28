@@ -117,6 +117,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="QuestManager.cpp" />
     <ClCompile Include="ShopManager.cpp" />
+    <ClCompile Include="SnakePoison.cpp" />
     <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="QuestManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
+    <ClInclude Include="SnakePoison.h" />
     <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TeamSelectScene.h" />
@@ -204,6 +206,8 @@
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\minion.xml" />
     <Xml Include="..\Game\Shop_config.xml" />
+    <Xml Include="..\Game\snakepoison.xml" />
+    <Xml Include="..\Game\snakes.xml" />
     <Xml Include="..\Game\tower.xml" />
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>
@@ -213,7 +217,6 @@
     </Xml>
     <Xml Include="..\Game\Trees.xml" />
     <Xml Include="..\Game\trunk.xml" />
-    <Xml Include="snakes.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

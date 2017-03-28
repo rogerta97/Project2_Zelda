@@ -14,9 +14,11 @@
 #include "j1Scene.h"
 #include "j1Spell.h"
 #include "Spell.h"
+#include "SnakePoison.h"
 
 #define SNAKE_H 64
 #define SNAKE_W 64
+
 Snakes::Snakes(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_npc, 0);
@@ -25,6 +27,8 @@ Snakes::Snakes(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
+
+	AddAbility(0, 10, 2.5f, 2, "s_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("snakes.xml", doc);
@@ -77,6 +81,7 @@ bool Snakes::Update(float dt)
 			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
 			{
 				state = Snake_Idle;
+				is_attacked = false;
 			}
 			else
 			{
@@ -86,6 +91,7 @@ bool Snakes::Update(float dt)
 		else
 		{
 			state = Snake_Idle;
+			is_attacked = false;
 		}
 		break;
 	default:
@@ -145,24 +151,24 @@ iPoint Snakes::GetPos() const
 
 void Snakes::DoAttack()
 {
-	/*if (abilities.at(0)->CdCompleted())
+	if (abilities.at(0)->CdCompleted())
 	{
 		game_object->SetAnimation("snake_attack");
 		anim_state = snake_attack;
 
-		SnakeAttack* ta = (SnakeAttack*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
-		ta->SetTarget(target);
+		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
+		sp->SetTarget(target);
 		abilities.at(0)->cd_timer.Start();
-	}*/
+	}
 }
 
 bool Snakes::LookForTarget()
 {
 	bool ret = false;
-/*
+
 	std::vector<Entity*> players;
 
-	//should look for both teams
+	players = App->entity->player_manager->GetAllPlayers();
 
 	for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
 	{
@@ -173,7 +179,7 @@ bool Snakes::LookForTarget()
 			break;
 		}
 	}
-*/
+
 	return ret;
 }
 

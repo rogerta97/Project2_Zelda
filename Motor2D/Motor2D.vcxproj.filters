@@ -157,6 +157,9 @@
     <ClCompile Include="Snakes.cpp">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClCompile>
+    <ClCompile Include="SnakePoison.cpp">
+      <Filter>Engine\5. Spells ===========\SnakePoison</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -345,6 +348,9 @@
     <ClInclude Include="Snakes.h">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClInclude>
+    <ClInclude Include="SnakePoison.h">
+      <Filter>Engine\5. Spells ===========\SnakePoison</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -419,6 +425,9 @@
     <Filter Include="Engine\4. Entities ==========\Jungle Camps">
       <UniqueIdentifier>{e88e1269-dac3-4cd5-9e6e-db0aa7223f3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\5. Spells ===========\SnakePoison">
+      <UniqueIdentifier>{2eb73cd3-985c-4abf-b389-0fc9c08d9ddd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -463,7 +472,10 @@
     <Xml Include="..\Game\eyes.xml">
       <Filter>Engine\4. Entities ==========\Eyes</Filter>
     </Xml>
-    <Xml Include="snakes.xml">
+    <Xml Include="..\Game\snakepoison.xml">
+      <Filter>Engine\5. Spells ===========\SnakePoison</Filter>
+    </Xml>
+    <Xml Include="..\Game\snakes.xml">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </Xml>
   </ItemGroup>

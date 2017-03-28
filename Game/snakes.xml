@@ -2,7 +2,7 @@
 
 <file>
   <animations texture ="textures/snakes_spritesheet.png">
-   <!-- to finish: WRONG COORDINATES, MISSING FRAMES
+    <!-- to finish: WRONG COORDINATES, MISSING FRAMES
    <anim speed = "10" name = "snake_idle" loop = "true">
       <rect x = "64" y = "0" w = "64" h = "128"/>
     </anim>
