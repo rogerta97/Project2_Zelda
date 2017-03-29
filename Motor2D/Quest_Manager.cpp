@@ -1,7 +1,25 @@
 #include "Quest_Manager.h"
 #include "j1App.h"
+#include "j1Render.h"
+#include "MainScene.h"
+#include "j1Scene.h"
+#include "j1Viewports.h"
+
 QuestManager::QuestManager()
 {
+	for (int i = 1; i < 5; i++)
+	{
+		SDL_Rect screen = App->view->GetViewportRect(i);
+		placer = iPoint(screen.w - 30, screen.h - 30);
+		for(int i = 0;i<3;i++)
+		{
+			abilitie_icons.push_back(App->scene->main_scene->main_window_1->CreateImage(placer, { 182, 78, 25 ,25 }, false));
+			placer.y -= 35;
+		}
+
+	}
+
+
 	App->LoadXML("Quests.xml", quests_file);
 	quests_node = quests_file.child("quests");
 	for (pugi::xml_node loop_tool = quests_node.child("quest"); loop_tool; loop_tool = loop_tool.next_sibling("quest"))
@@ -34,6 +52,13 @@ QuestManager::QuestManager()
 
 		vquest.push_back(quest);
 	}
+
+
+
+
+
+
+
 }
 
 QuestManager::~QuestManager()

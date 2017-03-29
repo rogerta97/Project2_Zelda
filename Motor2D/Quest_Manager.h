@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "PugiXml\src\pugixml.hpp"
+#include "j1Gui.h"
 struct Objectives {
 	int current_progress;
 	int requirement;
@@ -33,6 +34,10 @@ public:
 	void update_progress();
 	std::vector<Quest*> vquest;
 
+	vector<UI_Image*> abilitie_icons;
+
+	iPoint            placer = NULLPOINT;
+	SDL_Rect          done_rect = NULLRECT;
 
 };
 
