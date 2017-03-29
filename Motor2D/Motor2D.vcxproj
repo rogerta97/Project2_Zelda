@@ -115,7 +115,7 @@
     <ClCompile Include="Link.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
-    <ClCompile Include="QuestManager.cpp" />
+    <ClCompile Include="Quest_Manager.cpp" />
     <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
@@ -177,7 +177,7 @@
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
-    <ClInclude Include="QuestManager.h" />
+    <ClInclude Include="Quest_Manager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
     <ClInclude Include="Spell.h" />

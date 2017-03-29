@@ -105,7 +105,6 @@ public:
 
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
-
 public:
 	vector<Player*> players;
 

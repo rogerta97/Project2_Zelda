@@ -19,7 +19,7 @@ class TowerManager;
 class ShopManager;
 class ZeldaManager;
 class BaseManager;
-
+class QuestManager;
 
 enum GameStates
 {
@@ -62,12 +62,12 @@ public:
 	UI_Image*			princess_4 = nullptr;
 
 	MinionManager*		minion_manager = nullptr;
-	TowerManager*	    tower_manager = nullptr;
-	QuestManager*		quest_manager = nullptr;
+	TowerManager*	    tower_manager = nullptr;;
 	ShopManager*		shop_manager = nullptr;
 	AestheticsManager*  aest_manager = nullptr;
 	ZeldaManager*		zelda_manager = nullptr;
 	BaseManager*		base_manager = nullptr;
+	QuestManager*		quest_manager = nullptr;
 
 private:
 	//UI elements

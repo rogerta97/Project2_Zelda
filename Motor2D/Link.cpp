@@ -16,6 +16,7 @@
 #include "PlayerManager.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "Quest_Manager.h"
 
 #define ABILITY3_MAX_RANGE 200
 #define ABILITY3_GROW_SPEED 205.0f
@@ -96,6 +97,10 @@ bool Link::Update(float dt)
 					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
 				if (spell->stats.stun_duration > 0)
 					Stun(spell->stats.stun_duration);
+			}
+			if (stats.life <= 0)
+			{
+				if (entity->is_player) App->scene->main_scene->quest_manager->add_progress(1);
 			}
 		}
 

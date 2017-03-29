@@ -11,7 +11,6 @@
 #include "AestheticsManager.h"
 #include "j1Console.h"
 #include "Parallax.h"
-#include "QuestManager.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
 #include "Link.h"
@@ -27,6 +26,7 @@
 #include "MenuScene.h"
 #include "ZeldaManager.h"
 #include "BaseManager.h"
+#include "Quest_Manager.h"
 
 MainScene::MainScene()
 {
@@ -163,11 +163,11 @@ bool MainScene::Start()
 	// ------------------
 
 	//Creating quests
-	quest_manager = new QuestManager();
+	/*quest_manager = new QuestManager();
 	quest_manager->CreateQuest(string("Test"), 1); 
 	quest_manager->CreateQuest(string("Test"), 2);
 	quest_manager->CreateQuest(string("Test"), 3);
-	quest_manager->CreateQuest(string("Test"), 4);
+	quest_manager->CreateQuest(string("Test"), 4);*/
 
 	App->console->AddText("viewports.set 4", Input);
 
@@ -185,6 +185,7 @@ bool MainScene::Start()
 
 	base_manager = new BaseManager();
 
+	quest_manager = new QuestManager();
 
 	// Allow player input once the level is loaded
 	App->entity->player_manager->AllowInput(0);
@@ -205,7 +206,7 @@ bool MainScene::Update(float dt)
 	bool ret = true;
 
 	App->map->Draw();
-	quest_manager->Update(dt); 
+	/*quest_manager->Update(dt); */
 
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
