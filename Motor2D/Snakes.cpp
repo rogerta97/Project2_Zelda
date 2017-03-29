@@ -85,12 +85,15 @@ bool Snakes::Update(float dt)
 			}
 			else
 			{
+				anim_state = snake_attack_down;
 				DoAttack();
+
 			}
 		}
 		else
 		{
 			state = Snake_Idle;
+			anim_state = snake_down;
 			is_attacked = false;
 		}
 		break;
@@ -98,7 +101,7 @@ bool Snakes::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(64, 4), iPoint(-32, -92));
+	LifeBar(iPoint(64, 4), iPoint(-32, -32));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;

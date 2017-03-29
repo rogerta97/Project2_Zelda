@@ -2,9 +2,12 @@
 
 <file>
   <animations texture ="textures/snakes_spritesheet.png">
-    <anim speed = "5" name = "snake_down" loop = "true">
+    <anim speed = "5" name = "snake_attack_down" loop = "true">
       <rect x = "2" y = "2" w = "30" h = "32"/>
       <rect x = "2" y = "36" w = "28" h = "32"/>
+    </anim>
+    <anim speed = "5" name = "snake_down" loop = "true">
+      <rect x = "2" y = "2" w = "30" h = "32"/>
     </anim>
     <!--uncomment when implemented
     <anim speed = "10" name = "snake_up" loop = "true">
