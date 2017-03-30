@@ -216,6 +216,7 @@ bool MenuScene::PostUpdate()
 		{
 		case START:
 			App->scene->ChangeScene((Scene*)App->scene->team_select);
+			return true;
 			break;
 
 		case OPTIONS:
@@ -260,6 +261,12 @@ bool MenuScene::CleanUp()
 	// -------
 
 	button_list.clear();
+	cursors.clear();
+
+	pos = NULLPOINT;
+
+	current_button = START;
+	is_options = false;
 	
 	return true;
 }

@@ -113,6 +113,26 @@ bool MinionManager::Update()
 	return ret;
 }
 
+bool MinionManager::CleanUp()
+{
+	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
+	{
+		RELEASE(*it);
+		it = team1_minions.erase(it);
+	}
+
+	for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();)
+	{
+		RELEASE(*it);
+		it = team2_minions.erase(it);
+	}
+
+	team1_minions.clear();
+	team2_minions.clear();
+
+	return true;
+}
+
 std::list<Minion*>& MinionManager::GetMinionList(uint team)
 {
 	if (team == 1) 

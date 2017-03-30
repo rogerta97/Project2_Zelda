@@ -615,9 +615,11 @@ void PlayerManager::DeletePlayer(int controller_index)
 
 void PlayerManager::ClearPlayers()
 {
-	for (int i = 0; i < players.size(); i++)
+	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
-		RELEASE(players.at(i));
+		App->entity->DeleteEntity((*it)->entity);
+		RELEASE(*it);
+		it = players.erase(it);
 	}
 	players.clear();
 }

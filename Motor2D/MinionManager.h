@@ -27,6 +27,8 @@ public:
 	//Controll minion spawn
 	bool Update();
 
+	bool CleanUp();
+
 	//Return a list that contains all team #team minions. 1 or 2 teams.
 	std::list<Minion*>& GetMinionList(uint team);
 

@@ -205,7 +205,6 @@ bool MainScene::Update(float dt)
 	bool ret = true;
 
 	App->map->Draw();
-	quest_manager->Update(dt); 
 
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
@@ -213,8 +212,17 @@ bool MainScene::Update(float dt)
 		App->view->SetViews(1);
 	}
 
-	minion_manager->Update();
-	shop_manager->Update();
+	if(minion_manager!=nullptr)
+		minion_manager->Update();
+	if(shop_manager!=nullptr)
+		shop_manager->Update();
+	if (quest_manager != nullptr)
+		quest_manager->Update(dt);
+
+	//Update progress bar
+	if (zelda_manager != nullptr && winner == 0)
+		UpdateProgressBar();
+	// ------
 
 	// UI Control -----------
 
@@ -372,11 +380,6 @@ bool MainScene::Update(float dt)
 	}
 	// ------
 
-	//Update progress bar
-	if(winner == 0)
-		UpdateProgressBar();
-	// ------
-
 	//DrawScreenSeparation();
 
 	return ret;
@@ -397,6 +400,10 @@ bool MainScene::CleanUp()
 	shop_manager->CleanUp();
 	zelda_manager->CleanUp();
 	base_manager->CleanUp();
+	minion_manager->CleanUp();
+	App->entity->player_manager->CleanUp();
+	App->map->CleanUp();
+	aest_manager->CleanUp();
 
 	RELEASE(quest_manager);
 	RELEASE(minion_manager);
@@ -404,12 +411,12 @@ bool MainScene::CleanUp()
 	RELEASE(shop_manager);
 	RELEASE(zelda_manager);
 	RELEASE(base_manager);
+	RELEASE(aest_manager);
 
-	App->entity->player_manager->ClearPlayers();
 	App->entity->ClearEntities();
 
 	// Free UI
-	if (App->scene->GetCurrentScene() != App->scene->main_scene)
+	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
 	{
 		App->gui->DeleteElement(main_window_1);
 		App->gui->DeleteElement(main_window_2);
@@ -425,6 +432,9 @@ bool MainScene::CleanUp()
 	}
 	map_collisions.clear();
 	// -------
+
+	for (int i = 0; i < 4; i++)
+		App->scene->players[i].Reset();
 
 	return ret;
 }
