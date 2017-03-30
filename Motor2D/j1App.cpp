@@ -156,6 +156,9 @@ bool j1App::Start()
 	bug_report_text->SetText("Report a bug");
 	bug_report_text->click_through = true;
 
+	//game_states = (UI_Window*)App->gui->UI_CreateWin(iPoint(App->win->GetWindowSize().x - 200, 0), 200, 115, 1, false);
+	//game_states_rect = (UI_ColoredRect*)game_states->CreateColoredRect(iPoint(App->win->GetWindowSize().x - 200, 0), 200, 115, { 20, 20, 20, 255 }, true);
+	//game_states_text = (UI_Text*)game_states->CreateText(iPoint(App->win->GetWindowSize().x - 195, 5), App->font->default_15, 15);
 
 	PERF_PEEK(ptimer);
 
@@ -501,10 +504,23 @@ void j1App::GameStates()
 {
 	static char title[256];
 
+	//int ui_elements = 0;
+	//int entities = 0;
+
+	//if(App->gui != nullptr)
+	//	ui_elements = App->gui->elements_list.Count();
+	//if (App->entity != nullptr)
+	//	entities = App->entity->GetEntitiesNumber();
 
 
+	//p2SString str("UI_Elements: %d \nEntities: %d", ui_elements, entities);
+	//string t = str.GetString();
+	//game_states_text->SetText(t);
 
-
+	//if (debug_mode && !game_states->enabled)
+	//	game_states->SetEnabledAndChilds(true);
+	//if (!debug_mode && game_states->enabled)
+	//	game_states->SetEnabledAndChilds(false);
 }
 
 void j1App::EndSDL()
