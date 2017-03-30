@@ -45,6 +45,7 @@ bool Snakes::Start()
 	bool ret = true;
 
 	game_object->SetAnimation("snake_down");
+	state = Snk_S_Idle;
 
 	stats.max_life = stats.life = 40;
 
@@ -66,21 +67,21 @@ bool Snakes::Update(float dt)
 
 	switch (state)
 	{
-	case Snake_Idle:
+	case Snk_S_Idle:
 		game_object->SetAnimation("snake_down");
 		anim_state = snake_down;
 		target = nullptr;
 		if (LookForTarget() && is_attacked)
 		{
-			state = Snake_Attack;
+			state = Snk_S_Attack;
 		}
 		break;
-	case Snake_Attack:
+	case Snk_S_Attack:
 		if (target != nullptr && !target->to_delete)
 		{
 			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
 			{
-				state = Snake_Idle;
+				state = Snk_S_Idle;
 				is_attacked = false;
 			}
 			else
@@ -92,7 +93,7 @@ bool Snakes::Update(float dt)
 		}
 		else
 		{
-			state = Snake_Idle;
+			state = Snk_S_Idle;
 			anim_state = snake_down;
 			is_attacked = false;
 		}

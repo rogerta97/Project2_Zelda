@@ -9,8 +9,9 @@ class GameObject;
 
 enum SNAKE_STATE
 {
-	Snake_Idle,
-	Snake_Attack,
+	Snk_S_Null,
+	Snk_S_Idle,
+	Snk_S_Attack,
 };
 
 
@@ -59,7 +60,7 @@ private:
 
 	uint				attack_range = 150;
 
-	SNAKE_STATE			state = Snake_Idle;
+	SNAKE_STATE			state = Snk_S_Null;
 
 	Entity*				target = nullptr;
 
