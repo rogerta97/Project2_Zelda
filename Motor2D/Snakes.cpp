@@ -44,9 +44,6 @@ bool Snakes::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("snake_down");
-	state = Snk_S_Idle;
-
 	stats.max_life = stats.life = 40;
 
 	show_life_bar = true;
@@ -65,58 +62,21 @@ bool Snakes::Update(float dt)
 {
 	bool ret = true;
 
+	LifeBar(iPoint(64, 4), iPoint(-32, -32));
+
+	CheckState();
+
 	switch (state)
 	{
+	case Snk_S_Null:
+		break;
 	case Snk_S_Idle:
 		game_object->SetAnimation("snake_down");
-		anim_state = snake_down;
-		target = nullptr;
-		if (LookForTarget() && is_attacked)
-		{
-			state = Snk_S_Attack;
-		}
 		break;
 	case Snk_S_Attack:
-		if (target != nullptr && !target->to_delete)
-		{
-			if (GetPos().DistanceTo(target->GetPos()) > attack_range)
-			{
-				state = Snk_S_Idle;
-				is_attacked = false;
-			}
-			else
-			{
-				anim_state = snake_attack_down;
-				DoAttack();
-
-			}
-		}
-		else
-		{
-			state = Snk_S_Idle;
-			anim_state = snake_down;
-			is_attacked = false;
-		}
 		break;
 	default:
 		break;
-	}
-
-	LifeBar(iPoint(64, 4), iPoint(-32, -32));
-
-	Entity* entity = nullptr;
-	Ability* ability = nullptr;
-	Spell* spell = nullptr;
-	if (GotHit(entity, ability, spell))
-	{
-		is_attacked = true;
-
-		stats.life -= ability->damage;
-		if (stats.life <= 0)
-		{
-				App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-		}
-		
 	}
 
 	return ret;
@@ -153,7 +113,61 @@ iPoint Snakes::GetPos() const
 	return game_object->GetPos();
 }
 
-void Snakes::DoAttack()
+void Snakes::CheckState()
+{
+	switch (state)
+	{
+	case Snk_S_Null:
+		state = Snk_S_Idle;
+		break;
+	case Snk_S_Idle:
+	{
+		Entity* entity = nullptr;
+		Ability* ability = nullptr;
+		Spell* spell = nullptr;
+		if (GotHit(entity, ability, spell))
+		{
+			// Enemy attacks
+			if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
+			{
+				DealDamage(ability->damage * ability->damage_multiplicator);
+
+				if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+				{
+					DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+					if (spell->stats.slow_duration > 0)
+						Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+					if (spell->stats.stun_duration > 0)
+						Stun(spell->stats.stun_duration);
+				}
+
+				if (stats.life <= 0)
+					App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+				is_attacked = true;
+				state = Snk_S_Attack;
+				targets.push_back(entity);
+
+			}
+			break;
+		}
+	}
+	case Snk_S_Attack:
+		for (std::vector<Entity*>::iterator it = targets.begin(); it != targets.end();)
+		{
+			if ((*it)->to_delete == true || GetPos().DistanceTo((*it)->GetPos()) < 150)
+			{
+				it = targets.erase(targets.begin());
+			}
+		}
+
+		break;
+	default:
+		break;
+	}
+}
+
+/*void Snakes::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
@@ -161,9 +175,9 @@ void Snakes::DoAttack()
 		sp->SetTarget(target);
 		abilities.at(0)->cd_timer.Start();
 	}
-}
+}*/
 
-bool Snakes::LookForTarget()
+/*bool Snakes::LookForTarget()
 {
 	bool ret = false;
 
@@ -182,8 +196,8 @@ bool Snakes::LookForTarget()
 	}
 
 	return ret;
-}
+}*/
 
-void Snakes::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 }

@@ -87,7 +87,6 @@ public:
 	void DeletePlayer(int index);
 	void ClearPlayers();
 	
-	std::vector<Entity*> GetAllPlayers(); //for jungle camps
 	std::vector<Entity*> GetTeamPlayers(int team);
 	std::vector<int> GetTeamViewports(int team);
 	int GetEntityViewportIfIsPlayer(Entity* entity);

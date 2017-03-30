@@ -42,29 +42,37 @@ public:
 	bool CleanUp();
 
 	// On Collision
-	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	iPoint GetPos() const;
 
 private:
-	void DoAttack();
+	
+	void CheckState();
 
+	void Idle();
+	void AttackLeft();
+	void AttackRight();
+	void AttackUp();
+	void AttackDown();
 
-	bool LookForTarget();
+	//void DoAttack();
+	//bool LookForTarget();
 
 private:
 
-	bool				flip = false;
+	j1Timer					cd_timer;
 
-	bool				is_attacked = false;
+	bool					flip = false;
 
-	uint				attack_range = 150;
+	bool					is_attacked = false;
 
-	SNAKE_STATE			state = Snk_S_Null;
+	uint					attack_range = 150;
 
-	Entity*				target = nullptr;
+	SNAKE_STATE				state = Snk_S_Null;
 
-	states				anim_state = states_null;
+	std::vector<Entity*>	targets;
 
 };
 

@@ -622,18 +622,6 @@ void PlayerManager::ClearPlayers()
 	players.clear();
 }
 
-std::vector<Entity*> PlayerManager::GetAllPlayers()
-{
-	std::vector<Entity*> ret;
-
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-			ret.push_back((*it)->entity);
-	}
-
-	return ret;
-}
-
 std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)
 {
 	std::vector<Entity*> ret;

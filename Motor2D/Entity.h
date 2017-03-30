@@ -313,7 +313,7 @@ public:
 	int				 blit_layer = 0;
 
 	//Progress bar
-	iPoint  progress_limit = iPoint(0, 0);
+	iPoint           progress_limit = iPoint(0, 0);
 
 	// Got Hit
 	bool		     hit = false;
