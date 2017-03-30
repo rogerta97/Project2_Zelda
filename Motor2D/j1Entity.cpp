@@ -116,7 +116,9 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 	{
 		// Find the entity that got hit
 		Entity* entity = FindEntityByBody(bodyB);
-		entity->hit = false;
+
+		if (entity != nullptr)
+			entity->hit = false;
 
 		// Find the entity that hits
 		if (entity != nullptr)

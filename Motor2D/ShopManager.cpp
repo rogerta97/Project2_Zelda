@@ -379,6 +379,7 @@ bool ShopManager::CleanUp()
 	{
 		RELEASE(shops[i]);
 	}
+
 	return true;
 }
 

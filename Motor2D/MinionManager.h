@@ -45,23 +45,23 @@ private:
 public:
 
 private:
-	std::list<Minion*>		team1_minions;
-	std::list<Minion*>		team2_minions;
+	std::list<Minion*>	 team1_minions;
+	std::list<Minion*>	 team2_minions;
 
-	std::list<iPoint>		minions_path;
+	std::list<iPoint>	 minions_path;
 
-	j1Timer					spawn_timer;
-	float					wave_time = 0.0f;
-	float					minion_time_difference = 0.0f;
-	uint					minions_wave = 0.0f;
-	float					first_wave_delay = 0.0f;
+	j1Timer				 spawn_timer;
+	float				 wave_time = 0.0f;
+	float				 minion_time_difference = 0.0f;
+	uint				 minions_wave = 0.0f;
+	float				 first_wave_delay = 0.0f;
 
-	int						minion_num = 0;
+	int					 minion_num = 0;
 
-	iPoint					team1_spawn = NULLPOINT;
-	iPoint					team2_spawn = NULLPOINT;
+	iPoint				 team1_spawn = NULLPOINT;
+	iPoint				 team2_spawn = NULLPOINT;
 
-	minion_manager_state	state = null;
+	minion_manager_state state = null;
 };
 
 #endif // !_MINION_MANAGER_H_

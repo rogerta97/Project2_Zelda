@@ -81,12 +81,15 @@ bool j1Gui::Update(float dt)
 			{
 				list<UI_Element*> childs;
 				App->gui->GetChilds(elements->data, childs);
-				for (list<UI_Element*>::iterator it = childs.begin(); it != childs.end(); it++)
+				if (!childs.empty())
 				{
-					(*it)->blit_layer = elements->data->blit_layer;
-					(*it)->is_ui = elements->data->is_ui;
-					(*it)->is_gameplay = elements->data->is_gameplay;
-					(*it)->viewport = elements->data->viewport;
+					for (list<UI_Element*>::iterator it = childs.begin(); it != childs.end(); it++)
+					{
+						(*it)->blit_layer = elements->data->blit_layer;
+						(*it)->is_ui = elements->data->is_ui;
+						(*it)->is_gameplay = elements->data->is_gameplay;
+						(*it)->viewport = elements->data->viewport;
+					}
 				}
 			}
 		}

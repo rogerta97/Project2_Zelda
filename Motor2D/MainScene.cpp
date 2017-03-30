@@ -397,22 +397,16 @@ bool MainScene::CleanUp()
 {
 	bool ret = true;
 
-	shop_manager->CleanUp();
-	zelda_manager->CleanUp();
-	base_manager->CleanUp();
-	minion_manager->CleanUp();
+	shop_manager->CleanUp(); 	RELEASE(shop_manager)
+	zelda_manager->CleanUp(); 	RELEASE(zelda_manager);
+	base_manager->CleanUp(); 	RELEASE(base_manager);
+	minion_manager->CleanUp(); 	RELEASE(minion_manager);
+	quest_manager->CleanUp(); 	RELEASE(quest_manager);
+	tower_manager->CleanUp(); 	RELEASE(tower_manager);
+	aest_manager->CleanUp(); 	RELEASE(aest_manager);
+
 	App->entity->player_manager->CleanUp();
 	App->map->CleanUp();
-	aest_manager->CleanUp();
-
-	RELEASE(quest_manager);
-	RELEASE(minion_manager);
-	RELEASE(tower_manager);
-	RELEASE(shop_manager);
-	RELEASE(zelda_manager);
-	RELEASE(base_manager);
-	RELEASE(aest_manager);
-
 	App->entity->ClearEntities();
 
 	// Free UI
