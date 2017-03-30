@@ -8,18 +8,18 @@
 struct Objectives {
 	int current_progress;
 	int requirement;
+	int times_completed;
 };
 enum Quest_State {
-	unavailable,
+	inactive,
 	active,
-	completed
 };
 struct Quest {
 	int id;
 	std::string name;
 	std::string description;
 	Quest_State state;
-	Objectives task;
+	std::vector<Objectives*> task;
 };
 class QuestManager {
 public:
@@ -30,7 +30,7 @@ public:
 
 public:
 	void change_state(int id,Quest_State new_state);
-	void add_progress(int id);
+	void add_progress(int id,int team);
 	void update_progress();
 	std::vector<Quest*> vquest;
 

@@ -7,17 +7,36 @@
 
 QuestManager::QuestManager()
 {
-	for (int i = 1; i < 5; i++)
-	{
-		SDL_Rect screen = App->view->GetViewportRect(i);
-		placer = iPoint(screen.w - 30, screen.h - 30);
+
+		SDL_Rect screen = App->view->GetViewportRect(1);
 		for(int i = 0;i<3;i++)
 		{
-			abilitie_icons.push_back(App->scene->main_scene->main_window_1->CreateImage(placer, { 182, 78, 25 ,25 }, false));
-			placer.y -= 35;
+			placer = iPoint(screen.w - 30, screen.h - 30);
+			App->scene->main_scene->main_window_1->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			screen.h = screen.h - 30;
 		}
-
-	}
+		screen = App->view->GetViewportRect(1);
+		for (int i = 0; i<3; i++)
+		{
+			placer = iPoint(screen.w - 30, screen.h - 30);
+			App->scene->main_scene->main_window_2->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			screen.h = screen.h - 30;
+		}
+		screen = App->view->GetViewportRect(1);
+		for (int i = 0; i<3; i++)
+		{
+			placer = iPoint(screen.w - 30, screen.h - 30);
+			App->scene->main_scene->main_window_3->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			screen.h = screen.h - 30;
+		}
+		screen = App->view->GetViewportRect(1);
+		for (int i = 0; i<3; i++)
+		{
+			placer = iPoint(screen.w - 30, screen.h - 30);
+			App->scene->main_scene->main_window_4->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			screen.h = screen.h - 30;
+		}
+	
 
 
 	App->LoadXML("Quests.xml", quests_file);
@@ -25,7 +44,6 @@ QuestManager::QuestManager()
 	for (pugi::xml_node loop_tool = quests_node.child("quest"); loop_tool; loop_tool = loop_tool.next_sibling("quest"))
 	{
 		Quest* quest = new Quest;
-
 		quest->id = loop_tool.attribute("id").as_int();
 
 		quest->name = loop_tool.attribute("name").as_string();
@@ -35,21 +53,23 @@ QuestManager::QuestManager()
 		switch (loop_tool.attribute("state").as_int())
 		{
 		case 0: {
-			quest->state = (unavailable);
+			quest->state = (inactive);
 			break; }
 		case 1: {
 			quest->state = (active);
 			break; }
-		case 2: {
-			quest->state = (completed);
-			break; }
 		default:
 			break;
 		}
-
-		quest->task.current_progress = loop_tool.child("task").attribute("current").as_int();
-		quest->task.requirement = loop_tool.child("task").attribute("complete").as_int();
-
+		for (pugi::xml_node tool = quests_node.child("quest").child("task"); tool; tool = tool.next_sibling("task"))
+		{
+			Objectives* obj = new Objectives;
+			obj->current_progress = loop_tool.child("task").attribute("current").as_int();
+			obj->requirement = loop_tool.child("task").attribute("complete").as_int();
+			obj->times_completed = loop_tool.child("task").attribute("times_completed").as_int();
+			quest->task.push_back(obj);
+			
+		}
 		vquest.push_back(quest);
 	}
 
@@ -80,13 +100,13 @@ void QuestManager::change_state(int id,Quest_State new_state)
 	}
 }
 
-void QuestManager::add_progress(int id)
+void QuestManager::add_progress(int id,int team)
 {
 	for (int i = 0; i < vquest.size(); i++)
 	{
 		if (vquest[i]->id == id)
 		{
-			vquest[i]->task.current_progress++;
+			vquest[i]->task[team+1]->current_progress++;
 			break;
 		}
 	}
@@ -98,8 +118,17 @@ void QuestManager::update_progress()
 	{
 		if (vquest[i]->state == active)
 		{
-			if (vquest[i]->task.current_progress == vquest[i]->task.requirement)
-				vquest[i]->state = completed;
+			int i = 0;
+			for (pugi::xml_node tool = quests_node.child("quest").child("task"); tool; tool = tool.next_sibling("task"))
+			{
+				if (vquest[i]->task[i]->current_progress == vquest[i]->task[i]->requirement)
+				{
+					vquest[i]->state = inactive;
+					vquest[i]->task[i]->times_completed++;
+					i++;
+				}
+			}
+
 		}
 	}
 }

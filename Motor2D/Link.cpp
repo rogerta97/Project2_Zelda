@@ -100,7 +100,9 @@ bool Link::Update(float dt)
 			}
 			if (stats.life <= 0)
 			{
-				if (entity->is_player) App->scene->main_scene->quest_manager->add_progress(1);
+				int team = entity->GetTeam();
+				if (entity->is_player) App->scene->main_scene->quest_manager->add_progress(1,team);
+				App->scene->main_scene->quest_manager->update_progress();
 			}
 		}
 

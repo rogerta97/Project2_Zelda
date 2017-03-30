@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 
 <quests>
-<!--States: 0 Unavailable  1 Active  2 completed-->
+<!--States: 0 Inactive  1 Active -->
   <quest
     id='1'
     name='Power Quest'
     description='Slay 2 enemy Players to gain strenght'
     state = '1'>
-    <task current ='0' complete='2'/>
+    <task current ='0' complete='2' times_completed = '0'/>
+	<task current ='0' complete='2' times_completed = '0'/>
   </quest>
   
     <quest
     id='2'
     name='Speed Quest'
     description='Catch 3 Cuccos'
-    state = '1'>
-    <task current ='0' complete='3'/>
+    state = '0'>
+    <task current ='0' complete='3' times_completed = '0'/>
+	<task current ='0' complete='3' times_completed = '0'/>
   </quest>
   
     <quest
     id='3'
     name='Health Quest'
     description='Clear 3 enemy Camps'
-    state = '1'>
-    <task current ='0' complete='3'/>
+    state = '0'>
+    <task current ='0' complete='3' times_completed = '0'/>
+	<task current ='0' complete='3' times_completed = '0'/>
   </quest>
   
 </quests>
