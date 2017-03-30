@@ -4,9 +4,12 @@
 #include <list>
 #include "p2Defs.h"
 #include "p2Point.h"
+#include "j1Timer.h"
 
+class j1Timer;
 class Snakes;
 class Entity;
+
 
 class JungleCampManager
 {
@@ -21,7 +24,8 @@ public:
 private:
 
 	std::list<Entity*>		camps;
-	//j1Timer					respawn;
+
+	j1Timer					respawn;
 
 };
 

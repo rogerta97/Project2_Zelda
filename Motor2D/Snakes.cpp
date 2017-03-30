@@ -19,6 +19,8 @@
 #define SNAKE_H 32
 #define SNAKE_W 32
 
+#define ATTACK_RANGE 150
+
 Snakes::Snakes(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_npc, 0);
@@ -37,12 +39,13 @@ Snakes::Snakes(iPoint pos)
 
 Snakes::~Snakes()
 {
-	RELEASE(game_object);
 }
 
 bool Snakes::Start()
 {
 	bool ret = true;
+
+	Idle();	
 
 	stats.max_life = stats.life = 40;
 
@@ -64,8 +67,37 @@ bool Snakes::Update(float dt)
 
 	LifeBar(iPoint(64, 4), iPoint(-32, -32));
 
+	Entity* entity = nullptr;
+	Ability* ability = nullptr;
+	Spell* spell = nullptr;
+	if (GotHit(entity, ability, spell))
+	{
+		// Enemy attacks
+		if (entity != nullptr && ability != nullptr)
+		{
+			DealDamage(ability->damage * ability->damage_multiplicator);
 
-	CheckState();
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+				if (spell->stats.slow_duration > 0)
+					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
+			}
+			if(state == Snk_S_Idle)
+			{
+				is_attacked = true;
+				state = Snk_S_Attack;
+				target = entity;
+			}
+			
+		}
+		if (stats.life <= 0)
+			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+	}
+
 
 	switch (state)
 	{
@@ -76,27 +108,34 @@ bool Snakes::Update(float dt)
 		Idle();
 		break;
 	case Snk_S_Attack:
-		if (rel_angle >= 315 && rel_angle <= 45)
+		if (abs(DistanceFromTwoPoints(target->GetPos().x, target->GetPos().y, game_object->fGetPos().x, game_object->fGetPos().y)) < ATTACK_RANGE)
 		{
-			AttackRight();
-			break;
-		}
-		else if (rel_angle < 45 && rel_angle >= 135)
-		{
-			AttackUp();
-			break;
-		}
-		else if (rel_angle > 135 && rel_angle <= 225)
-		{
-			AttackLeft();
-			break;
+			rel_angle = AngleFromTwoPoints(game_object->fGetPos().x, game_object->fGetPos().y, target->GetPos().x,target->GetPos().y) + 180;
+
+			if (rel_angle >= -45 && rel_angle <= 45)
+			{
+				AttackLeft();
+			}
+			else if (rel_angle > 45 && rel_angle <= 135)
+			{
+				AttackUp();
+			}
+			else if (rel_angle > 135 && rel_angle <= 225)
+			{
+				AttackRight();
+			}
+			else
+			{
+				AttackDown();
+			}
 		}
 		else
 		{
-			AttackDown();
-			break;
+			if(!LookForTarget())
+				Idle();
+
 		}
-			
+		break;
 	default:
 		break;
 	}
@@ -111,7 +150,7 @@ bool Snakes::Draw(float dt)
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ATTACK_RANGE, 255, 0, 0);
 
 	return ret;
 }
@@ -135,68 +174,13 @@ iPoint Snakes::GetPos() const
 	return game_object->GetPos();
 }
 
-void Snakes::CheckState()
-{
-	switch (state)
-	{
-	case Snk_S_Null:
-		state = Snk_S_Idle;
-		break;
-	case Snk_S_Idle:
-	{
-		Entity* entity = nullptr;
-		Ability* ability = nullptr;
-		Spell* spell = nullptr;
-		if (GotHit(entity, ability, spell))
-		{
-			// Enemy attacks
-			if (entity != nullptr && ability != nullptr)
-			{
-				DealDamage(ability->damage * ability->damage_multiplicator);
-
-				if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
-				{
-					DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
-
-					if (spell->stats.slow_duration > 0)
-						Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-					if (spell->stats.stun_duration > 0)
-						Stun(spell->stats.stun_duration);
-				}
-
-				is_attacked = true;
-				state = Snk_S_Attack;
-				targets.push_back(entity);
-
-				rel_angle = AngleFromTwoPoints(game_object->fGetPos().x, game_object->fGetPos().y, targets.at(0)->GetPos().x, targets.at(0)->GetPos().y);
-
-			}
-			if (stats.life <= 0)
-					App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-			break;
-		}
-	}
-	case Snk_S_Attack:
-		for (std::vector<Entity*>::iterator it = targets.begin(); it != targets.end();)
-		{
-			if ((*it)->to_delete == true || GetPos().DistanceTo((*it)->GetPos()) < 150)
-			{
-				it = targets.erase(targets.begin());
-			}
-		}
-
-		break;
-	default:
-		break;
-	}
-}
-
 void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 }
 
 void Snakes::Idle()
 {
+	state = Snk_S_Idle;
 	game_object->SetAnimation("snake_down");
 	flip = false;
 	anim_state = snake_down;
@@ -207,7 +191,7 @@ void Snakes::DoAttack()
 	if (abilities.at(0)->CdCompleted())
 	{
 		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
-		sp->SetTarget(targets[0]);
+		sp->SetTarget(target);
 		abilities.at(0)->cd_timer.Start();
 	}
 }
@@ -217,7 +201,6 @@ void Snakes::AttackLeft()
 	
 	game_object->SetAnimation("snake_lateral");
 	flip = false;
-	anim_state = snake_attack_lateral;
 	DoAttack();
 }
 
@@ -225,7 +208,6 @@ void Snakes::AttackRight()
 {
 	game_object->SetAnimation("snake_lateral");
 	flip = true;
-	anim_state = snake_attack_lateral;
 	DoAttack();
 }
 
@@ -233,7 +215,6 @@ void Snakes::AttackUp()
 {
 	game_object->SetAnimation("snake_up");
 	flip = false;
-	anim_state = snake_attack_up;
 	DoAttack();
 }
 
@@ -241,22 +222,37 @@ void Snakes::AttackDown()
 {
 	game_object->SetAnimation("snake_attack_down");
 	flip = false;
-	anim_state = snake_attack_down;
 	DoAttack();
 }
 
-/*bool Snakes::LookForTarget()
+bool Snakes::LookForTarget()
 {
 	bool ret = false;
 
-	std::vector<Entity*> players;
+	int shortest_distance = ATTACK_RANGE;
 
-	players = App->entity->player_manager->GetAllPlayers();
+	std::vector<Entity*> players1;
+	std::vector<Entity*> players2;
 
-	for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
+
+	players1 = App->entity->player_manager->GetTeamPlayers(1);
+	players2 = App->entity->player_manager->GetTeamPlayers(2);
+
+	for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
 	{
-		if (GetPos().DistanceTo((*it)->GetPos()) < attack_range)
+		if (GetPos().DistanceTo((*it)->GetPos()) < ATTACK_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
 		{
+			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+			target = *it;
+			ret = true;
+			break;
+		}
+	}
+	for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
+	{
+		if (GetPos().DistanceTo((*it)->GetPos()) < ATTACK_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+		{
+			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
 			target = *it;
 			ret = true;
 			break;
@@ -264,5 +260,5 @@ void Snakes::AttackDown()
 	}
 
 	return ret;
-}*/
+}
 

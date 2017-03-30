@@ -48,8 +48,6 @@ public:
 	iPoint GetPos() const;
 
 private:
-	
-	void CheckState();
 
 	void Idle();
 	void DoAttack();
@@ -58,8 +56,7 @@ private:
 	void AttackUp();
 	void AttackDown();
 
-	//void DoAttack();
-	//bool LookForTarget();
+	bool LookForTarget();
 
 private:
 
@@ -69,15 +66,13 @@ private:
 
 	bool					is_attacked = false;
 
-	uint					attack_range = 150;
-
 	int						rel_angle = 0;
 
 	SNAKE_STATE				state = Snk_S_Null;
 
 	states					anim_state = states_null;
 
-	std::vector<Entity*>	targets;
+	Entity*					target = nullptr;
 
 };
 
