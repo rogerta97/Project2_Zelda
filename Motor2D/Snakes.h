@@ -71,6 +71,8 @@ private:
 
 	uint					attack_range = 150;
 
+	int						rel_angle = 0;
+
 	SNAKE_STATE				state = Snk_S_Null;
 
 	states					anim_state = states_null;

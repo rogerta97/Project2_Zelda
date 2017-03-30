@@ -64,6 +64,7 @@ bool Snakes::Update(float dt)
 
 	LifeBar(iPoint(64, 4), iPoint(-32, -32));
 
+
 	CheckState();
 
 	switch (state)
@@ -75,7 +76,27 @@ bool Snakes::Update(float dt)
 		Idle();
 		break;
 	case Snk_S_Attack:
-		break;
+		if (rel_angle >= 315 && rel_angle <= 45)
+		{
+			AttackRight();
+			break;
+		}
+		else if (rel_angle < 45 && rel_angle >= 135)
+		{
+			AttackUp();
+			break;
+		}
+		else if (rel_angle > 135 && rel_angle <= 225)
+		{
+			AttackLeft();
+			break;
+		}
+		else
+		{
+			AttackDown();
+			break;
+		}
+			
 	default:
 		break;
 	}
@@ -129,7 +150,7 @@ void Snakes::CheckState()
 		if (GotHit(entity, ability, spell))
 		{
 			// Enemy attacks
-			if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
+			if (entity != nullptr && ability != nullptr)
 			{
 				DealDamage(ability->damage * ability->damage_multiplicator);
 
@@ -143,13 +164,15 @@ void Snakes::CheckState()
 						Stun(spell->stats.stun_duration);
 				}
 
-				if (stats.life <= 0)
-					App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
 				is_attacked = true;
 				state = Snk_S_Attack;
 				targets.push_back(entity);
 
+				rel_angle = AngleFromTwoPoints(game_object->fGetPos().x, game_object->fGetPos().y, targets.at(0)->GetPos().x, targets.at(0)->GetPos().y);
+
 			}
+			if (stats.life <= 0)
+					App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
 			break;
 		}
 	}
@@ -191,35 +214,35 @@ void Snakes::DoAttack()
 
 void Snakes::AttackLeft()
 {
-	DoAttack();
+	
 	game_object->SetAnimation("snake_lateral");
 	flip = false;
 	anim_state = snake_attack_lateral;
-	
+	DoAttack();
 }
 
 void Snakes::AttackRight()
 {
-	DoAttack();
 	game_object->SetAnimation("snake_lateral");
 	flip = true;
 	anim_state = snake_attack_lateral;
+	DoAttack();
 }
 
 void Snakes::AttackUp()
 {
-	DoAttack();
 	game_object->SetAnimation("snake_up");
 	flip = false;
 	anim_state = snake_attack_up;
+	DoAttack();
 }
 
 void Snakes::AttackDown()
 {
-	DoAttack();
 	game_object->SetAnimation("snake_attack_down");
 	flip = false;
 	anim_state = snake_attack_down;
+	DoAttack();
 }
 
 /*bool Snakes::LookForTarget()
