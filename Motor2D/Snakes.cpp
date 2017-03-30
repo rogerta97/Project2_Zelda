@@ -69,9 +69,10 @@ bool Snakes::Update(float dt)
 	switch (state)
 	{
 	case Snk_S_Null:
+		Idle();
 		break;
 	case Snk_S_Idle:
-		game_object->SetAnimation("snake_down");
+		Idle();
 		break;
 	case Snk_S_Attack:
 		break;
@@ -167,15 +168,59 @@ void Snakes::CheckState()
 	}
 }
 
-/*void Snakes::DoAttack()
+void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+}
+
+void Snakes::Idle()
+{
+	game_object->SetAnimation("snake_down");
+	flip = false;
+	anim_state = snake_down;
+}
+
+void Snakes::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
 		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
-		sp->SetTarget(target);
+		sp->SetTarget(targets[0]);
 		abilities.at(0)->cd_timer.Start();
 	}
-}*/
+}
+
+void Snakes::AttackLeft()
+{
+	DoAttack();
+	game_object->SetAnimation("snake_lateral");
+	flip = false;
+	anim_state = snake_attack_lateral;
+	
+}
+
+void Snakes::AttackRight()
+{
+	DoAttack();
+	game_object->SetAnimation("snake_lateral");
+	flip = true;
+	anim_state = snake_attack_lateral;
+}
+
+void Snakes::AttackUp()
+{
+	DoAttack();
+	game_object->SetAnimation("snake_up");
+	flip = false;
+	anim_state = snake_attack_up;
+}
+
+void Snakes::AttackDown()
+{
+	DoAttack();
+	game_object->SetAnimation("snake_attack_down");
+	flip = false;
+	anim_state = snake_attack_down;
+}
 
 /*bool Snakes::LookForTarget()
 {
@@ -198,6 +243,3 @@ void Snakes::CheckState()
 	return ret;
 }*/
 
-void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
-{
-}

@@ -19,7 +19,9 @@ public:
 	void KillJungleCamp(Entity* camp);
 
 private:
+
 	std::list<Entity*>		camps;
+	//j1Timer					respawn;
 
 };
 

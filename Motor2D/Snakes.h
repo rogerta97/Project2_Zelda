@@ -52,6 +52,7 @@ private:
 	void CheckState();
 
 	void Idle();
+	void DoAttack();
 	void AttackLeft();
 	void AttackRight();
 	void AttackUp();
@@ -71,6 +72,8 @@ private:
 	uint					attack_range = 150;
 
 	SNAKE_STATE				state = Snk_S_Null;
+
+	states					anim_state = states_null;
 
 	std::vector<Entity*>	targets;
 
