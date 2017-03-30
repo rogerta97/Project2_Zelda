@@ -159,7 +159,7 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 			}
 		}
 
-		if (!entity->hit_by)
+		if (entity != nullptr && !entity->hit_by)
 		{
 			entity->hit_by = nullptr;
 			entity->hit_ability = nullptr;
@@ -229,6 +229,11 @@ void j1Entity::ClearEntities()
 		(*it)->to_delete = true;
 	
 	entity_list.clear();
+}
+
+int j1Entity::GetEntitiesNumber()
+{
+	return entity_list.size();
 }
 
 Entity * j1Entity::FindEntityByBody(PhysBody* body)
@@ -337,13 +342,18 @@ void j1Entity::SlowEntities()
 	{
 		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
 		{
-			if ((*it).time <= (*it).timer.ReadSec())
+			if ((*it).entity != nullptr)
 			{
-				(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
-				it = slowed_entities.erase(it);
+				if ((*it).time <= (*it).timer.ReadSec())
+				{
+					(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
+					it = slowed_entities.erase(it);
+				}
+				else
+					++it;
 			}
 			else
-				++it;
+				it = (slowed_entities.erase(it));
 		}
 	}
 }
@@ -354,13 +364,18 @@ void j1Entity::StunEntities()
 	{
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
 		{
-			if ((*it).time <= (*it).timer.ReadSec())
+			if ((*it).entity != nullptr)
 			{
-				(*it).entity->stuned = false;
-				it = stuned_entities.erase(it);
+				if ((*it).time <= (*it).timer.ReadSec())
+				{
+					(*it).entity->stuned = false;
+					it = stuned_entities.erase(it);
+				}
+				else
+					++it;
 			}
 			else
-				++it;
+				it = (stuned_entities.erase(it));
 		}
 	}
 }

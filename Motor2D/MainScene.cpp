@@ -430,6 +430,13 @@ bool MainScene::CleanUp()
 	for (int i = 0; i < 4; i++)
 		App->scene->players[i].Reset();
 
+	habilities_1.clear();
+	habilities_2.clear();
+	habilities_3.clear();
+	habilities_4.clear();
+
+	winner = 0;
+
 	return ret;
 }
 
@@ -525,8 +532,10 @@ void MainScene::CreateMapCollisions()
 		string points_string = chain.child_value();
 		int num_points = chain.attribute("vertex").as_int();
 		int* points = new int[num_points];
+
 		std::list<string> points_list;
 		Tokenize(points_string, ',', points_list);
+
 		int i = 0;
 		for (std::list<string>::iterator it = points_list.begin(); it != points_list.end(); it++)
 		{

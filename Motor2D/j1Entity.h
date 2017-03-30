@@ -103,6 +103,7 @@ public:
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
 	void ClearEntities();
+	int GetEntitiesNumber();
 
 	Entity* FindEntityByBody(PhysBody* type);
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);

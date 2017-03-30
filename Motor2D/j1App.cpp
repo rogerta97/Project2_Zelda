@@ -156,6 +156,7 @@ bool j1App::Start()
 	bug_report_text->SetText("Report a bug");
 	bug_report_text->click_through = true;
 
+
 	PERF_PEEK(ptimer);
 
 	return ret;
@@ -227,6 +228,7 @@ void j1App::FinishUpdate()
 		LoadGameNow();
 
 	FrameRateCalculations();
+	GameStates();
 }
 
 // Call modules before each loop iteration
@@ -489,11 +491,20 @@ void j1App::FrameRateCalculations()
 		bug_report_button_color->SetColor({ 30, 30, 30, 255 });
 	}
 
-
 	if (debug_mode && !debug_window->enabled)
 		debug_window->SetEnabledAndChilds(true);
 	if(!debug_mode && debug_window->enabled)
 		debug_window->SetEnabledAndChilds(false);
+}
+
+void j1App::GameStates()
+{
+	static char title[256];
+
+
+
+
+
 }
 
 void j1App::EndSDL()
