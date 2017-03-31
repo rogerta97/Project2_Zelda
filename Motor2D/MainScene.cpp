@@ -97,6 +97,8 @@ bool MainScene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	CreateMapCollisions();
+
 	// Shop Manager
 	shop_manager = new ShopManager();
 	shop_manager->Start();
@@ -136,6 +138,7 @@ bool MainScene::Start()
 
 	//Test Jungle Camp
 	jungleCamp_manager = new JungleCampManager();
+	jungleCamp_manager->Start();
 
 	//Test Minion
 	LOG("Creating minion manager");
@@ -144,16 +147,15 @@ bool MainScene::Start()
 	//Test Tower
 	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
-
-	CreateMapCollisions();
-
-	game_timer.Start();
   
+	// Zelda manager
 	zelda_manager = new ZeldaManager();
   
+	// Aesth manager
 	aest_manager = new AestheticsManager(); 
 	aest_manager->Start(); 
 
+	// Base manager
 	base_manager = new BaseManager();
 
 	//Creating quests
@@ -166,6 +168,8 @@ bool MainScene::Start()
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);
 	// ----
+
+	game_timer.Start();
 
 	App->console->AddText("viewports.set 4", Input);
 
@@ -199,14 +203,16 @@ bool MainScene::Update(float dt)
 	}
 
 	// Update Managers
-	if(minion_manager!=nullptr)
+	if(minion_manager != nullptr)
 		minion_manager->Update();
-	if(shop_manager!=nullptr)
+	if(shop_manager != nullptr)
 		shop_manager->Update();
 	if (quest_manager != nullptr)
 		quest_manager->Update(dt);
 	if(player_manager != nullptr)
 		player_manager->Update(dt);
+	if (jungleCamp_manager != nullptr)
+		jungleCamp_manager->Update(dt);
 	// ------
 
 	// Update progress bar
@@ -240,14 +246,15 @@ bool MainScene::CleanUp()
 	bool ret = true;
 
 	// Unload Managers
-	shop_manager->CleanUp(); 	RELEASE(shop_manager)
-	zelda_manager->CleanUp(); 	RELEASE(zelda_manager);
-	base_manager->CleanUp(); 	RELEASE(base_manager);
-	minion_manager->CleanUp(); 	RELEASE(minion_manager);
-	quest_manager->CleanUp(); 	RELEASE(quest_manager);
-	tower_manager->CleanUp(); 	RELEASE(tower_manager);
-	aest_manager->CleanUp(); 	RELEASE(aest_manager);
-	player_manager->CleanUp();	RELEASE(player_manager);
+	shop_manager->CleanUp(); 	   RELEASE(shop_manager)
+	zelda_manager->CleanUp(); 	   RELEASE(zelda_manager);
+	base_manager->CleanUp(); 	   RELEASE(base_manager);
+	minion_manager->CleanUp(); 	   RELEASE(minion_manager);
+	quest_manager->CleanUp(); 	   RELEASE(quest_manager);
+	tower_manager->CleanUp(); 	   RELEASE(tower_manager);
+	aest_manager->CleanUp(); 	   RELEASE(aest_manager);
+	player_manager->CleanUp();	   RELEASE(player_manager);
+	jungleCamp_manager->CleanUp(); RELEASE(jungleCamp_manager);
 
 	App->map->CleanUp();
 	App->entity->ClearEntities();

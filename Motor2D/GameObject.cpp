@@ -109,7 +109,12 @@ void GameObject::SetAnimation(const char * animation)
 
 SDL_Rect GameObject::GetCurrentAnimationRect(float dt)
 {
-	return animator->GetCurrentAnimation()->GetAnimationFrame(dt);
+	Animation* current = animator->GetCurrentAnimation();
+
+	if (current != nullptr)
+		return current->GetAnimationFrame(dt);
+
+	return NULLRECT;
 }
 
 b2Fixture* GameObject::CreateCollision(iPoint offset, int width, int height, fixture_type type)

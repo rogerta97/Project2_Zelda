@@ -161,8 +161,11 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 
 void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+			(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+	}
 }
 
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
@@ -182,7 +185,7 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case zelda:
 		ret = new Zelda(pos);
-    break;
+        break;
 	case trunk:
 		ret = new Trunk(pos);
 		break;
@@ -235,22 +238,28 @@ Entity * j1Entity::FindEntityByBody(PhysBody* body)
 	Entity* ret = nullptr;
 
 	// Look on entities
-	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	if (!entity_list.empty())
 	{
-		if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
-			ret = *it;
-			break;
+			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+			{
+				ret = *it;
+				break;
+			}
 		}
 	}
 
 	// Look on Spells
-	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	if (!App->spell->spell_list.empty())
 	{
-		if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+		for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 		{
-			ret = (*it)->owner;
-			break;
+			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+			{
+				ret = (*it)->owner;
+				break;
+			}
 		}
 	}
 

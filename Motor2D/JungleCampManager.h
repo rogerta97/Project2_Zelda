@@ -10,14 +10,15 @@ class j1Timer;
 class Snakes;
 class Entity;
 
-
 class JungleCampManager
 {
 public:
 	JungleCampManager();
 	~JungleCampManager();
 
-	bool Update();
+	bool Start();
+	bool Update(float dt);
+	bool CleanUp();
 
 	void SpawnSnake();
 
@@ -26,7 +27,6 @@ public:
 private:
 
 	std::list<Entity*>		snakes;
-
 	j1Timer					respawn;
 
 };
