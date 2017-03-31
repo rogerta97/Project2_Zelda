@@ -95,7 +95,7 @@ public:
 	void ChangePlayer(entity_name name, int controller_index, int viewport);
 	void DeletePlayer(int index);
 	void ClearPlayers();
-
+	
 	std::vector<Entity*> GetTeamPlayers(int team);
 	std::vector<int> GetTeamViewports(int team);
 	int GetEntityViewportIfIsPlayer(Entity* entity);

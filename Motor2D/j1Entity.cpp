@@ -16,6 +16,7 @@
 #include "Zelda.h"
 #include "Base.h"
 #include "Eyes.h"
+#include "Snakes.h"
 
 
 j1Entity::j1Entity()
@@ -194,6 +195,8 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	case eyes:
 		ret = new Eyes(pos);
 		break;
+	case snake:
+		ret = new Snakes(pos);
 	case bush:
 		ret = new Bush(pos);
 		break;

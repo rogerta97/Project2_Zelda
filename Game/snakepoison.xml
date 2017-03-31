@@ -1,0 +1,14 @@
+<!--Config file for the game-->
+
+<file>
+  <animations texture = "textures/snakes_spritesheet.png">
+   <anim speed = "10" name = "projectile" loop = "true">
+      <rect x = "100" y = "4" w = "6" h = "6"/>
+      <rect x = "110" y = "2" w = "10" h = "10"/>
+    </anim>
+    <anim speed = "20" name = "destroy" loop = "true">
+      <rect x = "122" y = "2" w = "10" h = "10"/>
+      <rect x = "134" y = "2" w = "10" h = "10"/>
+    </anim>
+  </animations>
+</file>
