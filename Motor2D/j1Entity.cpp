@@ -223,8 +223,16 @@ void j1Entity::ClearEntities()
 {
 	if (!entity_list.empty())
 	{
-		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-			(*it)->to_delete = true;
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end();)
+		{
+			if ((*it) != nullptr)
+			{
+				(*it)->to_delete = true;
+				it++;
+			}
+			else
+				it = entity_list.erase(it);
+		}	
 	}
 }
 
@@ -331,6 +339,7 @@ void j1Entity::RemoveEntities()
 				(*it)->CleanUp();
 				(*it)->CleanEntity();
 				RELEASE(*it);
+				*it = nullptr;
 				it = entity_list.erase(it);
 			}
 			else
