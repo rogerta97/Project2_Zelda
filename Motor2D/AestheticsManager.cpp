@@ -1,6 +1,8 @@
 #include "AestheticsManager.h"
 #include "j1Map.h"
 #include "Trees.h"
+#include "GameObject.h"
+#include "Bushes.h"
 #include "j1App.h"
 #include "j1Entity.h"
 #include "Eyes.h"
@@ -40,10 +42,44 @@ void AestheticsManager::Start()
 		case purple_tree:
 			trees_entity.at(z)->SetTreeColor("purple");
 			break;
-
 		}
-
 		z++; 	
+	}
+	// -----
+
+	// Bushes 
+	App->map->GetBushesPosition(bushes_nodes);
+
+	 z = 0;
+	while (z < bushes_nodes.size())
+	{
+		bushes_entity.push_back((Bush*)App->entity->CreateEntity(bush, iPoint(bushes_nodes.at(z)->bush_pos.x, bushes_nodes.at(z)->bush_pos.y)));
+
+		switch (bushes_nodes.at(z)->color)
+		{
+		case green_bush:
+			bushes_entity.at(z)->game_object->SetPos(fPoint(bushes_entity.at(z)->game_object->GetPos().x, bushes_entity.at(z)->game_object->GetPos().y - 5));
+			bushes_entity.at(z)->SetBushColor("green");
+			bushes_entity.at(z)->SetMiddle(green_bush);
+			break;
+
+		case purple_bush:
+			bushes_entity.at(z)->game_object->SetPos(fPoint(bushes_entity.at(z)->game_object->GetPos().x, bushes_entity.at(z)->game_object->GetPos().y - 5));
+			bushes_entity.at(z)->SetBushColor("purple");
+			bushes_entity.at(z)->SetMiddle(purple_bush);
+			break;
+
+		case green_half_bush:
+			bushes_entity.at(z)->SetBushColor("green_half");
+			bushes_entity.at(z)->SetMiddle(green_half_bush);
+			break;
+
+		case purple_half_bush:
+			bushes_entity.at(z)->SetBushColor("purple_half");
+			bushes_entity.at(z)->SetMiddle(purple_half_bush);
+			break;
+		}
+		z++;
 	}
 	// -----
 
@@ -61,20 +97,56 @@ void AestheticsManager::Start()
 void AestheticsManager::CleanUp()
 {
 	//Clear Trees
-	for (std::vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
+	if (!trees_entity.empty())
 	{
-		App->entity->DeleteEntity(*it);
-		it = trees_entity.erase(it);
+		for (std::vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
+		{
+			App->entity->DeleteEntity(*it);
+			it = trees_entity.erase(it);
+		}
 	}
 	// -----
 
 	//Clear Eyes
-	for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end(); ++it)
+	if (!eyes.empty())
 	{
-		App->entity->DeleteEntity(*it);
-		it = eyes.erase(it);
+		for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end(); ++it)
+		{
+			App->entity->DeleteEntity(*it);
+			it = eyes.erase(it);
+		}
 	}
 	// -----
+
+	//Clear bushes
+	if (!bushes_entity.empty())
+	{
+		for (std::vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
+		{
+			App->entity->DeleteEntity(*it);
+			it = bushes_entity.erase(it);
+		}
+	}
+
+	if (!trees_nodes.empty())
+	{
+		for (vector<TreeNode*>::iterator it = trees_nodes.begin(); it != trees_nodes.end();)
+		{
+			RELEASE(*it);
+			it = trees_nodes.erase(it);
+		}
+	}
+
+	if (!bushes_nodes.empty())
+	{
+		for (vector<BushNode*>::iterator it = bushes_nodes.begin(); it != bushes_nodes.end();)
+		{
+			RELEASE(*it);
+			it = bushes_nodes.erase(it);
+		}
+	}
+
+	App->entity->DeleteEntity(trunk_entity);
 }
 
 

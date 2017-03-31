@@ -778,6 +778,73 @@ bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
 	return ret;
 }
 
+bool j1Map::GetBushesPosition(vector<BushNode*>& bush_list)
+{
+	bool ret = true;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						BushNode* new_bush = new BushNode;
+						BushNode* new_half_bush = new BushNode; 
+
+						switch (relative_id)
+						{
+						case 8:
+							new_bush->bush_pos = MapToWorld(x, y);
+							new_bush->color = green_bush;
+							bush_list.push_back(new_bush);
+							new_half_bush->bush_pos = iPoint(new_bush->bush_pos.x, new_bush->bush_pos.y + 13);
+							new_half_bush->color = green_half_bush;
+							bush_list.push_back(new_half_bush);
+							break;
+
+						case 9:
+							new_bush->bush_pos = MapToWorld(x, y);
+							new_bush->color = purple_bush;
+							bush_list.push_back(new_bush);
+							new_half_bush->bush_pos = iPoint(new_bush->bush_pos.x, new_bush->bush_pos.y + 13);
+							new_half_bush->color = purple_half_bush;
+							bush_list.push_back(new_half_bush);
+							break;
+
+						default:
+							ret = false;
+							break;
+						}
+
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+
+	return false;
+}
+
 iPoint j1Map::GetShopPosition(uint team) const
 {
 	iPoint ret(-1, -1);

@@ -28,19 +28,7 @@ TowerManager::TowerManager()
 
 TowerManager::~TowerManager()
 {
-	for (std::list<Tower*>::const_iterator item = team1_towers.begin(); item != team1_towers.end(); ++item)
-	{
-		App->entity->DeleteEntity(*item);
-	}
 
-	team1_towers.clear();
-
-	for (std::list<Tower*>::const_iterator item = team2_towers.begin(); item != team2_towers.end(); ++item)
-	{
-		App->entity->DeleteEntity(*item);
-	}
-
-	team2_towers.clear();
 }
 
 bool TowerManager::Update()
@@ -49,6 +37,33 @@ bool TowerManager::Update()
 
 
 	return ret;
+}
+
+bool TowerManager::CleanUp()
+{
+	if (!team1_towers.empty())
+	{
+		for (std::list<Tower*>::const_iterator it = team1_towers.begin(); it != team1_towers.end(); it)
+		{
+			App->entity->DeleteEntity(*it);
+			it = team1_towers.erase(it);
+		}
+
+		team1_towers.clear();
+	}
+
+	if (!team2_towers.empty())
+	{
+		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end(); it)
+		{
+			App->entity->DeleteEntity(*it);
+			it = team2_towers.erase(it);
+		}
+
+		team2_towers.clear();
+	}
+
+	return true;
 }
 
 std::list<Tower*>& TowerManager::GetTowerList(uint team) 

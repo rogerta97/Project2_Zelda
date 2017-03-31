@@ -9,6 +9,8 @@
 #include "Functions.h"
 #include "Spell.h"
 #include "j1Spell.h"
+#include "Entity.h"
+#include "j1Entity.h"
 
 class b2Fixture;
 class PhysBody;
@@ -300,6 +302,7 @@ public:
 	GameObject*      game_object = nullptr;
 	vector<Ability*> abilities;
 	Stats	         stats;
+	entity_name		 type = entity_name::e_n_null;
 
 	// States
 	bool			 disable_controller = false;

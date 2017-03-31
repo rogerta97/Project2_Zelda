@@ -22,7 +22,7 @@ public:
 
 	~Tree();
 
-	tree_color type;
+	tree_color		type;
 
 };
 

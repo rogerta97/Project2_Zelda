@@ -1,0 +1,28 @@
+<!-- Config file for the game -->
+
+<file>
+	<animations texture ="maps/Bush_entity.png">
+    <anim speed = "10" name = "green" loop = "true">
+      <rect x = "0" y = "0" w = "32" h = "32"/>
+    </anim>
+    <anim speed = "10" name = "purple" loop = "true">
+      <rect x = "0" y = "32" w = "32" h = "32"/>
+    </anim>
+    <anim speed = "10" name = "green_half" loop = "true">
+		<rect x = "32" y = "14" w = "32" h = "18"/>
+      </anim> 
+	   <anim speed = "10" name = "purple_half" loop = "true">
+		<rect x = "32" y = "46" w = "32" h = "18"/>
+      </anim>
+    <anim speed = "10" name = "green_move" loop = "false">
+      <rect x = "32" y = "14" w = "32" h = "18"/>
+      <rect x = "64" y = "14" w = "32" h = "18"/>
+      <rect x = "32" y = "14" w = "32" h = "18"/>
+    </anim>
+    <anim speed = "10" name = "purple_move" loop = "false">
+      <rect x = "32" y = "46" w = "32" h = "18"/>
+      <rect x = "64" y = "46" w = "32" h = "18"/>
+      <rect x = "32" y = "46" w = "32" h = "18"/>
+    </anim>
+   </animations>
+</file>

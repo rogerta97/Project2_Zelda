@@ -71,7 +71,7 @@ bool QuestManager::Update(float dt)
 
 	for (int i = 0; i < quest_list.size(); i++)
 	{
-		quest_list.at(i).Update();
+		quest_list.at(i)->Update();
 	}
 
 	//// Print each type ----
@@ -95,7 +95,14 @@ bool QuestManager::CleanUp()
 {
 	bool ret = true;
 
-
+	if (!quest_list.empty())
+	{
+		for (vector<Quest*>::iterator it = quest_list.begin(); it != quest_list.end();)
+		{
+			RELEASE(*it);
+			it = quest_list.erase(it);
+		}
+	}
 
 	return ret;
 }
@@ -105,7 +112,7 @@ void QuestManager::CreateQuest(string& task, int id)
 	if (quest_list.size() < 5) 
 	{
 		Quest* new_quest = new Quest(task, id);	
-		quest_list.push_back(*new_quest);
+		quest_list.push_back(new_quest);
 		abilitie_icons.push_back(App->scene->main_scene->main_window_1->CreateImage(placer, { 182, 78, 25 ,25 }, false));
 		placer.y -= 35; 
 	}

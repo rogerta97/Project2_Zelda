@@ -17,8 +17,8 @@ private:
 public:
 
 private:
-	Base*	team1 = nullptr;
-	Base*	team2 = nullptr;
+	Base* team1 = nullptr;
+	Base* team2 = nullptr;
 
 };
 #endif // !_BASEMANAGER_H_

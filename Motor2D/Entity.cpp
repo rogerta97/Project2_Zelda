@@ -134,13 +134,13 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 10, 0, true);
 
 		// Get the viewports of my team
-		vector<int> my_team = App->entity->player_manager->GetTeamViewports(team);
+		vector<int> my_team = App->scene->main_scene->player_manager->GetTeamViewports(team);
 
 		int main_view = 0;
 
 		if (is_player)
 		{
-			main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+			main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 		}
 	
 		// Print to viewports depending the team

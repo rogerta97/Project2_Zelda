@@ -54,9 +54,8 @@ bool TowerAttack::Update(float dt)
 		if(game_object->animator->GetCurrentAnimation()->Finished())
 			App->spell->DeleteSpell(this);
 	}
-	else
+	else if (target != nullptr)
 	{
-
 		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
 
 		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
@@ -70,6 +69,10 @@ bool TowerAttack::Update(float dt)
 
 		game_object->SetPos({ game_object->GetPos().x + t.x, game_object->GetPos().y + t.y });
 
+	}
+	else if (target == nullptr)
+	{
+		App->spell->DeleteSpell(this);
 	}
 
 	return ret;
@@ -107,14 +110,13 @@ void TowerAttack::CleanSpell()
 
 }
 
-void TowerAttack::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+void TowerAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	if (game_object->pbody == bodyA && bodyB == target->game_object->pbody)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 	}
-		
 }
 
 void TowerAttack::SetTarget(Entity * _target)

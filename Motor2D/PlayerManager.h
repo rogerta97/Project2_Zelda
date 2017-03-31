@@ -35,24 +35,33 @@ public:
 	}
 
 	void BuyItem(Item* item, int price);
+	void Kill();
+	void Respawn();
 
 private:
 	void UpdateRupees();
 
 public:
 
-	Entity*  entity = nullptr;
-	states   state = states::states_null;
-	shows	 show = shows::show_null;
-	movement move = stop;
+	Entity*     entity = nullptr;
+	states      state = states::states_null;
+	shows	    show = shows::show_null;
+	movement    move = stop;
+	entity_name type = entity_name::e_n_null;
 
-	Item*	 items[3] = { nullptr,nullptr,nullptr };
+	Item*	    items[3] = { nullptr,nullptr,nullptr };
 
-	uint	 controller_index = 0;
-	uint	 viewport = 0;
+	uint	    controller_index = 0;
+	uint	    viewport = 0;
 
-	UI_Text* rupees_num = nullptr;
-	uint	 rupees = 20000;
+	UI_Text*    rupees_num = nullptr;
+	uint	    rupees = 20000;
+
+	j1Timer     death_timer;
+	float		death_time = 5.0f;
+
+	bool		is_dead = false;
+	
 };
 
 class PlayerManager
@@ -106,12 +115,25 @@ public:
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
+private:
+	void PlayerInput(Player* player);
+	void MoveCamera(Player* player);
+	void CheckIfRespawn(Player* player);
+	void CheckIfDeath(Player* player);
+	void UpdateUI(Player* player);
+
 public:
 	vector<Player*> players;
 
 private:
 	vector<iPoint> spawn_points_used_team1;
 	vector<iPoint> spawn_points_used_team2;
+
+	// UI
+	vector<UI_Image*>	habilities_1;
+	vector<UI_Image*>	habilities_2;
+	vector<UI_Image*>	habilities_3;
+	vector<UI_Image*>   habilities_4;
 };
 
 #endif // __PLAYER_MANAGER_H__

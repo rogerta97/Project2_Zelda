@@ -1,16 +1,16 @@
-#Issue Title : 
+# Issue Title : 
 
-#Priority Level 
+# Priority Level 
 (A = Severe, crash; B = important, affects gameplay; C = cosmetic, polish) :
 
-##Expected behavior :
+## Expected behavior :
 
 
 
-##Actual behavior :
+## Actual behavior :
 
 
 
-##Steps to reproduce :
+## Steps to reproduce :
 
 

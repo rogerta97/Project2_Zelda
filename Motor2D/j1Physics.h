@@ -104,5 +104,6 @@ private:
 	b2MouseJoint*   mouse_joint = nullptr;
 	b2Body*			ground = nullptr;
 	b2Body*			selected = nullptr;
+	bool			deleting = false;
 
 };
