@@ -282,6 +282,7 @@ bool j1App::CleanUp()
 	PERF_START(ptimer);
 	bool ret = true;
 
+	deleting_engine = true;
 	delete cf;
 
 	// Cleaning up in reverse order

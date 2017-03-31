@@ -61,16 +61,22 @@ bool j1Physics::PreUpdate()
 			b2Fixture* fA = c->GetFixtureA();
 			b2Fixture* fB = c->GetFixtureB();
 
-			if (pb1 && pb2 && !pb1->listeners.empty())
+			if (pb1 != nullptr && pb2 != nullptr && !pb1->listeners.empty())
 			{
-				for(int i = 0; i<pb1->listeners.size(); i++)
-					pb1->listeners.at(i)->OnCollision(pb1, pb2, fA, fB);
+				for (int i = 0; i < pb1->listeners.size(); i++)
+				{
+					if (pb1->listeners.at(i) != nullptr)
+						pb1->listeners.at(i)->OnCollision(pb1, pb2, fA, fB);
+				}
 			}
 
-			if (pb1 && pb2 && !pb2->listeners.empty())
+			if (pb1 != nullptr && pb2 != nullptr && !pb2->listeners.empty())
 			{
-				for (int i = 0; i<pb2->listeners.size(); i++)
-					pb2->listeners.at(i)->OnCollision(pb2, pb1, fB, fA);
+				for (int i = 0; i < pb2->listeners.size(); i++)
+				{
+					if (pb2->listeners.at(i) != nullptr)
+						pb2->listeners.at(i)->OnCollision(pb2, pb1, fB, fA);
+				}
 			}
 		}
 	}
@@ -1010,42 +1016,60 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 
 void j1Physics::BeginContact(b2Contact* contact)
 {
+	if (App->deleting_engine)
+		return;
+
  	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if (physA && physB && !physA->listeners.empty())
+	if (physA != nullptr && physB != nullptr && !physA->listeners.empty())
 	{
-		for (int i = 0; i<physA->listeners.size(); i++)
-			physA->listeners.at(i)->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
+		for (int i = 0; i < physA->listeners.size(); i++)
+		{
+			if (physA->listeners.at(i) != nullptr)
+				physA->listeners.at(i)->OnCollisionEnter(physA, physB, fixtureA, fixtureB);
+		}
 	}
 
-	if (physA && physB && !physB->listeners.empty())
+	if (physA != nullptr && physB != nullptr && !physB->listeners.empty())
 	{
-		for (int i = 0; i<physB->listeners.size(); i++)
+		for (int i = 0; i < physB->listeners.size(); i++)
+		{
+			if (physB->listeners.at(i) != nullptr)
 			physB->listeners.at(i)->OnCollisionEnter(physB, physA, fixtureB, fixtureA);
+		}
 	}
 }
 
 void j1Physics::EndContact(b2Contact * contact)
 {
+	if (App->deleting_engine)
+		return;
+
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
-	if (physA && physB && !physA->listeners.empty())
+	if (physA != nullptr && physB != nullptr && !physA->listeners.empty())
 	{
-		for (int i = 0; i<physA->listeners.size(); i++)
-			physA->listeners.at(i)->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+		for (int i = 0; i < physA->listeners.size(); i++)
+		{
+			if (physA->listeners.at(i) != nullptr && physB->listeners.at(i) != nullptr)
+				physA->listeners.at(i)->OnCollisionOut(physA, physB, fixtureA, fixtureB);
+		}
 	}
 
-	if (physA && physB && !physB->listeners.empty())
+	if (physA != nullptr && physB != nullptr && !physB->listeners.empty())
 	{
-		for (int i = 0; i<physB->listeners.size(); i++)
-			physB->listeners.at(i)->OnCollisionOut(physB, physA, fixtureB, fixtureA);
+		for (int i = 0; i < physB->listeners.size(); i++)
+		{
+			if(physB->listeners.at(i) != nullptr)
+			   physB->listeners.at(i)->OnCollisionOut(physB, physA, fixtureB, fixtureA);
+		}
 	}
 }

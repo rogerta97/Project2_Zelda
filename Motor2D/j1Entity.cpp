@@ -39,9 +39,6 @@ bool j1Entity::Start()
 {
 	bool ret = true;
 
-	player_manager = new PlayerManager();
-	player_manager->Start();
-
 	return ret;
 }
 
@@ -53,8 +50,6 @@ bool j1Entity::PreUpdate()
 
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PreUpdate();
-
-	player_manager->PreUpdate();
 
 	return ret;
 }
@@ -69,8 +64,6 @@ bool j1Entity::Update(float dt)
 		(*it)->Draw(dt);
 	}
 
-	player_manager->Update(dt);
-
 	SlowEntities();
 	StunEntities();
 
@@ -84,8 +77,6 @@ bool j1Entity::PostUpdate()
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PostUpdate();
 
-	player_manager->PostUpdate();
-
 	return ret;
 }
 
@@ -94,8 +85,6 @@ bool j1Entity::CleanUp()
 	bool ret = true;
 
 	ClearEntities();
-
-	player_manager->CleanUp();
 
 	return ret;
 }
@@ -215,6 +204,7 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	if (ret != nullptr)
 	{
 		ret->Start();
+		ret->type = entity;
 		entity_list.push_back(ret);
 	}
 	else
@@ -225,10 +215,11 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 
 void j1Entity::ClearEntities()
 {
-	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		(*it)->to_delete = true;
-	
-	entity_list.clear();
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+			(*it)->to_delete = true;
+	}
 }
 
 int j1Entity::GetEntitiesNumber()

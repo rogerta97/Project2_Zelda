@@ -127,6 +127,7 @@ public:
 	list<string>        logs;
 
 	bool			    debug_mode = false;
+	bool				deleting_engine = false;
 
 	collision_filters* cf;
 

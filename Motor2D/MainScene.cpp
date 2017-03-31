@@ -42,6 +42,49 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
+	//Create UI ---------
+	SDL_Rect screen = App->view->GetViewportRect(1);
+
+	iPoint rupiees_pos = { screen.w / 50 + 15 , screen.h / 40 + 5 };
+	SDL_Rect rupiees_rect = { 32, 0, 16, 16 };
+
+	iPoint minimap_pos = { screen.w - 58, 5 };
+	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
+
+	// Player1
+	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_1->viewport = 1;
+	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
+
+	// Player2
+	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_2->viewport = 2;
+	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
+
+	// Player3
+	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_3->viewport = 3;
+	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
+
+	// Player4
+	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+	main_window_4->viewport = 4;
+	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
+	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
+	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
+	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
+
+	// ------------------
+
 	//Load Map
 	if (App->map->Load("zelda_moba.tmx"))
 	{
@@ -58,6 +101,9 @@ bool MainScene::Start()
 	shop_manager->Start();
 
 	// Loading Players
+	player_manager = new PlayerManager();
+	player_manager->Start();
+
 	LOG("Loading Players");
 	bool def = false;
 	for (int i = 0; i < 4; i++)
@@ -70,21 +116,21 @@ bool MainScene::Start()
 	}
 	if (!def)
 	{
-		Player* p1 = App->entity->player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
-		Player* p2 = App->entity->player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
-		Player* p3 = App->entity->player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
-		Player* p4 = App->entity->player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
+		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
+		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
+		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
+		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
 	}
 	else
 	{
-		Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
-		Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
-		Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
-		Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
+		Player* p1 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
+		Player* p2 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
+		Player* p3 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
+		Player* p4 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
 	}
 
 	// Disable player input until level is loaded
-	App->entity->player_manager->DisableInput(0);
+	player_manager->DisableInput(0);
 	// ----
 
 	//Test Minion
@@ -94,73 +140,6 @@ bool MainScene::Start()
 	//Test Tower
 	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
-
-	//Create UI ---------
-	SDL_Rect screen = App->view->GetViewportRect(1);
-	iPoint ability1_pos = { screen.w  - 120 , screen.h - 126};
-	iPoint ability2_pos = { (screen.w / 50), screen.h - 126 };
-	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
-	iPoint ability4_pos = { (screen.w) / 50, screen.h - 76 };
-
-	iPoint rupiees_pos = { screen.w / 50 + 15 , screen.h / 40 + 5 };
-	SDL_Rect rupiees_rect = { 32, 0, 16, 16 };
-
-	iPoint minimap_pos = { screen.w - 58, 5 };
-	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
-
-	// Player1
-	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_1->viewport = 1;
-	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), {0, 28, 385, 24 });
-	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5) , { 0,0,32,28 });
-	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
-
-	habilities_1.push_back(main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_1.push_back(main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_1.push_back(main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_1.push_back(main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
-
-	// Player2
-	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_2->viewport = 2;
-	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
-	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
-
-	habilities_2.push_back(main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_2.push_back(main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_2.push_back(main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_2.push_back(main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
-
-	// Player3
-	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_3->viewport = 3;
-	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
-	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
-
-	habilities_3.push_back(main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_3.push_back(main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_3.push_back(main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_3.push_back(main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
-
-	// Player4
-	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_4->viewport = 4;
-	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 4 - 30, screen.h / 40), { 0, 28, 385, 24 });
-	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
-
-	habilities_4.push_back(main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_4.push_back(main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_4.push_back(main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_4.push_back(main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
-
-	// ------------------
 
 	//Creating quests
 	quest_manager = new QuestManager();
@@ -187,7 +166,7 @@ bool MainScene::Start()
 
 
 	// Allow player input once the level is loaded
-	App->entity->player_manager->AllowInput(0);
+	player_manager->AllowInput(0);
 	// ----
 
 	return ret;
@@ -197,6 +176,8 @@ bool MainScene::PreUpdate()
 {
 	bool ret = true;
 
+	player_manager->PreUpdate();
+
 	return ret;
 }
 
@@ -204,176 +185,33 @@ bool MainScene::Update(float dt)
 {
 	bool ret = true;
 
+	// Draw map
 	App->map->Draw();
 
+	// Test
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
 		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
 		App->view->SetViews(1);
 	}
 
+	// Update Managers
 	if(minion_manager!=nullptr)
 		minion_manager->Update();
 	if(shop_manager!=nullptr)
 		shop_manager->Update();
 	if (quest_manager != nullptr)
 		quest_manager->Update(dt);
+	if(player_manager != nullptr)
+		player_manager->Update(dt);
+	// ------
 
-	//Update progress bar
+	// Update progress bar
 	if (zelda_manager != nullptr && winner == 0)
 		UpdateProgressBar();
 	// ------
 
-	// UI Control -----------
-
-	for (int i = 0; i < App->entity->player_manager->players.size(); i++)
-	{
-		Player* curr_player = App->entity->player_manager->players.at(i);
-
-		switch (curr_player->viewport)
-		{
-		case 1:
-			if (curr_player->entity->GetAbility(0)->CdCompleted())
-			{
-				habilities_1.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_1.at(0)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(1)->CdCompleted())
-			{
-				habilities_1.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_1.at(1)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(2)->CdCompleted())
-			{
-				habilities_1.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_1.at(2)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(3)->CdCompleted())
-			{
-				habilities_1.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_1.at(3)->ChangeImage(NULLRECT);
-			}
-			break;
-		case 2:
-			if (curr_player->entity->GetAbility(0)->CdCompleted())
-			{
-				habilities_2.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_2.at(0)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(1)->CdCompleted())
-			{
-				habilities_2.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_2.at(1)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(2)->CdCompleted())
-			{
-				habilities_2.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_2.at(2)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(3)->CdCompleted())
-			{
-				habilities_2.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_2.at(3)->ChangeImage(NULLRECT);
-			}
-			break;
-		case 3:
-			if (curr_player->entity->GetAbility(0)->CdCompleted())
-			{
-				habilities_3.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_3.at(0)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(1)->CdCompleted())
-			{
-				habilities_3.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_3.at(1)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(2)->CdCompleted())
-			{
-				habilities_3.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_3.at(2)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(3)->CdCompleted())
-			{
-				habilities_3.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_3.at(3)->ChangeImage(NULLRECT);
-			}
-			break;
-		case 4:
-			if (curr_player->entity->GetAbility(0)->CdCompleted())
-			{
-				habilities_4.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_4.at(0)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(1)->CdCompleted())
-			{
-				habilities_4.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_4.at(1)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(2)->CdCompleted())
-			{
-				habilities_4.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_4.at(2)->ChangeImage(NULLRECT);
-			}
-			if (curr_player->entity->GetAbility(3)->CdCompleted())
-			{
-				habilities_4.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-			}
-			else
-			{
-				habilities_4.at(3)->ChangeImage(NULLRECT);
-			}
-			break;
-		}
-	}
-
-	// --------------
-
-	//End Game
+	// End Game
 	if (winner != 0 && game_timer.ReadSec() > end_delay)
 	{
 		App->scene->ChangeScene(App->scene->menu_scene);
@@ -389,6 +227,7 @@ bool MainScene::PostUpdate()
 {
 	bool ret = true;
 
+	player_manager->PostUpdate();
 
 	return ret;
 }
@@ -397,6 +236,7 @@ bool MainScene::CleanUp()
 {
 	bool ret = true;
 
+	// Unload Managers
 	shop_manager->CleanUp(); 	RELEASE(shop_manager)
 	zelda_manager->CleanUp(); 	RELEASE(zelda_manager);
 	base_manager->CleanUp(); 	RELEASE(base_manager);
@@ -404,8 +244,8 @@ bool MainScene::CleanUp()
 	quest_manager->CleanUp(); 	RELEASE(quest_manager);
 	tower_manager->CleanUp(); 	RELEASE(tower_manager);
 	aest_manager->CleanUp(); 	RELEASE(aest_manager);
+	player_manager->CleanUp();	RELEASE(player_manager);
 
-	App->entity->player_manager->CleanUp();
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 
@@ -429,11 +269,6 @@ bool MainScene::CleanUp()
 
 	for (int i = 0; i < 4; i++)
 		App->scene->players[i].Reset();
-
-	habilities_1.clear();
-	habilities_2.clear();
-	habilities_3.clear();
-	habilities_4.clear();
 
 	winner = 0;
 
@@ -499,7 +334,7 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 
 void MainScene::EndGame(int _winner)
 {
-	App->entity->player_manager->DisableInput(0);
+	player_manager->DisableInput(0);
 
 	winner = _winner;
 

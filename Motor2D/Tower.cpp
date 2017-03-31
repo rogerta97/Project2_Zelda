@@ -198,9 +198,9 @@ bool Tower::LookForTarget()
 		std::vector<Entity*> players;
 
 		if (GetTeam() == 1)
-			players = App->entity->player_manager->GetTeamPlayers(2);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 		else
-			players = App->entity->player_manager->GetTeamPlayers(1);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 
 		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
 		{

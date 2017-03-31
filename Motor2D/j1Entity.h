@@ -116,8 +116,6 @@ private:
 	void StunEntities();
 
 public:
-	PlayerManager* player_manager = nullptr;
-
 	list<slow>     slowed_entities;
 	list<stun>     stuned_entities;
 

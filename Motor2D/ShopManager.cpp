@@ -261,7 +261,7 @@ bool ShopManager::Start()
 
 bool ShopManager::Update()
 {
-	for (std::vector<Player*>::iterator it = App->entity->player_manager->players.begin(); it != App->entity->player_manager->players.end(); it++)
+	for (std::vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
 	{
 		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
