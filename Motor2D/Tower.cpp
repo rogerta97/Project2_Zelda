@@ -17,6 +17,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "TowerAttack.h"
+#include "Quest_Manager.h"
 
 #define TOWER_H 64
 #define TOWER_W 64

@@ -106,10 +106,15 @@ void QuestManager::add_progress(int id,int team)
 	{
 		if (vquest[i]->id == id)
 		{
-			vquest[i]->task[team+1]->current_progress++;
+			vquest[i]->task[team-1]->current_progress++;
 			break;
 		}
 	}
+}
+
+int QuestManager::get_progress(int id, int team)
+{
+	return vquest[id - 1]->task[team - 1]->times_completed;
 }
 
 void QuestManager::update_progress()

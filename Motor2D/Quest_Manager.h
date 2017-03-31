@@ -31,6 +31,7 @@ public:
 public:
 	void change_state(int id,Quest_State new_state);
 	void add_progress(int id,int team);
+	int get_progress(int id,int team);
 	void update_progress();
 	std::vector<Quest*> vquest;
 
