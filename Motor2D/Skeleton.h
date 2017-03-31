@@ -7,6 +7,7 @@
 
 class GameObject;
 
+
 enum SKELETON_STATE
 {
 	s_s_null,
@@ -53,7 +54,7 @@ private:
 	void Stunned();
 	void Attack();
 	void SpinAttack();
-	void BoneAttack();
+	void Bonemerang();
 
 private:
 
@@ -64,9 +65,6 @@ private:
 	SKELETON_STATE			state = s_s_null;
 
 	states					anim_state = states_null;
-
-	Entity*					target = nullptr;
-
 
 };
 

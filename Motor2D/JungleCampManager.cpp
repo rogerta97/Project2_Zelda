@@ -4,8 +4,10 @@
 #include "j1Entity.h"
 #include "j1Timer.h"
 #include "Snakes.h"
+#include "Skeleton.h"
 
-#define S_RESPAWN_TIME 120
+#define SNAKE_RESPAWN_TIME 120
+#define SKELETON_RESPAWN_TIME 180
 
 JungleCampManager::JungleCampManager()
 {	
@@ -19,6 +21,7 @@ bool JungleCampManager::Start()
 {
 	//first test
 	SpawnSnake();
+	SpawnSkeleton();
 
 	return true;
 }
@@ -27,9 +30,14 @@ bool JungleCampManager::Update(float dt)
 {
 	bool ret = true;
 	
-	if (respawn.ReadSec() > S_RESPAWN_TIME)
+	if (respawn.ReadSec() > SNAKE_RESPAWN_TIME)
 	{
 		SpawnSnake();
+
+	}
+	if (s_respawn.ReadSec() > SKELETON_RESPAWN_TIME)
+	{
+		SpawnSkeleton();
 	}
 
 	return ret;
@@ -76,6 +84,15 @@ void JungleCampManager::SpawnSnake()
 	snakes.push_back(s3);
 	Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, { 2940,720 });
 	snakes.push_back(s4);
+}
+
+void JungleCampManager::SpawnSkeleton()
+{
+	if (skltn == nullptr)
+	{
+		skltn = (Skeleton*)App->entity->CreateEntity(skeleton, {800,970});
+	}
+
 }
 
 void JungleCampManager::KillJungleCamp(Entity * camp)

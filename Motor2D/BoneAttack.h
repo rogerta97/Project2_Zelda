@@ -7,6 +7,7 @@
 #include "j1Physics.h"
 #include "Animation.h"
 #include "Spell.h"
+#include "j1Spell.h"
 
 class b2Fixture;
 class PhysBody;
@@ -46,8 +47,8 @@ public:
 
 private:
 
-	float			initial_speed = 0;
 	iPoint			starting_pos = NULLPOINT;
+	int				angle = 0;
 
 	j1Timer			timer;
 

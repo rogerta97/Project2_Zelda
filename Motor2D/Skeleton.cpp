@@ -14,11 +14,11 @@
 #include "j1Scene.h"
 #include "j1Spell.h"
 #include "Spell.h"
+#include "BoneAttack.h"
 
 
-#define SKELETON_H 32
-#define SKELETON_W 32
-
+#define SKELETON_W 78
+#define SKELETON_H 48
 
 
 Skeleton::Skeleton(iPoint pos)
@@ -30,8 +30,8 @@ Skeleton::Skeleton(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	//AddAbility(0, 50, 500, 500, "spin"); //times are ms.
-	//AddAbility(1, 30, 500, 3000, "bone");
+	AddAbility(0, 50, 500, 1000, "spin"); //times are ms.
+	AddAbility(1, 30, 500, 1000, "bone");
 
 	pugi::xml_document doc;
 	App->LoadXML("skeleton.xml", doc);
@@ -90,7 +90,6 @@ bool Skeleton::Update(float dt)
 			if (state == s_s_idle)
 			{
 				state = s_s_attack;
-				target = entity;
 			}
 
 		}
@@ -108,10 +107,20 @@ bool Skeleton::Update(float dt)
 		Idle();
 		break;
 	case s_s_attack:
+		Attack();
 		break;
+	case s_s_stunned:
+		Stunned();
+		if (game_object->animator->IsCurrentAnimation("stunned") && game_object->animator->GetCurrentAnimation()->Finished())
+		{
+			state = s_s_attack;
+		}
+		
 	default:
 		break;
 	}
+
+	
 
 	return ret;
 }
@@ -121,10 +130,11 @@ bool Skeleton::Draw(float dt)
 	bool ret = true;
 
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
-
-	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ATTACK_RANGE, 255, 0, 0);
-
+	if (game_object->animator->IsCurrentAnimation("spin") && game_object->animator->GetCurrentAnimation()->Finished())
+	{
+		game_object->DeleteFixture(abilities.at(0)->fixture);
+		game_object->animator->GetCurrentAnimation()->Reset();
+	}
 	return ret;
 }
 
@@ -161,12 +171,30 @@ void Skeleton::Stunned()
 	game_object->SetAnimation("stunned");
 	flip = false;
 	anim_state = skeleton_stunned;
+
 }
 
 void Skeleton::Attack()
 {
-	
+	if (abilities.at(1)->CdCompleted() && abilities.at(0)->CdCompleted())
+	{
+		if (!game_object->animator->IsCurrentAnimation("spin"))
+		{
+			if (!game_object->animator->IsCurrentAnimation("bone"))
+			{
+				Bonemerang();
 
+			}
+			if (game_object->animator->IsCurrentAnimation("bone") && game_object->animator->GetCurrentAnimation()->Finished())
+			{
+				SpinAttack();
+			}
+		}
+		if (game_object->animator->IsCurrentAnimation("spin") && game_object->animator->GetCurrentAnimation()->Finished())
+		{
+			state = s_s_stunned;
+		}
+	}
 }
 
 void Skeleton::SpinAttack()
@@ -175,26 +203,18 @@ void Skeleton::SpinAttack()
 	flip = false;
 	anim_state = skeleton_spin;
 
-	/*if (abilities.at(0)->CdCompleted())
-	{
-		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
-		sp->SetTarget(target);
-		abilities.at(0)->cd_timer.Start();
-	}*/
+	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 70, fixture_type::f_t_attack);
+	
 }
 
-void Skeleton::BoneAttack()
+void Skeleton::Bonemerang()
 {
 	game_object->SetAnimation("bone");
 	flip = false;
 	anim_state = skeleton_bone;
 
-	/*if (abilities.at(0)->CdCompleted())
-	{
-		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
-		sp->SetTarget(target);
-		abilities.at(0)->cd_timer.Start();
-	}*/
+	BoneAttack* ba = (BoneAttack*)App->spell->CreateSpell(bone_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
+
 }
 
 void Skeleton::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

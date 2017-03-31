@@ -6,6 +6,7 @@
 #include "p2Point.h"
 #include "j1Timer.h"
 
+class Skeleton;
 class j1Timer;
 class Snakes;
 class Entity;
@@ -21,12 +22,14 @@ public:
 	bool CleanUp();
 
 	void SpawnSnake();
+	void SpawnSkeleton();
 
 	void KillJungleCamp(Entity* camp);
 
 private:
 
 	std::list<Entity*>		snakes;
+	Skeleton*				skltn = nullptr;
 	
 	j1Timer					respawn;
 	j1Timer					s_respawn;

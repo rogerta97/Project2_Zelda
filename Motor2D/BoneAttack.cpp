@@ -40,6 +40,8 @@ bool BoneAttack::Start()
 
 	game_object->SetAnimation("spin");
 
+	int angle = GetRandomValue(0, 360);
+
 	return ret;
 }
 
@@ -56,9 +58,9 @@ bool BoneAttack::Update(float dt)
 {
 	bool ret = true;
 
-	int angle = GetRandomValue(0, 360);
+	int speed = SPEED*dt;
 
-	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y});
+	game_object->SetPos({ game_object->fGetPos().x + (speed * cos(DEGTORAD * angle)), game_object->fGetPos().y + (speed * sin(DEGTORAD * angle))});
 		
 	
 	if (timer.ReadSec() > DESTRUCTION_TIME)
