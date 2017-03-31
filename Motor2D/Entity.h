@@ -64,6 +64,11 @@ enum states
 	snake_attack_lateral,
 	snake_attack_down,
 
+	skeleton_idle,
+	skeleton_stunned,
+	skeleton_spin,
+	skeleton_bone,
+
 	states_null,
 };
 

@@ -211,6 +211,7 @@
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\minion.xml" />
     <Xml Include="..\Game\Shop_config.xml" />
+    <Xml Include="..\Game\skeleton.xml" />
     <Xml Include="..\Game\snakepoison.xml" />
     <Xml Include="..\Game\snakes.xml" />
     <Xml Include="..\Game\tower.xml" />

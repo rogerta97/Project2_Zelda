@@ -496,5 +496,8 @@
     <Xml Include="..\Game\bush.xml">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
     </Xml>
+    <Xml Include="..\Game\skeleton.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

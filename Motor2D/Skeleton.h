@@ -44,20 +44,16 @@ public:
 
 	// On Collision
 	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	iPoint GetPos() const;
 
 private:
 
-	/*void Idle();
-	void DoAttack();
-	void AttackLeft();
-	void AttackRight();
-	void AttackUp();
-	void AttackDown();
-
-	bool LookForTarget();*/
+	void Idle();
+	void Stunned();
+	void Attack();
+	void SpinAttack();
+	void BoneAttack();
 
 private:
 
@@ -65,15 +61,10 @@ private:
 
 	bool					flip = false;
 
-	bool					is_attacked = false;
-
-	int						rel_angle = 0;
-
 	SKELETON_STATE			state = s_s_null;
 
 	states					anim_state = states_null;
 
-	Entity*					target = nullptr;
 
 };
 

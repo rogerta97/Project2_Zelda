@@ -27,7 +27,9 @@ public:
 private:
 
 	std::list<Entity*>		snakes;
+	
 	j1Timer					respawn;
+	j1Timer					s_respawn;
 
 };
 

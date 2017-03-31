@@ -95,4 +95,6 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 
 		snakes.clear();
 	}
+	App->entity->DeleteEntity(camp);
+	s_respawn.Start();
 }
