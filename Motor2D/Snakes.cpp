@@ -235,8 +235,8 @@ bool Snakes::LookForTarget()
 	std::vector<Entity*> players2;
 
 
-	players1 = App->entity->player_manager->GetTeamPlayers(1);
-	players2 = App->entity->player_manager->GetTeamPlayers(2);
+	players1 = App->scene->main_scene->player_manager->GetTeamPlayers(1);
+	players2 = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 
 	for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
 	{

@@ -43,58 +43,6 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
-	//Load Map
-	if (App->map->Load("zelda_moba.tmx"))
-	{
-		int w, h;
-		uchar* data = NULL;
-		if (App->map->CreateWalkabilityMap(w, h, &data))
-			App->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
-
-	// Shop Manager
-	shop_manager = new ShopManager();
-	shop_manager->Start();
-
-	// Loading Players
-	LOG("Loading Players");
-	bool def = false;
-	for (int i = 0; i < 4; i++)
-	{
-		if (App->scene->players[i].character == e_n_null)
-		{
-			def = true;
-			break;
-		}
-	}
-	if (!def)
-	{
-		Player* p1 = App->entity->player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
-		Player* p2 = App->entity->player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
-		Player* p3 = App->entity->player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
-		Player* p4 = App->entity->player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
-	}
-	else
-	{
-		Player* p1 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
-		Player* p2 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
-		Player* p3 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
-		Player* p4 = App->entity->player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
-	}
-
-	//Test Minion
-	LOG("Creating minion manager");
-	minion_manager = new MinionManager();
-
-	//Test Tower
-	LOG("Creating tower manager");
-	tower_manager = new TowerManager();
-
-	//Test Jungle Camp
-	jungleCamp_manager = new JungleCampManager();
-
 	//Create UI ---------
 	SDL_Rect screen = App->view->GetViewportRect(1);
 
@@ -186,6 +134,9 @@ bool MainScene::Start()
 	player_manager->DisableInput(0);
 	// ----
 
+	//Test Jungle Camp
+	jungleCamp_manager = new JungleCampManager();
+
 	//Test Minion
 	LOG("Creating minion manager");
 	minion_manager = new MinionManager();
@@ -193,18 +144,6 @@ bool MainScene::Start()
 	//Test Tower
 	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
-
-	//Creating quests
-	quest_manager = new QuestManager();
-	quest_manager->CreateQuest(string("Test"), 1); 
-	quest_manager->CreateQuest(string("Test"), 2);
-	quest_manager->CreateQuest(string("Test"), 3);
-	quest_manager->CreateQuest(string("Test"), 4);
-
-	App->console->AddText("viewports.set 4", Input);
-
-	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
-	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	CreateMapCollisions();
 
@@ -217,10 +156,21 @@ bool MainScene::Start()
 
 	base_manager = new BaseManager();
 
+	//Creating quests
+	quest_manager = new QuestManager();
+	quest_manager->CreateQuest(string("Test"), 1);
+	quest_manager->CreateQuest(string("Test"), 2);
+	quest_manager->CreateQuest(string("Test"), 3);
+	quest_manager->CreateQuest(string("Test"), 4);
 
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);
 	// ----
+
+	App->console->AddText("viewports.set 4", Input);
+
+	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
+	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
 	return ret;
 }
