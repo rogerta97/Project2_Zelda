@@ -90,6 +90,7 @@ bool Skeleton::Update(float dt)
 			if (state == s_s_idle)
 			{
 				state = s_s_attack;
+				target = entity;
 			}
 
 		}

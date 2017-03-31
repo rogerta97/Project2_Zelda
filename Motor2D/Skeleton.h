@@ -65,6 +65,8 @@ private:
 
 	states					anim_state = states_null;
 
+	Entity*					target = nullptr;
+
 
 };
 

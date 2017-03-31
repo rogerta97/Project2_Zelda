@@ -166,6 +166,9 @@
     <ClCompile Include="Skeleton.cpp">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClCompile>
+    <ClCompile Include="BoneAttack.cpp">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -363,6 +366,9 @@
     <ClInclude Include="Skeleton.h">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClInclude>
+    <ClInclude Include="BoneAttack.h">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -443,6 +449,9 @@
     <Filter Include="Engine\4. Entities ==========\Bushes">
       <UniqueIdentifier>{9ef085b3-7b82-40a9-b487-3f78df6b41e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\5. Spells ===========\BoneAttack">
+      <UniqueIdentifier>{d8f600ad-a766-4725-8bcf-09b65f6bd00d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -498,6 +507,9 @@
     </Xml>
     <Xml Include="..\Game\skeleton.xml">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\boneattack.xml">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
     </Xml>
   </ItemGroup>
 </Project>

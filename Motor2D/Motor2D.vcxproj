@@ -79,6 +79,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseManager.cpp" />
+    <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseManager.h" />
+    <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
@@ -202,6 +204,7 @@
     <Xml Include="..\Game\base.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Game\boneattack.xml" />
     <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\bush.xml" />
     <Xml Include="..\Game\eyes.xml" />

@@ -1,0 +1,16 @@
+<!--Config file for the game-->
+
+<file>
+  <animations texture = "textures/snakes_spritesheet.png">
+    <anim speed = "10" name = "spin" loop = "true">
+      <rect x = "192" y = "0" w = "16" h = "12"/>
+      <rect x = "208" y = "0" w = "16" h = "12"/>
+      <rect x = "226" y = "0" w = "12" h = "16"/>
+      <rect x = "238" y = "0" w = "12" h = "16"/>
+      <rect x = "192" y = "16" w = "16" h = "16"/>
+      <rect x = "208" y = "16" w = "16" h = "16"/>
+      <rect x = "224" y = "16" w = "16" h = "16"/>
+      <rect x = "240" y = "16" w = "16" h = "16"/>
+    </anim>
+  </animations>
+</file>
