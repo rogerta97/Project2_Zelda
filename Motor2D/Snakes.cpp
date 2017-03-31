@@ -65,7 +65,7 @@ bool Snakes::Update(float dt)
 {
 	bool ret = true;
 
-	LifeBar(iPoint(64, 4), iPoint(-32, -32));
+	LifeBar(iPoint(32, 4), iPoint(-20, -32));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
