@@ -1,10 +1,12 @@
 #include "BoneAttack.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
+#include "Functions.h"
 #include "p2Log.h"
 #include "Entity.h"
 
-#define DESTRUCTION_TIME 1.8f
+#define DESTRUCTION_TIME 2.0f
+#define SPEED 100
 
 BoneAttack::BoneAttack(iPoint pos)
 {
@@ -54,54 +56,11 @@ bool BoneAttack::Update(float dt)
 {
 	bool ret = true;
 
-	// Speed calculations
-	initial_speed = ((BOOMERANG_RANGE - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
+	int angle = GetRandomValue(0, 360);
 
-	float speed = ((initial_speed)+(ACCELERATION * timer.ReadSec())) * dt;
-
-
-	// Reduce damage and slow
-	if (!can_delete)
-	{
-		if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) < BOOMERANG_RANGE * 0.5f)
-		{
-			stats.stun_duration = 1.0f;
-			stats.damage_multiplicator = 1.3f;
-		}
-		else if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) > BOOMERANG_RANGE * 0.5f)
-		{
-			stats.stun_duration = 0.0f;
-			stats.damage_multiplicator = 0.7f;
-			stats.slow_duration = SLOW_TIME;
-			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
-		}
-	}
-	else
-	{
-		stats.stun_duration = 0.0f;
-		stats.damage_multiplicator = 0.7f;
-		stats.slow_duration = 0.0f;
-		stats.slow_multiplicator = 0.0f;
-	}
-
-	switch (dir)
-	{
-	case direction::up:
-		game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });
-		break;
-	case direction::down:
-		game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y + speed });
-		break;
-	case direction::left:
-		game_object->SetPos({ game_object->fGetPos().x - speed, game_object->fGetPos().y });
-		break;
-	case direction::right:
-		game_object->SetPos({ game_object->fGetPos().x + speed, game_object->fGetPos().y });
-		break;
-	default:
-		break;
-	}
-
+	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y});
+		
+	
 	if (timer.ReadSec() > DESTRUCTION_TIME)
 		App->spell->DeleteSpell(this);
 
