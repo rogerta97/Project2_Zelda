@@ -104,16 +104,28 @@ bool Tower::Update(float dt)
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
 	if (GotHit(entity, ability, spell))
-	{
-		if (entity->GetTeam() != GetTeam())
+		// Enemy attacks
+		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			stats.life -= ability->damage;
+			if (entity->is_player)
+				DealDamage((ability->damage * ability->damage_multiplicator)*(1 + (App->scene->main_scene->quest_manager->get_progress(1, entity->GetTeam()))*0.1));
+			else
+				DealDamage((ability->damage * ability->damage_multiplicator));
+
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+				if (spell->stats.slow_duration > 0)
+					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
+			}
 			if (stats.life <= 0)
 			{
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
-	}
 
 	return ret;
 }
