@@ -163,6 +163,9 @@
     <ClCompile Include="Bushes.cpp">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
     </ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="Bushes.h">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

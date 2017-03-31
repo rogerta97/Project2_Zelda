@@ -118,6 +118,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="QuestManager.cpp" />
     <ClCompile Include="ShopManager.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SnakePoison.cpp" />
     <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="Spell.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="QuestManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="SnakePoison.h" />
     <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
