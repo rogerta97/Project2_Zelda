@@ -24,7 +24,7 @@ struct collision_filters
 	short int MASK_PLAYER = CATEGORY_SCENERY | CATEGORY_ABILITIES | CATEGORY_PLAYER | CATEGORY_PAYLOAD_AREA;
 	short int MASK_ABILITIES = CATEGORY_PLAYER;
 	short int MASK_SCENERY = -1;
-	short int MASK_NONCOLLISIONABLE = CATEGORY_NONCOLLISIONABLE;
+	short int MASK_NONCOLLISIONABLE = 0;
 	short int MASK_PAYLOAD_AREA = CATEGORY_SCENERY | CATEGORY_PLAYER;
 
 };
@@ -50,6 +50,7 @@ enum class fixture_type
 	f_t_null = 0,
 	f_t_attack,
 	f_t_hit_box,
+	f_t_collision_box,
 	f_t_minion_hit_sensor,
 	f_t_zelda_area,
 	f_t_aesthetics
