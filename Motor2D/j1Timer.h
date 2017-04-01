@@ -15,9 +15,11 @@ public:
 	uint32 Read() const;
 	float ReadSec() const;
 	void SubstractTimeFromStart(float sec);
+	void Stop();
 
 private:
 	uint32	started_at;
+	bool	active = false;
 };
 
 #endif //__j1TIMER_H__

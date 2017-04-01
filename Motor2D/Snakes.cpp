@@ -35,6 +35,7 @@ Snakes::Snakes(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("snakes.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+	App->UnloadXML(doc);
 }
 
 Snakes::~Snakes()

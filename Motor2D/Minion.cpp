@@ -388,6 +388,7 @@ void Minion::CheckState()
 			target = nullptr;
 		}
 	}
+
 	switch (state)
 	{
 	case Minion_Idle:

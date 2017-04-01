@@ -208,6 +208,7 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case snake:
 		ret = new Snakes(pos);
+		break;
 	case bush:
 		ret = new Bush(pos);
 		break;

@@ -20,14 +20,17 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
-	void SpawnSnake();
+	void SpawnSnake(uint camp);
 
 	void KillJungleCamp(Entity* camp);
 
 private:
 
-	std::list<Entity*>		snakes;
-	j1Timer					respawn;
+	std::list<Entity*>		snakes_camp1;
+	std::list<Entity*>		snakes_camp2;
+
+	j1Timer					snakes_timer_camp1;
+	j1Timer					snakes_timer_camp2;
 
 };
 

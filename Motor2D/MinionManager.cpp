@@ -170,15 +170,15 @@ void MinionManager::AddMinions()
 {
 	Minion* team1 = (Minion*)App->entity->CreateEntity(minion, team1_spawn);
 	Minion* team2 = (Minion*)App->entity->CreateEntity(minion, team2_spawn);
-
+	
 	team1->SetTeam(1);
 	team2->SetTeam(2);
-
+	
 	team1->SetBasePath(minions_path);
 	minions_path.reverse();
 	team2->SetBasePath(minions_path);
 	minions_path.reverse();
-
+	
 	team1_minions.push_back(team1);
 	team2_minions.push_back(team2);
 }

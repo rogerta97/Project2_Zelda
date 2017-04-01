@@ -2,6 +2,7 @@
 #include "j1Window.h"
 #include "j1Input.h"
 #include "j1Console.h"
+#include "p2Log.h"
 
 j1Viewports::j1Viewports()
 {
@@ -54,6 +55,8 @@ bool j1Viewports::Update(float dt)
 {
 	bool ret = true;
 
+	timer.Start();
+
 	// Blit different layers
 	DoLayerPrint();
 	// ---------------------
@@ -66,6 +69,9 @@ bool j1Viewports::Update(float dt)
 		camera1.y++;
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		camera1.y--;
+
+
+	//LOG("viewports time: %f", timer.ReadMs());
 
 	return ret;
 }

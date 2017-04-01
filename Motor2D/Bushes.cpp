@@ -30,7 +30,7 @@ bool Bush::Draw(float dt)
 
 	App->view->LayerBlit(game_object->fGetPos().y, game_object->GetTexture(), iPoint(game_object->GetPos().x, game_object->GetPos().y + offset), game_object->GetCurrentAnimationRect(dt));
 	
-	return false;
+	return true;
 }
 
 void Bush::SetBushColor(const char * color)
@@ -98,7 +98,7 @@ void Bush::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b
 bool Bush::CleanUp()
 {
 
-	return false;
+	return true;
 }
 
 Bush::~Bush()
