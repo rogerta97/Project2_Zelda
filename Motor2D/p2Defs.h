@@ -16,7 +16,7 @@
     if( x != NULL && x != nullptr )        \
 	    {                      \
       delete x;            \
-	  x = NULL;              \
+	  x = nullptr;              \
 	    }                      \
     }
 
@@ -26,7 +26,7 @@
     if( x != NULL )              \
 	    {                            \
       delete[] x;                \
-	  x = NULL;                    \
+	  x = nullptr;                    \
 	    }                            \
                               \
     }

@@ -39,7 +39,7 @@ Tower::Tower(iPoint pos)
 
 Tower::~Tower()
 {
-	RELEASE(game_object);
+	
 }
 
 bool Tower::Start()

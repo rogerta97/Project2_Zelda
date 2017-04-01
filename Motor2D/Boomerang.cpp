@@ -9,6 +9,7 @@
 #define DESTRUCTION_TIME 1.8f
 #define SLOW_TIME 1.5f
 #define SLOW_MULTIPLICATOR 0.5f
+
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_ABILITIES, App->cf->MASK_ABILITIES, pbody_type::p_t_boomerang, 0);

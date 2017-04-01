@@ -34,8 +34,6 @@ bool j1Spell::PreUpdate()
 {
 	bool ret = true;
 
-	RemoveSpells();
-
 	if (!spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
@@ -70,6 +68,8 @@ bool j1Spell::PostUpdate()
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 			ret = (*it)->PostUpdate();
 	}
+
+	RemoveSpells();
 
 	return ret;
 }
@@ -118,7 +118,6 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 		break;
 	}
 	
-
 	ret->owner = owner;
 	ret->Start();
 	spell_list.push_back(ret);

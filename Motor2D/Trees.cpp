@@ -51,8 +51,7 @@ bool Tree::CleanUp()
 
 void Tree::SetTreeColor(const char * color)
 {
-		game_object->SetAnimation(color);
-	
+	game_object->SetAnimation(color);
 }
 
 Tree::~Tree()

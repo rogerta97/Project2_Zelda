@@ -166,6 +166,7 @@ iPoint GameObject::GetHitBoxSize() const
 void GameObject::CleanUp()
 {
 	App->physics->DeleteBody(pbody);
+	animator->CleanUp();
 	RELEASE(animator);
 }
 
