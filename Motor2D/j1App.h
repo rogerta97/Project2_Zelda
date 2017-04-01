@@ -30,6 +30,9 @@ class j1Entity;
 class j1Viewports;
 class j1Spell;
 
+//Events
+class EventThrower;
+
 class j1App
 {
 public:
@@ -74,6 +77,8 @@ public:
 	void EndSDL();
 
 	void OpenWebPage(char* url);
+
+	void ExpandEvent(int type, EventThrower* origin, int id);
 
 private:
 

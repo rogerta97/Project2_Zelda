@@ -163,6 +163,9 @@
     <ClCompile Include="Bushes.cpp">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
     </ClCompile>
+    <ClCompile Include="EventThrower.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="Bushes.h">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </ClInclude>
+    <ClInclude Include="EventThrower.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -83,6 +83,7 @@
     <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EventThrower.cpp" />
     <ClCompile Include="Eyes.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EventThrower.h" />
     <ClInclude Include="Eyes.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />

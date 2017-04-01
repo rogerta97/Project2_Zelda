@@ -18,6 +18,7 @@ using namespace std;
 class j1App;
 class PhysBody;
 class b2Fixture;
+class EventThrower;
 
 class j1Module
 {
@@ -106,6 +107,8 @@ public:
 	virtual void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const {
 
 	}
+
+	virtual void ListenEvent(int type, EventThrower* origin, int id) {};
 
 public:
 
