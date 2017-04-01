@@ -10,16 +10,30 @@ enum event_type
 	e_t_null, e_t_death, e_t_end_game,
 };
 
-struct Event
+class Event
 {
-	event_type	type;
-	int			event_id = -1;
+public:
+	Event(event_type type, Entity* entity = nullptr, int data_id = -1);
+	Event();
+
+	~Event();
+
+	int GetID();
+
+	//This is called automatically by the event thrower when creating the event
+	void SetID(int id);
+public:
+	event_type	type = e_t_null;
 	
 	union 
 	{
-		Entity* entity;
+		Entity* entity = nullptr;
 		int		id;
 	} event_data;
+
+private:
+	int			event_id = -1;
+
 };
 
 class EventThrower
