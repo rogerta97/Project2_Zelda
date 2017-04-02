@@ -47,6 +47,7 @@ Link::Link(iPoint pos)
 
 	blit_layer = 2;
 
+	name = "link";
 }
 
 Link::~Link()

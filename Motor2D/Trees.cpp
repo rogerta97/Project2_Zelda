@@ -35,6 +35,8 @@ Tree::Tree(iPoint pos)
 
 	game_object->SetFixedRotation(true); 
 	game_object->SetKinematic(); 
+
+	name = "tree";
 }
 
 bool Tree::Draw(float dt)

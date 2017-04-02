@@ -37,6 +37,8 @@ Minion::Minion(iPoint pos)
 	cd_timer.Start();
 
 	event_thrower = new EventThrower();
+
+	name = "minion";
 }
 
 Minion::~Minion()
@@ -428,7 +430,7 @@ void Minion::CheckState()
 				{
 					if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < vision_range)
 					{
-						if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
+						if (target != nullptr && App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
 						{
 							PathToTarget();
 						}
@@ -444,7 +446,8 @@ void Minion::CheckState()
 			}
 			break;
 		case Move_ReturnToPath:
-			if (base_path_index < base_path.size()) {
+			if (base_path_index < base_path.size()) 
+			{
 				iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 2)
 					move_state = Move_FollowBasePath;
@@ -556,8 +559,8 @@ bool Minion::LookForTarget()
 		}
 	}
 
-
-	/*if (ret == false)
+	// Check for turrets
+	if (ret == false)
 	{
 		std::list<Tower*> towers;
 		if (GetTeam() == 1)
@@ -574,7 +577,7 @@ bool Minion::LookForTarget()
 				break;
 			}
 		}
-	}*/
+	}
 
 	//Check for Players
 	if (ret == false)

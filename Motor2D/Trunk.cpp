@@ -17,6 +17,8 @@ Trunk::Trunk(iPoint _pos)
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 	game_object->SetAnimation("main"); 
+
+	name = "trunk";
 }
 
 

@@ -41,6 +41,7 @@ Skeleton::Skeleton(iPoint pos)
 	App->LoadXML("skeleton.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
+	name = "skeleton";
 }
 
 Skeleton::~Skeleton()

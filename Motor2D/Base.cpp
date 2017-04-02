@@ -20,6 +20,8 @@ Base::Base(iPoint pos)
 	App->LoadXML("base.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 	App->UnloadXML(doc);
+
+	name = "base";
 }
 
 Base::~Base()

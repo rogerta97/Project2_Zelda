@@ -14,6 +14,8 @@ Eyes::Eyes(iPoint pos)
 	App->LoadXML("eyes.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 	App->UnloadXML(doc);
+
+	name = "eyes";
 }
 
 Eyes::~Eyes()

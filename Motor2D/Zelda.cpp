@@ -30,6 +30,8 @@ Zelda::Zelda(iPoint pos)
 	state = z_s_wait;
 
 	App->UnloadXML(doc);
+
+	name = "zelda";
 }
 
 Zelda::~Zelda()

@@ -18,7 +18,8 @@ Bush::Bush(iPoint _pos)
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 	game_object->SetListener(App->entity); 
-	
+
+	name = "bush";
 }
 
 bool Bush::Draw(float dt)

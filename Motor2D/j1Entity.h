@@ -110,6 +110,7 @@ public:
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 	Ability* FindAbilityBySpellBody(PhysBody* spell);
 	Spell* FindSpellByBody(PhysBody* spell);
+	vector<Entity*> FindEntitiesByName(char* name);
 	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
 
 private:

@@ -35,6 +35,8 @@ Tower::Tower(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
+	name = "tower";
 }
 
 Tower::~Tower()

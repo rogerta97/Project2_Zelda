@@ -332,6 +332,8 @@ public:
 
 	// Delete 
 	bool			 to_delete = false;
+
+	string			 name;
 	
 protected:
 	// Draw

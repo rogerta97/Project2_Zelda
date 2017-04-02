@@ -185,14 +185,28 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 	{
 		curr_event = origin->GetEvent(id);
 
+		// Snake kills player
 		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player)
 		{
-			vector<Entity*> snakes = FindEntitiesByBodyType(pbody_type::p_t_snake);
+			vector<Entity*> snakes = FindEntitiesByName("snake");
 			for (int i = 0; i < snakes.size(); i++)
 			{
 				Snakes* s = (Snakes*)snakes.at(i);
 				if (s->target == curr_event->event_data.entity)
 					s->target = nullptr;
+			}
+		}
+
+		// Minion kills
+		if (curr_event->event_data.entity != nullptr)
+		{
+			vector<Entity*> minions = FindEntitiesByName("minion");
+
+			for (int i = 0; i < minions.size(); i++)
+			{
+				Minion* m = (Minion*)minions.at(i);
+				if (m->target == curr_event->event_data.entity)
+					m->target = nullptr;
 			}
 		}
 	}
@@ -369,6 +383,25 @@ Spell * j1Entity::FindSpellByBody(PhysBody * spell)
 			{
 				ret = (*it);
 				break;
+			}
+		}
+	}
+
+	return ret;
+}
+
+vector<Entity*> j1Entity::FindEntitiesByName(char* name)
+{
+	vector<Entity*> ret;
+
+	// Look on entities
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			if (TextCmp((*it)->name.c_str(), name))
+			{
+				ret.push_back(*it);
 			}
 		}
 	}

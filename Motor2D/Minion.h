@@ -103,6 +103,7 @@ private:
 	void SetIdleAnim();
 
 public:
+	Entity*				target = nullptr;
 
 private:
 
@@ -113,8 +114,6 @@ private:
 
 	MINION_STATE		state = Minion_Idle;
 	MINION_MOVE_STATE	move_state = Move_FollowBasePath;
-
-	Entity*				target = nullptr;
 
 	std::vector<iPoint>	base_path;
 	std::vector<iPoint>	target_path;
