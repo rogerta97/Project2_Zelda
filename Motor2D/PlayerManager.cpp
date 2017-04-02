@@ -54,6 +54,9 @@ bool PlayerManager::Start()
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
+	// Event
+	event_thrower = new EventThrower();
+
 	return true;
 }
 
@@ -849,7 +852,14 @@ void PlayerManager::CheckIfRespawn(Player * player)
 void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
+	{
+		Event* event_die = new Event();
+		event_die->type = e_t_death;
+		event_die->event_data.entity = player->entity;
+		event_thrower->AddEvent(event_die);
+
 		player->Kill();
+	}
 }
 
 void PlayerManager::UpdateUI(Player* curr_player)

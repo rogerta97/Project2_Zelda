@@ -3,6 +3,8 @@
 #include "Boomerang.h"
 #include "TowerAttack.h"
 #include "SnakePoison.h"
+#include "EventThrower.h"
+#include "GameObject.h"
 
 j1Spell::j1Spell()
 {
@@ -101,6 +103,21 @@ void j1Spell::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fix
 		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
 }
 
+void j1Spell::ListenEvent(int type, EventThrower * origin, int id)
+{
+	Event* curr_event = nullptr;
+
+	if (type = static_cast<int>(event_type::e_t_death))
+	{
+		Event* curr_event = origin->GetEvent(id);
+
+		if (curr_event->event_data.entity != nullptr)
+		{
+			DeleteSpellIfTarget(curr_event->event_data.entity);
+		}
+	}
+}
+
 Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 {
 	Spell* ret = nullptr;
@@ -127,6 +144,20 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 void j1Spell::DeleteSpell(Spell * spell)
 {
 	spell->to_delete = true;
+}
+
+void j1Spell::DeleteSpellIfTarget(Entity * target)
+{
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			if ((*it)->target == target)
+			{
+				DeleteSpell(*it);
+			}
+		}
+	}
 }
 
 void j1Spell::ClearSpells()

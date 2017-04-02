@@ -46,6 +46,7 @@ Link::Link(iPoint pos)
 	draw_offset = restore_draw_offset = { 16, 26 }; // 
 
 	blit_layer = 2;
+
 }
 
 Link::~Link()

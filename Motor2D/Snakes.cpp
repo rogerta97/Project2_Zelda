@@ -199,7 +199,6 @@ void Snakes::DoAttack()
 
 void Snakes::AttackLeft()
 {
-	
 	game_object->SetAnimation("snake_lateral");
 	flip = false;
 	DoAttack();

@@ -7,7 +7,7 @@
 
 SnakePoison::SnakePoison(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(15, 15), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_tower_attack, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(15, 15), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_snake_poison, 0);
 	hit_box = game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetListener((j1Module*)App->spell);

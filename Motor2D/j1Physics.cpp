@@ -1059,7 +1059,7 @@ void j1Physics::EndContact(b2Contact * contact)
 	{
 		for (int i = 0; i < physA->listeners.size(); i++)
 		{
-			if (physA->listeners.at(i) != nullptr && physB->listeners.at(i) != nullptr)
+			if (physA->listeners.at(i) != nullptr)
 				physA->listeners.at(i)->OnCollisionOut(physA, physB, fixtureA, fixtureB);
 		}
 	}

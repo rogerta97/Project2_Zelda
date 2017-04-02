@@ -7,18 +7,24 @@ EventThrower::EventThrower()
 
 EventThrower::~EventThrower()
 {
-	for (std::list<Event*>::iterator it = events.begin(); it != events.end();)
+	if (!events.empty())
 	{
-		RELEASE(*it);
-		it = events.erase(it);
+		for (std::list<Event*>::iterator it = events.begin(); it != events.end();)
+		{
+			RELEASE(*it);
+			it = events.erase(it);
+		}
+
+		events.clear();
 	}
-	
-	events.clear();
 }
 
 void EventThrower::AddEvent(Event * new_event)
 {
-	new_event->SetID(events.size());
+	if (events.empty())
+		new_event->SetID(0);
+	else
+		new_event->SetID(events.size());
 
 	events.push_back(new_event);
 
@@ -27,10 +33,13 @@ void EventThrower::AddEvent(Event * new_event)
 
 Event * EventThrower::GetEvent(int id)
 {
-	for (std::list<Event*>::iterator it = events.begin(); it != events.end(); ++it)
+	if (!events.empty())
 	{
-		if (id == (*it)->GetID())
-			return *it;
+		for (std::list<Event*>::iterator it = events.begin(); it != events.end(); it++)
+		{
+			if (id == (*it)->GetID())
+				return *it;
+		}
 	}
 }
 

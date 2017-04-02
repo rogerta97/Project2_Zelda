@@ -63,6 +63,9 @@ public:
 	// Sets listener module
 	void SetListener(j1Module* scene);
 
+	// Deletes listener module
+	void DeleteListener(j1Module* scene);
+
 	// Changes cateogry and mask of the body
 	void SetCatMask(int cat, int mask);
 

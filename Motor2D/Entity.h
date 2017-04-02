@@ -11,6 +11,7 @@
 #include "j1Spell.h"
 #include "Entity.h"
 #include "j1Entity.h"
+#include "EventThrower.h"
 
 class b2Fixture;
 class PhysBody;

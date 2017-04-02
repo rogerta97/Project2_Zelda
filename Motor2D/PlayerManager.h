@@ -136,6 +136,8 @@ private:
 	vector<UI_Image*>	habilities_2;
 	vector<UI_Image*>	habilities_3;
 	vector<UI_Image*>   habilities_4;
+
+	EventThrower*       event_thrower = nullptr;
 };
 
 #endif // __PLAYER_MANAGER_H__
