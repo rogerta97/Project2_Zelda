@@ -90,10 +90,8 @@ bool Link::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			if (entity->is_player)
-				DealDamage((ability->damage * ability->damage_multiplicator)*(1 + (App->scene->main_scene->quest_manager->get_progress(1, entity->GetTeam()))*0.1));
-			else
-				DealDamage((ability->damage * ability->damage_multiplicator));
+			DealDamage((ability->damage * ability->damage_multiplicator));
+
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
 				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1));
@@ -102,12 +100,6 @@ bool Link::Update(float dt)
 					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
 				if (spell->stats.stun_duration > 0)
 					Stun(spell->stats.stun_duration);
-			}
-			if (stats.life <= 0)
-			{
-				int team = entity->GetTeam();
-				if (entity->is_player) App->scene->main_scene->quest_manager->add_progress(1,team);
-				App->scene->main_scene->quest_manager->update_progress();
 			}
 		}
 

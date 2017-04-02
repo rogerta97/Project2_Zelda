@@ -28,6 +28,7 @@
 #include "BaseManager.h"
 #include "Quest_Manager.h"
 #include "JungleCampManager.h"
+#include "EventThrower.h"
 
 MainScene::MainScene()
 {
@@ -362,6 +363,44 @@ void MainScene::UpdateProgressBar()
 	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 5 });
 	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 5 });
 	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 5 });
+}
+
+void MainScene::ListenEvent(int type, EventThrower * origin, int id)
+{
+	event_type etype = static_cast<event_type>(type);
+
+	switch (etype)
+	{
+	case e_t_null:
+		break;
+	case e_t_death:
+	{
+		Event* e = origin->GetEvent(id);
+		if (e->event_data.entity->is_player) {
+			int team = e->event_data.entity->GetTeam();
+			switch (team)
+			{
+			case 1:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 2);
+			}
+			case 2:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 1);
+			}
+			default:
+				break;
+			}
+			App->scene->main_scene->quest_manager->update_progress();
+		}
+		break;
+	}
+		
+	case e_t_end_game:
+		break;
+	default:
+		break;
+	}
 }
 
 void MainScene::CreateMapCollisions()

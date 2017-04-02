@@ -4,6 +4,8 @@
 #include "MainScene.h"
 #include "j1Scene.h"
 #include "j1Viewports.h"
+#include "Entity.h"
+#include "PlayerManager.h"
 
 QuestManager::QuestManager()
 {
@@ -130,6 +132,10 @@ void QuestManager::update_progress()
 				{
 					vquest[i]->state = inactive;
 					vquest[i]->task[i]->times_completed++;
+					for (int i = 0; i < App->scene->main_scene->player_manager->players.size(); i++)
+					{
+						App->scene->main_scene->player_manager->players[i]->entity->UpdateStats(0, 0, 0);
+					}
 					i++;
 				}
 			}

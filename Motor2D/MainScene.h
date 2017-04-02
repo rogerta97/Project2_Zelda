@@ -46,7 +46,7 @@ public:
 
 	void EndGame(int winner);
 	void UpdateProgressBar();
-
+	void ListenEvent(int type, EventThrower* origin, int id);
 
 private:
 	void CreateMapCollisions();

@@ -51,9 +51,6 @@ bool Base::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			if (entity->is_player)
-				DealDamage((ability->damage * ability->damage_multiplicator)*(1 + (App->scene->main_scene->quest_manager->get_progress(1, entity->GetTeam()))*0.1));
-			else
 				DealDamage((ability->damage * ability->damage_multiplicator));
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
