@@ -22,6 +22,8 @@
 
 #define STUN 2.0f
 
+#define HALFMAP 81*32
+
 
 Skeleton::Skeleton(iPoint pos)
 {
@@ -218,11 +220,15 @@ void Skeleton::SpinAttack()
 
 void Skeleton::Bonemerang()
 {
-	int angle = GetRandomValue(0, 360);
-	
 	game_object->SetAnimation("bone");
 	flip = false;
 	anim_state = skeleton_bone;
+	int angle = 0;
+	
+	if(game_object->GetPos().x < HALFMAP)
+		angle = GetRandomValue(100, 170);
+	else
+		angle = GetRandomValue(80, -80);
 
 	BoneAttack* ba = (BoneAttack*)App->spell->CreateSpell(bone_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 	ba->SetAngle(angle);
