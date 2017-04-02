@@ -40,7 +40,6 @@ bool BoneAttack::Start()
 
 	game_object->SetAnimation("spin");
 
-	int angle = GetRandomValue(0, 360);
 
 	return ret;
 }
@@ -91,6 +90,11 @@ bool BoneAttack::CleanUp()
 	bool ret = true;
 
 	return ret;
+}
+
+void BoneAttack::SetAngle(int _angle)
+{
+	angle = _angle;
 }
 
 void BoneAttack::CleanSpell()

@@ -47,6 +47,7 @@ public:
 
 	iPoint GetPos() const;
 
+
 private:
 
 	void Idle();

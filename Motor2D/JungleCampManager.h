@@ -21,23 +21,26 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
-	void SpawnSkeleton();
+	void SpawnSkeleton(uint camp);
 
 	void SpawnSnake(uint camp);
-
 
 	void KillJungleCamp(Entity* camp);
 
 private:
 
 
-	Skeleton*				skltn = nullptr;
-
 	std::list<Entity*>		snakes_camp1;
 	std::list<Entity*>		snakes_camp2;
 
 	j1Timer					snakes_timer_camp1;
 	j1Timer					snakes_timer_camp2;
+
+	std::list<Entity*>		skeleton_camp1;
+	std::list<Entity*>		skeleton_camp2;
+
+	j1Timer					skeleton_timer_camp1;
+	j1Timer					skeleton_timer_camp2;
 
 
 };

@@ -68,6 +68,8 @@ private:
 
 	states					anim_state = states_null;
 
+	iPoint					draw_offset = NULLPOINT;
+
 };
 
 #endif // !SKELETON_H_

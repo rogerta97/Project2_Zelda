@@ -30,6 +30,8 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	void SetAngle(int angle);
+
 	void CleanSpell();
 
 	virtual bool Load(pugi::xml_node&)

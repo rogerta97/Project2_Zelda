@@ -20,7 +20,7 @@
 #define SKELETON_W 78
 #define SKELETON_H 48
 
-#define STUN 1.0f
+#define STUN 2.0f
 
 
 Skeleton::Skeleton(iPoint pos)
@@ -38,6 +38,7 @@ Skeleton::Skeleton(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("skeleton.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
 }
 
 Skeleton::~Skeleton()
@@ -68,7 +69,7 @@ bool Skeleton::Update(float dt)
 {
 	bool ret = true;
 
-	LifeBar(iPoint(50, 4), iPoint(-20, -32));
+	LifeBar(iPoint(50, 4), iPoint(-23, -52));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -128,7 +129,7 @@ bool Skeleton::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 24 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	
 	return ret;
 }
@@ -158,6 +159,8 @@ void Skeleton::Idle()
 	game_object->SetAnimation("skeleton_idle");
 	flip = false;
 	anim_state = skeleton_idle;
+
+	draw_offset = NULLPOINT;
 }
 
 void Skeleton::Stunned()
@@ -166,6 +169,9 @@ void Skeleton::Stunned()
 	game_object->SetAnimation("stunned");
 	flip = false;
 	anim_state = skeleton_stunned;
+
+	draw_offset = NULLPOINT;
+
 	if (!stun_timer.IsActive())
 		stun_timer.Start();
 
@@ -204,17 +210,22 @@ void Skeleton::SpinAttack()
 	anim_state = skeleton_spin;
 
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 70, fixture_type::f_t_attack);
+
+	draw_offset.x = 40;
+	draw_offset.y = 22;
 	
 }
 
 void Skeleton::Bonemerang()
 {
+	int angle = GetRandomValue(0, 360);
+	
 	game_object->SetAnimation("bone");
 	flip = false;
 	anim_state = skeleton_bone;
 
 	BoneAttack* ba = (BoneAttack*)App->spell->CreateSpell(bone_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
-
+	ba->SetAngle(angle);
 }
 
 void Skeleton::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

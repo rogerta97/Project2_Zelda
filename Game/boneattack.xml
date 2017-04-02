@@ -1,7 +1,7 @@
 <!--Config file for the game-->
 
 <file>
-  <animations texture = "textures/snakes_spritesheet.png">
+  <animations texture = "textures/Boss_Spritesheet.png">
     <anim speed = "10" name = "spin" loop = "true">
       <rect x = "192" y = "0" w = "16" h = "12"/>
       <rect x = "208" y = "0" w = "16" h = "12"/>
