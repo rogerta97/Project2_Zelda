@@ -200,7 +200,7 @@ std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)
 	{
 		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			if ((*it)->entity->GetTeam() == team)
+			if ((*it)->team == team && !(*it)->is_dead)
 			{
 				ret.push_back((*it)->entity);
 			}
