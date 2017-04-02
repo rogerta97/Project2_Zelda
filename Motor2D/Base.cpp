@@ -39,7 +39,7 @@ bool Base::Start()
 
 bool Base::Update(float dt)
 {
-	LifeBar(iPoint(60, 6), iPoint(30, -10));
+	LifeBar(iPoint(120, 10), iPoint(-55, -160));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
