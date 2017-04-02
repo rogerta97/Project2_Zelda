@@ -54,7 +54,7 @@ public:
 	Item*	    items[3] = { nullptr,nullptr,nullptr };
 
 	uint	    controller_index = 0;
-	uint	    viewport = 0;
+	uint		viewport = 0;
 
 	UI_Text*    rupees_num = nullptr;
 	uint	    rupees = 20000;
@@ -126,6 +126,7 @@ private:
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
+	void UpdateDeathUI(Player* player);
 
 public:
 	vector<Player*>     players;
@@ -133,9 +134,20 @@ public:
 private:
 	// UI
 	vector<UI_Image*>	habilities_1;
+	UI_ColoredRect*		death_rect_1 = nullptr;
+	UI_Text*			death_text_1 = nullptr;
+
 	vector<UI_Image*>	habilities_2;
+	UI_ColoredRect*		death_rect_2 = nullptr;
+	UI_Text*			death_text_2 = nullptr;
+
 	vector<UI_Image*>	habilities_3;
+	UI_ColoredRect*		death_rect_3 = nullptr;
+	UI_Text*			death_text_3 = nullptr;
+
 	vector<UI_Image*>   habilities_4;
+	UI_ColoredRect*		death_rect_4 = nullptr;
+	UI_Text*			death_text_4 = nullptr;
 
 	EventThrower*       event_thrower = nullptr;
 };

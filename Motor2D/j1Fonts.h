@@ -40,6 +40,7 @@ public:
 	_TTF_Font*				game_font = nullptr; 
 	_TTF_Font*				game_font_12 = nullptr; 
 	_TTF_Font*				game_font_small = nullptr;
+	_TTF_Font*				game_font_20 = nullptr;
 
 };
 

@@ -30,29 +30,48 @@ bool PlayerManager::Start()
 	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
 	iPoint ability4_pos = { (screen.w) / 50, screen.h - 76 };
 
+	SDL_Color death_rect_color = { 32, 32, 32, 100 };
+	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
+
 	// p1
 	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
 	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
 	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	death_rect_1 = App->scene->main_scene->main_window_1->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
+	death_rect_1->enabled = false; death_rect_1->blit_layer += 1;
+	death_text_1 = App->scene->main_scene->main_window_1->CreateText(death_text_pos, App->font->game_font_20, 0);
+	death_text_1->enabled = false; death_text_1->blit_layer += 1;
 
 	// p2
 	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
 	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
 	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	death_rect_2 = App->scene->main_scene->main_window_2->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
+	death_rect_2->enabled = false; death_rect_1->blit_layer += 1;
+	death_text_2 = App->scene->main_scene->main_window_2->CreateText(death_text_pos, App->font->game_font_20, 0);
+	death_text_2->enabled = false; death_text_2->blit_layer += 1;
 
 	// p3
 	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
 	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
 	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	death_rect_3 = App->scene->main_scene->main_window_3->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
+	death_rect_3->enabled = false; death_rect_1->blit_layer += 1;
+	death_text_3 = App->scene->main_scene->main_window_3->CreateText(death_text_pos, App->font->game_font_20, 0);
+	death_text_3->enabled = false; death_text_3->blit_layer += 1;
 
 	// p4
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	death_rect_4 = App->scene->main_scene->main_window_4->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
+	death_rect_4->enabled = false; death_rect_1->blit_layer += 1;
+	death_text_4 = App->scene->main_scene->main_window_4->CreateText(death_text_pos, App->font->game_font_20, 0);
+	death_text_4->enabled = false; death_text_4->blit_layer += 1;
 
 	// Event
 	event_thrower = new EventThrower();
@@ -88,6 +107,7 @@ bool PlayerManager::Update(float dt)
 				MoveCamera(curr_player);
 
 			CheckIfRespawn(curr_player);
+			UpdateDeathUI(curr_player);
 		}
 	}
 
@@ -870,7 +890,29 @@ void PlayerManager::CheckIfRespawn(Player * player)
 	if (player->is_dead)
 	{
 		if (player->death_timer.ReadSec() > player->death_time)
+		{
+			switch (player->viewport)
+			{
+			case 1:
+				death_rect_1->SetEnabled(false);
+				death_text_1->SetEnabled(false);
+				break;
+			case 2:
+				death_rect_2->SetEnabled(false);
+				death_text_2->SetEnabled(false);
+				break;
+			case 3:
+				death_rect_3->SetEnabled(false);
+				death_text_3->SetEnabled(false);
+				break;
+			case 4:
+				death_rect_4->SetEnabled(false);
+				death_text_4->SetEnabled(false);
+				break;
+			}
+
 			player->Respawn();
+		}
 	}
 }
 
@@ -883,7 +925,28 @@ void PlayerManager::CheckIfDeath(Player * player)
 		event_die->event_data.entity = player->entity;
 		event_thrower->AddEvent(event_die);
 
+		switch (player->viewport)
+		{
+		case 1:
+			death_rect_1->SetEnabled(true);
+			death_text_1->SetEnabled(true);
+			break;
+		case 2:
+			death_rect_2->SetEnabled(true);
+			death_text_2->SetEnabled(true);
+			break;
+		case 3:
+			death_rect_3->SetEnabled(true);
+			death_text_3->SetEnabled(true);
+			break;
+		case 4:
+			death_rect_4->SetEnabled(true);
+			death_text_4->SetEnabled(true);
+			break;
+		}
+
 		player->Kill();
+
 	}
 }
 
@@ -1032,6 +1095,38 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	}
 
 	// --------------
+}
+
+void PlayerManager::UpdateDeathUI(Player * player)
+{
+	string str("You are death, respawn time ");
+	int time = player->death_time + 1 - player->death_timer.ReadSec();
+	 
+	str += std::to_string(time);
+
+	switch (player->viewport)
+	{
+	case 1:
+	{	
+		death_text_1->SetText(str);
+	}
+	break;
+	case 2:
+	{
+		death_text_2->SetText(str);
+	}
+	break;
+	case 3:
+	{
+		death_text_3->SetText(str);
+	}
+	break;
+	case 4:
+	{
+		death_text_4->SetText(str);
+	}
+	break;
+	}
 }
 
 
