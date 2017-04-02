@@ -126,14 +126,14 @@ bool MainScene::Start()
 	}
 	else
 	{
-		Player* p1 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1);
-		Player* p2 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1);
-		Player* p3 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2);
-		Player* p4 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2);
+		Player* p1 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1, 1);
+		Player* p2 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1, 2);
+		Player* p3 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2, 1);
+		Player* p4 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2, 2);
 	}
 
 	// Disable player input until level is loaded
-	player_manager->DisableInput(0);
+	player_manager->disable_controller = true;
 	// ----
 
 	//Test Jungle Camp
@@ -166,7 +166,7 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("Test"), 4);
 
 	// Allow player input once the level is loaded
-	player_manager->AllowInput(0);
+	player_manager->disable_controller = false;
 	// ----
 
 	game_timer.Start();
@@ -183,7 +183,8 @@ bool MainScene::PreUpdate()
 {
 	bool ret = true;
 
-	player_manager->PreUpdate();
+	if (player_manager != nullptr)
+		player_manager->PreUpdate();
 
 	return ret;
 }
@@ -194,13 +195,6 @@ bool MainScene::Update(float dt)
 
 	// Draw map
 	App->map->Draw();
-
-	// Test
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
-	{
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
-		App->view->SetViews(1);
-	}
 
 	// Update Managers
 	if(minion_manager != nullptr)
@@ -223,7 +217,15 @@ bool MainScene::Update(float dt)
 	// End Game
 	if (winner != 0 && game_timer.ReadSec() > end_delay)
 	{
-		App->scene->ChangeScene(App->scene->menu_scene);
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
+	}
+
+	// Test
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
 	}
 	// ------
 
@@ -236,7 +238,8 @@ bool MainScene::PostUpdate()
 {
 	bool ret = true;
 
-	player_manager->PostUpdate();
+	if (player_manager != nullptr)
+		player_manager->PostUpdate();
 
 	return ret;
 }
@@ -344,7 +347,7 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 
 void MainScene::EndGame(int _winner)
 {
-	player_manager->DisableInput(0);
+	player_manager->disable_controller = true;
 
 	winner = _winner;
 

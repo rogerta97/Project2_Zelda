@@ -23,7 +23,7 @@ class Player
 {
 public:
 	Player() {  };
-	Player(Entity* _entity, uint _controller_index, uint _viewport)
+	Player(Entity* _entity, uint _controller_index, uint _viewport, iPoint _respawn)
 	{
 		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
 		uint win_w, win_h;
@@ -32,6 +32,8 @@ public:
 		int y = 30 + ((viewport - 1) / 2)*win_h / 2;
 		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
 		UpdateRupees();
+		team = entity->GetTeam();
+		respawn = _respawn;
 	}
 
 	void BuyItem(Item* item, int price);
@@ -61,7 +63,9 @@ public:
 	float		death_time = 5.0f;
 
 	bool		is_dead = false;
-	
+
+	iPoint		respawn = NULLPOINT;
+	int			team = 0;	
 };
 
 class PlayerManager
@@ -91,15 +95,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	Player* AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn = true, int show_life_bar = true);
-	void ChangePlayer(entity_name name, int controller_index, int viewport);
+	Player* AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, int respawn = 1, int show_life_bar = true);
 	void DeletePlayer(int index);
 	void ClearPlayers();
 	
 	std::vector<Entity*> GetTeamPlayers(int team);
 	std::vector<int> GetTeamViewports(int team);
 	int GetEntityViewportIfIsPlayer(Entity* entity);
-	iPoint GetFreePlayerSpawn(int team);
+	iPoint GetFreePlayerSpawn(int team, int respawn);
 
 	// Ability goes from 1 to 4
 	bool IsAbilityCdCompleted(Player* player, int ability);
@@ -108,9 +111,6 @@ public:
 
 	int GetPlayerTeamFromBody(PhysBody* body);
 	Player* GetPlayerFromBody(PhysBody* body);
-
-	//Disable player input. 0 to disable all
-	void DisableInput(int player);
 
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
@@ -123,17 +123,18 @@ private:
 	void UpdateUI(Player* player);
 
 public:
-	vector<Player*> players;
+	vector<Player*>     players;
+
+	bool				disable_controller = false;
 
 private:
-	vector<iPoint> spawn_points_used_team1;
-	vector<iPoint> spawn_points_used_team2;
-
 	// UI
 	vector<UI_Image*>	habilities_1;
 	vector<UI_Image*>	habilities_2;
 	vector<UI_Image*>	habilities_3;
 	vector<UI_Image*>   habilities_4;
+
+	EventThrower*       event_thrower = nullptr;
 };
 
 #endif // __PLAYER_MANAGER_H__

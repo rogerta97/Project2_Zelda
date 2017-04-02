@@ -533,3 +533,9 @@ void j1App::OpenWebPage(char * url)
 {
 	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWMAXIMIZED);
 }
+
+void j1App::ExpandEvent(int type, EventThrower * origin, int id)
+{
+	for (list<j1Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
+		(*it)->ListenEvent(type, origin, id);
+}

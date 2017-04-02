@@ -5,6 +5,7 @@
 #include "j1Gui.h"
 #include "Scene.h"
 #include <vector>
+#include "j1PerfTimer.h"
 
 struct SDL_Texture;
 class MainScene;
@@ -175,6 +176,8 @@ private:
 	SDL_Rect			 view4_4 = NULLRECT;
 
 	float				 scale = -1.0;
+
+	j1PerfTimer			 timer;
 
 };
 

@@ -35,6 +35,7 @@ Snakes::Snakes(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("snakes.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+	App->UnloadXML(doc);
 }
 
 Snakes::~Snakes()
@@ -147,7 +148,7 @@ bool Snakes::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ATTACK_RANGE, 255, 0, 0);
@@ -198,7 +199,6 @@ void Snakes::DoAttack()
 
 void Snakes::AttackLeft()
 {
-	
 	game_object->SetAnimation("snake_lateral");
 	flip = false;
 	DoAttack();

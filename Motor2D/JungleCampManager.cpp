@@ -20,8 +20,10 @@ JungleCampManager::~JungleCampManager()
 bool JungleCampManager::Start()
 {
 	//first test
-	SpawnSnake();
+
 	SpawnSkeleton();
+	SpawnSnake(0);
+
 
 	return true;
 }
@@ -30,14 +32,28 @@ bool JungleCampManager::Update(float dt)
 {
 	bool ret = true;
 	
-	if (respawn.ReadSec() > SNAKE_RESPAWN_TIME)
-	{
-		SpawnSnake();
 
-	}
-	if (s_respawn.ReadSec() > SKELETON_RESPAWN_TIME)
+	if (snakes_camp1.empty() && !snakes_timer_camp1.IsActive())
 	{
-		SpawnSkeleton();
+		snakes_timer_camp1.Start();
+	}
+
+	if (snakes_camp2.empty() && !snakes_timer_camp2.IsActive())
+	{
+		snakes_timer_camp2.Start();
+	}
+
+	if (snakes_timer_camp1.ReadSec() > SNAKE_RESPAWN_TIME)
+	{
+		SpawnSnake(1);
+		snakes_timer_camp1.Stop();
+	}
+
+	if (snakes_timer_camp2.ReadSec() > SNAKE_RESPAWN_TIME)
+	{
+		SpawnSnake(2);
+		snakes_timer_camp2.Stop();
+
 	}
 
 	return ret;
@@ -45,45 +61,67 @@ bool JungleCampManager::Update(float dt)
 
 bool JungleCampManager::CleanUp()
 {
-	for (std::list<Entity*>::const_iterator item = snakes.begin(); item != snakes.end(); ++item)
+	for (std::list<Entity*>::const_iterator item = snakes_camp1.begin(); item != snakes_camp1.end();)
 	{
-		if ((*item) != nullptr)
-		{
-			App->entity->DeleteEntity(*item);
-		}
+		App->entity->DeleteEntity(*item);
+		item = snakes_camp1.erase(item);
 	}
 
-	snakes.clear();
+	snakes_camp1.clear();
+
+	for (std::list<Entity*>::const_iterator item = snakes_camp2.begin(); item != snakes_camp2.end();)
+	{
+		App->entity->DeleteEntity(*item);
+		item = snakes_camp2.erase(item);
+	}
+
+	snakes_camp1.clear();
+	snakes_camp2.clear();
 
 	return true;
 }
 
-void JungleCampManager::SpawnSnake()
+void JungleCampManager::SpawnSnake(uint camp)
 {
-	if (!snakes.empty())
+	switch (camp)
 	{
-		for (list<Entity*>::iterator it = snakes.begin(); it != snakes.end();)
-		{
-			if ((*it) != nullptr)
-			{
-				App->entity->DeleteEntity(*it);
-				it = snakes.erase(it);
-			}
-			else
-				++it;
-		}
+	case 0:
+	{
+		Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 2490,1740 });
+		Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, { 2530,1740 });
 
-		snakes.clear();
+		snakes_camp1.push_back(s1);
+		snakes_camp1.push_back(s2);
+
+		Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, { 2900,720 });
+		Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, { 2940,720 });
+
+		snakes_camp2.push_back(s3);
+		snakes_camp2.push_back(s4);
+		break; 
+	}
+	case 1:
+	{
+		Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 2490,1740 });
+		Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, { 2530,1740 });
+
+		snakes_camp1.push_back(s1);
+		snakes_camp1.push_back(s2);
+		break;
+	}
+	case 2:
+	{
+		Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, { 2900,720 });
+		Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, { 2940,720 });
+
+		snakes_camp2.push_back(s3);
+		snakes_camp2.push_back(s4);
+		break;
+	}
+	default:
+		break;
 	}
 
-	Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 2490,1740 });
-	snakes.push_back(s1);
-	Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, { 2530,1740 });
-	snakes.push_back(s2);
-	Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, { 2900,720 });
-	snakes.push_back(s3);
-	Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, { 2940,720 });
-	snakes.push_back(s4);
 }
 
 void JungleCampManager::SpawnSkeleton()
@@ -97,21 +135,17 @@ void JungleCampManager::SpawnSkeleton()
 
 void JungleCampManager::KillJungleCamp(Entity * camp)
 {
-	if (!snakes.empty())
+	if (camp->type == snake)
 	{
-		for (std::list<Entity*>::iterator it = snakes.begin(); it != snakes.end(); it++)
+		if (camp->GetPos().x < 2750)
 		{
-			if (camp == (*it))
-			{
-				App->entity->DeleteEntity(camp);
-				snakes.erase(it);
-				respawn.Start();
-				break;
-			}
+			snakes_camp1.remove(camp);
 		}
-
-		snakes.clear();
+		else
+		{
+			snakes_camp2.remove(camp);
+		}
 	}
 	App->entity->DeleteEntity(camp);
-	s_respawn.Start();
+
 }

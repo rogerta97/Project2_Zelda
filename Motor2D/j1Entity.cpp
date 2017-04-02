@@ -94,13 +94,18 @@ bool j1Entity::CleanUp()
 void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+	}
 }
 
 void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+	{
+		if((*it)!=nullptr)
+			(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+	}
 
 	// Returns GotHit to the entity --------
 	if (fixtureA->type == fixture_type::f_t_attack && fixtureB->type == fixture_type::f_t_hit_box)
@@ -165,7 +170,10 @@ void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fi
 	if (!entity_list.empty())
 	{
 		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-			(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+		{
+			if ((*it) != nullptr)
+				(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+		}
 	}
 }
 
@@ -228,8 +236,16 @@ void j1Entity::ClearEntities()
 {
 	if (!entity_list.empty())
 	{
-		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-			(*it)->to_delete = true;
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end();)
+		{
+			if ((*it) != nullptr)
+			{
+				(*it)->to_delete = true;
+				it++;
+			}
+			else
+				it = entity_list.erase(it);
+		}	
 	}
 }
 

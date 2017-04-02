@@ -168,6 +168,9 @@
     </ClCompile>
     <ClCompile Include="BoneAttack.cpp">
       <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+	</ClCompile>
+    <ClCompile Include="EventThrower.cpp">
+      <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +371,9 @@
     </ClInclude>
     <ClInclude Include="BoneAttack.h">
       <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+	</ClInclude>
+    <ClInclude Include="EventThrower.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

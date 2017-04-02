@@ -26,7 +26,7 @@ bool MenuScene::Start()
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
 	// Triforce
-//	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
+    //	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
 
 	// Start ---
 	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);

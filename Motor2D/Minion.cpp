@@ -35,6 +35,8 @@ Minion::Minion(iPoint pos)
 	App->UnloadXML(doc);
 
 	cd_timer.Start();
+
+	event_thrower = new EventThrower();
 }
 
 Minion::~Minion()
@@ -116,6 +118,11 @@ bool Minion::Update(float dt)
 
 			if (stats.life <=0)
 			{
+				Event* event_die = new Event();
+				event_die->type = e_t_death;
+				event_die->event_data.entity = this;
+				event_thrower->AddEvent(event_die);
+
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}
@@ -149,7 +156,7 @@ bool Minion::CleanUp()
 {
 	bool ret = true;
 
-
+	RELEASE(event_thrower);
 
 	return ret;
 }
@@ -388,6 +395,7 @@ void Minion::CheckState()
 			target = nullptr;
 		}
 	}
+
 	switch (state)
 	{
 	case Minion_Idle:

@@ -6,6 +6,8 @@
 #include "j1Map.h"
 #include "GameObject.h"
 
+#define DEATH_CAMERA_SPEED 500
+
 PlayerManager::PlayerManager()
 {
 }
@@ -52,6 +54,9 @@ bool PlayerManager::Start()
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
 	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
+	// Event
+	event_thrower = new EventThrower();
+
 	return true;
 }
 
@@ -69,19 +74,19 @@ bool PlayerManager::Update(float dt)
 	{
 		Player* curr_player = players.at(i);
 
-		// Disable controller input
-		//if (curr_player->entity->disable_controller) // this has to be on player
-		//	continue;
-
 		if (!curr_player->is_dead)
 		{
-			PlayerInput(curr_player);
+			if(!disable_controller)
+				PlayerInput(curr_player);
+
 			UpdateUI(curr_player);
 			CheckIfDeath(curr_player);
 		}
 		else
 		{
-			MoveCamera(curr_player);
+			if (!disable_controller)
+				MoveCamera(curr_player);
+
 			CheckIfRespawn(curr_player);
 		}
 	}
@@ -99,34 +104,31 @@ bool PlayerManager::CleanUp()
 	bool ret = true;
 
 	ClearPlayers();
-	spawn_points_used_team1.clear();
-	spawn_points_used_team2.clear();
 
 	habilities_1.clear();
 	habilities_2.clear();
 	habilities_3.clear();
 	habilities_4.clear();
 
+	RELEASE(event_thrower);
+
 	return ret;
 }
 
-Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn, int show_life_bar)
+Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, int respawn, int show_life_bar)
 {
 	Player* ret = nullptr;
 
 	if (players.size() <= 3)
 	{
 		iPoint position = pos;
-
-		// Searching for avaliable spawn points
-		if (on_spawn)
-		{
-			position = GetFreePlayerSpawn(team);
-			position += {16, 8};
-		}
+		
+		position = GetFreePlayerSpawn(team, respawn);
+		position.x += 16;
+		position.y += 9;
 
 		// Create player
-		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport);
+		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
 		p->entity->SetTeam(team);
 		p->entity->show_life_bar = show_life_bar;
@@ -134,30 +136,10 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		p->type = p->entity->type;
 		players.push_back(p);
 		ret = p;
+		p->team = team;
 	}
 
 	return ret;
-}
-
-void PlayerManager::ChangePlayer(entity_name name, int controller_index, int viewport)
-{
-	iPoint pos;
-	for(vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-		if ((*it)->controller_index == controller_index - 1)
-		{
-			pos = (*it)->entity->GetPos();
-			App->entity->DeleteEntity((*it)->entity);
-			players.erase(it);
-			RELEASE(*it);
-			break;
-		}
-	}
-
-	Player* p = new Player(App->entity->CreateEntity(name, pos), controller_index - 1, viewport);
-	p->type = p->entity->type;
-	p->entity->SetCamera(p->controller_index + 1);
-	players.push_back(p);
 }
 
 void PlayerManager::DeletePlayer(int controller_index)
@@ -166,9 +148,9 @@ void PlayerManager::DeletePlayer(int controller_index)
 	{
 		if ((*it)->controller_index == controller_index - 1)
 		{
-			players.erase(it);
 			App->entity->DeleteEntity((*it)->entity);
 			RELEASE(*it);
+			players.erase(it);
 			break;
 		}
 	}
@@ -176,7 +158,7 @@ void PlayerManager::DeletePlayer(int controller_index)
 
 void PlayerManager::ClearPlayers()
 {
-	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	for (vector<Player*>::iterator it = players.begin(); it != players.end();)
 	{
 		App->entity->DeleteEntity((*it)->entity);
 		RELEASE(*it);
@@ -226,7 +208,7 @@ int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 	}
 }
 
-iPoint PlayerManager::GetFreePlayerSpawn(int team)
+iPoint PlayerManager::GetFreePlayerSpawn(int team, int respawn)
 {
 	iPoint ret = NULLPOINT;
 
@@ -234,52 +216,11 @@ iPoint PlayerManager::GetFreePlayerSpawn(int team)
 	App->map->GetPlayerSpawnPoints(team, spawn_points);
 
 	for (int i = 0; i < spawn_points.size(); i++)
-	{    
-		ret = spawn_points.at(i);
-
-		switch (team)
-		{
-		case 1:
-			if (spawn_points_used_team1.empty())
-			{
-				spawn_points_used_team1.push_back(ret);
-				return ret;
-			}
-
-			for (int t1 = 0; t1 < spawn_points_used_team1.size(); t1++)
-			{
-				if (spawn_points_used_team1.at(t1) == ret)
-					ret = NULLPOINT;
-				else
-				{
-					spawn_points_used_team1.push_back(ret);
-					return ret;
-				}
-			}
-			break;
-		case 2:
- 			if (spawn_points_used_team2.empty())
-			{
-				spawn_points_used_team2.push_back(ret);
-				return ret;
-			}
-
-			for (int t2 = 0; t2 < spawn_points_used_team2.size(); t2++)
-			{
-				if (spawn_points_used_team2.at(t2) == ret)
-					ret = NULLPOINT;
-				else
-				{
-					spawn_points_used_team2.push_back(ret);
-					return ret;
-				}
-			}
-			break;
-		default:
-			break;
-		}
+	{
+		if (i == respawn - 1)
+			ret = spawn_points.at(i);
 	}
-
+	
 	return ret;
 }
 
@@ -321,30 +262,6 @@ Player * PlayerManager::GetPlayerFromBody(PhysBody * body)
 		}
 	}
 	return nullptr;
-}
-
-void PlayerManager::DisableInput(int player)
-{
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-		if ((*it)->controller_index == player)
-			(*it)->entity->disable_controller = true;
-
-		if(player == 0)
-			(*it)->entity->disable_controller = true;
-	}
-}
-
-void PlayerManager::AllowInput(int player)
-{
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-		if ((*it)->controller_index == player)
-			(*it)->entity->disable_controller = false;
-
-		if (player == 0)
-			(*it)->entity->disable_controller = false;
-	}
 }
 
 void PlayerManager::PlayerInput(Player * curr_player)
@@ -840,8 +757,44 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	}
 }
 
-void PlayerManager::MoveCamera(Player * player)
+void PlayerManager::MoveCamera(Player * curr_player)
 {
+	float speed = DEATH_CAMERA_SPEED*App->GetDT();
+
+	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45*DEGTORAD));
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+	}
+
+	// Normal moves
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, speed, 0);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, -speed, 0);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
+	{
+		App->view->MoveCamera(curr_player->viewport, 0, speed);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
+	{
+		App->view->MoveCamera(curr_player->viewport, 0, -speed);
+	}
 }
 
 void PlayerManager::CheckIfRespawn(Player * player)
@@ -856,7 +809,14 @@ void PlayerManager::CheckIfRespawn(Player * player)
 void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
+	{
+		Event* event_die = new Event();
+		event_die->type = e_t_death;
+		event_die->event_data.entity = player->entity;
+		event_thrower->AddEvent(event_die);
+
 		player->Kill();
+	}
 }
 
 void PlayerManager::UpdateUI(Player* curr_player)
@@ -1043,7 +1003,7 @@ void Player::BuyItem(Item * item, int price)
 
 	entity->UpdateStats(extra_power, extra_hp, extra_speed);
 
-	//UpdateRupees();
+	UpdateRupees();
 }
 
 void Player::Kill()
@@ -1058,9 +1018,13 @@ void Player::Kill()
 
 void Player::Respawn()
 {
-	if (entity == nullptr)
+	if (is_dead)
 	{
-		entity = App->entity->CreateEntity(type, iPoint(0, 0));
+		entity = App->entity->CreateEntity(type, respawn);
+		entity->SetCamera(viewport);
+		entity->SetTeam(team);
+		entity->show_life_bar = true;
+		entity->is_player = true;
 		is_dead = false;
 	}
 }

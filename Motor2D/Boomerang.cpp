@@ -9,6 +9,7 @@
 #define DESTRUCTION_TIME 1.8f
 #define SLOW_TIME 1.5f
 #define SLOW_MULTIPLICATOR 0.5f
+
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_ABILITIES, App->cf->MASK_ABILITIES, pbody_type::p_t_boomerang, 0);
@@ -124,7 +125,7 @@ bool Boomerang::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(1, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 
 	return ret;
 }

@@ -38,7 +38,6 @@ public:
 	int				  height = 0;
 	b2Body*			  body = nullptr;
 	vector<j1Module*> listeners;
-	j1Module*		  listener = nullptr;
 	pbody_type		  type = pbody_type::p_t_null;
 };
 

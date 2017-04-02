@@ -27,9 +27,11 @@ Link::Link(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 15), 10, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
+	game_object->pbody->body->SetBullet(true);
 
 	Ability* a1 = AddAbility(0, 10, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 });
 	Ability* a2 = AddAbility(1, 15, 1, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 });
@@ -44,6 +46,7 @@ Link::Link(iPoint pos)
 	draw_offset = restore_draw_offset = { 16, 26 }; // 
 
 	blit_layer = 2;
+
 }
 
 Link::~Link()

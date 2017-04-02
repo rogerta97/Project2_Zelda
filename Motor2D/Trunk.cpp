@@ -24,14 +24,13 @@ bool Trunk::Draw(float dt)
 {
 	App->view->LayerBlit(2200, game_object->GetTexture(), game_object->GetPos(), game_object->GetCurrentAnimationRect(dt));
 
-	return false;
+	return true;
 }
 
 
 
 bool Trunk::CleanUp()
 {
-	
 	return false;
 }
 

@@ -11,6 +11,7 @@ class b2Fixture;
 class PhysBody;
 class Entity;
 class Ability;
+class EventThrower;
 
 enum class pbody_type;
 
@@ -56,19 +57,21 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollisionEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollisionOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void ListenEvent(int type, EventThrower* origin, int id);
 
 	Spell* CreateSpell(spell_name entity, iPoint pos, Entity* owner);
 	void DeleteSpell(Spell* entity);
 
 	void ClearSpells();
 
+private:
+	void DeleteSpellIfTarget(Entity* target);
+	void RemoveSpells();
+
 public:
 	list<Spell*> spell_list;
 
 private:
-
-	void RemoveSpells();
-
 
 };
 

@@ -117,13 +117,13 @@ bool MinionManager::CleanUp()
 {
 	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
 	{
-		RELEASE(*it);
+		App->entity->DeleteEntity(*it);
 		it = team1_minions.erase(it);
 	}
 
 	for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();)
 	{
-		RELEASE(*it);
+		App->entity->DeleteEntity(*it);
 		it = team2_minions.erase(it);
 	}
 
@@ -150,13 +150,25 @@ void MinionManager::KillMinion(Entity * minion)
 	switch (minion->GetTeam())
 	{
 	case 1:
-		team1_minions.remove((Minion*)minion);
-		App->entity->DeleteEntity(minion);
-		break;
+		for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
+		{
+			if ((*it == minion))
+			{
+				App->entity->DeleteEntity(*it);
+				team1_minions.erase(it);
+				break;
+			}
+		}
 	case 2:
-		team2_minions.remove((Minion*)minion);
-		App->entity->DeleteEntity(minion);
-		break;
+		for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();)
+		{
+			if ((*it == minion))
+			{
+				App->entity->DeleteEntity(*it);
+				team2_minions.erase(it);
+				break;
+			}
+		}
 
 	}
 }
@@ -170,15 +182,15 @@ void MinionManager::AddMinions()
 {
 	Minion* team1 = (Minion*)App->entity->CreateEntity(minion, team1_spawn);
 	Minion* team2 = (Minion*)App->entity->CreateEntity(minion, team2_spawn);
-
+	
 	team1->SetTeam(1);
 	team2->SetTeam(2);
-
+	
 	team1->SetBasePath(minions_path);
 	minions_path.reverse();
 	team2->SetBasePath(minions_path);
 	minions_path.reverse();
-
+	
 	team1_minions.push_back(team1);
 	team2_minions.push_back(team2);
 }

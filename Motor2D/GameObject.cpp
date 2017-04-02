@@ -79,6 +79,17 @@ void GameObject::SetListener(j1Module * scene)
 	pbody->listeners.push_back(scene);
 }
 
+void GameObject::DeleteListener(j1Module * scene)
+{
+	for (vector<j1Module*>::iterator it = pbody->listeners.begin(); it != pbody->listeners.end();)
+	{
+		if (scene = *it)
+			it = pbody->listeners.erase(it);
+		else
+			++it;
+	}
+}
+
 void GameObject::SetCatMask(int cat, int mask)
 {
 	b2Filter data;
@@ -166,6 +177,7 @@ iPoint GameObject::GetHitBoxSize() const
 void GameObject::CleanUp()
 {
 	App->physics->DeleteBody(pbody);
+	animator->CleanUp();
 	RELEASE(animator);
 }
 
