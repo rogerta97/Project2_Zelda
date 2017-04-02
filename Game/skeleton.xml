@@ -3,9 +3,9 @@
 <file>
   <animations texture ="textures/Boss_Spritesheet.png">
     <anim speed = "5" name = "skeleton_idle" loop = "true">
-      <rect x = "2" y = "2" w = "30" h = "32"/>
+      <rect x = "0" y = "0" w = "48" h = "74"/>
     </anim>
-    <anim speed = "3" name = "stunned" loop = "false">
+    <anim speed = "3" name = "stunned" loop = "true">
       <rect x = "0" y = "0" w = "48" h = "74"/>
       <rect x = "48" y = "0" w = "48" h = "74"/>
       <rect x = "96" y = "0" w = "48" h = "74"/>
@@ -18,20 +18,6 @@
       <rect x = "128" y = "192" w = "128" h = "118"/>
     </anim>
     <anim speed = "2" name = "bone" loop = "false">
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "36" y = "104" w = "48" h = "74"/>
       <rect x = "0" y = "0" w = "48" h = "74"/>
       <rect x = "36" y = "104" w = "48" h = "74"/>
     </anim>

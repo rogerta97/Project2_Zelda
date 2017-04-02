@@ -20,6 +20,8 @@
 #define SKELETON_W 78
 #define SKELETON_H 48
 
+#define STUN 1.0f
+
 
 Skeleton::Skeleton(iPoint pos)
 {
@@ -30,8 +32,8 @@ Skeleton::Skeleton(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	AddAbility(0, 50, 500, 1000, "spin"); //times are ms.
-	AddAbility(1, 30, 500, 1000, "bone");
+	AddAbility(0, 50, 2, 2, "spin"); //times are ms.
+	AddAbility(1, 30, 2, 2, "bone");
 
 	pugi::xml_document doc;
 	App->LoadXML("skeleton.xml", doc);
@@ -111,17 +113,14 @@ bool Skeleton::Update(float dt)
 		break;
 	case s_s_stunned:
 		Stunned();
-		if (game_object->animator->IsCurrentAnimation("stunned") && game_object->animator->GetCurrentAnimation()->Finished())
+		if (stun_timer.ReadSec() > STUN)
 		{
+			stun_timer.Stop();
 			state = s_s_attack;
 		}
-		
 	default:
 		break;
 	}
-
-	
-
 	return ret;
 }
 
@@ -130,11 +129,7 @@ bool Skeleton::Draw(float dt)
 	bool ret = true;
 
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
-	if (game_object->animator->IsCurrentAnimation("spin") && game_object->animator->GetCurrentAnimation()->Finished())
-	{
-		game_object->DeleteFixture(abilities.at(0)->fixture);
-		game_object->animator->GetCurrentAnimation()->Reset();
-	}
+	
 	return ret;
 }
 
@@ -171,6 +166,8 @@ void Skeleton::Stunned()
 	game_object->SetAnimation("stunned");
 	flip = false;
 	anim_state = skeleton_stunned;
+	if (!stun_timer.IsActive())
+		stun_timer.Start();
 
 }
 
@@ -187,11 +184,14 @@ void Skeleton::Attack()
 			}
 			if (game_object->animator->IsCurrentAnimation("bone") && game_object->animator->GetCurrentAnimation()->Finished())
 			{
+				game_object->animator->GetCurrentAnimation()->Reset();
 				SpinAttack();
 			}
 		}
 		if (game_object->animator->IsCurrentAnimation("spin") && game_object->animator->GetCurrentAnimation()->Finished())
 		{
+			game_object->animator->GetCurrentAnimation()->Reset();
+			game_object->DeleteFixture(abilities.at(0)->fixture);
 			state = s_s_stunned;
 		}
 	}

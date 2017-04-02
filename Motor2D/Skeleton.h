@@ -60,6 +60,8 @@ private:
 
 	j1Timer					cd_timer;
 
+	j1Timer					stun_timer;
+
 	bool					flip = false;
 
 	SKELETON_STATE			state = s_s_null;
