@@ -11,32 +11,56 @@ QuestManager::QuestManager()
 {
 
 		SDL_Rect screen = App->view->GetViewportRect(1);
+		int offset = 0;
 		for(int i = 0;i<3;i++)
 		{
 			placer = iPoint(screen.w - 30, screen.h - 30);
-			App->scene->main_scene->main_window_1->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			App->scene->main_scene->main_window_1->CreateImage(placer, { 472, 812-offset, 24 ,24 }, false);
+
+			player_1_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x+6,placer.y), App->font->game_font_small));
+			player_1_text[i]->SetText("0");
+
 			screen.h = screen.h - 30;
+			offset += 24;
 		}
 		screen = App->view->GetViewportRect(1);
+		offset = 0;
 		for (int i = 0; i<3; i++)
 		{
 			placer = iPoint(screen.w - 30, screen.h - 30);
-			App->scene->main_scene->main_window_2->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			App->scene->main_scene->main_window_2->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+
+			player_2_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			player_2_text[i]->SetText("0");
+
 			screen.h = screen.h - 30;
+			offset += 24;
 		}
 		screen = App->view->GetViewportRect(1);
+		offset = 0;
 		for (int i = 0; i<3; i++)
 		{
 			placer = iPoint(screen.w - 30, screen.h - 30);
-			App->scene->main_scene->main_window_3->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			App->scene->main_scene->main_window_3->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+
+			player_3_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			player_3_text[i]->SetText("0");
+
 			screen.h = screen.h - 30;
+			offset += 24;
 		}
 		screen = App->view->GetViewportRect(1);
+		offset = 0;
 		for (int i = 0; i<3; i++)
 		{
 			placer = iPoint(screen.w - 30, screen.h - 30);
-			App->scene->main_scene->main_window_4->CreateImage(placer, { 182, 78, 25 ,25 }, false);
+			App->scene->main_scene->main_window_4->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+
+			player_4_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			player_4_text[i]->SetText("0");
+
 			screen.h = screen.h - 30;
+			offset += 24;
 		}
 	
 
@@ -74,12 +98,6 @@ QuestManager::QuestManager()
 		}
 		vquest.push_back(quest);
 	}
-
-
-
-
-
-
 
 }
 
@@ -125,19 +143,37 @@ void QuestManager::update_progress()
 	{
 		if (vquest[i]->state == active)
 		{
-			int i = 0;
+			int j = 0;
 			for (pugi::xml_node tool = quests_node.child("quest").child("task"); tool; tool = tool.next_sibling("task"))
 			{
-				if (vquest[i]->task[i]->current_progress == vquest[i]->task[i]->requirement)
+				if (vquest[i]->task[j]->current_progress == vquest[i]->task[j]->requirement)
 				{
 					vquest[i]->state = inactive;
 					vquest[i]->task[i]->times_completed++;
-					for (int i = 0; i < App->scene->main_scene->player_manager->players.size(); i++)
+					for (int k = 0; k < App->scene->main_scene->player_manager->players.size(); k++)
 					{
-						App->scene->main_scene->player_manager->players[i]->entity->UpdateStats(0, 0, 0);
+						App->scene->main_scene->player_manager->players[k]->entity->UpdateStats(0, 0, 0);
 					}
-					i++;
+
+					switch (j)
+					{
+					case 0:
+					{
+						player_1_text[1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_3_text[1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						break;
+					}
+					case 1:
+					{
+						player_2_text[1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_4_text[1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						break;
+					}
+					default:
+						break;
+					}
 				}
+				j++;
 			}
 
 		}
