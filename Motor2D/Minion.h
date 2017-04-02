@@ -127,6 +127,7 @@ private:
 
 	j1Timer				cd_timer;
 
+	EventThrower*       event_thrower = nullptr;
 };
 
 #endif // !MINION_H_

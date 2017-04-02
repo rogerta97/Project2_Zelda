@@ -9,6 +9,9 @@
 #include "Functions.h"
 #include "Spell.h"
 #include "j1Spell.h"
+#include "Entity.h"
+#include "j1Entity.h"
+#include "EventThrower.h"
 
 class b2Fixture;
 class PhysBody;
@@ -54,6 +57,13 @@ enum states
 
 	tower_idle,
 	tower_attack,
+
+	snake_up,
+	snake_lateral,
+	snake_down,	
+	snake_attack_up,
+	snake_attack_lateral,
+	snake_attack_down,
 
 	states_null,
 };
@@ -293,6 +303,7 @@ public:
 	GameObject*      game_object = nullptr;
 	vector<Ability*> abilities;
 	Stats	         stats;
+	entity_name		 type = entity_name::e_n_null;
 
 	// States
 	bool			 disable_controller = false;
@@ -306,7 +317,7 @@ public:
 	int				 blit_layer = 0;
 
 	//Progress bar
-	iPoint  progress_limit = iPoint(0, 0);
+	iPoint           progress_limit = iPoint(0, 0);
 
 	// Got Hit
 	bool		     hit = false;

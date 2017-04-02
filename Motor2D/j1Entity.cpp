@@ -16,6 +16,7 @@
 #include "Zelda.h"
 #include "Base.h"
 #include "Eyes.h"
+#include "Snakes.h"
 
 
 j1Entity::j1Entity()
@@ -39,9 +40,6 @@ bool j1Entity::Start()
 {
 	bool ret = true;
 
-	player_manager = new PlayerManager();
-	player_manager->Start();
-
 	return ret;
 }
 
@@ -53,8 +51,6 @@ bool j1Entity::PreUpdate()
 
 	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PreUpdate();
-
-	player_manager->PreUpdate();
 
 	return ret;
 }
@@ -69,8 +65,6 @@ bool j1Entity::Update(float dt)
 		(*it)->Draw(dt);
 	}
 
-	player_manager->Update(dt);
-
 	SlowEntities();
 	StunEntities();
 
@@ -84,8 +78,6 @@ bool j1Entity::PostUpdate()
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		ret = (*it)->PostUpdate();
 
-	player_manager->PostUpdate();
-
 	return ret;
 }
 
@@ -95,28 +87,33 @@ bool j1Entity::CleanUp()
 
 	ClearEntities();
 
-	player_manager->CleanUp();
-
 	return ret;
 }
 
 void j1Entity::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
 		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+	}
 }
 
 void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+	{
+		if((*it)!=nullptr)
+			(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+	}
 
 	// Returns GotHit to the entity --------
 	if (fixtureA->type == fixture_type::f_t_attack && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		// Find the entity that got hit
 		Entity* entity = FindEntityByBody(bodyB);
-		entity->hit = false;
+
+		if (entity != nullptr)
+			entity->hit = false;
 
 		// Find the entity that hits
 		if (entity != nullptr)
@@ -157,7 +154,7 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 			}
 		}
 
-		if (!entity->hit_by)
+		if (entity != nullptr && !entity->hit_by)
 		{
 			entity->hit_by = nullptr;
 			entity->hit_ability = nullptr;
@@ -169,8 +166,14 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 
 void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			if ((*it) != nullptr)
+				(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+		}
+	}
 }
 
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
@@ -190,7 +193,7 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case zelda:
 		ret = new Zelda(pos);
-    break;
+        break;
 	case trunk:
 		ret = new Trunk(pos);
 		break;
@@ -203,6 +206,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	case eyes:
 		ret = new Eyes(pos);
 		break;
+	case snake:
+		ret = new Snakes(pos);
+		break;
 	case bush:
 		ret = new Bush(pos);
 		break;
@@ -213,6 +219,7 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	if (ret != nullptr)
 	{
 		ret->Start();
+		ret->type = entity;
 		entity_list.push_back(ret);
 	}
 	else
@@ -223,10 +230,24 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 
 void j1Entity::ClearEntities()
 {
-	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		(*it)->to_delete = true;
-	
-	entity_list.clear();
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end();)
+		{
+			if ((*it) != nullptr)
+			{
+				(*it)->to_delete = true;
+				it++;
+			}
+			else
+				it = entity_list.erase(it);
+		}	
+	}
+}
+
+int j1Entity::GetEntitiesNumber()
+{
+	return entity_list.size();
 }
 
 Entity * j1Entity::FindEntityByBody(PhysBody* body)
@@ -234,22 +255,28 @@ Entity * j1Entity::FindEntityByBody(PhysBody* body)
 	Entity* ret = nullptr;
 
 	// Look on entities
-	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	if (!entity_list.empty())
 	{
-		if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
-			ret = *it;
-			break;
+			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+			{
+				ret = *it;
+				break;
+			}
 		}
 	}
 
 	// Look on Spells
-	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	if (!App->spell->spell_list.empty())
 	{
-		if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+		for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 		{
-			ret = (*it)->owner;
-			break;
+			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+			{
+				ret = (*it)->owner;
+				break;
+			}
 		}
 	}
 
@@ -335,13 +362,18 @@ void j1Entity::SlowEntities()
 	{
 		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
 		{
-			if ((*it).time <= (*it).timer.ReadSec())
+			if ((*it).entity != nullptr)
 			{
-				(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
-				it = slowed_entities.erase(it);
+				if ((*it).time <= (*it).timer.ReadSec())
+				{
+					(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
+					it = slowed_entities.erase(it);
+				}
+				else
+					++it;
 			}
 			else
-				++it;
+				it = (slowed_entities.erase(it));
 		}
 	}
 }
@@ -352,13 +384,18 @@ void j1Entity::StunEntities()
 	{
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
 		{
-			if ((*it).time <= (*it).timer.ReadSec())
+			if ((*it).entity != nullptr)
 			{
-				(*it).entity->stuned = false;
-				it = stuned_entities.erase(it);
+				if ((*it).time <= (*it).timer.ReadSec())
+				{
+					(*it).entity->stuned = false;
+					it = stuned_entities.erase(it);
+				}
+				else
+					++it;
 			}
 			else
-				++it;
+				it = (stuned_entities.erase(it));
 		}
 	}
 }

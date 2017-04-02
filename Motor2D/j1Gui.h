@@ -9,7 +9,7 @@
 // -----------------------------------------
 // -----------------------------------------
 
-                 // UI :D //
+// UI :D //
 
 // -----------------------------------------
 // -----------------------------------------
@@ -81,6 +81,7 @@ public:
 	bool Move_Elements();
 	UI_Element* CheckClickMove(int x, int y);
 	void DeleteElement(UI_Element * element);
+	void EraseFromElementsList(UI_Element* element);
 
 private:
 
@@ -103,7 +104,7 @@ public:
 	// Debug when F1
 	bool				   debug = false;
 
-	// Start code
+	// Start UI
 	bool				   start = true;
 
 private:
@@ -116,6 +117,8 @@ private:
 
 	int					   camera_x = 0;
 	int					   camera_y = 0;
+
+protected:
 };
 
 // -------------------------
@@ -150,7 +153,8 @@ public:
 	bool PutWindowToTop();
 
 	iPoint GetPos();
-	void SetPos(iPoint);
+	void SetPos(iPoint new_pos);
+	void fSetPos(fPoint new_pos);
 
 protected:
 
@@ -205,6 +209,7 @@ public:
 	~UI_Window();
 
 	bool update();
+	bool cleanup();
 
 	void Set(iPoint pos, int w, int h);
 
@@ -231,7 +236,7 @@ private:
 struct rect_text
 {
 	rect_text() {};
-	rect_text(char* _name, SDL_Rect _rect) 
+	rect_text(const char* _name, SDL_Rect _rect)
 	{
 		name = _name;
 		rect = { _rect.x, _rect.y, _rect.w, _rect.h };
@@ -258,8 +263,12 @@ public:
 	bool MouseClickEnterRight();
 	bool MouseClickOutRight();
 
-	void AddImage(char* name, SDL_Rect rect);
+	void AddImage(const char* name, SDL_Rect rect);
 	void SetImage(char* name);
+
+	void SetIdle(SDL_Rect rect);
+	void SetPressed(SDL_Rect rect);
+	void SetOver(SDL_Rect rect);
 
 private:
 	void ChangeButtonStats();
@@ -278,6 +287,11 @@ private:
 
 	bool			  to_clicked_right = false;
 	bool			  clicked_right = false;
+
+	SDL_Rect		  idle = NULLRECT;
+	SDL_Rect		  pressed = NULLRECT;
+	SDL_Rect		  over = NULLRECT;
+
 };
 
 // ----------------------------
@@ -289,7 +303,7 @@ private:
 struct tex_str
 {
 	tex_str() {};
-	tex_str(string _text, SDL_Texture* _texture){text = _text, texture = _texture;}
+	tex_str(string _text, SDL_Texture* _texture) { text = _text, texture = _texture; }
 	SDL_Texture* texture = nullptr;
 	string text;
 };
@@ -303,12 +317,12 @@ public:
 	bool update();
 	bool cleanup();
 
-	void Set(iPoint pos, _TTF_Font* font, int spacing,  uint r = 255, uint g = 255, uint b = 255);
+	void Set(iPoint pos, _TTF_Font* font, int spacing, uint r = 255, uint g = 255, uint b = 255);
 	void SetText(string text);
 	string GetText();
 
 public:
-	list<tex_str>          tex_str_list;  
+	list<tex_str>          tex_str_list;
 	SDL_Color	           color = NULLCOLOR;
 	_TTF_Font*	           font = nullptr;
 	int                    spacing = 0;
@@ -366,7 +380,7 @@ private:
 	bool Delete();
 	bool MoveCursor();
 
-	void SetBarPos(string text);	
+	void SetBarPos(string text);
 	int  GetTextSize(string text);
 	void SetPasword();
 	void ChangeTextInput();
@@ -411,7 +425,7 @@ public:
 	bool operator == (scroll_element sc)
 	{
 		if (sc.element == element && sc.starting_pos_x == starting_pos_x && sc.starting_pos_y == starting_pos_y)
-			return true; 
+			return true;
 		return false;
 	}
 
@@ -492,7 +506,7 @@ public:
 	void SetColor(SDL_Color color);
 
 public:
-	
+
 private:
 	SDL_Color color = NULLCOLOR;
 	bool      filled = true;
@@ -507,18 +521,18 @@ private:
 struct check_box
 {
 	check_box() {};
-	check_box(iPoint pos, int size_w, int size_h, const char* name2) 
+	check_box(iPoint pos, int size_w, int size_h, const char* _name)
 	{
 		button = new UI_Button();
 		button->Set(pos, size_w, size_h);
-		name = (char*)name2;
 		checked = false;
+		name = _name;
 	};
-	~check_box() {};
+	~check_box() { };
 
 	bool        checked = false;
 	UI_Button*  button = nullptr;
-	char*       name;
+	string      name;
 };
 
 class UI_Check_Box : public UI_Element
@@ -532,10 +546,13 @@ public:
 	bool update();
 	bool cleanup();
 
-	void AddBox(iPoint pos, int size_w, int size_h, char* name);
+	void AddBox(iPoint pos, int size_w, int size_h, const char* name);
 	bool GetBox(char* name);
 	void SetBox(bool set, char* name);
 	void SetBox(bool set, int i);
+
+	void SetPressed(SDL_Rect rect);
+	void SetIdle(SDL_Rect rect);
 
 private:
 	void CheckControl();

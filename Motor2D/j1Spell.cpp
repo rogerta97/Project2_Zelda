@@ -2,6 +2,9 @@
 #include "Spell.h"
 #include "Boomerang.h"
 #include "TowerAttack.h"
+#include "SnakePoison.h"
+#include "EventThrower.h"
+#include "GameObject.h"
 
 j1Spell::j1Spell()
 {
@@ -33,10 +36,11 @@ bool j1Spell::PreUpdate()
 {
 	bool ret = true;
 
-	RemoveSpells();
-
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-		ret = (*it)->PreUpdate();
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+			ret = (*it)->PreUpdate();
+	}
 
 	return ret;
 }
@@ -45,11 +49,13 @@ bool j1Spell::Update(float dt)
 {
 	bool ret = true;
 
-
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+	if (!spell_list.empty())
 	{
-		ret = (*it)->Update(dt);
-		(*it)->Draw(dt);
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			ret = (*it)->Update(dt);
+			(*it)->Draw(dt);
+		}
 	}
 
 	return ret;
@@ -59,8 +65,13 @@ bool j1Spell::PostUpdate()
 {
 	bool ret = true;
 
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-		ret = (*it)->PostUpdate();
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+			ret = (*it)->PostUpdate();
+	}
+
+	RemoveSpells();
 
 	return ret;
 }
@@ -92,6 +103,21 @@ void j1Spell::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fix
 		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
 }
 
+void j1Spell::ListenEvent(int type, EventThrower * origin, int id)
+{
+	Event* curr_event = nullptr;
+
+	if (type = static_cast<int>(event_type::e_t_death))
+	{
+		curr_event = origin->GetEvent(id);
+
+		if (curr_event->event_data.entity != nullptr)
+		{
+			DeleteSpellIfTarget(curr_event->event_data.entity);
+		}
+	}
+}
+
 Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 {
 	Spell* ret = nullptr;
@@ -104,9 +130,11 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 	case t_attack:
 		ret = new TowerAttack(pos);
 		break;
+	case s_attack:
+		ret = new SnakePoison(pos);
+		break;
 	}
 	
-
 	ret->owner = owner;
 	ret->Start();
 	spell_list.push_back(ret);
@@ -116,6 +144,20 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 void j1Spell::DeleteSpell(Spell * spell)
 {
 	spell->to_delete = true;
+}
+
+void j1Spell::DeleteSpellIfTarget(Entity * target)
+{
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			if ((*it)->target == target)
+			{
+				DeleteSpell(*it);
+			}
+		}
+	}
 }
 
 void j1Spell::ClearSpells()

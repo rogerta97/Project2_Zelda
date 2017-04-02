@@ -54,28 +54,20 @@ public:
 	~ShopManager();
 
 	bool Start();
-
 	bool Update();
-
 	bool CleanUp();
 
 private:
 	void ChangeShopState(int view);
-
 	void UpdateItemInfo(int view);
-
 	void UpdatePlayerItems(int view, Player* player);
 
 public:
 	UI_Window*		shop_window = nullptr;
 
 private:
-
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
-
 	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };
-
-
 };
 
 #endif // !_SHOPMANAGER_H_

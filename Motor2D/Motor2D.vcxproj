@@ -83,6 +83,7 @@
     <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EventThrower.cpp" />
     <ClCompile Include="Eyes.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="j1Spell.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Viewports.cpp" />
+    <ClCompile Include="JungleCampManager.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
     <ClCompile Include="MenuScene.cpp" />
@@ -117,6 +119,8 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Quest_Manager.cpp" />
     <ClCompile Include="ShopManager.cpp" />
+    <ClCompile Include="SnakePoison.cpp" />
+    <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -137,6 +141,7 @@
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EventThrower.h" />
     <ClInclude Include="Eyes.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
@@ -153,6 +158,7 @@
     <ClInclude Include="j1Spell.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Viewports.h" />
+    <ClInclude Include="JungleCampManager.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
     <ClInclude Include="MenuScene.h" />
@@ -180,6 +186,8 @@
     <ClInclude Include="Quest_Manager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
+    <ClInclude Include="SnakePoison.h" />
+    <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
@@ -203,6 +211,8 @@
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\minion.xml" />
     <Xml Include="..\Game\Shop_config.xml" />
+    <Xml Include="..\Game\snakepoison.xml" />
+    <Xml Include="..\Game\snakes.xml" />
     <Xml Include="..\Game\tower.xml" />
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>

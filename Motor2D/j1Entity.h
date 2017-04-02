@@ -19,7 +19,7 @@ enum class pbody_type;
 
 enum entity_name
 {
-	e_n_null, link, zelda, minion, tower, ganon, navi, trunk, base, tree, eyes, bush
+	e_n_null, link, zelda, minion, tower, ganon, navi, trunk, base, tree, eyes, bush, snake
 };
 
 class slow
@@ -103,6 +103,7 @@ public:
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
 	void ClearEntities();
+	int GetEntitiesNumber();
 
 	Entity* FindEntityByBody(PhysBody* type);
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
@@ -115,8 +116,6 @@ private:
 	void StunEntities();
 
 public:
-	PlayerManager* player_manager = nullptr;
-
 	list<slow>     slowed_entities;
 	list<stun>     stuned_entities;
 

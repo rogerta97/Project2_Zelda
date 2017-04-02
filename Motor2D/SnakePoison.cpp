@@ -1,61 +1,60 @@
-#include "TowerAttack.h"
+#include "SnakePoison.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
 
 #define INITIAL_SPEED 150
 #define ACCELERATION 100
 
-TowerAttack::TowerAttack(iPoint pos)
+SnakePoison::SnakePoison(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(15, 15), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_tower_attack, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(15, 15), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_snake_poison, 0);
 	hit_box = game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetListener((j1Module*)App->spell);
 
 	pugi::xml_document doc;
-	App->LoadXML("towerattack.xml", doc);
+	App->LoadXML("snakepoison.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
 
-	name = "t_attack";
+	name = "s_attack";
 }
 
-TowerAttack::~TowerAttack()
+SnakePoison::~SnakePoison()
 {
 }
 
-bool TowerAttack::Start()
+bool SnakePoison::Start()
 {
 	bool ret = true;
 
-	
 	game_object->SetAnimation("projectile");
 
 	return ret;
 }
 
-bool TowerAttack::PreUpdate()
+bool SnakePoison::PreUpdate()
 {
 	bool ret = true;
-
 
 
 	return ret;
 }
 
-bool TowerAttack::Update(float dt)
+bool SnakePoison::Update(float dt)
 {
 	bool ret = true;
 
 	if (game_object->animator->IsCurrentAnimation("destroy"))
 	{
-		if(game_object->animator->GetCurrentAnimation()->Finished())
+		if (game_object->animator->GetCurrentAnimation()->Finished())
 			App->spell->DeleteSpell(this);
 	}
-	else if (target != nullptr)
+	else
 	{
+
 		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
 
 		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
@@ -70,15 +69,11 @@ bool TowerAttack::Update(float dt)
 		game_object->SetPos({ game_object->GetPos().x + t.x, game_object->GetPos().y + t.y });
 
 	}
-	else if (target == nullptr)
-	{
-		App->spell->DeleteSpell(this);
-	}
 
 	return ret;
 }
 
-bool TowerAttack::Draw(float dt)
+bool SnakePoison::Draw(float dt)
 {
 	bool ret = true;
 
@@ -87,40 +82,38 @@ bool TowerAttack::Draw(float dt)
 	return ret;
 }
 
-bool TowerAttack::PostUpdate()
+bool SnakePoison::PostUpdate()
 {
 	bool ret = true;
-
-	
-
-	return ret;
-}
-
-bool TowerAttack::CleanUp()
-{
-	bool ret = true;
-
 
 
 	return ret;
 }
 
-void TowerAttack::CleanSpell()
+bool SnakePoison::CleanUp()
+{
+	bool ret = true;
+
+
+	return ret;
+}
+
+void SnakePoison::CleanSpell()
 {
 
 }
 
-void TowerAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+void SnakePoison::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody)
+	if (game_object->pbody == bodyA && bodyB == target->game_object->pbody)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 	}
+
 }
 
-void TowerAttack::SetTarget(Entity * _target)
+void SnakePoison::SetTarget(Entity * _target)
 {
 	target = _target;
 }
-

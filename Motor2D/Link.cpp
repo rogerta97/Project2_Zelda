@@ -28,9 +28,11 @@ Link::Link(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 15), 10, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
+	game_object->pbody->body->SetBullet(true);
 
 	Ability* a1 = AddAbility(0, 10, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 });
 	Ability* a2 = AddAbility(1, 15, 1, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 });
@@ -45,6 +47,7 @@ Link::Link(iPoint pos)
 	draw_offset = restore_draw_offset = { 16, 26 }; // 
 
 	blit_layer = 2;
+
 }
 
 Link::~Link()
@@ -468,25 +471,25 @@ void Link::BasicAttackRight()
 
 void Link::ShowBasicAttackUp()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 13, game_object->GetPos().y - 55, 10, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackDown()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x + 5, game_object->GetPos().y + 20, 10, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackLeft()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x -50 , game_object->GetPos().y - 4, 35, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackRight()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x + 20, game_object->GetPos().y - 4, 35, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
@@ -520,7 +523,7 @@ void Link::Ability1Right()
 
 void Link::ShowAbility1Up()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, false, true);
 }
 
@@ -565,14 +568,14 @@ void Link::Ability2Right()
 
 void Link::ShowAbility2Up()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85, 25, (int)(BOOMERANG_RANGE * 0.5) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85 - (int)(BOOMERANG_RANGE * 0.5), 25, (int)(BOOMERANG_RANGE * 0.5) }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Down()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(BOOMERANG_RANGE * 0.5) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15 + (int)(BOOMERANG_RANGE * 0.5), 25, (int)(BOOMERANG_RANGE * 0.5) }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
@@ -580,14 +583,14 @@ void Link::ShowAbility2Down()
 
 void Link::ShowAbility2Left()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 75, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25}, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 - (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowAbility2Right()
 {
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 	App->view->LayerDrawQuad({ game_object->GetPos().x + 12 + (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
@@ -633,7 +636,7 @@ void Link::ShowAbility3Up()
 	if(ability3_range<=ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, -(int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
@@ -644,7 +647,7 @@ void Link::ShowAbility3Down()
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, (int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
@@ -655,7 +658,7 @@ void Link::ShowAbility3Left()
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 10, game_object->GetPos().y - 18, -(int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();
@@ -666,7 +669,7 @@ void Link::ShowAbility3Right()
 	if (ability3_range <= ABILITY3_MAX_RANGE)
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
-	int main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x + 10, game_object->GetPos().y - 18, (int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 
 	CreateAbility3Test();

@@ -1,0 +1,22 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/snakes_spritesheet.png">
+    <anim speed = "5" name = "snake_down" loop = "true">
+      <rect x = "2" y = "2" w = "30" h = "32"/>
+    </anim>
+    <anim speed = "3" name = "snake_attack_down" loop = "true">
+      <rect x = "2" y = "2" w = "30" h = "32"/>
+      <rect x = "2" y = "36" w = "28" h = "32"/>
+    </anim>
+    <anim speed = "3" name = "snake_up" loop = "true">
+      <rect x = "36" y = "2" w = "24" h = "32"/>
+      <rect x = "36" y = "38" w = "24" h = "30"/>
+    </anim>
+    <anim speed = "3" name = "snake_lateral" loop = "true">
+      <rect x = "64" y = "2" w = "28" h = "32"/>
+      <rect x = "68" y = "36" w = "28" h = "32"/>
+    </anim>
+    
+  </animations>
+</file>

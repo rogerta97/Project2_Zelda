@@ -20,6 +20,7 @@ class ShopManager;
 class ZeldaManager;
 class BaseManager;
 class QuestManager;
+class JungleCampManager;
 
 enum GameStates
 {
@@ -68,6 +69,8 @@ public:
 	ZeldaManager*		zelda_manager = nullptr;
 	BaseManager*		base_manager = nullptr;
 	QuestManager*		quest_manager = nullptr;
+	JungleCampManager*	jungleCamp_manager = nullptr;
+	PlayerManager*      player_manager = nullptr;
 
 private:
 	//UI elements
@@ -75,25 +78,21 @@ private:
 	UI_Image*			progress_bar_1 = nullptr; 
 	UI_Image*			rupiees_img_1 = nullptr;
 	UI_Image*			minimap_icon_1 = nullptr;
-	vector<UI_Image*>	habilities_1;
 
 	// P2
 	UI_Image*			progress_bar_2 = nullptr;
 	UI_Image*			rupiees_img_2 = nullptr;
 	UI_Image*			minimap_icon_2 = nullptr;
-	vector<UI_Image*>	habilities_2;
 
 	// P3
 	UI_Image*			progress_bar_3 = nullptr;
 	UI_Image*			rupiees_img_3 = nullptr;
 	UI_Image*			minimap_icon_3 = nullptr;
-	vector<UI_Image*>	habilities_3;
 
 	// P4
 	UI_Image*			progress_bar_4 = nullptr;
 	UI_Image*			rupiees_img_4 = nullptr;
 	UI_Image*			minimap_icon_4 = nullptr;
-	vector<UI_Image*>   habilities_4;
 
 	vector<PhysBody*>	map_collisions;
 

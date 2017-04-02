@@ -56,6 +56,9 @@ public:
 	// Checks if is the current animation by name
 	bool IsCurrentAnimation(const char* name);
 
+	// Delete all animations
+	void CleanUp();
+
 private:
 	Animation*           current_animation = nullptr;
 	Animation*			 next_animation = nullptr;

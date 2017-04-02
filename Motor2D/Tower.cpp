@@ -19,14 +19,14 @@
 #include "TowerAttack.h"
 #include "Quest_Manager.h"
 
-#define TOWER_H 64
+#define TOWER_H 38
 #define TOWER_W 64
 
 Tower::Tower(iPoint pos) 
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_H, TOWER_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
 	
-	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
@@ -40,7 +40,7 @@ Tower::Tower(iPoint pos)
 
 Tower::~Tower()
 {
-	RELEASE(game_object);
+	
 }
 
 bool Tower::Start()
@@ -134,7 +134,7 @@ bool Tower::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
@@ -211,9 +211,9 @@ bool Tower::LookForTarget()
 		std::vector<Entity*> players;
 
 		if (GetTeam() == 1)
-			players = App->entity->player_manager->GetTeamPlayers(2);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 		else
-			players = App->entity->player_manager->GetTeamPlayers(1);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 
 		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
 		{

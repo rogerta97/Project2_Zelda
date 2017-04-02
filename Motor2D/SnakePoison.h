@@ -1,5 +1,5 @@
-#ifndef _TOWERATTACK_H
-#define _TOWERATTACK_H
+#ifndef _SNAKEPOISON_H
+#define _SNAKEPOISON_H
 
 #include "j1App.h"
 #include "j1Render.h"
@@ -16,12 +16,12 @@ class PhysBody;
 class GameObject;
 
 
-class TowerAttack : public Spell
+class SnakePoison : public Spell
 {
 public:
-	TowerAttack(iPoint pos);
+	SnakePoison(iPoint pos);
 
-	~TowerAttack();
+	~SnakePoison();
 
 	bool Start();
 	bool PreUpdate();
@@ -42,7 +42,7 @@ public:
 		return true;
 	}
 
-	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	void SetTarget(Entity* target);
 
@@ -51,4 +51,4 @@ private:
 	j1Timer			timer;
 };
 
-#endif // _TOWERATTACK_H
+#endif // _SNAKEPOISON_H

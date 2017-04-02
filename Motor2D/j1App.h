@@ -30,6 +30,9 @@ class j1Entity;
 class j1Viewports;
 class j1Spell;
 
+//Events
+class EventThrower;
+
 class j1App
 {
 public:
@@ -75,6 +78,8 @@ public:
 
 	void OpenWebPage(char* url);
 
+	void ExpandEvent(int type, EventThrower* origin, int id);
+
 private:
 
 	// Load config file
@@ -101,6 +106,7 @@ private:
 
 	// Frame rate calculations uptade
 	void FrameRateCalculations();
+	void GameStates();
 
 public:
 
@@ -126,6 +132,7 @@ public:
 	list<string>        logs;
 
 	bool			    debug_mode = false;
+	bool				deleting_engine = false;
 
 	collision_filters* cf;
 
@@ -162,6 +169,11 @@ private:
 	UI_Button*			bug_report_button = nullptr;
 	UI_ColoredRect*		bug_report_button_color = nullptr;
 	UI_Text*			bug_report_text = nullptr;
+
+	// Game states
+	UI_Window*			game_states = nullptr;
+	UI_ColoredRect*		game_states_rect = nullptr;
+	UI_Text*			game_states_text = nullptr;
 };
 
 extern j1App* App;

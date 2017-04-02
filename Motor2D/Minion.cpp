@@ -35,6 +35,8 @@ Minion::Minion(iPoint pos)
 	App->UnloadXML(doc);
 
 	cd_timer.Start();
+
+	event_thrower = new EventThrower();
 }
 
 Minion::~Minion()
@@ -119,6 +121,11 @@ bool Minion::Update(float dt)
 
 			if (stats.life <=0)
 			{
+				Event* event_die = new Event();
+				event_die->type = e_t_death;
+				event_die->event_data.entity = this;
+				event_thrower->AddEvent(event_die);
+
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}
@@ -391,6 +398,7 @@ void Minion::CheckState()
 			target = nullptr;
 		}
 	}
+
 	switch (state)
 	{
 	case Minion_Idle:
@@ -581,9 +589,9 @@ bool Minion::LookForTarget()
 	{
 		std::vector<Entity*> players;
 		if (GetTeam() == 1)
-			players = App->entity->player_manager->GetTeamPlayers(2);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 		else
-			players = App->entity->player_manager->GetTeamPlayers(1);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 
 		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
 		{

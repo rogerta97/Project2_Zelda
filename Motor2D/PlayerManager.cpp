@@ -6,6 +6,8 @@
 #include "j1Map.h"
 #include "GameObject.h"
 
+#define DEATH_CAMERA_SPEED 500
+
 PlayerManager::PlayerManager()
 {
 }
@@ -21,6 +23,40 @@ bool PlayerManager::Awake(pugi::xml_node &)
 
 bool PlayerManager::Start()
 {
+	// Abilities UI
+	SDL_Rect screen = App->view->GetViewportRect(1);
+	iPoint ability1_pos = { screen.w - 120 , screen.h - 126 };
+	iPoint ability2_pos = { (screen.w / 50), screen.h - 126 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
+	iPoint ability4_pos = { (screen.w) / 50, screen.h - 76 };
+
+	// p1
+	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// p2
+	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// p3
+	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// p4
+	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	// Event
+	event_thrower = new EventThrower();
+
 	return true;
 }
 
@@ -39,496 +75,19 @@ bool PlayerManager::Update(float dt)
 		Player* curr_player = players.at(i);
 
 		// Disable controller input
-		if (curr_player->entity->disable_controller)
-			continue;
+		//if (curr_player->entity->disable_controller) // this has to be on player
+		//	continue;
 
-		// Input
-
-		// Left Joystick -------
-
-			// Diagonal moves
-		if (curr_player->entity->stuned)
+		if (!curr_player->is_dead)
 		{
-			curr_player->move = stop;
-		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
-		{
-			curr_player->move = move_upleft;
-		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
-		{
-			curr_player->move = move_upright;
-		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
-		{
-			curr_player->move = move_downleft;
-		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
-		{
-			curr_player->move = move_downright;
-		}
-			// Normal moves
-		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
-		{
-			curr_player->move = move_left;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
-		{
-			curr_player->move = move_right;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
-		{
-			curr_player->move = move_up;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
-		{
-			curr_player->move = move_down;
+			PlayerInput(curr_player);
+			UpdateUI(curr_player);
+			CheckIfDeath(curr_player);
 		}
 		else
 		{
-			curr_player->move = stop;
-		}
-		// --------------------
-
-		// Right Joystick -----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_LEFT) > 22000)
-		{
-			if (curr_player->move != stop)
-				curr_player->state = run_left;
-			else
-				curr_player->state = idle_left;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_RIGHT) > 22000)
-		{
-			if (curr_player->move != stop)
-				curr_player->state = run_right;
-			else
-				curr_player->state = idle_right;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_UP) > 12000)
-		{
-			if (curr_player->move != stop)
-				curr_player->state = run_up;
-			else
-				curr_player->state = idle_up;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_DOWN) > 12000)
-		{
-			if (curr_player->move != stop)
-				curr_player->state = run_down;
-			else
-				curr_player->state = idle_down;
-		}
-		// --------------------
-
-		// Run to idle when not moving
-		else if (curr_player->state == run_left)
-		{
-			curr_player->state = idle_left;
-		}
-		else if (curr_player->state == run_right)
-		{
-			curr_player->state = idle_right;
-		}
-		else if (curr_player->state == run_up)
-		{
-			curr_player->state = idle_up;
-		}
-		else if (curr_player->state == run_down)
-		{
-			curr_player->state = idle_down;
-		}
-
-		// Idle to run when moving
-		if (curr_player->move != stop)
-		{
-			if (curr_player->state == idle_left)
-				curr_player->state = run_left;
-
-			else if (curr_player->state == idle_right)
-				curr_player->state = run_right;
-
-			else if (curr_player->state == idle_up)
-				curr_player->state = run_up;
-
-			else if (curr_player->state == idle_down)
-				curr_player->state = run_down;
-		}
-
-		// Abilities PRESS
-		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
-		{
-			if (IsAbilityCdCompleted(curr_player, 1))
-			{
-				if (curr_player->state == idle_down || curr_player->state == run_down)
-					curr_player->show = shows::show_basic_atack_down;
-				else if (curr_player->state == idle_up || curr_player->state == run_up)
-					curr_player->show = shows::show_basic_atack_up;
-				else if (curr_player->state == idle_left || curr_player->state == run_left)
-					curr_player->show = shows::show_basic_atack_left;
-				else if (curr_player->state == idle_right || curr_player->state == run_right)
-					curr_player->show = shows::show_basic_atack_right;
-			}
-		}
-		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
-		{
-			if (IsAbilityCdCompleted(curr_player, 2))
-			{
-				if (curr_player->state == idle_down || curr_player->state == run_down)
-					curr_player->show = shows::show_ability1_down;
-				else if (curr_player->state == idle_up || curr_player->state == run_up)
-					curr_player->show = shows::show_ability1_up;
-				else if (curr_player->state == idle_left || curr_player->state == run_left)
-					curr_player->show = shows::show_ability1_left;
-				else if (curr_player->state == idle_right || curr_player->state == run_right)
-					curr_player->show = shows::show_ability1_right;
-			}
-		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
-		{
-			if (IsAbilityCdCompleted(curr_player, 3))
-			{
-				if (curr_player->state == idle_down || curr_player->state == run_down)
-					curr_player->show = shows::show_ability2_down;
-				else if (curr_player->state == idle_up || curr_player->state == run_up)
-					curr_player->show = shows::show_ability2_up;
-				else if (curr_player->state == idle_left || curr_player->state == run_left)
-					curr_player->show = shows::show_ability2_left;
-				else if (curr_player->state == idle_right || curr_player->state == run_right)
-					curr_player->show = shows::show_ability2_right;
-			}
-		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
-		{
-			if (IsAbilityCdCompleted(curr_player, 4))
-			{
-				if (curr_player->state == idle_down || curr_player->state == run_down)
-					curr_player->show = shows::show_ability3_down;
-				else if (curr_player->state == idle_up || curr_player->state == run_up)
-					curr_player->show = shows::show_ability3_up;
-				else if (curr_player->state == idle_left || curr_player->state == run_left)
-					curr_player->show = shows::show_ability3_left;
-				else if (curr_player->state == idle_right || curr_player->state == run_right)
-					curr_player->show = shows::show_ability3_right;
-			}
-		}
-
-		// Abilities RELEASE
-		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE && !curr_player->entity->stuned)
-		{
-			if (curr_player->show != shows::show_null)
-			{
-				if (curr_player->show == shows::show_basic_atack_down)
-				{
-					curr_player->state = basic_atack_down;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 1);
-				}
-				else if (curr_player->show == shows::show_basic_atack_up)
-				{
-					curr_player->state = basic_atack_up;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 1);
-				}
-				else if (curr_player->show == shows::show_basic_atack_left)
-				{
-					curr_player->state = basic_atack_left;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 1);
-				}
-				else if (curr_player->show == shows::show_basic_atack_right)
-				{
-					curr_player->state = basic_atack_right;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 1);
-				}
-			}
-		}
-
-		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
-		{
-			if (curr_player->show != shows::show_null)
-			{
-				if (curr_player->show == shows::show_ability1_down)
-				{
-					curr_player->state = ability1_down;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 2);
-				}
-				else if (curr_player->show == shows::show_ability1_up)
-				{
-					curr_player->state = ability1_up;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 2);
-				}
-				else if (curr_player->show == shows::show_ability1_left)
-				{
-					curr_player->state = ability1_left;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 2);
-				}
-				else if (curr_player->show == shows::show_ability1_right)
-				{
-					curr_player->state = ability1_right;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 2);
-				}
-			}
-		}
-
-		if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) < 22000)
-		{
-			if (curr_player->show != shows::show_null)
-			{
-				if (curr_player->show == shows::show_ability2_down)
-				{
-					curr_player->state = ability2_down;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 3);
-				}
-				else if (curr_player->show == shows::show_ability2_up)
-				{
-					curr_player->state = ability2_up;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 3);
-				}
-				else if (curr_player->show == shows::show_ability2_left)
-				{
-					curr_player->state = ability2_left;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 3);
-				}
-				else if (curr_player->show == shows::show_ability2_right)
-				{
-					curr_player->state = ability2_right;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 3);
-				}
-			}
-		}
-
-		if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) < 22000)
-		{
-			if (curr_player->show != shows::show_null)
-			{
-				if (curr_player->show == shows::show_ability3_down)
-				{
-					curr_player->state = ability3_down;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 4);
-				}
-				else if (curr_player->show == shows::show_ability3_up)
-				{
-					curr_player->state = ability3_up;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 4);
-				}
-				else if (curr_player->show == shows::show_ability3_left)
-				{
-					curr_player->state = ability3_left;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 4);
-				}
-				else if (curr_player->show == shows::show_ability3_right)
-				{
-					curr_player->state = ability3_right;
-					curr_player->show = shows::show_null;
-					ResetAbilityTimer(curr_player, 4);
-				}
-			}
-		}
-		
-		// State machines
-
-		// Animations
-		switch (curr_player->state)
-		{
-		case run_up:
-			curr_player->entity->RunUp();
-			break;
-		case run_left:
-			curr_player->entity->RunLeft();
-			break;
-		case run_down:
-			curr_player->entity->RunDown();
-			break;
-		case run_right:
-			curr_player->entity->RunRight();
-			break;
-		case walk_up:
-			break;
-		case walk_left:
-			break;
-		case walk_down:
-			break;
-		case walk_right:
-			break;
-		case idle_up:
-			curr_player->entity->IdleUp();
-			break;
-		case idle_left:
-			curr_player->entity->IdleLeft();
-			break;
-		case idle_down:
-			curr_player->entity->IdleDown();
-			break;
-		case idle_right:
-			curr_player->entity->IdleRight();
-			break;
-		case basic_atack_up:
-			curr_player->entity->BasicAttackUp();
-			curr_player->state = idle_up;
-			break;
-		case basic_atack_left:
-			curr_player->entity->BasicAttackLeft();
-			curr_player->state = idle_left;
-			break;
-		case basic_atack_down:
-			curr_player->entity->BasicAttackDown();
-			curr_player->state = idle_down;
-			break;
-		case basic_atack_right:
-			curr_player->entity->BasicAttackRight();
-			curr_player->state = idle_right;
-			break;
-		case ability1_up:
-			curr_player->entity->Ability1Up();
-			curr_player->state = idle_up;
-			break;
-		case ability1_left:
-			curr_player->entity->Ability1Down();
-			curr_player->state = idle_left;
-			break;
-		case ability1_down:
-			curr_player->entity->Ability1Left();
-			curr_player->state = idle_down;
-			break;
-		case ability1_right:
-			curr_player->entity->Ability1Right();
-			curr_player->state = idle_right;
-			break;
-		case ability2_up:
-			curr_player->entity->Ability2Up();
-			curr_player->state = idle_up;
-			break;
-		case ability2_left:
-			curr_player->entity->Ability2Left();
-			curr_player->state = idle_left;
-			break;
-		case ability2_down:
-			curr_player->entity->Ability2Down();
-			curr_player->state = idle_down;
-			break;
-		case ability2_right:
-			curr_player->entity->Ability2Right();
-			curr_player->state = idle_right;
-			break;
-		case ability3_up:
-			curr_player->entity->Ability3Up();
-			curr_player->state = idle_up;
-			break;
-		case ability3_left:
-			curr_player->entity->Ability3Left();
-			curr_player->state = idle_left;
-			break;
-		case ability3_down:
-			curr_player->entity->Ability3Down();
-			curr_player->state = idle_down;
-			break;
-		case ability3_right:
-			curr_player->entity->Ability3Right();
-			curr_player->state = idle_right;
-			break;
-		case states_null:
-			break;
-		default:
-			break;
-		}
-
-		// Movement
-		float speed = (curr_player->entity->stats.speed * dt);
-
-		switch (curr_player->move)
-		{
-		case move_up:
-			curr_player->entity->MoveUp(speed);
-			break;
-		case move_down:
-			curr_player->entity->MoveDown(speed);
-			break;
-		case move_left:
-			curr_player->entity->MoveLeft(speed);
-			break;
-		case move_right:
-			curr_player->entity->MoveRight(speed);
-			break;
-		case move_upleft:
-			curr_player->entity->MoveUpLeft(speed);
-			break;
-		case move_upright:
-			curr_player->entity->MoveUpRight(speed);
-			break;
-		case move_downleft:
-			curr_player->entity->MoveDownLeft(speed);
-			break;
-		case move_downright:
-			curr_player->entity->MoveDownRight(speed);
-			break;
-		case stop:
-			break;
-		}
-
-		// Show
-		switch (curr_player->show)
-		{
-		case show_basic_atack_up:
-			curr_player->entity->ShowBasicAttackUp();
-			break;
-		case show_basic_atack_left:
-			curr_player->entity->ShowBasicAttackLeft();
-			break;
-		case show_basic_atack_down:
-			curr_player->entity->ShowBasicAttackDown();
-			break;
-		case show_basic_atack_right:
-			curr_player->entity->ShowBasicAttackRight();
-			break;
-		case show_ability1_up:
-			curr_player->entity->ShowAbility1Up();
-			break;
-		case show_ability1_left:
-			curr_player->entity->ShowAbility1Down();
-			break;
-		case show_ability1_down:
-			curr_player->entity->ShowAbility1Left();
-			break;
-		case show_ability1_right:
-			curr_player->entity->ShowAbility1Right();
-			break;
-		case show_ability2_up:
-			curr_player->entity->ShowAbility2Up();
-			break;
-		case show_ability2_left:
-			curr_player->entity->ShowAbility2Left();
-			break;
-		case show_ability2_down:
-			curr_player->entity->ShowAbility2Down();
-			break;
-		case show_ability2_right:
-			curr_player->entity->ShowAbility2Right();
-			break;
-		case show_ability3_up:
-			curr_player->entity->ShowAbility3Up();
-			break;
-		case show_ability3_left:
-			curr_player->entity->ShowAbility3Left();
-			break;
-		case show_ability3_down:
-			curr_player->entity->ShowAbility3Down();
-			break;
-		case show_ability3_right:
-			curr_player->entity->ShowAbility3Right();
-			break;
+			MoveCamera(curr_player);
+			CheckIfRespawn(curr_player);
 		}
 	}
 
@@ -545,35 +104,37 @@ bool PlayerManager::CleanUp()
 	bool ret = true;
 
 	ClearPlayers();
-	spawn_points_used_team1.clear();
-	spawn_points_used_team2.clear();
+
+	habilities_1.clear();
+	habilities_2.clear();
+	habilities_3.clear();
+	habilities_4.clear();
 
 	return ret;
 }
 
-Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, bool on_spawn, int show_life_bar)
+Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, int respawn, int show_life_bar)
 {
 	Player* ret = nullptr;
 
 	if (players.size() <= 3)
 	{
 		iPoint position = pos;
-
-		// Searching for avaliable spawn points
-		if (on_spawn)
-		{
-			position = GetFreePlayerSpawn(team);
-			position += {16, 8};
-		}
+		
+		position = GetFreePlayerSpawn(team, respawn);
+		position.x += 16;
+		position.y += 9;
 
 		// Create player
-		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport);
+		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
 		p->entity->SetTeam(team);
 		p->entity->show_life_bar = show_life_bar;
 		p->entity->is_player = true;
+		p->type = p->entity->type;
 		players.push_back(p);
 		ret = p;
+		p->team = team;
 	}
 
 	return ret;
@@ -594,9 +155,10 @@ void PlayerManager::ChangePlayer(entity_name name, int controller_index, int vie
 		}
 	}
 
-	Player* p = new Player(App->entity->CreateEntity(name, pos), controller_index - 1, viewport);
-	p->entity->SetCamera(p->controller_index + 1);
-	players.push_back(p);
+	//Player* p = new Player(App->entity->CreateEntity(name, pos), controller_index - 1, viewport, );
+	//p->type = p->entity->type;
+	//p->entity->SetCamera(p->controller_index + 1);
+	//players.push_back(p);
 }
 
 void PlayerManager::DeletePlayer(int controller_index)
@@ -615,9 +177,11 @@ void PlayerManager::DeletePlayer(int controller_index)
 
 void PlayerManager::ClearPlayers()
 {
-	for (int i = 0; i < players.size(); i++)
+	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
-		RELEASE(players.at(i));
+		App->entity->DeleteEntity((*it)->entity);
+		RELEASE(*it);
+		it = players.erase(it);
 	}
 	players.clear();
 }
@@ -663,7 +227,7 @@ int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 	}
 }
 
-iPoint PlayerManager::GetFreePlayerSpawn(int team)
+iPoint PlayerManager::GetFreePlayerSpawn(int team, int respawn)
 {
 	iPoint ret = NULLPOINT;
 
@@ -671,52 +235,11 @@ iPoint PlayerManager::GetFreePlayerSpawn(int team)
 	App->map->GetPlayerSpawnPoints(team, spawn_points);
 
 	for (int i = 0; i < spawn_points.size(); i++)
-	{    
-		ret = spawn_points.at(i);
-
-		switch (team)
-		{
-		case 1:
-			if (spawn_points_used_team1.empty())
-			{
-				spawn_points_used_team1.push_back(ret);
-				return ret;
-			}
-
-			for (int t1 = 0; t1 < spawn_points_used_team1.size(); t1++)
-			{
-				if (spawn_points_used_team1.at(t1) == ret)
-					ret = NULLPOINT;
-				else
-				{
-					spawn_points_used_team1.push_back(ret);
-					return ret;
-				}
-			}
-			break;
-		case 2:
- 			if (spawn_points_used_team2.empty())
-			{
-				spawn_points_used_team2.push_back(ret);
-				return ret;
-			}
-
-			for (int t2 = 0; t2 < spawn_points_used_team2.size(); t2++)
-			{
-				if (spawn_points_used_team2.at(t2) == ret)
-					ret = NULLPOINT;
-				else
-				{
-					spawn_points_used_team2.push_back(ret);
-					return ret;
-				}
-			}
-			break;
-		default:
-			break;
-		}
+	{
+		if (i == respawn - 1)
+			ret = spawn_points.at(i);
 	}
-
+	
 	return ret;
 }
 
@@ -784,6 +307,709 @@ void PlayerManager::AllowInput(int player)
 	}
 }
 
+void PlayerManager::PlayerInput(Player * curr_player)
+{
+	// Left Joystick -------
+
+	if (curr_player->entity == nullptr)
+		return;
+
+	// Diagonal moves
+	if (curr_player->entity->stuned)
+	{
+		curr_player->move = stop;
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
+	{
+		curr_player->move = move_upleft;
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
+	{
+		curr_player->move = move_upright;
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+	{
+		curr_player->move = move_downleft;
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+	{
+		curr_player->move = move_downright;
+	}
+	// Normal moves
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
+	{
+		curr_player->move = move_left;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
+	{
+		curr_player->move = move_right;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
+	{
+		curr_player->move = move_up;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
+	{
+		curr_player->move = move_down;
+	}
+	else
+	{
+		curr_player->move = stop;
+	}
+	// --------------------
+
+	// Right Joystick -----
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_LEFT) > 22000)
+	{
+		if (curr_player->move != stop)
+			curr_player->state = run_left;
+		else
+			curr_player->state = idle_left;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_RIGHT) > 22000)
+	{
+		if (curr_player->move != stop)
+			curr_player->state = run_right;
+		else
+			curr_player->state = idle_right;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_UP) > 12000)
+	{
+		if (curr_player->move != stop)
+			curr_player->state = run_up;
+		else
+			curr_player->state = idle_up;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHTJOY_DOWN) > 12000)
+	{
+		if (curr_player->move != stop)
+			curr_player->state = run_down;
+		else
+			curr_player->state = idle_down;
+	}
+	// --------------------
+
+	// Run to idle when not moving
+	else if (curr_player->state == run_left)
+	{
+		curr_player->state = idle_left;
+	}
+	else if (curr_player->state == run_right)
+	{
+		curr_player->state = idle_right;
+	}
+	else if (curr_player->state == run_up)
+	{
+		curr_player->state = idle_up;
+	}
+	else if (curr_player->state == run_down)
+	{
+		curr_player->state = idle_down;
+	}
+
+	// Idle to run when moving
+	if (curr_player->move != stop)
+	{
+		if (curr_player->state == idle_left)
+			curr_player->state = run_left;
+
+		else if (curr_player->state == idle_right)
+			curr_player->state = run_right;
+
+		else if (curr_player->state == idle_up)
+			curr_player->state = run_up;
+
+		else if (curr_player->state == idle_down)
+			curr_player->state = run_down;
+	}
+
+	// Abilities PRESS
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+	{
+		if (IsAbilityCdCompleted(curr_player, 1))
+		{
+			if (curr_player->state == idle_down || curr_player->state == run_down)
+				curr_player->show = shows::show_basic_atack_down;
+			else if (curr_player->state == idle_up || curr_player->state == run_up)
+				curr_player->show = shows::show_basic_atack_up;
+			else if (curr_player->state == idle_left || curr_player->state == run_left)
+				curr_player->show = shows::show_basic_atack_left;
+			else if (curr_player->state == idle_right || curr_player->state == run_right)
+				curr_player->show = shows::show_basic_atack_right;
+		}
+	}
+	else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
+	{
+		if (IsAbilityCdCompleted(curr_player, 2))
+		{
+			if (curr_player->state == idle_down || curr_player->state == run_down)
+				curr_player->show = shows::show_ability1_down;
+			else if (curr_player->state == idle_up || curr_player->state == run_up)
+				curr_player->show = shows::show_ability1_up;
+			else if (curr_player->state == idle_left || curr_player->state == run_left)
+				curr_player->show = shows::show_ability1_left;
+			else if (curr_player->state == idle_right || curr_player->state == run_right)
+				curr_player->show = shows::show_ability1_right;
+		}
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
+	{
+		if (IsAbilityCdCompleted(curr_player, 3))
+		{
+			if (curr_player->state == idle_down || curr_player->state == run_down)
+				curr_player->show = shows::show_ability2_down;
+			else if (curr_player->state == idle_up || curr_player->state == run_up)
+				curr_player->show = shows::show_ability2_up;
+			else if (curr_player->state == idle_left || curr_player->state == run_left)
+				curr_player->show = shows::show_ability2_left;
+			else if (curr_player->state == idle_right || curr_player->state == run_right)
+				curr_player->show = shows::show_ability2_right;
+		}
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
+	{
+		if (IsAbilityCdCompleted(curr_player, 4))
+		{
+			if (curr_player->state == idle_down || curr_player->state == run_down)
+				curr_player->show = shows::show_ability3_down;
+			else if (curr_player->state == idle_up || curr_player->state == run_up)
+				curr_player->show = shows::show_ability3_up;
+			else if (curr_player->state == idle_left || curr_player->state == run_left)
+				curr_player->show = shows::show_ability3_left;
+			else if (curr_player->state == idle_right || curr_player->state == run_right)
+				curr_player->show = shows::show_ability3_right;
+		}
+	}
+
+	// Abilities RELEASE
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE && !curr_player->entity->stuned)
+	{
+		if (curr_player->show != shows::show_null)
+		{
+			if (curr_player->show == shows::show_basic_atack_down)
+			{
+				curr_player->state = basic_atack_down;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 1);
+			}
+			else if (curr_player->show == shows::show_basic_atack_up)
+			{
+				curr_player->state = basic_atack_up;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 1);
+			}
+			else if (curr_player->show == shows::show_basic_atack_left)
+			{
+				curr_player->state = basic_atack_left;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 1);
+			}
+			else if (curr_player->show == shows::show_basic_atack_right)
+			{
+				curr_player->state = basic_atack_right;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 1);
+			}
+		}
+	}
+
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
+	{
+		if (curr_player->show != shows::show_null)
+		{
+			if (curr_player->show == shows::show_ability1_down)
+			{
+				curr_player->state = ability1_down;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 2);
+			}
+			else if (curr_player->show == shows::show_ability1_up)
+			{
+				curr_player->state = ability1_up;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 2);
+			}
+			else if (curr_player->show == shows::show_ability1_left)
+			{
+				curr_player->state = ability1_left;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 2);
+			}
+			else if (curr_player->show == shows::show_ability1_right)
+			{
+				curr_player->state = ability1_right;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 2);
+			}
+		}
+	}
+
+	if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) < 22000)
+	{
+		if (curr_player->show != shows::show_null)
+		{
+			if (curr_player->show == shows::show_ability2_down)
+			{
+				curr_player->state = ability2_down;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 3);
+			}
+			else if (curr_player->show == shows::show_ability2_up)
+			{
+				curr_player->state = ability2_up;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 3);
+			}
+			else if (curr_player->show == shows::show_ability2_left)
+			{
+				curr_player->state = ability2_left;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 3);
+			}
+			else if (curr_player->show == shows::show_ability2_right)
+			{
+				curr_player->state = ability2_right;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 3);
+			}
+		}
+	}
+
+	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) < 22000)
+	{
+		if (curr_player->show != shows::show_null)
+		{
+			if (curr_player->show == shows::show_ability3_down)
+			{
+				curr_player->state = ability3_down;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 4);
+			}
+			else if (curr_player->show == shows::show_ability3_up)
+			{
+				curr_player->state = ability3_up;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 4);
+			}
+			else if (curr_player->show == shows::show_ability3_left)
+			{
+				curr_player->state = ability3_left;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 4);
+			}
+			else if (curr_player->show == shows::show_ability3_right)
+			{
+				curr_player->state = ability3_right;
+				curr_player->show = shows::show_null;
+				ResetAbilityTimer(curr_player, 4);
+			}
+		}
+	}
+
+	// State machines
+
+	// Animations
+	switch (curr_player->state)
+	{
+	case run_up:
+		curr_player->entity->RunUp();
+		break;
+	case run_left:
+		curr_player->entity->RunLeft();
+		break;
+	case run_down:
+		curr_player->entity->RunDown();
+		break;
+	case run_right:
+		curr_player->entity->RunRight();
+		break;
+	case walk_up:
+		break;
+	case walk_left:
+		break;
+	case walk_down:
+		break;
+	case walk_right:
+		break;
+	case idle_up:
+		curr_player->entity->IdleUp();
+		break;
+	case idle_left:
+		curr_player->entity->IdleLeft();
+		break;
+	case idle_down:
+		curr_player->entity->IdleDown();
+		break;
+	case idle_right:
+		curr_player->entity->IdleRight();
+		break;
+	case basic_atack_up:
+		curr_player->entity->BasicAttackUp();
+		curr_player->state = idle_up;
+		break;
+	case basic_atack_left:
+		curr_player->entity->BasicAttackLeft();
+		curr_player->state = idle_left;
+		break;
+	case basic_atack_down:
+		curr_player->entity->BasicAttackDown();
+		curr_player->state = idle_down;
+		break;
+	case basic_atack_right:
+		curr_player->entity->BasicAttackRight();
+		curr_player->state = idle_right;
+		break;
+	case ability1_up:
+		curr_player->entity->Ability1Up();
+		curr_player->state = idle_up;
+		break;
+	case ability1_left:
+		curr_player->entity->Ability1Down();
+		curr_player->state = idle_left;
+		break;
+	case ability1_down:
+		curr_player->entity->Ability1Left();
+		curr_player->state = idle_down;
+		break;
+	case ability1_right:
+		curr_player->entity->Ability1Right();
+		curr_player->state = idle_right;
+		break;
+	case ability2_up:
+		curr_player->entity->Ability2Up();
+		curr_player->state = idle_up;
+		break;
+	case ability2_left:
+		curr_player->entity->Ability2Left();
+		curr_player->state = idle_left;
+		break;
+	case ability2_down:
+		curr_player->entity->Ability2Down();
+		curr_player->state = idle_down;
+		break;
+	case ability2_right:
+		curr_player->entity->Ability2Right();
+		curr_player->state = idle_right;
+		break;
+	case ability3_up:
+		curr_player->entity->Ability3Up();
+		curr_player->state = idle_up;
+		break;
+	case ability3_left:
+		curr_player->entity->Ability3Left();
+		curr_player->state = idle_left;
+		break;
+	case ability3_down:
+		curr_player->entity->Ability3Down();
+		curr_player->state = idle_down;
+		break;
+	case ability3_right:
+		curr_player->entity->Ability3Right();
+		curr_player->state = idle_right;
+		break;
+	case states_null:
+		break;
+	default:
+		break;
+	}
+
+	// Movement
+	float speed = (curr_player->entity->stats.speed * App->GetDT());
+
+	switch (curr_player->move)
+	{
+	case move_up:
+		curr_player->entity->MoveUp(speed);
+		break;
+	case move_down:
+		curr_player->entity->MoveDown(speed);
+		break;
+	case move_left:
+		curr_player->entity->MoveLeft(speed);
+		break;
+	case move_right:
+		curr_player->entity->MoveRight(speed);
+		break;
+	case move_upleft:
+		curr_player->entity->MoveUpLeft(speed);
+		break;
+	case move_upright:
+		curr_player->entity->MoveUpRight(speed);
+		break;
+	case move_downleft:
+		curr_player->entity->MoveDownLeft(speed);
+		break;
+	case move_downright:
+		curr_player->entity->MoveDownRight(speed);
+		break;
+	case stop:
+		break;
+	}
+
+	// Show
+	switch (curr_player->show)
+	{
+	case show_basic_atack_up:
+		curr_player->entity->ShowBasicAttackUp();
+		break;
+	case show_basic_atack_left:
+		curr_player->entity->ShowBasicAttackLeft();
+		break;
+	case show_basic_atack_down:
+		curr_player->entity->ShowBasicAttackDown();
+		break;
+	case show_basic_atack_right:
+		curr_player->entity->ShowBasicAttackRight();
+		break;
+	case show_ability1_up:
+		curr_player->entity->ShowAbility1Up();
+		break;
+	case show_ability1_left:
+		curr_player->entity->ShowAbility1Down();
+		break;
+	case show_ability1_down:
+		curr_player->entity->ShowAbility1Left();
+		break;
+	case show_ability1_right:
+		curr_player->entity->ShowAbility1Right();
+		break;
+	case show_ability2_up:
+		curr_player->entity->ShowAbility2Up();
+		break;
+	case show_ability2_left:
+		curr_player->entity->ShowAbility2Left();
+		break;
+	case show_ability2_down:
+		curr_player->entity->ShowAbility2Down();
+		break;
+	case show_ability2_right:
+		curr_player->entity->ShowAbility2Right();
+		break;
+	case show_ability3_up:
+		curr_player->entity->ShowAbility3Up();
+		break;
+	case show_ability3_left:
+		curr_player->entity->ShowAbility3Left();
+		break;
+	case show_ability3_down:
+		curr_player->entity->ShowAbility3Down();
+		break;
+	case show_ability3_right:
+		curr_player->entity->ShowAbility3Right();
+		break;
+	}
+}
+
+void PlayerManager::MoveCamera(Player * curr_player)
+{
+	float speed = DEATH_CAMERA_SPEED*App->GetDT();
+
+	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45*DEGTORAD));
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+	}
+	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+	}
+
+	// Normal moves
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, speed, 0);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
+	{
+		App->view->MoveCamera(curr_player->viewport, -speed, 0);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
+	{
+		App->view->MoveCamera(curr_player->viewport, 0, speed);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
+	{
+		App->view->MoveCamera(curr_player->viewport, 0, -speed);
+	}
+}
+
+void PlayerManager::CheckIfRespawn(Player * player)
+{
+	if (player->is_dead)
+	{
+		if (player->death_timer.ReadSec() > player->death_time)
+			player->Respawn();
+	}
+}
+
+void PlayerManager::CheckIfDeath(Player * player)
+{
+	if (player->entity->stats.life <= 0)
+	{
+		Event* event_die = new Event();
+		event_die->type = e_t_death;
+		event_die->event_data.entity = player->entity;
+		event_thrower->AddEvent(event_die);
+
+		player->Kill();
+	}
+}
+
+void PlayerManager::UpdateUI(Player* curr_player)
+{
+	// UI Control -----------
+
+	switch (curr_player->viewport)
+	{
+	case 1:
+		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		{
+			habilities_1.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_1.at(0)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(1)->CdCompleted())
+		{
+			habilities_1.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_1.at(1)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(2)->CdCompleted())
+		{
+			habilities_1.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_1.at(2)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(3)->CdCompleted())
+		{
+			habilities_1.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_1.at(3)->ChangeImage(NULLRECT);
+		}
+		break;
+	case 2:
+		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		{
+			habilities_2.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_2.at(0)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(1)->CdCompleted())
+		{
+			habilities_2.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_2.at(1)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(2)->CdCompleted())
+		{
+			habilities_2.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_2.at(2)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(3)->CdCompleted())
+		{
+			habilities_2.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_2.at(3)->ChangeImage(NULLRECT);
+		}
+		break;
+	case 3:
+		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		{
+			habilities_3.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_3.at(0)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(1)->CdCompleted())
+		{
+			habilities_3.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_3.at(1)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(2)->CdCompleted())
+		{
+			habilities_3.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_3.at(2)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(3)->CdCompleted())
+		{
+			habilities_3.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_3.at(3)->ChangeImage(NULLRECT);
+		}
+		break;
+	case 4:
+		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		{
+			habilities_4.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_4.at(0)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(1)->CdCompleted())
+		{
+			habilities_4.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_4.at(1)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(2)->CdCompleted())
+		{
+			habilities_4.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_4.at(2)->ChangeImage(NULLRECT);
+		}
+		if (curr_player->entity->GetAbility(3)->CdCompleted())
+		{
+			habilities_4.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
+		}
+		else
+		{
+			habilities_4.at(3)->ChangeImage(NULLRECT);
+		}
+		break;
+	}
+
+	// --------------
+}
+
+
 void Player::BuyItem(Item * item, int price)
 {
 	for (int i = 0; i < 3; i++)
@@ -820,7 +1046,30 @@ void Player::BuyItem(Item * item, int price)
 
 	entity->UpdateStats(extra_power, extra_hp, extra_speed);
 
-	UpdateRupees();
+	//UpdateRupees();
+}
+
+void Player::Kill()
+{
+	if (entity != nullptr)
+	{
+		App->entity->DeleteEntity(entity);
+		is_dead = true;
+		death_timer.Start();
+	}
+}
+
+void Player::Respawn()
+{
+	if (is_dead)
+	{
+		entity = App->entity->CreateEntity(type, respawn);
+		entity->SetCamera(viewport);
+		entity->SetTeam(team);
+		entity->show_life_bar = true;
+		entity->is_player = true;
+		is_dead = false;
+	}
 }
 
 void Player::UpdateRupees()

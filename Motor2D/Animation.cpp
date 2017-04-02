@@ -221,3 +221,12 @@ bool Animator::IsCurrentAnimation(const char * name)
 	}
 	return false;
 }
+
+void Animator::CleanUp()
+{
+	for (list<Animation*>::iterator it = animations.begin(); it != animations.end(); it++)
+	{
+		RELEASE(*it);
+	}
+	animations.clear();
+}

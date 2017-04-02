@@ -45,9 +45,7 @@ private:
 	UI_Image*		   cursor_1 = nullptr; 
 	UI_Image*		   cursor_2 = nullptr;
 
-	UI_Image*		   princess = nullptr;
-
-	button_action	   current_button = START; 
+	UI_Image*		   princess = nullptr; 
 
 	UI_Button*		   start_button = nullptr;
 	UI_Button*		   options_button = nullptr; 
@@ -70,7 +68,8 @@ private:
 	vector<UI_Button*> button_list;
 	vector<UI_Image*>  cursors;
 
-	bool			   is_options = false; 
+	bool			   is_options = false;
+	button_action	   current_button = START;
 
 };
 

@@ -15,6 +15,7 @@ public:
 	~TowerManager();
 
 	bool Update();
+	bool CleanUp();
 
 	//Return a list that contains all team #team towers. 1 or 2 teams.
 	std::list<Tower*>& GetTowerList(uint team);
@@ -22,13 +23,11 @@ public:
 	//Delete a tower from their team list
 	void KillTower(Entity* tower);
 
-
 private:
 
-
 private:
-	std::list<Tower*>		team1_towers;
-	std::list<Tower*>		team2_towers;
+	std::list<Tower*> team1_towers;
+	std::list<Tower*> team2_towers;
 
 };
 

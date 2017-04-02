@@ -26,7 +26,7 @@ bool MenuScene::Start()
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
 	// Triforce
-//	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
+    //	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
 
 	// Start ---
 	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
@@ -216,6 +216,7 @@ bool MenuScene::PostUpdate()
 		{
 		case START:
 			App->scene->ChangeScene((Scene*)App->scene->team_select);
+			return true;
 			break;
 
 		case OPTIONS:
@@ -260,6 +261,12 @@ bool MenuScene::CleanUp()
 	// -------
 
 	button_list.clear();
+	cursors.clear();
+
+	pos = NULLPOINT;
+
+	current_button = START;
+	is_options = false;
 	
 	return true;
 }

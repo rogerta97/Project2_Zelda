@@ -258,6 +258,25 @@ bool CharacterSelectionScene::CleanUp()
 	if (App->scene->GetCurrentScene() != App->scene->charselect_screen)
 		App->gui->DeleteElement(window);
 
+	for (int i = 0; i < 4; i++)
+	{
+		viewport[i].Reset();
+		info_container[i].clear();
+		char_view[i].clear();
+		player_ready[i] = false;
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		ganon_rects[i] = NULLRECT;
+		navi_rects[i] = NULLRECT;
+		link_rects[i] = NULLRECT;
+		backgrounds_rects[i] = NULLRECT;
+	}
+	
+	positions.clear();
+	change_scene = false;
+
 	return true;
 }
 
@@ -633,9 +652,6 @@ void CharacterSelectionScene::DisableInfo(entity_name character, int viewport_nu
 			viewport[viewport_num].info_back->enabled = false;
 			viewport[viewport_num].ready_text->enabled = true;
 		}
-			
-		
-	
 	};
 }
 

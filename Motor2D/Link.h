@@ -117,8 +117,8 @@ private:
 public:
 
 private:
-	int		camera = 1;
-	bool	flip = false;
+	int		      camera = 1;
+	bool	      flip = false;
 
 	// Ability 3
 	float        ability3_range = 0.0f;
