@@ -3,8 +3,10 @@
 #include "Boomerang.h"
 #include "TowerAttack.h"
 #include "SnakePoison.h"
+#include "BoneAttack.h"
 #include "EventThrower.h"
 #include "GameObject.h"
+
 
 j1Spell::j1Spell()
 {
@@ -132,6 +134,9 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 		break;
 	case s_attack:
 		ret = new SnakePoison(pos);
+		break;
+	case bone_attack:
+		ret = new BoneAttack(pos);
 		break;
 	}
 	

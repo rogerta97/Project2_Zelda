@@ -21,6 +21,7 @@ enum spell_name
 	boomerang,
 	t_attack,
 	s_attack,
+	bone_attack,
 
 };
 

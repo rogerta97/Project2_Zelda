@@ -20,6 +20,7 @@
 #define SNAKE_W 32
 
 #define ATTACK_RANGE 150
+#define HALFMAP 81*32
 
 Snakes::Snakes(iPoint pos)
 {
@@ -148,8 +149,11 @@ bool Snakes::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
-
+	if(!flip)
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	else
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ATTACK_RANGE, 255, 0, 0);
 
@@ -181,10 +185,20 @@ void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixture
 
 void Snakes::Idle()
 {
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("snake_lateral");
+		anim_state = snake_lateral;
+	}
+	else
+	{
+		game_object->SetAnimation("snake_down");
+		anim_state = snake_down;
+	}
+
 	state = Snk_S_Idle;
-	game_object->SetAnimation("snake_down");
 	flip = false;
-	anim_state = snake_down;
+	
 }
 
 void Snakes::DoAttack()

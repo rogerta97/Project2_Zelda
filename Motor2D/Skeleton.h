@@ -1,5 +1,5 @@
-#ifndef _SNAKES_H_
-#define _SNAKES_H_
+#ifndef _SKELETON_H_
+#define _SKELETON_H_
 
 #include "Entity.h"
 #include <list>
@@ -7,21 +7,23 @@
 
 class GameObject;
 
-enum SNAKE_STATE
+
+enum SKELETON_STATE
 {
-	Snk_S_Null,
-	Snk_S_Idle,
-	Snk_S_Attack,
+	s_s_null,
+	s_s_idle,
+	s_s_attack,
+	s_s_stunned,
 };
 
 
-class Snakes :public Entity
+class Skeleton :public Entity
 {
 public:
 
-	Snakes(iPoint pos);
+	Skeleton(iPoint pos);
 
-	~Snakes();
+	~Skeleton();
 
 	// Start variables
 	bool Start();
@@ -43,38 +45,31 @@ public:
 
 	// On Collision
 	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	iPoint GetPos() const;
-
 
 private:
 
 	void Idle();
-	void DoAttack();
-	void AttackLeft();
-	void AttackRight();
-	void AttackUp();
-	void AttackDown();
-
-	bool LookForTarget();
+	void Stunned();
+	void Attack();
+	void SpinAttack();
+	void Bonemerang();
 
 private:
 
 	j1Timer					cd_timer;
 
+	j1Timer					stun_timer;
+
 	bool					flip = false;
 
-	bool					is_attacked = false;
-
-	int						rel_angle = 0;
-
-	SNAKE_STATE				state = Snk_S_Null;
+	SKELETON_STATE			state = s_s_null;
 
 	states					anim_state = states_null;
 
-	Entity*					target = nullptr;
+	iPoint					draw_offset = NULLPOINT;
 
 };
 
-#endif // !SNAKES_H_
+#endif // !SKELETON_H_
