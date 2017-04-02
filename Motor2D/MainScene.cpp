@@ -261,6 +261,7 @@ bool MainScene::CleanUp()
 
 	App->map->CleanUp();
 	App->entity->ClearEntities();
+	App->spell->ClearSpells();
 
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	

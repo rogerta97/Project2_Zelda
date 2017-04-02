@@ -144,38 +144,47 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 
 void PlayerManager::DeletePlayer(int controller_index)
 {
-	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	if (!players.empty())
 	{
-		if ((*it)->controller_index == controller_index - 1)
+		for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			App->entity->DeleteEntity((*it)->entity);
-			RELEASE(*it);
-			players.erase(it);
-			break;
+			if ((*it)->controller_index == controller_index - 1)
+			{
+				App->entity->DeleteEntity((*it)->entity);
+				RELEASE(*it);
+				players.erase(it);
+				break;
+			}
 		}
 	}
 }
 
 void PlayerManager::ClearPlayers()
 {
-	for (vector<Player*>::iterator it = players.begin(); it != players.end();)
+	if (!players.empty())
 	{
-		App->entity->DeleteEntity((*it)->entity);
-		RELEASE(*it);
-		it = players.erase(it);
+		for (vector<Player*>::iterator it = players.begin(); it != players.end();)
+		{
+			App->entity->DeleteEntity((*it)->entity);
+			RELEASE(*it);
+			it = players.erase(it);
+		}
+		players.clear();
 	}
-	players.clear();
 }
 
 std::vector<Entity*> PlayerManager::GetTeamPlayers(int team)
 {
 	std::vector<Entity*> ret;
 
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	if (!players.empty())
 	{
-		if ((*it)->entity->GetTeam() == team)
+		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			ret.push_back((*it)->entity);
+			if ((*it)->entity->GetTeam() == team)
+			{
+				ret.push_back((*it)->entity);
+			}
 		}
 	}
 
@@ -186,11 +195,14 @@ std::vector<int> PlayerManager::GetTeamViewports(int team)
 {
 	std::vector<int> ret;
 
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	if (!players.empty())
 	{
-		if ((*it)->entity->GetTeam() == team)
+		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			ret.push_back((*it)->controller_index+1);
+			if ((*it)->entity->GetTeam() == team)
+			{
+				ret.push_back((*it)->controller_index + 1);
+			}
 		}
 	}
 
@@ -242,11 +254,14 @@ void PlayerManager::ResetAbilityTimer(Player* player, int ability)
 
 int PlayerManager::GetPlayerTeamFromBody(PhysBody * body)
 {
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	if (!players.empty())
 	{
-		if ((*it)->entity->game_object->pbody == body)
+		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			return (*it)->entity->GetTeam();
+			if ((*it)->entity->game_object->pbody == body)
+			{
+				return (*it)->entity->GetTeam();
+			}
 		}
 	}
 	return 0;
@@ -254,11 +269,14 @@ int PlayerManager::GetPlayerTeamFromBody(PhysBody * body)
 
 Player * PlayerManager::GetPlayerFromBody(PhysBody * body)
 {
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	if (!players.empty())
 	{
-		if ((*it)->entity->game_object->pbody == body)
+		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			return (*it);
+			if ((*it)->entity->game_object->pbody == body)
+			{
+				return (*it);
+			}
 		}
 	}
 	return nullptr;

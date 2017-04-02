@@ -232,16 +232,26 @@ void j1Entity::ClearEntities()
 {
 	if (!entity_list.empty())
 	{
-		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end();)
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
 			if ((*it) != nullptr)
 			{
 				(*it)->to_delete = true;
-				it++;
 			}
-			else
-				it = entity_list.erase(it);
 		}	
+	}
+
+	if (!slowed_entities.empty())
+	{
+		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
+			slowed_entities.erase(it);
+	}
+
+
+	if (!stuned_entities.empty())
+	{
+		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
+			stuned_entities.erase(it);
 	}
 }
 
@@ -306,11 +316,14 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 
 	if (sp != nullptr)
 	{
-		for (vector<Ability*>::iterator it = sp->owner->abilities.begin(); it != sp->owner->abilities.end(); it++)
+		if (!sp->owner->abilities.empty())
 		{
-			if (TextCmp((*it)->name.c_str(), sp->name.c_str()))
+			for (vector<Ability*>::iterator it = sp->owner->abilities.begin(); it != sp->owner->abilities.end(); it++)
 			{
-				return *it;
+				if (TextCmp((*it)->name.c_str(), sp->name.c_str()))
+				{
+					return *it;
+				}
 			}
 		}
 	}
@@ -320,12 +333,15 @@ Spell * j1Entity::FindSpellByBody(PhysBody * spell)
 {
 	Spell* ret = nullptr;
 
-	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	if (!App->spell->spell_list.empty())
 	{
-		if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+		for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 		{
-			ret = (*it);
-			break;
+			if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+			{
+				ret = (*it);
+				break;
+			}
 		}
 	}
 

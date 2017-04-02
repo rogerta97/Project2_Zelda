@@ -125,34 +125,37 @@ void Zelda::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 	{
 		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
-			int team = contact_palyer->team;
-
-			bool found = false;
-
-			for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
+			if (App->scene->main_scene->player_manager != nullptr)
 			{
-				if (*it == contact_palyer)
-				{
-					found = true;
-					break;
-				}
+				Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
+				int team = contact_palyer->team;
 
-			}
-			if (!found)
-			{
-				switch (team)
+				bool found = false;
+
+				for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
 				{
-				case 1:
-					team1_players++;
-					break;
-				case 2:
-					team2_players++;
-					break;
-				default:
-					break;
+					if (*it == contact_palyer)
+					{
+						found = true;
+						break;
+					}
+
 				}
-				counted_players.push_back(contact_palyer);
+				if (!found)
+				{
+					switch (team)
+					{
+					case 1:
+						team1_players++;
+						break;
+					case 2:
+						team2_players++;
+						break;
+					default:
+						break;
+					}
+					counted_players.push_back(contact_palyer);
+				}
 			}
 		}
 	}
@@ -164,33 +167,36 @@ void Zelda::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, 
 	{
 		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
-			int team = contact_palyer->team;
-
-			bool found = false;
-
-			for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
+			if (App->scene->main_scene->player_manager != nullptr)
 			{
-				if (*it == contact_palyer)
+				Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
+				int team = contact_palyer->team;
+
+				bool found = false;
+
+				for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
 				{
-					found = true;
-					counted_players.erase(it);
-					break;
+					if (*it == contact_palyer)
+					{
+						found = true;
+						counted_players.erase(it);
+						break;
+					}
+
 				}
-
-			}
-			if (found)
-			{
-				switch (team)
+				if (found)
 				{
-				case 1:
-					team1_players--;
-					break;
-				case 2:
-					team2_players--;
-					break;
-				default:
-					break;
+					switch (team)
+					{
+					case 1:
+						team1_players--;
+						break;
+					case 2:
+						team2_players--;
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}

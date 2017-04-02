@@ -162,13 +162,16 @@ void j1Spell::DeleteSpellIfTarget(Entity * target)
 
 void j1Spell::ClearSpells()
 {
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+	if (!spell_list.empty())
 	{
-		(*it)->CleanUp();
-		(*it)->CleanSpell();
-		RELEASE(*it);
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			(*it)->CleanUp();
+			(*it)->CleanSpell();
+			RELEASE(*it);
+		}
+		spell_list.clear();
 	}
-	spell_list.clear();
 }
 
 void j1Spell::RemoveSpells()
