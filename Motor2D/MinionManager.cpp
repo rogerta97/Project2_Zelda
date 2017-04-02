@@ -155,9 +155,12 @@ void MinionManager::KillMinion(Entity * minion)
 			if ((*it == minion))
 			{
 				App->entity->DeleteEntity(*it);
-				team1_minions.erase(it);
+				it = team1_minions.erase(it);
 				break;
 			}
+			else
+				++it;
+
 		}
 	case 2:
 		for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();)
@@ -165,9 +168,11 @@ void MinionManager::KillMinion(Entity * minion)
 			if ((*it == minion))
 			{
 				App->entity->DeleteEntity(*it);
-				team2_minions.erase(it);
+				it = team2_minions.erase(it);
 				break;
 			}
+			else
+				++it;
 		}
 
 	}
