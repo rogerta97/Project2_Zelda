@@ -93,12 +93,7 @@ bool Link::Update(float dt)
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1));
-
-				if (spell->stats.slow_duration > 0)
-					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-				if (spell->stats.stun_duration > 0)
-					Stun(spell->stats.stun_duration);
+				BoomerangEffects(ability, spell);
 			}
 		}
 
@@ -119,8 +114,10 @@ bool Link::Update(float dt)
 	LifeBar(iPoint(60, 5), iPoint(-25, -40));
 
 	// Ability3 movement
-	if (ab3_dir != ability3_dir::a3_direction_null && disable_controller)
+	if (ab3_dir != ability3_dir::a3_direction_null)
 	{
+		can_move = false;
+
 		iPoint target = NULLPOINT;
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 		switch (ab3_dir)
@@ -187,15 +184,17 @@ bool Link::Update(float dt)
 		{
 			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
 
-			Ability1Up();
 			// Reset
 			ab3_dir = ability3_dir::a3_direction_null;
 			ability3_point_up = NULLPOINT;
 			ability3_point_down = NULLPOINT;
 			ability3_point_left = NULLPOINT;
 			ability3_point_right = NULLPOINT;
-			disable_controller = false;
+			can_move = true;
+			attacking = false;
 			find = false;
+
+			Ability1Up();
 		}
 	}
 
@@ -588,36 +587,36 @@ void Link::ShowAbility2Right()
 
 void Link::Ability3Up()
 {
-	disable_controller = true;
 	ab3_dir = ability3_dir::a3_up;
-
+	can_move = false;
+	attacking = true;
 	ability3_range = 0;
 	DeleteAbility3Test();
 }
 
 void Link::Ability3Down()
 {
-	disable_controller = true;
 	ab3_dir = ability3_dir::a3_down;
-
+	can_move = false;
+	attacking = true;
 	ability3_range = 0;
 	DeleteAbility3Test();
 }
 
 void Link::Ability3Left()
 {
-	disable_controller = true;
 	ab3_dir = ability3_dir::a3_left;
-
+	can_move = false;
+	attacking = true;
 	ability3_range = 0;
 	DeleteAbility3Test();
 }
 
 void Link::Ability3Right()
 {
-	disable_controller = true;
 	ab3_dir = ability3_dir::a3_right;
-
+	can_move = false;
+	attacking = true;
 	ability3_range = 0;
 	DeleteAbility3Test();
 }

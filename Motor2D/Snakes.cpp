@@ -24,7 +24,7 @@
 
 Snakes::Snakes(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -75,18 +75,13 @@ bool Snakes::Update(float dt)
 	if (GotHit(entity, ability, spell))
 	{
 		// Enemy attacks
-		if (entity != nullptr && ability != nullptr)
+		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
 			DealDamage(ability->damage * ability->damage_multiplicator);
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
-
-				if (spell->stats.slow_duration > 0)
-					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-				if (spell->stats.stun_duration > 0)
-					Stun(spell->stats.stun_duration);
+				BoomerangEffects(ability, spell);
 			}
 			if(state == Snk_S_Idle)
 			{

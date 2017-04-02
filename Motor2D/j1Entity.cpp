@@ -155,7 +155,7 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 			}
 		}
 
-		if (entity != nullptr && !entity->hit_by)
+		if (entity != nullptr && !entity->hit)
 		{
 			entity->hit_by = nullptr;
 			entity->hit_ability = nullptr;
@@ -302,10 +302,13 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 	Ability* ret = nullptr;
 	for (int i = 0; i < entity->abilities.size(); i++)
 	{
-		if (entity->abilities.at(i)->fixture == fixture)
+		if (entity->abilities.at(i) != nullptr)
 		{
-			ret = entity->abilities.at(i);
-			break;
+			if (entity->abilities.at(i)->fixture == fixture)
+			{
+				ret = entity->abilities.at(i);
+				break;
+			}
 		}
 	}
 

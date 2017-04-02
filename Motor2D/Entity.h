@@ -278,6 +278,7 @@ public:
 	void Heal(int heal);
 	void Slow(float speed_multiplicator, float time);
 	void Stun(float time);
+	void BoomerangEffects(Ability* ability, Spell* spell);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 
@@ -311,7 +312,6 @@ public:
 	entity_name		 type = entity_name::e_n_null;
 
 	// States
-	bool			 disable_controller = false;
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
