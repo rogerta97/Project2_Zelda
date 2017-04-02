@@ -95,8 +95,7 @@ bool PlayerManager::Update(float dt)
 
 		if (!curr_player->is_dead)
 		{
-			if(!curr_player->disable_controller)
-				PlayerInput(curr_player);
+			PlayerInput(curr_player);
 
 			UpdateUI(curr_player);
 			CheckIfDeath(curr_player);
@@ -360,7 +359,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		return;
 
 	// Diagonal moves
-	if (curr_player->entity->stuned)
+	if (curr_player->entity->stuned || curr_player->disable_controller)
 	{
 		curr_player->move = stop;
 	}
@@ -469,65 +468,68 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	}
 
 	// Abilities PRESS
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+	if (!curr_player->entity->stuned && !curr_player->disable_controller)
 	{
-		if (IsAbilityCdCompleted(curr_player, 1))
+		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_basic_atack_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_basic_atack_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_basic_atack_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_basic_atack_right;
+			if (IsAbilityCdCompleted(curr_player, 1))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_basic_atack_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_basic_atack_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_basic_atack_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_basic_atack_right;
+			}
 		}
-	}
-	else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
-	{
-		if (IsAbilityCdCompleted(curr_player, 2))
+		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_ability1_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_ability1_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_ability1_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_ability1_right;
+			if (IsAbilityCdCompleted(curr_player, 2))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability1_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability1_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability1_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability1_right;
+			}
 		}
-	}
-	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
-	{
-		if (IsAbilityCdCompleted(curr_player, 3))
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_ability2_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_ability2_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_ability2_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_ability2_right;
+			if (IsAbilityCdCompleted(curr_player, 3))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability2_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability2_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability2_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability2_right;
+			}
 		}
-	}
-	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
-	{
-		if (IsAbilityCdCompleted(curr_player, 4))
+		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
 		{
-			if (curr_player->state == idle_down || curr_player->state == run_down)
-				curr_player->show = shows::show_ability3_down;
-			else if (curr_player->state == idle_up || curr_player->state == run_up)
-				curr_player->show = shows::show_ability3_up;
-			else if (curr_player->state == idle_left || curr_player->state == run_left)
-				curr_player->show = shows::show_ability3_left;
-			else if (curr_player->state == idle_right || curr_player->state == run_right)
-				curr_player->show = shows::show_ability3_right;
+			if (IsAbilityCdCompleted(curr_player, 4))
+			{
+				if (curr_player->state == idle_down || curr_player->state == run_down)
+					curr_player->show = shows::show_ability3_down;
+				else if (curr_player->state == idle_up || curr_player->state == run_up)
+					curr_player->show = shows::show_ability3_up;
+				else if (curr_player->state == idle_left || curr_player->state == run_left)
+					curr_player->show = shows::show_ability3_left;
+				else if (curr_player->state == idle_right || curr_player->state == run_right)
+					curr_player->show = shows::show_ability3_right;
+			}
 		}
 	}
 
 	// Abilities RELEASE
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE && !curr_player->entity->stuned)
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE)
 	{
 		if (curr_player->show != shows::show_null)
 		{
