@@ -74,10 +74,6 @@ bool PlayerManager::Update(float dt)
 	{
 		Player* curr_player = players.at(i);
 
-		// Disable controller input
-		//if (curr_player->entity->disable_controller) // this has to be on player
-		//	continue;
-
 		if (!curr_player->is_dead)
 		{
 			if(!disable_controller)
