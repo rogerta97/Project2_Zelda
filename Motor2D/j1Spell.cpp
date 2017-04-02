@@ -109,7 +109,7 @@ void j1Spell::ListenEvent(int type, EventThrower * origin, int id)
 
 	if (type = static_cast<int>(event_type::e_t_death))
 	{
-		Event* curr_event = origin->GetEvent(id);
+		curr_event = origin->GetEvent(id);
 
 		if (curr_event->event_data.entity != nullptr)
 		{
