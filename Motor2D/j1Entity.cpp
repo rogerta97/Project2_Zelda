@@ -177,6 +177,27 @@ void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fi
 	}
 }
 
+void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
+{
+	Event* curr_event = nullptr;
+
+	if (type = static_cast<int>(event_type::e_t_death))
+	{
+		curr_event = origin->GetEvent(id);
+
+		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player)
+		{
+			vector<Entity*> snakes = FindEntitiesByBodyType(pbody_type::p_t_snake);
+			for (int i = 0; i < snakes.size(); i++)
+			{
+				Snakes* s = (Snakes*)snakes.at(i);
+				if (s->target == curr_event->event_data.entity)
+					s->target = nullptr;
+			}
+		}
+	}
+}
+
 Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 {
 	Entity* ret = nullptr;
@@ -348,6 +369,25 @@ Spell * j1Entity::FindSpellByBody(PhysBody * spell)
 			{
 				ret = (*it);
 				break;
+			}
+		}
+	}
+
+	return ret;
+}
+
+vector<Entity*> j1Entity::FindEntitiesByBodyType(pbody_type type)
+{
+	vector<Entity*> ret;
+
+	// Look on entities
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			if ((*it)->game_object->pbody->type == type)
+			{
+				ret.push_back(*it);
 			}
 		}
 	}

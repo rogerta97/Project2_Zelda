@@ -24,7 +24,7 @@
 
 Snakes::Snakes(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_snake, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -105,33 +105,38 @@ bool Snakes::Update(float dt)
 		Idle();
 		break;
 	case Snk_S_Attack:
-		if (abs(DistanceFromTwoPoints(target->GetPos().x, target->GetPos().y, game_object->fGetPos().x, game_object->fGetPos().y)) < ATTACK_RANGE)
+		if (target != nullptr)
 		{
-			rel_angle = AngleFromTwoPoints(game_object->fGetPos().x, game_object->fGetPos().y, target->GetPos().x,target->GetPos().y) + 180;
+			if (abs(DistanceFromTwoPoints(target->GetPos().x, target->GetPos().y, game_object->fGetPos().x, game_object->fGetPos().y)) < ATTACK_RANGE)
+			{
+				rel_angle = AngleFromTwoPoints(game_object->fGetPos().x, game_object->fGetPos().y, target->GetPos().x, target->GetPos().y) + 180;
 
-			if (rel_angle >= -45 && rel_angle <= 45)
-			{
-				AttackLeft();
-			}
-			else if (rel_angle > 45 && rel_angle <= 135)
-			{
-				AttackUp();
-			}
-			else if (rel_angle > 135 && rel_angle <= 225)
-			{
-				AttackRight();
+				if (rel_angle >= -45 && rel_angle <= 45)
+				{
+					AttackLeft();
+				}
+				else if (rel_angle > 45 && rel_angle <= 135)
+				{
+					AttackUp();
+				}
+				else if (rel_angle > 135 && rel_angle <= 225)
+				{
+					AttackRight();
+				}
+				else
+				{
+					AttackDown();
+				}
 			}
 			else
 			{
-				AttackDown();
+				if (!LookForTarget())
+					Idle();
 			}
 		}
 		else
-		{
-			if(!LookForTarget())
-				Idle();
-
-		}
+			if (!LookForTarget())
+			Idle();
 		break;
 	default:
 		break;
@@ -200,8 +205,16 @@ void Snakes::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
-		SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
-		sp->SetTarget(target);
+		if (target != nullptr)
+		{
+			SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
+			sp->SetTarget(target);
+		}
+		else
+			if (!LookForTarget())
+				Idle();
+
+
 		abilities.at(0)->cd_timer.Start();
 	}
 }
@@ -243,7 +256,6 @@ bool Snakes::LookForTarget()
 	std::vector<Entity*> players1;
 	std::vector<Entity*> players2;
 
-
 	players1 = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 	players2 = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 
@@ -257,6 +269,7 @@ bool Snakes::LookForTarget()
 			break;
 		}
 	}
+
 	for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
 	{
 		if (GetPos().DistanceTo((*it)->GetPos()) < ATTACK_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)

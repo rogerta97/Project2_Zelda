@@ -99,6 +99,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollisionEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollisionOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void ListenEvent(int type, EventThrower* origin, int id);
 
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
@@ -109,6 +110,7 @@ public:
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 	Ability* FindAbilityBySpellBody(PhysBody* spell);
 	Spell* FindSpellByBody(PhysBody* spell);
+	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
 
 private:
 	void RemoveEntities();

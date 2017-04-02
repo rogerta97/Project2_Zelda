@@ -59,6 +59,8 @@ private:
 
 	bool LookForTarget();
 
+public:
+	Entity*					target = nullptr;
 private:
 
 	j1Timer					cd_timer;
@@ -72,8 +74,6 @@ private:
 	SNAKE_STATE				state = Snk_S_Null;
 
 	states					anim_state = states_null;
-
-	Entity*					target = nullptr;
 
 };
 
