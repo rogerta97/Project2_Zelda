@@ -27,12 +27,12 @@ bool JungleCampManager::Update(float dt)
 {
 	bool ret = true;
 	
-	if (snakes_camp1.empty())
+	if (snakes_camp1.empty() && !snakes_timer_camp1.IsActive())
 	{
 		snakes_timer_camp1.Start();
 	}
 
-	if (snakes_camp2.empty())
+	if (snakes_camp2.empty() && !snakes_timer_camp2.IsActive())
 	{
 		snakes_timer_camp2.Start();
 	}
@@ -129,4 +129,5 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 			snakes_camp2.remove(camp);
 		}
 	}
+	App->entity->DeleteEntity(camp);
 }

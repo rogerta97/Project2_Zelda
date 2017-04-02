@@ -17,6 +17,9 @@ public:
 	void SubstractTimeFromStart(float sec);
 	void Stop();
 
+	bool IsActive();
+
+
 private:
 	uint32	started_at;
 	bool	active = false;

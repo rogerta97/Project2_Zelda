@@ -50,3 +50,8 @@ void j1Timer::Stop()
 {
 	active = false;
 }
+
+bool j1Timer::IsActive()
+{
+	return active;
+}
