@@ -1101,7 +1101,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 
 void PlayerManager::UpdateDeathUI(Player * player)
 {
-	string str("You are death, respawn time ");
+	string str("You have been slain, respawn time ");
 	int time = player->death_time + 1 - player->death_timer.ReadSec();
 	 
 	str += std::to_string(time);
