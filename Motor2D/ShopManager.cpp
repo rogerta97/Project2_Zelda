@@ -431,6 +431,12 @@ void ShopManager::ChangeShopState(int view)
 
 	shops[view]->active = !shops[view]->active;
 	shops[view]->item_selected = false;
+
+	if (shops[view]->background->enabled == true)
+
+		App->scene->main_scene->player_manager->DisableInput(view + 1);
+	else
+		App->scene->main_scene->player_manager->AllowInput(view + 1);
 }
 
 void ShopManager::UpdateItemInfo(int view)

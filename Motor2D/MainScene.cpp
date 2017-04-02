@@ -133,7 +133,7 @@ bool MainScene::Start()
 	}
 
 	// Disable player input until level is loaded
-	player_manager->disable_controller = true;
+	player_manager->DisableInput(0);
 	// ----
 
 	//Test Jungle Camp
@@ -166,7 +166,7 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("Test"), 4);
 
 	// Allow player input once the level is loaded
-	player_manager->disable_controller = false;
+	player_manager->AllowInput(0);
 	// ----
 
 	game_timer.Start();
@@ -348,7 +348,7 @@ void MainScene::OnCommand(std::list<std::string>& tokens)
 
 void MainScene::EndGame(int _winner)
 {
-	player_manager->disable_controller = true;
+	player_manager->DisableInput(0);
 
 	winner = _winner;
 

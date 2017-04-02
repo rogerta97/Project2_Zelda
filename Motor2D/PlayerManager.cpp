@@ -76,7 +76,7 @@ bool PlayerManager::Update(float dt)
 
 		if (!curr_player->is_dead)
 		{
-			if(!disable_controller)
+			if(!curr_player->disable_controller)
 				PlayerInput(curr_player);
 
 			UpdateUI(curr_player);
@@ -84,7 +84,7 @@ bool PlayerManager::Update(float dt)
 		}
 		else
 		{
-			if (!disable_controller)
+			if (!curr_player->disable_controller)
 				MoveCamera(curr_player);
 
 			CheckIfRespawn(curr_player);
@@ -280,6 +280,56 @@ Player * PlayerManager::GetPlayerFromBody(PhysBody * body)
 		}
 	}
 	return nullptr;
+}
+
+void PlayerManager::DisableInput(int player)
+{
+	switch (player)
+	{
+	case 0:
+		players[0]->disable_controller = true;
+		players[1]->disable_controller = true;
+		players[2]->disable_controller = true;
+		players[3]->disable_controller = true;
+		break;
+	case 1:
+		players[0]->disable_controller = true;
+		break;
+	case 2:
+		players[1]->disable_controller = true;
+		break;
+	case 3:
+		players[2]->disable_controller = true;
+		break;
+	case 4:
+		players[3]->disable_controller = true;
+		break;
+	}
+}
+
+void PlayerManager::AllowInput(int player)
+{
+	switch (player)
+	{
+	case 0:
+		players[0]->disable_controller = false;
+		players[1]->disable_controller = false;
+		players[2]->disable_controller = false;
+		players[3]->disable_controller = false;
+		break;
+	case 1:
+		players[0]->disable_controller = false;
+		break;
+	case 2:
+		players[1]->disable_controller = false;
+		break;
+	case 3:
+		players[2]->disable_controller = false;
+		break;
+	case 4:
+		players[3]->disable_controller = false;
+		break;
+	}
 }
 
 void PlayerManager::PlayerInput(Player * curr_player)

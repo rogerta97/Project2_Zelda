@@ -66,6 +66,8 @@ public:
 
 	iPoint		respawn = NULLPOINT;
 	int			team = 0;	
+
+	bool		disable_controller = false;
 };
 
 class PlayerManager
@@ -112,6 +114,9 @@ public:
 	int GetPlayerTeamFromBody(PhysBody* body);
 	Player* GetPlayerFromBody(PhysBody* body);
 
+	//Disable player input. 0 for all
+	void DisableInput(int player);
+
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
@@ -124,8 +129,6 @@ private:
 
 public:
 	vector<Player*>     players;
-
-	bool				disable_controller = false;
 
 private:
 	// UI
