@@ -80,13 +80,17 @@ bool PlayerManager::Update(float dt)
 
 		if (!curr_player->is_dead)
 		{
-			PlayerInput(curr_player);
+			if(!disable_controller)
+				PlayerInput(curr_player);
+
 			UpdateUI(curr_player);
 			CheckIfDeath(curr_player);
 		}
 		else
 		{
-			MoveCamera(curr_player);
+			if (!disable_controller)
+				MoveCamera(curr_player);
+
 			CheckIfRespawn(curr_player);
 		}
 	}
@@ -109,6 +113,8 @@ bool PlayerManager::CleanUp()
 	habilities_2.clear();
 	habilities_3.clear();
 	habilities_4.clear();
+
+	RELEASE(event_thrower);
 
 	return ret;
 }
@@ -140,36 +146,15 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 	return ret;
 }
 
-void PlayerManager::ChangePlayer(entity_name name, int controller_index, int viewport)
-{
-	iPoint pos;
-	for(vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-		if ((*it)->controller_index == controller_index - 1)
-		{
-			pos = (*it)->entity->GetPos();
-			App->entity->DeleteEntity((*it)->entity);
-			players.erase(it);
-			RELEASE(*it);
-			break;
-		}
-	}
-
-	//Player* p = new Player(App->entity->CreateEntity(name, pos), controller_index - 1, viewport, );
-	//p->type = p->entity->type;
-	//p->entity->SetCamera(p->controller_index + 1);
-	//players.push_back(p);
-}
-
 void PlayerManager::DeletePlayer(int controller_index)
 {
 	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 	{
 		if ((*it)->controller_index == controller_index - 1)
 		{
-			players.erase(it);
 			App->entity->DeleteEntity((*it)->entity);
 			RELEASE(*it);
+			players.erase(it);
 			break;
 		}
 	}
@@ -177,7 +162,7 @@ void PlayerManager::DeletePlayer(int controller_index)
 
 void PlayerManager::ClearPlayers()
 {
-	for (vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
+	for (vector<Player*>::iterator it = players.begin(); it != players.end();)
 	{
 		App->entity->DeleteEntity((*it)->entity);
 		RELEASE(*it);
@@ -281,30 +266,6 @@ Player * PlayerManager::GetPlayerFromBody(PhysBody * body)
 		}
 	}
 	return nullptr;
-}
-
-void PlayerManager::DisableInput(int player)
-{
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-		if ((*it)->controller_index == player)
-			(*it)->entity->disable_controller = true;
-
-		if(player == 0)
-			(*it)->entity->disable_controller = true;
-	}
-}
-
-void PlayerManager::AllowInput(int player)
-{
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
-	{
-		if ((*it)->controller_index == player)
-			(*it)->entity->disable_controller = false;
-
-		if (player == 0)
-			(*it)->entity->disable_controller = false;
-	}
 }
 
 void PlayerManager::PlayerInput(Player * curr_player)

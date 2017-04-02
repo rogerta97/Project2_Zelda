@@ -125,9 +125,8 @@ void Zelda::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 	{
 		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			int team = App->scene->main_scene->player_manager->GetPlayerTeamFromBody(bodyB);
-
 			Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
+			int team = contact_palyer->team;
 
 			bool found = false;
 
@@ -165,9 +164,8 @@ void Zelda::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, 
 	{
 		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			int team = App->scene->main_scene->player_manager->GetPlayerTeamFromBody(bodyB);
-
 			Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
+			int team = contact_palyer->team;
 
 			bool found = false;
 

@@ -156,7 +156,7 @@ bool Minion::CleanUp()
 {
 	bool ret = true;
 
-
+	RELEASE(event_thrower);
 
 	return ret;
 }

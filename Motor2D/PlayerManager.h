@@ -65,8 +65,7 @@ public:
 	bool		is_dead = false;
 
 	iPoint		respawn = NULLPOINT;
-	int			team = 0;
-	
+	int			team = 0;	
 };
 
 class PlayerManager
@@ -97,7 +96,6 @@ public:
 	bool CleanUp();
 
 	Player* AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, int respawn = 1, int show_life_bar = true);
-	void ChangePlayer(entity_name name, int controller_index, int viewport);
 	void DeletePlayer(int index);
 	void ClearPlayers();
 	
@@ -114,9 +112,6 @@ public:
 	int GetPlayerTeamFromBody(PhysBody* body);
 	Player* GetPlayerFromBody(PhysBody* body);
 
-	//Disable player input. 0 to disable all
-	void DisableInput(int player);
-
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
@@ -128,7 +123,9 @@ private:
 	void UpdateUI(Player* player);
 
 public:
-	vector<Player*> players;
+	vector<Player*>     players;
+
+	bool				disable_controller = false;
 
 private:
 	// UI

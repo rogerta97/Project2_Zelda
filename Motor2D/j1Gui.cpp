@@ -492,7 +492,7 @@ void j1Gui::DeleteElement(UI_Element* element)
 					}
 				}
 
-				// Dekete from parent element list
+				// Delete from parent element list
 				if ((*ch)->parent_element != nullptr && !(*ch)->parent_element->childs.empty())
 				{
 					for (list<UI_Element*>::iterator it = (*ch)->parent_element->childs.begin(); it != (*ch)->parent_element->childs.end();)

@@ -22,8 +22,10 @@ ZeldaManager::ZeldaManager()
 		int i = 0;
 		int index = 0;
 		int x_value = path_unsorted.front().x;
-		for (std::vector<iPoint>::iterator it = path_unsorted.begin(); it != path_unsorted.end(); it++) {
-			if (it->x < x_value) {
+		for (std::vector<iPoint>::iterator it = path_unsorted.begin(); it != path_unsorted.end(); it++) 
+		{
+			if (it->x < x_value) 
+			{
 				index = i;
 				x_value = it->x;
 			}

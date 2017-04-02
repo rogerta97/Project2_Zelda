@@ -68,6 +68,7 @@ bool JungleCampManager::CleanUp()
 		item = snakes_camp2.erase(item);
 	}
 
+	snakes_camp1.clear();
 	snakes_camp2.clear();
 
 	return true;
