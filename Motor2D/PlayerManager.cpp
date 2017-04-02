@@ -1003,7 +1003,7 @@ void Player::BuyItem(Item * item, int price)
 
 	entity->UpdateStats(extra_power, extra_hp, extra_speed);
 
-	//UpdateRupees();
+	UpdateRupees();
 }
 
 void Player::Kill()
