@@ -143,6 +143,7 @@ bool MenuScene::Start()
 	App->view->camera1.y = 0;
 
 	//Music
+	App->audio->DefaultVolume();
 	App->audio->PlayMusic("Audio/Music/title.ogg");
 	music_time.Start();
 
@@ -282,6 +283,9 @@ bool MenuScene::CleanUp()
 	current_button = START;
 	is_options = false;
 	
+	//Stop Music
+	App->audio->StopMusic();
+
 	return true;
 }
 

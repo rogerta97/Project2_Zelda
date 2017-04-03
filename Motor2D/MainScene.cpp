@@ -28,6 +28,7 @@
 #include "ZeldaManager.h"
 #include "BaseManager.h"
 #include "JungleCampManager.h"
+#include "j1Audio.h"
 
 MainScene::MainScene()
 {
@@ -186,6 +187,9 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
+	App->audio->ChangeVolume(25);
+	App->audio->PlayMusic("Audio/Music/overworld.ogg");
+
 	return ret;
 }
 
@@ -298,6 +302,9 @@ bool MainScene::CleanUp()
 		App->scene->players[i].character = e_n_null;
 	}
 
+	//Stop Music
+	App->audio->StopMusic();
+
 	return ret;
 }
 
@@ -365,6 +372,9 @@ void MainScene::EndGame(int _winner)
 	winner = _winner;
 
 	SetWinnerText(winner);
+
+	App->audio->ChangeVolume(75);
+	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
 
 	game_timer.Start();
 }
