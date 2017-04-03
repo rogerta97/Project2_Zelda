@@ -24,6 +24,8 @@
 
 #define HALFMAP 81*32
 
+#define RANGE 150
+
 
 Skeleton::Skeleton(iPoint pos)
 {
@@ -112,6 +114,10 @@ bool Skeleton::Update(float dt)
 		break;
 	case s_s_attack:
 		Attack();
+		if (!LookForTarget())
+		{
+			Idle();
+		}
 		break;
 	case s_s_stunned:
 		Stunned();
@@ -224,13 +230,47 @@ void Skeleton::Bonemerang()
 	anim_state = skeleton_bone;
 	int angle = 0;
 	
-	if(game_object->GetPos().x < HALFMAP)
-		angle = GetRandomValue(100, 170);
-	else
-		angle = GetRandomValue(80, -80);
+	angle = GetRandomValue(0, 360);
 
 	BoneAttack* ba = (BoneAttack*)App->spell->CreateSpell(bone_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 	ba->SetAngle(angle);
+}
+
+bool Skeleton::LookForTarget()
+{
+	bool ret = false;
+
+	int shortest_distance = RANGE;
+
+	std::vector<Entity*> players1;
+	std::vector<Entity*> players2;
+
+	players1 = App->scene->main_scene->player_manager->GetTeamPlayers(1);
+	players2 = App->scene->main_scene->player_manager->GetTeamPlayers(2);
+
+	for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
+	{
+		if (GetPos().DistanceTo((*it)->GetPos()) < RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+		{
+			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+			target = *it;
+			ret = true;
+			break;
+		}
+	}
+
+	for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
+	{
+		if (GetPos().DistanceTo((*it)->GetPos()) < RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+		{
+			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+			target = *it;
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 void Skeleton::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

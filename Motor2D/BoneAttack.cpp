@@ -5,8 +5,8 @@
 #include "p2Log.h"
 #include "Entity.h"
 
-#define DESTRUCTION_TIME 2.0f
-#define SPEED 300
+#define DESTRUCTION_TIME 1.5f
+#define SPEED 230
 
 BoneAttack::BoneAttack(iPoint pos)
 {

@@ -53,8 +53,12 @@ private:
 	void Idle();
 	void Stunned();
 	void Attack();
+
 	void SpinAttack();
 	void Bonemerang();
+
+	bool LookForTarget();
+
 
 private:
 
@@ -69,6 +73,8 @@ private:
 	states					anim_state = states_null;
 
 	iPoint					draw_offset = NULLPOINT;
+
+	Entity*					target = nullptr;
 
 };
 
