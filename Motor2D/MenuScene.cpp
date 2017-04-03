@@ -5,7 +5,7 @@
 #include "j1Console.h"
 #include "j1Scene.h"
 #include "p2Log.h"
-
+#include "j1Audio.h"
 
 
 MenuScene::MenuScene()
@@ -142,6 +142,10 @@ bool MenuScene::Start()
 	App->view->camera1.x = 0;
 	App->view->camera1.y = 0;
 
+	//Music
+	App->audio->PlayMusic("Audio/Music/title.ogg");
+	music_time.Start();
+
 	return true;
 }
 
@@ -206,6 +210,12 @@ bool MenuScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		App->scene->ChangeScene(App->scene->main_scene);
+	}
+
+	//Stop music ones it finish
+	if (music_time.ReadSec() > 17)
+	{
+		App->audio->StopMusic();
 	}
 
 	return true;

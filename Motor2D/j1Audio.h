@@ -2,7 +2,6 @@
 #define __j1AUDIO_H__
 
 #include "j1Module.h"
-#include <list>
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
@@ -33,10 +32,19 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
+	void StopMusic();
+
+	void SilenceMusic();
+	void DefaultVolume();
+
+	bool MusicPlaying();
+
 private:
 
 	_Mix_Music*			music = NULL;
-	list<Mix_Chunk*>    fx;
+	p2List<Mix_Chunk*>	fx;
+
+	int def_volume = 75;
 };
 
 #endif // __j1AUDIO_H__

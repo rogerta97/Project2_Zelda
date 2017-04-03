@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "j1Gui.h"
 #include "j1Render.h"
+#include "j1Timer.h"
 
 enum button_action 
 {
@@ -70,6 +71,8 @@ private:
 
 	bool			   is_options = false;
 	button_action	   current_button = START;
+
+	j1Timer			   music_time;
 
 };
 
