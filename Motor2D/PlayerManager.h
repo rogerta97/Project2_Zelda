@@ -129,6 +129,7 @@ private:
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
 	void UpdateDeathUI(Player* player);
+	void PasiveHP(Player* player);
 
 public:
 	vector<Player*>     players;

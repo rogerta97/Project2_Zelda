@@ -125,23 +125,9 @@ bool PlayerManager::Update(float dt)
 
 		if (!curr_player->is_dead)
 		{
-			if (curr_player->entity->stats.life < curr_player->entity->stats.max_life)
-			{
-				if (curr_player->entity->GetPos().DistanceTo(App->scene->main_scene->shop_manager->team_shop[curr_player->entity->GetTeam() - 1]) < 200)
-				{
-					curr_player->entity->stats.life += 1;
-				}
-				else
-				{
-					if (App->scene->main_scene->GetGameTimer()->ReadSec() - last_heal_time > 2)
-					{
-						last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
-						curr_player->entity->stats.life += 1;
-					}
-				}
-			}
-
 			PlayerInput(curr_player);
+
+			PasiveHP(curr_player);
 
 			UpdateUI(curr_player);
 			CheckIfDeath(curr_player);
@@ -1112,6 +1098,35 @@ void PlayerManager::UpdateDeathUI(Player * player)
 	}
 	break;
 	}
+}
+
+void PlayerManager::PasiveHP(Player * curr_player)
+{
+	int my_team = curr_player->entity->GetTeam();
+
+	int enemy_team = 0;
+	if (my_team == 1)
+		enemy_team = 2;
+	else
+		enemy_team = 1;
+
+	if (curr_player->entity->GetPos().DistanceTo(App->scene->main_scene->shop_manager->team_shop[my_team - 1]) < 200)
+	{
+		curr_player->entity->Heal(1);
+	}
+	else if (curr_player->entity->GetPos().DistanceTo(App->scene->main_scene->shop_manager->team_shop[enemy_team - 1]) < 200)
+	{
+		curr_player->entity->DealDamage(2);
+	}
+	else
+	{
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - last_heal_time > 2)
+		{
+			last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
+			curr_player->entity->Heal(1);
+		}
+	}
+	
 }
 
 
