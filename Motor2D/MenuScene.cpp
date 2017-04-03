@@ -282,6 +282,9 @@ bool MenuScene::CleanUp()
 	current_button = START;
 	is_options = false;
 	
+	//Stop Music
+	App->audio->StopMusic();
+
 	return true;
 }
 

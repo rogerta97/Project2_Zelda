@@ -67,8 +67,8 @@ bool j1Audio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	for (std::vector<Mix_Chunk*>::iterator it = fx.begin();it!=fx.end();++it)
-		Mix_FreeChunk(*it);
+	for (list<Mix_Chunk*>::iterator current = fx.begin(); current != fx.end(); current++)
+		Mix_FreeChunk(*current);
 
 	fx.clear();
 
@@ -166,7 +166,16 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 
 	if (id > 0 && id <= fx.size())
 	{
-		Mix_PlayChannel(-1, fx[id - 1], repeat);
+		int i = 0;
+		for (list<Mix_Chunk*>::iterator current = fx.begin(); current != fx.end(); current++)
+		{
+			if (i == id - 1)
+			{
+				Mix_PlayChannel(-1, *current, repeat);
+				break;
+			}
+			i++;
+		}
 	}
 
 	return ret;
@@ -177,9 +186,9 @@ void j1Audio::StopMusic()
 	Mix_HaltMusic();
 }
 
-void j1Audio::SilenceMusic()
+void j1Audio::ChangeVolume(int volume)
 {
-	Mix_Volume(-1, 0);
+	Mix_Volume(-1, volume);
 }
 
 void j1Audio::DefaultVolume()

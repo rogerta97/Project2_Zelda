@@ -283,6 +283,9 @@ bool CharacterSelectionScene::CleanUp()
 	positions.clear();
 	change_scene = false;
 
+	//Stop Music
+	App->audio->StopMusic();
+
 	return true;
 }
 

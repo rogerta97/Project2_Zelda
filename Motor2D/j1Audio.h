@@ -2,9 +2,9 @@
 #define __j1AUDIO_H__
 
 #include "j1Module.h"
-#include <vector>
+#include <list>
 
-#define DEFAULT_MUSIC_FADE_TIME 0.0f
+#define DEFAULT_MUSIC_FADE_TIME 2.0f
 
 struct _Mix_Music;
 struct Mix_Chunk;
@@ -35,7 +35,7 @@ public:
 
 	void StopMusic();
 
-	void SilenceMusic();
+	void ChangeVolume( int volume);
 	void DefaultVolume();
 
 	bool MusicPlaying();
@@ -43,7 +43,7 @@ public:
 private:
 
 	_Mix_Music*			music = NULL;
-	std::vector<Mix_Chunk*>	fx;
+	list<Mix_Chunk*>    fx;
 
 	int def_volume = 75;
 };
