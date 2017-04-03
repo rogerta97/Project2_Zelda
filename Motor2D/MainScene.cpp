@@ -228,7 +228,7 @@ bool MainScene::Update(float dt)
 	}
 	// ------
 	// Quests
-	if (quest_timer.Read() <= 30 && first_quest_completed == false)
+	if (quest_timer.Read() <= 60 && first_quest_completed == false)
 	{
 		int rand_quest = GetRandomValue(1, 3);
 		switch (rand_quest)
@@ -318,7 +318,7 @@ bool MainScene::CleanUp()
 	aest_manager->CleanUp(); 	   RELEASE(aest_manager);
 	player_manager->CleanUp();	   RELEASE(player_manager);
 	jungleCamp_manager->CleanUp(); RELEASE(jungleCamp_manager);
-
+	quest_manager->CleanUp();	   RELEASE(quest_manager);
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 

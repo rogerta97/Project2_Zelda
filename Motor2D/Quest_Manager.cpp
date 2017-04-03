@@ -108,6 +108,32 @@ QuestManager::~QuestManager()
 	}
 }
 
+void QuestManager::CleanUp()
+{
+	//Quests
+	if (!vquest.empty())
+	{
+		for(int i = 0;i<vquest.size();i++)
+		{
+			for (int j = 0; j < vquest[i]->task.size(); j++)
+			{
+				RELEASE(vquest[i]->task[j]);
+			}
+			vquest[i]->task.clear();
+			RELEASE(vquest[i]);
+		}
+		vquest.clear();
+	}
+	//Texts
+	if (!player_1_text.empty())
+	{
+		player_1_text.clear();
+		player_2_text.clear();
+		player_3_text.clear();
+		player_4_text.clear();
+	}
+}
+
 void QuestManager::change_state(int id,Quest_State new_state)
 {
 	for (int i = 0; i < vquest.size(); i++)

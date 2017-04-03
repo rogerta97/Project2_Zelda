@@ -26,6 +26,7 @@ class QuestManager {
 public:
 	QuestManager();
 	~QuestManager();
+	void CleanUp();
 	pugi::xml_document quests_file;
 	pugi::xml_node quests_node;
 
