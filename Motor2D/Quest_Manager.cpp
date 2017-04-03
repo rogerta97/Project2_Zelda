@@ -207,6 +207,7 @@ void QuestManager::update_progress()
 				team_2 += +"l2";
 				active_quest_text[1]->SetText(team_2);
 				active_quest_text[3]->SetText(team_2);
+				break;
 			}
 			case 1:
 			{
@@ -222,6 +223,7 @@ void QuestManager::update_progress()
 				team_2 += +"l3";
 				active_quest_text[1]->SetText(team_2);
 				active_quest_text[3]->SetText(team_2);
+				break;
 			}
 			case 2:
 			{
@@ -237,6 +239,7 @@ void QuestManager::update_progress()
 				team_2 += +"l3";
 				active_quest_text[1]->SetText(team_2);
 				active_quest_text[3]->SetText(team_2);
+				break;
 			}
 			default:
 				break;
