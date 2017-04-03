@@ -3,7 +3,7 @@
   <minions>
     <wave_time sec="30"/>
     <minion_time_difference sec="1"/>
-    <minions_wave amount="1"/>
+    <minions_wave amount="3"/>
     <first_wave_delay sec="5"/>
   </minions>
   <victory_animations>
