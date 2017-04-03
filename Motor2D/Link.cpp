@@ -124,7 +124,7 @@ bool Link::Update(float dt)
 		switch (ab3_dir)
 		{
 		case ability3_dir::a3_up:
-			while(!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_up.x, ability3_point_up.y)))
+			while(!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_up.x, ability3_point_up.y)) && !to_delete)
 			{
 				ability3_point_up = iPoint(ability3_point_up.x, ability3_point_up.y + 30);
 				find = true;
@@ -136,7 +136,7 @@ bool Link::Update(float dt)
 				target.y -= (ABILITY3_MOVE_SAFE_OFFSET * 2);
 			break;
 		case ability3_dir::a3_down:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_down.x, ability3_point_down.y)))
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_down.x, ability3_point_down.y)) && !to_delete)
 			{
 				ability3_point_down = iPoint(ability3_point_down.x, ability3_point_down.y - 30);
 				find = true;
@@ -149,7 +149,7 @@ bool Link::Update(float dt)
 				target.y += (ABILITY3_MOVE_SAFE_OFFSET * 2);
 			break;
 		case ability3_dir::a3_left:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_left.x, ability3_point_left.y)))
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_left.x, ability3_point_left.y)) && !to_delete)
 			{
 				ability3_point_left = iPoint(ability3_point_left.x + 30, ability3_point_left.y);
 				find = true;
@@ -162,7 +162,7 @@ bool Link::Update(float dt)
 
 			break;
 		case ability3_dir::a3_right:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_right.x, ability3_point_right.y)))
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability3_point_right.x, ability3_point_right.y)) && !to_delete)
 			{
 				ability3_point_right = iPoint(ability3_point_right.x - 30, ability3_point_right.y);
 				find = true;
