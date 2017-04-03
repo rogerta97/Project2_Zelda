@@ -138,25 +138,24 @@ private:
 	// UI
 	vector<UI_Image*>	abilities_1;
 	vector<UI_Text*>    abilities_cd_1;
-	UI_ColoredRect*		death_rect_1 = nullptr;
 	UI_Text*			death_text_1 = nullptr;
 
 	vector<UI_Image*>	abilities_2;
 	vector<UI_Text*>    abilities_cd_2;
-	UI_ColoredRect*		death_rect_2 = nullptr;
 	UI_Text*			death_text_2 = nullptr;
 
 	vector<UI_Image*>	abilities_3;
 	vector<UI_Text*>    abilities_cd_3;
-	UI_ColoredRect*		death_rect_3 = nullptr;
 	UI_Text*			death_text_3 = nullptr;
 
 	vector<UI_Image*>   abilities_4;
 	vector<UI_Text*>    abilities_cd_4;
-	UI_ColoredRect*		death_rect_4 = nullptr;
 	UI_Text*			death_text_4 = nullptr;
 
 	EventThrower*       event_thrower = nullptr;
+
+	SDL_Color           death_rect_color = NULLRECT;
+	SDL_Rect			death_rect = NULLRECT;
 
 	uint				last_heal_time = 0;
 };

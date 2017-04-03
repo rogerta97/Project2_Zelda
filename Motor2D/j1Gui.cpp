@@ -2269,7 +2269,15 @@ bool UI_ColoredRect::update()
 	if (!enabled)
 		return false;
 
-	App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, filled);
+	if(!is_gameplay)
+		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, filled);
+	else
+	{
+		if (is_ui)
+			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER, viewport, false);
+		else
+			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER, viewport, true);
+	}
 
 	return true;
 }

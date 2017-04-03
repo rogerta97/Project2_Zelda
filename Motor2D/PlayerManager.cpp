@@ -36,7 +36,8 @@ bool PlayerManager::Start()
 	iPoint text3_pos = { screen.w - 70, screen.h - 56 };
 	iPoint text4_pos = { 35, screen.h - 56 };
 
-	SDL_Color death_rect_color = { 32, 32, 32, 100 };
+	death_rect_color = { 32, 32, 32, 100 };
+	death_rect = { 0, 0, screen.w ,  screen.h };
 	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
 
 	// p1
@@ -50,8 +51,6 @@ bool PlayerManager::Start()
 	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text3_pos, text_font));
 	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text4_pos, text_font));
 
-	death_rect_1 = App->scene->main_scene->main_window_1->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_1->enabled = false; death_rect_1->blit_layer += 1;
 	death_text_1 = App->scene->main_scene->main_window_1->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_1->enabled = false; death_text_1->blit_layer += 1;
 
@@ -66,8 +65,6 @@ bool PlayerManager::Start()
 	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text3_pos, text_font));
 	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text4_pos, text_font));
 
-	death_rect_2 = App->scene->main_scene->main_window_2->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_2->enabled = false; death_rect_2->blit_layer += 1;
 	death_text_2 = App->scene->main_scene->main_window_2->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_2->enabled = false; death_text_2->blit_layer += 1;
 
@@ -82,8 +79,6 @@ bool PlayerManager::Start()
 	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text3_pos, text_font));
 	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text4_pos, text_font));
 
-	death_rect_3 = App->scene->main_scene->main_window_3->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_3->enabled = false; death_rect_3->blit_layer += 1;
 	death_text_3 = App->scene->main_scene->main_window_3->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_3->enabled = false; death_text_3->blit_layer += 1;
 
@@ -98,8 +93,6 @@ bool PlayerManager::Start()
 	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text3_pos, text_font));
 	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text4_pos, text_font));
 
-	death_rect_4 = App->scene->main_scene->main_window_4->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_4->enabled = false; death_rect_4->blit_layer += 1;
 	death_text_4 = App->scene->main_scene->main_window_4->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_4->enabled = false; death_text_4->blit_layer += 1;
 
@@ -130,6 +123,7 @@ bool PlayerManager::Update(float dt)
 			PasiveHP(curr_player);
 
 			UpdateUI(curr_player);
+
 			CheckIfDeath(curr_player);
 		}
 		else
@@ -927,24 +921,22 @@ void PlayerManager::CheckIfRespawn(Player * player)
 {
 	if (player->is_dead)
 	{
+		App->view->LayerDrawQuad(death_rect, death_rect_color.r, death_rect_color.g, death_rect_color.b, death_rect_color.a, true, 1, player->viewport, false);
+
 		if (player->death_timer.ReadSec() > player->death_time)
 		{
 			switch (player->viewport)
 			{
 			case 1:
-				death_rect_1->SetEnabled(false);
 				death_text_1->SetEnabled(false);
 				break;
 			case 2:
-				death_rect_2->SetEnabled(false);
 				death_text_2->SetEnabled(false);
 				break;
 			case 3:
-				death_rect_3->SetEnabled(false);
 				death_text_3->SetEnabled(false);
 				break;
 			case 4:
-				death_rect_4->SetEnabled(false);
 				death_text_4->SetEnabled(false);
 				break;
 			}
@@ -967,19 +959,15 @@ void PlayerManager::CheckIfDeath(Player * player)
 		switch (player->viewport)
 		{
 		case 1:
-			death_rect_1->SetEnabled(true);
 			death_text_1->SetEnabled(true);
 			break;
 		case 2:
-			death_rect_2->SetEnabled(true);
 			death_text_2->SetEnabled(true);
 			break;
 		case 3:
-			death_rect_3->SetEnabled(true);
 			death_text_3->SetEnabled(true);
 			break;
 		case 4:
-			death_rect_4->SetEnabled(true);
 			death_text_4->SetEnabled(true);
 			break;
 		}
