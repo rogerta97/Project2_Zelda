@@ -138,6 +138,10 @@ bool MenuScene::Start()
 	cb->AddBox(iPoint(320, 380), 20, 20, "test4");
 	//cb->GetBox("test1");
 
+	App->console->AddText("viewports.set 1", Input);
+	App->view->camera1.x = 0;
+	App->view->camera1.y = 0;
+
 	return true;
 }
 
