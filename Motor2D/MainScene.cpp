@@ -373,6 +373,9 @@ void MainScene::EndGame(int _winner)
 
 	SetWinnerText(winner);
 
+	App->audio->ChangeVolume(75);
+	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
+
 	game_timer.Start();
 }
 

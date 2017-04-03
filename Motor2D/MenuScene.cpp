@@ -143,6 +143,7 @@ bool MenuScene::Start()
 	App->view->camera1.y = 0;
 
 	//Music
+	App->audio->DefaultVolume();
 	App->audio->PlayMusic("Audio/Music/title.ogg");
 	music_time.Start();
 

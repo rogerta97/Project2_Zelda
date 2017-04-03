@@ -4,7 +4,7 @@
 #include "j1Module.h"
 #include <list>
 
-#define DEFAULT_MUSIC_FADE_TIME 2.0f
+#define DEFAULT_MUSIC_FADE_TIME 0.0f
 
 struct _Mix_Music;
 struct Mix_Chunk;

@@ -188,12 +188,12 @@ void j1Audio::StopMusic()
 
 void j1Audio::ChangeVolume(int volume)
 {
-	Mix_Volume(-1, volume);
+	Mix_VolumeMusic(volume);
 }
 
 void j1Audio::DefaultVolume()
 {
-	Mix_Volume(-1, def_volume);
+	Mix_VolumeMusic(def_volume);
 }
 
 bool j1Audio::MusicPlaying()
