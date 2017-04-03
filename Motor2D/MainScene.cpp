@@ -296,6 +296,11 @@ bool MainScene::CleanUp()
 
 	winner = 0;
 
+	for (int i = 0; i < 4; i++)
+	{
+		App->scene->players[i].character = e_n_null;
+	}
+
 	return ret;
 }
 
