@@ -473,8 +473,8 @@ void MainScene::DrawScreenSeparation()
 
 void MainScene::UpdateWinnerAnim(uint winner, float dt)
 {
-	SDL_Rect win_rect = { 46,150,255,255 };
-	SDL_Rect lose_rect = { 255,0,0,255 };
+	SDL_Rect win_rect = victory.GetCurrentAnimation()->GetAnimationFrame(dt);
+	SDL_Rect lose_rect = defeat.GetCurrentAnimation()->GetAnimationFrame(dt);
 
 	switch (winner)
 	{
@@ -499,10 +499,5 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 	default:
 		break;
 	}
-
-	win_text_1->enabled = true;
-	win_text_2->enabled = true;
-	win_text_3->enabled = true;
-	win_text_4->enabled = true;
 }
 
