@@ -72,7 +72,7 @@ bool Zelda::Update(float dt)
 		break;
 	case z_s_end_game:
 		SetIdle();
-		App->scene->main_scene->EndGame((path_pos == 0) ? 1 : 2);
+		App->scene->main_scene->EndGame((path_pos <= 0) ? 1 : 2);
 		state = z_s_null;
 		break;
 	case z_s_null:

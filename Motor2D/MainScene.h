@@ -52,6 +52,8 @@ private:
 	void CreateMapCollisions();
 	void DrawScreenSeparation();
 
+	void SetWinnerText(uint winner);
+
 public:
 	UI_Window*			main_window_1 = nullptr;
 	UI_Image*			princess_1 = nullptr;
@@ -78,21 +80,25 @@ private:
 	UI_Image*			progress_bar_1 = nullptr; 
 	UI_Image*			rupiees_img_1 = nullptr;
 	UI_Image*			minimap_icon_1 = nullptr;
+	UI_Text*			win_text_1 = nullptr;
 
 	// P2
 	UI_Image*			progress_bar_2 = nullptr;
 	UI_Image*			rupiees_img_2 = nullptr;
 	UI_Image*			minimap_icon_2 = nullptr;
+	UI_Text*			win_text_2 = nullptr;
 
 	// P3
 	UI_Image*			progress_bar_3 = nullptr;
 	UI_Image*			rupiees_img_3 = nullptr;
 	UI_Image*			minimap_icon_3 = nullptr;
+	UI_Text*			win_text_3 = nullptr;
 
 	// P4
 	UI_Image*			progress_bar_4 = nullptr;
 	UI_Image*			rupiees_img_4 = nullptr;
 	UI_Image*			minimap_icon_4 = nullptr;
+	UI_Text*			win_text_4 = nullptr;
 
 	vector<PhysBody*>	map_collisions;
 

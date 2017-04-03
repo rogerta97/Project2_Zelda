@@ -52,6 +52,8 @@ bool MainScene::Start()
 	iPoint minimap_pos = { screen.w - 58, 5 };
 	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
 
+	iPoint win_text_pos = { int(screen.w*0.5f) - 50, int(screen.h*0.5f) - 100 };
+
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_1->viewport = 1;
@@ -59,6 +61,8 @@ bool MainScene::Start()
 	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
+	win_text_1 = main_window_1->CreateText(win_text_pos,App->font->game_font_20);
+	win_text_1->enabled = false;
 
 	// Player2
 	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -67,6 +71,8 @@ bool MainScene::Start()
 	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
+	win_text_2 = main_window_2->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_2->enabled = false;
 
 	// Player3
 	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -75,6 +81,8 @@ bool MainScene::Start()
 	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
+	win_text_3 = main_window_3->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_3->enabled = false;
 
 	// Player4
 	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -83,6 +91,8 @@ bool MainScene::Start()
 	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
+	win_text_4 = main_window_4->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_4->enabled = false;
 
 	// ------------------
 
@@ -352,6 +362,8 @@ void MainScene::EndGame(int _winner)
 
 	winner = _winner;
 
+	SetWinnerText(winner);
+
 	game_timer.Start();
 }
 
@@ -423,5 +435,45 @@ void MainScene::DrawScreenSeparation()
 	}
 
 	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
+}
+
+void MainScene::SetWinnerText(uint winner)
+{
+	switch (winner)
+	{
+	case 1:	
+		win_text_1->color = { 0,0,255,255 };
+		win_text_1->SetText("VICTORY");	
+
+		win_text_3->color = { 0,0,255,255 };
+		win_text_3->SetText("VICTORY");
+
+		win_text_2->color = { 255,0,0,255 };
+		win_text_2->SetText("DEFEAT");
+
+		win_text_4->color = { 255,0,0,255 };
+		win_text_4->SetText("DEFEAT");
+		break;
+	case 2:
+		win_text_2->color = { 0,0,255,255 };
+		win_text_2->SetText("VICTORY");
+		
+		win_text_4->color = { 0,0,255,255 };
+		win_text_4->SetText("VICTORY");
+		
+		win_text_1->color = { 255,0,0,255 };
+		win_text_1->SetText("DEFEAT");
+		
+		win_text_3->color = { 255,0,0,255 };
+		win_text_3->SetText("DEFEAT");
+		break;
+	default:
+		break;
+	}
+
+	win_text_1->enabled = true;
+	win_text_2->enabled = true;
+	win_text_3->enabled = true;
+	win_text_4->enabled = true;
 }
 
