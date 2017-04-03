@@ -2,6 +2,7 @@
 #define __j1AUDIO_H__
 
 #include "j1Module.h"
+#include <vector>
 
 #define DEFAULT_MUSIC_FADE_TIME 0.0f
 
@@ -42,7 +43,7 @@ public:
 private:
 
 	_Mix_Music*			music = NULL;
-	p2List<Mix_Chunk*>	fx;
+	std::vector<Mix_Chunk*>	fx;
 
 	int def_volume = 75;
 };
