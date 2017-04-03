@@ -2,26 +2,11 @@
 
 <file>
   <animations texture ="textures/Base_entity.png">
-    <anim speed = "4" name = "defeat" loop = "true">
-        <rect x = "0" y = "0" w = "320" h = "96"/>
-        <rect x = "0" y = "96" w = "320" h = "96"/>
-        <rect x = "0" y = "192" w = "320" h = "96"/>
-	<rect x = "0" y = "96" w = "320" h = "96"/>
-  	<rect x = "0" y = "0" w = "320" h = "96"/>
-        <rect x = "0" y = "288" w = "320" h = "96"/>
-  	<rect x = "0" y = "384" w = "320" h = "96"/>
- 	<rect x = "0" y = "288" w = "320" h = "96"/>
-    </anim>
-  <anim speed = "5" name = "victory" loop = "true">
-        <rect x = "320" y = "0" w = "372" h = "96"/>
- 	<rect x = "320" y = "0" w = "372" h = "96"/>
- 	<rect x = "320" y = "0" w = "372" h = "96"/>
- 	<rect x = "320" y = "0" w = "372" h = "96"/>
- 	<rect x = "320" y = "0" w = "372" h = "96"/>
-        <rect x = "320" y = "96" w = "372" h = "96"/>
-        <rect x = "320" y = "192" w = "372" h = "96"/>
-        <rect x = "320" y = "288" w = "372" h = "96"/>
-  	<rect x = "320" y = "384" w = "372" h = "96"/>
+    <anim speed = "4" name = "idle" loop = "true">
+      <rect x = "0" y = "0" w = "242" h = "290"/>
+      <rect x = "242" y = "0" w = "242" h = "290"/>
+      <rect x = "0" y = "290" w = "242" h = "290"/>
+      <rect x = "242" y = "290" w = "242" h = "290"/>
     </anim>
   </animations>
 </file>
