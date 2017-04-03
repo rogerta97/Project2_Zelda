@@ -155,6 +155,8 @@ private:
 	UI_Text*			death_text_4 = nullptr;
 
 	EventThrower*       event_thrower = nullptr;
+
+	uint				last_heal_time = 0;
 };
 
 #endif // __PLAYER_MANAGER_H__
