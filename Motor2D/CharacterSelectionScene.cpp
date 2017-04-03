@@ -5,6 +5,7 @@
 #include "p2Log.h"
 #include "j1Scene.h"
 #include "j1Viewports.h"
+#include "j1Audio.h"
 
 #define CHARACTER_NUM 3
 
@@ -24,6 +25,8 @@ bool CharacterSelectionScene::Start()
 	window = App->gui->UI_CreateWin(iPoint(0,0), w, h, 2, false); 
 
 	CreateScene(w,h); 
+
+	App->audio->PlayMusic("Audio/Music/guessing-game_house.ogg");
 
 	return true;
 }
