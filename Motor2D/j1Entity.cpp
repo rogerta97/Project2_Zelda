@@ -318,6 +318,9 @@ Entity* j1Entity::FindEntityByBody(PhysBody* body)
 {
 	Entity* ret = nullptr;
 
+	if (body == nullptr)
+		return nullptr;
+
 	// Look on entities
 	if (!entity_list.empty())
 	{
@@ -350,14 +353,18 @@ Entity* j1Entity::FindEntityByBody(PhysBody* body)
 Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 {
 	Ability* ret = nullptr;
-	for (int i = 0; i < entity->abilities.size(); i++)
+
+	if (entity != nullptr)
 	{
-		if (entity->abilities.at(i) != nullptr)
+		for (int i = 0; i < entity->abilities.size(); i++)
 		{
-			if (entity->abilities.at(i)->fixture == fixture)
+			if (entity->abilities.at(i) != nullptr)
 			{
-				ret = entity->abilities.at(i);
-				break;
+				if (entity->abilities.at(i)->fixture == fixture)
+				{
+					ret = entity->abilities.at(i);
+					break;
+				}
 			}
 		}
 	}
@@ -390,14 +397,17 @@ Spell * j1Entity::FindSpellByBody(PhysBody * spell)
 {
 	Spell* ret = nullptr;
 
-	if (!App->spell->spell_list.empty())
+	if (spell != nullptr)
 	{
-		for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+		if (!App->spell->spell_list.empty())
 		{
-			if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+			for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 			{
-				ret = (*it);
-				break;
+				if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+				{
+					ret = (*it);
+					break;
+				}
 			}
 		}
 	}
