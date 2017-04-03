@@ -111,7 +111,7 @@ bool Tower::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(64, 4), iPoint(-32, -92));
+	LifeBar(iPoint(75, 6), iPoint(-36, -92));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
