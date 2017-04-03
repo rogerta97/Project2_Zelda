@@ -179,11 +179,10 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 	{
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
 		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
+		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
+
 
 		skeleton_camp1.push_back(sk1);
-
-		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
-		
 		skeleton_camp2.push_back(sk2);
 		break;
 	}
