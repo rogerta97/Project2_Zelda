@@ -54,7 +54,7 @@ bool SnakePoison::Update(float dt)
 		if (game_object->animator->GetCurrentAnimation()->Finished())
 			App->spell->DeleteSpell(this);
 	}
-	else
+	else if (target != nullptr)
 	{
 
 		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
@@ -107,10 +107,11 @@ void SnakePoison::CleanSpell()
 
 void SnakePoison::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object->pbody == bodyA && bodyB == target->game_object->pbody)
+	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+		target = nullptr;
 	}
 
 }

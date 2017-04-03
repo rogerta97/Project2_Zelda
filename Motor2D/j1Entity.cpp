@@ -139,9 +139,7 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 
 				// If ability found return true
 				if (entity->hit_ability != nullptr)
-				{
 					entity->hit = true;
-				}
 
 				// If not ability found, check it by Spell and ability names
 				else

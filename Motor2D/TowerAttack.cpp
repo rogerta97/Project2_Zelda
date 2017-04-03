@@ -114,10 +114,11 @@ void TowerAttack::CleanSpell()
 
 void TowerAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody)
+	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+		target = nullptr;
 	}
 }
 
