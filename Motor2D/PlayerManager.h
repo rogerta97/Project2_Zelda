@@ -59,7 +59,7 @@ public:
 	uint		viewport = 0;
 
 	UI_Text*    rupees_num = nullptr;
-	uint	    rupees = 20000;
+	uint	    rupees = 0;
 
 	j1Timer     death_timer;
 	float		death_time = 5.0f;
