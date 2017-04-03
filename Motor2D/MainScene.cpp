@@ -383,7 +383,7 @@ void MainScene::UpdateProgressBar()
 {
 	iPoint zelda_pos = App->map->WorldToMap(zelda_manager->GetZeldaPos().x, zelda_manager->GetZeldaPos().y);
 
-	float percentage = (zelda_pos.x-27) * 100 / 95;
+	float percentage = (zelda_pos.x-36) * 100 / 95;
 	percentage /= 100;
 
 	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
