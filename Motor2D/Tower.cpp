@@ -56,11 +56,11 @@ bool Tower::Start()
 
 	if (game_object->GetPos().x < HALFMAP)
 	{
-		game_object->SetAnimation("tower2_idle");
+		game_object->SetAnimation("tower_idle");
 	}
 	else
 	{
-		game_object->SetAnimation("tower_idle");
+		game_object->SetAnimation("tower2_idle");
 	}
 
 	return ret;
@@ -166,11 +166,11 @@ void Tower::Idle()
 {	
 	if (game_object->GetPos().x < HALFMAP)
 	{
-		game_object->SetAnimation("tower2_idle");
+		game_object->SetAnimation("tower_idle");
 	}
 	else
 	{
-		game_object->SetAnimation("tower_idle");
+		game_object->SetAnimation("tower2_idle");
 	}
 }
 
@@ -184,11 +184,11 @@ void Tower::DoAttack()
 	{
 		if (game_object->GetPos().x < HALFMAP)
 		{
-			game_object->SetAnimation("tower2_attack");
+			game_object->SetAnimation("tower_attack");
 		}
 		else
 		{
-			game_object->SetAnimation("tower_attack");
+			game_object->SetAnimation("tower2_attack");
 		}
 		
 		anim_state = tower_attack;
