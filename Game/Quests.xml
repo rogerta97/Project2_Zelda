@@ -6,8 +6,8 @@
     id='1'
     name='Power Quest'
     description='Slay 2 enemy Players to gain strenght'
-    state = '1'>
-    <task current ='0' complete='2' times_completed = '0'/>
+    state = '0'>
+    <task current ='1' complete='2' times_completed = '0'/>
 	<task current ='0' complete='2' times_completed = '0'/>
   </quest>
   
@@ -15,7 +15,7 @@
     id='2'
     name='Speed Quest'
     description='Catch 3 Cuccos'
-    state = '0'>
+    state = '1'>
     <task current ='0' complete='3' times_completed = '0'/>
 	<task current ='0' complete='3' times_completed = '0'/>
   </quest>

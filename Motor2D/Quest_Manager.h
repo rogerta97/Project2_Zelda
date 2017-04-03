@@ -42,6 +42,8 @@ public:
 	vector<UI_Text*> player_3_text;
 	vector<UI_Text*> player_4_text;
 
+	vector<UI_Text*> active_quest_text;
+
 	iPoint           placer = NULLPOINT;
 
 };

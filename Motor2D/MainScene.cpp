@@ -197,7 +197,7 @@ bool MainScene::Update(float dt)
 	// Draw map
 	App->map->Draw();
 
-
+	quest_manager->update_progress();
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{

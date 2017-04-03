@@ -23,6 +23,12 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
+		player_1_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x - 50, placer.y-150), App->font->game_font_small));
+		player_1_text[3]->SetText("Active Quest");
+
+		active_quest_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x - 400, placer.y - 125), App->font->game_font_small));
+		active_quest_text[0]->SetText(" ");
+
 		screen = App->view->GetViewportRect(1);
 		offset = 0;
 		for (int i = 0; i<3; i++)
@@ -36,6 +42,12 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
+		player_2_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x - 50, placer.y - 150), App->font->game_font_small));
+		player_2_text[3]->SetText("Active Quest");
+
+		active_quest_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x - 50, placer.y - 125), App->font->game_font_small));
+		active_quest_text[1]->SetText(" ");
+
 		screen = App->view->GetViewportRect(1);
 		offset = 0;
 		for (int i = 0; i<3; i++)
@@ -49,6 +61,12 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
+		player_3_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x - 50, placer.y - 150), App->font->game_font_small,100));
+		player_3_text[3]->SetText("Active Quest");
+
+		active_quest_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x - 50, placer.y - 125), App->font->game_font_small));
+		active_quest_text[2]->SetText(" ");
+
 		screen = App->view->GetViewportRect(1);
 		offset = 0;
 		for (int i = 0; i<3; i++)
@@ -62,7 +80,11 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
+		player_4_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x - 50, placer.y - 150), App->font->game_font_small,25));
+		player_4_text[3]->SetText("Active Quest");
 	
+		active_quest_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x - 50, placer.y - 125), App->font->game_font_small));
+		active_quest_text[3]->SetText(" ");
 
 
 	App->LoadXML("Quests.xml", quests_file);
@@ -169,6 +191,57 @@ void QuestManager::update_progress()
 	{
 		if (vquest[i]->state == active)
 		{
+			switch (i)
+			{
+			case 0:
+			{
+				string team_1;
+				team_1 += "Power quest is active, slay 2 enemy players. Progress ";
+				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
+				team_1 += "l2";
+				active_quest_text[0]->SetText(team_1);
+				active_quest_text[2]->SetText(team_1);
+				string team_2;
+				team_2 += "Power quest is active, slay 2 enemy players. Progress ";
+				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
+				team_2 += +"l2";
+				active_quest_text[1]->SetText(team_2);
+				active_quest_text[3]->SetText(team_2);
+			}
+			case 1:
+			{
+				string team_1;
+				team_1 += "SPEED quest is active, RUN FASTER THAN SANIC TO WIN. Progress ";
+				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
+				team_1 += "l3";
+				active_quest_text[0]->SetText(team_1);
+				active_quest_text[2]->SetText(team_1);
+				string team_2;
+				team_2 += "SPEED quest is active, RUN FASTER THAN SANIC TO WIN. Progress ";
+				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
+				team_2 += +"l3";
+				active_quest_text[1]->SetText(team_2);
+				active_quest_text[3]->SetText(team_2);
+			}
+			case 2:
+			{
+				string team_1;
+				team_1 += "KILL STUFF TO GET HP. Progress ";
+				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
+				team_1 += "l3";
+				active_quest_text[0]->SetText(team_1);
+				active_quest_text[2]->SetText(team_1);
+				string team_2;
+				team_2 += "KILL STUFF TO GET HP. Progress ";
+				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
+				team_2 += +"l3";
+				active_quest_text[1]->SetText(team_2);
+				active_quest_text[3]->SetText(team_2);
+			}
+			default:
+				break;
+			}
+
 			int j = 0;
 			for (pugi::xml_node tool = quests_node.child("quest").child("task"); tool; tool = tool.next_sibling("task"))
 			{
