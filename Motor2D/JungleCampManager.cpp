@@ -21,12 +21,17 @@ JungleCampManager::~JungleCampManager()
 
 bool JungleCampManager::Start()
 {
-	//first test
+	//stopping timers
+	snakes_timer_camp1.Stop();
+	snakes_timer_camp2.Stop();
+	skeleton_timer_camp1.Stop();
+	skeleton_timer_camp2.Stop();
 
+	//spawning jungle camps
 	SpawnSkeleton(0);
 	SpawnSnake(0);
 
-
+	
 	return true;
 }
 
@@ -171,22 +176,22 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 	case 0:
 	{
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
-		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
-		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
+		skeleton_camp1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
+		skeleton_camp2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
 
 		break;
 	}
 	case 1:
 	{
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
-		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
+		skeleton_camp1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
 
 		break;
 	}
 	case 2:
 	{
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
-		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
+		skeleton_camp2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
 
 		break;
 	}
