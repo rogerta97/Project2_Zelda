@@ -36,8 +36,8 @@ private:
 	j1Timer					snakes_timer_camp1;
 	j1Timer					snakes_timer_camp2;
 
-	std::list<Entity*>		skeleton_camp1;
-	std::list<Entity*>		skeleton_camp2;
+	Skeleton*				skeleton_camp1 = nullptr;
+	Skeleton*				skeleton_camp2 = nullptr;
 
 	j1Timer					skeleton_timer_camp1;
 	j1Timer					skeleton_timer_camp2;

@@ -6,6 +6,7 @@
 #include "MainScene.h"
 #include "j1Viewports.h"
 #include "BaseManager.h"
+#include "Quest_Manager.h"
 
 Base::Base(iPoint pos)
 {

@@ -16,6 +16,7 @@
 #include "PlayerManager.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "Quest_Manager.h"
 
 #define ABILITY3_MAX_RANGE 200
 #define ABILITY3_GROW_SPEED 205.0f

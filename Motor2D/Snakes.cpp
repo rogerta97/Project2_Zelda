@@ -31,10 +31,10 @@ Snakes::Snakes(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	stats.life = stats.base_hp = stats.max_life = 40;
+	stats.life = stats.base_hp = stats.max_life = 100;
 	stats.base_power = stats.power = 10;
 
-	AddAbility(0, 0.7f, 4, 1, "s_attack");
+	AddAbility(0, 3.7f, 4, 1, "s_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("snakes.xml", doc);

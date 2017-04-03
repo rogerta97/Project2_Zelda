@@ -17,6 +17,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "TowerAttack.h"
+#include "Quest_Manager.h"
 
 #define TOWER_H 38
 #define TOWER_W 64
@@ -118,8 +119,8 @@ bool Tower::Update(float dt)
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
 	if (GotHit(entity, ability, spell))
-	{
-		if (entity->GetTeam() != GetTeam())
+		// Enemy attacks
+		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
 			if (spell != nullptr)
 			{
@@ -134,7 +135,6 @@ bool Tower::Update(float dt)
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
-	}
 
 	return ret;
 }

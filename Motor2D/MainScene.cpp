@@ -11,7 +11,6 @@
 #include "AestheticsManager.h"
 #include "j1Console.h"
 #include "Parallax.h"
-#include "QuestManager.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
 #include "Link.h"
@@ -27,7 +26,9 @@
 #include "MenuScene.h"
 #include "ZeldaManager.h"
 #include "BaseManager.h"
+#include "Quest_Manager.h"
 #include "JungleCampManager.h"
+#include "EventThrower.h"
 #include "j1Audio.h"
 
 MainScene::MainScene()
@@ -53,7 +54,7 @@ bool MainScene::Start()
 	iPoint minimap_pos = { screen.w - 58, 5 };
 	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
 
-	iPoint win_text_pos = { int(screen.w*0.5f) - 50, int(screen.h*0.5f) - 100 };
+	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -62,7 +63,7 @@ bool MainScene::Start()
 	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
-	win_text_1 = main_window_1->CreateText(win_text_pos,App->font->game_font_20);
+	win_text_1 = main_window_1->CreateImage(win_text_pos,NULLRECT);
 	win_text_1->enabled = false;
 
 	// Player2
@@ -72,7 +73,7 @@ bool MainScene::Start()
 	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
-	win_text_2 = main_window_2->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_2 = main_window_2->CreateImage(win_text_pos, NULLRECT);
 	win_text_2->enabled = false;
 
 	// Player3
@@ -82,7 +83,7 @@ bool MainScene::Start()
 	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
-	win_text_3 = main_window_3->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_3 = main_window_3->CreateImage(win_text_pos, NULLRECT);
 	win_text_3->enabled = false;
 
 	// Player4
@@ -92,11 +93,14 @@ bool MainScene::Start()
 	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
-	win_text_4 = main_window_4->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_4 = main_window_4->CreateImage(win_text_pos, NULLRECT);
 	win_text_4->enabled = false;
 
 	// ------------------
 
+
+
+	App->console->AddText("viewports.set 4", Input);
 	//Load Map
 	if (App->map->Load("zelda_moba.tmx"))
 	{
@@ -169,19 +173,30 @@ bool MainScene::Start()
 	// Base manager
 	base_manager = new BaseManager();
 
-	//Creating quests
+	//Quest manager
 	quest_manager = new QuestManager();
-	quest_manager->CreateQuest(string("Test"), 1);
-	quest_manager->CreateQuest(string("Test"), 2);
-	quest_manager->CreateQuest(string("Test"), 3);
-	quest_manager->CreateQuest(string("Test"), 4);
+
+
+	//Load Victory/Defeat Animations
+	pugi::xml_document gs;
+	pugi::xml_node file_node;
+
+	App->LoadXML("GameSettings.xml", gs);
+	file_node = gs.child("file");
+
+	defeat.LoadAnimationsFromXML(gs, "defeat_animations");
+	victory.LoadAnimationsFromXML(gs, "victory_animations");
+
+	defeat.SetAnimation("idle");
+	victory.SetAnimation("idle");
 
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);
 	// ----
 
 	game_timer.Start();
-
+	quest_timer.Start();
+	first_quest_completed = false;
 	App->console->AddText("viewports.set 4", Input);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
@@ -210,13 +225,19 @@ bool MainScene::Update(float dt)
 	// Draw map
 	App->map->Draw();
 
+	quest_manager->update_progress();
+	// Test
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
+	}
+
 	// Update Managers
 	if(minion_manager != nullptr)
 		minion_manager->Update();
 	if(shop_manager != nullptr)
 		shop_manager->Update();
-	if (quest_manager != nullptr)
-		quest_manager->Update(dt);
 	if(player_manager != nullptr)
 		player_manager->Update(dt);
 	if (jungleCamp_manager != nullptr)
@@ -235,6 +256,10 @@ bool MainScene::Update(float dt)
 		App->view->SetViews(1);
 	}
 
+	//Update Victory/Defeat animation
+	if (winner != 0)
+		UpdateWinnerAnim(winner, dt);
+
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
@@ -242,7 +267,70 @@ bool MainScene::Update(float dt)
 		App->view->SetViews(1);
 	}
 	// ------
-
+	// Quests
+	if (quest_timer.Read() <= 60 && first_quest_completed == false)
+	{
+		int rand_quest = GetRandomValue(1, 3);
+		switch (rand_quest)
+		{
+		case 1: 
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 2:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 3:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		default:
+			break;
+		}
+		quest_timer.Start();
+		first_quest_completed = true;
+	}
+	if (quest_timer.Read() <= 180 && first_quest_completed == true)
+	{
+		for(int i = 0; quest_manager->vquest.size();i++)
+		{
+			if (quest_manager->vquest[i]->state == active)
+			{
+				quest_manager->vquest[i]->state = inactive;
+				for (int j = 0; j < quest_manager->vquest[i]->task.size(); j++)
+				{
+					quest_manager->vquest[i]->task[j]->current_progress = 0;
+				}
+			}
+		}
+		int rand_quest = GetRandomValue(1, 3);
+		switch (rand_quest)
+		{
+		case 1:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 2:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 3:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		default:
+			break;
+		}
+		quest_timer.Start();
+	}
+	// ------
 	//DrawScreenSeparation();
 
 	return ret;
@@ -267,12 +355,11 @@ bool MainScene::CleanUp()
 	zelda_manager->CleanUp(); 	   RELEASE(zelda_manager);
 	base_manager->CleanUp(); 	   RELEASE(base_manager);
 	minion_manager->CleanUp(); 	   RELEASE(minion_manager);
-	quest_manager->CleanUp(); 	   RELEASE(quest_manager);
 	tower_manager->CleanUp(); 	   RELEASE(tower_manager);
 	aest_manager->CleanUp(); 	   RELEASE(aest_manager);
 	player_manager->CleanUp();	   RELEASE(player_manager);
 	jungleCamp_manager->CleanUp(); RELEASE(jungleCamp_manager);
-
+	quest_manager->CleanUp();	   RELEASE(quest_manager);
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 	App->spell->ClearSpells();
@@ -371,7 +458,12 @@ void MainScene::EndGame(int _winner)
 
 	winner = _winner;
 
-	SetWinnerText(winner);
+	win_text_1->enabled = true;
+	win_text_2->enabled = true;
+	win_text_3->enabled = true;
+	win_text_4->enabled = true;
+
+	UpdateWinnerAnim(winner,0.0f);
 
 	App->audio->ChangeVolume(75);
 	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
@@ -383,15 +475,53 @@ void MainScene::UpdateProgressBar()
 {
 	iPoint zelda_pos = App->map->WorldToMap(zelda_manager->GetZeldaPos().x, zelda_manager->GetZeldaPos().y);
 
-	float percentage = (zelda_pos.x-27) * 100 / 95;
+	float percentage = (zelda_pos.x-36) * 100 / 95;
 	percentage /= 100;
 
 	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
 
-	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 5 });
-	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 5 });
-	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 5 });
-	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 5 });
+	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 4 });
+	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 4 });
+	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 4 });
+	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 4 });
+}
+
+void MainScene::ListenEvent(int type, EventThrower * origin, int id)
+{
+	event_type etype = static_cast<event_type>(type);
+
+	switch (etype)
+	{
+	case e_t_null:
+		break;
+	case e_t_death:
+	{
+		Event* e = origin->GetEvent(id);
+		if (e->event_data.entity->is_player) {
+			int team = e->event_data.entity->GetTeam();
+			switch (team)
+			{
+			case 1:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 2);
+			}
+			case 2:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 1);
+			}
+			default:
+				break;
+			}
+			App->scene->main_scene->quest_manager->update_progress();
+		}
+		break;
+	}
+		
+	case e_t_end_game:
+		break;
+	default:
+		break;
+	}
 }
 
 void MainScene::CreateMapCollisions()
@@ -449,46 +579,33 @@ void MainScene::DrawScreenSeparation()
 	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
 }
 
-void MainScene::SetWinnerText(uint winner)
+void MainScene::UpdateWinnerAnim(uint winner, float dt)
 {
-	SDL_Color win_color = { 46,150,255,255 };
-	SDL_Color lose_color = { 255,0,0,255 };
+	SDL_Rect win_rect = victory.GetCurrentAnimation()->GetAnimationFrame(dt);
+	SDL_Rect lose_rect = defeat.GetCurrentAnimation()->GetAnimationFrame(dt);
 
 	switch (winner)
 	{
 	case 1:	
-		win_text_1->color = win_color;
-		win_text_1->SetText("VICTORY");	
+		win_text_1->image = win_rect;	
 
-		win_text_3->color = win_color;
-		win_text_3->SetText("VICTORY");
+		win_text_3->image = win_rect;
 
-		win_text_2->color = lose_color;
-		win_text_2->SetText("DEFEAT");
+		win_text_2->image = lose_rect;
 
-		win_text_4->color = lose_color;
-		win_text_4->SetText("DEFEAT");
+		win_text_4->image = lose_rect;
 		break;
 	case 2:
-		win_text_2->color = win_color;
-		win_text_2->SetText("VICTORY");
-		
-		win_text_4->color = win_color;
-		win_text_4->SetText("VICTORY");
-		
-		win_text_1->color = lose_color;
-		win_text_1->SetText("DEFEAT");
-		
-		win_text_3->color = lose_color;
-		win_text_3->SetText("DEFEAT");
+		win_text_2->image = win_rect;
+
+		win_text_4->image = win_rect;
+
+		win_text_1->image = lose_rect;
+
+		win_text_3->image = lose_rect;
 		break;
 	default:
 		break;
 	}
-
-	win_text_1->enabled = true;
-	win_text_2->enabled = true;
-	win_text_3->enabled = true;
-	win_text_4->enabled = true;
 }
 

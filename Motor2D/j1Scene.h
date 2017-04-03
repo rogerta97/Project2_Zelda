@@ -64,6 +64,8 @@ public:
 
 	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
 
+	void ListenEvent(int type, EventThrower * origin, int id);
+
 public:
 	// Scenes
 	MenuScene*					 menu_scene = nullptr; 

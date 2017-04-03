@@ -58,12 +58,12 @@ bool JungleCampManager::Update(float dt)
 
 	}
 
-	if (skeleton_camp1.empty() && !snakes_timer_camp1.IsActive())
+	if (skeleton_camp1 == nullptr && !skeleton_timer_camp1.IsActive())
 	{
 		skeleton_timer_camp1.Start();
 	}
 
-	if (skeleton_camp2.empty() && !snakes_timer_camp2.IsActive())
+	if (skeleton_camp2 == nullptr && !skeleton_timer_camp2.IsActive())
 	{
 		skeleton_timer_camp2.Start();
 	}
@@ -103,22 +103,15 @@ bool JungleCampManager::CleanUp()
 	snakes_camp1.clear();
 	snakes_camp2.clear();
 
-	for (std::list<Entity*>::const_iterator item = skeleton_camp1.begin(); item != skeleton_camp1.end();)
+	if(skeleton_camp1 != nullptr)
 	{
-		App->entity->DeleteEntity(*item);
-		item = skeleton_camp1.erase(item);
+		App->entity->DeleteEntity(skeleton_camp1);
 	}
 
-	skeleton_camp1.clear();
-
-	for (std::list<Entity*>::const_iterator item = skeleton_camp2.begin(); item != skeleton_camp2.end();)
+	if(skeleton_camp2 != nullptr)
 	{
-		App->entity->DeleteEntity(*item);
-		item = skeleton_camp2.erase(item);
+		App->entity->DeleteEntity(skeleton_camp2);
 	}
-
-	skeleton_camp1.clear();
-	skeleton_camp2.clear();
 
 	return true;
 }
@@ -179,12 +172,8 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 	{
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
 		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
-
-		skeleton_camp1.push_back(sk1);
-
 		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
-		
-		skeleton_camp2.push_back(sk2);
+
 		break;
 	}
 	case 1:
@@ -192,7 +181,6 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
 		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
 
-		skeleton_camp1.push_back(sk1);
 		break;
 	}
 	case 2:
@@ -200,7 +188,6 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
 		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
 
-		skeleton_camp2.push_back(sk2);
 		break;
 	}
 	default:
@@ -222,17 +209,19 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 			snakes_camp2.remove(camp);
 		}
 	}
+	App->entity->DeleteEntity(camp);
+
 	if (camp->type == skeleton)
 	{
 		if (camp->GetPos().x < HALFMAP)
 		{
-			skeleton_camp1.remove(camp);
+			skeleton_camp1 = nullptr;
 		}
 		else
 		{
-			skeleton_camp2.remove(camp);
+			skeleton_camp2 = nullptr;
 		}
 	}
-	App->entity->DeleteEntity(camp);
+	
 
 }

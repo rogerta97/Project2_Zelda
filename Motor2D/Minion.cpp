@@ -15,7 +15,7 @@
 #include "MainScene.h"
 #include "Tower.h"
 #include "TowerManager.h"
-
+#include "Quest_Manager.h"
 
 #define Half_Tile 16
 

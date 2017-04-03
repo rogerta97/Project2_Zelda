@@ -124,6 +124,11 @@ bool Skeleton::Update(float dt)
 		Attack();
 		if (!LookForTarget())
 		{
+			if (!game_object->animator->GetCurrentAnimation()->Finished())
+			{
+				if(game_object->animator->IsCurrentAnimation("spin"))
+					game_object->DeleteFixture(abilities.at(0)->fixture);
+			}
 			Idle();
 		}
 		break;
@@ -145,6 +150,8 @@ bool Skeleton::Draw(float dt)
 	bool ret = true;
 
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 24 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	if (App->debug_mode)
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, RANGE, 255, 0, 0);
 	
 	return ret;
 }
