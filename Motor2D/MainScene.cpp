@@ -62,7 +62,7 @@ bool MainScene::Start()
 	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
-	win_text_1 = main_window_1->CreateText(win_text_pos,App->font->game_font_20);
+	win_text_1 = main_window_1->CreateImage(win_text_pos,NULLRECT);
 	win_text_1->enabled = false;
 
 	// Player2
@@ -72,7 +72,7 @@ bool MainScene::Start()
 	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
-	win_text_2 = main_window_2->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_2 = main_window_2->CreateImage(win_text_pos, NULLRECT);
 	win_text_2->enabled = false;
 
 	// Player3
@@ -82,7 +82,7 @@ bool MainScene::Start()
 	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
-	win_text_3 = main_window_3->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_3 = main_window_3->CreateImage(win_text_pos, NULLRECT);
 	win_text_3->enabled = false;
 
 	// Player4
@@ -92,7 +92,7 @@ bool MainScene::Start()
 	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
-	win_text_4 = main_window_4->CreateText(win_text_pos, App->font->game_font_20);
+	win_text_4 = main_window_4->CreateImage(win_text_pos, NULLRECT);
 	win_text_4->enabled = false;
 
 	// ------------------
@@ -176,6 +176,19 @@ bool MainScene::Start()
 	quest_manager->CreateQuest(string("Test"), 3);
 	quest_manager->CreateQuest(string("Test"), 4);
 
+	//Load Victory/Defeat Animations
+	pugi::xml_document gs;
+	pugi::xml_node file_node;
+
+	App->LoadXML("GameSettings.xml", gs);
+	file_node = gs.child("file");
+
+	defeat.LoadAnimationsFromXML(gs, "defeat_animations");
+	victory.LoadAnimationsFromXML(gs, "victory_animations");
+
+	defeat.SetAnimation("idle");
+	victory.SetAnimation("idle");
+
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);
 	// ----
@@ -234,6 +247,10 @@ bool MainScene::Update(float dt)
 		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
 		App->view->SetViews(1);
 	}
+
+	//Update Victory/Defeat animation
+	if (winner != 0)
+		UpdateWinnerAnim(winner, dt);
 
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
@@ -371,7 +388,12 @@ void MainScene::EndGame(int _winner)
 
 	winner = _winner;
 
-	SetWinnerText(winner);
+	win_text_1->enabled = true;
+	win_text_2->enabled = true;
+	win_text_3->enabled = true;
+	win_text_4->enabled = true;
+
+	UpdateWinnerAnim(winner,0.0f);
 
 	App->audio->ChangeVolume(75);
 	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
@@ -449,38 +471,30 @@ void MainScene::DrawScreenSeparation()
 	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
 }
 
-void MainScene::SetWinnerText(uint winner)
+void MainScene::UpdateWinnerAnim(uint winner, float dt)
 {
-	SDL_Color win_color = { 46,150,255,255 };
-	SDL_Color lose_color = { 255,0,0,255 };
+	SDL_Rect win_rect = { 46,150,255,255 };
+	SDL_Rect lose_rect = { 255,0,0,255 };
 
 	switch (winner)
 	{
 	case 1:	
-		win_text_1->color = win_color;
-		win_text_1->SetText("VICTORY");	
+		win_text_1->image = win_rect;	
 
-		win_text_3->color = win_color;
-		win_text_3->SetText("VICTORY");
+		win_text_3->image = win_rect;
 
-		win_text_2->color = lose_color;
-		win_text_2->SetText("DEFEAT");
+		win_text_2->image = lose_rect;
 
-		win_text_4->color = lose_color;
-		win_text_4->SetText("DEFEAT");
+		win_text_4->image = lose_rect;
 		break;
 	case 2:
-		win_text_2->color = win_color;
-		win_text_2->SetText("VICTORY");
-		
-		win_text_4->color = win_color;
-		win_text_4->SetText("VICTORY");
-		
-		win_text_1->color = lose_color;
-		win_text_1->SetText("DEFEAT");
-		
-		win_text_3->color = lose_color;
-		win_text_3->SetText("DEFEAT");
+		win_text_2->image = win_rect;
+
+		win_text_4->image = win_rect;
+
+		win_text_1->image = lose_rect;
+
+		win_text_3->image = lose_rect;
 		break;
 	default:
 		break;
