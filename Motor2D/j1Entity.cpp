@@ -18,6 +18,7 @@
 #include "Eyes.h"
 #include "Snakes.h"
 #include "Skeleton.h"
+#include "j1Viewports.h"
 
 
 j1Entity::j1Entity()
@@ -40,6 +41,12 @@ bool j1Entity::Awake(pugi::xml_node &)
 bool j1Entity::Start()
 {
 	bool ret = true;
+
+	entity_effects_animator = new Animator();
+	pugi::xml_document doc;
+	App->LoadXML("entity_effects.xml", doc);
+	entity_effects_texture = entity_effects_animator->LoadAnimationsFromXML(doc, "animations");
+	App->UnloadXML(doc);
 
 	return ret;
 }
@@ -68,6 +75,7 @@ bool j1Entity::Update(float dt)
 
 	SlowEntities();
 	StunEntities();
+	DieEntities();
 
 	return ret;
 }
@@ -87,6 +95,9 @@ bool j1Entity::CleanUp()
 	bool ret = true;
 
 	ClearEntities();
+
+	entity_effects_animator->CleanUp();
+	RELEASE(entity_effects_animator);
 
 	return ret;
 }
@@ -299,7 +310,7 @@ int j1Entity::GetEntitiesNumber()
 	return entity_list.size();
 }
 
-Entity * j1Entity::FindEntityByBody(PhysBody* body)
+Entity* j1Entity::FindEntityByBody(PhysBody* body)
 {
 	Entity* ret = nullptr;
 
@@ -428,6 +439,14 @@ vector<Entity*> j1Entity::FindEntitiesByBodyType(pbody_type type)
 	return ret;
 }
 
+void j1Entity::DeathAnimation(Entity * ent)
+{
+	if (ent != nullptr)
+	{
+		dying_entities.push_back(die(ent->GetPos(), entity_effects_animator->GetAnimation("dead")));
+	}
+}
+
 void j1Entity::DeleteEntity(Entity* entity)
 {
 	entity->to_delete = true;
@@ -441,6 +460,7 @@ void j1Entity::RemoveEntities()
 		{
 			if ((*it)->to_delete == true)
 			{
+				DeathAnimation(*it);
 				(*it)->CleanUp();
 				(*it)->CleanEntity();
 				RELEASE(*it);
@@ -492,6 +512,27 @@ void j1Entity::StunEntities()
 			}
 			else
 				it = (stuned_entities.erase(it));
+		}
+	}
+}
+
+void j1Entity::DieEntities()
+{
+	if (!dying_entities.empty())
+	{
+		for (list<die>::iterator it = dying_entities.begin(); it != dying_entities.end();)
+		{
+			if ((*it).animator->GetCurrentAnimation()->Finished())
+			{
+				(*it).CleanUp();
+				it = dying_entities.erase(it);
+			}
+			else
+			{
+				App->view->LayerBlit(3, entity_effects_texture, { (*it).pos.x - 20, (*it).pos.y - 20 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+				++it;
+			}
+				
 		}
 	}
 }

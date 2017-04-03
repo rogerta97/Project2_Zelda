@@ -1,0 +1,16 @@
+<!--Config file for the game-->
+
+<file>
+  <animations texture = "textures/PlayerFX_spritesheet.png">
+    <anim speed = "13" name = "dead" loop = "false">
+      <rect x = "0" y = "26" w = "48" h = "44"/>
+      <rect x = "48" y = "26" w = "48" h = "44"/>
+      <rect x = "96" y = "26" w = "48" h = "44"/>
+      <rect x = "144" y = "26" w = "48" h = "44"/>
+
+      <rect x = "0" y = "72" w = "48" h = "44"/>
+      <rect x = "48" y = "72" w = "48" h = "44"/>
+      <rect x = "96" y = "72" w = "48" h = "44"/>
+    </anim>
+  </animations>
+</file>

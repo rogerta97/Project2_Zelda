@@ -6,6 +6,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Timer.h"
+#include "Animation.h"
 
 class PlayerManager;
 class b2Fixture;
@@ -68,6 +69,30 @@ public:
 	j1Timer timer;
 };
 
+class die
+{
+public:
+	die() {};
+	die(iPoint _pos, Animation* ani)
+	{
+		pos = _pos;
+		Animation* a = new Animation(*ani);
+		animator = new Animator();
+		animator->AddAnimation(a);
+		animator->SetAnimation("dead");
+	};
+	~die() {};
+
+	void CleanUp()
+	{
+		animator->CleanUp();
+		RELEASE(animator);
+	};
+
+	iPoint     pos = NULLPOINT;
+	Animator*  animator;
+};
+
 class Entity;
 class j1Entity : public j1Module
 {
@@ -112,19 +137,26 @@ public:
 	Spell* FindSpellByBody(PhysBody* spell);
 	vector<Entity*> FindEntitiesByName(char* name);
 	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
+	void DeathAnimation(Entity* die);
 
 private:
 	void RemoveEntities();
 	void SlowEntities();
 	void StunEntities();
+	void DieEntities();
 
 public:
 	list<slow>     slowed_entities;
 	list<stun>     stuned_entities;
+	list<die>	   dying_entities;
 
 private:
 	// List with all entities
 	list<Entity*>  entity_list;
+
+	// Texture with effects animations
+	SDL_Texture*   entity_effects_texture = nullptr;
+	Animator*	   entity_effects_animator = nullptr;
 };
 
 #endif // __j1ENTITY_H__

@@ -38,7 +38,7 @@ public:
 	~Animator();
 
 	// Add an animation
-	void AddAnimation(Animation* animation);
+	void AddAnimation(Animation* ani);
 
 	// Load Animations from XML
 	SDL_Texture* LoadAnimationsFromXML(pugi::xml_document& doc, char* node_name);
@@ -70,6 +70,7 @@ class Animation
 {
 public:
 	Animation(const char* name, list<SDL_Rect>& rects, float speed, bool loop = true);
+	Animation(Animation &ani);
 	~Animation();
 
 	// Gets the animation frame adding speed

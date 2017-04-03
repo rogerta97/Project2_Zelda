@@ -168,7 +168,7 @@
     </ClCompile>
     <ClCompile Include="BoneAttack.cpp">
       <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="EventThrower.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
@@ -371,7 +371,7 @@
     </ClInclude>
     <ClInclude Include="BoneAttack.h">
       <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="EventThrower.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
@@ -516,6 +516,9 @@
     </Xml>
     <Xml Include="..\Game\boneattack.xml">
       <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\entity_effects.xml">
+      <Filter>Engine\4. Entities ==========</Filter>
     </Xml>
   </ItemGroup>
 </Project>

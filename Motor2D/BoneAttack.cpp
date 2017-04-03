@@ -6,7 +6,7 @@
 #include "Entity.h"
 
 #define DESTRUCTION_TIME 2.0f
-#define SPEED 100
+#define SPEED 300
 
 BoneAttack::BoneAttack(iPoint pos)
 {
