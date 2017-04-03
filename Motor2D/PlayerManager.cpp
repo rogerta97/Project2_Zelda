@@ -32,9 +32,9 @@ bool PlayerManager::Start()
 
 	_TTF_Font* text_font = App->font->game_font;
 	iPoint text1_pos = { screen.w - 85 , screen.h - 119 };
-	iPoint text2_pos = { (55), screen.h - 119 };
-	iPoint text3_pos = { screen.w - 70, screen.h - 56 };
-	iPoint text4_pos = { 35, screen.h - 56 };
+	iPoint text2_pos = { (50), screen.h - 119 };
+	iPoint text3_pos = { screen.w - 75, screen.h - 56 };
+	iPoint text4_pos = { 27, screen.h - 56 };
 
 	death_rect_color = { 32, 32, 32, 100 };
 	death_rect = { 0, 0, screen.w ,  screen.h };

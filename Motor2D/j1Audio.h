@@ -42,7 +42,7 @@ public:
 
 private:
 
-	_Mix_Music*			music = NULL;
+	_Mix_Music*			    music = NULL;
 	std::vector<Mix_Chunk*>	fx;
 
 	int def_volume = 75;

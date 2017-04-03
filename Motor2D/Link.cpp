@@ -33,10 +33,10 @@ Link::Link(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
-	Ability* a1 = AddAbility(0, 10, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
-	Ability* a2 = AddAbility(1, 15, 1, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
-	Ability* a3 = AddAbility(2, 10, 1, 2, "boomerang");  a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
-	Ability* a4 = AddAbility(3, 10, 1, 2);			     a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+	Ability* a1 = AddAbility(0, 1, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
+	Ability* a2 = AddAbility(1, 6, 6, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
+	Ability* a3 = AddAbility(2, 20, 20, 2, "boomerang");  a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
+	Ability* a4 = AddAbility(3, 50, 50, 2);			     a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
@@ -108,8 +108,11 @@ bool Link::Update(float dt)
 			{
 				if (spell->owner == this)
 				{
-					if(spell->can_delete)
+					if (spell->can_delete)
+					{
+						GetAbility(2)->cd_timer.SubstractTimeFromStart(7);
 						App->spell->DeleteSpell(spell);
+					}
 				}
 			}
 		}
