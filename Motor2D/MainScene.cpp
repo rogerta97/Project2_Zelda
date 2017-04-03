@@ -54,7 +54,7 @@ bool MainScene::Start()
 	iPoint minimap_pos = { screen.w - 58, 5 };
 	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
 
-	iPoint win_text_pos = { int(screen.w*0.5f) - 50, int(screen.h*0.5f) - 100 };
+	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -480,10 +480,10 @@ void MainScene::UpdateProgressBar()
 
 	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
 
-	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 5 });
-	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 5 });
-	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 5 });
-	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 5 });
+	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 4 });
+	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 4 });
+	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 4 });
+	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 4 });
 }
 
 void MainScene::ListenEvent(int type, EventThrower * origin, int id)
