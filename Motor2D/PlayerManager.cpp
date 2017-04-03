@@ -914,6 +914,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 			}
 
 			player->Respawn();
+			player->ApplyItemStats();
 		}
 	}
 }
@@ -948,7 +949,7 @@ void PlayerManager::CheckIfDeath(Player * player)
 		}
 
 		player->Kill();
-
+		player->show = shows::show_null;
 	}
 }
 
@@ -1134,6 +1135,9 @@ void PlayerManager::UpdateDeathUI(Player * player)
 
 void Player::BuyItem(Item * item, int price)
 {
+	if (is_dead)
+		return;
+
 	for (int i = 0; i < 3; i++)
 	{
 		if (items[i] != nullptr)
@@ -1192,6 +1196,29 @@ void Player::Respawn()
 		entity->is_player = true;
 		is_dead = false;
 	}
+}
+
+void Player::ApplyItemStats()
+{
+	if (is_dead)
+		return;
+
+	int extra_hp = 0;
+	int extra_power = 0;
+	int extra_speed = 0;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (items[i] == nullptr)
+		{
+			continue;
+		}
+		extra_hp += items[i]->hp;
+		extra_power += items[i]->power;
+		extra_speed += items[i]->speed;
+	}
+
+	entity->UpdateStats(extra_power, extra_hp, extra_speed);
 }
 
 void Player::UpdateRupees()

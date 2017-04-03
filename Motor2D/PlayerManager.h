@@ -39,6 +39,7 @@ public:
 	void BuyItem(Item* item, int price);
 	void Kill();
 	void Respawn();
+	void ApplyItemStats();
 
 private:
 	void UpdateRupees();

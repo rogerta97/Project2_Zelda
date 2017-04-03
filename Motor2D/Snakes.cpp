@@ -69,6 +69,9 @@ bool Snakes::Update(float dt)
 {
 	bool ret = true;
 
+	if (to_delete)
+		return true;
+
 	LifeBar(iPoint(32, 4), iPoint(-20, -32));
 
 	Entity* entity = nullptr;

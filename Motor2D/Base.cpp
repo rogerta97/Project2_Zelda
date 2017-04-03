@@ -41,6 +41,9 @@ bool Base::Start()
 
 bool Base::Update(float dt)
 {
+	if (!to_delete)
+		return true;
+
 	LifeBar(iPoint(120, 10), iPoint(-55, -160));
 
 	Entity* entity = nullptr;

@@ -73,6 +73,9 @@ bool Minion::Update(float dt)
 {
 	bool ret = true;
 
+	if (to_delete)
+		return true;
+
 	speed = stats.speed*dt;
 
 	if (!stuned)

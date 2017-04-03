@@ -80,6 +80,9 @@ bool Link::Update(float dt)
 {
 	bool ret = true;
 
+	if (to_delete)
+		return true;
+
 	App->view->CenterCamera(camera, game_object->GetPos().x, game_object->GetPos().y);
 
 	Entity* entity = nullptr;

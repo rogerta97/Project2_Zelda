@@ -72,6 +72,9 @@ bool Skeleton::Update(float dt)
 {
 	bool ret = true;
 
+	if (to_delete)
+		return true;
+
 	LifeBar(iPoint(50, 4), iPoint(-23, -52));
 
 	Entity* entity = nullptr;

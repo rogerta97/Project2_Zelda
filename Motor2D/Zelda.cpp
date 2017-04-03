@@ -50,6 +50,9 @@ bool Zelda::PreUpdate()
 
 bool Zelda::Update(float dt)
 {
+	if (to_delete)
+		return true;
+
 	CheckState();
 
 	speed = stats.speed*dt;
