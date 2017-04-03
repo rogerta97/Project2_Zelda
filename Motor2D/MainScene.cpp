@@ -171,7 +171,8 @@ bool MainScene::Start()
 	// ----
 
 	game_timer.Start();
-
+	quest_timer.Start();
+	first_quest_completed = false;
 	App->console->AddText("viewports.set 4", Input);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
@@ -226,7 +227,70 @@ bool MainScene::Update(float dt)
 		App->scene->ChangeScene(App->scene->menu_scene);
 	}
 	// ------
-
+	// Quests
+	if (quest_timer.Read() <= 30 && first_quest_completed == false)
+	{
+		int rand_quest = GetRandomValue(1, 3);
+		switch (rand_quest)
+		{
+		case 1: 
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 2:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 3:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		default:
+			break;
+		}
+		quest_timer.Start();
+		first_quest_completed = true;
+	}
+	if (quest_timer.Read() <= 180 && first_quest_completed == true)
+	{
+		for(int i = 0; quest_manager->vquest.size();i++)
+		{
+			if (quest_manager->vquest[i]->state == active)
+			{
+				quest_manager->vquest[i]->state = inactive;
+				for (int j = 0; j < quest_manager->vquest[i]->task.size(); j++)
+				{
+					quest_manager->vquest[i]->task[j]->current_progress = 0;
+				}
+			}
+		}
+		int rand_quest = GetRandomValue(1, 3);
+		switch (rand_quest)
+		{
+		case 1:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 2:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 3:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		default:
+			break;
+		}
+		quest_timer.Start();
+	}
+	// ------
 	//DrawScreenSeparation();
 
 	return ret;
