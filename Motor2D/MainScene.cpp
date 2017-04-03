@@ -242,6 +242,8 @@ bool MainScene::Update(float dt)
 		player_manager->Update(dt);
 	if (jungleCamp_manager != nullptr)
 		jungleCamp_manager->Update(dt);
+	if (quest_manager != nullptr)
+		quest_manager->Update();
 	// ------
 
 	// Update progress bar

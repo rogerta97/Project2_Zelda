@@ -520,5 +520,8 @@
     <Xml Include="..\Game\entity_effects.xml">
       <Filter>Engine\4. Entities ==========</Filter>
     </Xml>
+    <Xml Include="..\Game\Quests.xml">
+      <Filter>Engine\2. Components ======</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

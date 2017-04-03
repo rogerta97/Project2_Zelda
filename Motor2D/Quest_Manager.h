@@ -26,6 +26,9 @@ class QuestManager {
 public:
 	QuestManager();
 	~QuestManager();
+
+	void Update();
+
 	void CleanUp();
 	pugi::xml_document quests_file;
 	pugi::xml_node quests_node;
@@ -45,6 +48,11 @@ public:
 	vector<UI_Text*> active_quest_text;
 
 	iPoint           placer = NULLPOINT;
+
+private:
+
+	int				active_quest = -1;
+	uint			timer_read = 0;
 
 };
 

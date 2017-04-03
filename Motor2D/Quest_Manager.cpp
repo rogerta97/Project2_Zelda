@@ -23,10 +23,7 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		player_1_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x - 50, placer.y-150), App->font->game_font_small));
-		player_1_text[3]->SetText("Active Quest");
-
-		active_quest_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x - 400, placer.y - 125), App->font->game_font_small));
+		active_quest_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x - 450, placer.y - 225), App->font->game_font_small));
 		active_quest_text[0]->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -42,10 +39,7 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		player_2_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x - 50, placer.y - 150), App->font->game_font_small));
-		player_2_text[3]->SetText("Active Quest");
-
-		active_quest_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x - 50, placer.y - 125), App->font->game_font_small));
+		active_quest_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x - 450, placer.y - 225), App->font->game_font_small));
 		active_quest_text[1]->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -61,10 +55,7 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		player_3_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x - 50, placer.y - 150), App->font->game_font_small,100));
-		player_3_text[3]->SetText("Active Quest");
-
-		active_quest_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x - 50, placer.y - 125), App->font->game_font_small));
+		active_quest_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x - 450, placer.y - 225), App->font->game_font_small));
 		active_quest_text[2]->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -79,11 +70,8 @@ QuestManager::QuestManager()
 
 			screen.h = screen.h - 30;
 			offset += 24;
-		}
-		player_4_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x - 50, placer.y - 150), App->font->game_font_small,25));
-		player_4_text[3]->SetText("Active Quest");
-	
-		active_quest_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x - 50, placer.y - 125), App->font->game_font_small));
+		}	
+		active_quest_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x - 450, placer.y - 225), App->font->game_font_small));
 		active_quest_text[3]->SetText(" ");
 
 
@@ -121,12 +109,42 @@ QuestManager::QuestManager()
 		vquest.push_back(quest);
 	}
 
+	active_quest_text[0]->enabled = false;
+	active_quest_text[1]->enabled = false;
+	active_quest_text[2]->enabled = false;
+	active_quest_text[3]->enabled = false;
 }
 
 QuestManager::~QuestManager()
 {
 	for (int i = 0; i < vquest.size(); i++) {
 		RELEASE(vquest[i]);
+	}
+}
+
+void QuestManager::Update()
+{
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+	{
+		change_state(1, active);
+		active_quest = 1;
+		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+		update_progress();
+		active_quest_text[0]->enabled = true;
+		active_quest_text[1]->enabled = true;
+		active_quest_text[2]->enabled = true;
+		active_quest_text[3]->enabled = true;
+	}
+
+	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 180)
+	{
+		change_state(active_quest, inactive);
+		active_quest = -1;
+		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+		active_quest_text[0]->enabled = false;
+		active_quest_text[1]->enabled = false;
+		active_quest_text[2]->enabled = false;
+		active_quest_text[3]->enabled = false;
 	}
 }
 
@@ -204,7 +222,7 @@ void QuestManager::update_progress()
 				string team_2;
 				team_2 += "Power quest is active, slay 2 enemy players. Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += +"l2";
+				team_2 += "l2";
 				active_quest_text[1]->SetText(team_2);
 				active_quest_text[3]->SetText(team_2);
 				break;
@@ -212,15 +230,15 @@ void QuestManager::update_progress()
 			case 1:
 			{
 				string team_1;
-				team_1 += "SPEED quest is active, RUN FASTER THAN SANIC TO WIN. Progress ";
+				team_1 += "SPEED quest is active. Progress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
 				active_quest_text[0]->SetText(team_1);
 				active_quest_text[2]->SetText(team_1);
 				string team_2;
-				team_2 += "SPEED quest is active, RUN FASTER THAN SANIC TO WIN. Progress ";
+				team_2 += "SPEED quest is active. Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += +"l3";
+				team_2 += "l3";
 				active_quest_text[1]->SetText(team_2);
 				active_quest_text[3]->SetText(team_2);
 				break;
@@ -236,7 +254,7 @@ void QuestManager::update_progress()
 				string team_2;
 				team_2 += "KILL STUFF TO GET HP. Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += +"l3";
+				team_2 += "l3";
 				active_quest_text[1]->SetText(team_2);
 				active_quest_text[3]->SetText(team_2);
 				break;
@@ -252,9 +270,13 @@ void QuestManager::update_progress()
 				{
 					vquest[i]->state = inactive;
 					vquest[i]->task[i]->times_completed++;
+					active_quest_text[0]->enabled = false;
+					active_quest_text[1]->enabled = false;
+					active_quest_text[2]->enabled = false;
+					active_quest_text[3]->enabled = false;
 					for (int k = 0; k < App->scene->main_scene->player_manager->players.size(); k++)
 					{
-						App->scene->main_scene->player_manager->players[k]->entity->UpdateStats(0, 0, 0);
+						//App->scene->main_scene->player_manager->players[k]->entity->UpdateStats(0, 0, 0);
 					}
 
 					switch (j)
