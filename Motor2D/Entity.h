@@ -140,9 +140,9 @@ struct Ability
 		cd_timer.SubstractTimeFromStart(_cd);
 	};
 
-	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed)
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd)
 	{
-		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable;
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd;
 	}
 
 	bool CdCompleted()
@@ -174,6 +174,7 @@ struct Ability
 
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
+	SDL_Rect   ability_in_cd = NULLRECT;
 };
 
 class Entity

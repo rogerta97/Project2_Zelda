@@ -26,50 +26,80 @@ bool PlayerManager::Start()
 	// Abilities UI
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	iPoint ability1_pos = { screen.w - 120 , screen.h - 126 };
-	iPoint ability2_pos = { (screen.w / 50), screen.h - 126 };
+	iPoint ability2_pos = { 13, screen.h - 126 };
 	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
-	iPoint ability4_pos = { (screen.w) / 50, screen.h - 76 };
+	iPoint ability4_pos = { 13, screen.h - 76 };
+
+	_TTF_Font* text_font = App->font->game_font;
+	iPoint text1_pos = { screen.w - 85 , screen.h - 119 };
+	iPoint text2_pos = { (55), screen.h - 119 };
+	iPoint text3_pos = { screen.w - 70, screen.h - 56 };
+	iPoint text4_pos = { 35, screen.h - 56 };
 
 	SDL_Color death_rect_color = { 32, 32, 32, 100 };
 	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
 
 	// p1
-	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text1_pos, text_font));
+	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text2_pos, text_font));
+	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text3_pos, text_font));
+	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text4_pos, text_font));
+
 	death_rect_1 = App->scene->main_scene->main_window_1->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
 	death_rect_1->enabled = false; death_rect_1->blit_layer += 1;
 	death_text_1 = App->scene->main_scene->main_window_1->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_1->enabled = false; death_text_1->blit_layer += 1;
 
 	// p2
-	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text1_pos, text_font));
+	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text2_pos, text_font));
+	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text3_pos, text_font));
+	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text4_pos, text_font));
+
 	death_rect_2 = App->scene->main_scene->main_window_2->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_2->enabled = false; death_rect_1->blit_layer += 1;
+	death_rect_2->enabled = false; death_rect_2->blit_layer += 1;
 	death_text_2 = App->scene->main_scene->main_window_2->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_2->enabled = false; death_text_2->blit_layer += 1;
 
 	// p3
-	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text1_pos, text_font));
+	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text2_pos, text_font));
+	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text3_pos, text_font));
+	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text4_pos, text_font));
+
 	death_rect_3 = App->scene->main_scene->main_window_3->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_3->enabled = false; death_rect_1->blit_layer += 1;
+	death_rect_3->enabled = false; death_rect_3->blit_layer += 1;
 	death_text_3 = App->scene->main_scene->main_window_3->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_3->enabled = false; death_text_3->blit_layer += 1;
 
 	// p4
-	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	habilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
+	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+
+	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text1_pos, text_font));
+	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text2_pos, text_font));
+	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text3_pos, text_font));
+	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text4_pos, text_font));
+
 	death_rect_4 = App->scene->main_scene->main_window_4->CreateColoredRect(iPoint(0, 0), screen.w, screen.h, death_rect_color, true);
-	death_rect_4->enabled = false; death_rect_1->blit_layer += 1;
+	death_rect_4->enabled = false; death_rect_4->blit_layer += 1;
 	death_text_4 = App->scene->main_scene->main_window_4->CreateText(death_text_pos, App->font->game_font_20, 0);
 	death_text_4->enabled = false; death_text_4->blit_layer += 1;
 
@@ -124,10 +154,10 @@ bool PlayerManager::CleanUp()
 
 	ClearPlayers();
 
-	habilities_1.clear();
-	habilities_2.clear();
-	habilities_3.clear();
-	habilities_4.clear();
+	abilities_1.clear();
+	abilities_2.clear();
+	abilities_3.clear();
+	abilities_4.clear();
 
 	RELEASE(event_thrower);
 
@@ -960,139 +990,71 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	switch (curr_player->viewport)
 	{
 	case 1:
-		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			habilities_1.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_1.at(0)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(1)->CdCompleted())
-		{
-			habilities_1.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_1.at(1)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(2)->CdCompleted())
-		{
-			habilities_1.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_1.at(2)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(3)->CdCompleted())
-		{
-			habilities_1.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_1.at(3)->ChangeImage(NULLRECT);
+			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			{
+				abilities_1.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				abilities_cd_1.at(i)->enabled = false;
+			}
+			else
+			{
+				abilities_1.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				string str("");
+				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
+				abilities_cd_1.at(i)->enabled = true; abilities_cd_1.at(i)->SetText(str);
+			}
 		}
 		break;
 	case 2:
-		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			habilities_2.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_2.at(0)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(1)->CdCompleted())
-		{
-			habilities_2.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_2.at(1)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(2)->CdCompleted())
-		{
-			habilities_2.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_2.at(2)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(3)->CdCompleted())
-		{
-			habilities_2.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_2.at(3)->ChangeImage(NULLRECT);
+			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			{
+				abilities_2.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				abilities_cd_2.at(i)->enabled = false;
+			}
+			else
+			{
+				abilities_2.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				string str("");
+				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
+				abilities_cd_2.at(i)->enabled = true; abilities_cd_2.at(i)->SetText(str);
+			}
 		}
 		break;
 	case 3:
-		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			habilities_3.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_3.at(0)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(1)->CdCompleted())
-		{
-			habilities_3.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_3.at(1)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(2)->CdCompleted())
-		{
-			habilities_3.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_3.at(2)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(3)->CdCompleted())
-		{
-			habilities_3.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_3.at(3)->ChangeImage(NULLRECT);
+			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			{
+				abilities_3.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				abilities_cd_3.at(i)->enabled = false;
+			}
+			else
+			{
+				abilities_3.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				string str("");
+				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
+				abilities_cd_3.at(i)->enabled = true; abilities_cd_3.at(i)->SetText(str);
+			}
 		}
 		break;
 	case 4:
-		if (curr_player->entity->GetAbility(0)->CdCompleted())
+		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			habilities_4.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_4.at(0)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(1)->CdCompleted())
-		{
-			habilities_4.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_4.at(1)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(2)->CdCompleted())
-		{
-			habilities_4.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_4.at(2)->ChangeImage(NULLRECT);
-		}
-		if (curr_player->entity->GetAbility(3)->CdCompleted())
-		{
-			habilities_4.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ablility_avaliable);
-		}
-		else
-		{
-			habilities_4.at(3)->ChangeImage(NULLRECT);
+			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			{
+				abilities_4.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				abilities_cd_4.at(i)->enabled = false;
+			}
+			else
+			{
+				abilities_4.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				string str("");
+				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
+				abilities_cd_4.at(i)->enabled = true; abilities_cd_4.at(i)->SetText(str);
+			}
 		}
 		break;
 	}
