@@ -6,27 +6,29 @@
     <minions_wave amount="1"/>
     <first_wave_delay sec="5"/>
   </minions>
-  <victory_animations texture ="textures/Victorydefeat_spritesheet.png">
+  <victory_animations>
     <anim speed = "4" name = "idle" loop = "true">
-      <rect x = "0" y = "0" w = "320" h = "96"/>
-      <rect x = "0" y = "96" w = "320" h = "96"/>
-      <rect x = "0" y = "192" w = "320" h = "96"/>
-      <rect x = "0" y = "96" w = "320" h = "96"/>
-      <rect x = "0" y = "0" w = "320" h = "96"/>
-      <rect x = "0" y = "288" w = "320" h = "96"/>
-      <rect x = "0" y = "384" w = "320" h = "96"/>
-      <rect x = "0" y = "288" w = "320" h = "96"/>
+      <rect x = "434" y = "920" w = "320" h = "96"/>
+      <rect x = "434" y = "1016" w = "320" h = "96"/>
+      <rect x = "434" y = "1112" w = "320" h = "96"/>
+      <rect x = "434" y = "1016" w = "320" h = "96"/>
+      <rect x = "434" y = "920" w = "320" h = "96"/>
+      <rect x = "434" y = "1208" w = "320" h = "96"/>
+      <rect x = "434" y = "1304" w = "320" h = "96"/>
+      <rect x = "434" y = "1208" w = "320" h = "96"/>
     </anim>
   </victory_animations>
-  <defeat_animations texture ="textures/Victorydefeat_spritesheet.png">
+  <defeat_animations>
     <anim speed = "4" name = "idle" loop = "true">
-      <rect x = "320" y = "0" w = "372" h = "96"/>
-      <rect x = "320" y = "0" w = "372" h = "96"/>
-      <rect x = "320" y = "0" w = "372" h = "96"/>
-      <rect x = "320" y = "0" w = "372" h = "96"/>
-      <rect x = "320" y = "0" w = "372" h = "96"/>
-      <rect x = "320" y = "96" w = "372" h = "96"/>
-      <rect x = "320" y = "192" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "1016" w = "372" h = "96"/>
+      <rect x = "754" y = "1112" w = "372" h = "96"/>
+      <rect x = "754" y = "1208" w = "372" h = "96"/>
+      <rect x = "754" y = "1304" w = "372" h = "96"/>
     </anim>
   </defeat_animations>
 </file>
