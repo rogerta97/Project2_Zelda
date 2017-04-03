@@ -113,6 +113,11 @@ bool Link::Update(float dt)
 				}
 			}
 		}
+
+		if (stats.life <= 0)
+		{
+			App->entity->AddRupeesIfPlayer(entity, 100);
+		}
 	}
 
 	LifeBar(iPoint(60, 5), iPoint(-25, -40));

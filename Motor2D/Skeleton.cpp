@@ -100,7 +100,10 @@ bool Skeleton::Update(float dt)
 
 		}
 		if (stats.life <= 0)
+		{
+			App->entity->AddRupeesIfPlayer(entity, 50);
 			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+		}
 	}
 
 

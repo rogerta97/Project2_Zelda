@@ -69,6 +69,7 @@ bool Base::Update(float dt)
 
 			if (stats.life <= 0)
 			{
+				App->entity->AddRupeesIfPlayer(entity, 1);
 				App->scene->main_scene->base_manager->KillBase(this);
 				App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
 			}

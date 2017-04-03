@@ -138,6 +138,7 @@ public:
 	vector<Entity*> FindEntitiesByName(char* name);
 	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
 	void DeathAnimation(Entity* die);
+	void AddRupeesIfPlayer(Entity* entity, int amount);
 
 private:
 	void RemoveEntities();

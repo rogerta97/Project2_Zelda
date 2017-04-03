@@ -40,6 +40,7 @@ public:
 	void Kill();
 	void Respawn();
 	void ApplyItemStats();
+	void AddRupees(int add);
 
 private:
 	void UpdateRupees();

@@ -1203,6 +1203,12 @@ void Player::ApplyItemStats()
 	entity->UpdateStats(extra_power, extra_hp, extra_speed);
 }
 
+void Player::AddRupees(int add)
+{
+	rupees += add;
+	UpdateRupees();
+}
+
 void Player::UpdateRupees()
 {
 	string r;

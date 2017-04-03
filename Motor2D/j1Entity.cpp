@@ -453,6 +453,21 @@ void j1Entity::DeathAnimation(Entity * ent)
 	}
 }
 
+void j1Entity::AddRupeesIfPlayer(Entity * entity, int amount)
+{
+	if (App->scene->main_scene != nullptr)
+	{
+		if (entity != nullptr)
+		{
+			if (entity->is_player)
+			{
+				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(entity->game_object->pbody);
+				p->AddRupees(amount);
+			}
+		}
+	}
+}
+
 void j1Entity::DeleteEntity(Entity* entity)
 {
 	entity->to_delete = true;

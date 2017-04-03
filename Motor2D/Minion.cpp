@@ -123,6 +123,7 @@ bool Minion::Update(float dt)
 				event_die->event_data.entity = this;
 				event_thrower->AddEvent(event_die);
 
+				App->entity->AddRupeesIfPlayer(entity, 20);
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}

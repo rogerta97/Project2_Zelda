@@ -123,6 +123,7 @@ bool Tower::Update(float dt)
 			stats.life -= ability->damage;
 			if (stats.life <= 0)
 			{
+				App->entity->AddRupeesIfPlayer(entity, 75);
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
