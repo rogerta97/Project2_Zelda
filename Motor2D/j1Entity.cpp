@@ -303,6 +303,12 @@ void j1Entity::ClearEntities()
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
 			stuned_entities.erase(it);
 	}
+
+	if (!dying_entities.empty())
+	{
+		for (list<die>::iterator it = dying_entities.begin(); it != dying_entities.end();)
+			it = dying_entities.erase(it);
+	}
 }
 
 int j1Entity::GetEntitiesNumber()
@@ -460,7 +466,9 @@ void j1Entity::RemoveEntities()
 		{
 			if ((*it)->to_delete == true)
 			{
-				DeathAnimation(*it);
+				if(App->scene->main_scene->player_manager != nullptr)
+					DeathAnimation(*it);
+
 				(*it)->CleanUp();
 				(*it)->CleanEntity();
 				RELEASE(*it);
