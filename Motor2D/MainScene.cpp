@@ -11,7 +11,6 @@
 #include "AestheticsManager.h"
 #include "j1Console.h"
 #include "Parallax.h"
-#include "QuestManager.h"
 #include "j1Entity.h"
 #include "CollisionFilters.h"
 #include "Link.h"
@@ -27,7 +26,9 @@
 #include "MenuScene.h"
 #include "ZeldaManager.h"
 #include "BaseManager.h"
+#include "Quest_Manager.h"
 #include "JungleCampManager.h"
+#include "EventThrower.h"
 #include "j1Audio.h"
 
 MainScene::MainScene()
@@ -97,6 +98,9 @@ bool MainScene::Start()
 
 	// ------------------
 
+
+
+	App->console->AddText("viewports.set 4", Input);
 	//Load Map
 	if (App->map->Load("zelda_moba.tmx"))
 	{
@@ -169,12 +173,9 @@ bool MainScene::Start()
 	// Base manager
 	base_manager = new BaseManager();
 
-	//Creating quests
+	//Quest manager
 	quest_manager = new QuestManager();
-	quest_manager->CreateQuest(string("Test"), 1);
-	quest_manager->CreateQuest(string("Test"), 2);
-	quest_manager->CreateQuest(string("Test"), 3);
-	quest_manager->CreateQuest(string("Test"), 4);
+
 
 	//Load Victory/Defeat Animations
 	pugi::xml_document gs;
@@ -194,7 +195,8 @@ bool MainScene::Start()
 	// ----
 
 	game_timer.Start();
-
+	quest_timer.Start();
+	first_quest_completed = false;
 	App->console->AddText("viewports.set 4", Input);
 
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
@@ -223,13 +225,19 @@ bool MainScene::Update(float dt)
 	// Draw map
 	App->map->Draw();
 
+	quest_manager->update_progress();
+	// Test
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
+	}
+
 	// Update Managers
 	if(minion_manager != nullptr)
 		minion_manager->Update();
 	if(shop_manager != nullptr)
 		shop_manager->Update();
-	if (quest_manager != nullptr)
-		quest_manager->Update(dt);
 	if(player_manager != nullptr)
 		player_manager->Update(dt);
 	if (jungleCamp_manager != nullptr)
@@ -259,7 +267,70 @@ bool MainScene::Update(float dt)
 		App->view->SetViews(1);
 	}
 	// ------
-
+	// Quests
+	if (quest_timer.Read() <= 60 && first_quest_completed == false)
+	{
+		int rand_quest = GetRandomValue(1, 3);
+		switch (rand_quest)
+		{
+		case 1: 
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 2:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 3:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		default:
+			break;
+		}
+		quest_timer.Start();
+		first_quest_completed = true;
+	}
+	if (quest_timer.Read() <= 180 && first_quest_completed == true)
+	{
+		for(int i = 0; quest_manager->vquest.size();i++)
+		{
+			if (quest_manager->vquest[i]->state == active)
+			{
+				quest_manager->vquest[i]->state = inactive;
+				for (int j = 0; j < quest_manager->vquest[i]->task.size(); j++)
+				{
+					quest_manager->vquest[i]->task[j]->current_progress = 0;
+				}
+			}
+		}
+		int rand_quest = GetRandomValue(1, 3);
+		switch (rand_quest)
+		{
+		case 1:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 2:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		case 3:
+		{
+			quest_manager->change_state(rand_quest, active);
+			break;
+		}
+		default:
+			break;
+		}
+		quest_timer.Start();
+	}
+	// ------
 	//DrawScreenSeparation();
 
 	return ret;
@@ -284,12 +355,11 @@ bool MainScene::CleanUp()
 	zelda_manager->CleanUp(); 	   RELEASE(zelda_manager);
 	base_manager->CleanUp(); 	   RELEASE(base_manager);
 	minion_manager->CleanUp(); 	   RELEASE(minion_manager);
-	quest_manager->CleanUp(); 	   RELEASE(quest_manager);
 	tower_manager->CleanUp(); 	   RELEASE(tower_manager);
 	aest_manager->CleanUp(); 	   RELEASE(aest_manager);
 	player_manager->CleanUp();	   RELEASE(player_manager);
 	jungleCamp_manager->CleanUp(); RELEASE(jungleCamp_manager);
-
+	quest_manager->CleanUp();	   RELEASE(quest_manager);
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 	App->spell->ClearSpells();
@@ -414,6 +484,44 @@ void MainScene::UpdateProgressBar()
 	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 5 });
 	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 5 });
 	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 5 });
+}
+
+void MainScene::ListenEvent(int type, EventThrower * origin, int id)
+{
+	event_type etype = static_cast<event_type>(type);
+
+	switch (etype)
+	{
+	case e_t_null:
+		break;
+	case e_t_death:
+	{
+		Event* e = origin->GetEvent(id);
+		if (e->event_data.entity->is_player) {
+			int team = e->event_data.entity->GetTeam();
+			switch (team)
+			{
+			case 1:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 2);
+			}
+			case 2:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 1);
+			}
+			default:
+				break;
+			}
+			App->scene->main_scene->quest_manager->update_progress();
+		}
+		break;
+	}
+		
+	case e_t_end_game:
+		break;
+	default:
+		break;
+	}
 }
 
 void MainScene::CreateMapCollisions()

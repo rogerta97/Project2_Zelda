@@ -16,6 +16,7 @@
 #include "PlayerManager.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "Quest_Manager.h"
 
 #define ABILITY3_MAX_RANGE 200
 #define ABILITY3_GROW_SPEED 205.0f
@@ -93,7 +94,7 @@ bool Link::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
+			DealDamage((ability->damage * ability->damage_multiplicator));
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{

@@ -94,9 +94,6 @@
     <ClCompile Include="Tower.cpp">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
     </ClCompile>
-    <ClCompile Include="QuestManager.cpp">
-      <Filter>Engine\2. Components ======\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="MinionManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
@@ -163,6 +160,9 @@
     <ClCompile Include="Bushes.cpp">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
     </ClCompile>
+    <ClCompile Include="Quest_Manager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+	</ClCompile>
     <ClCompile Include="Skeleton.cpp">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClCompile>
@@ -294,9 +294,6 @@
     <ClInclude Include="Tower.h">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
     </ClInclude>
-    <ClInclude Include="QuestManager.h">
-      <Filter>Engine\2. Components ======\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="MinionManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
@@ -366,6 +363,9 @@
     <ClInclude Include="Bushes.h">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
     </ClInclude>
+    <ClInclude Include="Quest_Manager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+	</ClInclude>
     <ClInclude Include="Skeleton.h">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClInclude>

@@ -17,6 +17,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "TowerAttack.h"
+#include "Quest_Manager.h"
 
 #define TOWER_H 38
 #define TOWER_W 64
@@ -117,17 +118,26 @@ bool Tower::Update(float dt)
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
 	if (GotHit(entity, ability, spell))
-	{
-		if (entity->GetTeam() != GetTeam())
+		// Enemy attacks
+		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			stats.life -= ability->damage;
+				DealDamage((ability->damage * ability->damage_multiplicator));
+
+			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			{
+				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+				if (spell->stats.slow_duration > 0)
+					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+				if (spell->stats.stun_duration > 0)
+					Stun(spell->stats.stun_duration);
+			}
 			if (stats.life <= 0)
 			{
 				App->entity->AddRupeesIfPlayer(entity, 75);
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
-	}
 
 	return ret;
 }

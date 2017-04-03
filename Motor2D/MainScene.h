@@ -20,8 +20,8 @@ class TowerManager;
 class ShopManager;
 class ZeldaManager;
 class BaseManager;
+class QuestManager;
 class JungleCampManager;
-
 
 enum GameStates
 {
@@ -47,7 +47,7 @@ public:
 
 	void EndGame(int winner);
 	void UpdateProgressBar();
-
+	void ListenEvent(int type, EventThrower* origin, int id);
 
 private:
 	void CreateMapCollisions();
@@ -66,12 +66,12 @@ public:
 	UI_Image*			princess_4 = nullptr;
 
 	MinionManager*		minion_manager = nullptr;
-	TowerManager*	    tower_manager = nullptr;
-	QuestManager*		quest_manager = nullptr;
+	TowerManager*	    tower_manager = nullptr;;
 	ShopManager*		shop_manager = nullptr;
 	AestheticsManager*  aest_manager = nullptr;
 	ZeldaManager*		zelda_manager = nullptr;
 	BaseManager*		base_manager = nullptr;
+	QuestManager*		quest_manager = nullptr;
 	JungleCampManager*	jungleCamp_manager = nullptr;
 	PlayerManager*      player_manager = nullptr;
 
@@ -104,7 +104,8 @@ private:
 	vector<PhysBody*>	map_collisions;
 
 	j1Timer				game_timer;
-
+	j1Timer				quest_timer;
+	bool				first_quest_completed;
 	uint				end_delay = 10;
 
 	uint				winner = 0;

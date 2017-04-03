@@ -122,6 +122,7 @@ public:
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
+
 private:
 	void PlayerInput(Player* player);
 	void MoveCamera(Player* player);
@@ -130,6 +131,7 @@ private:
 	void UpdateUI(Player* player);
 	void UpdateDeathUI(Player* player);
 	void PasiveHP(Player* player);
+
 
 public:
 	vector<Player*>     players;

@@ -6,6 +6,7 @@
 #include "MainScene.h"
 #include "j1Viewports.h"
 #include "BaseManager.h"
+#include "Quest_Manager.h"
 
 Base::Base(iPoint pos)
 {
@@ -55,7 +56,7 @@ bool Base::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
+				DealDamage((ability->damage * ability->damage_multiplicator));
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{

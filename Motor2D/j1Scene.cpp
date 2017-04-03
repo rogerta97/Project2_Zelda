@@ -167,5 +167,10 @@ void j1Scene::SaveCVar(std::string & cvar_name, pugi::xml_node & node) const
 	current_scene->SaveCVar(cvar_name,node);
 }
 
+void j1Scene::ListenEvent(int type, EventThrower * origin, int id)
+{
+	current_scene->ListenEvent(type, origin, id);
+}
+
 
 
