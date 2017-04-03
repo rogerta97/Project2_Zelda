@@ -21,6 +21,8 @@
 #define TOWER_H 38
 #define TOWER_W 64
 
+#define HALFMAP 81*32
+
 Tower::Tower(iPoint pos) 
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
@@ -48,11 +50,18 @@ bool Tower::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("tower_idle");
-
 	stats.max_life = stats.life = 400;
 
 	show_life_bar = true;
+
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("tower2_idle");
+	}
+	else
+	{
+		game_object->SetAnimation("tower_idle");
+	}
 
 	return ret;
 }
@@ -155,7 +164,14 @@ iPoint Tower::GetPos() const
 
 void Tower::Idle()
 {	
-	game_object->SetAnimation("tower_idle");
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("tower2_idle");
+	}
+	else
+	{
+		game_object->SetAnimation("tower_idle");
+	}
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -166,7 +182,15 @@ void Tower::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
-		game_object->SetAnimation("tower_attack");
+		if (game_object->GetPos().x < HALFMAP)
+		{
+			game_object->SetAnimation("tower2_attack");
+		}
+		else
+		{
+			game_object->SetAnimation("tower_attack");
+		}
+		
 		anim_state = tower_attack;
 
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
