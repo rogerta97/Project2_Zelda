@@ -58,12 +58,12 @@ bool JungleCampManager::Update(float dt)
 
 	}
 
-	if (skeleton_camp1.empty() && !snakes_timer_camp1.IsActive())
+	if (skeleton_camp1.empty() && !skeleton_timer_camp1.IsActive())
 	{
 		skeleton_timer_camp1.Start();
 	}
 
-	if (skeleton_camp2.empty() && !snakes_timer_camp2.IsActive())
+	if (skeleton_camp2.empty() && !skeleton_timer_camp2.IsActive())
 	{
 		skeleton_timer_camp2.Start();
 	}
