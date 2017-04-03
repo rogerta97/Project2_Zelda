@@ -129,16 +129,16 @@ void JungleCampManager::SpawnSnake(uint camp)
 	{
 	case 0:
 	{
-		Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 2360,1555 });
-		Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, { 2360,1595 });
-
+		std::vector<iPoint> snake_positions = App->map->GetSnakesSpawns();
+		Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[0]);
+		Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[1]);
 
 		snakes_camp1.push_back(s1);
 		snakes_camp1.push_back(s2);
 
 
-		Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, { 3165,735 });
-		Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, { 3205,735 });
+		Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[2]);
+		Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[3]);
 
 		snakes_camp2.push_back(s3);
 		snakes_camp2.push_back(s4);
@@ -146,8 +146,9 @@ void JungleCampManager::SpawnSnake(uint camp)
 	}
 	case 1:
 	{
-		Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, { 2360,1555 });
-		Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, { 2360,1595 });
+		std::vector<iPoint> snake_positions = App->map->GetSnakesSpawns();
+		Snakes* s1 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[0]);
+		Snakes* s2 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[1]);
 
 
 		snakes_camp1.push_back(s1);
@@ -156,8 +157,9 @@ void JungleCampManager::SpawnSnake(uint camp)
 	}
 	case 2:
 	{
-		Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, { 3165,735 });
-		Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, { 3205,735 });
+		std::vector<iPoint> snake_positions = App->map->GetSnakesSpawns();
+		Snakes* s3 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[2]);
+		Snakes* s4 = (Snakes*)App->entity->CreateEntity(snake, snake_positions[3]);
 
 		snakes_camp2.push_back(s3);
 		snakes_camp2.push_back(s4);
@@ -175,25 +177,28 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 	{
 	case 0:
 	{
-		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, { 1975,1150 });
+		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
+		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
 
 		skeleton_camp1.push_back(sk1);
 
-		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, { 2950,1150 });
+		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
 		
 		skeleton_camp2.push_back(sk2);
 		break;
 	}
 	case 1:
 	{
-		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, { 1975,1150 });
+		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
+		Skeleton* sk1 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[0]);
 
 		skeleton_camp1.push_back(sk1);
 		break;
 	}
 	case 2:
 	{
-		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, { 2950,1150 });
+		std::vector<iPoint> skeleton_positions = App->map->GetSkeletonSpawns();
+		Skeleton* sk2 = (Skeleton*)App->entity->CreateEntity(skeleton, skeleton_positions[1]);
 
 		skeleton_camp2.push_back(sk2);
 		break;
