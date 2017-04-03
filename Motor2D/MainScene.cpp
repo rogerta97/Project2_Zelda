@@ -291,9 +291,6 @@ bool MainScene::CleanUp()
 	map_collisions.clear();
 	// -------
 
-	for (int i = 0; i < 4; i++)
-		App->scene->players[i].Reset();
-
 	winner = 0;
 
 	for (int i = 0; i < 4; i++)
