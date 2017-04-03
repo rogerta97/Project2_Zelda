@@ -32,7 +32,10 @@ Tower::Tower(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	AddAbility(0, 50, 2.5f, 2, "t_attack");
+	stats.life = stats.base_hp = stats.max_life = 400;
+	stats.base_power = stats.power = 50;
+
+	AddAbility(0, 1, 4, 1, "t_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
@@ -49,8 +52,6 @@ Tower::~Tower()
 bool Tower::Start()
 {
 	bool ret = true;
-
-	stats.max_life = stats.life = 400;
 
 	show_life_bar = true;
 
@@ -120,7 +121,13 @@ bool Tower::Update(float dt)
 	{
 		if (entity->GetTeam() != GetTeam())
 		{
-			stats.life -= ability->damage;
+			if (spell != nullptr)
+			{
+
+			}
+			else
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+
 			if (stats.life <= 0)
 			{
 				App->entity->AddRupeesIfPlayer(entity, 75);

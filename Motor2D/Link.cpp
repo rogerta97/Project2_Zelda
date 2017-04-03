@@ -33,10 +33,14 @@ Link::Link(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
-	Ability* a1 = AddAbility(0, 1, 1, 2);		         a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
-	Ability* a2 = AddAbility(1, 6, 6, 2);				 a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
-	Ability* a3 = AddAbility(2, 20, 20, 2, "boomerang");  a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
-	Ability* a4 = AddAbility(3, 50, 50, 2);			     a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+	stats.life = stats.base_hp = stats.max_life = 100;
+	stats.base_power = stats.power = 15;
+	stats.base_speed = stats.speed = stats.restore_speed = 160;
+
+	Ability* a1 = AddAbility(0, 1, 5, 1);		           a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
+	Ability* a2 = AddAbility(1, 6, 15, 0.7f);			   a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
+	Ability* a3 = AddAbility(2, 20, 8, 0.5f, "boomerang"); a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
+	Ability* a4 = AddAbility(3, 50, 20, 2);			       a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
 
 	pugi::xml_document doc;
 	App->LoadXML("link.xml", doc);
@@ -48,6 +52,7 @@ Link::Link(iPoint pos)
 	blit_layer = 2;
 
 	name = "link";
+
 }
 
 Link::~Link()
@@ -61,8 +66,6 @@ bool Link::Start()
 	game_object->SetAnimation("idle_down");
 
 	can_move = true;
-	stats.base_speed = stats.speed = stats.restore_speed = 160;
-	stats.base_power = stats.power = 10;
 
 	return ret;
 }
@@ -70,7 +73,6 @@ bool Link::Start()
 bool Link::PreUpdate()
 {
 	bool ret = true;
-
 
 
 	return ret;
@@ -93,12 +95,15 @@ bool Link::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
-
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			if (spell != nullptr)
 			{
-				BoomerangEffects(ability, spell);
+				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+
+				if (TextCmp(spell->name.c_str(), "boomerang"))
+					BoomerangEffects(entity, ability, spell);
 			}
+			else
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 		}
 
 		// Friendly attacks

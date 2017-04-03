@@ -133,9 +133,9 @@ public:
 
 struct Ability
 {
-	Ability(int _number, int _damage, float _cd, float _duration, char* _name)
+	Ability(int _number, int _damage, int _damage_multiplicator, float _cd, char* _name)
 	{
-		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd;
+		index = _number; damage = _damage; damage_multiplicator = _damage_multiplicator, cd = _cd; cd = _cd;
 		name = _name;
 		cd_timer.SubstractTimeFromStart(_cd);
 	};
@@ -159,7 +159,6 @@ struct Ability
 
 	int        index = 0;
 	float      cd = 0;
-	float      duration = 0;
 
 	float      damage = 0.0f;
 	float	   damage_multiplicator = 1.0f;
@@ -275,7 +274,7 @@ public:
 	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	Ability* AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
+	Ability* AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name = "no_name");
 	Ability* GetAbility(int number);
 	Ability* GetAbilityByName(const char* name);
 
@@ -284,7 +283,7 @@ public:
 	void Heal(int heal);
 	void Slow(float speed_multiplicator, float time);
 	void Stun(float time);
-	void BoomerangEffects(Ability* ability, Spell* spell);
+	void BoomerangEffects(Entity* entity, Ability* ability, Spell* spell);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 

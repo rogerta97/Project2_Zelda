@@ -27,7 +27,11 @@ Minion::Minion(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	AddAbility(0, 5, 1, 69);
+	stats.life = stats.base_hp = stats.max_life = 50;
+	stats.base_power = stats.power = 10;
+	stats.base_speed = stats.speed = stats.restore_speed = 45;
+
+	AddAbility(0, 1, 4, 1);
 	
 	pugi::xml_document doc;
 	App->LoadXML("minion.xml", doc);
@@ -51,9 +55,6 @@ bool Minion::Start()
 	bool ret = true;
 
 	game_object->SetAnimation("idle_down");
-
-	stats.speed = stats.restore_speed = 45;
-	stats.max_life = stats.life = 50;
 
 	show_life_bar = true;
 
@@ -109,12 +110,15 @@ bool Minion::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
-
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			if (spell != nullptr)
 			{
-				BoomerangEffects(ability, spell);
+				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+
+				if (TextCmp(spell->name.c_str(), "boomerang"))
+					BoomerangEffects(entity, ability, spell);
 			}
+			else
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 
 			if (stats.life <=0)
 			{

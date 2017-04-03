@@ -31,7 +31,10 @@ Snakes::Snakes(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	AddAbility(0, 10, 2.5f, 2, "s_attack");
+	stats.life = stats.base_hp = stats.max_life = 40;
+	stats.base_power = stats.power = 10;
+
+	AddAbility(0, 0.7f, 4, 1, "s_attack");
 
 	pugi::xml_document doc;
 	App->LoadXML("snakes.xml", doc);
@@ -50,8 +53,6 @@ bool Snakes::Start()
 	bool ret = true;
 
 	Idle();	
-
-	stats.max_life = stats.life = 40;
 
 	show_life_bar = true;
 
@@ -82,12 +83,16 @@ bool Snakes::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
-
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			if (spell != nullptr)
 			{
-				BoomerangEffects(ability, spell);
+				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+
+				if (TextCmp(spell->name.c_str(), "boomerang"))
+					BoomerangEffects(entity, ability, spell);
 			}
+			else
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+
 			if(state == Snk_S_Idle)
 			{
 				is_attacked = true;

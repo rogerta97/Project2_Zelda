@@ -42,11 +42,11 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 	return false;
 }
 
-Ability* Entity::AddAbility(int number, int damage, int cooldow, int duration, char* name)
+Ability* Entity::AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name)
 {
 	Ability* ret = nullptr;
 
-	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability); ret = ability;
+	Ability* ability = new Ability(number, base_damage, damage_multiplier, cooldow, name); abilities.push_back(ability); ret = ability;
 
 	return ability;
 }
@@ -118,10 +118,8 @@ void Entity::Stun(float time)
 	App->entity->stuned_entities.push_back(s);
 }
 
-void Entity::BoomerangEffects(Ability * ability, Spell * spell)
+void Entity::BoomerangEffects(Entity* entity, Ability * ability, Spell * spell)
 {
-	DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
-
 	if (spell->stats.slow_duration > 0)
 		Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
 	if (spell->stats.stun_duration > 0)

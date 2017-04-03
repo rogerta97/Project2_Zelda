@@ -16,6 +16,8 @@ Base::Base(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
+	stats.life = stats.base_hp = stats.max_life = 400;
+
 	pugi::xml_document doc;
 	App->LoadXML("base.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -33,8 +35,6 @@ bool Base::Start()
 	show_life_bar = true;
 
 	game_object->SetAnimation("idle");
-
-	stats.max_life = stats.life = 400;
 
 	return true;
 }
@@ -55,17 +55,15 @@ bool Base::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
-
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			if (spell != nullptr)
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+				DealDamage((entity->stats.power * (ability->damage)) * (spell->stats.damage_multiplicator)); // Spells control their own damage mutiplicator
 
-				if (spell->stats.slow_duration > 0)
-					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-				if (spell->stats.stun_duration > 0)
-					Stun(spell->stats.stun_duration);
+				if (TextCmp(spell->name.c_str(), "boomerang"))
+					BoomerangEffects(entity, ability, spell);
 			}
+			else
+				DealDamage(entity->stats.base_power * (ability->damage * ability->damage_multiplicator));
 
 			if (stats.life <= 0)
 			{

@@ -294,14 +294,14 @@ void j1Entity::ClearEntities()
 	if (!slowed_entities.empty())
 	{
 		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
-			slowed_entities.erase(it);
+			it = slowed_entities.erase(it);
 	}
 
 
 	if (!stuned_entities.empty())
 	{
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
-			stuned_entities.erase(it);
+			it = stuned_entities.erase(it);
 	}
 
 	if (!dying_entities.empty())

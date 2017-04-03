@@ -12,6 +12,8 @@ SnakePoison::SnakePoison(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetListener((j1Module*)App->spell);
 
+	stats.damage_multiplicator = 1.0f;
+
 	pugi::xml_document doc;
 	App->LoadXML("snakepoison.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
