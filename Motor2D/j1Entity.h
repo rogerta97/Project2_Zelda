@@ -6,6 +6,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Timer.h"
+#include "Animation.h"
 
 class PlayerManager;
 class b2Fixture;
@@ -19,7 +20,7 @@ enum class pbody_type;
 
 enum entity_name
 {
-	e_n_null, link, zelda, minion, tower, ganon, navi, trunk, base, tree, eyes, bush, snake
+	e_n_null, link, zelda, minion, tower, ganon, navi, trunk, base, tree, eyes, bush, snake, skeleton,
 };
 
 class slow
@@ -68,6 +69,30 @@ public:
 	j1Timer timer;
 };
 
+class die
+{
+public:
+	die() {};
+	die(iPoint _pos, Animation* ani)
+	{
+		pos = _pos;
+		Animation* a = new Animation(*ani);
+		animator = new Animator();
+		animator->AddAnimation(a);
+		animator->SetAnimation("dead");
+	};
+	~die() {};
+
+	void CleanUp()
+	{
+		animator->CleanUp();
+		RELEASE(animator);
+	};
+
+	iPoint     pos = NULLPOINT;
+	Animator*  animator;
+};
+
 class Entity;
 class j1Entity : public j1Module
 {
@@ -99,6 +124,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollisionEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollisionOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void ListenEvent(int type, EventThrower* origin, int id);
 
 	Entity* CreateEntity(entity_name entity, iPoint pos);
 	void DeleteEntity(Entity* entity);
@@ -109,19 +135,29 @@ public:
 	Ability* FindAbilityByFixture(Entity* entity, b2Fixture* fixture);
 	Ability* FindAbilityBySpellBody(PhysBody* spell);
 	Spell* FindSpellByBody(PhysBody* spell);
+	vector<Entity*> FindEntitiesByName(char* name);
+	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
+	void DeathAnimation(Entity* die);
+	void AddRupeesIfPlayer(Entity* entity, int amount);
 
 private:
 	void RemoveEntities();
 	void SlowEntities();
 	void StunEntities();
+	void DieEntities();
 
 public:
 	list<slow>     slowed_entities;
 	list<stun>     stuned_entities;
+	list<die>	   dying_entities;
 
 private:
 	// List with all entities
 	list<Entity*>  entity_list;
+
+	// Texture with effects animations
+	SDL_Texture*   entity_effects_texture = nullptr;
+	Animator*	   entity_effects_animator = nullptr;
 };
 
 #endif // __j1ENTITY_H__

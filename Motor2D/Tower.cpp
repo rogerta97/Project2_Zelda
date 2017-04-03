@@ -22,6 +22,8 @@
 #define TOWER_H 38
 #define TOWER_W 64
 
+#define HALFMAP 81*32
+
 Tower::Tower(iPoint pos) 
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
@@ -36,6 +38,8 @@ Tower::Tower(iPoint pos)
 	pugi::xml_document doc;
 	App->LoadXML("tower.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
+	name = "tower";
 }
 
 Tower::~Tower()
@@ -47,11 +51,18 @@ bool Tower::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("tower_idle");
-
 	stats.max_life = stats.life = 400;
 
 	show_life_bar = true;
+
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("tower_idle");
+	}
+	else
+	{
+		game_object->SetAnimation("tower2_idle");
+	}
 
 	return ret;
 }
@@ -66,6 +77,9 @@ bool Tower::PreUpdate()
 bool Tower::Update(float dt)
 {
 	bool ret = true;
+
+	if (to_delete)
+		return true;
 
 	switch (state)
 	{
@@ -98,7 +112,7 @@ bool Tower::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(64, 4), iPoint(-32, -92));
+	LifeBar(iPoint(75, 6), iPoint(-36, -92));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -120,6 +134,7 @@ bool Tower::Update(float dt)
 			}
 			if (stats.life <= 0)
 			{
+				App->entity->AddRupeesIfPlayer(entity, 75);
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
@@ -160,7 +175,14 @@ iPoint Tower::GetPos() const
 
 void Tower::Idle()
 {	
-	game_object->SetAnimation("tower_idle");
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("tower_idle");
+	}
+	else
+	{
+		game_object->SetAnimation("tower2_idle");
+	}
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -171,7 +193,15 @@ void Tower::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
-		game_object->SetAnimation("tower_attack");
+		if (game_object->GetPos().x < HALFMAP)
+		{
+			game_object->SetAnimation("tower_attack");
+		}
+		else
+		{
+			game_object->SetAnimation("tower2_attack");
+		}
+		
 		anim_state = tower_attack;
 
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);

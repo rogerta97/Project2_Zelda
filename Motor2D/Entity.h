@@ -65,6 +65,11 @@ enum states
 	snake_attack_lateral,
 	snake_attack_down,
 
+	skeleton_idle,
+	skeleton_stunned,
+	skeleton_spin,
+	skeleton_bone,
+
 	states_null,
 };
 
@@ -135,14 +140,19 @@ struct Ability
 		cd_timer.SubstractTimeFromStart(_cd);
 	};
 
-	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed)
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd)
 	{
-		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable;
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd;
 	}
 
 	bool CdCompleted()
 	{
 		return cd_timer.ReadSec() >= cd;
+	}
+
+	void CdReset() 
+	{
+		cd_timer.Start();
 	}
 
 	float GetCdTimeLeft();
@@ -164,6 +174,7 @@ struct Ability
 
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
+	SDL_Rect   ability_in_cd = NULLRECT;
 };
 
 class Entity
@@ -273,6 +284,7 @@ public:
 	void Heal(int heal);
 	void Slow(float speed_multiplicator, float time);
 	void Stun(float time);
+	void BoomerangEffects(Ability* ability, Spell* spell);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 
@@ -306,7 +318,6 @@ public:
 	entity_name		 type = entity_name::e_n_null;
 
 	// States
-	bool			 disable_controller = false;
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
@@ -327,6 +338,8 @@ public:
 
 	// Delete 
 	bool			 to_delete = false;
+
+	string			 name;
 	
 protected:
 	// Draw

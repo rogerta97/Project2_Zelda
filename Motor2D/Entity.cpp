@@ -119,6 +119,17 @@ void Entity::Stun(float time)
 	App->entity->stuned_entities.push_back(s);
 }
 
+void Entity::BoomerangEffects(Ability * ability, Spell * spell)
+{
+	DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+
+	if (spell->stats.slow_duration > 0)
+		Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+	if (spell->stats.stun_duration > 0)
+		Stun(spell->stats.stun_duration);
+}
+
+
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
 	if (show_life_bar && game_object != nullptr)

@@ -385,10 +385,13 @@ void j1Viewports::DoLayerPrint()
 					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
 
 			}
-	
+			
 			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 		
 			for (int i = 0; i < line_list.size(); i++)
@@ -428,7 +431,10 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -457,7 +463,10 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_quad>* curr = quad_list2.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -499,7 +508,10 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -527,7 +539,10 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_quad>* curr = quad_list2.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -555,7 +570,10 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_quad>* curr = quad_list3.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera3.x, curr->data.rect.y + camera3.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera3.x, curr->data.rect.y + camera3.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -583,7 +601,10 @@ void j1Viewports::DoLayerPrint()
 
 			for (p2PQueue_item<layer_quad>* curr = quad_list4.start; curr != nullptr; curr = curr->next)
 			{
-				App->render->DrawQuad({ curr->data.rect.x + camera4.x, curr->data.rect.y + camera4.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				if (curr->data.use_camera)
+					App->render->DrawQuad({ curr->data.rect.x + camera4.x, curr->data.rect.y + camera4.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				else
+					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
 			}
 
 			for (int i = 0; i < line_list.size(); i++)

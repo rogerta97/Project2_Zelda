@@ -82,6 +82,7 @@ public:
 	UI_Element* CheckClickMove(int x, int y);
 	void DeleteElement(UI_Element * element);
 	void EraseFromElementsList(UI_Element* element);
+	void TakeVariablesFromWindow(UI_Element* element);
 
 private:
 
@@ -103,9 +104,6 @@ public:
 
 	// Debug when F1
 	bool				   debug = false;
-
-	// Start UI
-	bool				   start = true;
 
 private:
 	// Movement

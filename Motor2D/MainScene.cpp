@@ -29,6 +29,7 @@
 #include "Quest_Manager.h"
 #include "JungleCampManager.h"
 #include "EventThrower.h"
+#include "j1Audio.h"
 
 MainScene::MainScene()
 {
@@ -53,6 +54,8 @@ bool MainScene::Start()
 	iPoint minimap_pos = { screen.w - 58, 5 };
 	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
 
+	iPoint win_text_pos = { int(screen.w*0.5f) - 50, int(screen.h*0.5f) - 100 };
+
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_1->viewport = 1;
@@ -60,6 +63,8 @@ bool MainScene::Start()
 	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
+	win_text_1 = main_window_1->CreateImage(win_text_pos,NULLRECT);
+	win_text_1->enabled = false;
 
 	// Player2
 	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -68,6 +73,8 @@ bool MainScene::Start()
 	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
+	win_text_2 = main_window_2->CreateImage(win_text_pos, NULLRECT);
+	win_text_2->enabled = false;
 
 	// Player3
 	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -76,6 +83,8 @@ bool MainScene::Start()
 	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
+	win_text_3 = main_window_3->CreateImage(win_text_pos, NULLRECT);
+	win_text_3->enabled = false;
 
 	// Player4
 	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -84,6 +93,8 @@ bool MainScene::Start()
 	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
+	win_text_4 = main_window_4->CreateImage(win_text_pos, NULLRECT);
+	win_text_4->enabled = false;
 
 	// ------------------
 
@@ -123,10 +134,10 @@ bool MainScene::Start()
 	}
 	if (!def)
 	{
-		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
-		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
-		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
-		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
+		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team,1);
+		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team,1);
+		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team,2);
+		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team,2);
 	}
 	else
 	{
@@ -166,6 +177,19 @@ bool MainScene::Start()
 	quest_manager = new QuestManager();
 
 
+	//Load Victory/Defeat Animations
+	pugi::xml_document gs;
+	pugi::xml_node file_node;
+
+	App->LoadXML("GameSettings.xml", gs);
+	file_node = gs.child("file");
+
+	defeat.LoadAnimationsFromXML(gs, "defeat_animations");
+	victory.LoadAnimationsFromXML(gs, "victory_animations");
+
+	defeat.SetAnimation("idle");
+	victory.SetAnimation("idle");
+
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);
 	// ----
@@ -178,6 +202,9 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
+	App->audio->ChangeVolume(25);
+	App->audio->PlayMusic("Audio/Music/overworld.ogg");
+
 	return ret;
 }
 
@@ -185,7 +212,8 @@ bool MainScene::PreUpdate()
 {
 	bool ret = true;
 
-	player_manager->PreUpdate();
+	if (player_manager != nullptr)
+		player_manager->PreUpdate();
 
 	return ret;
 }
@@ -224,7 +252,19 @@ bool MainScene::Update(float dt)
 	// End Game
 	if (winner != 0 && game_timer.ReadSec() > end_delay)
 	{
-		App->scene->ChangeScene(App->scene->menu_scene);
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
+	}
+
+	//Update Victory/Defeat animation
+	if (winner != 0)
+		UpdateWinnerAnim(winner, dt);
+
+	// Test
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->view->SetViews(1);
 	}
 	// ------
 	// Quests
@@ -300,7 +340,8 @@ bool MainScene::PostUpdate()
 {
 	bool ret = true;
 
-	player_manager->PostUpdate();
+	if (player_manager != nullptr)
+		player_manager->PostUpdate();
 
 	return ret;
 }
@@ -321,6 +362,7 @@ bool MainScene::CleanUp()
 	quest_manager->CleanUp();	   RELEASE(quest_manager);
 	App->map->CleanUp();
 	App->entity->ClearEntities();
+	App->spell->ClearSpells();
 
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
@@ -340,10 +382,15 @@ bool MainScene::CleanUp()
 	map_collisions.clear();
 	// -------
 
-	for (int i = 0; i < 4; i++)
-		App->scene->players[i].Reset();
-
 	winner = 0;
+
+	for (int i = 0; i < 4; i++)
+	{
+		App->scene->players[i].character = e_n_null;
+	}
+
+	//Stop Music
+	App->audio->StopMusic();
 
 	return ret;
 }
@@ -411,6 +458,16 @@ void MainScene::EndGame(int _winner)
 
 	winner = _winner;
 
+	win_text_1->enabled = true;
+	win_text_2->enabled = true;
+	win_text_3->enabled = true;
+	win_text_4->enabled = true;
+
+	UpdateWinnerAnim(winner,0.0f);
+
+	App->audio->ChangeVolume(75);
+	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
+
 	game_timer.Start();
 }
 
@@ -418,7 +475,7 @@ void MainScene::UpdateProgressBar()
 {
 	iPoint zelda_pos = App->map->WorldToMap(zelda_manager->GetZeldaPos().x, zelda_manager->GetZeldaPos().y);
 
-	float percentage = (zelda_pos.x-27) * 100 / 95;
+	float percentage = (zelda_pos.x-36) * 100 / 95;
 	percentage /= 100;
 
 	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
@@ -520,5 +577,35 @@ void MainScene::DrawScreenSeparation()
 	}
 
 	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
+}
+
+void MainScene::UpdateWinnerAnim(uint winner, float dt)
+{
+	SDL_Rect win_rect = victory.GetCurrentAnimation()->GetAnimationFrame(dt);
+	SDL_Rect lose_rect = defeat.GetCurrentAnimation()->GetAnimationFrame(dt);
+
+	switch (winner)
+	{
+	case 1:	
+		win_text_1->image = win_rect;	
+
+		win_text_3->image = win_rect;
+
+		win_text_2->image = lose_rect;
+
+		win_text_4->image = lose_rect;
+		break;
+	case 2:
+		win_text_2->image = win_rect;
+
+		win_text_4->image = win_rect;
+
+		win_text_1->image = lose_rect;
+
+		win_text_3->image = lose_rect;
+		break;
+	default:
+		break;
+	}
 }
 

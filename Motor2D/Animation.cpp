@@ -11,6 +11,16 @@ Animation::Animation(const char* _name, list<SDL_Rect>& rects, float speed, bool
 	name = _name;
 }
 
+Animation::Animation(Animation & ani)
+{
+	name = ani.name;
+	speed = ani.speed;
+	loop = ani.loop;
+	loops = ani.loops;
+	frames = ani.frames;
+	curr_frame = ani.curr_frame;
+}
+
 Animation::~Animation()
 {
 }

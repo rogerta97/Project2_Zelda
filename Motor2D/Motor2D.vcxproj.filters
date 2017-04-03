@@ -162,7 +162,13 @@
     </ClCompile>
     <ClCompile Include="Quest_Manager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
-	  </ClCompile>
+	</ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneAttack.cpp">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </ClCompile>
     <ClCompile Include="EventThrower.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
@@ -360,6 +366,12 @@
     <ClInclude Include="Quest_Manager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
 	</ClInclude>
+    <ClInclude Include="Skeleton.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneAttack.h">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </ClInclude>
     <ClInclude Include="EventThrower.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
@@ -443,6 +455,9 @@
     <Filter Include="Engine\4. Entities ==========\Bushes">
       <UniqueIdentifier>{9ef085b3-7b82-40a9-b487-3f78df6b41e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\5. Spells ===========\BoneAttack">
+      <UniqueIdentifier>{d8f600ad-a766-4725-8bcf-09b65f6bd00d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -495,6 +510,15 @@
     </Xml>
     <Xml Include="..\Game\bush.xml">
       <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </Xml>
+    <Xml Include="..\Game\skeleton.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\boneattack.xml">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\entity_effects.xml">
+      <Filter>Engine\4. Entities ==========</Filter>
     </Xml>
   </ItemGroup>
 </Project>

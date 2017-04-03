@@ -42,6 +42,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 		game_font_small = Load(path, 10);
 
 		game_font_12 = Load(path, 12);
+		game_font_20 = Load(path, 20);
 
 	}
 

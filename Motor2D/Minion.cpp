@@ -37,6 +37,8 @@ Minion::Minion(iPoint pos)
 	cd_timer.Start();
 
 	event_thrower = new EventThrower();
+
+	name = "minion";
 }
 
 Minion::~Minion()
@@ -70,6 +72,9 @@ bool Minion::PreUpdate()
 bool Minion::Update(float dt)
 {
 	bool ret = true;
+
+	if (to_delete)
+		return true;
 
 	speed = stats.speed*dt;
 
@@ -108,12 +113,7 @@ bool Minion::Update(float dt)
 
 			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
-
-				if (spell->stats.slow_duration > 0)
-					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-				if (spell->stats.stun_duration > 0)
-					Stun(spell->stats.stun_duration);
+				BoomerangEffects(ability, spell);
 			}
 
 			if (stats.life <=0)
@@ -123,6 +123,7 @@ bool Minion::Update(float dt)
 				event_die->event_data.entity = this;
 				event_thrower->AddEvent(event_die);
 
+				App->entity->AddRupeesIfPlayer(entity, 20);
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}
@@ -156,7 +157,7 @@ bool Minion::CleanUp()
 {
 	bool ret = true;
 
-
+	RELEASE(event_thrower);
 
 	return ret;
 }
@@ -433,7 +434,7 @@ void Minion::CheckState()
 				{
 					if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < vision_range)
 					{
-						if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
+						if (target != nullptr && App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
 						{
 							PathToTarget();
 						}
@@ -449,7 +450,8 @@ void Minion::CheckState()
 			}
 			break;
 		case Move_ReturnToPath:
-			if (base_path_index < base_path.size()) {
+			if (base_path_index < base_path.size()) 
+			{
 				iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 2)
 					move_state = Move_FollowBasePath;
@@ -561,8 +563,8 @@ bool Minion::LookForTarget()
 		}
 	}
 
-
-	/*if (ret == false)
+	// Check for turrets
+	if (ret == false)
 	{
 		std::list<Tower*> towers;
 		if (GetTeam() == 1)
@@ -579,7 +581,7 @@ bool Minion::LookForTarget()
 				break;
 			}
 		}
-	}*/
+	}
 
 	//Check for Players
 	if (ret == false)

@@ -64,10 +64,11 @@ private:
 
 public:
 	UI_Window*		shop_window = nullptr;
+	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };
 
 private:
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
-	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };
+	
 };
 
 #endif // !_SHOPMANAGER_H_

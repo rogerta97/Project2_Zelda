@@ -5,6 +5,7 @@
 #include "p2Log.h"
 #include "j1Scene.h"
 #include "j1Viewports.h"
+#include "j1Audio.h"
 
 #define CHARACTER_NUM 3
 
@@ -24,6 +25,8 @@ bool CharacterSelectionScene::Start()
 	window = App->gui->UI_CreateWin(iPoint(0,0), w, h, 2, false); 
 
 	CreateScene(w,h); 
+
+	App->audio->PlayMusic("Audio/Music/guessing-game_house.ogg");
 
 	return true;
 }
@@ -236,16 +239,19 @@ bool CharacterSelectionScene::Update(float dt)
 
 bool CharacterSelectionScene::PostUpdate()
 {
-
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN) 
-	{
-		App->scene->ChangeScene((Scene*)App->scene->main_scene);
-	}
-
 	change_scene = AllReady();
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	{
+		change_scene = true;
+	}
 
 	if(change_scene)
 	{
+		for (int i = 0; i < 4; i++)
+		{
+			App->scene->players[i].character = link;
+		}
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 
@@ -276,6 +282,9 @@ bool CharacterSelectionScene::CleanUp()
 	
 	positions.clear();
 	change_scene = false;
+
+	//Stop Music
+	App->audio->StopMusic();
 
 	return true;
 }

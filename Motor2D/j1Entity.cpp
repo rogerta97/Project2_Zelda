@@ -17,6 +17,8 @@
 #include "Base.h"
 #include "Eyes.h"
 #include "Snakes.h"
+#include "Skeleton.h"
+#include "j1Viewports.h"
 
 
 j1Entity::j1Entity()
@@ -39,6 +41,12 @@ bool j1Entity::Awake(pugi::xml_node &)
 bool j1Entity::Start()
 {
 	bool ret = true;
+
+	entity_effects_animator = new Animator();
+	pugi::xml_document doc;
+	App->LoadXML("entity_effects.xml", doc);
+	entity_effects_texture = entity_effects_animator->LoadAnimationsFromXML(doc, "animations");
+	App->UnloadXML(doc);
 
 	return ret;
 }
@@ -67,6 +75,7 @@ bool j1Entity::Update(float dt)
 
 	SlowEntities();
 	StunEntities();
+	DieEntities();
 
 	return ret;
 }
@@ -86,6 +95,9 @@ bool j1Entity::CleanUp()
 	bool ret = true;
 
 	ClearEntities();
+
+	entity_effects_animator->CleanUp();
+	RELEASE(entity_effects_animator);
 
 	return ret;
 }
@@ -154,7 +166,7 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 			}
 		}
 
-		if (entity != nullptr && !entity->hit_by)
+		if (entity != nullptr && !entity->hit)
 		{
 			entity->hit_by = nullptr;
 			entity->hit_ability = nullptr;
@@ -172,6 +184,41 @@ void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fi
 		{
 			if ((*it) != nullptr)
 				(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+		}
+	}
+}
+
+void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
+{
+	Event* curr_event = nullptr;
+
+	if (type = static_cast<int>(event_type::e_t_death))
+	{
+		curr_event = origin->GetEvent(id);
+
+		// Snake kills player
+		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player)
+		{
+			vector<Entity*> snakes = FindEntitiesByName("snake");
+			for (int i = 0; i < snakes.size(); i++)
+			{
+				Snakes* s = (Snakes*)snakes.at(i);
+				if (s->target == curr_event->event_data.entity)
+					s->target = nullptr;
+			}
+		}
+
+		// Minion kills
+		if (curr_event->event_data.entity != nullptr)
+		{
+			vector<Entity*> minions = FindEntitiesByName("minion");
+
+			for (int i = 0; i < minions.size(); i++)
+			{
+				Minion* m = (Minion*)minions.at(i);
+				if (m->target == curr_event->event_data.entity)
+					m->target = nullptr;
+			}
 		}
 	}
 }
@@ -212,6 +259,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	case bush:
 		ret = new Bush(pos);
 		break;
+	case skeleton:
+		ret = new Skeleton(pos);
+		break;
 	default:
 		break;
 	}
@@ -232,16 +282,32 @@ void j1Entity::ClearEntities()
 {
 	if (!entity_list.empty())
 	{
-		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end();)
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
 			if ((*it) != nullptr)
 			{
 				(*it)->to_delete = true;
-				it++;
 			}
-			else
-				it = entity_list.erase(it);
 		}	
+	}
+
+	if (!slowed_entities.empty())
+	{
+		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
+			slowed_entities.erase(it);
+	}
+
+
+	if (!stuned_entities.empty())
+	{
+		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
+			stuned_entities.erase(it);
+	}
+
+	if (!dying_entities.empty())
+	{
+		for (list<die>::iterator it = dying_entities.begin(); it != dying_entities.end();)
+			it = dying_entities.erase(it);
 	}
 }
 
@@ -250,7 +316,7 @@ int j1Entity::GetEntitiesNumber()
 	return entity_list.size();
 }
 
-Entity * j1Entity::FindEntityByBody(PhysBody* body)
+Entity* j1Entity::FindEntityByBody(PhysBody* body)
 {
 	Entity* ret = nullptr;
 
@@ -288,10 +354,13 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 	Ability* ret = nullptr;
 	for (int i = 0; i < entity->abilities.size(); i++)
 	{
-		if (entity->abilities.at(i)->fixture == fixture)
+		if (entity->abilities.at(i) != nullptr)
 		{
-			ret = entity->abilities.at(i);
-			break;
+			if (entity->abilities.at(i)->fixture == fixture)
+			{
+				ret = entity->abilities.at(i);
+				break;
+			}
 		}
 	}
 
@@ -306,11 +375,14 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 
 	if (sp != nullptr)
 	{
-		for (vector<Ability*>::iterator it = sp->owner->abilities.begin(); it != sp->owner->abilities.end(); it++)
+		if (!sp->owner->abilities.empty())
 		{
-			if (TextCmp((*it)->name.c_str(), sp->name.c_str()))
+			for (vector<Ability*>::iterator it = sp->owner->abilities.begin(); it != sp->owner->abilities.end(); it++)
 			{
-				return *it;
+				if (TextCmp((*it)->name.c_str(), sp->name.c_str()))
+				{
+					return *it;
+				}
 			}
 		}
 	}
@@ -320,16 +392,80 @@ Spell * j1Entity::FindSpellByBody(PhysBody * spell)
 {
 	Spell* ret = nullptr;
 
-	for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
+	if (!App->spell->spell_list.empty())
 	{
-		if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+		for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 		{
-			ret = (*it);
-			break;
+			if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+			{
+				ret = (*it);
+				break;
+			}
 		}
 	}
 
 	return ret;
+}
+
+vector<Entity*> j1Entity::FindEntitiesByName(char* name)
+{
+	vector<Entity*> ret;
+
+	// Look on entities
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			if (TextCmp((*it)->name.c_str(), name))
+			{
+				ret.push_back(*it);
+			}
+		}
+	}
+
+	return ret;
+}
+
+vector<Entity*> j1Entity::FindEntitiesByBodyType(pbody_type type)
+{
+	vector<Entity*> ret;
+
+	// Look on entities
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			if ((*it)->game_object->pbody->type == type)
+			{
+				ret.push_back(*it);
+			}
+		}
+	}
+
+	return ret;
+}
+
+void j1Entity::DeathAnimation(Entity * ent)
+{
+	if (ent != nullptr)
+	{
+		dying_entities.push_back(die(ent->GetPos(), entity_effects_animator->GetAnimation("dead")));
+	}
+}
+
+void j1Entity::AddRupeesIfPlayer(Entity * entity, int amount)
+{
+	if (App->scene->main_scene != nullptr)
+	{
+		if (entity != nullptr)
+		{
+			if (entity->is_player)
+			{
+				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(entity->game_object->pbody);
+				p->AddRupees(amount);
+			}
+		}
+	}
 }
 
 void j1Entity::DeleteEntity(Entity* entity)
@@ -345,6 +481,9 @@ void j1Entity::RemoveEntities()
 		{
 			if ((*it)->to_delete == true)
 			{
+				if(App->scene->main_scene->player_manager != nullptr)
+					DeathAnimation(*it);
+
 				(*it)->CleanUp();
 				(*it)->CleanEntity();
 				RELEASE(*it);
@@ -396,6 +535,27 @@ void j1Entity::StunEntities()
 			}
 			else
 				it = (stuned_entities.erase(it));
+		}
+	}
+}
+
+void j1Entity::DieEntities()
+{
+	if (!dying_entities.empty())
+	{
+		for (list<die>::iterator it = dying_entities.begin(); it != dying_entities.end();)
+		{
+			if ((*it).animator->GetCurrentAnimation()->Finished())
+			{
+				(*it).CleanUp();
+				it = dying_entities.erase(it);
+			}
+			else
+			{
+				App->view->LayerBlit(3, entity_effects_texture, { (*it).pos.x - 20, (*it).pos.y - 20 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+				++it;
+			}
+				
 		}
 	}
 }

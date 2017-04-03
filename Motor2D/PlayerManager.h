@@ -39,6 +39,8 @@ public:
 	void BuyItem(Item* item, int price);
 	void Kill();
 	void Respawn();
+	void ApplyItemStats();
+	void AddRupees(int add);
 
 private:
 	void UpdateRupees();
@@ -54,10 +56,10 @@ public:
 	Item*	    items[3] = { nullptr,nullptr,nullptr };
 
 	uint	    controller_index = 0;
-	uint	    viewport = 0;
+	uint		viewport = 0;
 
 	UI_Text*    rupees_num = nullptr;
-	uint	    rupees = 20000;
+	uint	    rupees = 0;
 
 	j1Timer     death_timer;
 	float		death_time = 5.0f;
@@ -65,8 +67,9 @@ public:
 	bool		is_dead = false;
 
 	iPoint		respawn = NULLPOINT;
-	int			team = 0;
-	
+	int			team = 0;	
+
+	bool		disable_controller = false;
 };
 
 class PlayerManager
@@ -97,7 +100,6 @@ public:
 	bool CleanUp();
 
 	Player* AddPlayer(entity_name name, iPoint pos, int controller_index, int viewport, int team, int respawn = 1, int show_life_bar = true);
-	void ChangePlayer(entity_name name, int controller_index, int viewport);
 	void DeletePlayer(int index);
 	void ClearPlayers();
 	
@@ -114,7 +116,7 @@ public:
 	int GetPlayerTeamFromBody(PhysBody* body);
 	Player* GetPlayerFromBody(PhysBody* body);
 
-	//Disable player input. 0 to disable all
+	//Disable player input. 0 for all
 	void DisableInput(int player);
 
 	//Allow player input. 0 to allow all
@@ -127,19 +129,37 @@ private:
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
+	void UpdateDeathUI(Player* player);
+	void PasiveHP(Player* player);
 
 
 public:
-	vector<Player*> players;
+	vector<Player*>     players;
 
 private:
 	// UI
-	vector<UI_Image*>	habilities_1;
-	vector<UI_Image*>	habilities_2;
-	vector<UI_Image*>	habilities_3;
-	vector<UI_Image*>   habilities_4;
+	vector<UI_Image*>	abilities_1;
+	vector<UI_Text*>    abilities_cd_1;
+	UI_Text*			death_text_1 = nullptr;
+
+	vector<UI_Image*>	abilities_2;
+	vector<UI_Text*>    abilities_cd_2;
+	UI_Text*			death_text_2 = nullptr;
+
+	vector<UI_Image*>	abilities_3;
+	vector<UI_Text*>    abilities_cd_3;
+	UI_Text*			death_text_3 = nullptr;
+
+	vector<UI_Image*>   abilities_4;
+	vector<UI_Text*>    abilities_cd_4;
+	UI_Text*			death_text_4 = nullptr;
 
 	EventThrower*       event_thrower = nullptr;
+
+	SDL_Color           death_rect_color = NULLRECT;
+	SDL_Rect			death_rect = NULLRECT;
+
+	uint				last_heal_time = 0;
 };
 
 #endif // __PLAYER_MANAGER_H__

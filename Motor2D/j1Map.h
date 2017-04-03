@@ -152,6 +152,11 @@ public:
 	//World spawn position for towers
 	std::vector<iPoint> GetTowerSpawns(uint team) const;
 
+	//World spawn position for jungle camps
+	std::vector<iPoint> GetSnakesSpawns() const;
+
+	std::vector<iPoint> GetSkeletonSpawns() const;
+
 	// Return all unsorted Zelda initial path points
 	std::vector<iPoint> GetZeldaInitPath()const;
 

@@ -5,7 +5,7 @@
 #include "j1Console.h"
 #include "j1Scene.h"
 #include "p2Log.h"
-
+#include "j1Audio.h"
 
 
 MenuScene::MenuScene()
@@ -138,6 +138,15 @@ bool MenuScene::Start()
 	cb->AddBox(iPoint(320, 380), 20, 20, "test4");
 	//cb->GetBox("test1");
 
+	App->console->AddText("viewports.set 1", Input);
+	App->view->camera1.x = 0;
+	App->view->camera1.y = 0;
+
+	//Music
+	App->audio->DefaultVolume();
+	App->audio->PlayMusic("Audio/Music/title.ogg");
+	music_time.Start();
+
 	return true;
 }
 
@@ -204,6 +213,12 @@ bool MenuScene::Update(float dt)
 		App->scene->ChangeScene(App->scene->main_scene);
 	}
 
+	//Stop music ones it finish
+	if (music_time.ReadSec() > 17)
+	{
+		App->audio->StopMusic();
+	}
+
 	return true;
 }
 
@@ -215,7 +230,7 @@ bool MenuScene::PostUpdate()
 		switch (current_button)
 		{
 		case START:
-			App->scene->ChangeScene((Scene*)App->scene->team_select);
+			App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
 			return true;
 			break;
 
@@ -268,6 +283,9 @@ bool MenuScene::CleanUp()
 	current_button = START;
 	is_options = false;
 	
+	//Stop Music
+	App->audio->StopMusic();
+
 	return true;
 }
 

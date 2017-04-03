@@ -70,33 +70,6 @@ bool j1Gui::Update(float dt)
 		debug = false;
 
 
-	// Start -------------------------------------------------
-
-	if (start)
-	{
-		// Set variables that inherit from window to childs
-		for (p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start; elements != nullptr; elements = elements->next)
-		{
-			if (elements->data->type == ui_element::ui_window)
-			{
-				list<UI_Element*> childs;
-				App->gui->GetChilds(elements->data, childs);
-				if (!childs.empty())
-				{
-					for (list<UI_Element*>::iterator it = childs.begin(); it != childs.end(); it++)
-					{
-						(*it)->blit_layer = elements->data->blit_layer;
-						(*it)->is_ui = elements->data->is_ui;
-						(*it)->is_gameplay = elements->data->is_gameplay;
-						(*it)->viewport = elements->data->viewport;
-					}
-				}
-			}
-		}
-
-		start = false;
-	}
-
 	// Update
 	// -------------------------------------------------------
 
@@ -492,7 +465,7 @@ void j1Gui::DeleteElement(UI_Element* element)
 					}
 				}
 
-				// Dekete from parent element list
+				// Delete from parent element list
 				if ((*ch)->parent_element != nullptr && !(*ch)->parent_element->childs.empty())
 				{
 					for (list<UI_Element*>::iterator it = (*ch)->parent_element->childs.begin(); it != (*ch)->parent_element->childs.end();)
@@ -596,6 +569,18 @@ void j1Gui::EraseFromElementsList(UI_Element * to_del)
 	for (int i = 0; i < fill.size(); i++)
 		elements_list.Push(fill.at(i), fill.at(i)->layer);
 }
+
+void j1Gui::TakeVariablesFromWindow(UI_Element * element)
+{
+	if (element != nullptr && element->parent != nullptr)
+	{
+		element->blit_layer = element->parent->blit_layer;
+		element->is_ui = element->parent->is_ui;
+		element->is_gameplay = element->parent->is_gameplay;
+		element->viewport = element->parent->viewport;
+	}
+}
+
 
 // -----------------------------------
 // ------------------------- Class Gui
@@ -884,9 +869,9 @@ UI_Button* UI_Window::CreateButton(iPoint pos, int w, int h, bool _dinamic)
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 	return ret;
 }
@@ -916,9 +901,9 @@ UI_Text* UI_Window::CreateText(iPoint pos, _TTF_Font * font, int spacing, bool _
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 	return ret;
 }
@@ -947,9 +932,9 @@ UI_Image* UI_Window::CreateImage(iPoint pos, SDL_Rect image, bool _dinamic)
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 	return ret;
 }
@@ -979,9 +964,9 @@ UI_Text_Input* UI_Window::CreateTextInput(iPoint pos, int w, _TTF_Font* font, bo
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 	return ret;
 }
@@ -1007,9 +992,9 @@ UI_Scroll_Bar * UI_Window::CreateScrollBar(iPoint pos, int view_w, int view_h, i
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 
 	return ret;
@@ -1036,9 +1021,9 @@ UI_ColoredRect * UI_Window::CreateColoredRect(iPoint pos, int w, int h, SDL_Colo
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 
 	return ret;
@@ -1065,9 +1050,9 @@ UI_Check_Box * UI_Window::CreateCheckBox(iPoint pos, int w, int h, SDL_Rect pres
 
 		// ---------
 
+		App->gui->TakeVariablesFromWindow(ret);
 		App->gui->elements_list.Push(ret, ret->layer);
 		childs.push_back((UI_Element*)ret);
-		App->gui->start = true;
 	}
 
 	return ret;
@@ -2284,7 +2269,15 @@ bool UI_ColoredRect::update()
 	if (!enabled)
 		return false;
 
-	App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, filled);
+	if(!is_gameplay)
+		App->render->DrawQuad(rect, color.r, color.g, color.b, -1.0f, color.a, filled);
+	else
+	{
+		if (is_ui)
+			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER, viewport, false);
+		else
+			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER, viewport, true);
+	}
 
 	return true;
 }
