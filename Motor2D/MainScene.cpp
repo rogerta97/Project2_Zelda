@@ -129,10 +129,10 @@ bool MainScene::Start()
 	}
 	if (!def)
 	{
-		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team);
-		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team);
-		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team);
-		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team);
+		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team,1);
+		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team,1);
+		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team,2);
+		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team,2);
 	}
 	else
 	{
@@ -439,32 +439,35 @@ void MainScene::DrawScreenSeparation()
 
 void MainScene::SetWinnerText(uint winner)
 {
+	SDL_Color win_color = { 46,150,255,255 };
+	SDL_Color lose_color = { 255,0,0,255 };
+
 	switch (winner)
 	{
 	case 1:	
-		win_text_1->color = { 0,0,255,255 };
+		win_text_1->color = win_color;
 		win_text_1->SetText("VICTORY");	
 
-		win_text_3->color = { 0,0,255,255 };
+		win_text_3->color = win_color;
 		win_text_3->SetText("VICTORY");
 
-		win_text_2->color = { 255,0,0,255 };
+		win_text_2->color = lose_color;
 		win_text_2->SetText("DEFEAT");
 
-		win_text_4->color = { 255,0,0,255 };
+		win_text_4->color = lose_color;
 		win_text_4->SetText("DEFEAT");
 		break;
 	case 2:
-		win_text_2->color = { 0,0,255,255 };
+		win_text_2->color = win_color;
 		win_text_2->SetText("VICTORY");
 		
-		win_text_4->color = { 0,0,255,255 };
+		win_text_4->color = win_color;
 		win_text_4->SetText("VICTORY");
 		
-		win_text_1->color = { 255,0,0,255 };
+		win_text_1->color = lose_color;
 		win_text_1->SetText("DEFEAT");
 		
-		win_text_3->color = { 255,0,0,255 };
+		win_text_3->color = lose_color;
 		win_text_3->SetText("DEFEAT");
 		break;
 	default:

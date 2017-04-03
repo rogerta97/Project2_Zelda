@@ -215,7 +215,7 @@ bool MenuScene::PostUpdate()
 		switch (current_button)
 		{
 		case START:
-			App->scene->ChangeScene((Scene*)App->scene->team_select);
+			App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
 			return true;
 			break;
 

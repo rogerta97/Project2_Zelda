@@ -236,16 +236,19 @@ bool CharacterSelectionScene::Update(float dt)
 
 bool CharacterSelectionScene::PostUpdate()
 {
-
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN) 
-	{
-		App->scene->ChangeScene((Scene*)App->scene->main_scene);
-	}
-
 	change_scene = AllReady();
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	{
+		change_scene = true;
+	}
 
 	if(change_scene)
 	{
+		for (int i = 0; i < 4; i++)
+		{
+			App->scene->players[i].character = link;
+		}
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 
