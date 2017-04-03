@@ -37,13 +37,13 @@ public:
 
 	void SilenceMusic();
 	void DefaultVolume();
-
+	void ChangeVolume(int volume);
 	bool MusicPlaying();
 
 private:
 
 	_Mix_Music*			    music = NULL;
-	std::vector<Mix_Chunk*>	fx;
+	std::list<Mix_Chunk*>	fx;
 
 	int def_volume = 75;
 };
