@@ -133,7 +133,7 @@ public:
 
 struct Ability
 {
-	Ability(int _number, int _damage, int _damage_multiplicator, float _cd, char* _name)
+	Ability(int _number, int _damage, float _damage_multiplicator, float _cd, char* _name)
 	{
 		index = _number; damage = _damage; damage_multiplicator = _damage_multiplicator, cd = _cd; cd = _cd;
 		name = _name;
