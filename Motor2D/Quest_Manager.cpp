@@ -177,6 +177,29 @@ void QuestManager::CleanUp()
 	}
 }
 
+void QuestManager::DeathQuestEvent(Entity * attacant, Entity * victim)
+{
+	if (attacant != nullptr && victim != nullptr && attacant->is_player && victim->is_player)
+	{
+		switch (victim->GetTeam())
+		{
+		case 1:
+		{
+			App->scene->main_scene->quest_manager->add_progress(1, 2);
+			break;
+		}
+		case 2:
+		{
+			App->scene->main_scene->quest_manager->add_progress(1, 1);
+			break;
+		}
+		default:
+			break;
+		}
+		App->scene->main_scene->quest_manager->update_progress();
+	}
+}
+
 void QuestManager::reset_progress(int id)
 {
 	for(int i = 0; i<vquest.size();i++)

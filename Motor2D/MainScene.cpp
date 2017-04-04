@@ -437,30 +437,7 @@ void MainScene::ListenEvent(int type, EventThrower * origin, int id)
 	case e_t_null:
 		break;
 	case e_t_death:
-	{
-		Event* e = origin->GetEvent(id);
-		if (e->event_data.entity->is_player) {
-			int team = e->event_data.entity->GetTeam();
-			switch (team)
-			{
-			case 1:
-			{
-				App->scene->main_scene->quest_manager->add_progress(1, 2);
-				break;
-			}
-			case 2:
-			{
-				App->scene->main_scene->quest_manager->add_progress(1, 1);
-				break;
-			}
-			default:
-				break;
-			}
-			App->scene->main_scene->quest_manager->update_progress();
-		}
-		break;
-	}
-		
+	{}	
 	case e_t_end_game:
 		break;
 	default:

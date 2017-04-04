@@ -123,8 +123,13 @@ bool Link::Update(float dt)
 			}
 		}
 
+		// Dies
 		if (stats.life <= 0)
 		{
+			if (entity->is_player)
+				// Update quests
+				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
+			
 			App->entity->AddRupeesIfPlayer(entity, 100);
 		}
 	}

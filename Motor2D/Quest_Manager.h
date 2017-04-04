@@ -6,6 +6,8 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "j1Gui.h"
 
+class Entity;
+
 struct Objectives {
 	int current_progress;
 	int requirement;
@@ -30,6 +32,8 @@ public:
 	void Update();
 
 	void CleanUp();
+
+	void DeathQuestEvent(Entity* attacant, Entity* victim);
 
 	void reset_progress(int id);
 	pugi::xml_document quests_file;
