@@ -9,4 +9,5 @@
       <rect x = "242" y = "290" w = "242" h = "290"/>
     </anim>
   </animations>
+  <stats hp="400" speed="0" power="0"/>
 </file>

@@ -28,14 +28,19 @@ Minion::Minion(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	stats.life = stats.base_hp = stats.max_life = 50;
-	stats.base_power = stats.power = 10;
-	stats.base_speed = stats.speed = stats.restore_speed = 45;
-
-	AddAbility(0, 1, 4, 1);
-	
 	pugi::xml_document doc;
 	App->xml->LoadXML("minion.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats");
+
+	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
+	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
+
+	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
+	float cd = stats_node.child("ability1").attribute("cd").as_float();
+	int bd = stats_node.child("ability1").attribute("bd").as_int();
+	AddAbility(0, cd, bd, dmg_mult);
+	
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	cd_timer.Start();

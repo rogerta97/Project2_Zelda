@@ -36,14 +36,23 @@ Skeleton::Skeleton(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	stats.life = stats.base_hp = stats.max_life = 250;
-	stats.base_power = stats.power = 30;
-
-	AddAbility(0, 4, 4, 1, "spin"); //times are ms.
-	AddAbility(1, 0.7f, 4, 0.5f, "bone");
-
 	pugi::xml_document doc;
 	App->xml->LoadXML("skeleton.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats");
+
+	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
+	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+
+	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
+	float cd = stats_node.child("ability1").attribute("cd").as_float();
+	int bd = stats_node.child("ability1").attribute("bd").as_int();
+	AddAbility(0, cd, bd, dmg_mult, "spin");
+
+	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
+	cd = stats_node.child("ability2").attribute("cd").as_float();
+	bd = stats_node.child("ability2").attribute("bd").as_int();
+	AddAbility(1, cd, bd, dmg_mult, "bone");
+
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	name = "skeleton";

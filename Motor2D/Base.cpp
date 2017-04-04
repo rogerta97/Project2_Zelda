@@ -18,10 +18,12 @@ Base::Base(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	stats.life = stats.base_hp = stats.max_life = 400;
-
 	pugi::xml_document doc;
 	App->xml->LoadXML("base.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats");
+
+	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
+
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	name = "base";

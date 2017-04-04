@@ -26,4 +26,7 @@
     -->
     
   </animations>
+  <stats hp="100" speed="0" power="10">
+    <ability1 mult="1" cd="3.7" bd="4"/>
+  </stats>
 </file>
