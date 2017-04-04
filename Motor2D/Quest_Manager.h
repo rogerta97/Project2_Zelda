@@ -30,6 +30,8 @@ public:
 	void Update();
 
 	void CleanUp();
+
+	void reset_progress(int id);
 	pugi::xml_document quests_file;
 	pugi::xml_node quests_node;
 

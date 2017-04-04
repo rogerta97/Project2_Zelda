@@ -124,7 +124,7 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 10 && active_quest == -1)
 	{
 		change_state(1, active);
 		active_quest = 1;
@@ -139,12 +139,14 @@ void QuestManager::Update()
 	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 180)
 	{
 		change_state(active_quest, inactive);
+		reset_progress(active_quest);
 		active_quest = -1;
 		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 		active_quest_text[0]->enabled = false;
 		active_quest_text[1]->enabled = false;
 		active_quest_text[2]->enabled = false;
 		active_quest_text[3]->enabled = false;
+		
 	}
 }
 
@@ -171,6 +173,19 @@ void QuestManager::CleanUp()
 		player_2_text.clear();
 		player_3_text.clear();
 		player_4_text.clear();
+	}
+}
+
+void QuestManager::reset_progress(int id)
+{
+	for(int i = 0; i<vquest.size();i++)
+	{
+		if (vquest[i]->id == id) {
+			for (int j = 0; j < vquest[i]->task.size(); j++)
+			{
+				vquest[i]->task[j]->current_progress = 0;
+			}
+		}
 	}
 }
 
@@ -269,7 +284,7 @@ void QuestManager::update_progress()
 				if (vquest[i]->task[j]->current_progress == vquest[i]->task[j]->requirement)
 				{
 					vquest[i]->state = inactive;
-					vquest[i]->task[i]->times_completed++;
+					vquest[i]->task[j]->times_completed++;
 					active_quest_text[0]->enabled = false;
 					active_quest_text[1]->enabled = false;
 					active_quest_text[2]->enabled = false;
