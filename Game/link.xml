@@ -95,4 +95,10 @@
        <rect x = "208" y = "1198" w = "97" h = "90"/>
      </anim>
    </animations>
+  <stats hp="100" speed="160" power="15">
+    <ability1 mult="1" cd="1" bd="5"/>
+    <ability2 mult="0.7" cd="6" bd="15"/>
+    <ability3 mult="0.5" cd="20" bd="8"/>
+    <ability4 mult="2" cd="50" bd="20"/>
+  </stats>
 </file>
