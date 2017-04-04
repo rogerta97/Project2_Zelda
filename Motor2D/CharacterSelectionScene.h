@@ -90,7 +90,8 @@ private:
 	bool				 player_ready[4] = {false, false, false, false};
 	bool				 change_scene = false; 
 
-
+	uint				 win_w = 0; 
+	uint				 win_h = 0; 
 
 public:
 

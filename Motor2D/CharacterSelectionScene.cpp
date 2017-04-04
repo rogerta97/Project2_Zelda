@@ -45,7 +45,7 @@ bool CharacterSelectionScene::Update(float dt)
 	
 	for (int i = 0; i < 4; i++) 
 	{
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad-1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN) 
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad-1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN && player_ready[App->scene->players[i].viewport - 1] == false)
 		{
 	
 			MoveCard(App->scene->players[i].viewport - 1, "right");
@@ -96,7 +96,7 @@ bool CharacterSelectionScene::Update(float dt)
 			}
 		}
 
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN && player_ready[App->scene->players[i].viewport - 1] == false)
 		{
 			MoveCard(i, "left");
 
@@ -220,11 +220,11 @@ bool CharacterSelectionScene::Update(float dt)
 			player_ready[App->scene->players[i].viewport - 1] = true;
 	
 			viewport[App->scene->players[i].viewport - 1].ready_text->SetText("READY");
-			//App->scene->players[i].character = 
+
 						
 		}
 
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN && player_ready[App->scene->players[i].viewport - 1] == true)
 		{
 			player_ready[App->scene->players[i].viewport - 1] = false;
 			viewport[App->scene->players[i].viewport - 1].ready_text->SetPos(iPoint(viewport[App->scene->players[i].viewport - 1].ready_text->GetPos().x - 70, viewport[App->scene->players[i].viewport - 1].ready_text->GetPos().y));
@@ -294,9 +294,9 @@ void CharacterSelectionScene::CreateScene(uint w, uint h)
 	//Seting the position of the cards -------------------------------
 
 	// viewport 1 ---
-	positions.push_back(iPoint(100, 100));
-	positions.push_back(iPoint(230, 70));
-	positions.push_back(iPoint(425, 100));
+	positions.push_back(iPoint(w / 10, h / 10));
+	positions.push_back(iPoint(w / 10 + 120, h / 10 - 20));
+	positions.push_back(iPoint(w / 10 + 240, h / 10));
 
 	positions.push_back(iPoint(positions[0].x + 12, positions[0].y - 10));
 	positions.push_back(iPoint(positions[1].x + 20, positions[1].y ));
