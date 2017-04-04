@@ -67,7 +67,7 @@ struct viewport_data
 		background_name_image = window->CreateImage(background_name_image_pos, background_name_image_rect);
 		text_name = window->CreateText(text_name_pos, App->font->game_font);
 
-		ready_text = window->CreateText(ready_text_pos, App->font->game_font);
+		ready_text = window->CreateText(ready_text_pos, App->font->game_font, 30);
 		ready_text->SetText("Ready!");
 		ready_text->enabled = false;
 

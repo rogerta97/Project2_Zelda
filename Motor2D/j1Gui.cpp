@@ -1372,7 +1372,9 @@ void UI_Text::SetText(string _text)
 
 		comp[words_counter] = '\0';
 
-		tex_str ts(comp.c_str(), App->font->Print(comp.c_str(), color, font));
+		int width = 0; int height = 0;
+		App->font->CalcSize(comp.c_str(), width, height, font);
+		tex_str ts(comp.c_str(), App->font->Print(comp.c_str(), color, font), {0, 0, width, height});
 		tex_str_list.push_back(ts);
 	}
 }
@@ -1435,9 +1437,9 @@ bool UI_Text::update()
 					else
 					{
 						if (is_ui)
-							App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), { 0, 0, rect.w, rect.h }, viewport, -1.0f, false);
+							App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), (*it).size, viewport, -1.0f, false);
 						else
-							App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space));
+							App->view->LayerBlit(LAYER, (*it).texture, iPoint(rect.x, rect.y + space), (*it).size);
 					}
 					space += spacing;
 				}

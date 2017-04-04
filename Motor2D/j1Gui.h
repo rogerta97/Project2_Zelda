@@ -301,9 +301,10 @@ private:
 struct tex_str
 {
 	tex_str() {};
-	tex_str(string _text, SDL_Texture* _texture) { text = _text, texture = _texture; }
+	tex_str(string _text, SDL_Texture* _texture, SDL_Rect _text_size) { text = _text, texture = _texture; size = _text_size; }
 	SDL_Texture* texture = nullptr;
 	string text;
+	SDL_Rect size = NULLRECT;
 };
 
 class UI_Text : public UI_Element

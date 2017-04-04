@@ -130,6 +130,7 @@ bool MenuScene::Start()
 	cursors.push_back(cursor_1); 
 	cursors.push_back(cursor_2);
 
+
 	App->console->AddText("viewports.set 1", Input);
 	App->view->camera1.x = 0;
 	App->view->camera1.y = 0;
