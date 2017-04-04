@@ -184,6 +184,7 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info3->enabled = true;
 			viewports_data[i].abilities_info4->enabled = true;
 		}
+		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
 		{
 			viewports_data[i].background_info_image->enabled = false;
 
@@ -243,9 +244,45 @@ bool CharacterSelectionScene::CleanUp()
 	return true;
 }
 
-player_data* CharacterSelectionScene::MoveCharacter(const char * direction, entity_name middle)
+
+player_data* CharacterSelectionScene::MoveCharacterLeft(player_data * data, int viewport)
 {
-	switch (middle) 
+	player_data* ret = nullptr;
+
+	int main_index = GetIndexByPlayerData(data);
+
+	// Move left
+	main_index--;
+	if (main_index < 0)
+		main_index = players_data.size() - 1;
+
+	ret = players_data.at(main_index);
+
+	SetDataToViewport(ret, viewport);
+
+	return ret;
+}
+
+player_data* CharacterSelectionScene::MoveCharacterRight(player_data * data, int viewport)
+{
+	player_data* ret = nullptr;
+
+	int main_index = GetIndexByPlayerData(data);
+
+	// Move right
+	main_index++;
+	if (main_index > players_data.size() - 1)
+		main_index = 0;
+
+	ret = players_data.at(main_index);
+
+	SetDataToViewport(ret, viewport);
+
+	return ret;
+}
+
+void CharacterSelectionScene::SetDataToViewport(player_data * data, int viewport)
+{
 	if (viewport >= 0 && viewport < viewports_data.size())
 	{
 		int main_index = GetIndexByPlayerData(data);
