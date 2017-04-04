@@ -506,10 +506,12 @@ void MainScene::ListenEvent(int type, EventThrower * origin, int id)
 			case 1:
 			{
 				App->scene->main_scene->quest_manager->add_progress(1, 2);
+				break;
 			}
 			case 2:
 			{
 				App->scene->main_scene->quest_manager->add_progress(1, 1);
+				break;
 			}
 			default:
 				break;
