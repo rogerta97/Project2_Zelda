@@ -393,6 +393,7 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 				if (TextCmp((*it)->name.c_str(), sp->name.c_str()))
 				{
 					return *it;
+					break;
 				}
 			}
 		}

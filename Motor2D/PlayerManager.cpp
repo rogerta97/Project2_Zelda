@@ -256,13 +256,18 @@ std::vector<int> PlayerManager::GetTeamViewports(int team)
 
 int PlayerManager::GetEntityViewportIfIsPlayer(Entity * entity)
 {
+	int ret = 0;
+
 	for (int i = 0; i < players.size(); i++)
 	{
-		if (players.at(i)->entity == entity)
+		if (!players.at(i)->is_dead && players.at(i)->entity != nullptr && players.at(i)->entity == entity)
 		{
-			return players.at(i)->viewport;
+			ret = players.at(i)->viewport;
+			break;
 		}
 	}
+
+	return ret;
 }
 
 iPoint PlayerManager::GetFreePlayerSpawn(int team, int respawn)
@@ -299,32 +304,39 @@ void PlayerManager::ResetAbilityTimer(Player* player, int ability)
 
 int PlayerManager::GetPlayerTeamFromBody(PhysBody * body)
 {
+	int ret = 0;
+
 	if (!players.empty())
 	{
 		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
 			if ((*it)->entity->game_object->pbody == body)
 			{
-				return (*it)->entity->GetTeam();
+				ret = (*it)->entity->GetTeam();
 			}
 		}
 	}
-	return 0;
+
+	return ret;
 }
 
 Player * PlayerManager::GetPlayerFromBody(PhysBody * body)
 {
+	Player* ret = nullptr;
+
 	if (!players.empty())
 	{
 		for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++)
 		{
-			if ((*it)->entity->game_object->pbody == body)
+			if (!(*it)->is_dead && (*it)->entity != nullptr && (*it)->entity->game_object->pbody == body)
 			{
-				return (*it);
+				ret = (*it);
+				break;
 			}
 		}
 	}
-	return nullptr;
+
+	return ret;
 }
 
 void PlayerManager::DisableInput(int player)
