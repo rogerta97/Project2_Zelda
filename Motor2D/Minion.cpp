@@ -30,7 +30,7 @@ Minion::Minion(iPoint pos)
 	game_object->SetFixedRotation(true);
 
 	stats.life = stats.base_hp = stats.max_life = 50;
-	stats.base_power = stats.power = 10;
+	stats.base_power = stats.power = 5;
 	stats.base_speed = stats.speed = stats.restore_speed = 45;
 
 	AddAbility(0, 1, 4, 1);
