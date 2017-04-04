@@ -16,6 +16,7 @@
 #include "Tower.h"
 #include "TowerManager.h"
 #include "Quest_Manager.h"
+#include "j1XMLLoader.h"
 
 #define Half_Tile 16
 
@@ -34,9 +35,8 @@ Minion::Minion(iPoint pos)
 	AddAbility(0, 1, 4, 1);
 	
 	pugi::xml_document doc;
-	App->LoadXML("minion.xml", doc);
+	App->xml->LoadXML("minion.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	cd_timer.Start();
 

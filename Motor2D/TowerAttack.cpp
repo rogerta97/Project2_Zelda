@@ -1,6 +1,7 @@
 #include "TowerAttack.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
+#include "j1XMLLoader.h"
 
 #define INITIAL_SPEED 150
 #define ACCELERATION 100
@@ -15,9 +16,8 @@ TowerAttack::TowerAttack(iPoint pos)
 	stats.damage_multiplicator = 1.0f;
 
 	pugi::xml_document doc;
-	App->LoadXML("towerattack.xml", doc);
+	App->xml->LoadXML("towerattack.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
 

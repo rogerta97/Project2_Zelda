@@ -6,6 +6,7 @@
 #include "j1Viewports.h"
 #include "Entity.h"
 #include "PlayerManager.h"
+#include "j1XMLLoader.h"
 
 QuestManager::QuestManager()
 {
@@ -75,7 +76,7 @@ QuestManager::QuestManager()
 		active_quest_text[3]->SetText(" ");
 
 
-	App->LoadXML("Quests.xml", quests_file);
+	App->xml->LoadXML("Quests.xml", quests_file);
 	quests_node = quests_file.child("quests");
 	for (pugi::xml_node loop_tool = quests_node.child("quest"); loop_tool; loop_tool = loop_tool.next_sibling("quest"))
 	{

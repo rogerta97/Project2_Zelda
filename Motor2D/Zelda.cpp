@@ -5,11 +5,12 @@
 #include "p2Log.h"
 #include "PlayerManager.h"
 #include <algorithm>
+#include "j1XMLLoader.h"
 
 Zelda::Zelda(iPoint pos)
 {
 	pugi::xml_document doc;
-	App->LoadXML("zelda.xml", doc);
+	App->xml->LoadXML("zelda.xml", doc);
 
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30, 40), App->cf->CATEGORY_PAYLOAD_AREA, App->cf->MASK_PAYLOAD_AREA, pbody_type::p_t_npc, 0);
 
@@ -29,7 +30,6 @@ Zelda::Zelda(iPoint pos)
 
 	state = z_s_wait;
 
-	App->UnloadXML(doc);
 
 	name = "zelda";
 }

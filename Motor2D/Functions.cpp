@@ -5,7 +5,7 @@
 #include <random>
 #include "p2Defs.h"
 #include "p2Log.h"
-
+#include "j1XMLLoader.h"
 
 // Returns the angle between two points in degrees
 float AngleFromTwoPoints(float x1, float y1, float x2, float y2)
@@ -69,7 +69,7 @@ void LoadAnimationFromXML(list<SDL_Rect>& rects, const char * file, const char* 
 	pugi::xml_document doc;
 	pugi::xml_node node;
 
-	App->LoadXML(file, doc);
+	App->xml->LoadXML(file, doc);
 
 	node = doc.child("file").child("animations").child(animation_name);
 

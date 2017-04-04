@@ -5,15 +5,15 @@
 #include "j1Scene.h"
 #include "MainScene.h"
 #include "j1Viewports.h"
+#include "j1XMLLoader.h"
 
 Eyes::Eyes(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(121, 145), App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE, pbody_type::p_t_npc, 0);
 
 	pugi::xml_document doc;
-	App->LoadXML("eyes.xml", doc);
+	App->xml->LoadXML("eyes.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	name = "eyes";
 }

@@ -29,6 +29,7 @@ class j1Physics;
 class j1Entity;
 class j1Viewports;
 class j1Spell;
+class j1XMLLoader;
 
 //Events
 class EventThrower;
@@ -68,10 +69,6 @@ public:
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
 	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
-
-	// Load an XML file
-	void LoadXML(const char* path, pugi::xml_document& doc);
-	void UnloadXML(pugi::xml_document& doc);
 
 	void CapFps(float fps);
 	void EndSDL();
@@ -127,6 +124,7 @@ public:
 	j1Entity*			entity = NULL;
 	j1Viewports*        view = NULL;
 	j1Spell*			spell = NULL;
+	j1XMLLoader*		xml = NULL;
 
 	// Console logs
 	list<string>        logs;

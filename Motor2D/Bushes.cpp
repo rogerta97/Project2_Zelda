@@ -1,4 +1,4 @@
-
+#include "j1XMLLoader.h"
 #include "Bushes.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
@@ -8,7 +8,7 @@
 Bush::Bush(iPoint _pos)
 {
 	pugi::xml_document doc;
-	App->LoadXML("Bush.xml", doc);
+	App->xml->LoadXML("Bush.xml", doc);
 
 	pugi::xml_node file = doc.child("file");
 

@@ -19,6 +19,7 @@
 #include "Snakes.h"
 #include "Skeleton.h"
 #include "j1Viewports.h"
+#include "j1XMLLoader.h"
 
 
 j1Entity::j1Entity()
@@ -44,9 +45,8 @@ bool j1Entity::Start()
 
 	entity_effects_animator = new Animator();
 	pugi::xml_document doc;
-	App->LoadXML("entity_effects.xml", doc);
+	App->xml->LoadXML("entity_effects.xml", doc);
 	entity_effects_texture = entity_effects_animator->LoadAnimationsFromXML(doc, "animations");
-	App->UnloadXML(doc);
 
 	return ret;
 }

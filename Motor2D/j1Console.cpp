@@ -9,6 +9,7 @@
 #include "j1Render.h"
 #include "j1Input.h"
 #include "Functions.h"
+#include "j1XMLLoader.h"
 #include <sstream>
 
 #define PADDING 15
@@ -142,7 +143,7 @@ bool j1Console::Save(pugi::xml_node & node) const
 	pugi::xml_document	config_file;
 	pugi::xml_node		config;
 
-	App->LoadXML("config.xml", config_file);
+	App->xml->LoadXML("config.xml", config_file);
 
 	config = config_file.child("config");
 

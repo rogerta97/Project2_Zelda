@@ -7,6 +7,7 @@
 #include "j1Viewports.h"
 #include "BaseManager.h"
 #include "Quest_Manager.h"
+#include "j1XMLLoader.h"
 
 Base::Base(iPoint pos)
 {
@@ -20,9 +21,8 @@ Base::Base(iPoint pos)
 	stats.life = stats.base_hp = stats.max_life = 400;
 
 	pugi::xml_document doc;
-	App->LoadXML("base.xml", doc);
+	App->xml->LoadXML("base.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	name = "base";
 }

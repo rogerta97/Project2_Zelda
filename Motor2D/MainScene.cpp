@@ -30,6 +30,7 @@
 #include "JungleCampManager.h"
 #include "EventThrower.h"
 #include "j1Audio.h"
+#include "j1XMLLoader.h"
 
 MainScene::MainScene()
 {
@@ -181,7 +182,7 @@ bool MainScene::Start()
 	pugi::xml_document gs;
 	pugi::xml_node file_node;
 
-	App->LoadXML("GameSettings.xml", gs);
+	App->xml->LoadXML("GameSettings.xml", gs);
 	file_node = gs.child("file");
 
 	defeat = new Animator();
@@ -531,7 +532,7 @@ void MainScene::ListenEvent(int type, EventThrower * origin, int id)
 void MainScene::CreateMapCollisions()
 {
 	pugi::xml_document doc;
-	App->LoadXML("MapCollisions.xml", doc);
+	App->xml->LoadXML("MapCollisions.xml", doc);
 	pugi::xml_node collisions = doc.child("collisions");
 	
 	for(pugi::xml_node chain = collisions.child("chain");chain != NULL;chain = chain.next_sibling("chain"))

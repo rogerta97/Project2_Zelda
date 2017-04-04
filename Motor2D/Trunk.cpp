@@ -1,4 +1,4 @@
-
+#include "j1XMLLoader.h"
 #include "Trunk.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
@@ -7,7 +7,7 @@
 Trunk::Trunk(iPoint _pos)
 {
 	pugi::xml_document doc;
-	App->LoadXML("trunk.xml", doc);
+	App->xml->LoadXML("trunk.xml", doc);
 
 	pugi::xml_node file = doc.child("file");
 

@@ -15,6 +15,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "SnakePoison.h"
+#include "j1XMLLoader.h"
 
 #define SNAKE_H 32
 #define SNAKE_W 32
@@ -37,9 +38,8 @@ Snakes::Snakes(iPoint pos)
 	AddAbility(0, 3.7f, 4, 1, "s_attack");
 
 	pugi::xml_document doc;
-	App->LoadXML("snakes.xml", doc);
+	App->xml->LoadXML("snakes.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	name = "snake";
 }

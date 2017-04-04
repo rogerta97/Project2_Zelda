@@ -4,6 +4,7 @@
 #include "Functions.h"
 #include "p2Log.h"
 #include "Entity.h"
+#include "j1XMLLoader.h"
 
 #define DESTRUCTION_TIME 1.5f
 #define SPEED 230
@@ -17,9 +18,8 @@ BoneAttack::BoneAttack(iPoint pos)
 	game_object->pbody->body->SetBullet(true);
 
 	pugi::xml_document doc;
-	App->LoadXML("boneattack.xml", doc);
+	App->xml->LoadXML("boneattack.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
 

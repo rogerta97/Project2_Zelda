@@ -7,6 +7,7 @@
 #include "j1App.h"
 #include "j1Scene.h"
 #include "j1Map.h"
+#include "j1XMLLoader.h"
 
 ShopManager::ShopManager()
 {
@@ -32,7 +33,7 @@ bool ShopManager::Start()
 	pugi::xml_document shop_config;
 	pugi::xml_node shop_node;
 
-	App->LoadXML("Shop_config.xml", shop_config);
+	App->xml->LoadXML("Shop_config.xml", shop_config);
 	shop_node = shop_config.child("shop");
 	// -----
 
@@ -55,7 +56,7 @@ bool ShopManager::Start()
 	pugi::xml_document items_doc;
 	pugi::xml_node file_node;
 
-	App->LoadXML("Items.xml", items_doc);
+	App->xml->LoadXML("Items.xml", items_doc);
 	file_node = items_doc.child("file");
 
 	int item_num = 0;
@@ -252,9 +253,6 @@ bool ShopManager::Start()
 	//Get shop positions
 	team_shop[0] = App->map->GetShopPosition(1);
 	team_shop[1] = App->map->GetShopPosition(2);
-
-	App->UnloadXML(shop_config);
-	App->UnloadXML(items_doc);
 
 	return true;
 }

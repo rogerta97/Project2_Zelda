@@ -15,7 +15,7 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "BoneAttack.h"
-
+#include "j1XMLLoader.h"
 
 #define SKELETON_W 78
 #define SKELETON_H 48
@@ -43,7 +43,7 @@ Skeleton::Skeleton(iPoint pos)
 	AddAbility(1, 0.7f, 4, 0.5f, "bone");
 
 	pugi::xml_document doc;
-	App->LoadXML("skeleton.xml", doc);
+	App->xml->LoadXML("skeleton.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	name = "skeleton";

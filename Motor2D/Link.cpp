@@ -17,6 +17,7 @@
 #include "j1Pathfinding.h"
 #include "j1Map.h"
 #include "Quest_Manager.h"
+#include "j1XMLLoader.h"
 
 #define ABILITY3_MAX_RANGE 200
 #define ABILITY3_GROW_SPEED 205.0f
@@ -44,9 +45,8 @@ Link::Link(iPoint pos)
 	Ability* a4 = AddAbility(3, 50, 20, 2);			       a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
 
 	pugi::xml_document doc;
-	App->LoadXML("link.xml", doc);
+	App->xml->LoadXML("link.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 16, 26 }; // 
 

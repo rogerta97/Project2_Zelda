@@ -3,6 +3,7 @@
 #include "j1Viewports.h"
 #include "p2Log.h"
 #include "Entity.h"
+#include "j1XMLLoader.h"
 
 #define ACCELERATION -1300
 #define TIME 0.65f
@@ -21,9 +22,8 @@ Boomerang::Boomerang(iPoint pos)
 	stats.damage_multiplicator = 1.0f;
 
 	pugi::xml_document doc;
-	App->LoadXML("boomerang.xml", doc);
+	App->xml->LoadXML("boomerang.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
 

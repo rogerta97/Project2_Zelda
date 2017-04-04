@@ -172,6 +172,9 @@
     <ClCompile Include="EventThrower.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="j1XMLLoader.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -374,6 +377,9 @@
     </ClInclude>
     <ClInclude Include="Minion.h">
       <Filter>Engine\4. Entities ==========\Minions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1XMLLoader.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

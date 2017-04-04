@@ -2,11 +2,12 @@
 #include "GameObject.h"
 #include "j1Viewports.h"
 #include "j1FileSystem.h"
+#include "j1XMLLoader.h"
 
 Tree::Tree(iPoint pos)
 {
 	pugi::xml_document doc;
-	App->LoadXML("Trees.xml", doc);
+	App->xml->LoadXML("Trees.xml", doc);
 
 	pugi::xml_node file = doc.child("file");
 

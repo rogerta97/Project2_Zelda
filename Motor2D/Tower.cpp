@@ -18,6 +18,7 @@
 #include "Spell.h"
 #include "TowerAttack.h"
 #include "Quest_Manager.h"
+#include "j1XMLLoader.h"
 
 #define TOWER_H 38
 #define TOWER_W 64
@@ -39,7 +40,7 @@ Tower::Tower(iPoint pos)
 	AddAbility(0, 1, 4, 1, "t_attack");
 
 	pugi::xml_document doc;
-	App->LoadXML("tower.xml", doc);
+	App->xml->LoadXML("tower.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	name = "tower";

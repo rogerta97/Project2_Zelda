@@ -4,12 +4,13 @@
 #include "j1Map.h"
 #include "j1Entity.h"
 #include "Minion.h"
+#include "j1XMLLoader.h"
 
 // Coment code, ty
 MinionManager::MinionManager()
 {
 	pugi::xml_document doc;
-	App->LoadXML("GameSettings.xml", doc);
+	App->xml->LoadXML("GameSettings.xml", doc);
 
 	pugi::xml_node minions_node = doc.child("file").child("minions");
 
