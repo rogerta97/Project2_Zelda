@@ -65,9 +65,11 @@ bool Zelda::Update(float dt)
 		MoveToPathState();
 		break;
 	case z_s_idle:
+		UpdatePlayers();
 		SetIdle();
 		break;
 	case z_s_move:
+		UpdatePlayers();
 		MoveState();
 		break;
 	case z_s_end_game:
@@ -126,86 +128,10 @@ void Zelda::SetPath(std::vector<iPoint>& path)
 
 void Zelda::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (bodyA == game_object->pbody && fixtureA->type == fixture_type::f_t_zelda_area)
-	{
-		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
-		{
-			if (App->scene->main_scene->player_manager != nullptr)
-			{
-				Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
-				int team = contact_palyer->team;
-
-				bool found = false;
-
-				for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
-				{
-					if (*it == contact_palyer)
-					{
-						found = true;
-						break;
-					}
-
-				}
-				if (!found)
-				{
-					switch (team)
-					{
-					case 1:
-						team1_players++;
-						break;
-					case 2:
-						team2_players++;
-						break;
-					default:
-						break;
-					}
-					counted_players.push_back(contact_palyer);
-				}
-			}
-		}
-	}
 }
 
 void Zelda::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (bodyA == game_object->pbody && fixtureA->type == fixture_type::f_t_zelda_area)
-	{
-		if (bodyB->type == pbody_type::p_t_player && fixtureB->type == fixture_type::f_t_hit_box)
-		{
-			if (App->scene->main_scene->player_manager != nullptr)
-			{
-				Player* contact_palyer = App->scene->main_scene->player_manager->GetPlayerFromBody(bodyB);
-				int team = contact_palyer->team;
-
-				bool found = false;
-
-				for (std::vector<Player*>::iterator it = counted_players.begin(); it != counted_players.end(); it++)
-				{
-					if (*it == contact_palyer)
-					{
-						found = true;
-						counted_players.erase(it);
-						break;
-					}
-
-				}
-				if (found)
-				{
-					switch (team)
-					{
-					case 1:
-						team1_players--;
-						break;
-					case 2:
-						team2_players--;
-						break;
-					default:
-						break;
-					}
-				}
-			}
-		}
-	}
 }
 
 iPoint Zelda::GetPos() const
@@ -454,6 +380,31 @@ void Zelda::Move(int delta_x, int delta_y)
 		{
 			MoveUp(speed);
 			WalkUp();
+		}
+	}
+}
+
+void Zelda::UpdatePlayers()
+{
+	std::vector<Entity*> t1 = App->scene->main_scene->player_manager->GetTeamPlayers(1);
+	std::vector<Entity*> t2 = App->scene->main_scene->player_manager->GetTeamPlayers(2);
+
+	team1_players = t1.size();
+	team2_players = t2.size();
+
+	for (std::vector<Entity*>::iterator p_t1 = t1.begin(); p_t1 != t1.end(); ++p_t1)
+	{
+		if (GetPos().DistanceTo((*p_t1)->GetPos()) > radius)
+		{
+			team1_players--;
+		}
+	}
+
+	for (std::vector<Entity*>::iterator p_t2 = t2.begin(); p_t2 != t2.end(); ++p_t2)
+	{
+		if (GetPos().DistanceTo((*p_t2)->GetPos()) > radius)
+		{
+			team2_players--;
 		}
 	}
 }

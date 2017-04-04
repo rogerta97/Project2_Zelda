@@ -67,15 +67,13 @@ private:
 	void SetIdle();
 	void Move(int delta_x, int delta_y);
 
-
+	void UpdatePlayers();
 
 public:
 
 private:
 	uint					team1_players = 0;
 	uint					team2_players = 0;
-
-	std::vector<Player*>	counted_players;
 
 	int						radius = 0;
 

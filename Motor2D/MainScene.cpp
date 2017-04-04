@@ -266,70 +266,7 @@ bool MainScene::Update(float dt)
 		EndGame(1);
 	}
 	// ------
-	// Quests
-	//if (quest_timer.Read() <= 60 && first_quest_completed == false)
-	//{
-	//	int rand_quest = GetRandomValue(1, 3);
-	//	switch (rand_quest)
-	//	{
-	//	case 1: 
-	//	{
-	//		quest_manager->change_state(rand_quest, active);
-	//		break;
-	//	}
-	//	case 2:
-	//	{
-	//		quest_manager->change_state(rand_quest, active);
-	//		break;
-	//	}
-	//	case 3:
-	//	{
-	//		quest_manager->change_state(rand_quest, active);
-	//		break;
-	//	}
-	//	default:
-	//		break;
-	//	}
-	//	quest_timer.Start();
-	//	first_quest_completed = true;
-	//}
-	/*if (quest_timer.Read() <= 180 && first_quest_completed == true)
-	{
-		for(int i = 0; quest_manager->vquest.size();i++)
-		{
-			if (quest_manager->vquest[i]->state == active)
-			{
-				quest_manager->vquest[i]->state = inactive;
-				for (int j = 0; j < quest_manager->vquest[i]->task.size(); j++)
-				{
-					quest_manager->vquest[i]->task[j]->current_progress = 0;
-				}
-			}
-		}
-		int rand_quest = GetRandomValue(1, 3);
-		switch (rand_quest)
-		{
-		case 1:
-		{
-			quest_manager->change_state(rand_quest, active);
-			break;
-		}
-		case 2:
-		{
-			quest_manager->change_state(rand_quest, active);
-			break;
-		}
-		case 3:
-		{
-			quest_manager->change_state(rand_quest, active);
-			break;
-		}
-		default:
-			break;
-		}
-		quest_timer.Start();
-	}*/
-	// ------
+	
 	//DrawScreenSeparation();
 
 	return ret;

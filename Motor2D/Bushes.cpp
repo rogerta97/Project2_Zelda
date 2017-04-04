@@ -60,13 +60,11 @@ void Bush::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA,
 	{
 		if (fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			string name = game_object->animator->GetCurrentAnimation()->GetName(); 
-
-			if(name == "green_half")
+			if(game_object->animator->IsCurrentAnimation("green_half"))
 			{
 				game_object->SetAnimation("green_move"); 
 			}
-			else if(name == "purple_half")
+			else if(game_object->animator->IsCurrentAnimation("purple_half"))
 			{
 				game_object->SetAnimation("purple_move");
 			}
@@ -81,13 +79,11 @@ void Bush::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b
 	{
 		if (fixtureB->type == fixture_type::f_t_hit_box)
 		{
-			string name = game_object->animator->GetCurrentAnimation()->GetName();
-
-			if (name == "green_move")
+			if (game_object->animator->IsCurrentAnimation("green_move"))
 			{
 				game_object->SetAnimation("green_half");
 			}
-			else if (name == "purple_move")
+			else if (game_object->animator->IsCurrentAnimation("purple_move"))
 			{
 				game_object->SetAnimation("purple_half");
 			}
@@ -98,11 +94,9 @@ void Bush::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b
 
 bool Bush::CleanUp()
 {
-
 	return true;
 }
 
 Bush::~Bush()
 {
-
 }
