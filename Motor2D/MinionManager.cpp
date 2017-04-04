@@ -200,3 +200,16 @@ void MinionManager::AddMinions()
 	team1_minions.push_back(team1);
 	team2_minions.push_back(team2);
 }
+
+void MinionManager::StunMinions()
+{
+	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();++it)
+	{
+		(*it)->Stun(20.0f);
+	}
+
+	for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();++it)
+	{
+		(*it)->Stun(20.0f);
+	}
+}

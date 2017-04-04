@@ -409,6 +409,8 @@ void MainScene::EndGame(int _winner)
 	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
 
 	game_timer.Start();
+
+	minion_manager->StunMinions();
 }
 
 void MainScene::UpdateProgressBar()

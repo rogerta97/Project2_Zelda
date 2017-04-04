@@ -40,6 +40,8 @@ public:
 
 	void AddMinions();
 
+	void StunMinions();
+
 private:
 
 public:
