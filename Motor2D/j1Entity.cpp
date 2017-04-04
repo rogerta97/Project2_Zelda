@@ -125,7 +125,12 @@ void j1Entity::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * 
 		Entity* entity = FindEntityByBody(bodyB);
 
 		if (entity != nullptr)
+		{
 			entity->hit = false;
+			entity->hit_by = nullptr;
+			entity->hit_ability = nullptr;
+			entity->hit_spell = nullptr;
+		}
 
 		// Find the entity that hits
 		if (entity != nullptr)
@@ -374,11 +379,12 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 
 Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 {
+	Ability* ret = nullptr;
 	Spell* sp = nullptr;
 
 	sp = FindSpellByBody(spell);
 
-	if (sp != nullptr)
+	if (sp != nullptr && sp->owner != nullptr)
 	{
 		if (!sp->owner->abilities.empty())
 		{
@@ -391,6 +397,8 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 			}
 		}
 	}
+
+	return ret;
 }
 
 Spell * j1Entity::FindSpellByBody(PhysBody * spell)
