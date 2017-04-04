@@ -110,8 +110,8 @@ private:
 
 	uint				winner = 0;
 
-	Animator			victory;
-	Animator			defeat;
+	Animator*			victory = nullptr;
+	Animator*			defeat = nullptr;
 };
 
 

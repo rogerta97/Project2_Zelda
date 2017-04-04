@@ -184,11 +184,14 @@ bool MainScene::Start()
 	App->LoadXML("GameSettings.xml", gs);
 	file_node = gs.child("file");
 
-	defeat.LoadAnimationsFromXML(gs, "defeat_animations");
-	victory.LoadAnimationsFromXML(gs, "victory_animations");
+	defeat = new Animator();
+	victory = new Animator();
 
-	defeat.SetAnimation("idle");
-	victory.SetAnimation("idle");
+	defeat->LoadAnimationsFromXML(gs, "defeat_animations");
+	victory->LoadAnimationsFromXML(gs, "victory_animations");
+
+	defeat->SetAnimation("idle");
+	victory->SetAnimation("idle");
 
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);
@@ -226,12 +229,6 @@ bool MainScene::Update(float dt)
 	App->map->Draw();
 
 	quest_manager->update_progress();
-	// Test
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
-	{
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
-		App->view->SetViews(1);
-	}
 
 	// Update Managers
 	if(minion_manager != nullptr)
@@ -265,38 +262,37 @@ bool MainScene::Update(float dt)
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
-		App->view->SetViews(1);
+		EndGame(1);
 	}
 	// ------
 	// Quests
-	if (quest_timer.Read() <= 60 && first_quest_completed == false)
-	{
-		int rand_quest = GetRandomValue(1, 3);
-		switch (rand_quest)
-		{
-		case 1: 
-		{
-			quest_manager->change_state(rand_quest, active);
-			break;
-		}
-		case 2:
-		{
-			quest_manager->change_state(rand_quest, active);
-			break;
-		}
-		case 3:
-		{
-			quest_manager->change_state(rand_quest, active);
-			break;
-		}
-		default:
-			break;
-		}
-		quest_timer.Start();
-		first_quest_completed = true;
-	}
-	if (quest_timer.Read() <= 180 && first_quest_completed == true)
+	//if (quest_timer.Read() <= 60 && first_quest_completed == false)
+	//{
+	//	int rand_quest = GetRandomValue(1, 3);
+	//	switch (rand_quest)
+	//	{
+	//	case 1: 
+	//	{
+	//		quest_manager->change_state(rand_quest, active);
+	//		break;
+	//	}
+	//	case 2:
+	//	{
+	//		quest_manager->change_state(rand_quest, active);
+	//		break;
+	//	}
+	//	case 3:
+	//	{
+	//		quest_manager->change_state(rand_quest, active);
+	//		break;
+	//	}
+	//	default:
+	//		break;
+	//	}
+	//	quest_timer.Start();
+	//	first_quest_completed = true;
+	//}
+	/*if (quest_timer.Read() <= 180 && first_quest_completed == true)
 	{
 		for(int i = 0; quest_manager->vquest.size();i++)
 		{
@@ -331,7 +327,7 @@ bool MainScene::Update(float dt)
 			break;
 		}
 		quest_timer.Start();
-	}
+	}*/
 	// ------
 	//DrawScreenSeparation();
 
@@ -365,6 +361,10 @@ bool MainScene::CleanUp()
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 	App->spell->ClearSpells();
+
+	//Releas Animators
+	RELEASE(victory);
+	RELEASE(defeat);
 
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
@@ -583,8 +583,8 @@ void MainScene::DrawScreenSeparation()
 
 void MainScene::UpdateWinnerAnim(uint winner, float dt)
 {
-	SDL_Rect win_rect = victory.GetCurrentAnimation()->GetAnimationFrame(dt);
-	SDL_Rect lose_rect = defeat.GetCurrentAnimation()->GetAnimationFrame(dt);
+	SDL_Rect win_rect = victory->GetCurrentAnimation()->GetAnimationFrame(dt);
+	SDL_Rect lose_rect = defeat->GetCurrentAnimation()->GetAnimationFrame(dt);
 
 	switch (winner)
 	{
