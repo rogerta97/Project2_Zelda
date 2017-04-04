@@ -35,17 +35,34 @@ Link::Link(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
-	stats.life = stats.base_hp = stats.max_life = 100;
-	stats.base_power = stats.power = 15;
-	stats.base_speed = stats.speed = stats.restore_speed = 160;
-
-	Ability* a1 = AddAbility(0, 1, 5, 1);		           a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
-	Ability* a2 = AddAbility(1, 6, 15, 0.7f);			   a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
-	Ability* a3 = AddAbility(2, 20, 8, 0.5f, "boomerang"); a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
-	Ability* a4 = AddAbility(3, 50, 20, 2);			       a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
-
 	pugi::xml_document doc;
 	App->xml->LoadXML("link.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats");
+
+	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
+	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
+
+	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
+	float cd = stats_node.child("ability1").attribute("cd").as_float();
+	int bd = stats_node.child("ability1").attribute("bd").as_int();
+	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);		           a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
+
+	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
+	cd = stats_node.child("ability2").attribute("cd").as_float();
+	bd = stats_node.child("ability2").attribute("bd").as_int();
+	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);			   a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
+
+	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
+	cd = stats_node.child("ability3").attribute("cd").as_float();
+	bd = stats_node.child("ability3").attribute("bd").as_int();
+	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
+
+	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
+	cd = stats_node.child("ability4").attribute("cd").as_float();
+	bd = stats_node.child("ability4").attribute("bd").as_int();
+	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);			       a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
 	draw_offset = restore_draw_offset = { 16, 26 }; // 
