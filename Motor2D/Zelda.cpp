@@ -242,7 +242,7 @@ void Zelda::CheckState()
 			{
 				if (direction != 1)
 				{
-					direction = 11;
+					direction = 1;
 					change_dir = true;
 				}
 			}
