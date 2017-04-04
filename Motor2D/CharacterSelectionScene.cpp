@@ -33,6 +33,7 @@ bool CharacterSelectionScene::Start()
 	link->small_image = {348, 445, 74, 90};
 	link->name = "link"; 
 	link->entity = entity_name::link; 
+	players_data.push_back(link);
 
 	ganon = new player_data();
 	ganon->ability1_text = "Basic Attack    Frontal smash with the trident";
@@ -43,6 +44,7 @@ bool CharacterSelectionScene::Start()
 	ganon->small_image = { 422, 445, 75, 90 };
 	ganon->name = "ganon";
 	ganon->entity = entity_name::ganon;
+	players_data.push_back(ganon);
 
 	navi = new player_data();
 	navi->ability1_text = "Basic Attack    Navi shoots an energy ball in front\n of her that hits the first enemy hit";
@@ -53,16 +55,16 @@ bool CharacterSelectionScene::Start()
 	navi->small_image = { 496, 445, 75, 90 };
 	navi->name = "navi";
 	navi->entity = entity_name::navi;
+	players_data.push_back(navi);
 
-	curr_player_data1 = link;
-	curr_player_data2 = ganon;
-	curr_player_data3 = navi;
-	curr_player_data4 = link;
+	curr_player_data1 = players_data.at(0);
+	curr_player_data2 = players_data.at(0);
+	curr_player_data3 = players_data.at(0);
+	curr_player_data4 = players_data.at(0);
 
 	// ----
 
 	// Creating viewports
-
 	viewport_data data_view_1(1); 
 	viewport_data data_view_2(2);
 	viewport_data data_view_3(3);
@@ -72,10 +74,13 @@ bool CharacterSelectionScene::Start()
 	viewports_data.push_back(data_view_2);
 	viewports_data.push_back(data_view_3);
 	viewports_data.push_back(data_view_4);
-
 	// ----
 
-	
+	// Starting data
+	for (int i = 0; i < viewports_data.size(); i++)
+	{
+		SetDataToViewport(players_data.at(0), i);
+	}
 
 	return ret;
 }
@@ -86,22 +91,22 @@ bool CharacterSelectionScene::Update(float dt)
 
 	bool change_cene = false;
 
+	// Debug
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
-		change_scene = true;
+		for (int i = 0; i < 4; i++) 
+			App->scene->players[i].character = entity_name::link;
+		
+		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 	
 	if(change_scene)
 	{
-
-		for (int i = 0; i < 4; i++) {
-			App->scene->players[i].character = entity_name::link; 
-		}
-		
-		/*App->scene->players[0].character = curr_player_data1->entity;
+		// Set characters when finished
+		App->scene->players[0].character = curr_player_data1->entity;
 		App->scene->players[1].character = curr_player_data2->entity;
 		App->scene->players[2].character = curr_player_data3->entity;
-		App->scene->players[3].character = curr_player_data4->entity;*/
+		App->scene->players[3].character = curr_player_data4->entity;
 		
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
@@ -112,6 +117,7 @@ bool CharacterSelectionScene::Update(float dt)
 
 		player_data* curr = nullptr;
 
+		// Pick current viewport data
 		switch (i)
 		{
 		case 0:
@@ -128,57 +134,56 @@ bool CharacterSelectionScene::Update(float dt)
 			break;
 		}
 
+		// Move Left
 		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			switch (i)
 			{
 			case 0:
-				curr_player_data1 = MoveCharacter("left", curr->entity);
+				curr = curr_player_data1 = MoveCharacterLeft(curr, i);
 				break;
 			case 1:
-				curr_player_data2 = MoveCharacter("left", curr->entity);
+				curr = curr_player_data2 = MoveCharacterLeft(curr, i);
 				break;
 			case 2:
-				curr_player_data3 = MoveCharacter("left", curr->entity);
+				curr = curr_player_data3 = MoveCharacterLeft(curr, i);
 				break;
 			case 3:
-				curr_player_data4 = MoveCharacter("left", curr->entity);
+				curr = curr_player_data4 = MoveCharacterLeft(curr, i);
 				break;
 			}
-			
 		}
 
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
+		// Move right
+		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			switch (i)
 			{
 			case 0:
-				curr_player_data1 = MoveCharacter("right", curr->entity);
+				curr = curr_player_data1 = MoveCharacterRight(curr, i);
 				break;
 			case 1:
-				curr_player_data2 = MoveCharacter("right", curr->entity);
+				curr = curr_player_data2 = MoveCharacterRight(curr, i);
 				break;
 			case 2:
-				curr_player_data3 = MoveCharacter("right", curr->entity);
+				curr = curr_player_data3 = MoveCharacterRight(curr, i);
 				break;
 			case 3:
-				curr_player_data4 = MoveCharacter("right", curr->entity);
+				curr = curr_player_data4 = MoveCharacterRight(curr, i);
 				break;
 			}
-
 		}
 
+		// Show info
 		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 		{
-			viewports_data[i].background_info_image->enabled = true; 
+			viewports_data[i].background_info_image->enabled = true;
 
-			viewports_data[i].abilities_info1->enabled = true; 
+			viewports_data[i].abilities_info1->enabled = true;
 			viewports_data[i].abilities_info2->enabled = true;
 			viewports_data[i].abilities_info3->enabled = true;
 			viewports_data[i].abilities_info4->enabled = true;
 		}
-
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
 		{
 			viewports_data[i].background_info_image->enabled = false;
 
@@ -188,72 +193,100 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info4->enabled = false;
 		}
 
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && viewports_data[i].is_ready == false) 
+		// Ready
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN) 
 		{
-			viewports_data[i].is_ready = true; 
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 15, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].is_ready = !viewports_data[i].is_ready;
+			viewports_data[i].ready_text->enabled = viewports_data[i].is_ready;
 		}
-
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN && viewports_data[i].is_ready == true)
-		{
-			viewports_data[i].is_ready = false;
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 15, viewports_data[i].ready_text->GetPos().y));
-		}
-
-		viewports_data[i].SetViewportInfo(curr);
-
-		if (viewports_data[0].is_ready == true && viewports_data[1].is_ready == true && viewports_data[2].is_ready == true && viewports_data[3].is_ready == true)
-			change_cene = true; 
-	
 	}
+
+	// Check if all ready
+	int counter = 0;
+	for (int i = 0; i < viewports_data.size(); i++)
+	{
+		if (viewports_data[i].is_ready)
+			counter++;
+	}
+
+	if (counter == viewports_data.size())
+		change_cene = true;
 
 	return ret;
 }
 
 bool CharacterSelectionScene::CleanUp()
 {
-	for (int i = 0; i < 4; i++)
+	// Free UI
+	if (App->scene->GetCurrentScene() != App->scene->charselect_screen)
 	{
-		if (App->scene->GetCurrentScene() != App->scene->charselect_screen)
+		for (int i = 0; i < viewports_data.size(); i++)
+		{
 			App->gui->DeleteElement(viewports_data[i].window);
+		}
+	}
+
+	// Free players
+	for (int i = 0; i < players_data.size(); i++)
+	{
+		RELEASE(players_data.at(i));
 	}
 		
-		viewports_data.clear(); 
-			
-		change_scene = false;
+	viewports_data.clear(); 
+	players_data.clear();
 	
-		//Stop Music
-		App->audio->StopMusic();
+	//Stop Music
+	App->audio->StopMusic();
+
+	change_scene = false;
 	
-		return true;
+	return true;
 }
 
 player_data* CharacterSelectionScene::MoveCharacter(const char * direction, entity_name middle)
 {
 	switch (middle) 
+	if (viewport >= 0 && viewport < viewports_data.size())
 	{
-	case entity_name::link: 
-		if (direction == "left")
-			return ganon; 
-		else
-			return navi;
-		break; 
+		int main_index = GetIndexByPlayerData(data);
 
-	case entity_name::ganon:
-		if (direction == "left")
-			return navi;
-		else 
-			return link;
-		break;
+		int left_index = main_index - 1;
+		if (left_index < 0)
+			left_index = players_data.size() - 1;
 
-	case entity_name::navi:
-		if (direction == "left")
-			return link;
-		else
-			return ganon;
-		break;
+		int right_index = main_index + 1;
+		if (right_index > players_data.size()-1)
+			right_index = 0;
+
+		// Player name
+		viewports_data.at(viewport).text_name->SetText(players_data.at(main_index)->name);
+
+		// Abilities text
+		viewports_data.at(viewport).abilities_info1->SetText(players_data.at(main_index)->ability1_text);
+		viewports_data.at(viewport).abilities_info2->SetText(players_data.at(main_index)->ability2_text);
+		viewports_data.at(viewport).abilities_info3->SetText(players_data.at(main_index)->ability3_text);
+		viewports_data.at(viewport).abilities_info4->SetText(players_data.at(main_index)->ability4_text);
+
+		// Card Images
+		viewports_data.at(viewport).big_image->ChangeImage(players_data.at(main_index)->big_image);
+		viewports_data.at(viewport).small_image_left->ChangeImage(players_data.at(left_index)->small_image);
+		viewports_data.at(viewport).small_image_right->ChangeImage(players_data.at(right_index)->small_image);
 	}
+}
 
+int CharacterSelectionScene::GetIndexByPlayerData(player_data * data)
+{
+	int ret = 0;
+
+	for (int i = 0; players_data.size(); i++)
+	{
+		if (data == players_data.at(i))
+		{
+			ret = i;
+			break;
+		}
+	}
+	return ret;
 }
 
 

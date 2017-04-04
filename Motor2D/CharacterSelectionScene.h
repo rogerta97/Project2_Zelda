@@ -8,106 +8,6 @@
 #include "j1App.h"
 #include "j1Viewports.h"
 
-//#include "j1Entity.h"
-//#include <vector>
-//
-//class UI_Image;
-//class UI_Text;
-//class UI_Window;
-//
-//struct info_window
-//{
-//	entity_name			name = e_n_null; 
-//	vector<UI_Image*>	habilites; 
-//	vector<UI_Text*>	description;
-//
-//	void Reset() { name = e_n_null; habilites.clear(); description.clear(); }
-//};
-//
-//struct char_select_view
-//{	
-//	vector<UI_Image*>   char_images;
-//
-//	UI_Image*			name_background = nullptr; 
-//	UI_Text*			name = nullptr; 
-//	UI_Image*			info_button = nullptr; 
-//	UI_Image*			info_back = nullptr;
-//	UI_Text*			ready_text = false;
-//
-//	void Reset() { char_images.clear(); name_background = nullptr; name = nullptr; info_button = nullptr; info_back = nullptr; ready_text = false;}
-//};
-//
-//struct character_info
-//{
-//	entity_name	 character = e_n_null; 
-//	string		 name; 
-//	void Reset() { character = e_n_null; name = ""; }
-//};
-//
-//
-//class CharacterSelectionScene : public Scene
-//{
-//public:
-//	CharacterSelectionScene();
-//
-//	~CharacterSelectionScene();
-//
-//	bool Start();
-//	bool PreUpdate();
-//	bool Update(float dt);
-//	bool PostUpdate();
-//	bool CleanUp();
-//
-//	void CreateScene(uint w, uint h); 
-//	void MoveCard(int pad, const char* direction); 
-//	void EnableInfo(entity_name character, int viewport_num, uint w, uint h);
-//	void DisableInfo(entity_name character, int viewport_num);
-//	bool AllReady();
-//
-//	UI_Window*		window = nullptr; 
-//
-//private:
-//	void DrawScreenSeparation();
-//
-//private:
-//	int					 player_viewports[4];
-//	char_select_view	 viewport[4]; 
-//
-//	list<info_window>	 info_container[4]; 
-//
-//	list<character_info> char_view[4]; 
-//
-//
-//	// Ganon
-//	SDL_Rect			 ganon_rects[2];
-//
-//	// Navi
-//	SDL_Rect			 navi_rects[2];
-//
-//	// Link
-//	SDL_Rect			 link_rects[2];
-//
-//	// Background
-//	SDL_Rect			 backgrounds_rects[2];
-//
-//	vector<iPoint>		 positions;
-//
-//	bool				 player_ready[4] = {false, false, false, false};
-//	bool				 change_scene = false; 
-//
-//	uint				 win_w = 0; 
-//	uint				 win_h = 0; 
-//
-//public:
-//
-//private:
-//
-//
-//
-//};
-//
-//
-
 struct player_data
 {
 	player_data() {};
@@ -138,9 +38,14 @@ struct viewport_data
 		iPoint small_image_right_pos = {320, 100};
 
 		iPoint button_info_pos = {350, 310};
+		SDL_Rect button_info_rect = { 324, 195, 95, 40 };
+
 		iPoint background_info_image_pos = {10, 10};
+		SDL_Rect background_info_image_rect = { 656, 595, 470, 325 };
 
 		iPoint background_name_image_pos = {200, 200};
+		SDL_Rect background_name_image_rect = { 128, 52,  217, 55 };
+
 		iPoint text_name_pos = {250, 210};
 
 		iPoint abilities_info1_pos = {15, 20};
@@ -157,14 +62,16 @@ struct viewport_data
 		small_image_left = window->CreateImage(small_image_left_pos, { 0, 0, 0, 0 });
 		small_image_right = window->CreateImage(small_image_right_pos, { 0, 0, 0, 0 });
 
-		button_info = window->CreateImage(button_info_pos, { 324, 195, 95, 40 });
+		button_info = window->CreateImage(button_info_pos, button_info_rect);
 
-		background_name_image = window->CreateImage(background_name_image_pos, { 128, 52,  217, 55 });
+		background_name_image = window->CreateImage(background_name_image_pos, background_name_image_rect);
 		text_name = window->CreateText(text_name_pos, App->font->game_font);
 
 		ready_text = window->CreateText(ready_text_pos, App->font->game_font);
+		ready_text->SetText("Ready!");
+		ready_text->enabled = false;
 
-		background_info_image = window->CreateImage(background_info_image_pos, { 656, 595, 470, 325 });
+		background_info_image = window->CreateImage(background_info_image_pos, background_info_image_rect);
 		background_info_image->enabled = false;
 
 		abilities_info1 = window->CreateText(abilities_info1_pos, App->font->game_font);
@@ -175,8 +82,6 @@ struct viewport_data
 		abilities_info3->enabled = false;
 		abilities_info4 = window->CreateText(abilities_info4_pos, App->font->game_font);
 		abilities_info4->enabled = false;
-
-		
 	};
 
 	~viewport_data() {};
@@ -202,7 +107,7 @@ struct viewport_data
 
 	UI_Text* ready_text = nullptr; 
 
-	bool	 SetViewportInfo(player_data* player); 
+	bool SetViewportInfo(player_data* player); 
 };
 
 class CharacterSelectionScene : public Scene
@@ -215,8 +120,10 @@ public:
 	bool CleanUp();
 
 private:
-
-	player_data* MoveCharacter(const char* direction, entity_name middle);
+	player_data* MoveCharacterLeft(player_data* data, int viewport);
+	player_data* MoveCharacterRight(player_data* data, int viewport);
+	void SetDataToViewport(player_data* data, int viewport);
+	int GetIndexByPlayerData(player_data* data);
 
 public:
 
@@ -226,6 +133,7 @@ public:
 
 private:
 	vector<viewport_data> viewports_data;
+	vector<player_data*> players_data;
 
 	player_data* curr_player_data1 = nullptr;
 	player_data* curr_player_data2 = nullptr;
