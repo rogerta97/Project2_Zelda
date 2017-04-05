@@ -224,13 +224,13 @@ void Zelda::CheckState()
 		}
 		break;
 	case z_s_idle:
-		if ((team1_players != 0 && team2_players == 0) || (team2_players != 0 && team1_players == 0))
+		if ((team1_players > team2_players) || (team2_players > team1_players))
 		{
 			state = z_s_move;
 
 			bool change_dir = false;
 
-			if (team1_players != 0)
+			if (team1_players > team2_players)
 			{
 				if (direction != -1)
 				{
@@ -252,7 +252,7 @@ void Zelda::CheckState()
 		}
 		break;
 	case z_s_move:
-		if ((team1_players == 0 && team2_players == 0) || (team1_players != 0 && team2_players != 0))
+		if ((team1_players == 0 && team2_players == 0) || (team1_players == team2_players))
 		{
 			state = z_s_idle;
 		}
