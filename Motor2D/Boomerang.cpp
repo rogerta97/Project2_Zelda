@@ -81,12 +81,12 @@ bool Boomerang::Update(float dt)
 		if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) < BOOMERANG_RANGE * 0.5f)
 		{
 			stats.stun_duration = 1.0f;
-			stats.damage_multiplicator = 0.8f;
+			stats.damage_multiplicator = 0.3f;
 		}
 		else if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) > BOOMERANG_RANGE * 0.5f)
 		{
 			stats.stun_duration = 0.0f;
-			stats.damage_multiplicator = 0.3f;
+			stats.damage_multiplicator = 0.15f;
 			stats.slow_duration = SLOW_TIME;
 			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
 		}
@@ -94,7 +94,7 @@ bool Boomerang::Update(float dt)
 	else
 	{
 		stats.stun_duration = 0.0f;
-		stats.damage_multiplicator = 0.3f;
+		stats.damage_multiplicator = 0.15f;
 		stats.slow_duration = 0.0f;
 		stats.slow_multiplicator = 0.0f;
 	}
