@@ -125,7 +125,7 @@ bool CharacterSelectionScene::Update(float dt)
 {
 	bool ret = true;
 
-	// Blit main banner
+	// Blit background
 	if (App->scene->GetCurrentScene() == this)
 	{
 		App->view->LayerBlit(1, background_image, background_pos, background_image_rect);
@@ -144,6 +144,9 @@ bool CharacterSelectionScene::Update(float dt)
 
 	if (all_ready)
 	{
+		for (int i = 0; i < 4; i++)
+			App->scene->players[i].character = entity_name::link;
+
 		// Set characters when finished
 		App->scene->players[0].character = curr_player_data1->entity;
 		App->scene->players[1].character = curr_player_data2->entity;
@@ -254,7 +257,7 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].ready_text->SetText("Press START when ready!");
 		}
 
-		if (viewports_data[0].is_ready == true && viewports_data[1].is_ready == true && viewports_data[2].is_ready == true && viewports_data[3].is_ready == true)
+		if (viewports_data[0].is_ready && viewports_data[1].is_ready && viewports_data[2].is_ready && viewports_data[3].is_ready)
 		{
 			all_ready = true;
 		}
