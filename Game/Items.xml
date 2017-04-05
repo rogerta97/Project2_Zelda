@@ -6,7 +6,7 @@
     <description>The latest trend in footwear</description>
     <power value="0"/>
     <hp value="0"/>
-    <speed value="20"/>
+    <speed value="30"/>
     <price rupees="200"/>
     <upgrade id="1"/>
     <rect x="647" y="330" w="40" h="40"/>
@@ -16,7 +16,7 @@
     <description>So fast it feels like flying !</description>
     <power value="0"/>
     <hp value="0"/>
-    <speed value="50"/>
+    <speed value="60"/>
     <price rupees="500"/>
     <upgrade id="-1"/>
     <upgrade_from id="0"/>
@@ -25,7 +25,7 @@
   <item id="2">
     <name>Sword</name>
     <description> Slice your enemies !</description>
-    <power value="20"/>
+    <power value="10"/>
     <hp value="0"/>
     <speed value="0"/>
     <price rupees="200"/>
@@ -35,7 +35,7 @@
   <item id="3">
     <name>Master Sword</name>
     <description> Obliterate your foes !</description>
-    <power value="50"/>
+    <power value="30"/>
     <hp value="0"/>
     <speed value="0"/>
     <price rupees="500"/>
@@ -47,7 +47,7 @@
     <name>Shield</name>
     <description>The best attack is a good defense. </description>
     <power value="0"/>
-    <hp value="20"/>
+    <hp value="50"/>
     <speed value="0"/>
     <price rupees="200"/>
     <upgrade id="5"/>
@@ -57,7 +57,7 @@
     <name>Sturdy Shield</name>
     <description>A sturdier version of the shield.</description>
     <power value="0"/>
-    <hp value="50"/>
+    <hp value="120"/>
     <speed value="0"/>
     <price rupees="500"/>
     <upgrade id="-1"/>
