@@ -38,7 +38,6 @@ bool JungleCampManager::Start()
 bool JungleCampManager::Update(float dt)
 {
 	bool ret = true;
-	
 
 	if (snakes_camp1.empty() && !snakes_timer_camp1.IsActive())
 	{
@@ -205,7 +204,7 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 {
 	if (camp->type == snake)
 	{
-		if (camp->GetPos().x < HALFMAP)
+		if (camp->GetPos().x > HALFMAP)
 		{
 			snakes_camp1.remove(camp);
 		}
