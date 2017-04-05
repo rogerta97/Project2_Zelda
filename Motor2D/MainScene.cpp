@@ -60,7 +60,7 @@ bool MainScene::Start()
 	// Player1
 	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_1->viewport = 1;
-	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 4 + (screen.w / 14), screen.h / 40), { 0, 28, 385, 24 });
+	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
 	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
@@ -70,7 +70,7 @@ bool MainScene::Start()
 	// Player2
 	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_2->viewport = 2;
-	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 4 + (screen.w / 14), screen.h / 40), { 0, 28, 385, 24 });
+	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
 	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
@@ -80,7 +80,7 @@ bool MainScene::Start()
 	// Player3
 	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_3->viewport = 3;
-	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 4 + (screen.w/14) , screen.h / 40), { 0, 28, 385, 24 });
+	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
 	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
@@ -90,7 +90,7 @@ bool MainScene::Start()
 	// Player4
 	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 	main_window_4->viewport = 4;
-	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 4 + (screen.w / 14), screen.h / 40), { 0, 28, 385, 24 });
+	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
 	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
 	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
 	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);

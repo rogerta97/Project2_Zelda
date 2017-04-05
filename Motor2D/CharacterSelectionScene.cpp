@@ -201,7 +201,7 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			viewports_data[i].is_ready = true;
 		
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 90, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 100, viewports_data[i].ready_text->GetPos().y));
 			viewports_data[i].ready_text->SetText("READY!");
 							
 		}
@@ -210,7 +210,7 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			viewports_data[i].is_ready = false;
 
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 90, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 100, viewports_data[i].ready_text->GetPos().y));
 			viewports_data[i].ready_text->SetText("Press START when ready!");
 		}
 

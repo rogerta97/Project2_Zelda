@@ -24,7 +24,7 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		active_quest_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(screen.w/4 , 50), App->font->game_font_12, 0, false, 255, 215, 0));
+		active_quest_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(screen.w/4 -55 , 50), App->font->game_font_12, 0, false, 255, 215, 0));
 		active_quest_text[0]->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -125,7 +125,7 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 02 && active_quest == -1)
 	{
 		change_state(1, active);
 		active_quest = 1;
