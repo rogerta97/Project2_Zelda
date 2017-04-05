@@ -8,6 +8,7 @@
 #include "j1Audio.h"
 #include "j1XMLLoader.h"
 #include "Animation.h"
+#include "j1Window.h"
 
 MenuScene::MenuScene()
 {
@@ -23,7 +24,7 @@ bool MenuScene::Start()
 
 	change_scene = false;
 
-	SDL_Rect screen = App->view->GetViewportRect(1);
+	SDL_Rect screen = {0, 0, App->win->GetWindowSize().x,  App->win->GetWindowSize().y};
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
 	// Main banner
@@ -31,7 +32,8 @@ bool MenuScene::Start()
 	pugi::xml_document doc;
 	App->xml->LoadXML("menu_scene.xml", doc);
 	main_banner_texture = main_banner->LoadAnimationsFromXML(doc, "animations");
-	main_banner_pos = {30, 30};
+	main_banner->SetAnimation("idle");
+	main_banner_pos = {(screen.w / 2) - (main_banner->GetCurrentAnimation()->GetActualFrame().w / 2), 30};
 	main_banner->SetAnimation("idle");
 
 	// Start ---
@@ -207,7 +209,8 @@ bool MenuScene::Update(float dt)
 	}
 
 	// Blit main banner
-	App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
+	if(App->scene->GetCurrentScene() == this)
+		App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
 
 	//Stop music ones it finish
 	if (music_time.ReadSec() > 17)
