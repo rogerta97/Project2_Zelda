@@ -489,15 +489,18 @@ void MainScene::DrawScreenSeparation()
 
 	for (uint y = 0; y < win_h - 2; y += 2)
 	{
-		App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, y), { 130,0,4,2 });
+		SDL_Rect rect = { 130,0,4,2 };
+		App->render->Blit(App->gui->atlas, win_w / 2 - 2, y, &rect);
 	}
 
 	for (uint x = 0; x < win_w - 2; x += 2)
 	{
-		App->view->LayerBlit(20, App->gui->atlas, iPoint(x, win_h / 4 - 4), { 130,2,2,4 });
+		SDL_Rect rect2 = { 130,2,2,4 };
+		App->render->Blit(App->gui->atlas, x, win_h / 2 - 4, &rect2);
 	}
 
-	App->view->LayerBlit(20, App->gui->atlas, iPoint(win_w / 4 - 2, win_h / 4 - 6), { 130,0,6,6 });
+	SDL_Rect rect3 = { 130,0,6,6 };
+	App->render->Blit(App->gui->atlas, win_w / 2 - 2, win_h / 2 - 6, &rect3);
 }
 
 void MainScene::UpdateWinnerAnim(uint winner, float dt)

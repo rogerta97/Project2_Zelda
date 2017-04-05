@@ -125,6 +125,8 @@ private:
 	void SetDataToViewport(player_data* data, int viewport);
 	int GetIndexByPlayerData(player_data* data);
 
+	void DrawScreenSeparation();
+
 public:
 
 	player_data* link = nullptr;

@@ -91,6 +91,8 @@ bool CharacterSelectionScene::Update(float dt)
 
 	bool change_cene = false;
 
+	DrawScreenSeparation();
+
 	// Debug
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
@@ -339,6 +341,27 @@ int CharacterSelectionScene::GetIndexByPlayerData(player_data * data)
 		}
 	}
 	return ret;
+}
+
+void CharacterSelectionScene::DrawScreenSeparation()
+{
+	uint win_w, win_h;
+	App->win->GetWindowSize(win_w, win_h);
+
+	for (uint y = 0; y < win_h - 2; y += 2)
+	{
+		SDL_Rect rect = { 130,0,4,2 };
+		App->render->Blit(App->gui->atlas, win_w / 2 - 2, y, &rect);
+	}
+
+	for (uint x = 0; x < win_w - 2; x += 2)
+	{
+		SDL_Rect rect2 = { 130,2,2,4 };
+		App->render->Blit(App->gui->atlas, x, win_h / 2 - 4, &rect2);
+	}
+
+	SDL_Rect rect3 = { 130,0,6,6 };
+	App->render->Blit(App->gui->atlas, win_w / 2 - 2, win_h / 2 - 6, &rect3);
 }
 
 

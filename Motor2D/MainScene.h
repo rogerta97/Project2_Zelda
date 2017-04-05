@@ -55,6 +55,7 @@ private:
 
 	void UpdateWinnerAnim(uint winner, float dt);
 
+
 public:
 	UI_Window*			main_window_1 = nullptr;
 	UI_Image*			princess_1 = nullptr;
