@@ -214,9 +214,9 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].ready_text->SetText("Press START when ready!");
 		}
 
-		
+		if (viewports_data[0].is_ready == true && viewports_data[1].is_ready == true && viewports_data[2].is_ready == true && viewports_data[3].is_ready == true)
+			change_cene = true; 
 	
-		
 	}
 
 	// Check if all ready
