@@ -8,6 +8,7 @@ class UI_Image;
 class UI_Text;
 class UI_Window;
 class Player;
+class Animator;
 
 struct item_info
 {
@@ -45,6 +46,8 @@ struct shop
 	bool				item_selected = false;
 
 	bool				active = false;
+
+	UI_Image*			shop_icon = nullptr;
 };
 
 class ShopManager
@@ -68,6 +71,8 @@ public:
 
 private:
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
+
+	Animator*		shop_icon_anim = nullptr;
 	
 };
 

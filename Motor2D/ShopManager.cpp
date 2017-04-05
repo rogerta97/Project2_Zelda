@@ -8,6 +8,7 @@
 #include "j1Scene.h"
 #include "j1Map.h"
 #include "j1XMLLoader.h"
+#include "Animation.h"
 
 ShopManager::ShopManager()
 {
@@ -247,12 +248,24 @@ bool ShopManager::Start()
 		}
 	}
 
-	shop_window->SetEnabledAndChilds(false);
-	shop_window->enabled = true;
-
 	//Get shop positions
 	team_shop[0] = App->map->GetShopPosition(1);
 	team_shop[1] = App->map->GetShopPosition(2);
+
+	//Shop icon
+	for (int i = 0; i < 4; i++)
+	{
+		int x = (win_w / 4 - 16);
+		int y = (win_h / 4 - win_h / 6) + (i / 2)*win_h / 2;
+
+		shops[i]->shop_icon = shop_window->CreateImage(iPoint(x, y), { 0,0,0,0 });
+	}
+
+	shop_window->SetEnabledAndChilds(false);
+	shop_window->enabled = true;
+
+	shop_icon_anim = new Animator();
+	shop_icon_anim->LoadAnimationsFromXML(shop_config, "animations");
 
 	return true;
 }
@@ -263,6 +276,17 @@ bool ShopManager::Update()
 	{
 		if ((*it)->is_dead)
 			return true;
+
+		if (team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200 && !shops[(*it)->viewport - 1]->active)
+		{
+			shops[(*it)->viewport - 1]->shop_icon->enabled = true;
+			shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
+		}
+		else
+		{
+			if(shops[(*it)->viewport - 1]->shop_icon->enabled == true)
+				shops[(*it)->viewport - 1]->shop_icon->enabled = false;
+		}
 
 		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
