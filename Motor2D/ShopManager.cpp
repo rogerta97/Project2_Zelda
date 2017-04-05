@@ -431,6 +431,10 @@ void ShopManager::ChangeShopState(int view)
 		it->item_image->enabled = !it->item_image->enabled;
 	}
 
+	shops[view]->selected_item = 0;
+
+	UpdateItemInfo(view);
+
 	for (int i = 0; i < 3; i++)
 	{
 		shops[view]->player_items[i]->enabled = !shops[view]->player_items[i]->enabled;
@@ -447,10 +451,6 @@ void ShopManager::ChangeShopState(int view)
 
 	if (shops[view]->upgrade_from_item->enabled)
 		shops[view]->upgrade_from_item->enabled = !shops[view]->upgrade_from_item->enabled;
-
-	shops[view]->selected_item = 0;
-	
-	UpdateItemInfo(view);
 
 	shops[view]->active = !shops[view]->active;
 	shops[view]->item_selected = false;
