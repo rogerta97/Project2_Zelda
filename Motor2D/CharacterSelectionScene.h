@@ -146,6 +146,12 @@ private:
 	player_data* curr_player_data2 = nullptr;
 	player_data* curr_player_data3 = nullptr;
 	player_data* curr_player_data4 = nullptr;
+
+	// Background image
+	SDL_Texture*	   background_image = nullptr;
+	iPoint			   background_pos = NULLPOINT;
+	SDL_Rect		   background_image_rect = NULLRECT;
+	float              fade_value = 255.0f;
 };
 
 #endif
