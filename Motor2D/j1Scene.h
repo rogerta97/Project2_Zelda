@@ -11,6 +11,7 @@ class MenuScene;
 class MainScene;
 class CharacterSelectionScene; 
 class TeamSelectScene;
+class LogoScene;
 
 struct player_info
 {
@@ -72,6 +73,7 @@ public:
 	MainScene*					 main_scene = nullptr;
 	CharacterSelectionScene*	 charselect_screen = nullptr; 
 	TeamSelectScene*			 team_select = nullptr;
+	LogoScene*					 logo_scene = nullptr;
 
 	player_info					 players[4];
 

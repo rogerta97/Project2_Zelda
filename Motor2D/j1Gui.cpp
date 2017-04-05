@@ -150,7 +150,11 @@ bool j1Gui::CleanUp()
 	while (elements_list.Count() > 0)
 	{
 		p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start;
-		DeleteElement(elements->data);
+
+		if(elements->data->type == ui_window)
+			DeleteElement(elements->data);
+		else
+			elements_list.Pop(elements->data);
 	}
 
 	return true;

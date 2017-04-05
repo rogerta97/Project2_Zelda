@@ -175,6 +175,9 @@
     <ClCompile Include="j1XMLLoader.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="LogoScene.cpp">
+      <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -381,6 +384,9 @@
     <ClInclude Include="j1XMLLoader.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
+    <ClInclude Include="LogoScene.h">
+      <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -463,6 +469,9 @@
     </Filter>
     <Filter Include="Engine\5. Spells ===========\BoneAttack">
       <UniqueIdentifier>{d8f600ad-a766-4725-8bcf-09b65f6bd00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\LogoScene">
+      <UniqueIdentifier>{2a7db05e-620f-44c4-aa2c-95a40dfdd87a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
