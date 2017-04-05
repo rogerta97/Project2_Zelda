@@ -180,10 +180,8 @@ bool MainScene::Start()
 
 	//Load Victory/Defeat Animations
 	pugi::xml_document gs;
-	pugi::xml_node file_node;
 
 	App->xml->LoadXML("GameSettings.xml", gs);
-	file_node = gs.child("file");
 
 	defeat = new Animator();
 	victory = new Animator();

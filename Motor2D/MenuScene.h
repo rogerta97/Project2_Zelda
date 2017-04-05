@@ -6,6 +6,8 @@
 #include "j1Render.h"
 #include "j1Timer.h"
 
+class Animator;
+
 enum button_action 
 {
 	START,
@@ -74,7 +76,10 @@ private:
 
 	j1Timer			   music_time;
 
+	// Main banner
 	Animator*		   main_banner = nullptr;
+	iPoint			   main_banner_pos = NULLPOINT;
+	SDL_Texture*	   main_banner_texture = nullptr;
 
 };
 

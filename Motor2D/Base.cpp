@@ -60,10 +60,6 @@ bool Base::Update(float dt)
 		{
 			if (spell != nullptr)
 			{
-				DealDamage((entity->stats.power * (ability->damage)) * (spell->stats.damage_multiplicator)); // Spells control their own damage mutiplicator
-
-				if (TextCmp(spell->name.c_str(), "boomerang"))
-					BoomerangEffects(entity, ability, spell);
 			}
 			else
 				DealDamage(entity->stats.base_power * (ability->damage * ability->damage_multiplicator));

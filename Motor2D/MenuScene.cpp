@@ -6,7 +6,8 @@
 #include "j1Scene.h"
 #include "p2Log.h"
 #include "j1Audio.h"
-
+#include "j1XMLLoader.h"
+#include "Animation.h"
 
 MenuScene::MenuScene()
 {
@@ -25,8 +26,13 @@ bool MenuScene::Start()
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
-	// Triforce
-    //	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
+	// Main banner
+	main_banner = new Animator();
+	pugi::xml_document doc;
+	App->xml->LoadXML("menu_scene.xml", doc);
+	main_banner_texture = main_banner->LoadAnimationsFromXML(doc, "animations");
+	main_banner_pos = {30, 30};
+	main_banner->SetAnimation("idle");
 
 	// Start ---
 	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
@@ -200,6 +206,9 @@ bool MenuScene::Update(float dt)
 		App->scene->ChangeScene(App->scene->main_scene);
 	}
 
+	// Blit main banner
+	App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
+
 	//Stop music ones it finish
 	if (music_time.ReadSec() > 17)
 	{
@@ -272,6 +281,11 @@ bool MenuScene::CleanUp()
 	
 	//Stop Music
 	App->audio->StopMusic();
+
+	// Main banner
+	main_banner->CleanUp();
+	RELEASE(main_banner);
+	App->tex->UnLoadTexture(main_banner_texture);
 
 	return true;
 }
