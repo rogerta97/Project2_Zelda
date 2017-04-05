@@ -25,10 +25,10 @@ bool CharacterSelectionScene::Start()
 
 	// Create players and info
 	link = new player_data();
-	link->ability1_text = "Basic Attack: Frontal smash with the\nsword";
-	link->ability2_text = "Sword Swing: Link swings his sword\naround him and damage all nearby\nenemies"; 
-	link->ability3_text = "Boomerang: Link shoots his boomerang,\ncatch it when it comes back!";
-	link->ability4_text = "Charge: Link will run to target location\nignoring collisions and damaging\nall enemies he touches.";
+	link->ability1_text = "Basic Attack: Frontal smash with the sword";
+	link->ability2_text = "Sword Swing: Link swings his sword around\nhim and damage all nearby enemies."; 
+	link->ability3_text = "Boomerang: Link shoots his boomerang, catch\nit when it comes back!";
+	link->ability4_text = "Charge: Link will run to target location\nignoring collisions and damaging all enemies he\n touches.";
 	link->big_image = {0, 294, 116, 147}; 
 	link->small_image = {348, 445, 74, 90};
 	link->name = "LINK"; 
@@ -36,8 +36,8 @@ bool CharacterSelectionScene::Start()
 	players_data.push_back(link);
 
 	ganon = new player_data();
-	ganon->ability1_text = "Basic Attack: Frontal smash with the trident";
-	ganon->ability2_text = "Bat: Ganon shoot a bat to target direction";
+	ganon->ability1_text = "Basic Attack: Frontal smash with the trident.";
+	ganon->ability2_text = "Bat: Ganon shoot a bat to target direction.";
 	ganon->ability3_text = "Flame Shield: Ganon puts a shield to himself\nand summon 3 fire orbs that orbit around him. ";
 	ganon->ability4_text = "Evil Jump: Ganaon jumps to a target position\nand stuns all enemies on the area.";
 	ganon->big_image = { 116, 294, 116, 147 };
@@ -47,10 +47,10 @@ bool CharacterSelectionScene::Start()
 	players_data.push_back(ganon);
 
 	navi = new player_data();
-	navi->ability1_text = "Basic Attack: Navi shoots an energy ball in\nfront of her that hits the first enemy hit";
+	navi->ability1_text = "Basic Attack: Navi shoots an energy ball in\nfront of her that hits the first enemy hit.";
 	navi->ability2_text = "Watch Out!:  Navi heals allies around her. Range\nis displayed as a circle with Navi as centre.";
 	navi->ability3_text = "Blink: Navi uses her magic energy to teleport\na small distance in front of her.!";
-	navi->ability4_text = "Hey Listen!: disable enemy players view for 3\n seconds";
+	navi->ability4_text = "Hey Listen!: disable enemy players view for 3\n seconds.";
 	navi->big_image = { 232, 294, 116, 147 };
 	navi->small_image = { 496, 445, 75, 90 };
 	navi->name = "NAVI";
@@ -201,7 +201,7 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			viewports_data[i].is_ready = true;
 		
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 80, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 90, viewports_data[i].ready_text->GetPos().y));
 			viewports_data[i].ready_text->SetText("READY!");
 							
 		}
@@ -210,7 +210,7 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			viewports_data[i].is_ready = false;
 
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 80, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 90, viewports_data[i].ready_text->GetPos().y));
 			viewports_data[i].ready_text->SetText("Press START when ready!");
 		}
 
