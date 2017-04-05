@@ -58,11 +58,8 @@ bool Base::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			if (spell != nullptr)
-			{
-			}
-			else
-				DealDamage(entity->stats.base_power * (ability->damage * ability->damage_multiplicator));
+			if (spell == nullptr)
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 
 			if (stats.life <= 0)
 			{
