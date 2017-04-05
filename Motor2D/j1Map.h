@@ -172,6 +172,9 @@ public:
 	// Return eyes coordinates
 	std::vector<iPoint> GetEyesPositions()const;
 
+	//Return base position in world cordinates
+	iPoint GetWaterfallPosition() const;
+
 private:
 
 	bool LoadMap();

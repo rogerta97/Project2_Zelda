@@ -92,6 +92,10 @@ void AestheticsManager::Start()
 	}
 	// -----
 
+	//Waterfall
+	App->entity->CreateEntity(entity_name::waterfall, App->map->GetWaterfallPosition());
+	// -----
+
 }
 
 void AestheticsManager::CleanUp()

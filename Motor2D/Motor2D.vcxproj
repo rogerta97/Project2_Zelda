@@ -131,6 +131,7 @@
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
     <ClCompile Include="Trees.cpp" />
+    <ClCompile Include="Waterfall.cpp" />
     <ClCompile Include="Zelda.cpp" />
     <ClCompile Include="ZeldaManager.cpp" />
     <ClCompile Include="Trunk.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
     <ClInclude Include="Trees.h" />
+    <ClInclude Include="Waterfall.h" />
     <ClInclude Include="Zelda.h" />
     <ClInclude Include="ZeldaManager.h" />
     <ClInclude Include="Trunk.h" />
@@ -229,6 +231,7 @@
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Game\waterfall.xml" />
     <Xml Include="..\Game\zelda.xml">
       <SubType>Designer</SubType>
     </Xml>

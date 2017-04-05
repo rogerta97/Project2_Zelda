@@ -54,6 +54,9 @@ private:
 	// Trunk
 	Entity*					trunk_entity = nullptr; 
 
+	//Waterfall
+	Entity*					waterfall = nullptr;
+
 	// Trees
 	std::vector<Tree*>		trees_entity;
 
