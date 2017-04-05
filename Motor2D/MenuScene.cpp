@@ -65,7 +65,7 @@ bool MenuScene::Start()
 	options_button->AddImage("idle", { 128, 52, 220, 55 });
 	options_button->SetImage("idle");
 
-	options_text = menu_window->CreateText(iPoint(options_button->rect.x + 60, (screen.h / 2) + 110), App->font->game_font);
+	options_text = menu_window->CreateText(iPoint(options_button->rect.x + 66, (screen.h / 2) + 110), App->font->game_font);
 	options_text->SetText("OPTIONS");
 	options_text->click_through = true;
 
@@ -112,7 +112,7 @@ bool MenuScene::Start()
 
 	credits_button->SetImage("idle");
 
-	credits_text = menu_window->CreateText(iPoint(credits_button->rect.x + 60, (screen.h / 2) + 180), App->font->game_font);
+	credits_text = menu_window->CreateText(iPoint(credits_button->rect.x + 68, (screen.h / 2) + 180), App->font->game_font);
 	credits_text->SetText("CREDITS"); 
 	credits_text->click_through = true; 
 	// ---------
@@ -125,7 +125,7 @@ bool MenuScene::Start()
 
 	quit_button->SetImage("idle");
 
-	quit_text = menu_window->CreateText(iPoint(quit_button->rect.x + 60, (screen.h / 2) + 250), App->font->game_font);
+	quit_text = menu_window->CreateText(iPoint(quit_button->rect.x + 55, (screen.h / 2) + 250), App->font->game_font);
 	quit_text->SetText("QUIT GAME");
 	quit_text->click_through = true;
 	// ---------
