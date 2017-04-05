@@ -21,6 +21,11 @@ bool CharacterSelectionScene::Start()
 {
 	bool ret = true;
 
+	// Background image
+	background_image = App->tex->LoadTexture("gui/intro_background.png");
+	background_pos = { 0 , 0 };
+	background_image_rect = { 0, 0, 1994, 1359 };
+
 	App->console->AddText("viewports.set 4", Input); 
 
 	// Create players and info
@@ -90,6 +95,12 @@ bool CharacterSelectionScene::Update(float dt)
 	bool ret = true;
 
 	bool change_cene = false;
+
+	// Blit main banner
+	if (App->scene->GetCurrentScene() == this)
+	{
+		App->view->LayerBlit(1, background_image, background_pos, background_image_rect);
+	}
 
 	DrawScreenSeparation();
 
@@ -253,8 +264,11 @@ bool CharacterSelectionScene::CleanUp()
 	viewports_data.clear(); 
 	players_data.clear();
 	
-	//Stop Music
+	// Stop Music
 	App->audio->StopMusic();
+
+	// Background image
+	App->tex->UnLoadTexture(background_image);
 
 	change_scene = false;
 	

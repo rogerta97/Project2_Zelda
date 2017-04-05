@@ -32,7 +32,7 @@ bool MenuScene::Start()
 
 	// Background
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
-	background_pos = { 0, 0 };
+	background_pos = {0 , 0 };
 	background_image_rect = {0, 0, 1994, 1359};
 
 	// Main banner
@@ -218,7 +218,7 @@ bool MenuScene::Update(float dt)
 	// Blit main banner
 	if (App->scene->GetCurrentScene() == this)
 	{
-		App->render->Blit(background_image, background_pos.x, background_pos.x, &background_image_rect);
+		App->render->Blit(background_image, background_pos.x, background_pos.y, &background_image_rect);
 		App->render->DrawQuad({ 0, 0, App->win->GetWindowSize().x, App->win->GetWindowSize().y }, 255, 255, 255, -1.0f, fade_value, true);
 		FadeOut();
 		App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
