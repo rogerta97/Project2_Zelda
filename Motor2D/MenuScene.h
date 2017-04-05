@@ -74,6 +74,8 @@ private:
 
 	j1Timer			   music_time;
 
+	Animator*		   main_banner = nullptr;
+
 };
 
 

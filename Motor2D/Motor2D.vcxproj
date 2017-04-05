@@ -221,6 +221,7 @@
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
+    <Xml Include="..\Game\menu_scene.xml" />
     <Xml Include="..\Game\minion.xml" />
     <Xml Include="..\Game\Quests.xml" />
     <Xml Include="..\Game\Shop_config.xml" />

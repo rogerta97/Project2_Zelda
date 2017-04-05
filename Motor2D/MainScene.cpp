@@ -301,6 +301,8 @@ bool MainScene::CleanUp()
 	App->spell->ClearSpells();
 
 	//Releas Animators
+	victory->CleanUp();
+	defeat->CleanUp();
 	RELEASE(victory);
 	RELEASE(defeat);
 
