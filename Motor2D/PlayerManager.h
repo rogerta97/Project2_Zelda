@@ -39,6 +39,7 @@ public:
 	void BuyItem(Item* item, int price);
 	void Kill();
 	void Respawn();
+	void BaseTravel();
 	void ApplyItemStats();
 	void AddRupees(int add);
 
@@ -70,6 +71,9 @@ public:
 	int			team = 0;	
 
 	bool		disable_controller = false;
+
+	bool		base_travel = false;
+	j1Timer     base_travel_timer;
 };
 
 class PlayerManager
@@ -161,5 +165,6 @@ private:
 
 	uint				last_heal_time = 0;
 };
+
 
 #endif // __PLAYER_MANAGER_H__

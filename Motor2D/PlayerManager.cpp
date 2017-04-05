@@ -7,6 +7,9 @@
 #include "GameObject.h"
 
 #define DEATH_CAMERA_SPEED 500
+#define BASE_TRAVEL_TIME 4
+#define BASE_TRAVEL_RECT_W 240
+#define BASE_TRAVEL_RECT_H 15
 
 PlayerManager::PlayerManager()
 {
@@ -125,6 +128,9 @@ bool PlayerManager::Update(float dt)
 			UpdateUI(curr_player);
 
 			CheckIfDeath(curr_player);
+
+			if (curr_player->base_travel)
+				curr_player->BaseTravel();
 		}
 		else
 		{
@@ -395,6 +401,12 @@ void PlayerManager::PlayerInput(Player * curr_player)
 
 	if (curr_player->entity == nullptr)
 		return;
+
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
+	{
+		curr_player->BaseTravel();
+		curr_player->move = stop;
+	}
 
 	// Diagonal moves
 	if (curr_player->entity->stuned || curr_player->disable_controller)
@@ -694,6 +706,9 @@ void PlayerManager::PlayerInput(Player * curr_player)
 			}
 		}
 	}
+
+	if (curr_player->move != stop || curr_player->show != show_null)
+		curr_player->base_travel = false;
 
 	// State machines
 
@@ -1176,6 +1191,7 @@ void Player::Kill()
 {
 	if (entity != nullptr)
 	{
+		base_travel = false;
 		App->entity->DeleteEntity(entity);
 		is_dead = true;
 		death_timer.Start();
@@ -1191,7 +1207,40 @@ void Player::Respawn()
 		entity->SetTeam(team);
 		entity->show_life_bar = true;
 		entity->is_player = true;
+		base_travel = false;
 		is_dead = false;
+	}
+}
+
+void Player::BaseTravel()
+{
+	if (!base_travel)
+	{
+		base_travel_timer.Start();
+		base_travel = true;
+	}
+	else if(!is_dead)
+	{
+		SDL_Rect win = App->view->GetViewportRect(1);
+
+		SDL_Rect base_rect = { (win.w / 2 - (BASE_TRAVEL_RECT_W / 2)), win.h - 20, BASE_TRAVEL_RECT_W, BASE_TRAVEL_RECT_H };
+
+		float width = (base_rect.w * base_travel_timer.ReadSec()) / BASE_TRAVEL_TIME;
+		SDL_Rect time_rect = { base_rect.x, base_rect.y, width, base_rect.h };
+
+		App->view->LayerDrawQuad(base_rect, 32, 32, 32, 200, true, 1, viewport, false);
+		App->view->LayerDrawQuad(time_rect, 208, 240, 208, 200, true, 1, viewport, false);
+
+		if (base_travel_timer.ReadSec() > BASE_TRAVEL_TIME)
+		{
+			fPoint r; r.x = respawn.x; r.y = respawn.y;
+			entity->game_object->SetPos(r);
+			base_travel = false;
+		}
+	}
+	else
+	{
+		base_travel = false;
 	}
 }
 

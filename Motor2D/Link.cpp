@@ -123,6 +123,12 @@ bool Link::Update(float dt)
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+
+			// Base travel cancel
+			Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(game_object->pbody);
+			if (p != nullptr)
+				p->base_travel = false;
+			// -------------
 		}
 
 		// Friendly attacks
@@ -145,8 +151,10 @@ bool Link::Update(float dt)
 		if (stats.life <= 0)
 		{
 			if (entity->is_player)
+			{
 				// Update quests
 				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
+			}
 			
 			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 		}
