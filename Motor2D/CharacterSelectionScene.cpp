@@ -90,11 +90,40 @@ bool CharacterSelectionScene::Start()
 	return ret;
 }
 
+bool CharacterSelectionScene::CleanUp()
+{
+	// Free UI
+	if (App->scene->GetCurrentScene() != App->scene->charselect_screen)
+	{
+		for (int i = 0; i < viewports_data.size(); i++)
+		{
+			App->gui->DeleteElement(viewports_data[i].window);
+		}
+	}
+
+	// Free players
+	for (int i = 0; i < players_data.size(); i++)
+	{
+		RELEASE(players_data.at(i));
+	}
+
+	viewports_data.clear();
+	players_data.clear();
+
+	// Stop Music
+	App->audio->StopMusic();
+
+	// Background image
+	App->tex->UnLoadTexture(background_image);
+
+	all_ready = false;
+
+	return true;
+}
+
 bool CharacterSelectionScene::Update(float dt)
 {
 	bool ret = true;
-
-	bool change_cene = false;
 
 	// Blit main banner
 	if (App->scene->GetCurrentScene() == this)
@@ -107,20 +136,20 @@ bool CharacterSelectionScene::Update(float dt)
 	// Debug
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
-		for (int i = 0; i < 4; i++) 
+		for (int i = 0; i < 4; i++)
 			App->scene->players[i].character = entity_name::link;
-		
+
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
-	
-	if(change_scene)
+
+	if (all_ready)
 	{
 		// Set characters when finished
 		App->scene->players[0].character = curr_player_data1->entity;
 		App->scene->players[1].character = curr_player_data2->entity;
 		App->scene->players[2].character = curr_player_data3->entity;
 		App->scene->players[3].character = curr_player_data4->entity;
-		
+
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 
@@ -207,16 +236,14 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info4->enabled = false;
 		}
 
-		viewports_data[i].ready_text->color = { 0,0,0,0 };
-
 		// Ready
 		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			viewports_data[i].is_ready = true;
-		
+
 			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 100, viewports_data[i].ready_text->GetPos().y));
 			viewports_data[i].ready_text->SetText("READY!");
-							
+
 		}
 
 		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN && viewports_data[i].is_ready == true)
@@ -228,56 +255,26 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		if (viewports_data[0].is_ready == true && viewports_data[1].is_ready == true && viewports_data[2].is_ready == true && viewports_data[3].is_ready == true)
-			change_cene = true; 
+		{
+			all_ready = true;
+		}
 
-		
-	
-	}
 
-	// Check if all ready
-	int counter = 0;
-	for (int i = 0; i < viewports_data.size(); i++)
-	{
-		if (viewports_data[i].is_ready)
-			counter++;
-	}
-
-	if (counter == viewports_data.size())
-		change_cene = true;
-
-	return ret;
-}
-
-bool CharacterSelectionScene::CleanUp()
-{
-	// Free UI
-	if (App->scene->GetCurrentScene() != App->scene->charselect_screen)
-	{
+		// Check if all ready
+		int counter = 0;
 		for (int i = 0; i < viewports_data.size(); i++)
 		{
-			App->gui->DeleteElement(viewports_data[i].window);
+			if (viewports_data[i].is_ready)
+				counter++;
 		}
+
+		if (counter == viewports_data.size())
+			all_ready = true;
+
+		return ret;
 	}
-
-	// Free players
-	for (int i = 0; i < players_data.size(); i++)
-	{
-		RELEASE(players_data.at(i));
-	}
-		
-	viewports_data.clear(); 
-	players_data.clear();
-	
-	// Stop Music
-	App->audio->StopMusic();
-
-	// Background image
-	App->tex->UnLoadTexture(background_image);
-
-	change_scene = false;
-	
-	return true;
 }
+
 
 
 player_data* CharacterSelectionScene::MoveCharacterLeft(player_data * data, int viewport)

@@ -118,10 +118,12 @@ struct viewport_data
 class CharacterSelectionScene : public Scene
 {
 public:
+
 	CharacterSelectionScene();
 	~CharacterSelectionScene();
 	bool Start();
 	bool Update(float dt);
+
 	bool CleanUp();
 
 private:
@@ -152,6 +154,8 @@ private:
 	iPoint			   background_pos = NULLPOINT;
 	SDL_Rect		   background_image_rect = NULLRECT;
 	float              fade_value = 255.0f;
+
+	bool			   all_ready = false;
 };
 
 #endif
