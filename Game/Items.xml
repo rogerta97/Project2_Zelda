@@ -1,17 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <file>  <!--Items must be ordered the more expensive first-->
-  <item id="7">
-    <name>Triforce</name>
-    <description>Only true heroes can use the Triforce's powers.</description>
-    <power value="30"/>
-    <hp value="30"/>
-    <speed value="30"/>
-    <price rupees="1000"/>
+  <item id="0">
+    <name>Boots</name>
+    <description>The latest trend in footwear</description>
+    <power value="0"/>
+    <hp value="0"/>
+    <speed value="20"/>
+    <price rupees="200"/>
+    <upgrade id="1"/>
+    <rect x="647" y="330" w="40" h="40"/>
+  </item>
+  <item id="1">
+    <name>Flying Boots</name>
+    <description>So fast it feels like flying !</description>
+    <power value="0"/>
+    <hp value="0"/>
+    <speed value="50"/>
+    <price rupees="500"/>
     <upgrade id="-1"/>
-    <rect x="647" y="444" w="40" h="40"/>
+    <upgrade_from id="0"/>
+    <rect x="687" y="330" w="40" h="40"/>
+  </item>
+  <item id="2">
+    <name>Sword</name>
+    <description> Slice your enemies !</description>
+    <power value="20"/>
+    <hp value="0"/>
+    <speed value="0"/>
+    <price rupees="200"/>
+    <upgrade id="3"/>
+    <rect x="647" y="404" w="40" h="40"/>
   </item>
   <item id="3">
+    <name>Master Sword</name>
+    <description> Obliterate your foes !</description>
+    <power value="50"/>
+    <hp value="0"/>
+    <speed value="0"/>
+    <price rupees="500"/>
+    <upgrade id="-1"/>
+    <upgrade_from id="2"/>
+    <rect x="687" y="404" w="40" h="40"/>
+  </item>
+  <item id="4">
+    <name>Shield</name>
+    <description>The best attack is a good defense. </description>
+    <power value="0"/>
+    <hp value="20"/>
+    <speed value="0"/>
+    <price rupees="200"/>
+    <upgrade id="5"/>
+    <rect x="647" y="368" w="40" h="40"/>
+  </item>
+  <item id="5">
+    <name>Sturdy Shield</name>
+    <description>A sturdier version of the shield.</description>
+    <power value="0"/>
+    <hp value="50"/>
+    <speed value="0"/>
+    <price rupees="500"/>
+    <upgrade id="-1"/>
+    <upgrade_from id="4"/>
+    <rect x="687" y="368" w="40" h="40"/>
+  </item>
+  <item id="6">
     <name>Bomb</name>
     <description>Boom! (Work In Progress) </description>
     <power value="50"/>
@@ -21,67 +74,15 @@
     <upgrade id="-1"/>
     <rect x="725" y="330" w="40" h="40"/>
   </item>
-  <item id="6">
-    <name>Sturdy Shield</name>
-    <description>A sturdier version of the regular shield.</description>
-    <power value="0"/>
-    <hp value="50"/>
-    <speed value="0"/>
-    <price rupees="500"/>
+  
+  <item id="7">
+    <name>Triforce</name>
+    <description>Only heroes can wield a Triforce</description>
+    <power value="30"/>
+    <hp value="30"/>
+    <speed value="30"/>
+    <price rupees="700"/>
     <upgrade id="-1"/>
-    <upgrade_from id="5"/>
-    <rect x="687" y="368" w="40" h="40"/>
-  </item>
-  <item id="5">
-    <name>Master Sword</name>
-    <description></description>
-    <power value="50"/>
-    <hp value="0"/>
-    <speed value="0"/>
-    <price rupees="500"/>
-    <upgrade id="-1"/>
-    <upgrade_from id="6"/>
-    <rect x="687" y="404" w="40" h="40"/>
-  </item>
-  <item id="4">
-    <name>Flying Boots</name>
-    <description></description>
-    <power value="0"/>
-    <hp value="0"/>
-    <speed value="50"/>
-    <price rupees="500"/>
-    <upgrade id="-1"/>
-    <upgrade_from id="7"/>
-    <rect x="687" y="330" w="40" h="40"/>
-  </item>
-  <item id="3">
-    <name>Shield</name>
-    <description>The best attack is a good defense. </description>
-    <power value="0"/>
-    <hp value="20"/>
-    <speed value="0"/>
-    <price rupees="200"/>
-    <upgrade id="2"/>
-    <rect x="647" y="368" w="40" h="40"/>
-  </item>
-  <item id="1">
-    <name>Sword</name>
-    <description></description>
-    <power value="20"/>
-    <hp value="0"/>
-    <speed value="0"/>
-    <price rupees="200"/>
-    <upgrade id="3"/>
-    <rect x="647" y="404" w="40" h="40"/>
-  </item>
-  <item id="0">
-    <name>Boots</name>
-    <description></description>
-    <power value="0"/>
-    <hp value="0"/>
-    <speed value="20"/>
-    <price rupees="200"/>
-    <upgrade id="4"/>
-    <rect x="647" y="330" w="40" h="40"/>
+    <rect x="647" y="444" w="40" h="40"/>
   </item>
 </file>
