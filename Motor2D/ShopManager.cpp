@@ -273,6 +273,8 @@ bool ShopManager::Start()
 
 bool ShopManager::Update()
 {
+	bool shop_icon_updated = false;
+
 	for (std::vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
 	{
 		if ((*it)->is_dead)
@@ -281,7 +283,13 @@ bool ShopManager::Update()
 		if (team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200 && !shops[(*it)->viewport - 1]->active)
 		{
 			shops[(*it)->viewport - 1]->shop_icon->enabled = true;
-			shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
+			if (!shop_icon_updated)
+			{
+				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
+				shop_icon_updated = true;
+			}
+			else
+				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(0.0f);
 		}
 		else
 		{

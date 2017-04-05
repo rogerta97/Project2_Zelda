@@ -207,6 +207,8 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info4->enabled = false;
 		}
 
+		viewports_data[i].ready_text->color = { 0,0,0,0 };
+
 		// Ready
 		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
@@ -227,6 +229,8 @@ bool CharacterSelectionScene::Update(float dt)
 
 		if (viewports_data[0].is_ready == true && viewports_data[1].is_ready == true && viewports_data[2].is_ready == true && viewports_data[3].is_ready == true)
 			change_cene = true; 
+
+		
 	
 	}
 
