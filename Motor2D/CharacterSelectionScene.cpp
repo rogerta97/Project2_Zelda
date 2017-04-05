@@ -94,8 +94,6 @@ bool CharacterSelectionScene::Update(float dt)
 {
 	bool ret = true;
 
-	bool change_cene = false;
-
 	// Blit main banner
 	if (App->scene->GetCurrentScene() == this)
 	{
@@ -113,7 +111,7 @@ bool CharacterSelectionScene::Update(float dt)
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 	
-	if(change_scene)
+	if(all_ready)
 	{
 		// Set characters when finished
 		App->scene->players[0].character = curr_player_data1->entity;
@@ -207,6 +205,8 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info4->enabled = false;
 		}
 
+		viewports_data[i].ready_text->color = { 0,0,0 }; 
+
 		// Ready
 		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
@@ -226,7 +226,7 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		if (viewports_data[0].is_ready == true && viewports_data[1].is_ready == true && viewports_data[2].is_ready == true && viewports_data[3].is_ready == true)
-			change_cene = true; 
+			all_ready = true; 
 	
 	}
 
@@ -239,7 +239,7 @@ bool CharacterSelectionScene::Update(float dt)
 	}
 
 	if (counter == viewports_data.size())
-		change_cene = true;
+		all_ready = true;
 
 	return ret;
 }
@@ -270,7 +270,7 @@ bool CharacterSelectionScene::CleanUp()
 	// Background image
 	App->tex->UnLoadTexture(background_image);
 
-	change_scene = false;
+	all_ready = false;
 	
 	return true;
 }
