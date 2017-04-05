@@ -195,21 +195,20 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		// Ready
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN) 
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
-			viewports_data[i].is_ready = !viewports_data[i].is_ready;
-
-			if(viewports_data[i].is_ready == true)
-			{
-				viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 15, viewports_data[i].ready_text->GetPos().y));
-				viewports_data[i].ready_text->SetText("READY!");
-			}
-				
+			viewports_data[i].is_ready = true;
+		
+			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 80, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetText("READY!");
+							
 		}
 
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN && viewports_data[i].is_ready == true)
 		{
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 15, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].is_ready = false;
+
+			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 80, viewports_data[i].ready_text->GetPos().y));
 			viewports_data[i].ready_text->SetText("Press START when ready!");
 		}
 
