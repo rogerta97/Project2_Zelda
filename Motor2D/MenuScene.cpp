@@ -10,6 +10,7 @@
 #include "Animation.h"
 #include "j1Window.h"
 
+
 MenuScene::MenuScene()
 {
 }
@@ -27,59 +28,64 @@ bool MenuScene::Start()
 	SDL_Rect screen = {0, 0, App->win->GetWindowSize().x,  App->win->GetWindowSize().y};
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
+	// Background
+	background_image = App->tex->LoadTexture("gui/");
+	background_pos = { 0, 0 };
+	background_image_rect = {};
+
 	// Main banner
 	main_banner = new Animator();
 	pugi::xml_document doc;
 	App->xml->LoadXML("menu_scene.xml", doc);
 	main_banner_texture = main_banner->LoadAnimationsFromXML(doc, "animations");
 	main_banner->SetAnimation("idle");
-	main_banner_pos = {(screen.w / 2) - (main_banner->GetCurrentAnimation()->GetActualFrame().w / 2), 30};
+	main_banner_pos = {(screen.w / 2) - (main_banner->GetCurrentAnimation()->GetActualFrame().w / 2), (screen.h/2) - 350};
 	main_banner->SetAnimation("idle");
 
 	// Start ---
-	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
+	start_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 30), 223, 60, false);
 	button_list.push_back(start_button);
 
 	start_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	start_button->SetImage("idle");
 
-	start_text = menu_window->CreateText(iPoint(screen.w - 3, 160), App->font->game_font);
+	start_text = menu_window->CreateText(iPoint(start_button->rect.x + 60, (screen.h / 2) + 40), App->font->game_font);
 	start_text->SetText("NEW GAME");
 	start_text->click_through = true;
 
 	// ---------
 
 	// Options -
-	options_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
+	options_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 100), 223, 60, false);
 	button_list.push_back(options_button);
 
 	options_button->AddImage("idle", { 128, 52, 220, 55 });
 	options_button->SetImage("idle");
 
-	options_text = menu_window->CreateText(iPoint(screen.w - 3, 230), App->font->game_font);
+	options_text = menu_window->CreateText(iPoint(options_button->rect.x + 60, (screen.h / 2) + 110), App->font->game_font);
 	options_text->SetText("OPTIONS");
 	options_text->click_through = true;
 
-	fx_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
+	fx_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, 220), 223, 60, false);
 
 	fx_button->AddImage("idle", { 128, 52, 220, 55 });
 	fx_button->SetImage("idle");
 
 	fx_button->enabled = false;
 
-	fx_text = menu_window->CreateText(iPoint(screen.w - 3, 230), App->font->game_font);
+	fx_text = menu_window->CreateText(iPoint(fx_button->rect.x + 60, 230), App->font->game_font);
 	fx_text->SetText("FX");
 	fx_text->enabled = false;
 
-	music_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
+	music_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, 290), 223, 60, false);
 
 	music_button->AddImage("idle", { 128, 52, 220, 55 });
 	music_button->SetImage("idle");
 
 	music_button->enabled = false;
 
-	music_text = menu_window->CreateText(iPoint(screen.w, 300), App->font->game_font);
+	music_text = menu_window->CreateText(iPoint(music_button->rect.x + 60, 300), App->font->game_font);
 	music_text->SetText("MUSIC");
 	music_text->enabled = false;
 
@@ -97,27 +103,27 @@ bool MenuScene::Start()
 	// ---------
 
 	// Credits --
-	credits_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
+	credits_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 170), 223, 60, false);
 	button_list.push_back(credits_button); 
 
 	credits_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	credits_button->SetImage("idle");
 
-	credits_text = menu_window->CreateText(iPoint(screen.w, 300), App->font->game_font);
+	credits_text = menu_window->CreateText(iPoint(credits_button->rect.x + 60, (screen.h / 2) + 180), App->font->game_font);
 	credits_text->SetText("CREDITS"); 
 	credits_text->click_through = true; 
 	// ---------
 
 	// Quit ---
-	quit_button = menu_window->CreateButton(iPoint(screen.w - 70, 360), 223, 60, false);
+	quit_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 240), 223, 60, false);
 	button_list.push_back(quit_button);
 
 	quit_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	quit_button->SetImage("idle");
 
-	quit_text = menu_window->CreateText(iPoint(screen.w, 370), App->font->game_font);
+	quit_text = menu_window->CreateText(iPoint(quit_button->rect.x + 60, (screen.h / 2) + 250), App->font->game_font);
 	quit_text->SetText("QUIT GAME");
 	quit_text->click_through = true;
 	// ---------
@@ -131,7 +137,6 @@ bool MenuScene::Start()
 
 	cursors.push_back(cursor_1); 
 	cursors.push_back(cursor_2);
-
 
 	App->console->AddText("viewports.set 1", Input);
 	App->view->camera1.x = 0;
@@ -234,8 +239,8 @@ bool MenuScene::PostUpdate()
 			break;
 
 		case OPTIONS:
-			is_options = true; 
-			GoOptions();
+			//is_options = true; 
+			//GoOptions();
 			break;
 
 		case CREDITS:

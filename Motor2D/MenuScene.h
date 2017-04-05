@@ -81,6 +81,11 @@ private:
 	iPoint			   main_banner_pos = NULLPOINT;
 	SDL_Texture*	   main_banner_texture = nullptr;
 
+	// Background image
+	SDL_Texture*	   background_image = nullptr;
+	iPoint			   background_pos = NULLPOINT;
+	SDL_Rect		   background_image_rect = NULLRECT;
+
 };
 
 
