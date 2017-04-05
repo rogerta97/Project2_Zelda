@@ -194,7 +194,7 @@ bool ShopManager::Start()
 	//Set stat numbers text
 	for (int i = 0; i < 4; i++)
 	{
-		int x = (win_w / 4 + 10) + (i % 2)*win_w / 2;
+		int x = (win_w / 4 + 14) + (i % 2)*win_w / 2;
 		int y = (win_h / 4 - 60) + (i / 2)*win_h / 2;
 
 		shops[i]->power_num = shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
@@ -207,7 +207,7 @@ bool ShopManager::Start()
 		string hp = std::to_string(shops[i]->items[0].item->hp);
 		shops[i]->hp_num->SetText(hp);
 
-		x += 97;
+		x += 99;
 
 		shops[i]->speed_num = shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
 		string s = std::to_string(shops[i]->items[0].item->speed);
