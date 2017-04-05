@@ -1140,9 +1140,9 @@ void PlayerManager::PasiveHP(Player * curr_player)
 	}
 	
 	// Passive heal
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - last_heal_time > 2)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - curr_player->last_heal_time > 2)
 	{
-		last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
+		curr_player->last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
 		curr_player->entity->Heal(1);
 	}
 }

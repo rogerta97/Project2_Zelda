@@ -74,6 +74,8 @@ public:
 
 	bool		base_travel = false;
 	j1Timer     base_travel_timer;
+
+	float		last_heal_time = 0.0f;
 };
 
 class PlayerManager
