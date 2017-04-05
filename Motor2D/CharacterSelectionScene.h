@@ -38,7 +38,7 @@ struct viewport_data
 		iPoint small_image_left_pos = { big_image_pos.x - 120, big_image_pos.y + 30};
 		iPoint small_image_right_pos = { big_image_pos.x + 116 + 120 - 74, big_image_pos.y + 30};
 
-		iPoint button_info_pos = {view.w - 100, view.h - 45};
+		iPoint button_info_pos = {view.w - 120, view.h - 65};
 		SDL_Rect button_info_rect = { 324, 195, 95, 40 };
 
 		iPoint background_info_image_pos = {view.w / 15, view.h / 15 };
@@ -54,7 +54,7 @@ struct viewport_data
 		iPoint abilities_info3_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 150 };
 		iPoint abilities_info4_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 210 };
 
-		iPoint ready_text_pos = { view.w/3 + 10, view.h - 50 }; 
+		iPoint ready_text_pos = { view.w/3 + 40, view.h - 80}; 
 
 		window = App->gui->UI_CreateWin(iPoint(0, 0), view.w, view.h, 1, true, false, true);
 		window->viewport = viewport;
