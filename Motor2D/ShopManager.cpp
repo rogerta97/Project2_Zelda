@@ -255,7 +255,7 @@ bool ShopManager::Start()
 	//Shop icon
 	for (int i = 0; i < 4; i++)
 	{
-		int x = (win_w / 4 - 16) + (i / 2)*win_w / 2;
+		int x = (win_w / 4 - 16) + (i % 2)*win_w / 2;
 		int y = (win_h / 4 - win_h / 6) + (i / 2)*win_h / 2;
 
 		shops[i]->shop_icon = shop_window->CreateImage(iPoint(x, y), { 0,0,0,0 });
