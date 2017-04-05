@@ -39,7 +39,8 @@ Tower::Tower(iPoint pos)
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();;
-	stats.base_power = stats.power = stats_node.attribute("power").as_int();;
+	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+	rupee_reward = stats_node.attribute("rupees").as_int();
 
 	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
@@ -137,7 +138,7 @@ bool Tower::Update(float dt)
 
 			if (stats.life <= 0)
 			{
-				App->entity->AddRupeesIfPlayer(entity, 75);
+				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}

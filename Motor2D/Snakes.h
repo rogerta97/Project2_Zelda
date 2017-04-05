@@ -75,6 +75,8 @@ private:
 
 	states					anim_state = states_null;
 
+	int						rupee_reward = 0;
+
 };
 
 #endif // !SNAKES_H_

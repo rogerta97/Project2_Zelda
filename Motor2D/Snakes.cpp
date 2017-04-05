@@ -38,6 +38,7 @@ Snakes::Snakes(iPoint pos)
 
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
 	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+	rupee_reward = stats_node.attribute("rupees").as_int();
 
 	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
@@ -108,7 +109,7 @@ bool Snakes::Update(float dt)
 		}
 		if (stats.life <= 0)
 		{
-			App->entity->AddRupeesIfPlayer(entity, 15);
+			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
 		}
 	}

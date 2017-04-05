@@ -76,6 +76,8 @@ private:
 
 	Entity*					target = nullptr;
 
+	int						rupee_reward = 0;
+
 };
 
 #endif // !SKELETON_H_

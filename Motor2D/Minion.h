@@ -128,6 +128,8 @@ private:
 	j1Timer				cd_timer;
 
 	EventThrower*       event_thrower = nullptr;
+
+	int					rupee_reward = 0;
 };
 
 #endif // !MINION_H_

@@ -32,6 +32,7 @@ Minion::Minion(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("minion.xml", doc);
 	pugi::xml_node stats_node = doc.child("file").child("stats");
+	rupee_reward = stats_node.attribute("rupees").as_int();
 
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
 	stats.base_power = stats.power = stats_node.attribute("power").as_int();
@@ -141,7 +142,7 @@ bool Minion::Update(float dt)
 				event_die->event_data.entity = this;
 				event_thrower->AddEvent(event_die);
 
-				App->entity->AddRupeesIfPlayer(entity, 20);
+				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}

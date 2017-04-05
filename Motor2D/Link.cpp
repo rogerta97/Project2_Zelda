@@ -38,6 +38,7 @@ Link::Link(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("link.xml", doc);
 	pugi::xml_node stats_node = doc.child("file").child("stats");
+	rupee_reward = stats_node.attribute("rupees").as_int();
 
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
 	stats.base_power = stats.power = stats_node.attribute("power").as_int();
@@ -147,7 +148,7 @@ bool Link::Update(float dt)
 				// Update quests
 				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
 			
-			App->entity->AddRupeesIfPlayer(entity, 100);
+			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 		}
 	}
 

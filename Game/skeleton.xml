@@ -22,7 +22,7 @@
       <rect x = "36" y = "104" w = "48" h = "74"/>
     </anim>
   </animations>
-  <stats hp="250" speed="0" power="30">
+  <stats hp="250" speed="0" power="30" rupees="75">
     <ability1 mult="1" cd="4" bd="4"/>
     <ability2 mult="0.5" cd="0.7" bd="4"/>
   </stats>
