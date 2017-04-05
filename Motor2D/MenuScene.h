@@ -37,6 +37,9 @@ public:
 	void GoOptions();
 	void GoMenu(); 
 
+private:
+	void FadeOut();
+
 public:
 	fPoint			   pos = NULLPOINT;
 
@@ -85,6 +88,7 @@ private:
 	SDL_Texture*	   background_image = nullptr;
 	iPoint			   background_pos = NULLPOINT;
 	SDL_Rect		   background_image_rect = NULLRECT;
+	float              fade_value = 255.0f;
 
 };
 

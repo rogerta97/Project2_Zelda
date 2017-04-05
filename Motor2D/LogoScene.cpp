@@ -72,6 +72,8 @@ bool LogoScene::CleanUp()
 	App->tex->UnLoadTexture(logo);
 	App->render->background = { 0, 0, 0 };
 
+	fade_value = 255.0f;
+
 	return ret;
 }
 

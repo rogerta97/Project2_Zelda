@@ -10,6 +10,8 @@
 #include "Animation.h"
 #include "j1Window.h"
 
+#define FADE_SPEED 150
+
 
 MenuScene::MenuScene()
 {
@@ -29,9 +31,9 @@ bool MenuScene::Start()
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
 	// Background
-	background_image = App->tex->LoadTexture("gui/");
+	background_image = App->tex->LoadTexture("gui/intro_background.png");
 	background_pos = { 0, 0 };
-	background_image_rect = {};
+	background_image_rect = {0, 0, 1994, 1359};
 
 	// Main banner
 	main_banner = new Animator();
@@ -214,8 +216,13 @@ bool MenuScene::Update(float dt)
 	}
 
 	// Blit main banner
-	if(App->scene->GetCurrentScene() == this)
+	if (App->scene->GetCurrentScene() == this)
+	{
+		App->render->Blit(background_image, background_pos.x, background_pos.x, &background_image_rect);
+		App->render->DrawQuad({ 0, 0, App->win->GetWindowSize().x, App->win->GetWindowSize().y }, 255, 255, 255, -1.0f, fade_value, true);
+		FadeOut();
 		App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
+	}
 
 	//Stop music ones it finish
 	if (music_time.ReadSec() > 17)
@@ -293,7 +300,11 @@ bool MenuScene::CleanUp()
 	// Main banner
 	main_banner->CleanUp();
 	RELEASE(main_banner);
-	App->tex->UnLoadTexture(main_banner_texture);
+	App->tex->UnLoadTexture(main_banner_texture);	
+
+	// Background image
+	App->tex->UnLoadTexture(background_image);
+	fade_value = 255.0f;
 
 	return true;
 }
@@ -345,4 +356,11 @@ void MenuScene::GoMenu()
 	options_checkbox->enabled = false;
 
 	current_button = START;
+}
+
+void MenuScene::FadeOut()
+{
+	fade_value -= FADE_SPEED*App->GetDT();
+	if (fade_value < 0)
+		fade_value = 0;
 }
