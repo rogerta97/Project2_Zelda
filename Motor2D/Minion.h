@@ -121,6 +121,7 @@ private:
 	int					target_path_index = 0;
 
 	float				speed = 0;
+	float				tower_dmg_mult = 0.0f;
 
 	states				anim_state = states_null;
 

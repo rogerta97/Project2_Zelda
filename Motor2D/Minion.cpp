@@ -36,6 +36,7 @@ Minion::Minion(iPoint pos)
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
 	stats.base_power = stats.power = stats_node.attribute("power").as_int();
 	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
+	tower_dmg_mult = stats_node.attribute("tower_dmg_mult").as_float();
 
 	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
@@ -118,10 +119,17 @@ bool Minion::Update(float dt)
 		{
 			if (spell != nullptr)
 			{
-				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+				if (spell->name == "t_attack")
+				{
+					DealDamage(((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage)*tower_dmg_mult);
+				}
+				else
+				{
+					DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				if (TextCmp(spell->name.c_str(), "boomerang"))
-					BoomerangEffects(entity, ability, spell);
+					if (TextCmp(spell->name.c_str(), "boomerang"))
+						BoomerangEffects(entity, ability, spell);
+				}
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
