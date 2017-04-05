@@ -1117,6 +1117,9 @@ void PlayerManager::UpdateDeathUI(Player * player)
 
 void PlayerManager::PasiveHP(Player * curr_player)
 {
+	if (curr_player->is_dead)
+		return;
+
 	int my_team = curr_player->entity->GetTeam();
 
 	int enemy_team = 0;
@@ -1125,23 +1128,23 @@ void PlayerManager::PasiveHP(Player * curr_player)
 	else
 		enemy_team = 1;
 
+	// Heal on my base
 	if (curr_player->entity->GetPos().DistanceTo(App->scene->main_scene->shop_manager->team_shop[my_team - 1]) < 200)
 	{
 		curr_player->entity->Heal(1);
 	}
+	// Damage me on enemy base
 	else if (curr_player->entity->GetPos().DistanceTo(App->scene->main_scene->shop_manager->team_shop[enemy_team - 1]) < 200)
 	{
 		curr_player->entity->DealDamage(2);
 	}
-	else
-	{
-		if (App->scene->main_scene->GetGameTimer()->ReadSec() - last_heal_time > 2)
-		{
-			last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
-			curr_player->entity->Heal(1);
-		}
-	}
 	
+	// Passive heal
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - last_heal_time > 2)
+	{
+		last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
+		curr_player->entity->Heal(1);
+	}
 }
 
 
