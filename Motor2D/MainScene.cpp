@@ -332,6 +332,9 @@ bool MainScene::CleanUp()
 	//Stop Music
 	App->audio->StopMusic();
 
+	//Reset cameras position
+	App->view->ResetCameras();
+
 	return ret;
 }
 

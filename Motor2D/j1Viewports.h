@@ -131,6 +131,8 @@ public:
 
 	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
 
+	void ResetCameras();
+
 private:
 	// Blit in the layer order
 	void DoLayerPrint();

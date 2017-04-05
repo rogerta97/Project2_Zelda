@@ -87,6 +87,8 @@ bool CharacterSelectionScene::Start()
 		SetDataToViewport(players_data.at(0), i);
 	}
 
+	App->audio->PlayMusic("Audio/Music/guessing-game_house.ogg");
+
 	return ret;
 }
 
@@ -117,6 +119,9 @@ bool CharacterSelectionScene::CleanUp()
 	App->tex->UnLoadTexture(background_image);
 
 	all_ready = false;
+
+	//Stop Music
+	App->audio->StopMusic();
 
 	return true;
 }

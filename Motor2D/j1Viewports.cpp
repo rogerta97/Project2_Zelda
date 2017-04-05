@@ -671,3 +671,18 @@ void j1Viewports::SaveCVar(std::string & cvar_name, pugi::xml_node & node) const
 {
 }
 
+void j1Viewports::ResetCameras()
+{
+	camera1.x = 0;
+	camera1.y = 0;
+
+	camera2.x = 0;
+	camera2.y = 0;
+
+	camera3.x = 0;
+	camera3.y = 0;
+
+	camera4.x = 0;
+	camera4.y = 0;
+}
+
