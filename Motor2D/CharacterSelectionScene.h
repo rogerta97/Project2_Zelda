@@ -34,27 +34,27 @@ struct viewport_data
 	{
 		SDL_Rect view = App->view->GetViewportRect(1);
 
-		iPoint big_image_pos = { view.w/2 - 50, view.h / 2 - 120 };
+		iPoint big_image_pos = { view.w/2 - view.w/11, view.h / 5};
 		iPoint small_image_left_pos = { big_image_pos.x - 120, big_image_pos.y + 30};
 		iPoint small_image_right_pos = { big_image_pos.x + 116 + 120 - 74, big_image_pos.y + 30};
 
-		iPoint button_info_pos = {view.w - 120, view.h - 65};
+		iPoint button_info_pos = {view.w - 95 - 15, view.h - 60};
 		SDL_Rect button_info_rect = { 324, 195, 95, 40 };
 
 		iPoint background_info_image_pos = {view.w / 15, view.h / 15 };
 		SDL_Rect background_info_image_rect = { 656, 595, 470, 325 };
 
-		iPoint background_name_image_pos = {view.w / 2 - 100, view.h - ( view.h / 3)};
+		iPoint background_name_image_pos = {view.w / 3 , view.h - ( view.h / 3)};
 		SDL_Rect background_name_image_rect = { 128, 52,  217, 55 };
 
 		iPoint text_name_pos = { background_name_image_pos.x + 85, background_name_image_pos.y + 10};
 
-		iPoint abilities_info1_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 30 };
-		iPoint abilities_info2_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 90 };
-		iPoint abilities_info3_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 150 };
-		iPoint abilities_info4_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 210 };
+		iPoint abilities_info1_pos = { background_info_image_pos.x + 25, background_info_image_pos.y - 13 + view.h/ 12 };
+		iPoint abilities_info2_pos = { background_info_image_pos.x + 25, background_info_image_pos.y - 13 + view.h/ 4 };
+		iPoint abilities_info3_pos = { background_info_image_pos.x + 25, background_info_image_pos.y - 13 + view.h/ (int) 2.4f };
+		iPoint abilities_info4_pos = { background_info_image_pos.x + 25, background_info_image_pos.y - 13 + background_info_image_rect.h - background_info_image_rect.h/4 };
 
-		iPoint ready_text_pos = { view.w/3 + 40, view.h - 80}; 
+		iPoint ready_text_pos = { view.w/3 - view.w/30, view.h - view.h/6}; 
 
 		window = App->gui->UI_CreateWin(iPoint(0, 0), view.w, view.h, 1, true, false, true);
 		window->viewport = viewport;

@@ -36,7 +36,7 @@ bool MenuScene::Start()
 
 	start_button->SetImage("idle");
 
-	start_text = menu_window->CreateText(iPoint(screen.w, 160), App->font->game_font);
+	start_text = menu_window->CreateText(iPoint(screen.w - 3, 160), App->font->game_font);
 	start_text->SetText("NEW GAME");
 	start_text->click_through = true;
 
@@ -47,32 +47,26 @@ bool MenuScene::Start()
 	button_list.push_back(options_button);
 
 	options_button->AddImage("idle", { 128, 52, 220, 55 });
-
-
 	options_button->SetImage("idle");
 
-	options_text = menu_window->CreateText(iPoint(screen.w, 230), App->font->game_font);
+	options_text = menu_window->CreateText(iPoint(screen.w - 3, 230), App->font->game_font);
 	options_text->SetText("OPTIONS");
 	options_text->click_through = true;
 
 	fx_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
 
 	fx_button->AddImage("idle", { 128, 52, 220, 55 });
-
-
 	fx_button->SetImage("idle");
 
 	fx_button->enabled = false;
 
-	fx_text = menu_window->CreateText(iPoint(screen.w, 230), App->font->game_font);
+	fx_text = menu_window->CreateText(iPoint(screen.w - 3, 230), App->font->game_font);
 	fx_text->SetText("FX");
 	fx_text->enabled = false;
 
 	music_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
 
 	music_button->AddImage("idle", { 128, 52, 220, 55 });
-
-
 	music_button->SetImage("idle");
 
 	music_button->enabled = false;
@@ -84,8 +78,8 @@ bool MenuScene::Start()
 	//Check Box 
 
 	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
-	options_checkbox->AddBox(iPoint(screen.w + 99, screen.h / 2 + 45), 44, 44, "fx");
-	options_checkbox->AddBox(iPoint(screen.w + 99, screen.h / 2 + 115), 44, 44, "music");
+	options_checkbox->AddBox(iPoint(fx_button->GetPos().x + fx_button->rect.w - options_checkbox->rect.w - 13, fx_button->GetPos().y + 5), 44, 44, "fx");
+	options_checkbox->AddBox(iPoint(music_button->GetPos().x + music_button->rect.w - options_checkbox->rect.w - 13, music_button->GetPos().y + 5), 44, 44, "music");
 
 	options_checkbox->SetBox(true, "fx"); 
 	options_checkbox->SetBox(true, "music");
