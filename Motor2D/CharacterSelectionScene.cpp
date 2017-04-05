@@ -274,8 +274,10 @@ bool CharacterSelectionScene::Update(float dt)
 		if (counter == viewports_data.size())
 			all_ready = true;
 
-		return ret;
 	}
+
+	return ret;
+	
 }
 
 
