@@ -33,27 +33,28 @@ struct viewport_data
 	viewport_data(int viewport)
 	{
 		SDL_Rect view = App->view->GetViewportRect(1);
-		iPoint big_image_pos = { 180, 70 };
-		iPoint small_image_left_pos = {80, 100};
-		iPoint small_image_right_pos = {320, 100};
 
-		iPoint button_info_pos = {350, 310};
+		iPoint big_image_pos = { view.w/2 - 50, view.h / 2 - 120 };
+		iPoint small_image_left_pos = { big_image_pos.x - 120, big_image_pos.y + 30};
+		iPoint small_image_right_pos = { big_image_pos.x + 116 + 120 - 74, big_image_pos.y + 30};
+
+		iPoint button_info_pos = {view.w - 100, view.h - 45};
 		SDL_Rect button_info_rect = { 324, 195, 95, 40 };
 
-		iPoint background_info_image_pos = {10, 10};
+		iPoint background_info_image_pos = {view.w / 15, view.h / 15 };
 		SDL_Rect background_info_image_rect = { 656, 595, 470, 325 };
 
-		iPoint background_name_image_pos = {200, 200};
+		iPoint background_name_image_pos = {view.w / 2 - 100, view.h - ( view.h / 3)};
 		SDL_Rect background_name_image_rect = { 128, 52,  217, 55 };
 
-		iPoint text_name_pos = {250, 210};
+		iPoint text_name_pos = { background_name_image_pos.x + 85, background_name_image_pos.y + 10};
 
-		iPoint abilities_info1_pos = {15, 20};
-		iPoint abilities_info2_pos = { 15, 30};
-		iPoint abilities_info3_pos = { 15, 40};
-		iPoint abilities_info4_pos = { 15, 50};
+		iPoint abilities_info1_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 30 };
+		iPoint abilities_info2_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 90 };
+		iPoint abilities_info3_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 150 };
+		iPoint abilities_info4_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 210 };
 
-		iPoint ready_text_pos = { 250, 270 }; 
+		iPoint ready_text_pos = { view.w/3 + 10, view.h - 50 }; 
 
 		window = App->gui->UI_CreateWin(iPoint(0, 0), view.w, view.h, 1, true, false, true);
 		window->viewport = viewport;
@@ -68,19 +69,18 @@ struct viewport_data
 		text_name = window->CreateText(text_name_pos, App->font->game_font);
 
 		ready_text = window->CreateText(ready_text_pos, App->font->game_font, 30);
-		ready_text->SetText("Ready!");
-		ready_text->enabled = false;
+		ready_text->SetText("Press START when ready");
 
 		background_info_image = window->CreateImage(background_info_image_pos, background_info_image_rect);
 		background_info_image->enabled = false;
 
-		abilities_info1 = window->CreateText(abilities_info1_pos, App->font->game_font);
+		abilities_info1 = window->CreateText(abilities_info1_pos, App->font->game_font, 25);
 		abilities_info1->enabled = false;
-		abilities_info2 = window->CreateText(abilities_info2_pos, App->font->game_font);
+		abilities_info2 = window->CreateText(abilities_info2_pos, App->font->game_font, 25);
 		abilities_info2->enabled = false;
-		abilities_info3 = window->CreateText(abilities_info3_pos, App->font->game_font);
+		abilities_info3 = window->CreateText(abilities_info3_pos, App->font->game_font, 25);
 		abilities_info3->enabled = false;
-		abilities_info4 = window->CreateText(abilities_info4_pos, App->font->game_font);
+		abilities_info4 = window->CreateText(abilities_info4_pos, App->font->game_font, 25);
 		abilities_info4->enabled = false;
 	};
 
