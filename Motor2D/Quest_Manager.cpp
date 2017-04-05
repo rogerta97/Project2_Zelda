@@ -308,6 +308,7 @@ void QuestManager::update_progress()
 				if (vquest[i]->task[j]->current_progress == vquest[i]->task[j]->requirement)
 				{
 					vquest[i]->state = inactive;
+					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
 					active_quest_text[0]->enabled = false;
 					active_quest_text[1]->enabled = false;

@@ -15,7 +15,7 @@
      <rect x = "128" y = "128" w = "64" h = "128"/>
     </anim>
   </animations>
-  <stats hp="400" speed="0" power="50" rupees="150">
+  <stats hp="200" speed="0" power="50" rupees="150">
     <ability1 mult="1" cd="1" bd="4"/>
   </stats>
 </file>

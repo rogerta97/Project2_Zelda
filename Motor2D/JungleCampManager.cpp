@@ -6,8 +6,8 @@
 #include "Snakes.h"
 #include "Skeleton.h"
 
-#define SNAKE_RESPAWN_TIME 120
-#define SKELETON_RESPAWN_TIME 180
+#define SNAKE_RESPAWN_TIME 60
+#define SKELETON_RESPAWN_TIME 100
 
 #define HALFMAP 81*32
 
