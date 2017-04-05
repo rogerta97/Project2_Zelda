@@ -9,6 +9,9 @@
 #include "Functions.h"
 #include "Spell.h"
 #include "j1Spell.h"
+#include "Entity.h"
+#include "j1Entity.h"
+#include "EventThrower.h"
 
 class b2Fixture;
 class PhysBody;
@@ -54,6 +57,18 @@ enum states
 
 	tower_idle,
 	tower_attack,
+
+	snake_up,
+	snake_lateral,
+	snake_down,	
+	snake_attack_up,
+	snake_attack_lateral,
+	snake_attack_down,
+
+	skeleton_idle,
+	skeleton_stunned,
+	skeleton_spin,
+	skeleton_bone,
 
 	states_null,
 };
@@ -118,16 +133,16 @@ public:
 
 struct Ability
 {
-	Ability(int _number, int _damage, float _cd, float _duration, char* _name)
+	Ability(int _number, int _damage, float _damage_multiplicator, float _cd, char* _name)
 	{
-		index = _number; damage = _damage;  cd = _cd; duration = _duration; cd = _cd;
+		index = _number; damage = _damage; damage_multiplicator = _damage_multiplicator, cd = _cd; cd = _cd;
 		name = _name;
 		cd_timer.SubstractTimeFromStart(_cd);
 	};
 
-	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed)
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd)
 	{
-		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable;
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd;
 	}
 
 	bool CdCompleted()
@@ -135,11 +150,15 @@ struct Ability
 		return cd_timer.ReadSec() >= cd;
 	}
 
+	void CdReset() 
+	{
+		cd_timer.Start();
+	}
+
 	float GetCdTimeLeft();
 
 	int        index = 0;
 	float      cd = 0;
-	float      duration = 0;
 
 	float      damage = 0.0f;
 	float	   damage_multiplicator = 1.0f;
@@ -154,6 +173,7 @@ struct Ability
 
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
+	SDL_Rect   ability_in_cd = NULLRECT;
 };
 
 class Entity
@@ -254,7 +274,7 @@ public:
 	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 
-	Ability* AddAbility(int number, int damage, int cooldow, int duration, char* name = "no_name");
+	Ability* AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name = "no_name");
 	Ability* GetAbility(int number);
 	Ability* GetAbilityByName(const char* name);
 
@@ -263,6 +283,7 @@ public:
 	void Heal(int heal);
 	void Slow(float speed_multiplicator, float time);
 	void Stun(float time);
+	void BoomerangEffects(Entity* entity, Ability* ability, Spell* spell);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 
@@ -293,9 +314,9 @@ public:
 	GameObject*      game_object = nullptr;
 	vector<Ability*> abilities;
 	Stats	         stats;
+	entity_name		 type = entity_name::e_n_null;
 
 	// States
-	bool			 disable_controller = false;
 	bool		     can_move = false;
 	bool             attacking = false;
 	bool			 is_player = false;
@@ -306,7 +327,7 @@ public:
 	int				 blit_layer = 0;
 
 	//Progress bar
-	iPoint  progress_limit = iPoint(0, 0);
+	iPoint           progress_limit = iPoint(0, 0);
 
 	// Got Hit
 	bool		     hit = false;
@@ -316,6 +337,8 @@ public:
 
 	// Delete 
 	bool			 to_delete = false;
+
+	string			 name;
 	
 protected:
 	// Draw

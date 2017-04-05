@@ -94,9 +94,6 @@
     <ClCompile Include="Tower.cpp">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
     </ClCompile>
-    <ClCompile Include="QuestManager.cpp">
-      <Filter>Engine\2. Components ======\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="MinionManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClCompile>
@@ -126,6 +123,63 @@
     </ClCompile>
     <ClCompile Include="ShopManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Zelda.cpp">
+      <Filter>Engine\4. Entities ==========\Zelda</Filter>
+    </ClCompile>
+    <ClCompile Include="ZeldaManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Trunk.cpp">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </ClCompile>
+    <ClCompile Include="AestheticsManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Base.cpp">
+      <Filter>Engine\4. Entities ==========\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Trees.cpp">
+      <Filter>Engine\4. Entities ==========\Trees</Filter>
+    </ClCompile>
+    <ClCompile Include="Eyes.cpp">
+      <Filter>Engine\4. Entities ==========\Eyes</Filter>
+    </ClCompile>
+    <ClCompile Include="JungleCampManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Snakes.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakePoison.cpp">
+      <Filter>Engine\5. Spells ===========\SnakePoison</Filter>
+    </ClCompile>
+    <ClCompile Include="Bushes.cpp">
+      <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </ClCompile>
+    <ClCompile Include="Quest_Manager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneAttack.cpp">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="EventThrower.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
+    <ClCompile Include="j1XMLLoader.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
+    <ClCompile Include="Waterfall.cpp">
+      <Filter>Engine\4. Entities ==========\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="LogoScene.cpp">
+      <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,17 +294,11 @@
     <ClInclude Include="Link.h">
       <Filter>Engine\4. Entities ==========\Link</Filter>
     </ClInclude>
-    <ClInclude Include="Minion.h">
-      <Filter>Engine\4. Entities ==========\Minions</Filter>
-    </ClInclude>
     <ClInclude Include="MenuScene.h">
       <Filter>Engine\3. Scenes ==========\Menu</Filter>
     </ClInclude>
     <ClInclude Include="Tower.h">
       <Filter>Engine\4. Entities ==========\Towers</Filter>
-    </ClInclude>
-    <ClInclude Include="QuestManager.h">
-      <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
     <ClInclude Include="MinionManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
@@ -284,6 +332,66 @@
     </ClInclude>
     <ClInclude Include="ShopManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Zelda.h">
+      <Filter>Engine\4. Entities ==========\Zelda</Filter>
+    </ClInclude>
+    <ClInclude Include="ZeldaManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Trunk.h">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </ClInclude>
+    <ClInclude Include="AestheticsManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>Engine\4. Entities ==========\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Trees.h">
+      <Filter>Engine\4. Entities ==========\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Eyes.h">
+      <Filter>Engine\4. Entities ==========\Eyes</Filter>
+    </ClInclude>
+    <ClInclude Include="JungleCampManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Snakes.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
+    <ClInclude Include="SnakePoison.h">
+      <Filter>Engine\5. Spells ===========\SnakePoison</Filter>
+    </ClInclude>
+    <ClInclude Include="Bushes.h">
+      <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest_Manager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneAttack.h">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="EventThrower.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="Minion.h">
+      <Filter>Engine\4. Entities ==========\Minions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1XMLLoader.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="Waterfall.h">
+      <Filter>Engine\4. Entities ==========\Waterfall</Filter>
+    </ClInclude>
+    <ClInclude Include="LogoScene.h">
+      <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +449,39 @@
     <Filter Include="Engine\3. Scenes ==========\CharacterSelection">
       <UniqueIdentifier>{20ba1de4-2920-493b-83f2-4edabc19fe22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Zelda">
+      <UniqueIdentifier>{a098f2b5-d279-41f1-b97a-5fe19ec85576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Trunk">
+      <UniqueIdentifier>{6cc80d32-975d-4155-bd20-c9a79fc86820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Base">
+      <UniqueIdentifier>{8ba32828-9068-476d-ab52-fca59de55bab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Trees">
+      <UniqueIdentifier>{822fa593-6faf-4b89-a983-8bf0f08b5c7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Eyes">
+      <UniqueIdentifier>{ccac2d89-38c0-4829-a422-d4b18372492a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Jungle Camps">
+      <UniqueIdentifier>{e88e1269-dac3-4cd5-9e6e-db0aa7223f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\SnakePoison">
+      <UniqueIdentifier>{2eb73cd3-985c-4abf-b389-0fc9c08d9ddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Bushes">
+      <UniqueIdentifier>{9ef085b3-7b82-40a9-b487-3f78df6b41e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\BoneAttack">
+      <UniqueIdentifier>{d8f600ad-a766-4725-8bcf-09b65f6bd00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Waterfall">
+      <UniqueIdentifier>{5f67913f-22e2-47ae-9d26-1be68f7cf516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\LogoScene">
+      <UniqueIdentifier>{2a7db05e-620f-44c4-aa2c-95a40dfdd87a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -369,6 +510,48 @@
     </Xml>
     <Xml Include="..\Game\towerattack.xml">
       <Filter>Engine\5. Spells ===========\TowerAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\zelda.xml">
+      <Filter>Engine\4. Entities ==========\Zelda</Filter>
+    </Xml>
+    <Xml Include="..\Game\trunk.xml">
+      <Filter>Engine\4. Entities ==========\Trunk</Filter>
+    </Xml>
+    <Xml Include="..\Game\base.xml">
+      <Filter>Engine\4. Entities ==========\Base</Filter>
+    </Xml>
+    <Xml Include="..\Game\Trees.xml">
+      <Filter>Engine\4. Entities ==========\Trees</Filter>
+    </Xml>
+    <Xml Include="..\Game\eyes.xml">
+      <Filter>Engine\4. Entities ==========\Eyes</Filter>
+    </Xml>
+    <Xml Include="..\Game\snakepoison.xml">
+      <Filter>Engine\5. Spells ===========\SnakePoison</Filter>
+    </Xml>
+    <Xml Include="..\Game\snakes.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\bush.xml">
+      <Filter>Engine\4. Entities ==========\Bushes</Filter>
+    </Xml>
+    <Xml Include="..\Game\skeleton.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\boneattack.xml">
+      <Filter>Engine\5. Spells ===========\BoneAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\entity_effects.xml">
+      <Filter>Engine\4. Entities ==========</Filter>
+    </Xml>
+    <Xml Include="..\Game\Quests.xml">
+      <Filter>Engine\2. Components ======</Filter>
+    </Xml>
+    <Xml Include="..\Game\waterfall.xml">
+      <Filter>Engine\4. Entities ==========\Waterfall</Filter>
+    </Xml>
+    <Xml Include="..\Game\menu_scene.xml">
+      <Filter>Engine\3. Scenes ==========\Menu</Filter>
     </Xml>
   </ItemGroup>
 </Project>

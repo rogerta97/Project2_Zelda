@@ -8,6 +8,7 @@ class UI_Image;
 class UI_Text;
 class UI_Window;
 class Player;
+class Animator;
 
 struct item_info
 {
@@ -45,6 +46,8 @@ struct shop
 	bool				item_selected = false;
 
 	bool				active = false;
+
+	UI_Image*			shop_icon = nullptr;
 };
 
 class ShopManager
@@ -54,28 +57,23 @@ public:
 	~ShopManager();
 
 	bool Start();
-
 	bool Update();
-
 	bool CleanUp();
 
 private:
 	void ChangeShopState(int view);
-
 	void UpdateItemInfo(int view);
-
 	void UpdatePlayerItems(int view, Player* player);
 
 public:
 	UI_Window*		shop_window = nullptr;
-
-private:
-
-	shop*			shops[4] = { nullptr,nullptr,nullptr };
-
 	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };
 
+private:
+	shop*			shops[4] = { nullptr,nullptr,nullptr };
 
+	Animator*		shop_icon_anim = nullptr;
+	
 };
 
 #endif // !_SHOPMANAGER_H_

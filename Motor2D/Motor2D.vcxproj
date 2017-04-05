@@ -75,10 +75,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AestheticsManager.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Base.cpp" />
+    <ClCompile Include="BaseManager.cpp" />
+    <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
+    <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EventThrower.cpp" />
+    <ClCompile Include="Eyes.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="j1Console.cpp" />
@@ -97,6 +104,9 @@
     <ClCompile Include="j1Spell.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Viewports.cpp" />
+    <ClCompile Include="j1XMLLoader.cpp" />
+    <ClCompile Include="JungleCampManager.cpp" />
+    <ClCompile Include="LogoScene.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
     <ClCompile Include="MenuScene.cpp" />
@@ -110,20 +120,35 @@
     <ClCompile Include="Link.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
-    <ClCompile Include="QuestManager.cpp" />
+    <ClCompile Include="Quest_Manager.cpp" />
     <ClCompile Include="ShopManager.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
+    <ClCompile Include="SnakePoison.cpp" />
+    <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
+    <ClCompile Include="Trees.cpp" />
+    <ClCompile Include="Waterfall.cpp" />
+    <ClCompile Include="Zelda.cpp" />
+    <ClCompile Include="ZeldaManager.cpp" />
+    <ClCompile Include="Trunk.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AestheticsManager.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Base.h" />
+    <ClInclude Include="BaseManager.h" />
+    <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
+    <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EventThrower.h" />
+    <ClInclude Include="Eyes.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Item.h" />
@@ -139,6 +164,9 @@
     <ClInclude Include="j1Spell.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Viewports.h" />
+    <ClInclude Include="j1XMLLoader.h" />
+    <ClInclude Include="JungleCampManager.h" />
+    <ClInclude Include="LogoScene.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
     <ClInclude Include="MenuScene.h" />
@@ -163,27 +191,53 @@
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
-    <ClInclude Include="QuestManager.h" />
+    <ClInclude Include="Quest_Manager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
+    <ClInclude Include="Skeleton.h" />
+    <ClInclude Include="SnakePoison.h" />
+    <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
+    <ClInclude Include="Trees.h" />
+    <ClInclude Include="Waterfall.h" />
+    <ClInclude Include="Zelda.h" />
+    <ClInclude Include="ZeldaManager.h" />
+    <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Game\base.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\Game\boneattack.xml" />
     <Xml Include="..\Game\boomerang.xml" />
+    <Xml Include="..\Game\bush.xml" />
+    <Xml Include="..\Game\entity_effects.xml" />
+    <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
+    <Xml Include="..\Game\menu_scene.xml" />
     <Xml Include="..\Game\minion.xml" />
+    <Xml Include="..\Game\Quests.xml" />
     <Xml Include="..\Game\Shop_config.xml" />
+    <Xml Include="..\Game\skeleton.xml" />
+    <Xml Include="..\Game\snakepoison.xml" />
+    <Xml Include="..\Game\snakes.xml" />
     <Xml Include="..\Game\tower.xml" />
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Game\waterfall.xml" />
+    <Xml Include="..\Game\zelda.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\Game\Trees.xml" />
+    <Xml Include="..\Game\trunk.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

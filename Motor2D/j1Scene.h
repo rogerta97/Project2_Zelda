@@ -11,6 +11,7 @@ class MenuScene;
 class MainScene;
 class CharacterSelectionScene; 
 class TeamSelectScene;
+class LogoScene;
 
 struct player_info
 {
@@ -19,6 +20,7 @@ struct player_info
 	uint			team = 3;
 	uint			player = 5;
 	entity_name		character = e_n_null;
+	void Reset() { gamepad = 5; viewport = 5;  team = 3; player = 5; character = e_n_null; };
 };
 
 class j1Scene : public j1Module
@@ -63,12 +65,15 @@ public:
 
 	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
 
+	void ListenEvent(int type, EventThrower * origin, int id);
+
 public:
 	// Scenes
 	MenuScene*					 menu_scene = nullptr; 
 	MainScene*					 main_scene = nullptr;
 	CharacterSelectionScene*	 charselect_screen = nullptr; 
 	TeamSelectScene*			 team_select = nullptr;
+	LogoScene*					 logo_scene = nullptr;
 
 	player_info					 players[4];
 

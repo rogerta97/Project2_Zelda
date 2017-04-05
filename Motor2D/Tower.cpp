@@ -17,40 +17,60 @@
 #include "j1Spell.h"
 #include "Spell.h"
 #include "TowerAttack.h"
+#include "Quest_Manager.h"
+#include "j1XMLLoader.h"
 
-#define TOWER_H 64
+#define TOWER_H 38
 #define TOWER_W 64
+
+#define HALFMAP 81*32
 
 Tower::Tower(iPoint pos) 
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_H, TOWER_W), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
 	
-	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	AddAbility(0, 50, 2.5f, 2, "t_attack");
-
 	pugi::xml_document doc;
-	App->LoadXML("tower.xml", doc);
+	App->xml->LoadXML("tower.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats");
+
+	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();;
+	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+	rupee_reward = stats_node.attribute("rupees").as_int();
+
+	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
+	float cd = stats_node.child("ability1").attribute("cd").as_float();
+	int bd = stats_node.child("ability1").attribute("bd").as_int();
+	AddAbility(0, cd, bd, dmg_mult, "t_attack");
+
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
+	name = "tower";
 }
 
 Tower::~Tower()
 {
-	RELEASE(game_object);
+	
 }
 
 bool Tower::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("tower_idle");
-
-	stats.max_life = stats.life = 400;
-
 	show_life_bar = true;
+
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("tower_idle");
+	}
+	else
+	{
+		game_object->SetAnimation("tower2_idle");
+	}
 
 	return ret;
 }
@@ -65,6 +85,9 @@ bool Tower::PreUpdate()
 bool Tower::Update(float dt)
 {
 	bool ret = true;
+
+	if (to_delete)
+		return true;
 
 	switch (state)
 	{
@@ -97,22 +120,28 @@ bool Tower::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(64, 4), iPoint(-32, -92));
+	LifeBar(iPoint(75, 6), iPoint(-36, -92));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
 	if (GotHit(entity, ability, spell))
-	{
-		if (entity->GetTeam() != GetTeam())
+		// Enemy attacks
+		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			stats.life -= ability->damage;
+			if (spell != nullptr)
+			{
+
+			}
+			else
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+
 			if (stats.life <= 0)
 			{
+				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
-	}
 
 	return ret;
 }
@@ -121,7 +150,7 @@ bool Tower::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
@@ -150,7 +179,14 @@ iPoint Tower::GetPos() const
 
 void Tower::Idle()
 {	
-	game_object->SetAnimation("tower_idle");
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("tower_idle");
+	}
+	else
+	{
+		game_object->SetAnimation("tower2_idle");
+	}
 }
 
 void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -161,7 +197,15 @@ void Tower::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
-		game_object->SetAnimation("tower_attack");
+		if (game_object->GetPos().x < HALFMAP)
+		{
+			game_object->SetAnimation("tower_attack");
+		}
+		else
+		{
+			game_object->SetAnimation("tower2_attack");
+		}
+		
 		anim_state = tower_attack;
 
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
@@ -198,9 +242,9 @@ bool Tower::LookForTarget()
 		std::vector<Entity*> players;
 
 		if (GetTeam() == 1)
-			players = App->entity->player_manager->GetTeamPlayers(2);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 		else
-			players = App->entity->player_manager->GetTeamPlayers(1);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 
 		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
 		{

@@ -44,6 +44,7 @@ public:
 
 	virtual bool isDone() { return change_scene; }
 
+	virtual void ListenEvent(int type, EventThrower * origin, int id) {};
 protected:
 
 	bool change_scene = false; 

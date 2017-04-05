@@ -3,12 +3,14 @@
 #include "j1Viewports.h"
 #include "p2Log.h"
 #include "Entity.h"
+#include "j1XMLLoader.h"
 
 #define ACCELERATION -1300
 #define TIME 0.65f
 #define DESTRUCTION_TIME 1.8f
 #define SLOW_TIME 1.5f
 #define SLOW_MULTIPLICATOR 0.5f
+
 Boomerang::Boomerang(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_ABILITIES, App->cf->MASK_ABILITIES, pbody_type::p_t_boomerang, 0);
@@ -17,10 +19,11 @@ Boomerang::Boomerang(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
+	stats.damage_multiplicator = 1.0f;
+
 	pugi::xml_document doc;
-	App->LoadXML("boomerang.xml", doc);
+	App->xml->LoadXML("boomerang.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
 
@@ -78,12 +81,12 @@ bool Boomerang::Update(float dt)
 		if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) < BOOMERANG_RANGE * 0.5f)
 		{
 			stats.stun_duration = 1.0f;
-			stats.damage_multiplicator = 1.3f;
+			stats.damage_multiplicator = 0.3f;
 		}
 		else if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) > BOOMERANG_RANGE * 0.5f)
 		{
 			stats.stun_duration = 0.0f;
-			stats.damage_multiplicator = 0.7f;
+			stats.damage_multiplicator = 0.15f;
 			stats.slow_duration = SLOW_TIME;
 			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
 		}
@@ -91,7 +94,7 @@ bool Boomerang::Update(float dt)
 	else
 	{
 		stats.stun_duration = 0.0f;
-		stats.damage_multiplicator = 0.7f;
+		stats.damage_multiplicator = 0.15f;
 		stats.slow_duration = 0.0f;
 		stats.slow_multiplicator = 0.0f;
 	}
@@ -124,7 +127,7 @@ bool Boomerang::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(1, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 
 	return ret;
 }

@@ -79,6 +79,17 @@ void GameObject::SetListener(j1Module * scene)
 	pbody->listeners.push_back(scene);
 }
 
+void GameObject::DeleteListener(j1Module * scene)
+{
+	for (vector<j1Module*>::iterator it = pbody->listeners.begin(); it != pbody->listeners.end();)
+	{
+		if (scene = *it)
+			it = pbody->listeners.erase(it);
+		else
+			++it;
+	}
+}
+
 void GameObject::SetCatMask(int cat, int mask)
 {
 	b2Filter data;
@@ -109,7 +120,12 @@ void GameObject::SetAnimation(const char * animation)
 
 SDL_Rect GameObject::GetCurrentAnimationRect(float dt)
 {
-	return animator->GetCurrentAnimation()->GetAnimationFrame(dt);
+	Animation* current = animator->GetCurrentAnimation();
+
+	if (current != nullptr)
+		return current->GetAnimationFrame(dt);
+
+	return NULLRECT;
 }
 
 b2Fixture* GameObject::CreateCollision(iPoint offset, int width, int height, fixture_type type)
@@ -120,6 +136,11 @@ b2Fixture* GameObject::CreateCollision(iPoint offset, int width, int height, fix
 b2Fixture* GameObject::CreateCollision(iPoint offset, int rad, fixture_type type)
 {
 	return App->physics->AddCircleToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
+}
+
+b2Fixture* GameObject::CreateCollision(iPoint offset, int* data, int size, fixture_type type)
+{
+	return App->physics->AddChainBody(pbody, offset.x, offset.y, data, size, type, density, 0, friction);
 }
 
 b2Fixture* GameObject::CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type)
@@ -156,6 +177,7 @@ iPoint GameObject::GetHitBoxSize() const
 void GameObject::CleanUp()
 {
 	App->physics->DeleteBody(pbody);
+	animator->CleanUp();
 	RELEASE(animator);
 }
 

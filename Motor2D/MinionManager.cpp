@@ -4,12 +4,13 @@
 #include "j1Map.h"
 #include "j1Entity.h"
 #include "Minion.h"
+#include "j1XMLLoader.h"
 
 // Coment code, ty
 MinionManager::MinionManager()
 {
 	pugi::xml_document doc;
-	App->LoadXML("GameSettings.xml", doc);
+	App->xml->LoadXML("GameSettings.xml", doc);
 
 	pugi::xml_node minions_node = doc.child("file").child("minions");
 
@@ -113,6 +114,26 @@ bool MinionManager::Update()
 	return ret;
 }
 
+bool MinionManager::CleanUp()
+{
+	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
+	{
+		App->entity->DeleteEntity(*it);
+		it = team1_minions.erase(it);
+	}
+
+	for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();)
+	{
+		App->entity->DeleteEntity(*it);
+		it = team2_minions.erase(it);
+	}
+
+	team1_minions.clear();
+	team2_minions.clear();
+
+	return true;
+}
+
 std::list<Minion*>& MinionManager::GetMinionList(uint team)
 {
 	if (team == 1) 
@@ -130,13 +151,30 @@ void MinionManager::KillMinion(Entity * minion)
 	switch (minion->GetTeam())
 	{
 	case 1:
-		team1_minions.remove((Minion*)minion);
-		App->entity->DeleteEntity(minion);
-		break;
+		for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
+		{
+			if ((*it == minion))
+			{
+				App->entity->DeleteEntity(*it);
+				it = team1_minions.erase(it);
+				break;
+			}
+			else
+				++it;
+
+		}
 	case 2:
-		team2_minions.remove((Minion*)minion);
-		App->entity->DeleteEntity(minion);
-		break;
+		for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();)
+		{
+			if ((*it == minion))
+			{
+				App->entity->DeleteEntity(*it);
+				it = team2_minions.erase(it);
+				break;
+			}
+			else
+				++it;
+		}
 
 	}
 }
@@ -150,15 +188,28 @@ void MinionManager::AddMinions()
 {
 	Minion* team1 = (Minion*)App->entity->CreateEntity(minion, team1_spawn);
 	Minion* team2 = (Minion*)App->entity->CreateEntity(minion, team2_spawn);
-
+	
 	team1->SetTeam(1);
 	team2->SetTeam(2);
-
+	
 	team1->SetBasePath(minions_path);
 	minions_path.reverse();
 	team2->SetBasePath(minions_path);
 	minions_path.reverse();
-
+	
 	team1_minions.push_back(team1);
 	team2_minions.push_back(team2);
+}
+
+void MinionManager::StunMinions()
+{
+	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();++it)
+	{
+		(*it)->Stun(20.0f);
+	}
+
+	for (list<Minion*>::iterator it = team2_minions.begin(); it != team2_minions.end();++it)
+	{
+		(*it)->Stun(20.0f);
+	}
 }

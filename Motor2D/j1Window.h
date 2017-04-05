@@ -2,6 +2,7 @@
 #define __j1WINDOW_H__
 
 #include "j1Module.h"
+#include "j1Render.h"
 
 struct SDL_Window;
 struct SDL_Surface;
@@ -28,6 +29,7 @@ public:
 
 	// Retrive window size
 	void GetWindowSize(uint& width, uint& height) const;
+	iPoint GetWindowSize();
 
 	// Retrieve window scale
 	uint GetScale() const;

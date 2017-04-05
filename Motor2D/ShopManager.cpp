@@ -7,6 +7,8 @@
 #include "j1App.h"
 #include "j1Scene.h"
 #include "j1Map.h"
+#include "j1XMLLoader.h"
+#include "Animation.h"
 
 ShopManager::ShopManager()
 {
@@ -32,8 +34,8 @@ bool ShopManager::Start()
 	pugi::xml_document shop_config;
 	pugi::xml_node shop_node;
 
-	App->LoadXML("Shop_config.xml", shop_config);
-	shop_node = shop_config.child("shop");
+	App->xml->LoadXML("Shop_config.xml", shop_config);
+	shop_node = shop_config.child("file");
 	// -----
 
 	//Create window
@@ -55,7 +57,7 @@ bool ShopManager::Start()
 	pugi::xml_document items_doc;
 	pugi::xml_node file_node;
 
-	App->LoadXML("Items.xml", items_doc);
+	App->xml->LoadXML("Items.xml", items_doc);
 	file_node = items_doc.child("file");
 
 	int item_num = 0;
@@ -193,7 +195,7 @@ bool ShopManager::Start()
 	//Set stat numbers text
 	for (int i = 0; i < 4; i++)
 	{
-		int x = (win_w / 4 + 10) + (i % 2)*win_w / 2;
+		int x = (win_w / 4 + 14) + (i % 2)*win_w / 2;
 		int y = (win_h / 4 - 60) + (i / 2)*win_h / 2;
 
 		shops[i]->power_num = shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
@@ -206,7 +208,7 @@ bool ShopManager::Start()
 		string hp = std::to_string(shops[i]->items[0].item->hp);
 		shops[i]->hp_num->SetText(hp);
 
-		x += 97;
+		x += 99;
 
 		shops[i]->speed_num = shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
 		string s = std::to_string(shops[i]->items[0].item->speed);
@@ -246,23 +248,55 @@ bool ShopManager::Start()
 		}
 	}
 
-	shop_window->SetEnabledAndChilds(false);
-	shop_window->enabled = true;
-
 	//Get shop positions
 	team_shop[0] = App->map->GetShopPosition(1);
 	team_shop[1] = App->map->GetShopPosition(2);
 
-	App->UnloadXML(shop_config);
-	App->UnloadXML(items_doc);
+	//Shop icon
+	for (int i = 0; i < 4; i++)
+	{
+		int x = (win_w / 4 - 16) + (i % 2)*win_w / 2;
+		int y = (win_h / 4 - win_h / 6) + (i / 2)*win_h / 2;
+
+		shops[i]->shop_icon = shop_window->CreateImage(iPoint(x, y), { 0,0,0,0 });
+	}
+
+	shop_window->SetEnabledAndChilds(false);
+	shop_window->enabled = true;
+
+	shop_icon_anim = new Animator();
+	shop_icon_anim->LoadAnimationsFromXML(shop_config, "animations");
+	shop_icon_anim->SetAnimation("shop_icon");
 
 	return true;
 }
 
 bool ShopManager::Update()
 {
-	for (std::vector<Player*>::iterator it = App->entity->player_manager->players.begin(); it != App->entity->player_manager->players.end(); it++)
+	bool shop_icon_updated = false;
+
+	for (std::vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
 	{
+		if ((*it)->is_dead)
+			return true;
+
+		if (team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200 && !shops[(*it)->viewport - 1]->active)
+		{
+			shops[(*it)->viewport - 1]->shop_icon->enabled = true;
+			if (!shop_icon_updated)
+			{
+				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
+				shop_icon_updated = true;
+			}
+			else
+				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(0.0f);
+		}
+		else
+		{
+			if(shops[(*it)->viewport - 1]->shop_icon->enabled == true)
+				shops[(*it)->viewport - 1]->shop_icon->enabled = false;
+		}
+
 		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
 			ChangeShopState((*it)->viewport - 1);
@@ -379,6 +413,7 @@ bool ShopManager::CleanUp()
 	{
 		RELEASE(shops[i]);
 	}
+
 	return true;
 }
 
@@ -404,6 +439,10 @@ void ShopManager::ChangeShopState(int view)
 		it->item_image->enabled = !it->item_image->enabled;
 	}
 
+	shops[view]->selected_item = 0;
+
+	UpdateItemInfo(view);
+
 	for (int i = 0; i < 3; i++)
 	{
 		shops[view]->player_items[i]->enabled = !shops[view]->player_items[i]->enabled;
@@ -421,12 +460,14 @@ void ShopManager::ChangeShopState(int view)
 	if (shops[view]->upgrade_from_item->enabled)
 		shops[view]->upgrade_from_item->enabled = !shops[view]->upgrade_from_item->enabled;
 
-	shops[view]->selected_item = 0;
-	
-	UpdateItemInfo(view);
-
 	shops[view]->active = !shops[view]->active;
 	shops[view]->item_selected = false;
+
+	if (shops[view]->background->enabled == true)
+
+		App->scene->main_scene->player_manager->DisableInput(view + 1);
+	else
+		App->scene->main_scene->player_manager->AllowInput(view + 1);
 }
 
 void ShopManager::UpdateItemInfo(int view)

@@ -5,6 +5,7 @@
 #include "j1Gui.h"
 #include "Scene.h"
 #include <vector>
+#include "j1PerfTimer.h"
 
 struct SDL_Texture;
 class MainScene;
@@ -69,9 +70,9 @@ struct layer_line
 struct layer_circle
 {
 	layer_circle() {};
-	layer_circle(int _x1, int _y1, int _redius, Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a, bool _use_camera)
+	layer_circle(int _x1, int _y1, int _redius, Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a, bool _filled, bool _use_camera)
 	{
-		x1 = _x1; y1 = _y1; redius = _redius; r = _r; g = _g; b = _b; a = _a; use_camera = _use_camera;
+		x1 = _x1; y1 = _y1; redius = _redius; r = _r; g = _g; b = _b; a = _a; filled = _filled, use_camera = _use_camera;
 	}
 	int   x1 = 0;
 	int   y1 = 0;
@@ -80,6 +81,7 @@ struct layer_circle
 	Uint8 g = 0;
 	Uint8 b = 0;
 	Uint8 a = 0;
+	bool filled = false;
 	bool  use_camera = true;
 };
 
@@ -114,7 +116,7 @@ public:
 	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, int viewport = 0, float scale = -1.0f, bool use_camera = true, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
 	void LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, int layer = 0, int viewport = 0, bool use_camera = true);
 	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
-	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, int layer = 0, int viewport = 0, bool use_camera = true);
+	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, int layer = 0, int viewport = 0, bool filled = false, bool use_camera = true);
 	void SetViews(uint number);
 	uint GetViews();
 	SDL_Rect GetViewportRect(uint viewport);
@@ -128,6 +130,8 @@ public:
 	void OnCVar(std::list<std::string>& tokens);
 
 	void SaveCVar(std::string& cvar_name, pugi::xml_node& node) const;
+
+	void ResetCameras();
 
 private:
 	// Blit in the layer order
@@ -174,6 +178,8 @@ private:
 	SDL_Rect			 view4_4 = NULLRECT;
 
 	float				 scale = -1.0;
+
+	j1PerfTimer			 timer;
 
 };
 

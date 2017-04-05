@@ -6,6 +6,7 @@
 #include "PlayerManager.h"
 #include "p2Log.h"
 #include "Functions.h"
+#include "Quest_Manager.h"
 
 #define LIFE_BAR_COLOR_1 {30, 30, 30, 255}
 
@@ -42,11 +43,11 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 	return false;
 }
 
-Ability* Entity::AddAbility(int number, int damage, int cooldow, int duration, char* name)
+Ability* Entity::AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name)
 {
 	Ability* ret = nullptr;
 
-	Ability* ability = new Ability(number, damage, cooldow, duration, name); abilities.push_back(ability); ret = ability;
+	Ability* ability = new Ability(number, base_damage, damage_multiplier, cooldow, name); abilities.push_back(ability); ret = ability;
 
 	return ability;
 }
@@ -118,6 +119,15 @@ void Entity::Stun(float time)
 	App->entity->stuned_entities.push_back(s);
 }
 
+void Entity::BoomerangEffects(Entity* entity, Ability * ability, Spell * spell)
+{
+	if (spell->stats.slow_duration > 0)
+		Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
+	if (spell->stats.stun_duration > 0)
+		Stun(spell->stats.stun_duration);
+}
+
+
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
 	if (show_life_bar && game_object != nullptr)
@@ -134,13 +144,13 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 10, 0, true);
 
 		// Get the viewports of my team
-		vector<int> my_team = App->entity->player_manager->GetTeamViewports(team);
+		vector<int> my_team = App->scene->main_scene->player_manager->GetTeamViewports(team);
 
 		int main_view = 0;
 
 		if (is_player)
 		{
-			main_view = App->entity->player_manager->GetEntityViewportIfIsPlayer(this);
+			main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 		}
 	
 		// Print to viewports depending the team
@@ -175,9 +185,23 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 
 void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 {
-	stats.power = stats.base_power + extra_power;
 	stats.speed = stats.restore_speed = stats.base_speed + extra_speed;
 	stats.max_life = stats.base_hp + extra_hp;
+	switch (team)
+	{
+	case 1:
+	{
+		stats.power = (stats.base_power + extra_power)*(1 + (App->scene->main_scene->quest_manager->get_progress(1,GetTeam()))*0.1);
+		break;
+	}
+	case 2:
+	{
+		stats.power = (stats.base_power + extra_power)*(1 + (App->scene->main_scene->quest_manager->get_progress(1, GetTeam()))*0.1);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 float Ability::GetCdTimeLeft()

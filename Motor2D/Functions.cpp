@@ -2,8 +2,10 @@
 #include "j1App.h"
 #include <stdio.h>
 #include <cmath>
+#include <random>
 #include "p2Defs.h"
 #include "p2Log.h"
+#include "j1XMLLoader.h"
 
 // Returns the angle between two points in degrees
 float AngleFromTwoPoints(float x1, float y1, float x2, float y2)
@@ -67,7 +69,7 @@ void LoadAnimationFromXML(list<SDL_Rect>& rects, const char * file, const char* 
 	pugi::xml_document doc;
 	pugi::xml_node node;
 
-	App->LoadXML(file, doc);
+	App->xml->LoadXML(file, doc);
 
 	node = doc.child("file").child("animations").child(animation_name);
 
@@ -80,4 +82,13 @@ void LoadAnimationFromXML(list<SDL_Rect>& rects, const char * file, const char* 
 		rect.h = curr.attribute("h").as_int();
 		rects.push_back(rect);
 	}
+}
+
+int GetRandomValue(int range_1, int range_2)
+{
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<> dis(range_1, range_2);
+
+	return dis(gen);
 }

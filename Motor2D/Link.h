@@ -117,8 +117,8 @@ private:
 public:
 
 private:
-	int		camera = 1;
-	bool	flip = false;
+	int		      camera = 1;
+	bool	      flip = false;
 
 	// Ability 3
 	float        ability3_range = 0.0f;
@@ -136,6 +136,8 @@ private:
 	bool		 get_right = true;
 	ability3_dir ab3_dir = ability3_dir::a3_direction_null;
 	bool		 find = false;
+
+	int			 rupee_reward = 0;
 };
 
 #endif

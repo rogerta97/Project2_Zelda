@@ -33,4 +33,7 @@ void ToLowerCase(std::string str);
 // Loads an xml and and load it's animations
 void LoadAnimationFromXML(list<SDL_Rect>& rects, const char* file, const char* animation_name);
 
+// Returns a random int given a range;
+int GetRandomValue(int range_1, int range_2);
+
 #endif //__FUNCTIONS_H__

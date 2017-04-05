@@ -1,10 +1,12 @@
 #ifndef _MENUSCENE_H_
 #define _MENUSCENE_H_
 
-
 #include "Scene.h"
 #include "j1Gui.h"
 #include "j1Render.h"
+#include "j1Timer.h"
+
+class Animator;
 
 enum button_action 
 {
@@ -35,6 +37,9 @@ public:
 	void GoOptions();
 	void GoMenu(); 
 
+private:
+	void FadeOut();
+
 public:
 	fPoint			   pos = NULLPOINT;
 
@@ -46,9 +51,7 @@ private:
 	UI_Image*		   cursor_1 = nullptr; 
 	UI_Image*		   cursor_2 = nullptr;
 
-	UI_Image*		   princess = nullptr;
-
-	button_action	   current_button = START; 
+	UI_Image*		   princess = nullptr; 
 
 	UI_Button*		   start_button = nullptr;
 	UI_Button*		   options_button = nullptr; 
@@ -66,10 +69,26 @@ private:
 	UI_Text*		   fx_text = nullptr;
 	UI_Text*		   music_text = nullptr;
 
+	UI_Check_Box*	   options_checkbox = nullptr; 
+
 	vector<UI_Button*> button_list;
 	vector<UI_Image*>  cursors;
 
-	bool			   is_options = false; 
+	bool			   is_options = false;
+	button_action	   current_button = START;
+
+	j1Timer			   music_time;
+
+	// Main banner
+	Animator*		   main_banner = nullptr;
+	iPoint			   main_banner_pos = NULLPOINT;
+	SDL_Texture*	   main_banner_texture = nullptr;
+
+	// Background image
+	SDL_Texture*	   background_image = nullptr;
+	iPoint			   background_pos = NULLPOINT;
+	SDL_Rect		   background_image_rect = NULLRECT;
+	float              fade_value = 255.0f;
 
 };
 

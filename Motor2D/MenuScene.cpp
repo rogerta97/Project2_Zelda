@@ -5,7 +5,12 @@
 #include "j1Console.h"
 #include "j1Scene.h"
 #include "p2Log.h"
+#include "j1Audio.h"
+#include "j1XMLLoader.h"
+#include "Animation.h"
+#include "j1Window.h"
 
+#define FADE_SPEED 150
 
 
 MenuScene::MenuScene()
@@ -20,91 +25,107 @@ bool MenuScene::Start()
 {
 	bool ret = false;
 
-	change_scene = false; 
+	change_scene = false;
 
-	SDL_Rect screen = App->view->GetViewportRect(1);
+	SDL_Rect screen = {0, 0, App->win->GetWindowSize().x,  App->win->GetWindowSize().y};
 	menu_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, false);
 
-	// Triforce
-//	triforce = menu_window->CreateImage(iPoint(50, 25), {34, 133, 115, 104}, false);
+	// Background
+	background_image = App->tex->LoadTexture("gui/intro_background.png");
+	background_pos = {0 , 0 };
+	background_image_rect = {0, 0, 1994, 1359};
+
+	// Main banner
+	main_banner = new Animator();
+	pugi::xml_document doc;
+	App->xml->LoadXML("menu_scene.xml", doc);
+	main_banner_texture = main_banner->LoadAnimationsFromXML(doc, "animations");
+	main_banner->SetAnimation("idle");
+	main_banner_pos = {(screen.w / 2) - (main_banner->GetCurrentAnimation()->GetActualFrame().w / 2), (screen.h/2) - 350};
+	main_banner->SetAnimation("idle");
 
 	// Start ---
-	start_button = menu_window->CreateButton(iPoint(screen.w - 70, 150), 223, 60, false);
+	start_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 30), 223, 60, false);
 	button_list.push_back(start_button);
 
-	start_button->AddImage("idle", { 128, 52, 220, 55 }); 
+	start_button->AddImage("idle", { 128, 52, 220, 55 });
 
-	start_button->SetImage("idle"); 
+	start_button->SetImage("idle");
 
-	start_text = menu_window->CreateText(iPoint(screen.w, 160), App->font->game_font);
+	start_text = menu_window->CreateText(iPoint(start_button->rect.x + 60, (screen.h / 2) + 40), App->font->game_font);
 	start_text->SetText("NEW GAME");
 	start_text->click_through = true;
 
 	// ---------
 
 	// Options -
-	options_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
+	options_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 100), 223, 60, false);
 	button_list.push_back(options_button);
 
 	options_button->AddImage("idle", { 128, 52, 220, 55 });
-
-
 	options_button->SetImage("idle");
 
-	options_text = menu_window->CreateText(iPoint(screen.w, 230), App->font->game_font);
+	options_text = menu_window->CreateText(iPoint(options_button->rect.x + 66, (screen.h / 2) + 110), App->font->game_font);
 	options_text->SetText("OPTIONS");
 	options_text->click_through = true;
 
-	fx_button = menu_window->CreateButton(iPoint(screen.w - 70, 220), 223, 60, false);
+	fx_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, 220), 223, 60, false);
 
 	fx_button->AddImage("idle", { 128, 52, 220, 55 });
-
-
 	fx_button->SetImage("idle");
 
-	fx_button->enabled = false; 
+	fx_button->enabled = false;
 
-	fx_text = menu_window->CreateText(iPoint(screen.w, 230), App->font->game_font);
+	fx_text = menu_window->CreateText(iPoint(fx_button->rect.x + 60, 230), App->font->game_font);
 	fx_text->SetText("FX");
-	fx_text->enabled = false; 
+	fx_text->enabled = false;
 
-	music_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
+	music_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, 290), 223, 60, false);
 
 	music_button->AddImage("idle", { 128, 52, 220, 55 });
-
-
 	music_button->SetImage("idle");
 
 	music_button->enabled = false;
 
-	music_text = menu_window->CreateText(iPoint(screen.w, 300), App->font->game_font);
-	music_text->SetText("MUSIC"); 
+	music_text = menu_window->CreateText(iPoint(music_button->rect.x + 60, 300), App->font->game_font);
+	music_text->SetText("MUSIC");
 	music_text->enabled = false;
 
+	//Check Box 
+
+	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
+	options_checkbox->AddBox(iPoint(fx_button->GetPos().x + fx_button->rect.w - options_checkbox->rect.w - 13, fx_button->GetPos().y + 5), 44, 44, "fx");
+	options_checkbox->AddBox(iPoint(music_button->GetPos().x + music_button->rect.w - options_checkbox->rect.w - 13, music_button->GetPos().y + 5), 44, 44, "music");
+
+	options_checkbox->SetBox(true, "fx"); 
+	options_checkbox->SetBox(true, "music");
+
+	options_checkbox->enabled = false;
+	
 	// ---------
 
 	// Credits --
-	credits_button = menu_window->CreateButton(iPoint(screen.w - 70, 290), 223, 60, false);
+	credits_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 170), 223, 60, false);
 	button_list.push_back(credits_button); 
 
 	credits_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	credits_button->SetImage("idle");
 
-	credits_text = menu_window->CreateText(iPoint(screen.w, 300), App->font->game_font);
+	credits_text = menu_window->CreateText(iPoint(credits_button->rect.x + 68, (screen.h / 2) + 180), App->font->game_font);
 	credits_text->SetText("CREDITS"); 
 	credits_text->click_through = true; 
 	// ---------
 
 	// Quit ---
-	quit_button = menu_window->CreateButton(iPoint(screen.w - 70, 360), 223, 60, false);
+	quit_button = menu_window->CreateButton(iPoint(screen.w/2 - 110, (screen.h / 2) + 240), 223, 60, false);
 	button_list.push_back(quit_button);
 
 	quit_button->AddImage("idle", { 128, 52, 220, 55 });
 
 	quit_button->SetImage("idle");
 
-	quit_text = menu_window->CreateText(iPoint(screen.w, 370), App->font->game_font);
+	quit_text = menu_window->CreateText(iPoint(quit_button->rect.x + 55, (screen.h / 2) + 250), App->font->game_font);
 	quit_text->SetText("QUIT GAME");
 	quit_text->click_through = true;
 	// ---------
@@ -119,13 +140,14 @@ bool MenuScene::Start()
 	cursors.push_back(cursor_1); 
 	cursors.push_back(cursor_2);
 
-	// Checkbox test
-	UI_Check_Box* cb = menu_window->CreateCheckBox(iPoint(300, 300), 100, 100, {166, 5, 11, 9}, {181, 5, 11, 9 }, false, true);
-	cb->AddBox(iPoint(320, 320), 20, 20, "test1");
-	cb->AddBox(iPoint(320, 340), 20, 20, "test2");
-	cb->AddBox(iPoint(320, 360), 20, 20, "test3");
-	cb->AddBox(iPoint(320, 380), 20, 20, "test4");
-	//cb->GetBox("test1");
+	App->console->AddText("viewports.set 1", Input);
+	App->view->camera1.x = 0;
+	App->view->camera1.y = 0;
+
+	//Music
+	App->audio->DefaultVolume();
+	App->audio->PlayMusic("Audio/Music/title.ogg");
+	music_time.Start();
 
 	return true;
 }
@@ -193,24 +215,39 @@ bool MenuScene::Update(float dt)
 		App->scene->ChangeScene(App->scene->main_scene);
 	}
 
+	// Blit main banner
+	if (App->scene->GetCurrentScene() == this)
+	{
+		App->render->Blit(background_image, background_pos.x, background_pos.y, &background_image_rect);
+		App->render->DrawQuad({ 0, 0, App->win->GetWindowSize().x, App->win->GetWindowSize().y }, 255, 255, 255, -1.0f, fade_value, true);
+		FadeOut();
+		App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
+	}
+
+	//Stop music ones it finish
+	if (music_time.ReadSec() > 17)
+	{
+		App->audio->StopMusic();
+	}
+
 	return true;
 }
 
 bool MenuScene::PostUpdate()
 {
-
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 	{
 
 		switch (current_button)
 		{
 		case START:
-			App->scene->ChangeScene((Scene*)App->scene->team_select);
+			App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
+			return true;
 			break;
 
 		case OPTIONS:
-			is_options = true; 
-			GoOptions();
+			//is_options = true; 
+			//GoOptions();
 			break;
 
 		case CREDITS:
@@ -222,11 +259,11 @@ bool MenuScene::PostUpdate()
 			break;
 
 		case FX:
-			LOG("fx");
+			options_checkbox->SetBox(!options_checkbox->GetBox("fx"), "fx");
 			break; 
 
 		case MUSIC:
-			LOG("music"); 
+			options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
 			break; 
 
 		}
@@ -250,7 +287,25 @@ bool MenuScene::CleanUp()
 	// -------
 
 	button_list.clear();
+	cursors.clear();
+
+	pos = NULLPOINT;
+
+	current_button = START;
+	is_options = false;
 	
+	//Stop Music
+	App->audio->StopMusic();
+
+	// Main banner
+	main_banner->CleanUp();
+	RELEASE(main_banner);
+	App->tex->UnLoadTexture(main_banner_texture);	
+
+	// Background image
+	App->tex->UnLoadTexture(background_image);
+	fade_value = 255.0f;
+
 	return true;
 }
 
@@ -278,6 +333,7 @@ void MenuScene::GoOptions()
 	music_button->enabled = true; 
 	fx_text->enabled = true; 
 	music_text->enabled = true; 
+	options_checkbox->enabled = true; 
 
 	current_button = FX; 
 }
@@ -297,6 +353,14 @@ void MenuScene::GoMenu()
 	music_button->enabled = false;
 	fx_text->enabled = false;
 	music_text->enabled = false;
+	options_checkbox->enabled = false;
 
 	current_button = START;
+}
+
+void MenuScene::FadeOut()
+{
+	fade_value -= FADE_SPEED*App->GetDT();
+	if (fade_value < 0)
+		fade_value = 0;
 }

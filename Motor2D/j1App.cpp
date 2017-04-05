@@ -22,6 +22,7 @@
 #include "j1Entity.h"
 #include "j1Viewports.h"
 #include "j1Spell.h"
+#include "j1XMLLoader.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -44,10 +45,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	entity = new j1Entity();
 	view = new j1Viewports();
 	spell = new j1Spell();
+	xml = new j1XMLLoader();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(fs);
+	AddModule(xml);
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
@@ -156,6 +159,10 @@ bool j1App::Start()
 	bug_report_text->SetText("Report a bug");
 	bug_report_text->click_through = true;
 
+	//game_states = (UI_Window*)App->gui->UI_CreateWin(iPoint(App->win->GetWindowSize().x - 200, 0), 200, 115, 1, false);
+	//game_states_rect = (UI_ColoredRect*)game_states->CreateColoredRect(iPoint(App->win->GetWindowSize().x - 200, 0), 200, 115, { 20, 20, 20, 255 }, true);
+	//game_states_text = (UI_Text*)game_states->CreateText(iPoint(App->win->GetWindowSize().x - 195, 5), App->font->default_15, 15);
+
 	PERF_PEEK(ptimer);
 
 	return ret;
@@ -227,6 +234,7 @@ void j1App::FinishUpdate()
 		LoadGameNow();
 
 	FrameRateCalculations();
+	GameStates();
 }
 
 // Call modules before each loop iteration
@@ -277,6 +285,7 @@ bool j1App::CleanUp()
 	PERF_START(ptimer);
 	bool ret = true;
 
+	deleting_engine = true;
 	delete cf;
 
 	// Cleaning up in reverse order
@@ -344,25 +353,6 @@ void j1App::SaveGame(const char* file) const
 void j1App::GetSaveGames(p2List<p2SString>& list_to_fill) const
 {
 	// need to add functionality to file_system module for this to work
-}
-
-void j1App::LoadXML(const char * path, pugi::xml_document & doc)
-{
-	char* buf = NULL;
-	int size = App->fs->Load(path, &buf);
-	pugi::xml_parse_result result = doc.load_buffer(buf, size);
-	
-	if (buf == NULL)
-		LOG("Error loading '%s', probably wrong XML file name", path);
-	else
-		LOG("Succes loading '%s'", path);
-
-	RELEASE(buf);
-}
-
-void j1App::UnloadXML(pugi::xml_document & doc)
-{
-	doc.reset();
 }
 
 void j1App::CapFps(float fps)
@@ -489,11 +479,33 @@ void j1App::FrameRateCalculations()
 		bug_report_button_color->SetColor({ 30, 30, 30, 255 });
 	}
 
-
 	if (debug_mode && !debug_window->enabled)
 		debug_window->SetEnabledAndChilds(true);
 	if(!debug_mode && debug_window->enabled)
 		debug_window->SetEnabledAndChilds(false);
+}
+
+void j1App::GameStates()
+{
+	static char title[256];
+
+	//int ui_elements = 0;
+	//int entities = 0;
+
+	//if(App->gui != nullptr)
+	//	ui_elements = App->gui->elements_list.Count();
+	//if (App->entity != nullptr)
+	//	entities = App->entity->GetEntitiesNumber();
+
+
+	//p2SString str("UI_Elements: %d \nEntities: %d", ui_elements, entities);
+	//string t = str.GetString();
+	//game_states_text->SetText(t);
+
+	//if (debug_mode && !game_states->enabled)
+	//	game_states->SetEnabledAndChilds(true);
+	//if (!debug_mode && game_states->enabled)
+	//	game_states->SetEnabledAndChilds(false);
 }
 
 void j1App::EndSDL()
@@ -504,4 +516,10 @@ void j1App::EndSDL()
 void j1App::OpenWebPage(char * url)
 {
 	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWMAXIMIZED);
+}
+
+void j1App::ExpandEvent(int type, EventThrower * origin, int id)
+{
+	for (list<j1Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
+		(*it)->ListenEvent(type, origin, id);
 }

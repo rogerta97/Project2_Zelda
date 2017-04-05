@@ -3,6 +3,8 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1FileSystem.h"
+#include "j1Entity.h"
+#include "AestheticsManager.h"
 #include "j1Textures.h"
 #include "j1Map.h"
 #include "j1Viewports.h"
@@ -671,6 +673,178 @@ iPoint j1Map::GetMinionsSpawn(uint team) const
 	return ret;
 }
 
+iPoint j1Map::GetTrunkPosition() const
+{
+	iPoint ret(-1, -1);
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 18)
+							ret = MapToWorld(x, y); 
+					}
+				}
+				if (ret != iPoint(-1, -1))
+					break;
+			}
+			if (ret != iPoint(-1, -1))
+				break;
+		}
+	}
+
+	return ret;
+}
+
+bool j1Map::GetTreesPosition(vector<TreeNode*>& trees_pos)
+{	
+	bool ret = true; 
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						TreeNode* new_tree = new TreeNode;
+
+						switch (relative_id) 
+						{
+						case 7: 
+							new_tree->tree_pos = MapToWorld(x, y); 
+							new_tree->color = green_tree; 
+							trees_pos.push_back(new_tree);
+							break;
+
+						case 10:
+							new_tree->tree_pos = MapToWorld(x, y);
+							new_tree->color = yellow_tree;
+							trees_pos.push_back(new_tree);
+							break;
+
+						case 12:
+							new_tree->tree_pos = MapToWorld(x, y);
+							new_tree->color = purple_tree;
+							trees_pos.push_back(new_tree);
+							break; 
+
+						default: 
+							ret = false; 
+							break; 
+						}	
+
+						
+					}
+				}
+			}
+		}		
+	}
+	
+	return ret;
+}
+
+bool j1Map::GetBushesPosition(vector<BushNode*>& bush_list)
+{
+	bool ret = true;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						BushNode* new_bush = new BushNode;
+						BushNode* new_half_bush = new BushNode; 
+
+						switch (relative_id)
+						{
+						case 8:
+							new_bush->bush_pos = MapToWorld(x, y);
+							new_bush->color = green_bush;
+							bush_list.push_back(new_bush);
+							new_half_bush->bush_pos = iPoint(new_bush->bush_pos.x, new_bush->bush_pos.y + 13);
+							new_half_bush->color = green_half_bush;
+							bush_list.push_back(new_half_bush);
+							break;
+
+						case 9:
+							new_bush->bush_pos = MapToWorld(x, y);
+							new_bush->color = purple_bush;
+							bush_list.push_back(new_bush);
+							new_half_bush->bush_pos = iPoint(new_bush->bush_pos.x, new_bush->bush_pos.y + 13);
+							new_half_bush->color = purple_half_bush;
+							bush_list.push_back(new_half_bush);
+							break;
+
+						default:
+							ret = false;
+							break;
+						}
+
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+
+	return false;
+}
+
 iPoint j1Map::GetShopPosition(uint team) const
 {
 	iPoint ret(-1, -1);
@@ -860,6 +1034,344 @@ std::vector<iPoint> j1Map::GetTowerSpawns(uint team) const
 					}
 				}
 			}
+		}
+	}
+
+	return ret;
+}
+
+std::vector<iPoint> j1Map::GetSnakesSpawns() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 24)
+						{
+							ret.push_back(MapToWorld(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+std::vector<iPoint> j1Map::GetSkeletonSpawns() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 22)
+						{
+							ret.push_back(MapToWorld(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+std::vector<iPoint> j1Map::GetZeldaInitPath() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 16)
+						{
+							ret.push_back(iPoint(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+std::vector<iPoint> j1Map::GetZeldaPath() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 17)
+						{
+							ret.push_back(iPoint(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+iPoint j1Map::GetZeldaPosition() const
+{
+	iPoint ret(-1, -1);
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+						
+						if (relative_id == 15)
+						{
+							ret = MapToWorld(x, y);
+						}
+					}
+				}
+				if (ret != iPoint(-1, -1))
+					break;
+			}
+			if (ret != iPoint(-1, -1))
+				break;
+		}
+	}
+
+	return ret;
+}
+
+iPoint j1Map::GetBasePosition(uint team) const
+{
+	iPoint ret(-1, -1);
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+						switch (team)
+						{
+						case 1:
+							if (relative_id == 19)
+							{
+								ret = MapToWorld(x, y);
+							}
+							break;
+						case 2:
+							if (relative_id == 20)
+							{
+								ret = MapToWorld(x, y);
+							}
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				if (ret != iPoint(-1, -1))
+					break;
+			}
+			if (ret != iPoint(-1, -1))
+				break;
+		}
+	}
+
+	return ret;
+}
+
+std::vector<iPoint> j1Map::GetEyesPositions() const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 21)
+						{
+							ret.push_back(MapToWorld(x, y));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+iPoint j1Map::GetWaterfallPosition() const
+{
+	iPoint ret(-1, -1);
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						if (relative_id == 23)
+						{
+							ret = MapToWorld(x, y);
+						}
+					}
+				}
+				if (ret != iPoint(-1, -1))
+					break;
+			}
+			if (ret != iPoint(-1, -1))
+				break;
 		}
 	}
 

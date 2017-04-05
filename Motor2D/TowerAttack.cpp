@@ -1,6 +1,7 @@
 #include "TowerAttack.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
+#include "j1XMLLoader.h"
 
 #define INITIAL_SPEED 150
 #define ACCELERATION 100
@@ -12,10 +13,11 @@ TowerAttack::TowerAttack(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetListener((j1Module*)App->spell);
 
+	stats.damage_multiplicator = 1.0f;
+
 	pugi::xml_document doc;
-	App->LoadXML("towerattack.xml", doc);
+	App->xml->LoadXML("towerattack.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	draw_offset = restore_draw_offset = { 7, 9 };
 
@@ -54,9 +56,8 @@ bool TowerAttack::Update(float dt)
 		if(game_object->animator->GetCurrentAnimation()->Finished())
 			App->spell->DeleteSpell(this);
 	}
-	else
+	else if (target != nullptr)
 	{
-
 		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
 
 		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
@@ -70,6 +71,10 @@ bool TowerAttack::Update(float dt)
 
 		game_object->SetPos({ game_object->GetPos().x + t.x, game_object->GetPos().y + t.y });
 
+	}
+	else if (target == nullptr)
+	{
+		App->spell->DeleteSpell(this);
 	}
 
 	return ret;
@@ -107,14 +112,14 @@ void TowerAttack::CleanSpell()
 
 }
 
-void TowerAttack::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+void TowerAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object->pbody == bodyA && bodyB == target->game_object->pbody)
+	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+		target = nullptr;
 	}
-		
 }
 
 void TowerAttack::SetTarget(Entity * _target)

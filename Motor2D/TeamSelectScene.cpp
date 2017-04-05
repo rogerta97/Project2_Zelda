@@ -337,16 +337,14 @@ bool TeamSelectScene::PostUpdate()
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			App->scene->players[i].viewport = App->scene->players[i].player;
-			if (i < 2)
-			{
+			App->scene->players[i].viewport = i + 1;
+			App->scene->players[i].gamepad = i;
+			if (i <= 1)
 				App->scene->players[i].team = 1;
-			}
 			else
-			{
 				App->scene->players[i].team = 2;
-			}
 		}
+
 		App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
 	}
 
@@ -360,6 +358,23 @@ bool TeamSelectScene::CleanUp()
 	if (App->scene->GetCurrentScene() != App->scene->team_select)
 		App->gui->DeleteElement(window);
 	// -------
+
+	pads.clear();
+	middle_pads.clear();
+	team_nums.clear();
+	ready_texts.clear();
+	set_ready_texts.clear();
+
+	team1_members = 0;
+	team2_members = 0;
+
+	for (int i = 0; i < 4; i++)
+	{
+		positioned[i] = 0;
+		fixed[i] = 0;
+		ready[i] = 0;
+	}
+
 
 	return true;
 }

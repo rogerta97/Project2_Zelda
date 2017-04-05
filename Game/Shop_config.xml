@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<shop>
+<file>
   <selector x="687" y="444" w="40" h="40"/>
   <background x="641" y="0" w="452" h="305"/>
+ <animations>
+ <anim speed = "12" name = "shop_icon" loop = "true">
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "816" y = "305" w = "32" h = "46"/>
+      <rect x = "848" y = "305" w = "32" h = "46"/>
+      <rect x = "880" y = "305" w = "32" h = "46"/>
+      <rect x = "912" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "944" y = "305" w = "32" h = "46"/>
+      <rect x = "848" y = "305" w = "32" h = "46"/>
+    </anim>
+ </animations>
 
-</shop>
+</file>

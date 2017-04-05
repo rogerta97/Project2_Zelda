@@ -12,6 +12,7 @@
 #include "j1Console.h"
 #include "TeamSelectScene.h"
 #include "CharacterSelectionScene.h"
+#include "LogoScene.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -52,19 +53,24 @@ bool j1Scene::Start()
 	scenes.push_back(team_select);
 	charselect_screen = new CharacterSelectionScene();
 	scenes.push_back(charselect_screen); 
-
+	logo_scene = new LogoScene();
+	scenes.push_back(logo_scene);
 	// -------------
 
 	// Starting scene
-	current_scene = menu_scene;
+	current_scene = logo_scene;
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();
 
-	players[0].player = players[0].gamepad = 1;
-	players[1].player = players[1].gamepad = 2;
-	players[2].player = players[2].gamepad = 3;
-	players[3].player = players[3].gamepad = 4;
+	players[0].player = players[0].gamepad = players[0].viewport = 1;
+	players[1].player = players[1].gamepad = players[1].viewport = 2;
+	players[2].player = players[2].gamepad = players[2].viewport = 3;
+	players[3].player = players[3].gamepad = players[3].viewport = 4;
+	players[0].team = 1;
+	players[1].team = 2;
+	players[2].team = 1;
+	players[3].team = 2;
 
 	return ret;
 }
@@ -161,6 +167,11 @@ void j1Scene::OnCVar(std::list<std::string>& tokens)
 void j1Scene::SaveCVar(std::string & cvar_name, pugi::xml_node & node) const
 {
 	current_scene->SaveCVar(cvar_name,node);
+}
+
+void j1Scene::ListenEvent(int type, EventThrower * origin, int id)
+{
+	current_scene->ListenEvent(type, origin, id);
 }
 
 

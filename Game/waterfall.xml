@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<file>
+  <animations texture ="maps/Water_entity.png">
+    <anim speed = "10" name = "idle" loop = "true">
+      <rect x = "0" y = "0" w = "384" h = "96"/>
+      <rect x = "0" y = "96" w = "384" h = "96"/>
+    </anim>
+  </animations>
+</file>

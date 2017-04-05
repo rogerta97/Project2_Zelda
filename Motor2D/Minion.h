@@ -103,6 +103,7 @@ private:
 	void SetIdleAnim();
 
 public:
+	Entity*				target = nullptr;
 
 private:
 
@@ -114,19 +115,21 @@ private:
 	MINION_STATE		state = Minion_Idle;
 	MINION_MOVE_STATE	move_state = Move_FollowBasePath;
 
-	Entity*				target = nullptr;
-
 	std::vector<iPoint>	base_path;
 	std::vector<iPoint>	target_path;
 	int					base_path_index = 0;
 	int					target_path_index = 0;
 
 	float				speed = 0;
+	float				tower_dmg_mult = 0.0f;
 
 	states				anim_state = states_null;
 
 	j1Timer				cd_timer;
 
+	EventThrower*       event_thrower = nullptr;
+
+	int					rupee_reward = 0;
 };
 
 #endif // !MINION_H_

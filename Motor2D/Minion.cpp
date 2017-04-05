@@ -15,7 +15,8 @@
 #include "MainScene.h"
 #include "Tower.h"
 #include "TowerManager.h"
-
+#include "Quest_Manager.h"
+#include "j1XMLLoader.h"
 
 #define Half_Tile 16
 
@@ -23,18 +24,33 @@ Minion::Minion(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	AddAbility(0, 5, 1, 69);
-	
 	pugi::xml_document doc;
-	App->LoadXML("minion.xml", doc);
+	App->xml->LoadXML("minion.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats");
+	rupee_reward = stats_node.attribute("rupees").as_int();
+
+	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
+	stats.base_power = stats.power = stats_node.attribute("power").as_int();
+	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
+	tower_dmg_mult = stats_node.attribute("tower_dmg_mult").as_float();
+
+	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
+	float cd = stats_node.child("ability1").attribute("cd").as_float();
+	int bd = stats_node.child("ability1").attribute("bd").as_int();
+	AddAbility(0, cd, bd, dmg_mult);
+	
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	App->UnloadXML(doc);
 
 	cd_timer.Start();
+
+	event_thrower = new EventThrower();
+
+	name = "minion";
 }
 
 Minion::~Minion()
@@ -47,9 +63,6 @@ bool Minion::Start()
 	bool ret = true;
 
 	game_object->SetAnimation("idle_down");
-
-	stats.speed = stats.restore_speed = 45;
-	stats.max_life = stats.life = 50;
 
 	show_life_bar = true;
 
@@ -68,6 +81,9 @@ bool Minion::PreUpdate()
 bool Minion::Update(float dt)
 {
 	bool ret = true;
+
+	if (to_delete)
+		return true;
 
 	speed = stats.speed*dt;
 
@@ -102,20 +118,31 @@ bool Minion::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			DealDamage(ability->damage * ability->damage_multiplicator);
-
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
+			if (spell != nullptr)
 			{
-				DealDamage(ability->damage * (spell->stats.damage_multiplicator - 1)); // Spells control their own damage mutiplicator
+				if (spell->name == "t_attack")
+				{
+					DealDamage(((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage)*tower_dmg_mult);
+				}
+				else
+				{
+					DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				if (spell->stats.slow_duration > 0)
-					Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-				if (spell->stats.stun_duration > 0)
-					Stun(spell->stats.stun_duration);
+					if (TextCmp(spell->name.c_str(), "boomerang"))
+						BoomerangEffects(entity, ability, spell);
+				}
 			}
+			else
+				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 
 			if (stats.life <=0)
 			{
+				Event* event_die = new Event();
+				event_die->type = e_t_death;
+				event_die->event_data.entity = this;
+				event_thrower->AddEvent(event_die);
+
+				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
 		}
@@ -129,9 +156,9 @@ bool Minion::Draw(float dt)
 	bool ret = true;
 
 	if (flip)
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -149,7 +176,7 @@ bool Minion::CleanUp()
 {
 	bool ret = true;
 
-
+	RELEASE(event_thrower);
 
 	return ret;
 }
@@ -388,6 +415,7 @@ void Minion::CheckState()
 			target = nullptr;
 		}
 	}
+
 	switch (state)
 	{
 	case Minion_Idle:
@@ -425,7 +453,7 @@ void Minion::CheckState()
 				{
 					if (game_object->GetPos().DistanceTo(target->GetPos()) < vision_range && GetPos().DistanceTo(App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y)) < vision_range)
 					{
-						if (App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
+						if (target != nullptr && App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
 						{
 							PathToTarget();
 						}
@@ -441,7 +469,8 @@ void Minion::CheckState()
 			}
 			break;
 		case Move_ReturnToPath:
-			if (base_path_index < base_path.size()) {
+			if (base_path_index < base_path.size()) 
+			{
 				iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 				if (map_pos.DistanceTo(base_path.at(base_path_index)) < 2)
 					move_state = Move_FollowBasePath;
@@ -553,8 +582,8 @@ bool Minion::LookForTarget()
 		}
 	}
 
-
-	/*if (ret == false)
+	// Check for turrets
+	if (ret == false)
 	{
 		std::list<Tower*> towers;
 		if (GetTeam() == 1)
@@ -571,16 +600,16 @@ bool Minion::LookForTarget()
 				break;
 			}
 		}
-	}*/
+	}
 
 	//Check for Players
 	if (ret == false)
 	{
 		std::vector<Entity*> players;
 		if (GetTeam() == 1)
-			players = App->entity->player_manager->GetTeamPlayers(2);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 		else
-			players = App->entity->player_manager->GetTeamPlayers(1);
+			players = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 
 		for (std::vector<Entity*>::iterator it = players.begin(); it != players.end(); it++)
 		{

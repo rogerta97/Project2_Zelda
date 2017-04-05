@@ -3,7 +3,32 @@
   <minions>
     <wave_time sec="30"/>
     <minion_time_difference sec="1"/>
-    <minions_wave amount="1"/>
+    <minions_wave amount="3"/>
     <first_wave_delay sec="5"/>
   </minions>
+  <defeat_animations>
+    <anim speed = "8" name = "idle" loop = "true">
+      <rect x = "434" y = "920" w = "320" h = "96"/>
+      <rect x = "434" y = "1016" w = "320" h = "96"/>
+      <rect x = "434" y = "1112" w = "320" h = "96"/>
+      <rect x = "434" y = "1016" w = "320" h = "96"/>
+      <rect x = "434" y = "920" w = "320" h = "96"/>
+      <rect x = "434" y = "1208" w = "320" h = "96"/>
+      <rect x = "434" y = "1304" w = "320" h = "96"/>
+      <rect x = "434" y = "1208" w = "320" h = "96"/>
+    </anim>
+  </defeat_animations>
+  <victory_animations>
+    <anim speed = "10" name = "idle" loop = "true">
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "920" w = "372" h = "96"/>
+      <rect x = "754" y = "1016" w = "372" h = "96"/>
+      <rect x = "754" y = "1112" w = "372" h = "96"/>
+      <rect x = "754" y = "1208" w = "372" h = "96"/>
+      <rect x = "754" y = "1304" w = "372" h = "96"/>
+    </anim>
+  </victory_animations>
 </file>

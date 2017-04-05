@@ -64,6 +64,7 @@ private:
 
 	states				anim_state = states_null;
 
+	int					rupee_reward = 0;
 };
 
 #endif // !TOWER_H_

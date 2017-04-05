@@ -1,0 +1,32 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/snakes_spritesheet.png">
+    <anim speed = "5" name = "snake_down" loop = "true">
+      <rect x = "2" y = "0" w = "32" h = "34"/>
+      <rect x = "2" y = "70" w = "32" h = "34"/>
+    </anim>
+    <anim speed = "3" name = "snake_attack_down" loop = "true">
+      <rect x = "2" y = "0" w = "32" h = "34"/>
+      <rect x = "2" y = "36" w = "32" h = "34"/>
+    </anim>
+    <anim speed = "3" name = "snake_up" loop = "true">
+      <rect x = "36" y = "0" w = "24" h = "34"/>
+      <rect x = "36" y = "36" w = "24" h = "34"/>
+    </anim>
+    <anim speed = "3" name = "snake_lateral" loop = "true">
+      <rect x = "64" y = "0" w = "32" h = "34"/>
+      <rect x = "64" y = "72" w = "32" h = "34"/>
+    </anim>
+    <!--
+    <anim speed = "3" name = "snake_attack_lateral" loop = "true">
+      <rect x = "64" y = "0" w = "32" h = "34"/>
+      <rect x = "64" y = "36" w = "32" h = "34"/>
+    </anim>
+    -->
+    
+  </animations>
+  <stats hp="100" speed="0" power="10" rupees="50">
+    <ability1 mult="1" cd="3.7" bd="4"/>
+  </stats>
+</file>

@@ -63,6 +63,9 @@ public:
 	// Sets listener module
 	void SetListener(j1Module* scene);
 
+	// Deletes listener module
+	void DeleteListener(j1Module* scene);
+
 	// Changes cateogry and mask of the body
 	void SetCatMask(int cat, int mask);
 
@@ -83,6 +86,9 @@ public:
 
 	// Adds a circle shape to the current body
 	b2Fixture* CreateCollision(iPoint offset, int rad, fixture_type type);
+
+	// Adds a chain shape shape to the current body
+	b2Fixture* CreateCollision(iPoint offset, int* data, int size, fixture_type type);
 
 	// Adds a box sensor shape to the current body
 	b2Fixture* CreateCollisionSensor(iPoint offset, int width, int height, fixture_type type);

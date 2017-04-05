@@ -104,7 +104,7 @@ public:
 	int tasks_done = 0;
 
 private:
-	vector<Quest>     quest_list;
+	vector<Quest*>    quest_list;
 
 	vector<UI_Image*> abilitie_icons; 
 

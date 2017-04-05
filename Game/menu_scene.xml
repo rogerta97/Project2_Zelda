@@ -1,0 +1,31 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="gui/Titleletters_sheet.png">
+      <anim speed = "20" name = "idle" loop = "true">
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+        	<rect x = "0" y = "0" w = "892" h = "346"/>
+          <rect x = "0" y = "346" w = "892" h = "346"/>
+          <rect x = "0" y = "692" w = "892" h = "346"/>
+          <rect x = "0" y = "1038" w = "892" h = "346"/>
+        	<rect x = "0" y = "1038" w = "892" h = "346"/>
+        	<rect x = "0" y = "1384" w = "892" h = "346"/>
+        	<rect x = "0" y = "1384" w = "892" h = "346"/>
+        	<rect x = "0" y = "1730" w = "892" h = "346"/>
+        	<rect x = "0" y = "1730" w = "892" h = "346"/>
+        	<rect x = "0" y = "2076" w = "892" h = "346"/>
+        	<rect x = "0" y = "2076" w = "892" h = "346"/>
+        	<rect x = "0" y = "2422" w = "892" h = "346"/>
+      </anim>
+   </animations>
+</file>
