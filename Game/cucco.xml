@@ -1,0 +1,54 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="textures/cucco_spritesheet.png">
+      <anim speed = "10" name = "basic_chicken" loop = "true">
+        <rect x = "0" y = "0" w = "32" h = "42"/>
+        <rect x = "32" y = "0" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "basic_chicken_surprise" loop = "false">
+        <rect x = "64" y = "0" w = "32" h = "42"/>
+ 	<rect x = "96" y = "0" w = "32" h = "42"/>
+      </anim>
+    <anim speed = "10" name = "cap_chicken" loop = "true">
+        <rect x = "0" y = "42" w = "32" h = "42"/>
+        <rect x = "32" y = "42" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "cap_chicken_surprise" loop = "false">
+        <rect x = "64" y = "42" w = "32" h = "42"/>
+ 	<rect x = "96" y = "42" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "black_chicken" loop = "true">
+        <rect x = "0" y = "84" w = "32" h = "42"/>
+        <rect x = "32" y = "84" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "black_chicken_surprise" loop = "false">
+        <rect x = "64" y = "84" w = "32" h = "42"/>
+ 	<rect x = "96" y = "84" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "pink_chicken" loop = "true">
+        <rect x = "0" y = "126" w = "32" h = "42"/>
+        <rect x = "32" y = "126" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "pink_chicken_surprise" loop = "false">
+        <rect x = "64" y = "126" w = "32" h = "42"/>
+ 	<rect x = "96" y = "126" w = "32" h = "42"/>
+      </anim>
+<anim speed = "10" name = "cook_chicken" loop = "true">
+        <rect x = "0" y = "168" w = "32" h = "42"/>
+        <rect x = "32" y = "168" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "cook_chicken_surprise" loop = "false">
+        <rect x = "64" y = "168" w = "32" h = "42"/>
+ 	<rect x = "96" y = "168" w = "32" h = "42"/>
+      </anim>
+<anim speed = "10" name = "stone_chicken" loop = "true">
+        <rect x = "0" y = "210" w = "32" h = "42"/>
+        <rect x = "32" y = "210" w = "32" h = "42"/>
+      </anim>
+ <anim speed = "10" name = "stone_chicken_surprise" loop = "false">
+        <rect x = "64" y = "210" w = "32" h = "42"/>
+ 	<rect x = "96" y = "210" w = "32" h = "42"/>
+      </anim> 
+   </animations>
+</file>
