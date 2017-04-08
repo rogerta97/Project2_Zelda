@@ -34,6 +34,28 @@
  	  <rect x = "240" y = "0" w = "48" h = "50"/>
  	  <rect x = "240" y = "0" w = "48" h = "50"/>
      </anim>
+<anim speed = "10" name = "blink_up" loop = "false">
+          <rect x = "288" y = "0" w = "48" h = "50"/>
+ 	  <rect x = "336" y = "0" w = "48" h = "50"/>
+ 	  <rect x = "192" y = "50" w = "48" h = "50"/>
+	  <rect x = "240" y = "50" w = "48" h = "50"/>
+     </anim>
+<anim speed = "10" name = "blink_down" loop = "false">
+          <rect x = "288" y = "50" w = "48" h = "50"/>
+ 	  <rect x = "336" y = "50" w = "48" h = "50"/>
+ 	  <rect x = "192" y = "50" w = "48" h = "50"/>
+	  <rect x = "240" y = "50" w = "48" h = "50"/>
+     </anim>
+<anim speed = "10" name = "blink_side" loop = "false">
+          <rect x = "288" y = "100" w = "48" h = "50"/>
+ 	  <rect x = "336" y = "100" w = "48" h = "50"/>
+ 	  <rect x = "192" y = "50" w = "48" h = "50"/>
+	  <rect x = "240" y = "50" w = "48" h = "50"/>
+     </anim>
+<anim speed = "10" name = "blink_movement" loop = "true">
+ 	  <rect x = "192" y = "100" w = "48" h = "50"/>
+	  <rect x = "240" y = "100" w = "48" h = "50"/>
+     </anim>
    </animations>
   <stats hp="100" speed="160" power="20" rupees="100">
     <ability1 mult="1.5" cd="1" bd="3"/>
