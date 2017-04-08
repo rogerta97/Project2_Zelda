@@ -1,0 +1,44 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="textures/navi_spritesheet.png">
+      <anim speed = "10" name = "down" loop = "true">
+	       <rect x = "0" y = "0" w = "48" h = "50"/>
+	       <rect x = "48" y = "0" w = "48" h = "50"/>
+	       <rect x = "96" y = "0" w = "48" h = "50"/>
+               <rect x = "48" y = "0" w = "48" h = "50"/>
+      </anim>
+      <anim speed = "10" name = "up" loop = "true">
+	      <rect x = "0" y = "50" w = "48" h = "50"/>
+	       <rect x = "48" y = "50" w = "48" h = "50"/>
+	       <rect x = "96" y = "50" w = "48" h = "50"/>
+               <rect x = "48" y = "50" w = "48" h = "50"/>
+      </anim>
+      <anim speed = "10" name = "lateral" loop = "true">
+	     <rect x = "0" y = "100" w = "48" h = "50"/>
+	       <rect x = "48" y = "100" w = "48" h = "50"/>
+	       <rect x = "96" y = "100" w = "48" h = "50"/>
+               <rect x = "48" y = "100" w = "48" h = "50"/>
+      </anim>
+ 	<anim speed = "10" name = "basic_attack_up" loop = "false">
+          <rect x = "144" y = "0" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_down" loop = "false">
+         <rect x = "144" y = "50" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_side" loop = "false">
+          <rect x = "144" y = "100" w = "48" h = "50"/>
+     </anim>
+ <anim speed = "10" name = "basic_projectile" loop = "true">
+          <rect x = "192" y = "0" w = "48" h = "50"/>
+ 	  <rect x = "240" y = "0" w = "48" h = "50"/>
+ 	  <rect x = "240" y = "0" w = "48" h = "50"/>
+     </anim>
+   </animations>
+  <stats hp="100" speed="160" power="20" rupees="100">
+    <ability1 mult="1.5" cd="1" bd="3"/>
+    <ability2 mult="1" cd="4" bd="15"/>
+    <ability3 mult="0" cd="10" bd="0"/>
+    <ability4 mult="0" cd="60" bd="0"/>
+  </stats>
+</file>
