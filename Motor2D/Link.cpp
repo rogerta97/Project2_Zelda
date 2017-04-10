@@ -26,13 +26,15 @@ Link::Link(iPoint pos)
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
-	game_object->CreateCollision(iPoint(0, 15), 10, fixture_type::f_t_collision_box);
+	game_object->CreateCollision(iPoint(2, 10), 13, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
 	pugi::xml_document doc;
 	App->xml->LoadXML("link.xml", doc);
+
+	// Loading stats from XML
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 	rupee_reward = stats_node.attribute("rupees").as_int();
 
@@ -59,6 +61,7 @@ Link::Link(iPoint pos)
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);			       a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+	// -----------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 

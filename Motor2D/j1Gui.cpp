@@ -143,15 +143,10 @@ bool j1Gui::CleanUp()
 
 	App->tex->UnLoadTexture(atlas);
 
-	//while (elements_list.Count() > 0)
-	//{
-	//	p2PQueue_item<UI_Element*>* elements = App->gui->elements_list.start;
-
-	//	if(elements->data->type == ui_window)
-	//		DeleteElement(elements->data);
-	//	else
-	//		elements_list.Pop(elements->data);
-	//}
+	while (!elements_list_priority.empty())
+	{
+		App->gui->DeleteElement(elements_list_priority.top());
+	}
 
 	return true;
 }
@@ -496,7 +491,6 @@ void j1Gui::DeleteElement(UI_Element* element)
 			}
 
 			ch = childs.erase(ch);
-
 		}
 	}
 }
