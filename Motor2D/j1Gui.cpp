@@ -392,16 +392,24 @@ UI_Element* j1Gui::CheckClickMove(int x, int y)
 	{
 		for (list<UI_Element*>::iterator it = elements_clicked.begin(); it != elements_clicked.end(); it++)
 		{
-			if ((*it)->layer > higher_layer && (*it)->blit_layer >= higher_blit_layer)
+			if ((*it)->blit_layer > higher_blit_layer)
 			{
 				higher_layer = (*it)->layer;
-				higher_blit_layer = (*it)->blit_layer;
 				higher_element = *it;
+			}
+			else if ((*it)->blit_layer == higher_blit_layer)
+			{
+				if ((*it)->layer > higher_layer)
+				{
+					higher_layer = (*it)->layer;
+					higher_blit_layer = (*it)->blit_layer;
+					higher_element = *it;
+				}
 			}
 		}
 
 		//  If the current it's not dynamic, check if there is dinamic parents
-		if (!higher_element->dinamic)
+		if (higher_element != nullptr && !higher_element->dinamic)
 		{
 			list<UI_Element*> parents_list;
 			App->gui->GetParentElements(higher_element, parents_list);
@@ -713,10 +721,17 @@ int UI_Element::CheckClickOverlap(int x, int y)
 	{
 		for (list<UI_Element*>::iterator it = contactors.begin(); it != contactors.end(); it++)
 		{
-			if ((*it)->layer > higher_layer && (*it)->blit_layer >= higher_blit_layer)
+			if ((*it)->blit_layer > higher_blit_layer)
 			{
 				higher_layer = (*it)->layer;
-				higher_blit_layer = (*it)->blit_layer;
+			}
+			else if((*it)->blit_layer == higher_blit_layer)
+			{
+				if ((*it)->layer > higher_layer)
+				{
+					higher_layer = (*it)->layer;
+					higher_blit_layer = (*it)->blit_layer;
+				}
 			}
 		}
 	}
@@ -1140,17 +1155,16 @@ bool UI_Button::MouseEnter()
 	mouse_x -= App->render->camera.x;
 	mouse_y -= App->render->camera.y;
 
-	if (CheckClickOverlap(mouse_x, mouse_y) != layer)
+	if (!CheckClickRect(mouse_x, mouse_y))
 		return false;
 
-	if (CheckClickRect(mouse_x, mouse_y))
-	{
-		if (!enter)
-		{
-			to_enter = true;
-			return true;
-		}
+	if (CheckClickOverlap(mouse_x, mouse_y) != layer)
 		return false;
+	
+	if (!enter)
+	{
+		to_enter = true;
+		return true;
 	}
 
 	return false;
@@ -1161,13 +1175,13 @@ bool UI_Button::MouseOut()
 	if (!enabled)
 		return false;
 
+	if (!enter)
+		return false;
+
 	int mouse_x, mouse_y;
 	App->input->GetMousePosition(mouse_x, mouse_y);
 	mouse_x -= App->render->camera.x;
 	mouse_y -= App->render->camera.y;
-
-	if (CheckClickOverlap(mouse_x, mouse_y) != layer && !enter)
-		return true;
 
 	if (CheckClickRect(mouse_x, mouse_y))
 		return false;
@@ -1193,14 +1207,15 @@ bool UI_Button::MouseClickEnterLeft()
 		mouse_x -= App->render->camera.x;
 		mouse_y -= App->render->camera.y;
 
-		if (CheckClickOverlap(mouse_x, mouse_y) != layer)
+		if (!CheckClickRect(mouse_x, mouse_y))
 			return false;
 
-		if (CheckClickRect(mouse_x, mouse_y))
-		{
-			to_clicked_left = true;
-			return true;
-		}
+		if (CheckClickOverlap(mouse_x, mouse_y) != layer)
+			return false;
+		
+		to_clicked_left = true;
+		return true;
+		
 	}
 	return false;
 }
@@ -1233,17 +1248,14 @@ bool UI_Button::MouseClickEnterRight()
 		mouse_x -= App->render->camera.x;
 		mouse_y -= App->render->camera.y;
 
-		if (CheckClickOverlap(mouse_x, mouse_y) != layer)
+		if (!CheckClickRect(mouse_x, mouse_y))
 			return false;
 
-		if (mouse_x > rect.x && mouse_x < rect.x + rect.w)
-		{
-			if (mouse_y > rect.y && mouse_y < rect.y + rect.h)
-			{
-				to_clicked_right = true;
-				return true;
-			}
-		}
+		if (CheckClickOverlap(mouse_x, mouse_y) != layer)
+			return false;
+		
+		to_clicked_right = true;
+		return true;
 	}
 	return false;
 }
@@ -2467,7 +2479,9 @@ void UI_Check_Box::CheckControl()
 
 bool UI_Element_Cmp::operator()(UI_Element *& e1, UI_Element *& e2)
 {
-	if (e1->blit_layer <= e2->blit_layer)
+	if (e1->blit_layer > e2->blit_layer)
+		return true;
+	else if (e1->blit_layer == e2->blit_layer)
 		return e1->layer >= e2->layer;
 	else
 		return false;

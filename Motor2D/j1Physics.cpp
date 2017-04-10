@@ -23,7 +23,7 @@ j1Physics::j1Physics()
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -777,8 +777,6 @@ void j1Physics::DeleteJoint(b2Joint* joint)
 // 
 bool j1Physics::PostUpdate()
 {
-	debug = App->debug_mode;
-
 	if(!debug)
 		return true;
 
