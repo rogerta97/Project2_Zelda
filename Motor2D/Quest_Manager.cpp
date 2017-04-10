@@ -139,8 +139,8 @@ void QuestManager::Update()
 
 	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
 	{
-		change_state(active_quest, inactive);
 		reset_progress(active_quest);
+		change_state(active_quest, inactive);
 		active_quest = -1;
 		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 		active_quest_text[0]->enabled = false;
@@ -179,24 +179,27 @@ void QuestManager::CleanUp()
 
 void QuestManager::DeathQuestEvent(Entity * attacant, Entity * victim)
 {
-	if (attacant != nullptr && victim != nullptr && attacant->is_player && victim->is_player)
+	if (vquest[0]->state == active)
 	{
-		switch (victim->GetTeam())
+		if (attacant != nullptr && victim != nullptr && attacant->is_player && victim->is_player)
 		{
-		case 1:
-		{
-			App->scene->main_scene->quest_manager->add_progress(1, 2);
-			break;
+			switch (victim->GetTeam())
+			{
+			case 1:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 2);
+				break;
+			}
+			case 2:
+			{
+				App->scene->main_scene->quest_manager->add_progress(1, 1);
+				break;
+			}
+			default:
+				break;
+			}
+			App->scene->main_scene->quest_manager->update_progress();
 		}
-		case 2:
-		{
-			App->scene->main_scene->quest_manager->add_progress(1, 1);
-			break;
-		}
-		default:
-			break;
-		}
-		App->scene->main_scene->quest_manager->update_progress();
 	}
 }
 
