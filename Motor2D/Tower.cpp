@@ -7,12 +7,9 @@
 #include "PlayerManager.h"
 #include "Entity.h"
 #include "j1Entity.h"
-#include <vector>
 #include "p2Log.h"
 #include "TowerManager.h"
 #include "MinionManager.h"
-#include "MainScene.h"
-#include "j1Scene.h"
 #include "Minion.h"
 #include "j1Spell.h"
 #include "Spell.h"

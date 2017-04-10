@@ -8,10 +8,8 @@
 #include "PlayerManager.h"
 #include "j1Entity.h"
 #include "Entity.h"
-#include <vector>
 #include "p2Log.h"
 #include "MinionManager.h"
-#include "j1Scene.h"
 #include "MainScene.h"
 #include "Tower.h"
 #include "TowerManager.h"

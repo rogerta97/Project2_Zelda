@@ -5,6 +5,7 @@
 #include "j1Entity.h"
 #include "Minion.h"
 #include "j1XMLLoader.h"
+#include "p2Log.h"
 
 // Coment code, ty
 MinionManager::MinionManager()
@@ -116,6 +117,8 @@ bool MinionManager::Update()
 
 bool MinionManager::CleanUp()
 {
+	LOG("Unloading MinionManager");
+
 	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
 	{
 		App->entity->DeleteEntity(*it);

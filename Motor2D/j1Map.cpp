@@ -3,7 +3,6 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1FileSystem.h"
-#include "j1Entity.h"
 #include "AestheticsManager.h"
 #include "j1Textures.h"
 #include "j1Map.h"

@@ -6,6 +6,7 @@
 #include "j1App.h"
 #include "j1Entity.h"
 #include "Eyes.h"
+#include "p2Log.h"
 
 AestheticsManager::AestheticsManager()
 {
@@ -17,11 +18,11 @@ AestheticsManager::~AestheticsManager()
 
 void AestheticsManager::Start()
 {
-	//Trunk
+	// Trunk
 	trunk_entity = App->entity->CreateEntity(trunk, App->map->GetTrunkPosition()); 
 	// -----
 
-	//Trees
+	// Trees
 	App->map->GetTreesPosition(trees_nodes); 
 	
 	int z = 0; 
@@ -83,7 +84,7 @@ void AestheticsManager::Start()
 	}
 	// -----
 
-	//Eyes
+	// Eyes
 	std::vector<iPoint> eyes_positions = App->map->GetEyesPositions();
 
 	for (std::vector<iPoint>::iterator it = eyes_positions.begin(); it != eyes_positions.end(); ++it)
@@ -92,7 +93,7 @@ void AestheticsManager::Start()
 	}
 	// -----
 
-	//Waterfall
+	// Waterfall
 	App->entity->CreateEntity(entity_name::waterfall, App->map->GetWaterfallPosition());
 	// -----
 
@@ -100,7 +101,9 @@ void AestheticsManager::Start()
 
 void AestheticsManager::CleanUp()
 {
-	//Clear Trees
+	LOG("Unloading AestheticsManager");
+
+	// Clear Trees
 	if (!trees_entity.empty())
 	{
 		for (std::vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
@@ -111,7 +114,7 @@ void AestheticsManager::CleanUp()
 	}
 	// -----
 
-	//Clear Eyes
+	// Clear Eyes
 	if (!eyes.empty())
 	{
 		for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end(); ++it)
@@ -122,7 +125,7 @@ void AestheticsManager::CleanUp()
 	}
 	// -----
 
-	//Clear bushes
+	// Clear bushes
 	if (!bushes_entity.empty())
 	{
 		for (std::vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
@@ -149,7 +152,9 @@ void AestheticsManager::CleanUp()
 			it = bushes_nodes.erase(it);
 		}
 	}
+	// -----
 
+	// Delete trunk xD
 	App->entity->DeleteEntity(trunk_entity);
 }
 

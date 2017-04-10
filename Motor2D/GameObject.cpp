@@ -2,7 +2,6 @@
 #include "j1Physics.h"
 #include "Animation.h"
 #include "p2Defs.h"
-#include "j1Physics.h"
 #include "Functions.h" 
 #include "CollisionFilters.h"
 

@@ -33,11 +33,9 @@ void BaseManager::KillBase(Base* base)
 	if (base == team1)
 	{
 		App->entity->DeleteEntity(team1);
-		//team1 = nullptr;
 	}
 	else if (base == team2)
 	{
 		App->entity->DeleteEntity(team2);
-		//team2 = nullptr;
 	}
 }

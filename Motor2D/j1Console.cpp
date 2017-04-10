@@ -1,6 +1,5 @@
 #include "j1Console.h"
 #include "p2Defs.h"
-#include "p2Point.h"
 #include "j1Window.h"
 #include "j1FileSystem.h"
 #include "p2Log.h"
@@ -194,24 +193,30 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 				AddText(cvar_text.c_str(), Output);
 			}
 		}
-		else if ((*it) == "quit") {
+		else if ((*it) == "quit") 
+		{
 			App->EndSDL();
 			ready = false;
 		}
-		else if ((*it) == "save") {
+		else if ((*it) == "save") 
+		{
 			App->SaveGame("config.xml");
 		}
-		else if ((*it) == "clear") {
+		else if ((*it) == "clear") 
+		{
 			scroll->ClearElements();
 			labels.clear();
 			currentLabel = -1;
 		}
 		break;
 	case 2:
-		if ((*it) == "list") {
+		if ((*it) == "list") 
+		{
 			it++;
-			if ((*it) == "commands") {
-				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) {
+			if ((*it) == "commands") 
+			{
+				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) 
+				{
 					std::ostringstream oss;
 					oss << (*item)->command_str.c_str() << ": " << (*item)->help.c_str() << ".";
 					std::string command_text = oss.str();
@@ -219,7 +224,8 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 				}
 			}
 			else if ((*it) == "cvars") {
-				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) {
+				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) 
+				{
 					std::ostringstream oss;
 					oss << (*item)->cvar_str.c_str() << ": " << (*item)->help.c_str() << ".";
 					std::string cvar_text = oss.str();
@@ -228,8 +234,10 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 			}
 			else {
 				AddText("--- COMMANDS ---", Output);
-				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) {
-					if((*item)->command_str.find((*it).c_str()) != std::string::npos){
+				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) 
+				{
+					if((*item)->command_str.find((*it).c_str()) != std::string::npos)
+					{
 						std::ostringstream oss;
 						oss << (*item)->command_str.c_str() << ": " << (*item)->help.c_str() << ".";
 						std::string command_text = oss.str();
@@ -237,7 +245,8 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 					}
 				}
 				AddText("     --- CVARS ---", Output);
-				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) {
+				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) 
+				{
 					if((*item)->cvar_str.find((*it).c_str()) != std::string::npos){
 						std::ostringstream oss;
 						oss << (*item)->cvar_str.c_str() << ": " << (*item)->help.c_str() << ".";
@@ -265,12 +274,16 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 				AddText("Invalid framerate", ConsoleTextType::Error);
 		}
 	case 3:
-		if ((*it) == "list") {
+		if ((*it) == "list") 
+		{
 			it++;
-			if ((*it) == "commands") {
+			if ((*it) == "commands") 
+			{
 				it++;
-				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) {
-					if ((*item)->command_str.find((*it).c_str()) != std::string::npos) {
+				for (std::list<Command*>::iterator item = commands.begin(); item != commands.end(); item++) 
+				{
+					if ((*item)->command_str.find((*it).c_str()) != std::string::npos) 
+					{
 						std::ostringstream oss;
 						oss << (*item)->command_str.c_str() << ": " << (*item)->help.c_str() << ".";
 						std::string command_text = oss.str();
@@ -280,8 +293,10 @@ void j1Console::OnCommand(std::list<std::string>& tokens)
 			}
 			else if ((*it) == "cvars") {
 				it++;
-				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) {
-					if ((*item)->cvar_str.find((*it).c_str()) != std::string::npos) {
+				for (std::list<CVar*>::iterator item = cvars.begin(); item != cvars.end(); item++) 
+				{
+					if ((*item)->cvar_str.find((*it).c_str()) != std::string::npos) 
+					{
 						std::ostringstream oss;
 						oss << (*item)->cvar_str.c_str() << ": " << (*item)->help.c_str() << ".";
 						std::string cvar_text = oss.str();
@@ -336,7 +351,8 @@ void j1Console::AddCVar(const char * cvar, j1Module * callback, const char* help
 // type: input (check commands and cvars) or output (console return message).
 void j1Console::AddText(const char * txt, ConsoleTextType type)
 {
-	if (txt[0] != '\0' && ready) {
+	if (txt[0] != '\0' && ready) 
+	{
 		switch (type)
 		{
 		case Output: 
@@ -381,7 +397,8 @@ void j1Console::AddText(const char * txt, ConsoleTextType type)
 				if (cvar_found) cvar_valid = CheckCVarArguments(tokens.size() - 1, cvar);
 			}
 
-			if ((command_found && command_valid) || (cvar_found && cvar_valid)) {
+			if ((command_found && command_valid) || (cvar_found && cvar_valid)) 
+			{
 				Log(txt, INPUT_TEXT_COLOR);
 
 				if (command_found) 
@@ -392,7 +409,8 @@ void j1Console::AddText(const char * txt, ConsoleTextType type)
 			}
 			else 
 			{
-				if (!command_found && !cvar_found) {
+				if (!command_found && !cvar_found) 
+				{
 					std::ostringstream oss;
 					oss << "Error: " << text << " don't exist.";
 					Log(std::string(oss.str()), ERROR_TEXT_COLOR);

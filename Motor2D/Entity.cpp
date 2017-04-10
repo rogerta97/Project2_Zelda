@@ -1,14 +1,10 @@
 #include "Entity.h"
 #include "j1Viewports.h"
-#include "j1Scene.h"
-#include "MainScene.h"
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
 #include "Functions.h"
 #include "Quest_Manager.h"
-
-#define LIFE_BAR_COLOR_1 {30, 30, 30, 255}
 
 void Entity::CleanEntity()
 {
@@ -141,7 +137,7 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 			life.w = 0;
 
 		// Back bar
-		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 10, 0, true);
+		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 9, 0, true);
 
 		// Get the viewports of my team
 		vector<int> my_team = App->scene->main_scene->player_manager->GetTeamViewports(team);

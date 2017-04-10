@@ -5,6 +5,7 @@
 #include "j1Timer.h"
 #include "Snakes.h"
 #include "Skeleton.h"
+#include "p2Log.h"
 
 #define SNAKE_RESPAWN_TIME 60
 #define SKELETON_RESPAWN_TIME 100
@@ -21,6 +22,8 @@ JungleCampManager::~JungleCampManager()
 
 bool JungleCampManager::Start()
 {
+	bool ret = true;
+
 	//stopping timers
 	snakes_timer_camp1.Stop();
 	snakes_timer_camp2.Stop();
@@ -31,8 +34,7 @@ bool JungleCampManager::Start()
 	SpawnSkeleton(0);
 	SpawnSnake(0);
 
-	
-	return true;
+	return ret;
 }
 
 bool JungleCampManager::Update(float dt)
@@ -59,7 +61,6 @@ bool JungleCampManager::Update(float dt)
 	{
 		SpawnSnake(2);
 		snakes_timer_camp2.Stop();
-
 	}
 
 	if (skeleton_camp1 == nullptr && !skeleton_timer_camp1.IsActive())
@@ -82,7 +83,6 @@ bool JungleCampManager::Update(float dt)
 	{
 		SpawnSkeleton(2);
 		skeleton_timer_camp2.Stop();
-
 	}
 
 	return ret;
@@ -90,6 +90,8 @@ bool JungleCampManager::Update(float dt)
 
 bool JungleCampManager::CleanUp()
 {
+	LOG("Unloading JungleCampManager");
+
 	for (std::list<Entity*>::const_iterator item = snakes_camp1.begin(); item != snakes_camp1.end();)
 	{
 		App->entity->DeleteEntity(*item);

@@ -43,7 +43,17 @@ class UI_Scroll_Bar;
 class UI_ColoredRect;
 class UI_Text_Input;
 class UI_Check_Box;
+class UI_Element_Cmp;
 
+// UI_Elements priority
+class UI_Element_Cmp
+{
+public:
+	bool operator ()(UI_Element*& e1, UI_Element*& e2);
+};
+
+// -----------------------------------
+// Class Gui -------------------------
 class j1Gui : public j1Module
 {
 public:
@@ -75,14 +85,15 @@ public:
 
 	UI_Window* UI_CreateWin(iPoint pos, int w, int h, int blit = 0, bool is_gameplay = true, bool dinamic = false, bool is_ui = true);
 
+	void ElementsListToVector(vector<UI_Element*> &vec);
 	void GetChilds(UI_Element * element, list<UI_Element*>& visited);
 	void GetParentElements(UI_Element * element, list<UI_Element*>& visited);
-	void ReorderElements();
 	bool Move_Elements();
 	UI_Element* CheckClickMove(int x, int y);
 	void DeleteElement(UI_Element * element);
 	void EraseFromElementsList(UI_Element* element);
 	void TakeVariablesFromWindow(UI_Element* element);
+	
 
 private:
 
@@ -93,7 +104,8 @@ public:
 	// --------
 
 	// All elements
-	p2PQueue<UI_Element*>  elements_list;
+	priority_queue<UI_Element*, std::vector<UI_Element*>, UI_Element_Cmp> elements_list_priority;
+	vector<UI_Element*>    elements_list;
 	double				   higher_layer = 0;
 
 	// Elements that can tab
@@ -133,6 +145,14 @@ public:
 
 	virtual bool update();
 	virtual bool cleanup();
+
+	bool operator ()(UI_Element*& e1, UI_Element*& e2)
+	{
+		if (e1->blit_layer <= e2->blit_layer)
+			return e1->layer < e2->layer;
+		else
+			return false;
+	}
 
 	// Enable function
 	void SetEnabled(bool set);
@@ -192,7 +212,6 @@ protected:
 private:
 	bool				clicked = false;
 };
-
 
 // ---------------------------
 // --------------------------- Element

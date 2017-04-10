@@ -1,7 +1,6 @@
 #include "Base.h"
 #include "GameObject.h"
 #include "j1Entity.h"
-#include "Scene.h"
 #include "j1Scene.h"
 #include "MainScene.h"
 #include "j1Viewports.h"

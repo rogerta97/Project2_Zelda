@@ -1,6 +1,5 @@
 #include "PlayerManager.h"
 #include "j1Viewports.h"
-#include "j1Scene.h"
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Map.h"
@@ -119,25 +118,36 @@ bool PlayerManager::Update(float dt)
 	{
 		Player* curr_player = players.at(i);
 
+		// If player is not dead
 		if (!curr_player->is_dead)
 		{
+			// Take player input
 			PlayerInput(curr_player);
 
+			// Update pasive heal
 			PasiveHP(curr_player);
 
+			// Update ui
 			UpdateUI(curr_player);
 
+			// Check if is dead
 			CheckIfDeath(curr_player);
 
+			// Check if is on base travel
 			if (curr_player->base_travel)
 				curr_player->BaseTravel();
 		}
+		// If player is dead
 		else
 		{
+			// Enable camera movement
 			if (!curr_player->disable_controller)
 				MoveCamera(curr_player);
 
+			// Check if it has to respawn
 			CheckIfRespawn(curr_player);
+
+			// Update death text
 			UpdateDeathUI(curr_player);
 		}
 	}
@@ -153,6 +163,8 @@ bool PlayerManager::PostUpdate()
 bool PlayerManager::CleanUp()
 {
 	bool ret = true;
+
+	LOG("Unloading PlayerManager");
 
 	ClearPlayers();
 
