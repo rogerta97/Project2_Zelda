@@ -11,6 +11,7 @@
 
 #include <iostream> 
 #include <sstream> 
+#include <memory>
 
 #define LAYER 2210
 
@@ -63,13 +64,6 @@ bool j1Gui::Start()
 // ---------------------------------------------------------------------
 bool j1Gui::Update(float dt)
 {
-	// Debug
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->debug_mode)
-		debug = !debug;
-	else if (!App->debug_mode)
-		debug = false;
-
-
 	// Update
 	// -------------------------------------------------------
 

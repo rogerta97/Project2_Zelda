@@ -163,6 +163,11 @@ bool j1App::Start()
 	physics_debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 140), App->font->default_15, 15); physics_debug_text->click_through = true;
 	physics_debug_text->SetText("Physics");
 
+	ui_debug_button_color = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 165), 100, 25, { 20, 20, 20, 255 }, true);
+	ui_debug_button = (UI_Button*)debug_window->CreateButton(iPoint(0, 165), 100, 25);
+	ui_debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 165), App->font->default_15, 15); physics_debug_text->click_through = true;
+	ui_debug_text->SetText("UI");
+
 	PERF_PEEK(ptimer);
 
 	return ret;
@@ -491,6 +496,20 @@ void j1App::FrameRateCalculations()
 	{
 		App->physics->debug = !App->physics->debug;
 		physics_debug_button_color->SetColor({ 30, 30, 30, 255 });
+	}
+
+	// UI button
+	if (ui_debug_button->MouseEnter())
+		ui_debug_button_color->SetColor({ 30, 30, 30, 255 });
+	else if (ui_debug_button->MouseOut())
+		ui_debug_button_color->SetColor({ 20, 20, 20, 255 });
+
+	if (ui_debug_button->MouseClickEnterLeft())
+		ui_debug_button_color->SetColor({ 50, 50, 50, 255 });
+	if (ui_debug_button->MouseClickOutLeft())
+	{
+		App->gui->debug = !App->gui->debug;
+		ui_debug_button_color->SetColor({ 30, 30, 30, 255 });
 	}
 
 	if (debug_mode && !debug_window->enabled)

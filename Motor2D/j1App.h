@@ -173,10 +173,10 @@ private:
 	UI_ColoredRect*		physics_debug_button_color = nullptr;
 	UI_Text*			physics_debug_text = nullptr;
 
-	// Debug stats
-	UI_Button*			stats_debug_button = nullptr;
-	UI_ColoredRect*		stats_debug_button_color = nullptr;
-	UI_Text*			stats_debug_text = nullptr;
+	// Debug ui
+	UI_Button*			ui_debug_button = nullptr;
+	UI_ColoredRect*		ui_debug_button_color = nullptr;
+	UI_Text*			ui_debug_text = nullptr;
 	// ---------------------
 };
 

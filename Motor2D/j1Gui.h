@@ -3,8 +3,9 @@
 
 #include "j1Module.h"
 #include "j1Fonts.h"
-#include "p2PQueue.h"
 #include "j1Render.h"
+
+using namespace std;
 
 // -----------------------------------------
 // -----------------------------------------
@@ -13,8 +14,6 @@
 
 // -----------------------------------------
 // -----------------------------------------
-
-#define CURSOR_WIDTH 2
 
 enum ui_element
 {
