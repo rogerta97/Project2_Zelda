@@ -26,7 +26,7 @@ Link::Link(iPoint pos)
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
-	game_object->CreateCollision(iPoint(2, 10), 13, fixture_type::f_t_collision_box);
+	link_collision = game_object->CreateCollision(iPoint(2, 10), 13, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
@@ -34,7 +34,7 @@ Link::Link(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("link.xml", doc);
 
-	// Loading stats from XML
+	// Loading Abilities ----------------
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 	rupee_reward = stats_node.attribute("rupees").as_int();
 
@@ -45,32 +45,35 @@ Link::Link(iPoint pos)
 	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
-	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);		           a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
+	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);
+	a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
-	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);			   a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
+	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);
+	a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
-	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); // Name references to the Spell name
+	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); // Name references to the Spell name
+	a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); 
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
-	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);			       a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
-	// -----------------------
+	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
+	a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	draw_offset = restore_draw_offset = { 16, 26 }; // 
+	draw_offset = restore_draw_offset = { 16, 26 }; 
 
 	blit_layer = 2;
 
 	name = "link";
-
 }
 
 Link::~Link()
@@ -164,10 +167,15 @@ bool Link::Update(float dt)
 	// Ability3 movement
 	if (ab3_dir != ability3_dir::a3_direction_null)
 	{
+		game_object->SetAnimation("ultimate_attack");
 		can_move = false;
 
 		iPoint target = NULLPOINT;
-		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+
+		// Disable collisions
+		link_collision->SetSensor(true);
+
+		// Check if there is collisions and find a nice spot
 		switch (ab3_dir)
 		{
 		case ability3_dir::a3_up:
@@ -177,6 +185,7 @@ bool Link::Update(float dt)
 				find = true;
 			}
 			target = ability3_point_up;
+
 			if(find)
 				target.y += ABILITY3_MOVE_SAFE_OFFSET;
 			else
@@ -224,15 +233,16 @@ bool Link::Update(float dt)
 				
 		}
 
+		// Move to target
 		App->view->LayerDrawCircle(target.x, target.y, 3, 255, 255, 255, 255, 99);
 		float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y);
 		MoveAngle(300, angle - 180);
 
 		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) < 20)
 		{
-			game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
-
 			// Reset
+			draw_offset = restore_draw_offset;
+			game_object->DeleteFixture(GetAbility(3)->fixture);
 			ab3_dir = ability3_dir::a3_direction_null;
 			ability3_point_up = NULLPOINT;
 			ability3_point_down = NULLPOINT;
@@ -241,7 +251,8 @@ bool Link::Update(float dt)
 			can_move = true;
 			attacking = false;
 			find = false;
-
+			link_collision->SetSensor(false);
+			//game_object->SetAnimation("idle_down");
 			Ability1Up();
 		}
 	}
@@ -635,37 +646,45 @@ void Link::ShowAbility2Right()
 
 void Link::Ability3Up()
 {
+	draw_offset = { 44, 60 };
 	ab3_dir = ability3_dir::a3_up;
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
 
 void Link::Ability3Down()
 {
+	draw_offset = { 44, 60 };
 	ab3_dir = ability3_dir::a3_down;
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
 
 void Link::Ability3Left()
 {
+	draw_offset = { 44, 60 };
 	ab3_dir = ability3_dir::a3_left;
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
 
 void Link::Ability3Right()
 {
+	draw_offset = { 44, 60 };
 	ab3_dir = ability3_dir::a3_right;
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
 

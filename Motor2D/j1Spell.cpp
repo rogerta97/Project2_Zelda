@@ -148,7 +148,8 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 
 void j1Spell::DeleteSpell(Spell * spell)
 {
-	spell->to_delete = true;
+	if(spell != nullptr)
+		spell->to_delete = true;
 }
 
 void j1Spell::DeleteSpellIfTarget(Entity * target)

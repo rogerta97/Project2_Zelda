@@ -491,7 +491,8 @@ void j1Entity::AddRupeesIfPlayer(Entity * entity, int amount)
 
 void j1Entity::DeleteEntity(Entity* entity)
 {
-	entity->to_delete = true;
+	if(entity != nullptr)
+		entity->to_delete = true;
 }
 
 void j1Entity::RemoveEntities()

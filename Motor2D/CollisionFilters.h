@@ -19,6 +19,7 @@ struct collision_filters
 	short int CATEGORY_ABILITIES = 0x0004;
 	short int CATEGORY_NONCOLLISIONABLE = 0x0008;
 	short int CATEGORY_PAYLOAD_AREA = 0x0016;
+	short int CATEGORY_LINK_ULTIMATE = 0x0032;
 
 	// Mask
 	short int MASK_PLAYER = CATEGORY_SCENERY | CATEGORY_ABILITIES | CATEGORY_PLAYER | CATEGORY_PAYLOAD_AREA;
@@ -26,7 +27,7 @@ struct collision_filters
 	short int MASK_SCENERY = -1;
 	short int MASK_NONCOLLISIONABLE = 0;
 	short int MASK_PAYLOAD_AREA = CATEGORY_SCENERY | CATEGORY_PLAYER;
-
+	short int MASK_LINK_ULTIMATE = CATEGORY_PLAYER;
 };
 
 // PhysBody enum

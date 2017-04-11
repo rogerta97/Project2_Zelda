@@ -136,6 +136,7 @@ private:
 	bool		 get_right = true;
 	ability3_dir ab3_dir = ability3_dir::a3_direction_null;
 	bool		 find = false;
+	b2Fixture*   link_collision = nullptr;
 
 	int			 rupee_reward = 0;
 };
