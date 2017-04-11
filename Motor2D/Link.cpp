@@ -164,7 +164,7 @@ bool Link::Update(float dt)
 
 	LifeBar(iPoint(60, 5), iPoint(-25, -40));
 
-	// Ability3 movement
+	// Ability3 movement ------------------------------
 	if (ab3_dir != ability3_dir::a3_direction_null)
 	{
 		game_object->SetAnimation("ultimate_attack");
@@ -252,10 +252,10 @@ bool Link::Update(float dt)
 			attacking = false;
 			find = false;
 			link_collision->SetSensor(false);
-			//game_object->SetAnimation("idle_down");
 			Ability1Up();
 		}
 	}
+	// ------------------------------------------------
 
 	return ret;
 }
@@ -476,7 +476,7 @@ void Link::BasicAttackUp()
 		attacking = true;
 		can_move = false;
 		flip = false;
-		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 10, 40, fixture_type::f_t_attack);
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 15, 50, fixture_type::f_t_attack);
 	}
 }
 
@@ -489,7 +489,7 @@ void Link::BasicAttackDown()
 		attacking = true;
 		can_move = false;
 		flip = false;
-		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, 35), 10, 40, fixture_type::f_t_attack);
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, 35), 15, 50, fixture_type::f_t_attack);
 	}
 }
 
@@ -502,7 +502,7 @@ void Link::BasicAttackLeft()
 		attacking = true;
 		can_move = false;
 		flip = true;
-		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-30, 0), 40, 10, fixture_type::f_t_attack);
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-30, 0), 50, 15, fixture_type::f_t_attack);
 	}
 }
 
@@ -514,32 +514,32 @@ void Link::BasicAttackRight()
 		attacking = true;
 		can_move = false;
 		flip = false;
-		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(35, 0), 40, 10, fixture_type::f_t_attack);
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(35, 0), 50, 15, fixture_type::f_t_attack);
 	}
 }
 
 void Link::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 13, game_object->GetPos().y - 55, 10, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 13, game_object->GetPos().y - 55, 10, 45 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackDown()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 5, game_object->GetPos().y + 20, 10, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 5, game_object->GetPos().y + 20, 10, 45 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x -50 , game_object->GetPos().y - 4, 35, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x -50 , game_object->GetPos().y - 4, 45, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 20, game_object->GetPos().y - 4, 35, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 20, game_object->GetPos().y - 4, 45, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Link::Ability1Up()
