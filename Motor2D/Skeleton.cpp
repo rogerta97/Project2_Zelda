@@ -14,10 +14,10 @@
 #include "BoneAttack.h"
 #include "j1XMLLoader.h"
 
-#define SKELETON_W 78
-#define SKELETON_H 48
+#define SKELETON_W 70
+#define SKELETON_H 70
 
-#define STUN 2.0f
+#define STUN 1.0f
 
 #define HALFMAP 81*32
 
@@ -28,7 +28,7 @@ Skeleton::Skeleton(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SKELETON_H, SKELETON_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_tower, 0);
 
-	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(10, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
@@ -240,8 +240,8 @@ void Skeleton::SpinAttack()
 
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 70, fixture_type::f_t_attack);
 
-	draw_offset.x = 40;
-	draw_offset.y = 22;
+	draw_offset.x = 36;
+	draw_offset.y = 44;
 	
 }
 

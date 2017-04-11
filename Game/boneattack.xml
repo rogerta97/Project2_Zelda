@@ -3,9 +3,9 @@
 <file>
   <animations texture = "textures/bigskeleton_Spritesheet.png">
     <anim speed = "10" name = "spin" loop = "true">
-      <rect x = "154" y = 404" w = "30" h = "32"/>
-	<rect x = "184" y = 404" w = "30" h = "32"/>
-	<rect x = "214" y = 404" w = "30" h = "32"/>
+      <rect x = "154" y = "404" w = "30" h = "32"/>
+	    <rect x = "184" y = "404" w = "30" h = "32"/>
+	    <rect x = "214" y = "404" w = "30" h = "32"/>
     </anim>
   </animations>
 </file>

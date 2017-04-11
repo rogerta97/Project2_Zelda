@@ -4,15 +4,12 @@
   <animations texture ="textures/bigskeleton_Spritesheet.png">
     <anim speed = "2" name = "skeleton_idle" loop = "true">
         <rect x = "0" y = "0" w = "84" h = "80"/>
- 	<rect x = "84" y = "0" w = "84" h = "80"/>
+ 	      <rect x = "84" y = "0" w = "84" h = "80"/>
     </anim>
     <anim speed = "3" name = "stunned" loop = "true">
-      <rect x = "0" y = "0" w = "48" h = "74"/>
-      <rect x = "48" y = "0" w = "48" h = "74"/>
-      <rect x = "96" y = "0" w = "48" h = "74"/>
-      <rect x = "144" y = "0" w = "48" h = "74"/>
+      <rect x = "37" y = "125" w = "84" h = "80"/>
     </anim>
-    <anim speed = "10" name = "spin" loop = "false">
+    <anim speed = "8" name = "spin" loop = "false">
       <rect x = "1" y = "81" w = "152" h = "160"/>
       <rect x = "155" y = "81" w = "152" h = "160"/>
       <rect x = "155" y = "243" w = "152" h = "160"/>
@@ -22,8 +19,8 @@
       <rect x = "1" y = "405" w = "152" h = "160"/>
     </anim>
     <anim speed = "2" name = "bone" loop = "false">
-     <rect x = "168" y = "0" w = "84" h = "80"/>
-     <rect x = "168" y = "0" w = "84" h = "80"/>
+     <rect x = "168" y = "0" w = "90" h = "80"/>
+     <rect x = "168" y = "0" w = "90" h = "80"/>
     </anim>
   </animations>
   <stats hp="250" speed="0" power="30" rupees="150">
