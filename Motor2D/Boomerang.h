@@ -61,6 +61,10 @@ private:
 
 	j1Timer			timer;
 
+	float			damage_multiplicator_first = 0.0f;
+	float			damage_multiplicator_second = 0.0f;
+	float			damage_multiplicator_return = 0.0f;
+
 };
 
 #endif // _BOOMERANG_
