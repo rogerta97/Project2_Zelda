@@ -79,6 +79,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseManager.cpp" />
+    <ClCompile Include="BezierEasing.cpp" />
     <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseManager.h" />
+    <ClInclude Include="BezierEasing.h" />
     <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Bushes.h" />

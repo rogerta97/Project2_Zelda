@@ -181,6 +181,9 @@
     <ClCompile Include="LogoScene.cpp">
       <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
     </ClCompile>
+    <ClCompile Include="BezierEasing.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -392,6 +395,9 @@
     </ClInclude>
     <ClInclude Include="LogoScene.h">
       <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierEasing.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
