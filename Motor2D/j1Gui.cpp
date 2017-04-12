@@ -8,6 +8,7 @@
 #include "j1Gui.h"
 #include "Functions.h"
 #include "j1Viewports.h"
+#include "BezierEasing.h"
 
 #include <iostream> 
 #include <sstream> 
@@ -77,6 +78,9 @@ bool j1Gui::Update(float dt)
 
 		if (curr != nullptr)
 		{
+			// Reset animation
+			curr->animation_finished = false;
+
 			// Move elements if the camera is moving
 			if (curr->is_ui && (camera_x != App->render->camera.x || camera_y != App->render->camera.y))
 			{
@@ -120,6 +124,10 @@ bool j1Gui::Update(float dt)
 	// Update intern camera position
 	camera_x = App->render->camera.x;
 	camera_y = App->render->camera.y;
+
+	// Update Animations
+	for (int i = 0; i < animations_list.size(); i++)
+		animations_list.at(i)->update();
 
 	return true;
 }
@@ -593,6 +601,18 @@ bool UI_Element::update()
 bool UI_Element::cleanup()
 {
 	return true;
+}
+
+void UI_Element::StartInterpolationAnimation(iPoint destination, fPoint bezier_point1, fPoint bezier_point2, float time)
+{
+	UIA_Interpolation* anim = new UIA_Interpolation(this, destination, bezier_point1, bezier_point2, time);
+	anim->start();
+	App->gui->animations_list.push_back(anim);
+}
+
+bool UI_Element::AnimationFinished()
+{
+	return animation_finished;
 }
 
 void UI_Element::SetEnabled(bool set)
@@ -1569,7 +1589,7 @@ bool UI_Text_Input::update()
 		if (intern_text.size() == 0 && active)
 			text->SetText("");
 
-		// Manuall change text
+		// Manually change text
 		ChangeTextInput();
 
 		// Input
@@ -2473,4 +2493,80 @@ bool UI_Element_Cmp::operator()(UI_Element *& e1, UI_Element *& e2)
 		return e1->layer >= e2->layer;
 	else
 		return false;
+}
+
+UI_Animation::UI_Animation(UI_Element * _element)
+{
+	element = _element;
+}
+
+UI_Animation::~UI_Animation()
+{
+}
+
+void UI_Animation::start()
+{
+}
+
+void UI_Animation::update()
+{
+}
+
+UI_Element * UI_Animation::GetElement()
+{
+	return element;
+}
+
+bool UI_Animation::Finished()
+{
+	return finished;
+}
+
+void UI_Animation::SetFinished(bool set)
+{
+	finished = set;
+}
+
+UIA_Interpolation::UIA_Interpolation(UI_Element * element, iPoint _destination, fPoint _bezier_point1, fPoint _bezier_point2, float _time) : UI_Animation(element)
+{
+	destination = _destination; 
+	bezier_point1 = _bezier_point1;
+	bezier_point2 = _bezier_point2;
+	time = _time;
+}
+
+UIA_Interpolation::~UIA_Interpolation()
+{
+}
+
+void UIA_Interpolation::start()
+{
+	GetElement()->animation_finished = false;
+	bezier = new BezierEasing(bezier_point1, bezier_point2);
+	angle = AngleFromTwoPoints(GetElement()->GetPos().x, GetElement()->GetPos().y, destination.x, destination.y);
+	distance = abs(DistanceFromTwoPoints(GetElement()->GetPos().x, GetElement()->GetPos().y, destination.x, destination.y));
+	timer.Start();
+	starting_pos = GetElement()->GetPos();
+}
+
+void UIA_Interpolation::update()
+{
+	// Check if finished
+	if (timer.ReadSec() > time)
+	{
+		SetFinished(true);
+		return;
+	}
+
+	// Normalized time
+	float norm_time = (1 * timer.ReadSec()) / time;
+
+	// Normalized distance
+	float norm_dis = bezier->GetEasingProgress(norm_time);
+
+	// Real distance
+	float curr_dis = (distance * norm_dis) / 1;
+
+	// Move
+	GetElement()->SetPos({ (int)(starting_pos.x + (curr_dis*cos(angle*DEGTORAD))), (int)(starting_pos.y + (curr_dis*sin(angle*DEGTORAD))) });
 }
