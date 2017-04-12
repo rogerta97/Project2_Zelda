@@ -31,7 +31,7 @@ bool PlayerManager::Start()
 	iPoint ability2_pos = { 13, screen.h - 126 };
 	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
 	iPoint ability4_pos = { 13, screen.h - 76 };
-
+	
 	_TTF_Font* text_font = App->font->game_font;
 	iPoint text1_pos = { screen.w - 85 , screen.h - 119 };
 	iPoint text2_pos = { (50), screen.h - 119 };
@@ -50,8 +50,8 @@ bool PlayerManager::Start()
 		ui_elements = new PlayerManagerUI(); 
 		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability1_pos, { 182, 78, 35, 35 })); 
 		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 
 		ui_elements->abilities_cd.push_back((*it)->main_window->CreateText(text1_pos, text_font));
 		ui_elements->abilities_cd.push_back((*it)->main_window->CreateText(text2_pos, text_font));

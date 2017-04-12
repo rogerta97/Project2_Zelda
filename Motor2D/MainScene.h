@@ -51,7 +51,8 @@ struct MainSceneViewport
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
 	UI_Image*			win_text = nullptr;
-	MinimapState*		minimapstate = nullptr;
+
+	MinimapState		minimapstate;
 
 };
 class MainScene : public Scene 

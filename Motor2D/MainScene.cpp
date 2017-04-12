@@ -53,6 +53,9 @@ bool MainScene::Start()
 
 	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
+	SDL_Rect minimap_img_rect = {0, 588, 472, 313}; 
+	SDL_Rect stats_back_img_rect = { 0, 900, 410, 148 }; 
+
 	MainSceneViewport* curr_viewport;
 
 	for(int i = 0; i < 4;i++)
@@ -66,6 +69,7 @@ bool MainScene::Start()
 		curr_viewport->minimap_icon = curr_viewport->main_window->CreateImage(minimap_pos, minimap_rect);
 		curr_viewport->win_text = curr_viewport->main_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport->win_text->enabled = false;
+		//curr_viewport->minimapstate.minimap = curr_viewport->main_window->CreateImage(iPoint(screen.w / 2 - minimap_img_rect.w/2, screen.h / 2 - minimap_img_rect.h / 2), minimap_img_rect);
 		ui_viewports.push_back(curr_viewport);
 	}
 	// ------------------
@@ -398,8 +402,9 @@ void MainScene::UpdateProgressBar()
 
 	for (vector<MainSceneViewport*>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
 	{
-		(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4 });
+		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4 });
 	}
+	
 
 }
 
