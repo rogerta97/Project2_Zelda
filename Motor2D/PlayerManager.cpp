@@ -930,25 +930,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 
 		if (player->death_timer.ReadSec() > player->death_time)
 		{
-
-			p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(true);
-
-		/*	switch (player->viewport)
-			{
-			case 1:
-				death_text_1->SetEnabled(false);
-				break;
-			case 2:
-				death_text_2->SetEnabled(false);
-				break;
-			case 3:
-				death_text_3->SetEnabled(false);
-				break;
-			case 4:
-				death_text_4->SetEnabled(false);
-				break;
-			}*/
-
+			p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(false);
 			player->Respawn();
 			player->ApplyItemStats();
 		}
@@ -964,27 +946,9 @@ void PlayerManager::CheckIfDeath(Player * player)
 		event_die->event_data.entity = player->entity;
 		event_thrower->AddEvent(event_die);
 
-		// modified
-
 		p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(true); 
 
-		//switch (player->viewport)
-		//{
-		//case 1:
-		//	death_text_1->SetEnabled(true);
-		//	break;
-		//case 2:
-		//	death_text_2->SetEnabled(true);
-		//	break;
-		//case 3:
-		//	death_text_3->SetEnabled(true);
-		//	break;
-		//case 4:
-		//	death_text_4->SetEnabled(true);
-		//	break;
-		//}
-
-		player->Kill();
+    	player->Kill();
 		player->show = shows::show_null;
 	}
 }
@@ -1201,7 +1165,7 @@ void Player::Respawn()
 		entity->SetTeam(team);
 		entity->show_life_bar = true;
 		entity->is_player = true;
-		base_travel = false;
+		base_travel = false; 
 		is_dead = false;
 	}
 }

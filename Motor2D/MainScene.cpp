@@ -62,7 +62,7 @@ bool MainScene::Start()
 	{
 		curr_viewport = new MainSceneViewport();
 		curr_viewport->main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-		curr_viewport->main_window->viewport = i; 
+		curr_viewport->main_window->viewport = i + 1; 
 		curr_viewport->progress_bar = curr_viewport->main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
 		curr_viewport->princess = curr_viewport->main_window->CreateImage(iPoint(curr_viewport->progress_bar->rect.x + (curr_viewport->progress_bar->rect.w / 2) - 15, curr_viewport->progress_bar->rect.y - 5), { 0,0,32,28 });
 		curr_viewport->rupiees_img = curr_viewport->main_window->CreateImage(rupiees_pos, rupiees_rect);
@@ -398,11 +398,11 @@ void MainScene::UpdateProgressBar()
 	float percentage = (zelda_pos.x-36) * 100 / 95;
 	percentage /= 100;
 
-	int delta = (ui_viewports.front()->progress_bar->rect.w * percentage) - ui_viewports.front()->progress_bar->rect.w/2;
+	int delta = (ui_viewports[0]->progress_bar->rect.w * percentage) - ui_viewports[0]->progress_bar->rect.w/2;
 
 	for (vector<MainSceneViewport*>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
 	{
-		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4 });
+		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4});
 	}
 	
 
