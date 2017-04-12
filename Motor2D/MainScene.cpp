@@ -71,7 +71,6 @@ bool MainScene::Start()
 	// ------------------
 
 
-
 	App->console->AddText("viewports.set 4", Input);
 	//Load Map
 	if (App->map->Load("zelda_moba.tmx"))

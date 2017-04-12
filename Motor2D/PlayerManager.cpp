@@ -61,7 +61,7 @@ bool PlayerManager::Start()
 		ui_elements->death_text = (*it)->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
 		ui_elements->death_text->enabled = false; 
 		ui_elements->death_text->blit_layer += 1;
-
+		p_manager_ui_elements.push_back(ui_elements);
 	}
 
 	// Event
