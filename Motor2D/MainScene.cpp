@@ -53,46 +53,21 @@ bool MainScene::Start()
 
 	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
-	// Player1
-	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_1->viewport = 1;
-	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
-	win_text_1 = main_window_1->CreateImage(win_text_pos,NULLRECT);
-	win_text_1->enabled = false;
+	MainSceneViewport* curr_viewport;
 
-	// Player2
-	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_2->viewport = 2;
-	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
-	win_text_2 = main_window_2->CreateImage(win_text_pos, NULLRECT);
-	win_text_2->enabled = false;
-
-	// Player3
-	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_3->viewport = 3;
-	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
-	win_text_3 = main_window_3->CreateImage(win_text_pos, NULLRECT);
-	win_text_3->enabled = false;
-
-	// Player4
-	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_4->viewport = 4;
-	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
-	win_text_4 = main_window_4->CreateImage(win_text_pos, NULLRECT);
-	win_text_4->enabled = false;
-
+	for(int i = 0; i < 4;i++)
+	{
+		curr_viewport = new MainSceneViewport();
+		curr_viewport->main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+		curr_viewport->main_window->viewport = i; 
+		curr_viewport->progress_bar = curr_viewport->main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
+		curr_viewport->princess = curr_viewport->main_window->CreateImage(iPoint(curr_viewport->progress_bar->rect.x + (curr_viewport->progress_bar->rect.w / 2) - 15, curr_viewport->progress_bar->rect.y - 5), { 0,0,32,28 });
+		curr_viewport->rupiees_img = curr_viewport->main_window->CreateImage(rupiees_pos, rupiees_rect);
+		curr_viewport->minimap_icon = curr_viewport->main_window->CreateImage(minimap_pos, minimap_rect);
+		curr_viewport->win_text = curr_viewport->main_window->CreateImage(win_text_pos, NULLRECT);
+		curr_viewport->win_text->enabled = false;
+		ui_viewports.push_back(curr_viewport);
+	}
 	// ------------------
 
 
@@ -303,10 +278,11 @@ bool MainScene::CleanUp()
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
 	{
-		App->gui->DeleteElement(main_window_1);
-		App->gui->DeleteElement(main_window_2);
-		App->gui->DeleteElement(main_window_3);
-		App->gui->DeleteElement(main_window_4);
+		for (vector<MainSceneViewport*>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++) 
+		{
+			App->gui->DeleteElement((*it)->main_window);
+			RELEASE((*it)); 
+		}	
 	}
 	// -------
 
@@ -397,10 +373,10 @@ void MainScene::EndGame(int _winner)
 
 	winner = _winner;
 
-	win_text_1->enabled = true;
-	win_text_2->enabled = true;
-	win_text_3->enabled = true;
-	win_text_4->enabled = true;
+	for (vector<MainSceneViewport*>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
+	{
+		(*it)->win_text->enabled = true;
+	}
 
 	UpdateWinnerAnim(winner,0.0f);
 
@@ -419,12 +395,13 @@ void MainScene::UpdateProgressBar()
 	float percentage = (zelda_pos.x-36) * 100 / 95;
 	percentage /= 100;
 
-	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
+	int delta = (ui_viewports.front()->progress_bar->rect.w * percentage) - ui_viewports.front()->progress_bar->rect.w/2;
 
-	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 4 });
-	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 4 });
-	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 4 });
-	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 4 });
+	for (vector<MainSceneViewport*>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
+	{
+		(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4 });
+	}
+
 }
 
 void MainScene::ListenEvent(int type, EventThrower * origin, int id)
@@ -510,22 +487,22 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 	switch (winner)
 	{
 	case 1:	
-		win_text_1->image = win_rect;	
+		ui_viewports.at(0)->win_text->image = win_rect;	
 
-		win_text_3->image = win_rect;
+		ui_viewports.at(1)->win_text->image = win_rect;
 
-		win_text_2->image = lose_rect;
+		ui_viewports.at(2)->win_text->image = lose_rect;
 
-		win_text_4->image = lose_rect;
+		ui_viewports.at(3)->win_text->image = lose_rect;
 		break;
 	case 2:
-		win_text_2->image = win_rect;
+		ui_viewports.at(0)->win_text->image = win_rect;
 
-		win_text_4->image = win_rect;
+		ui_viewports.at(1)->win_text->image = win_rect;
 
-		win_text_1->image = lose_rect;
+		ui_viewports.at(2)->win_text->image = lose_rect;
 
-		win_text_3->image = lose_rect;
+		ui_viewports.at(3)->win_text->image = lose_rect;
 		break;
 	default:
 		break;

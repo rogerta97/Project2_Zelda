@@ -34,6 +34,13 @@ struct quest
 	std::vector<objectives*> task;
 };
 
+struct PlayerText
+{
+	vector<UI_Text*> player_text;
+
+	vector<UI_Text*> active_quest_text;
+};
+
 class QuestManager 
 {
 public:
@@ -57,12 +64,7 @@ public:
 	void update_progress();
 	std::vector<quest*> vquest;
 
-	vector<UI_Text*> player_1_text;
-	vector<UI_Text*> player_2_text;
-	vector<UI_Text*> player_3_text;
-	vector<UI_Text*> player_4_text;
-
-	vector<UI_Text*> active_quest_text;
+	vector<PlayerText*> player_text_list; 
 
 	iPoint           placer = NULLPOINT;
 

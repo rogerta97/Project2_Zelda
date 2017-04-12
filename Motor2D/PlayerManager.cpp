@@ -42,61 +42,27 @@ bool PlayerManager::Start()
 	death_rect = { 0, 0, screen.w ,  screen.h };
 	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
 
-	// p1
-	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	abilities_1.push_back(App->scene->main_scene->main_window_1->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+	PlayerManagerUI* ui_elements; 
 
-	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text1_pos, text_font));
-	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text2_pos, text_font));
-	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text3_pos, text_font));
-	abilities_cd_1.push_back(App->scene->main_scene->main_window_1->CreateText(text4_pos, text_font));
+	for (vector<MainSceneViewport*>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
+	{
 
-	death_text_1 = App->scene->main_scene->main_window_1->CreateText(death_text_pos, App->font->game_font_20, 0);
-	death_text_1->enabled = false; death_text_1->blit_layer += 1;
+		ui_elements = new PlayerManagerUI(); 
+		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability1_pos, { 182, 78, 35, 35 })); 
+		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities.push_back((*it)->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
 
-	// p2
-	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	abilities_2.push_back(App->scene->main_scene->main_window_2->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities_cd.push_back((*it)->main_window->CreateText(text1_pos, text_font));
+		ui_elements->abilities_cd.push_back((*it)->main_window->CreateText(text2_pos, text_font));
+		ui_elements->abilities_cd.push_back((*it)->main_window->CreateText(text3_pos, text_font));
+		ui_elements->abilities_cd.push_back((*it)->main_window->CreateText(text4_pos, text_font));
 
-	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text1_pos, text_font));
-	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text2_pos, text_font));
-	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text3_pos, text_font));
-	abilities_cd_2.push_back(App->scene->main_scene->main_window_2->CreateText(text4_pos, text_font));
+		ui_elements->death_text = (*it)->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
+		ui_elements->death_text->enabled = false; 
+		ui_elements->death_text->blit_layer += 1;
 
-	death_text_2 = App->scene->main_scene->main_window_2->CreateText(death_text_pos, App->font->game_font_20, 0);
-	death_text_2->enabled = false; death_text_2->blit_layer += 1;
-
-	// p3
-	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	abilities_3.push_back(App->scene->main_scene->main_window_3->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
-
-	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text1_pos, text_font));
-	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text2_pos, text_font));
-	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text3_pos, text_font));
-	abilities_cd_3.push_back(App->scene->main_scene->main_window_3->CreateText(text4_pos, text_font));
-
-	death_text_3 = App->scene->main_scene->main_window_3->CreateText(death_text_pos, App->font->game_font_20, 0);
-	death_text_3->enabled = false; death_text_3->blit_layer += 1;
-
-	// p4
-	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability1_pos, { 182, 78, 35, 35 }));
-	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-	abilities_4.push_back(App->scene->main_scene->main_window_4->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
-
-	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text1_pos, text_font));
-	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text2_pos, text_font));
-	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text3_pos, text_font));
-	abilities_cd_4.push_back(App->scene->main_scene->main_window_4->CreateText(text4_pos, text_font));
-
-	death_text_4 = App->scene->main_scene->main_window_4->CreateText(death_text_pos, App->font->game_font_20, 0);
-	death_text_4->enabled = false; death_text_4->blit_layer += 1;
+	}
 
 	// Event
 	event_thrower = new EventThrower();
@@ -168,10 +134,10 @@ bool PlayerManager::CleanUp()
 
 	ClearPlayers();
 
-	abilities_1.clear();
-	abilities_2.clear();
-	abilities_3.clear();
-	abilities_4.clear();
+	for (vector<PlayerManagerUI*>::iterator it = p_manager_ui_elements.begin(); it != p_manager_ui_elements.end(); it++)
+	{
+		(*it)->abilities.clear(); 
+	}
 
 	RELEASE(event_thrower);
 
@@ -964,7 +930,10 @@ void PlayerManager::CheckIfRespawn(Player * player)
 
 		if (player->death_timer.ReadSec() > player->death_time)
 		{
-			switch (player->viewport)
+
+			p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(true);
+
+		/*	switch (player->viewport)
 			{
 			case 1:
 				death_text_1->SetEnabled(false);
@@ -978,7 +947,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 			case 4:
 				death_text_4->SetEnabled(false);
 				break;
-			}
+			}*/
 
 			player->Respawn();
 			player->ApplyItemStats();
@@ -995,21 +964,25 @@ void PlayerManager::CheckIfDeath(Player * player)
 		event_die->event_data.entity = player->entity;
 		event_thrower->AddEvent(event_die);
 
-		switch (player->viewport)
-		{
-		case 1:
-			death_text_1->SetEnabled(true);
-			break;
-		case 2:
-			death_text_2->SetEnabled(true);
-			break;
-		case 3:
-			death_text_3->SetEnabled(true);
-			break;
-		case 4:
-			death_text_4->SetEnabled(true);
-			break;
-		}
+		// modified
+
+		p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(true); 
+
+		//switch (player->viewport)
+		//{
+		//case 1:
+		//	death_text_1->SetEnabled(true);
+		//	break;
+		//case 2:
+		//	death_text_2->SetEnabled(true);
+		//	break;
+		//case 3:
+		//	death_text_3->SetEnabled(true);
+		//	break;
+		//case 4:
+		//	death_text_4->SetEnabled(true);
+		//	break;
+		//}
 
 		player->Kill();
 		player->show = shows::show_null;
@@ -1027,15 +1000,16 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		{
 			if (curr_player->entity->GetAbility(i)->CdCompleted())
 			{
-				abilities_1.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-				abilities_cd_1.at(i)->enabled = false;
+				p_manager_ui_elements.at(0)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(0)->abilities_cd.at(i)->enabled = false;
 			}
 			else
 			{
-				abilities_1.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(0)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
-				abilities_cd_1.at(i)->enabled = true; abilities_cd_1.at(i)->SetText(str);
+				p_manager_ui_elements.at(0)->abilities_cd.at(i)->enabled = true; 
+				p_manager_ui_elements.at(0)->abilities_cd.at(i)->SetText(str);
 			}
 		}
 		break;
@@ -1044,15 +1018,16 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		{
 			if (curr_player->entity->GetAbility(i)->CdCompleted())
 			{
-				abilities_2.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-				abilities_cd_2.at(i)->enabled = false;
+				p_manager_ui_elements.at(1)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(1)->abilities_cd.at(i)->enabled = false;
 			}
 			else
 			{
-				abilities_2.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(1)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
-				abilities_cd_2.at(i)->enabled = true; abilities_cd_2.at(i)->SetText(str);
+				p_manager_ui_elements.at(1)->abilities_cd.at(i)->enabled = true; 
+				p_manager_ui_elements.at(1)->abilities_cd.at(i)->SetText(str);
 			}
 		}
 		break;
@@ -1061,15 +1036,16 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		{
 			if (curr_player->entity->GetAbility(i)->CdCompleted())
 			{
-				abilities_3.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-				abilities_cd_3.at(i)->enabled = false;
+				p_manager_ui_elements.at(2)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(2)->abilities_cd.at(i)->enabled = false;
 			}
 			else
 			{
-				abilities_3.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(2)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
-				abilities_cd_3.at(i)->enabled = true; abilities_cd_3.at(i)->SetText(str);
+				p_manager_ui_elements.at(2)->abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(2)->abilities_cd.at(i)->SetText(str);
 			}
 		}
 		break;
@@ -1078,15 +1054,16 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		{
 			if (curr_player->entity->GetAbility(i)->CdCompleted())
 			{
-				abilities_4.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-				abilities_cd_4.at(i)->enabled = false;
+				p_manager_ui_elements.at(3)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(3)->abilities_cd.at(i)->enabled = false;
 			}
 			else
 			{
-				abilities_4.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(3)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
-				abilities_cd_4.at(i)->enabled = true; abilities_cd_4.at(i)->SetText(str);
+				p_manager_ui_elements.at(3)->abilities_cd.at(i)->enabled = true; 
+				p_manager_ui_elements.at(3)->abilities_cd.at(i)->SetText(str);
 			}
 		}
 		break;
@@ -1102,29 +1079,31 @@ void PlayerManager::UpdateDeathUI(Player * player)
 	 
 	str += std::to_string(time);
 
-	switch (player->viewport)
-	{
-	case 1:
-	{	
-		death_text_1->SetText(str);
-	}
-	break;
-	case 2:
-	{
-		death_text_2->SetText(str);
-	}
-	break;
-	case 3:
-	{
-		death_text_3->SetText(str);
-	}
-	break;
-	case 4:
-	{
-		death_text_4->SetText(str);
-	}
-	break;
-	}
+	p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetText(str);
+
+	//switch (player->viewport)
+	//{
+	//case 1:
+	//{	
+	//	death_text_1->SetText(str);
+	//}
+	//break;
+	//case 2:
+	//{
+	//	death_text_2->SetText(str);
+	//}
+	//break;
+	//case 3:
+	//{
+	//	death_text_3->SetText(str);
+	//}
+	//break;
+	//case 4:
+	//{
+	//	death_text_4->SetText(str);
+	//}
+	//break;
+	//}
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)

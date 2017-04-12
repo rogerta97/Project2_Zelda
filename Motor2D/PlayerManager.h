@@ -78,6 +78,13 @@ public:
 	float		last_heal_time = 0.0f;
 };
 
+struct PlayerManagerUI
+{
+	vector<UI_Image*>	abilities;
+	vector<UI_Text*>    abilities_cd;
+	UI_Text*			death_text;
+};
+
 class PlayerManager
 {
 public:
@@ -143,22 +150,9 @@ public:
 	vector<Player*>     players;
 
 private:
-	// UI
-	vector<UI_Image*>	abilities_1;
-	vector<UI_Text*>    abilities_cd_1;
-	UI_Text*			death_text_1 = nullptr;
+	// UI Elements
 
-	vector<UI_Image*>	abilities_2;
-	vector<UI_Text*>    abilities_cd_2;
-	UI_Text*			death_text_2 = nullptr;
-
-	vector<UI_Image*>	abilities_3;
-	vector<UI_Text*>    abilities_cd_3;
-	UI_Text*			death_text_3 = nullptr;
-
-	vector<UI_Image*>   abilities_4;
-	vector<UI_Text*>    abilities_cd_4;
-	UI_Text*			death_text_4 = nullptr;
+	vector<PlayerManagerUI*> p_manager_ui_elements; 
 
 	EventThrower*       event_thrower = nullptr;
 
