@@ -126,8 +126,23 @@ bool j1Gui::Update(float dt)
 	camera_y = App->render->camera.y;
 
 	// Update Animations
-	for (int i = 0; i < animations_list.size(); i++)
-		animations_list.at(i)->update();
+	if (!animations_list.empty())
+	{
+		for (vector<UI_Animation*>::iterator it = animations_list.begin(); it != animations_list.end();)
+		{
+			if ((*it)->Finished())
+			{
+				(*it)->cleanup();
+				RELEASE(*it);
+				it = animations_list.erase(it);
+			}
+			else
+			{
+				(*it)->update();
+				++it;
+			}
+		}
+	}
 
 	return true;
 }
@@ -2512,6 +2527,10 @@ void UI_Animation::update()
 {
 }
 
+void UI_Animation::cleanup()
+{
+}
+
 UI_Element * UI_Animation::GetElement()
 {
 	return element;
@@ -2555,6 +2574,7 @@ void UIA_Interpolation::update()
 	if (timer.ReadSec() > time)
 	{
 		SetFinished(true);
+		GetElement()->animation_finished = true;
 		return;
 	}
 
@@ -2569,4 +2589,9 @@ void UIA_Interpolation::update()
 
 	// Move
 	GetElement()->SetPos({ (int)(starting_pos.x + (curr_dis*cos(angle*DEGTORAD))), (int)(starting_pos.y + (curr_dis*sin(angle*DEGTORAD))) });
+}
+
+void UIA_Interpolation::cleanup()
+{
+	RELEASE(bezier);
 }

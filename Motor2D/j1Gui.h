@@ -605,6 +605,7 @@ public:
 	
 	virtual void start();
 	virtual void update();
+	virtual void cleanup();
 
 	UI_Element* GetElement();
 	bool Finished();
@@ -623,6 +624,7 @@ public:
 
 	void start();
 	void update();
+	void cleanup();
 
 private:
 	iPoint        destination = NULLPOINT;
