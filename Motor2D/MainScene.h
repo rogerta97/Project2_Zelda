@@ -40,11 +40,13 @@ struct MinimapState
 	UI_Text* kills_text = nullptr;
 	UI_Text* minions_text = nullptr;
 
+	void Enable();
+	void Disable();
+
 };
 
 struct MainSceneViewport
 {
-
 	UI_Window*			main_window = nullptr;
 	UI_Image*			princess = nullptr;
 	UI_Image*			progress_bar = nullptr;
@@ -53,7 +55,6 @@ struct MainSceneViewport
 	UI_Image*			win_text = nullptr;
 
 	MinimapState		minimapstate;
-
 };
 class MainScene : public Scene 
 {
@@ -96,7 +97,7 @@ public:
 
 	// UI Elements
 
-	vector<MainSceneViewport*>	ui_viewports;
+	vector<MainSceneViewport>	ui_viewports;
 
 private:
 	

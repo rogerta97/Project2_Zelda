@@ -28,9 +28,9 @@ public:
 		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
 		uint win_w, win_h;
 		App->win->GetWindowSize(win_w, win_h);
-		int x = 20 + ((viewport - 1) % 2)*win_w / 2;
+		int x = 27 + ((viewport - 1) % 2)*win_w / 2;
 		int y = 30 + ((viewport - 1) / 2)*win_h / 2;
-		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
+		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_12);
 		UpdateRupees();
 		team = entity->GetTeam();
 		respawn = _respawn;
@@ -152,7 +152,7 @@ public:
 private:
 	// UI Elements
 
-	vector<PlayerManagerUI*> p_manager_ui_elements; 
+	vector<PlayerManagerUI> p_manager_ui_elements; 
 
 	EventThrower*       event_thrower = nullptr;
 
