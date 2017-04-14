@@ -42,24 +42,24 @@ bool PlayerManager::Start()
 	death_rect = { 0, 0, screen.w ,  screen.h };
 	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
 
-	PlayerManagerUI ui_elements; 
+	PlayerManagerUI* ui_elements; 
 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability1_pos, { 182, 78, 35, 35 })); 
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+		ui_elements = new PlayerManagerUI(); 
+		ui_elements->abilities.push_back(it->main_window->CreateImage(ability1_pos, { 182, 78, 35, 35 })); 
+		ui_elements->abilities.push_back(it->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities.push_back(it->main_window->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
+		ui_elements->abilities.push_back(it->main_window->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
 				   
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text1_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text2_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text3_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text4_pos, text_font));
+		ui_elements->abilities_cd.push_back(it->main_window->CreateText(text1_pos, text_font));
+		ui_elements->abilities_cd.push_back(it->main_window->CreateText(text2_pos, text_font));
+		ui_elements->abilities_cd.push_back(it->main_window->CreateText(text3_pos, text_font));
+		ui_elements->abilities_cd.push_back(it->main_window->CreateText(text4_pos, text_font));
 				   
-		ui_elements.death_text = it->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
-		ui_elements.death_text->enabled = false; 
-		ui_elements.death_text->blit_layer += 1;
+		ui_elements->death_text = it->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
+		ui_elements->death_text->enabled = false; 
+		ui_elements->death_text->blit_layer += 1;
 		p_manager_ui_elements.push_back(ui_elements);
 	}
 
@@ -143,9 +143,9 @@ bool PlayerManager::CleanUp()
 
 	ClearPlayers();
 
-	for (vector<PlayerManagerUI>::iterator it = p_manager_ui_elements.begin(); it != p_manager_ui_elements.end(); it++)
+	for (vector<PlayerManagerUI*>::iterator it = p_manager_ui_elements.begin(); it != p_manager_ui_elements.end(); it++)
 	{
-		it->abilities.clear(); 
+		(*it)->abilities.clear(); 
 	}
 
 	RELEASE(event_thrower);
@@ -172,7 +172,6 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		p->entity->show_life_bar = show_life_bar;
 		p->entity->is_player = true;
 		p->type = p->entity->type;
-		p->AddRupees(999); 
 		players.push_back(p);
 		ret = p;
 		p->team = team;
@@ -940,7 +939,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 
 		if (player->death_timer.ReadSec() > player->death_time)
 		{
-			p_manager_ui_elements.at((player->viewport) - 1).death_text->SetEnabled(false);
+			p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(false);
 			player->Respawn();
 			player->ApplyItemStats();
 		}
@@ -956,7 +955,7 @@ void PlayerManager::CheckIfDeath(Player * player)
 		event_die->event_data.entity = player->entity;
 		event_thrower->AddEvent(event_die);
 
-		p_manager_ui_elements.at((player->viewport) - 1).death_text->SetEnabled(true); 
+		p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetEnabled(true);
 
     	player->Kill();
 		player->show = shows::show_null;
@@ -967,47 +966,31 @@ void PlayerManager::UpdateUI(Player* curr_player)
 {
 	// UI Control -----------
 
-	/*switch (curr_player->viewport)
+	switch (curr_player->viewport)
 	{
-	case 1:*/
+	case 1:
 
-	for (vector<PlayerManagerUI>::iterator it = p_manager_ui_elements.begin(); it != p_manager_ui_elements.end(); it++)
+	for (vector<PlayerManagerUI*>::iterator it = p_manager_ui_elements.begin(); it != p_manager_ui_elements.end(); it++)
 	{
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
 			if (curr_player->entity->GetAbility(i)->CdCompleted())
 			{
-				it->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-				it->abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(0)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(0)->abilities_cd.at(i)->enabled = false;
 			}
 			else
 			{
-				it->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(0)->abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
-				it->abilities_cd.at(i)->enabled = true;
-				it->abilities_cd.at(i)->SetText(str);
+				p_manager_ui_elements.at(0)->abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(0)->abilities_cd.at(i)->SetText(str);
 			}
 		}
 	}
 
-	/*for (int i = 0; i < curr_player->entity->abilities.size(); i++)
-	{
-		if (curr_player->entity->GetAbility(i)->CdCompleted())
-		{
-			p_manager_ui_elements.at(curr_player->viewport - 1).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-			p_manager_ui_elements.at(curr_player->viewport - 1).abilities_cd.at(i)->enabled = false;
-		}
-		else
-		{
-			p_manager_ui_elements.at(curr_player->viewport - 1).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
-			string str("");
-			str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
-			p_manager_ui_elements.at(curr_player->viewport - 1).abilities_cd.at(i)->enabled = true;
-			p_manager_ui_elements.at(curr_player->viewport - 1).abilities_cd.at(i)->SetText(str);
-		}
-	}*/
-	/*	break;
+		break;
 	case 2:
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
@@ -1062,7 +1045,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 			}
 		}
 		break;
-	}*/
+	}
 
 	// --------------
 }
@@ -1074,7 +1057,7 @@ void PlayerManager::UpdateDeathUI(Player * player)
 	 
 	str += std::to_string(time);
 
-	p_manager_ui_elements.at((player->viewport) - 1).death_text->SetText(str);
+	p_manager_ui_elements.at((player->viewport) - 1)->death_text->SetText(str);
 
 	//switch (player->viewport)
 	//{

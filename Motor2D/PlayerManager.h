@@ -152,7 +152,7 @@ public:
 private:
 	// UI Elements
 
-	vector<PlayerManagerUI> p_manager_ui_elements; 
+	vector<PlayerManagerUI*> p_manager_ui_elements; 
 
 	EventThrower*       event_thrower = nullptr;
 
