@@ -21,7 +21,7 @@ bool CharacterSelectionScene::Start()
 {
 	bool ret = true;
 
-	// Background image
+	// Background images
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
 	background_pos = { 0 , 0 };
 	background_image_rect = { 0, 0, 1994, 1359 };
@@ -30,10 +30,10 @@ bool CharacterSelectionScene::Start()
 
 	// Create players and info
 	link = new player_data();
-	link->ability1_text = "Basic Attack: Frontal smash with the sword";
-	link->ability2_text = "Sword Swing: Link swings his sword around\nhim and damage all nearby enemies."; 
-	link->ability3_text = "Boomerang: Link shoots his boomerang, catch\nit when it comes back!";
-	link->ability4_text = "Charge: Link will run to target location\nignoring collisions and damaging all enemies he\n touches.";
+	link->ability1_text = "    Basic Attack:\n\nFrontal smash with\n     the sword";
+	link->ability2_text = "     Sword Swing:\n\nLink swings his sword\n       around him."; 
+	link->ability3_text = "    Boomerang:\n\nLink shoots his boo-\nmerang, catch it when\n    it comes back!";
+	link->ability4_text = "         Charge:\n\n Link will run to target\n  location damaging.";
 	link->big_image = {0, 294, 116, 147}; 
 	link->small_image = {348, 445, 74, 90};
 	link->name = "LINK"; 
@@ -41,10 +41,10 @@ bool CharacterSelectionScene::Start()
 	players_data.push_back(link);
 
 	ganon = new player_data();
-	ganon->ability1_text = "Basic Attack: Frontal smash with the trident.";
-	ganon->ability2_text = "Bat: Ganon shoot a bat to target direction.";
-	ganon->ability3_text = "Flame Shield: Ganon puts a shield to himself\nand summon 3 fire orbs that orbit around him. ";
-	ganon->ability4_text = "Evil Jump: Ganaon jumps to a target position\nand stuns all enemies on the area.";
+	ganon->ability1_text = "   Basic Attack:\n\nFrontal smash with\n     the trident.";
+	ganon->ability2_text = "           Bat:\n\nGanon shoot a bat\n to target direction.";
+	ganon->ability3_text = "    Flame Shield:\n\nGanon puts a shield\n     to himself. ";
+	ganon->ability4_text = "      Evil Jump:\n\nGanaon jumps to a\ntarget position and\n  stuns enemies.";
 	ganon->big_image = { 116, 294, 116, 147 };
 	ganon->small_image = { 422, 445, 75, 90 };
 	ganon->name = "GANON";
@@ -52,10 +52,10 @@ bool CharacterSelectionScene::Start()
 	players_data.push_back(ganon);
 
 	navi = new player_data();
-	navi->ability1_text = "Basic Attack: Navi shoots an energy ball in\nfront of her that hits the first enemy hit.";
-	navi->ability2_text = "Watch Out!:  Navi heals allies around her. Range\nis displayed as a circle with Navi as centre.";
-	navi->ability3_text = "Blink: Navi uses her magic energy to teleport\na small distance in front of her.!";
-	navi->ability4_text = "Hey Listen!: disable enemy players view for 3\n seconds.";
+	navi->ability1_text = "      Basic Attack:\n\nNavi shoots an energy\n ball in front of her."; 
+	navi->ability2_text = "        Watch Out!:\n\n   Navi heals allies\n       around her.";
+	navi->ability3_text = "         Blink:\n\nNavi uses her magic\n energy to teleport a\n   small distance!";
+	navi->ability4_text = "      Hey Listen!:\n\ndisable enemy players\n view for 3  seconds.";
 	navi->big_image = { 232, 294, 116, 147 };
 	navi->small_image = { 496, 445, 75, 90 };
 	navi->name = "NAVI";
