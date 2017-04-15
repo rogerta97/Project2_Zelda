@@ -182,19 +182,18 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 {
 	stats.speed = stats.restore_speed = stats.base_speed + extra_speed;
-	stats.max_life = stats.base_hp + extra_hp;
 	switch (team)
 	{
 	case 1:
 	{
 		stats.power = (stats.base_power + extra_power)*(1 + (App->scene->main_scene->quest_manager->get_progress(1,GetTeam()))*0.1);
-		stats.max_life = (stats.base_hp + extra_hp)*(10 * (App->scene->main_scene->quest_manager->get_progress(3, GetTeam())));
+		stats.max_life = (stats.base_hp + extra_hp) + (10 * (App->scene->main_scene->quest_manager->get_progress(3, GetTeam())));
 		break;
 	}
 	case 2:
 	{
 		stats.power = (stats.base_power + extra_power)*(1 + (App->scene->main_scene->quest_manager->get_progress(1, GetTeam()))*0.1);
-		stats.max_life = (stats.base_hp + extra_hp)*(10 * (App->scene->main_scene->quest_manager->get_progress(3, GetTeam())));
+		stats.max_life = (stats.base_hp + extra_hp) + (10 * (App->scene->main_scene->quest_manager->get_progress(3, GetTeam())));
 		break;
 	}
 	default:
