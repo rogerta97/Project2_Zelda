@@ -92,21 +92,17 @@ bool JungleCampManager::CleanUp()
 {
 	LOG("Unloading JungleCampManager");
 
-	for (std::list<Entity*>::const_iterator item = snakes_camp1.begin(); item != snakes_camp1.end();)
+	for (int i = 0;i<snakes_camp1.size();i++)
 	{
-		App->entity->DeleteEntity(*item);
-		item = snakes_camp1.erase(item);
+		App->entity->DeleteEntity(snakes_camp1[i]);
 	}
 
 	snakes_camp1.clear();
 
-	for (std::list<Entity*>::const_iterator item = snakes_camp2.begin(); item != snakes_camp2.end();)
+	for (int i = 0; i<snakes_camp2.size(); i++)
 	{
-		App->entity->DeleteEntity(*item);
-		item = snakes_camp2.erase(item);
+		App->entity->DeleteEntity(snakes_camp1[i]);
 	}
-
-	snakes_camp1.clear();
 	snakes_camp2.clear();
 
 	if(skeleton_camp1 != nullptr)
@@ -208,11 +204,24 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 	{
 		if (camp->GetPos().x > HALFMAP)
 		{
-			snakes_camp1.remove(camp);
+			for (std::vector<Entity*>::iterator it = snakes_camp1.begin(); it != snakes_camp1.end(); ++it)
+			{
+				if (camp == *it) 
+				{
+					snakes_camp1.erase(it);
+					break;
+				}
+			}
 		}
 		else
 		{
-			snakes_camp2.remove(camp);
+			for (std::vector<Entity*>::iterator it = snakes_camp2.begin(); it != snakes_camp2.end(); ++it)
+			{
+				if (camp == *it) {
+					snakes_camp2.erase(it);
+					break;
+				}
+			}
 		}
 	}
 	App->entity->DeleteEntity(camp);

@@ -12,6 +12,7 @@
 #include "Spell.h"
 #include "SnakePoison.h"
 #include "j1XMLLoader.h"
+#include "Quest_Manager.h"
 
 #define SNAKE_H 32
 #define SNAKE_W 32
@@ -107,6 +108,22 @@ bool Snakes::Update(float dt)
 		{
 			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+
+			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+			{
+				if (this->GetPos().x > HALFMAP)
+				{
+					if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
+						if (entity->is_player)
+							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
+				}
+				else
+				{
+					if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
+						if (entity->is_player)
+							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
+				}
+			}
 		}
 	}
 

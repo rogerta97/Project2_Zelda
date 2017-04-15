@@ -436,7 +436,7 @@ void MainScene::ListenEvent(int type, EventThrower * origin, int id)
 	case e_t_null:
 		break;
 	case e_t_death:
-	{}	
+		break;
 	case e_t_end_game:
 		break;
 	default:
