@@ -13,6 +13,7 @@
 #include "Spell.h"
 #include "BoneAttack.h"
 #include "j1XMLLoader.h"
+#include "Quest_Manager.h"
 
 #define SKELETON_W 70
 #define SKELETON_H 70
@@ -115,6 +116,10 @@ bool Skeleton::Update(float dt)
 		{
 			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+			{
+				App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
+			}
 		}
 	}
 

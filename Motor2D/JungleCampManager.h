@@ -1,7 +1,7 @@
 #ifndef _JUNGLE_CAMP_MANAGER_H_
 #define _JUNGLE_CAMP_MANAGER_H_
 
-#include <list>
+#include <vector>
 #include "p2Defs.h"
 #include "p2Point.h"
 #include "j1Timer.h"
@@ -27,17 +27,19 @@ public:
 
 	void KillJungleCamp(Entity* camp);
 
-private:
 
 
-	std::list<Entity*>		snakes_camp1;
-	std::list<Entity*>		snakes_camp2;
 
-	j1Timer					snakes_timer_camp1;
-	j1Timer					snakes_timer_camp2;
+public:
+	std::vector<Entity*>		snakes_camp1;
+	std::vector<Entity*>		snakes_camp2;
+
 
 	Skeleton*				skeleton_camp1 = nullptr;
 	Skeleton*				skeleton_camp2 = nullptr;
+private:
+	j1Timer					snakes_timer_camp1;
+	j1Timer					snakes_timer_camp2;
 
 	j1Timer					skeleton_timer_camp1;
 	j1Timer					skeleton_timer_camp2;
