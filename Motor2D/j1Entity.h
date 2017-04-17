@@ -20,7 +20,7 @@ enum class pbody_type;
 
 enum entity_name
 {
-	e_n_null, link, zelda, minion, tower, ganon, navi, trunk, base, tree, eyes, bush, snake, skeleton, waterfall
+	e_n_null, link, zelda, minion, tower, ganon, navi, trunk, base, tree, eyes, bush, snake, skeleton, waterfall, mskeleton
 };
 
 class slow
