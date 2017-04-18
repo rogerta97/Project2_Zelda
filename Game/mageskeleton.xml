@@ -1,0 +1,30 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/mageskeleton_spritesheet.png">
+    <anim speed = "5" name = "mage_down" loop = "true">
+      <rect x = "0" y = "0" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "mage_attack_down" loop = "true">
+      <rect x = "0" y = "0" w = "32" h = "48"/>
+      <rect x = "32" y = "0" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "mage_up" loop = "true">
+      <rect x = "128" y = "0" w = "32" h = "48"/>
+    </anim>
+ <anim speed = "3" name = "mage_attack_up" loop = "true">
+      <rect x = "128" y = "0" w = "32" h = "48"/>
+      <rect x = "160" y = "0" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "mage_lateral" loop = "true">
+       <rect x = "64" y = "0" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "mage_attack_lateral" loop = "true">
+     <rect x = "64" y = "0" w = "32" h = "48"/>
+      <rect x = "96" y = "0" w = "32" h = "48"/>
+    </anim>
+    
+    
+  </animations>
+  </stats>
+</file>
