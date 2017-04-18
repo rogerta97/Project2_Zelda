@@ -231,10 +231,10 @@ void JungleCampManager::SpawnMageSkeleton(uint camp)
 		MageSkeleton* s7 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[6]);
 		MageSkeleton* s8 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[7]);
 
-		mageskeleton_camp1.push_back(s5);
-		mageskeleton_camp1.push_back(s6);
-		mageskeleton_camp1.push_back(s7);
-		mageskeleton_camp1.push_back(s8);
+		mageskeleton_camp2.push_back(s5);
+		mageskeleton_camp2.push_back(s6);
+		mageskeleton_camp2.push_back(s7);
+		mageskeleton_camp2.push_back(s8);
 
 		break;
 	}
@@ -260,10 +260,10 @@ void JungleCampManager::SpawnMageSkeleton(uint camp)
 		MageSkeleton* s7 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[6]);
 		MageSkeleton* s8 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[7]);
 
-		mageskeleton_camp1.push_back(s5);
-		mageskeleton_camp1.push_back(s6);
-		mageskeleton_camp1.push_back(s7);
-		mageskeleton_camp1.push_back(s8);
+		mageskeleton_camp2.push_back(s5);
+		mageskeleton_camp2.push_back(s6);
+		mageskeleton_camp2.push_back(s7);
+		mageskeleton_camp2.push_back(s8);
 		break;
 	}
 	default:

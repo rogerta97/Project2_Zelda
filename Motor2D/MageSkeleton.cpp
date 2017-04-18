@@ -101,6 +101,24 @@ bool MageSkeleton::Update(float dt)
 				is_attacked = true;
 				state = MSkl_S_Attack;
 				target = entity;
+				if (this->GetPos().x < HALFMAP)
+				{
+					for (int i = 0; i < App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.size(); i++)
+					{
+						MageSkeleton* m = static_cast<MageSkeleton*>(App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1[i]);
+						m->target = target;
+						m->state = state;
+					}
+				}
+				else
+				{
+					for (int i = 0; i < App->scene->main_scene->jungleCamp_manager->mageskeleton_camp2.size(); i++)
+					{
+						MageSkeleton* m = static_cast<MageSkeleton*>(App->scene->main_scene->jungleCamp_manager->mageskeleton_camp2[i]);
+						m->target = target;
+						m->state = state;
+					}
+				}
 			}
 
 		}
