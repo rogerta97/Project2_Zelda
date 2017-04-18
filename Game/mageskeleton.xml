@@ -26,5 +26,7 @@
     
     
   </animations>
+  <stats hp="25" speed="0" power="20" rupees="7">
+    <ability1 mult="1" cd="1" bd="3"/>
   </stats>
 </file>
