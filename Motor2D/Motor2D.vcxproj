@@ -108,6 +108,7 @@
     <ClCompile Include="j1XMLLoader.cpp" />
     <ClCompile Include="JungleCampManager.cpp" />
     <ClCompile Include="LogoScene.cpp" />
+    <ClCompile Include="MageSkeleton.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
     <ClCompile Include="MenuScene.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SnakePoison.cpp" />
     <ClCompile Include="Snakes.cpp" />
+    <ClCompile Include="TacoAttack.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -169,6 +171,7 @@
     <ClInclude Include="j1XMLLoader.h" />
     <ClInclude Include="JungleCampManager.h" />
     <ClInclude Include="LogoScene.h" />
+    <ClInclude Include="MageSkeleton.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
     <ClInclude Include="MenuScene.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="SnakePoison.h" />
     <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
+    <ClInclude Include="TacoAttack.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
@@ -222,6 +226,7 @@
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\mageskeleton.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\menu_scene.xml" />
     <Xml Include="..\Game\minion.xml" />

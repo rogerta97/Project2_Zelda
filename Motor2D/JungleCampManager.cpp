@@ -5,11 +5,13 @@
 #include "j1Timer.h"
 #include "Snakes.h"
 #include "Skeleton.h"
+#include "MageSkeleton.h"
 #include "p2Log.h"
 #include "j1Audio.h"
 
 #define SNAKE_RESPAWN_TIME 60
 #define SKELETON_RESPAWN_TIME 100
+#define MAGESKELETON_RESPAWN_TIME 60
 
 #define HALFMAP 81*32
 
@@ -28,12 +30,17 @@ bool JungleCampManager::Start()
 	//stopping timers
 	snakes_timer_camp1.Stop();
 	snakes_timer_camp2.Stop();
+
 	skeleton_timer_camp1.Stop();
 	skeleton_timer_camp2.Stop();
+
+	mageskeleton_timer_camp1.Stop();
+	mageskeleton_timer_camp2.Stop();
 
 	//spawning jungle camps
 	SpawnSkeleton(0);
 	SpawnSnake(0);
+	SpawnMageSkeleton(0);
 
 	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
 
@@ -88,6 +95,28 @@ bool JungleCampManager::Update(float dt)
 		skeleton_timer_camp2.Stop();
 	}
 
+	if (mageskeleton_camp1.empty() && !mageskeleton_timer_camp1.IsActive())
+	{
+		mageskeleton_timer_camp1.Start();
+	}
+
+	if (mageskeleton_camp2.empty() && !mageskeleton_timer_camp2.IsActive())
+	{
+		mageskeleton_timer_camp2.Start();
+	}
+
+	if (mageskeleton_timer_camp1.ReadSec() > MAGESKELETON_RESPAWN_TIME)
+	{
+		SpawnMageSkeleton(1);
+		mageskeleton_timer_camp1.Stop();
+	}
+
+	if (mageskeleton_timer_camp2.ReadSec() > MAGESKELETON_RESPAWN_TIME)
+	{
+		SpawnMageSkeleton(2);
+		mageskeleton_timer_camp2.Stop();
+	}
+
 	return ret;
 }
 
@@ -104,7 +133,7 @@ bool JungleCampManager::CleanUp()
 
 	for (int i = 0; i<snakes_camp2.size(); i++)
 	{
-		App->entity->DeleteEntity(snakes_camp1[i]);
+		App->entity->DeleteEntity(snakes_camp2[i]);
 	}
 	snakes_camp2.clear();
 
@@ -117,6 +146,19 @@ bool JungleCampManager::CleanUp()
 	{
 		App->entity->DeleteEntity(skeleton_camp2);
 	}
+
+	for (int i = 0; i<mageskeleton_camp1.size(); i++)
+	{
+		App->entity->DeleteEntity(mageskeleton_camp1[i]);
+	}
+
+	snakes_camp1.clear();
+
+	for (int i = 0; i<mageskeleton_camp2.size(); i++)
+	{
+		App->entity->DeleteEntity(mageskeleton_camp2[i]);
+	}
+	snakes_camp2.clear();
 
 	return true;
 }
@@ -167,6 +209,69 @@ void JungleCampManager::SpawnSnake(uint camp)
 		break;
 	}
 
+}
+
+void JungleCampManager::SpawnMageSkeleton(uint camp)
+{
+	switch (camp)
+	{
+	case 0:
+	{
+		std::vector<iPoint> mskeleton_positions = App->map->GetMageSkeletonSpawns();
+		MageSkeleton* s1 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[0]);
+		MageSkeleton* s2 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[1]);
+		MageSkeleton* s3 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[2]);
+		MageSkeleton* s4 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[3]);
+
+		mageskeleton_camp1.push_back(s1);
+		mageskeleton_camp1.push_back(s2);
+		mageskeleton_camp1.push_back(s3);
+		mageskeleton_camp1.push_back(s4);
+
+
+		MageSkeleton* s5 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[4]);
+		MageSkeleton* s6 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[5]);
+		MageSkeleton* s7 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[6]);
+		MageSkeleton* s8 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[7]);
+
+		mageskeleton_camp2.push_back(s5);
+		mageskeleton_camp2.push_back(s6);
+		mageskeleton_camp2.push_back(s7);
+		mageskeleton_camp2.push_back(s8);
+
+		break;
+	}
+	case 1:
+	{
+		std::vector<iPoint> mskeleton_positions = App->map->GetMageSkeletonSpawns();
+		MageSkeleton* s1 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[0]);
+		MageSkeleton* s2 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[1]);
+		MageSkeleton* s3 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[2]);
+		MageSkeleton* s4 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[3]);
+
+		mageskeleton_camp1.push_back(s1);
+		mageskeleton_camp1.push_back(s2);
+		mageskeleton_camp1.push_back(s3);
+		mageskeleton_camp1.push_back(s4);
+		break;
+	}
+	case 2:
+	{
+		std::vector<iPoint> mskeleton_positions = App->map->GetMageSkeletonSpawns();
+		MageSkeleton* s5 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[4]);
+		MageSkeleton* s6 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[5]);
+		MageSkeleton* s7 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[6]);
+		MageSkeleton* s8 = (MageSkeleton*)App->entity->CreateEntity(mskeleton, mskeleton_positions[7]);
+
+		mageskeleton_camp2.push_back(s5);
+		mageskeleton_camp2.push_back(s6);
+		mageskeleton_camp2.push_back(s7);
+		mageskeleton_camp2.push_back(s8);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void JungleCampManager::SpawnSkeleton(uint camp)

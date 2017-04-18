@@ -1,0 +1,14 @@
+<!--Config file for the game-->
+
+<file>
+  <animations texture = "textures/mageskeleton_spritesheet.png">
+   <anim speed = "10" name = "projectile" loop = "true">
+      <rect x ="0" y = "48" w = "28" h = "28"/>
+      <rect x ="28" y = "48" w = "28" h = "28"/>
+      <rect x ="56" y = "48" w = "28" h = "28"/>
+    </anim>
+    <anim speed = "20" name = "destroy" loop = "true">
+      <rect x ="84" y = "48" w = "28" h = "28"/>
+    </anim>
+  </animations>
+</file>

@@ -157,6 +157,8 @@ public:
 
 	std::vector<iPoint> GetSkeletonSpawns() const;
 
+	std::vector<iPoint> GetMageSkeletonSpawns() const;
+
 	// Return all unsorted Zelda initial path points
 	std::vector<iPoint> GetZeldaInitPath()const;
 
