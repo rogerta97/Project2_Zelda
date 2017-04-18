@@ -4,6 +4,7 @@
 #include "p2Log.h"
 #include "j1Map.h"
 #include "GameObject.h"
+#include "j1Audio.h"
 
 #define DEATH_CAMERA_SPEED 500
 #define BASE_TRAVEL_TIME 4
@@ -100,6 +101,8 @@ bool PlayerManager::Start()
 
 	// Event
 	event_thrower = new EventThrower();
+
+	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Link/LTTP_Link_Dying.wav");
 
 	return true;
 }
@@ -1013,6 +1016,8 @@ void PlayerManager::CheckIfDeath(Player * player)
 
 		player->Kill();
 		player->show = shows::show_null;
+
+		App->audio->PlayFx(death_sound_effect, 0);
 	}
 }
 

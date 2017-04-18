@@ -166,6 +166,8 @@ private:
 	SDL_Rect			death_rect = NULLRECT;
 
 	uint				last_heal_time = 0;
+
+	uint				death_sound_effect = 100;
 };
 
 

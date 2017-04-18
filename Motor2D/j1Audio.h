@@ -9,6 +9,15 @@
 struct _Mix_Music;
 struct Mix_Chunk;
 
+class SoundEffect {
+public:
+	SoundEffect(const char* path);
+	~SoundEffect();
+
+	string path;
+	Mix_Chunk* fx;
+};
+
 class j1Audio : public j1Module
 {
 public:
@@ -35,7 +44,6 @@ public:
 
 	void StopMusic();
 
-	void SilenceMusic();
 	void DefaultVolume();
 	void ChangeVolume(int volume);
 	bool MusicPlaying();
@@ -43,7 +51,7 @@ public:
 private:
 
 	_Mix_Music*			    music = NULL;
-	std::list<Mix_Chunk*>	fx;
+	std::list<SoundEffect*>	fx;
 
 	int def_volume = 75;
 };
