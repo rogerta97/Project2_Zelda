@@ -7,6 +7,7 @@
 #include "Skeleton.h"
 #include "MageSkeleton.h"
 #include "p2Log.h"
+#include "j1Audio.h"
 
 #define SNAKE_RESPAWN_TIME 60
 #define SKELETON_RESPAWN_TIME 100
@@ -40,6 +41,8 @@ bool JungleCampManager::Start()
 	SpawnSkeleton(0);
 	SpawnSnake(0);
 	SpawnMageSkeleton(0);
+
+	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
 
 	return ret;
 }
@@ -343,5 +346,5 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 		}
 	}
 	
-
+	App->audio->PlayFx(death_sound_effect, 0);
 }

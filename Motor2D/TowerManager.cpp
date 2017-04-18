@@ -3,6 +3,7 @@
 #include "j1Map.h"
 #include "j1Entity.h"
 #include "Tower.h"
+#include "j1Audio.h"
 
 TowerManager::TowerManager()
 {
@@ -24,6 +25,7 @@ TowerManager::TowerManager()
 	team2_towers.push_back(t4);
 
 	//to-improve: using for loop to create towers inside
+	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
 }
 
 TowerManager::~TowerManager()
@@ -97,4 +99,6 @@ void TowerManager::KillTower(Entity * tower)
 		break;
 
 	}
+
+	App->audio->PlayFx(death_sound_effect, 0);
 }

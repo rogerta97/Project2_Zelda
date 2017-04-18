@@ -50,8 +50,12 @@ private:
 	j1Timer					skeleton_timer_camp1;
 	j1Timer					skeleton_timer_camp2;
 
+
 	j1Timer					mageskeleton_timer_camp1;
 	j1Timer					mageskeleton_timer_camp2;
+
+	uint					death_sound_effect = 100;
+
 
 
 };
