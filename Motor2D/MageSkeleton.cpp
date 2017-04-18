@@ -30,7 +30,7 @@ MageSkeleton::MageSkeleton(iPoint pos)
 	game_object->SetKinematic();
 
 	pugi::xml_document doc;
-	App->xml->LoadXML("snakes.xml", doc);
+	App->xml->LoadXML("mageskeleton.xml", doc);
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
@@ -131,13 +131,13 @@ bool MageSkeleton::Update(float dt)
 			{
 				if (this->GetPos().x > HALFMAP)
 				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
+					if (App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.empty())
 						if (entity->is_player)
 							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
 				}
 				else
 				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
+					if (App->scene->main_scene->jungleCamp_manager->mageskeleton_camp2.empty())
 						if (entity->is_player)
 							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
 				}

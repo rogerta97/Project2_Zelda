@@ -574,5 +574,8 @@
     <Xml Include="..\Game\menu_scene.xml">
       <Filter>Engine\3. Scenes ==========\Menu</Filter>
     </Xml>
+    <Xml Include="..\Game\mageskeleton.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

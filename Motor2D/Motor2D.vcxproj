@@ -226,6 +226,7 @@
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\mageskeleton.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\menu_scene.xml" />
     <Xml Include="..\Game\minion.xml" />
