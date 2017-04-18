@@ -76,6 +76,8 @@ public:
 	j1Timer     base_travel_timer;
 
 	float		last_heal_time = 0.0f;
+
+	float		last_rupee_time = 60.0f;
 };
 
 class PlayerManager
@@ -137,7 +139,7 @@ private:
 	void UpdateUI(Player* player);
 	void UpdateDeathUI(Player* player);
 	void PasiveHP(Player* player);
-
+	void PasiveRupee(Player* player);
 
 public:
 	vector<Player*>     players;

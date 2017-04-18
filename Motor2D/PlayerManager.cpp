@@ -130,6 +130,9 @@ bool PlayerManager::Update(float dt)
 			// Update pasive heal
 			PasiveHP(curr_player);
 
+			//Reward pasive Rupee
+			PasiveRupee(curr_player);
+
 			// Update ui
 			UpdateUI(curr_player);
 
@@ -1161,6 +1164,18 @@ void PlayerManager::PasiveHP(Player * curr_player)
 	{
 		curr_player->last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
 		curr_player->entity->Heal(1);
+	}
+}
+
+void PlayerManager::PasiveRupee(Player * curr_player)
+{
+	if (curr_player->is_dead)
+		return;
+
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - curr_player->last_rupee_time > 3)
+	{
+		curr_player->last_rupee_time = App->scene->main_scene->GetGameTimer()->ReadSec();
+		curr_player->AddRupees(1);
 	}
 }
 
