@@ -4,6 +4,7 @@
 #include "TowerAttack.h"
 #include "SnakePoison.h"
 #include "BoneAttack.h"
+#include "TacoAttack.h"
 #include "EventThrower.h"
 #include "GameObject.h"
 
@@ -137,6 +138,9 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 		break;
 	case bone_attack:
 		ret = new BoneAttack(pos);
+		break;
+	case taco_attack:
+		ret = new TacoAttack(pos);
 		break;
 	}
 	

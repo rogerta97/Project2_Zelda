@@ -10,7 +10,7 @@
 #include "j1Entity.h"
 #include "p2Log.h"
 #include "Spell.h"
-#include "SnakePoison.h"
+#include "TacoAttack.h"
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
 
@@ -40,7 +40,7 @@ MageSkeleton::MageSkeleton(iPoint pos)
 	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
-	AddAbility(0, cd, bd, dmg_mult, "s_attack");
+	AddAbility(0, cd, bd, dmg_mult, "taco_attack");
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
@@ -257,7 +257,7 @@ void MageSkeleton::DoAttack()
 	{
 		if (target != nullptr)
 		{
-			SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
+			TacoAttack* sp = (TacoAttack*)App->spell->CreateSpell(taco_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 			sp->SetTarget(target);
 		}
 		else
