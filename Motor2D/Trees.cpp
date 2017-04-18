@@ -3,6 +3,8 @@
 #include "j1Viewports.h"
 #include "j1FileSystem.h"
 #include "j1XMLLoader.h"
+#include "j1Map.h"
+#include "j1Pathfinding.h"
 
 Tree::Tree(iPoint pos)
 {
@@ -36,6 +38,20 @@ Tree::Tree(iPoint pos)
 
 	game_object->SetFixedRotation(true); 
 	game_object->SetKinematic(); 
+
+	uchar* matrix = new uchar[20];
+	uchar data[20] = {  1,1,1,1,
+						1,1,1,1,
+						1,1,1,1,
+						0,0,0,0,
+						1,0,0,1};
+
+	memcpy_s(matrix, 72, data, 72);
+
+	iPoint map_pos = App->map->WorldToMap(GetPos().x - 242 / 2, GetPos().y - 290 / 2);
+	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 8, 9);
+
+	RELEASE_ARRAY(matrix);
 
 	name = "tree";
 }

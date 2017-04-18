@@ -58,6 +58,18 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
+void j1PathFinding::ChangeWalkability(uchar * change_matrix, int start_x, int start_y, int matrix_w, int matrix_h)
+{
+	for (int x = start_x; x < start_x + matrix_w; x++)
+	{
+		for (int y = start_y; y < start_y + matrix_h; y++)
+		{
+			map[y*width + x] = change_matrix[(y - start_y)*matrix_w + (x - start_x)];
+		}
+	}
+
+}
+
 // To request all tiles involved in the last generated path
 const std::list<iPoint>* j1PathFinding::GetLastPath() const
 {
