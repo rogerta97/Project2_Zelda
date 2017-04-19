@@ -46,10 +46,10 @@ Tree::Tree(iPoint pos)
 						0,0,0,0,
 						1,0,0,1};
 
-	memcpy_s(matrix, 72, data, 72);
+	memcpy_s(matrix, 20, data, 20);
 
-	iPoint map_pos = App->map->WorldToMap(GetPos().x - 242 / 2, GetPos().y - 290 / 2);
-	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 8, 9);
+	iPoint map_pos = App->map->WorldToMap(GetPos().x - 128/2, GetPos().y - 80);
+	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 4, 5);
 
 	RELEASE_ARRAY(matrix);
 
