@@ -54,10 +54,10 @@ struct viewport_data
 
 		iPoint text_name_pos = { background_name_image_pos.x + 85, background_name_image_pos.y + 10};
 
-		iPoint abilities_info1_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 30 };
-		iPoint abilities_info2_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 90};
-		iPoint abilities_info3_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 150};
-		iPoint abilities_info4_pos = { background_info_image_pos.x + 25, background_info_image_pos.y + 210 };
+		iPoint abilities_info1_pos = { background_info_image_pos.x + 30, background_info_image_pos.y + 60};
+		iPoint abilities_info2_pos = { background_info_image_pos.x + 280, background_info_image_pos.y + 60};
+		iPoint abilities_info3_pos = { background_info_image_pos.x + 30, background_info_image_pos.y + 190};
+		iPoint abilities_info4_pos = { background_info_image_pos.x + 280, background_info_image_pos.y + 190};
 
 		iPoint ready_text_pos = { view.w/3 - 25, view.h - view.h/6};
 

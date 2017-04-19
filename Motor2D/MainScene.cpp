@@ -53,48 +53,38 @@ bool MainScene::Start()
 
 	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
-	// Player1
-	main_window_1 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_1->viewport = 1;
-	progress_bar_1 = main_window_1->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_1 = main_window_1->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_1->rect.w / 2) - 15, progress_bar_1->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_1 = main_window_1->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_1 = main_window_1->CreateImage(minimap_pos, minimap_rect);
-	win_text_1 = main_window_1->CreateImage(win_text_pos,NULLRECT);
-	win_text_1->enabled = false;
+	SDL_Rect minimap_img_rect = {0, 588, 472, 313}; 
+	iPoint minimap_img_pos = { screen.w / 2 - minimap_img_rect.w / 2, screen.h / 2 - minimap_img_rect.h / 2 };
 
-	// Player2
-	main_window_2 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_2->viewport = 2;
-	progress_bar_2 = main_window_2->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_2 = main_window_2->CreateImage(iPoint(progress_bar_2->rect.x + (progress_bar_2->rect.w / 2) - 15, progress_bar_2->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_2 = main_window_2->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_2 = main_window_2->CreateImage(minimap_pos, minimap_rect);
-	win_text_2 = main_window_2->CreateImage(win_text_pos, NULLRECT);
-	win_text_2->enabled = false;
+	SDL_Rect stats_back_img_rect = { 0, 900, 410, 83 }; 
+	iPoint stats_back_img_pos = { screen.w / 2 - stats_back_img_rect.w / 2 - 10, screen.h - 90 };
 
-	// Player3
-	main_window_3 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_3->viewport = 3;
-	progress_bar_3 = main_window_3->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_3 = main_window_3->CreateImage(iPoint(progress_bar_1->rect.x + (progress_bar_3->rect.w / 2) - 15, progress_bar_3->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_3 = main_window_3->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_3 = main_window_3->CreateImage(minimap_pos, minimap_rect);
-	win_text_3 = main_window_3->CreateImage(win_text_pos, NULLRECT);
-	win_text_3->enabled = false;
+	iPoint first_text_pos = { stats_back_img_pos.x + 20, stats_back_img_pos.y + 15 }; 
 
-	// Player4
-	main_window_4 = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-	main_window_4->viewport = 4;
-	progress_bar_4 = main_window_4->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-	princess_4 = main_window_4->CreateImage(iPoint(progress_bar_4->rect.x + (progress_bar_4->rect.w / 2) - 15, progress_bar_4->rect.y - 5), { 0,0,32,28 });
-	rupiees_img_4 = main_window_4->CreateImage(rupiees_pos, rupiees_rect);
-	minimap_icon_4 = main_window_4->CreateImage(minimap_pos, minimap_rect);
-	win_text_4 = main_window_4->CreateImage(win_text_pos, NULLRECT);
-	win_text_4->enabled = false;
+	MainSceneViewport curr_viewport;
 
+	for(int i = 0; i < 4;i++)
+	{
+		curr_viewport.main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+		curr_viewport.main_window->viewport = i + 1; 
+		curr_viewport.progress_bar = curr_viewport.main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
+		curr_viewport.princess = curr_viewport.main_window->CreateImage(iPoint(curr_viewport.progress_bar->rect.x + (curr_viewport.progress_bar->rect.w / 2) - 15, curr_viewport.progress_bar->rect.y - 5), { 0,0,32,28 });
+		curr_viewport.rupiees_img = curr_viewport.main_window->CreateImage(rupiees_pos, rupiees_rect);
+		curr_viewport.minimap_icon = curr_viewport.main_window->CreateImage(minimap_pos, minimap_rect);
+		curr_viewport.win_text = curr_viewport.main_window->CreateImage(win_text_pos, NULLRECT);
+		curr_viewport.win_text->enabled = false;
+		curr_viewport.minimapstate.minimap = curr_viewport.main_window->CreateImage(minimap_img_pos, minimap_img_rect);
+		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
+		curr_viewport.minimapstate.hp_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.power_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.speed_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.kills_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.minions_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.Disable(); 
+
+		ui_viewports.push_back(curr_viewport);
+	}
 	// ------------------
-
 
 
 	App->console->AddText("viewports.set 4", Input);
@@ -303,10 +293,10 @@ bool MainScene::CleanUp()
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
 	{
-		App->gui->DeleteElement(main_window_1);
-		App->gui->DeleteElement(main_window_2);
-		App->gui->DeleteElement(main_window_3);
-		App->gui->DeleteElement(main_window_4);
+		for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++) 
+		{
+			App->gui->DeleteElement(it->main_window);
+		}	
 	}
 	// -------
 
@@ -397,10 +387,10 @@ void MainScene::EndGame(int _winner)
 
 	winner = _winner;
 
-	win_text_1->enabled = true;
-	win_text_2->enabled = true;
-	win_text_3->enabled = true;
-	win_text_4->enabled = true;
+	for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
+	{
+		it->win_text->enabled = true;
+	}
 
 	UpdateWinnerAnim(winner,0.0f);
 
@@ -419,12 +409,14 @@ void MainScene::UpdateProgressBar()
 	float percentage = (zelda_pos.x-36) * 100 / 95;
 	percentage /= 100;
 
-	int delta = (progress_bar_1->rect.w * percentage) - princess_1->rect.w/2;
+	int delta = (ui_viewports[0].progress_bar->rect.w * percentage) - ui_viewports[0].progress_bar->rect.w/2;
 
-	princess_1->SetPos({ progress_bar_1->GetPos().x + delta, progress_bar_1->GetPos().y - 4 });
-	princess_2->SetPos({ progress_bar_2->GetPos().x + delta, progress_bar_2->GetPos().y - 4 });
-	princess_3->SetPos({ progress_bar_3->GetPos().x + delta, progress_bar_3->GetPos().y - 4 });
-	princess_4->SetPos({ progress_bar_4->GetPos().x + delta, progress_bar_4->GetPos().y - 4 });
+	for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
+	{
+		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4});
+	}
+	
+
 }
 
 void MainScene::ListenEvent(int type, EventThrower * origin, int id)
@@ -510,26 +502,56 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 	switch (winner)
 	{
 	case 1:	
-		win_text_1->image = win_rect;	
+		ui_viewports.at(0).win_text->image = win_rect;	
 
-		win_text_3->image = win_rect;
+		ui_viewports.at(1).win_text->image = win_rect;
 
-		win_text_2->image = lose_rect;
+		ui_viewports.at(2).win_text->image = lose_rect;
 
-		win_text_4->image = lose_rect;
+		ui_viewports.at(3).win_text->image = lose_rect;
 		break;
 	case 2:
-		win_text_2->image = win_rect;
+		ui_viewports.at(0).win_text->image = win_rect;
 
-		win_text_4->image = win_rect;
+		ui_viewports.at(1).win_text->image = win_rect;
 
-		win_text_1->image = lose_rect;
+		ui_viewports.at(2).win_text->image = lose_rect;
 
-		win_text_3->image = lose_rect;
+		ui_viewports.at(3).win_text->image = lose_rect;
 		break;
 	default:
 		break;
 	}
 }
 
+void MinimapState::Enable()
+{
+	minimap->enabled = true; 
+	stats_back_image->enabled = true;
 
+	hp_text->SetText("HP: 300");
+	hp_text->enabled = true;
+
+	power_text->SetText("POWER: 300");
+	power_text->enabled = true;
+
+	speed_text->SetText("SPEED: 300");
+	speed_text->enabled = true;
+
+	kills_text->SetText("KILLS: 4/7");
+	kills_text->enabled = true;
+
+	minions_text->SetText("MINIONS: 5");
+	minions_text->enabled = true;
+}
+
+void MinimapState::Disable()
+{
+	minimap->enabled = false;
+	stats_back_image->enabled = false;
+	hp_text->enabled = false;
+	power_text->enabled = false;
+	speed_text->enabled = false;
+	kills_text->enabled = false;
+	minions_text->enabled = false;
+}
