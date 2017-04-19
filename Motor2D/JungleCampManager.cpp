@@ -345,6 +345,31 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 			skeleton_camp2 = nullptr;
 		}
 	}
+
+	if (camp->type == mskeleton)
+	{
+		if (camp->GetPos().x > HALFMAP)
+		{
+			for (std::vector<Entity*>::iterator it = mageskeleton_camp1.begin(); it != mageskeleton_camp1.end(); ++it)
+			{
+				if (camp == *it)
+				{
+					mageskeleton_camp1.erase(it);
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (std::vector<Entity*>::iterator it = mageskeleton_camp2.begin(); it != mageskeleton_camp2.end(); ++it)
+			{
+				if (camp == *it) {
+					mageskeleton_camp2.erase(it);
+					break;
+				}
+			}
+		}
+	}
 	
 	App->audio->PlayFx(death_sound_effect, 0);
 }
