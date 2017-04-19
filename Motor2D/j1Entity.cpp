@@ -21,7 +21,7 @@
 #include "j1Viewports.h"
 #include "j1XMLLoader.h"
 #include "Waterfall.h"
-
+#include "MageSkeleton.h"
 
 j1Entity::j1Entity()
 {
@@ -268,6 +268,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case waterfall:
 		ret = new Waterfall(pos);
+		break;
+	case mskeleton:
+		ret = new MageSkeleton(pos);
 		break;
 	default:
 		break;

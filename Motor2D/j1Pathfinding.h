@@ -46,6 +46,9 @@ public:
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
 
+	//Change walkability map 
+	void ChangeWalkability(uchar* change_matrix, int start_x, int start_y, int matrix_w, int matrix_h);
+
 private:
 
 	// size of the map

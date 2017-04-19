@@ -33,6 +33,8 @@ enum ui_element
 // -----------------------------------
 
 struct TTF_Font;
+class BezierEasing;
+
 class UI_Element;
 class UI_Window;
 class UI_Text;
@@ -43,6 +45,7 @@ class UI_ColoredRect;
 class UI_Text_Input;
 class UI_Check_Box;
 class UI_Element_Cmp;
+class UI_Animation;
 
 // UI_Elements priority
 class UI_Element_Cmp
@@ -68,6 +71,7 @@ public:
 	// Call before first frame
 	bool Start();
 
+	// Update
 	bool Update(float dt);
 
 	// Called before all Updates
@@ -82,6 +86,7 @@ public:
 	// Gets the atlas texture
 	const void GetAtlas() const;
 
+	// Creates and returns a UI_Window
 	UI_Window* UI_CreateWin(iPoint pos, int w, int h, int blit = 0, bool is_gameplay = true, bool dinamic = false, bool is_ui = true);
 
 	void ElementsListToVector(vector<UI_Element*> &vec);
@@ -93,7 +98,6 @@ public:
 	void EraseFromElementsList(UI_Element* element);
 	void TakeVariablesFromWindow(UI_Element* element);
 	
-
 private:
 
 public:
@@ -103,7 +107,7 @@ public:
 	// --------
 
 	// All elements
-	priority_queue<UI_Element*, std::vector<UI_Element*>, UI_Element_Cmp> elements_list_priority;
+	priority_queue<UI_Element*, vector<UI_Element*>, UI_Element_Cmp> elements_list_priority;
 	vector<UI_Element*>    elements_list;
 	double				   higher_layer = 0;
 
@@ -113,10 +117,14 @@ public:
 	// All windows
 	list<UI_Window*>       windows;
 
+	// Animations
+	vector<UI_Animation*>  animations_list;
+
 	// Debug when F1
 	bool				   debug = false;
 
 private:
+
 	// Movement
 	bool				   moving = false;
 	int					   mouse_x = 0;
@@ -152,6 +160,9 @@ public:
 		else
 			return false;
 	}
+
+	void StartInterpolationAnimation(iPoint destination, fPoint bezier_point1, fPoint bezier_point2, float time);
+	bool AnimationFinished();
 
 	// Enable function
 	void SetEnabled(bool set);
@@ -192,6 +203,8 @@ public:
 	bool				is_gameplay = true;
 
 	int					viewport = 0;
+
+	bool				animation_finished = false;
 
 	// Layers --
 	double				layer = 0;
@@ -582,6 +595,47 @@ private:
 	SDL_Rect		   pressed = NULLRECT;
 	SDL_Rect		   idle = NULLRECT;
 
+};
+
+class UI_Animation
+{
+public:
+	UI_Animation(UI_Element* element);
+	virtual ~UI_Animation();
+	
+	virtual void start();
+	virtual void update();
+	virtual void cleanup();
+
+	UI_Element* GetElement();
+	bool Finished();
+	void SetFinished(bool set);
+
+private:
+	UI_Element* element = nullptr;
+	bool		finished = false;
+};
+
+class UIA_Interpolation : public UI_Animation
+{
+public:
+	UIA_Interpolation(UI_Element* element, iPoint destination, fPoint bezier_point1, fPoint bezier_point2, float time);
+	~UIA_Interpolation();
+
+	void start();
+	void update();
+	void cleanup();
+
+private:
+	iPoint        destination = NULLPOINT;
+	fPoint		  bezier_point1 = NULLPOINT;
+	fPoint		  bezier_point2 = NULLPOINT;
+	float         time = 0.0f;
+	BezierEasing* bezier = nullptr;
+	float		  angle = 0.0f;
+	int			  distance = 0.0f;
+	j1Timer		  timer;
+	iPoint        starting_pos = NULLPOINT;
 };
 
 #endif // !_j1GUI_H__

@@ -64,6 +64,8 @@ private:
 	iPoint				 team2_spawn = NULLPOINT;
 
 	minion_manager_state state = null;
+
+	uint				 death_sound_effect = 100;
 };
 
 #endif // !_MINION_MANAGER_H_

@@ -67,8 +67,10 @@ bool j1Audio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	for (list<Mix_Chunk*>::iterator current = fx.begin(); current != fx.end(); current++)
-		Mix_FreeChunk(*current);
+	for (list<SoundEffect*>::iterator current = fx.begin(); current != fx.end(); current++)
+	{
+		RELEASE(*current);
+	}
 
 	fx.clear();
 
@@ -136,24 +138,24 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 // Load WAV
 unsigned int j1Audio::LoadFx(const char* path)
 {
-	unsigned int ret = 0;
-
 	if (!active)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV_RW(App->fs->Load(path), 1);
-
-	if (chunk == NULL)
+	//Check if the effect is loaded
+	uint i = 0;
+	for (list<SoundEffect*>::iterator current = fx.begin(); current != fx.end(); ++current)
 	{
-		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
-	}
-	else
-	{
-		fx.push_back(chunk);
-		ret = fx.size();
+		if (path == (*current)->path)
+		{
+			return i;
+		}
+		++i;
 	}
 
-	return ret;
+	//If the effect is not loaded, store it on memory
+	fx.push_back(new SoundEffect(path));
+
+	return (uint)(fx.size() - 1);
 }
 
 // Play WAV
@@ -164,14 +166,14 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	if (!active)
 		return false;
 
-	if (id > 0 && id <= fx.size())
+	if (id >= 0 && id < fx.size())
 	{
 		int i = 0;
-		for (list<Mix_Chunk*>::iterator current = fx.begin(); current != fx.end(); current++)
+		for (list<SoundEffect*>::iterator current = fx.begin(); current != fx.end(); current++)
 		{
-			if (i == id - 1)
+			if (i == id)
 			{
-				Mix_PlayChannel(-1, *current, repeat);
+				Mix_PlayChannel(-1, (*current)->fx, repeat);
 				break;
 			}
 			i++;
@@ -199,4 +201,20 @@ void j1Audio::DefaultVolume()
 bool j1Audio::MusicPlaying()
 {
 	return Mix_Playing(-1);
+}
+
+SoundEffect::SoundEffect(const char * path)
+{
+	fx = Mix_LoadWAV_RW(App->fs->Load(path), 1);
+	this->path = path;
+
+	if (fx == NULL)
+	{
+		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
+	}
+}
+
+SoundEffect::~SoundEffect()
+{
+	Mix_FreeChunk(fx);
 }

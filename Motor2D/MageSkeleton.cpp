@@ -1,4 +1,4 @@
-#include "Snakes.h"
+#include "MageSkeleton.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
 #include "CollisionFilters.h"
@@ -10,19 +10,19 @@
 #include "j1Entity.h"
 #include "p2Log.h"
 #include "Spell.h"
-#include "SnakePoison.h"
+#include "TacoAttack.h"
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
 
-#define SNAKE_H 32
-#define SNAKE_W 32
+#define MSKL_H 32
+#define MSKL_W 32
 
 #define ATTACK_RANGE 150
 #define HALFMAP 81*32
 
-Snakes::Snakes(iPoint pos)
+MageSkeleton::MageSkeleton(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SNAKE_H, SNAKE_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(MSKL_H, MSKL_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -30,7 +30,7 @@ Snakes::Snakes(iPoint pos)
 	game_object->SetKinematic();
 
 	pugi::xml_document doc;
-	App->xml->LoadXML("snakes.xml", doc);
+	App->xml->LoadXML("mageskeleton.xml", doc);
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 
 	stats.life = stats.base_hp = stats.max_life = stats_node.attribute("hp").as_int();
@@ -40,36 +40,36 @@ Snakes::Snakes(iPoint pos)
 	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
-	AddAbility(0, cd, bd, dmg_mult, "s_attack");
+	AddAbility(0, cd, bd, dmg_mult, "taco_attack");
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	name = "snake";
+	name = "mageskeleton";
 }
 
-Snakes::~Snakes()
+MageSkeleton::~MageSkeleton()
 {
 }
 
-bool Snakes::Start()
+bool MageSkeleton::Start()
 {
 	bool ret = true;
 
-	Idle();	
+	Idle();
 
 	show_life_bar = true;
 
 	return ret;
 }
 
-bool Snakes::PreUpdate()
+bool MageSkeleton::PreUpdate()
 {
 	bool ret = true;
 
 	return ret;
 }
 
-bool Snakes::Update(float dt)
+bool MageSkeleton::Update(float dt)
 {
 	bool ret = true;
 
@@ -96,13 +96,31 @@ bool Snakes::Update(float dt)
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 
-			if(state == Snk_S_Idle)
+			if (state == MSkl_S_Idle)
 			{
 				is_attacked = true;
-				state = Snk_S_Attack;
+				state = MSkl_S_Attack;
 				target = entity;
+				if (this->GetPos().x < HALFMAP)
+				{
+					for (int i = 0; i < App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.size(); i++)
+					{
+						MageSkeleton* m = static_cast<MageSkeleton*>(App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1[i]);
+						m->target = target;
+						m->state = state;
+					}
+				}
+				else
+				{
+					for (int i = 0; i < App->scene->main_scene->jungleCamp_manager->mageskeleton_camp2.size(); i++)
+					{
+						MageSkeleton* m = static_cast<MageSkeleton*>(App->scene->main_scene->jungleCamp_manager->mageskeleton_camp2[i]);
+						m->target = target;
+						m->state = state;
+					}
+				}
 			}
-			
+
 		}
 		if (stats.life <= 0)
 		{
@@ -113,13 +131,13 @@ bool Snakes::Update(float dt)
 			{
 				if (this->GetPos().x > HALFMAP)
 				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
+					if (App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.empty())
 						if (entity->is_player)
 							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
 				}
 				else
 				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
+					if (App->scene->main_scene->jungleCamp_manager->mageskeleton_camp2.empty())
 						if (entity->is_player)
 							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
 				}
@@ -130,13 +148,13 @@ bool Snakes::Update(float dt)
 
 	switch (state)
 	{
-	case Snk_S_Null:
+	case MSkl_S_Null:
 		Idle();
 		break;
-	case Snk_S_Idle:
+	case MSkl_S_Idle:
 		Idle();
 		break;
-	case Snk_S_Attack:
+	case MSkl_S_Attack:
 		if (target != nullptr)
 		{
 			if (abs(DistanceFromTwoPoints(target->GetPos().x, target->GetPos().y, game_object->fGetPos().x, game_object->fGetPos().y)) < ATTACK_RANGE)
@@ -168,7 +186,7 @@ bool Snakes::Update(float dt)
 		}
 		else
 			if (!LookForTarget())
-			Idle();
+				Idle();
 		break;
 	default:
 		break;
@@ -177,69 +195,69 @@ bool Snakes::Update(float dt)
 	return ret;
 }
 
-bool Snakes::Draw(float dt)
+bool MageSkeleton::Draw(float dt)
 {
 	bool ret = true;
 
-	if(!flip)
+	if (!flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	else
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
-	
+
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ATTACK_RANGE, 255, 0, 0);
 
 	return ret;
 }
 
-bool Snakes::PostUpdate()
+bool MageSkeleton::PostUpdate()
 {
 	bool ret = true;
 
 	return ret;
 }
 
-bool Snakes::CleanUp()
+bool MageSkeleton::CleanUp()
 {
 	bool ret = true;
 
 	return ret;
 }
 
-iPoint Snakes::GetPos() const
+iPoint MageSkeleton::GetPos() const
 {
 	return game_object->GetPos();
 }
 
-void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+void MageSkeleton::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 }
 
-void Snakes::Idle()
+void MageSkeleton::Idle()
 {
 	if (game_object->GetPos().x < HALFMAP)
 	{
-		game_object->SetAnimation("snake_lateral");
-		anim_state = snake_lateral;
+		game_object->SetAnimation("mskeleton_lateral");
+		anim_state = mskeleton_lateral;
 	}
 	else
 	{
-		game_object->SetAnimation("snake_down");
-		anim_state = snake_down;
+		game_object->SetAnimation("mskeleton_down");
+		anim_state = mskeleton_down;
 	}
 
-	state = Snk_S_Idle;
+	state = MSkl_S_Idle;
 	flip = false;
-	
+
 }
 
-void Snakes::DoAttack()
+void MageSkeleton::DoAttack()
 {
 	if (abilities.at(0)->CdCompleted())
 	{
 		if (target != nullptr)
 		{
-			SnakePoison* sp = (SnakePoison*)App->spell->CreateSpell(s_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
+			TacoAttack* sp = (TacoAttack*)App->spell->CreateSpell(taco_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 			sp->SetTarget(target);
 		}
 		else
@@ -251,35 +269,35 @@ void Snakes::DoAttack()
 	}
 }
 
-void Snakes::AttackLeft()
+void MageSkeleton::AttackLeft()
 {
-	game_object->SetAnimation("snake_lateral");
+	game_object->SetAnimation("mskeleton_lateral");
 	flip = false;
 	DoAttack();
 }
 
-void Snakes::AttackRight()
+void MageSkeleton::AttackRight()
 {
-	game_object->SetAnimation("snake_lateral");
+	game_object->SetAnimation("mskeleton_lateral");
 	flip = true;
 	DoAttack();
 }
 
-void Snakes::AttackUp()
+void MageSkeleton::AttackUp()
 {
-	game_object->SetAnimation("snake_up");
+	game_object->SetAnimation("mskeleton_up");
 	flip = false;
 	DoAttack();
 }
 
-void Snakes::AttackDown()
+void MageSkeleton::AttackDown()
 {
-	game_object->SetAnimation("snake_attack_down");
+	game_object->SetAnimation("mskeleton_attack_down");
 	flip = false;
 	DoAttack();
 }
 
-bool Snakes::LookForTarget()
+bool MageSkeleton::LookForTarget()
 {
 	bool ret = false;
 
@@ -297,6 +315,12 @@ bool Snakes::LookForTarget()
 		{
 			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
 			target = *it;
+			for (int i = 0; App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.size(); i++)
+			{
+				
+				MageSkeleton* test = (MageSkeleton*)App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1[i];
+				test->target = *it;
+			}
 			ret = true;
 			break;
 		}
@@ -308,6 +332,12 @@ bool Snakes::LookForTarget()
 		{
 			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
 			target = *it;
+			for (int i = 0; App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.size(); i++)
+			{
+
+				MageSkeleton* test = (MageSkeleton*)App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1[i];
+				test->target = *it;
+			}
 			ret = true;
 			break;
 		}
@@ -315,4 +345,3 @@ bool Snakes::LookForTarget()
 
 	return ret;
 }
-

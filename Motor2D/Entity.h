@@ -70,6 +70,13 @@ enum states
 	skeleton_spin,
 	skeleton_bone,
 
+	mskeleton_up,
+	mskeleton_lateral,
+	mskeleton_down,
+	mskeleton_attack_up,
+	mskeleton_attack_lateral,
+	mskeleton_attack_down,
+
 	states_null,
 };
 

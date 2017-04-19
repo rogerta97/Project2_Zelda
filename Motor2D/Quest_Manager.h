@@ -68,6 +68,8 @@ public:
 
 	iPoint           placer = NULLPOINT;
 
+	int lerandomnumero;
+
 private:
 	int				active_quest = -1;
 	uint			timer_read = 0;

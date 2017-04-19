@@ -4,6 +4,7 @@
 #include "p2Log.h"
 #include "j1Map.h"
 #include "GameObject.h"
+#include "j1Audio.h"
 
 #define DEATH_CAMERA_SPEED 500
 #define BASE_TRAVEL_TIME 4
@@ -66,6 +67,8 @@ bool PlayerManager::Start()
 	// Event
 	event_thrower = new EventThrower();
 
+	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Link/LTTP_Link_Dying.wav");
+
 	return true;
 }
 
@@ -91,6 +94,9 @@ bool PlayerManager::Update(float dt)
 
 			// Update pasive heal
 			PasiveHP(curr_player);
+
+			//Reward pasive Rupee
+			PasiveRupee(curr_player);
 
 			// Update ui
 			UpdateUI(curr_player);
@@ -959,6 +965,8 @@ void PlayerManager::CheckIfDeath(Player * player)
 
     	player->Kill();
 		player->show = shows::show_null;
+
+		App->audio->PlayFx(death_sound_effect, 0);
 	}
 }
 
@@ -1113,6 +1121,18 @@ void PlayerManager::PasiveHP(Player * curr_player)
 	{
 		curr_player->last_heal_time = App->scene->main_scene->GetGameTimer()->ReadSec();
 		curr_player->entity->Heal(1);
+	}
+}
+
+void PlayerManager::PasiveRupee(Player * curr_player)
+{
+	if (curr_player->is_dead)
+		return;
+
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - curr_player->last_rupee_time > 3)
+	{
+		curr_player->last_rupee_time = App->scene->main_scene->GetGameTimer()->ReadSec();
+		curr_player->AddRupees(1);
 	}
 }
 

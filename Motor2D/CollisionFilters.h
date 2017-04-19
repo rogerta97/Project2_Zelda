@@ -44,7 +44,8 @@ enum class pbody_type
 	p_t_snake_poison,
 	p_t_trunk,
 	p_t_tree,
-	p_t_bush
+	p_t_bush,
+	p_t_taco
 };
 
 // Fixture enum

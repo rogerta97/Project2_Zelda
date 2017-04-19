@@ -139,14 +139,12 @@ QuestManager::QuestManager()
 		vquest.push_back(q);
 	}
 
+
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
 		(*it)->active_quest_text.at(0)->enabled = false; 
 	}
-	//active_quest_text[0]->enabled = false;
-	//active_quest_text[1]->enabled = false;
-	//active_quest_text[2]->enabled = false;
-	//active_quest_text[3]->enabled = false;
+
 }
 
 QuestManager::~QuestManager()
@@ -157,8 +155,13 @@ void QuestManager::Update()
 {
 	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
 	{
-		change_state(1, active);
-		active_quest = 1;
+
+		lerandomnumero = GetRandomValue(1, 10);
+
+		if (lerandomnumero < 5) active_quest = 1;
+		else active_quest = 3;
+
+		change_state(active_quest, active);
 		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 		update_progress();
 
@@ -346,6 +349,7 @@ void QuestManager::update_progress()
 			default:
 				break;
 			}
+		}
 
 			int j = 0;
 			for (pugi::xml_node tool = quests_node.child("quest").child("task"); tool; tool = tool.next_sibling("task"))
@@ -359,6 +363,7 @@ void QuestManager::update_progress()
 					player_text_list[1]->active_quest_text[0] ->enabled = false;
 					player_text_list[2]->active_quest_text[0] ->enabled = false;
 					player_text_list[3]->active_quest_text[0] ->enabled = false;
+
 					for (int k = 0; k < App->scene->main_scene->player_manager->players.size(); k++)
 					{
 						//App->scene->main_scene->player_manager->players[k]->entity->UpdateStats(0, 0, 0);
@@ -368,14 +373,37 @@ void QuestManager::update_progress()
 					{
 					case 0:
 					{
+
 						player_text_list[0]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						player_text_list[2]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+//=======
+//						player_1_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
+//						player_3_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
+//
+//						player_1_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
+//						player_3_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
+//
+//						player_1_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
+//						player_3_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
+//>>>>>>> refs/remotes/origin/development
 						break;
 					}
 					case 1:
 					{
+
 						player_text_list[1]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						player_text_list[3]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+//=======
+//						player_2_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
+//						player_4_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
+//
+//						player_2_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
+//						player_4_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
+//
+//						player_2_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
+//						player_4_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
+//						break;
+//>>>>>>> refs/remotes/origin/development
 						break;
 					}
 					default:
@@ -384,7 +412,5 @@ void QuestManager::update_progress()
 				}
 				j++;
 			}
-
-		}
 	}
 }
