@@ -7,8 +7,11 @@
       <rect x ="28" y = "48" w = "28" h = "28"/>
       <rect x ="56" y = "48" w = "28" h = "28"/>
     </anim>
-    <anim speed = "20" name = "destroy" loop = "true">
-      <rect x ="84" y = "48" w = "28" h = "28"/>
+    <anim speed = "20" name = "destroy" loop = "false">
+	<rect x ="112" y = "48" w = "28" h = "28"/>
+	<rect x ="140" y = "48" w = "28" h = "28"/>	
+	<rect x ="84" y = "48" w = "28" h = "28"/>
+	<rect x ="168" y = "48" w = "28" h = "28"/>
     </anim>
   </animations>
 </file>

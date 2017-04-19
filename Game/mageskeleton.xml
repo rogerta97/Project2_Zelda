@@ -3,21 +3,24 @@
 <file>
   <animations texture ="textures/mageskeleton_spritesheet.png">
     <anim speed = "5" name = "mskeleton_down" loop = "true">
-      <rect x = "0" y = "0" w = "32" h = "48"/>
+      <rect x = "32" y = "0" w = "32" h = "48"/>
+      <rect x = "0" y = "76" w = "32" h = "48"/>
     </anim>
     <anim speed = "3" name = "mskeleton_attack_down" loop = "true">
       <rect x = "0" y = "0" w = "32" h = "48"/>
       <rect x = "32" y = "0" w = "32" h = "48"/>
     </anim>
     <anim speed = "3" name = "mskeleton_up" loop = "true">
-      <rect x = "128" y = "0" w = "32" h = "48"/>
+      <rect x = "160" y = "0" w = "32" h = "48"/>
+      <rect x = "96" y = "76" w = "32" h = "48"/>
     </anim>
  <anim speed = "3" name = "mskeleton_attack_up" loop = "true">
       <rect x = "128" y = "0" w = "32" h = "48"/>
       <rect x = "160" y = "0" w = "32" h = "48"/>
     </anim>
     <anim speed = "3" name = "mskeleton_lateral" loop = "true">
-       <rect x = "64" y = "0" w = "32" h = "48"/>
+       <rect x = "32" y = "76" w = "32" h = "48"/>
+       <rect x = "64" y = "76" w = "32" h = "48"/>
     </anim>
     <anim speed = "3" name = "mskeleton_attack_lateral" loop = "true">
      <rect x = "64" y = "0" w = "32" h = "48"/>
