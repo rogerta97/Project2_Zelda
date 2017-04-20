@@ -190,6 +190,9 @@
     <ClCompile Include="TacoAttack.cpp">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </ClCompile>
+    <ClCompile Include="Navi.cpp">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -411,6 +414,9 @@
     <ClInclude Include="TacoAttack.h">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </ClInclude>
+    <ClInclude Include="Navi.h">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -503,6 +509,9 @@
     <Filter Include="Engine\5. Spells ===========\TacoAttack">
       <UniqueIdentifier>{2eae4e44-1c45-45b2-8890-97b995dc6d28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\4. Entities ==========\Navi">
+      <UniqueIdentifier>{dc840a14-aa38-42bd-9623-77bb68548b8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -576,6 +585,9 @@
     </Xml>
     <Xml Include="..\Game\mageskeleton.xml">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\navi.xml">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
     </Xml>
   </ItemGroup>
 </Project>
