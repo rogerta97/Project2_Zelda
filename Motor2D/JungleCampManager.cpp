@@ -332,7 +332,7 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 			}
 		}
 	}
-	App->entity->DeleteEntity(camp);
+	
 
 	if (camp->type == skeleton)
 	{
@@ -348,7 +348,7 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 
 	if (camp->type == mskeleton)
 	{
-		if (camp->GetPos().x > HALFMAP)
+		if (camp->GetPos().x < HALFMAP)
 		{
 			for (std::vector<Entity*>::iterator it = mageskeleton_camp1.begin(); it != mageskeleton_camp1.end(); ++it)
 			{
@@ -370,6 +370,6 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 			}
 		}
 	}
-	
+	App->entity->DeleteEntity(camp);
 	App->audio->PlayFx(death_sound_effect, 0);
 }

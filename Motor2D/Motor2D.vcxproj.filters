@@ -190,6 +190,9 @@
     <ClCompile Include="TacoAttack.cpp">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </ClCompile>
+    <ClCompile Include="Cuco.cpp">
+      <Filter>Engine\4. Entities ==========\Cuco</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -411,6 +414,9 @@
     <ClInclude Include="TacoAttack.h">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </ClInclude>
+    <ClInclude Include="Cuco.h">
+      <Filter>Engine\4. Entities ==========\Cuco</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -502,6 +508,9 @@
     </Filter>
     <Filter Include="Engine\5. Spells ===========\TacoAttack">
       <UniqueIdentifier>{2eae4e44-1c45-45b2-8890-97b995dc6d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Cuco">
+      <UniqueIdentifier>{d9e4eae2-e1c2-476f-9988-67a5d49dbee9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
