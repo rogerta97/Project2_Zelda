@@ -1,5 +1,5 @@
-#ifndef _BOOMERANG_
-#define _BOOMERANG_
+#ifndef _NAVI_BASIC_ATTACK_
+#define _NAVI_BASIC_ATTACK_
 
 #include "j1App.h"
 #include "j1Render.h"
@@ -15,21 +15,21 @@ class Spell;
 
 #define BOOMERANG_RANGE 170
 
-enum direction
+enum n_b_a_direction
 {
-	null,
-	up,
-	down,
-	left,
-	right,
+	n_b_a_null,
+	n_b_a_up,
+	n_b_a_down,
+	n_b_a_left,
+	n_b_a_right,
 };
 
-class Boomerang : public Spell
+class NaviBasicAttack : public Spell
 {
 public:
-	Boomerang(iPoint pos);
+	NaviBasicAttack(iPoint pos);
 
-	virtual ~Boomerang();
+	virtual ~NaviBasicAttack();
 
 	bool Start();
 	bool PreUpdate();
@@ -50,23 +50,20 @@ public:
 		return true;
 	}
 
-	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	void Set(direction dir);
+	void Set(n_b_a_direction dir);
 
 	void Effects(Entity* entity, Ability * ability);
 
 private:
-	direction dir = direction::null;
+	n_b_a_direction dir = n_b_a_direction::n_b_a_null;
 	float			initial_speed = 0;
 	iPoint			starting_pos = NULLPOINT;
-
+	float			rotation = 0.0f;
+	float			die = false;
+	
 	j1Timer			timer;
-
-	float			damage_multiplicator_first = 0.0f;
-	float			damage_multiplicator_second = 0.0f;
-	float			damage_multiplicator_return = 0.0f;
-
 };
 
-#endif // _BOOMERANG_
+#endif // _NAVI_BASIC_ATTACK_

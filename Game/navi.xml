@@ -29,11 +29,6 @@
      <anim speed = "10" name = "basic_attack_side" loop = "false">
           <rect x = "144" y = "100" w = "48" h = "50"/>
      </anim>
- <anim speed = "10" name = "basic_projectile" loop = "true">
-          <rect x = "192" y = "0" w = "48" h = "50"/>
- 	  <rect x = "240" y = "0" w = "48" h = "50"/>
- 	  <rect x = "240" y = "0" w = "48" h = "50"/>
-     </anim>
 <anim speed = "10" name = "blink_up" loop = "false">
           <rect x = "288" y = "0" w = "48" h = "50"/>
  	  <rect x = "336" y = "0" w = "48" h = "50"/>
@@ -59,7 +54,7 @@
 <anim speed = "10" name = "heal_area" loop = "true">
  	  <rect x = "774" y = "0" w = "280" h = "280"/>
 	  <rect x = "774" y = "280" w = "280" h = "280"/>
-          <rect x = "774" y = "560" w = "280" h = "280"/>
+        <rect x = "774" y = "560" w = "280" h = "280"/>
  	  <rect x = "774" y = "280" w = "280" h = "280"/>
      </anim>
 <anim speed = "10" name = "ulti_letters" loop = "false">
@@ -89,5 +84,6 @@
     <ability2 mult="1" cd="4" bd="15"/>
     <ability3 mult="0" cd="10" bd="0"/>
     <ability4 mult="0" cd="60" bd="0"/>
+    <basic_attack_spell mult ="1"/>
   </stats>
 </file>

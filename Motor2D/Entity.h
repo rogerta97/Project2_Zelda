@@ -290,7 +290,6 @@ public:
 	void Heal(int heal);
 	void Slow(float speed_multiplicator, float time);
 	void Stun(float time);
-	void BoomerangEffects(Entity* entity, Ability* ability, Spell* spell);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 

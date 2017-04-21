@@ -22,6 +22,7 @@
 #include "j1XMLLoader.h"
 #include "Waterfall.h"
 #include "MageSkeleton.h"
+#include "Navi.h"
 
 j1Entity::j1Entity()
 {
@@ -235,6 +236,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	{
 	case link:
 		ret = new Link(pos);
+		break;
+	case navi:
+		ret = new Navi(pos);
 		break;
 	case minion:
 		ret = new Minion(pos);

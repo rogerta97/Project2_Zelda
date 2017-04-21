@@ -1,0 +1,15 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture = "textures/navi_spritesheet.png">
+    <anim speed = "10" name = "basic_projectile" loop = "true">
+      <rect x = "192" y = "0" w = "48" h = "50"/>
+      <rect x = "240" y = "0" w = "48" h = "50"/>
+      <rect x = "240" y = "0" w = "48" h = "50"/>
+    </anim>
+    <anim speed = "5" name = "destroy" loop = "true">
+      <rect x ="204" y = "61" w = "26" h = "30"/>
+      <rect x ="251" y = "61" w = "26" h = "30"/>
+    </anim>
+  </animations>
+</file>

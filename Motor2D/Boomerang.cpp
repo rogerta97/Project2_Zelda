@@ -167,3 +167,11 @@ void Boomerang::Set(direction _dir)
 {
 	dir = _dir;
 }
+
+void Boomerang::Effects(Entity * entity, Ability * ability)
+{
+	if (stats.slow_duration > 0)
+		entity->Slow(stats.slow_multiplicator, stats.slow_duration);
+	if (stats.stun_duration > 0)
+		entity->Stun(stats.stun_duration);
+}
