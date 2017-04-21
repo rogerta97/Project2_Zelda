@@ -126,8 +126,7 @@ bool Minion::Update(float dt)
 				{
 					DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-					if (TextCmp(spell->name.c_str(), "boomerang"))
-						BoomerangEffects(entity, ability, spell);
+					spell->Effects(entity, ability);
 				}
 			}
 			else

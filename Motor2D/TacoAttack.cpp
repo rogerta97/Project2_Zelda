@@ -49,6 +49,9 @@ bool TacoAttack::Update(float dt)
 {
 	bool ret = true;
 
+	if (to_delete)
+		return true;
+
 	if (game_object->animator->IsCurrentAnimation("destroy"))
 	{
 		if (game_object->animator->GetCurrentAnimation()->Finished())
@@ -56,7 +59,6 @@ bool TacoAttack::Update(float dt)
 	}
 	else if (target != nullptr)
 	{
-
 		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
 
 		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);

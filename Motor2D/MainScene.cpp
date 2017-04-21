@@ -63,7 +63,7 @@ bool MainScene::Start()
 
 	MainSceneViewport curr_viewport;
 
-	for(int i = 0; i < 4;i++)
+	for (int i = 0; i < 4;i++)
 	{
 		curr_viewport.main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 		curr_viewport.main_window->viewport = i + 1; 
@@ -284,7 +284,7 @@ bool MainScene::CleanUp()
 	App->entity->ClearEntities();
 	App->spell->ClearSpells();
 
-	//Releas Animators
+	//Release Animators
 	victory->CleanUp();
 	defeat->CleanUp();
 	RELEASE(victory);

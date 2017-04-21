@@ -23,6 +23,7 @@ enum spell_name
 	s_attack,
 	bone_attack,
 	taco_attack,
+	navi_basic_attack,
 
 };
 

@@ -15,6 +15,7 @@ TowerManager::TowerManager()
 	Tower* t2 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[1]);
 	t2->SetTeam(1);
 	team1_towers.push_back(t2);
+
 	//Team 2 towers
 	std::vector<iPoint> tower_positions2 = App->map->GetTowerSpawns(2);
 	Tower* t3 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[0]);
@@ -30,7 +31,6 @@ TowerManager::TowerManager()
 
 TowerManager::~TowerManager()
 {
-
 }
 
 bool TowerManager::Update()
@@ -43,9 +43,12 @@ bool TowerManager::Update()
 
 bool TowerManager::CleanUp()
 {
+	bool ret = true;
+
+	// Cleaning towers 1
 	if (!team1_towers.empty())
 	{
-		for (std::list<Tower*>::const_iterator it = team1_towers.begin(); it != team1_towers.end(); it)
+		for (std::list<Tower*>::const_iterator it = team1_towers.begin(); it != team1_towers.end();)
 		{
 			App->entity->DeleteEntity(*it);
 			it = team1_towers.erase(it);
@@ -54,9 +57,10 @@ bool TowerManager::CleanUp()
 		team1_towers.clear();
 	}
 
+	// Cleaning towers 2
 	if (!team2_towers.empty())
 	{
-		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end(); it)
+		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end();)
 		{
 			App->entity->DeleteEntity(*it);
 			it = team2_towers.erase(it);
@@ -65,7 +69,7 @@ bool TowerManager::CleanUp()
 		team2_towers.clear();
 	}
 
-	return true;
+	return ret;
 }
 
 std::list<Tower*>& TowerManager::GetTowerList(uint team) 
@@ -81,8 +85,7 @@ std::list<Tower*>& TowerManager::GetTowerList(uint team)
 	default:
 		return team1_towers;
 		break;
-	}
-	
+	}	
 }
 
 void TowerManager::KillTower(Entity * tower)
@@ -90,14 +93,33 @@ void TowerManager::KillTower(Entity * tower)
 	switch (tower->GetTeam())
 	{
 	case 1:
-		team1_towers.remove((Tower*)tower);
+		for (std::list<Tower*>::const_iterator it = team1_towers.begin(); it != team1_towers.end();)
+		{
+			if (tower == (*it))
+			{
+				team1_towers.erase(it);
+				break;
+			}
+			else
+				++it;
+		}
+
 		App->entity->DeleteEntity(tower);
 		break;
 	case 2:
-		team2_towers.remove((Tower*)tower);
+		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end();)
+		{
+			if (tower == (*it))
+			{
+				team2_towers.erase(it);
+				break;
+			}
+			else
+				++it;
+		}
+
 		App->entity->DeleteEntity(tower);
 		break;
-
 	}
 
 	App->audio->PlayFx(death_sound_effect, 0);

@@ -4,7 +4,6 @@
 
 Animation::Animation(const char* _name, list<SDL_Rect>& rects, float speed, bool loop) : speed(speed), loop(loop)
 {
-
 	for (list<SDL_Rect>::iterator it = rects.begin(); it != rects.end(); it++)
 		frames.push_back(*it);
 

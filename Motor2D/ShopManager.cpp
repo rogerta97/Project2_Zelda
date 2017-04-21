@@ -85,7 +85,6 @@ bool ShopManager::Start()
 		item_num++;
 	}
 
-
 	item_num = 0;
 	for (pugi::xml_node item = file_node.child("item"); item != NULL; item = item.next_sibling("item"))
 	{
@@ -388,7 +387,6 @@ bool ShopManager::Update()
 				}
 			}
 		}
-
 	}
 
 	return true;

@@ -33,7 +33,6 @@ public:
 
 private:
 	int			event_id = -1;
-
 };
 
 class EventThrower
@@ -47,13 +46,10 @@ public:
 	Event* GetEvent(int id);
 
 private:
-
 	void ThrowEvent(int type, int id);
 
 private:
-
 	std::list<Event*> events;
-
 };
 
 

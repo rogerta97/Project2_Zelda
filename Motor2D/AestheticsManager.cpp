@@ -44,7 +44,8 @@ void AestheticsManager::Start()
 			trees_entity.at(z)->SetTreeColor("purple");
 			break;
 		}
-		z++; 	
+
+		++z; 	
 	}
 	// -----
 
@@ -80,14 +81,15 @@ void AestheticsManager::Start()
 			bushes_entity.at(z)->SetMiddle(purple_half_bush);
 			break;
 		}
-		z++;
+
+		++z;
 	}
 	// -----
 
 	// Eyes
 	std::vector<iPoint> eyes_positions = App->map->GetEyesPositions();
 
-	for (std::vector<iPoint>::iterator it = eyes_positions.begin(); it != eyes_positions.end(); ++it)
+	for (std::vector<iPoint>::iterator it = eyes_positions.begin(); it != eyes_positions.end(); it++)
 	{
 		eyes.push_back((Eyes*)App->entity->CreateEntity(entity_name::eyes, *it));
 	}
@@ -117,7 +119,7 @@ void AestheticsManager::CleanUp()
 	// Clear Eyes
 	if (!eyes.empty())
 	{
-		for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end(); ++it)
+		for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end();)
 		{
 			App->entity->DeleteEntity(*it);
 			it = eyes.erase(it);
@@ -135,6 +137,7 @@ void AestheticsManager::CleanUp()
 		}
 	}
 
+	// Clear trees
 	if (!trees_nodes.empty())
 	{
 		for (vector<TreeNode*>::iterator it = trees_nodes.begin(); it != trees_nodes.end();)
@@ -144,12 +147,32 @@ void AestheticsManager::CleanUp()
 		}
 	}
 
+	if (!trees_entity.empty())
+	{
+		for (vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
+		{
+			App->entity->DeleteEntity(*it);
+			it = trees_entity.erase(it);
+		}
+	}
+	// -----
+
+	// Clear bushes
 	if (!bushes_nodes.empty())
 	{
 		for (vector<BushNode*>::iterator it = bushes_nodes.begin(); it != bushes_nodes.end();)
 		{
 			RELEASE(*it);
 			it = bushes_nodes.erase(it);
+		}
+	}
+
+	if (!bushes_entity.empty())
+	{
+		for (vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
+		{
+			App->entity->DeleteEntity(*it);
+			it = bushes_entity.erase(it);
 		}
 	}
 	// -----
