@@ -18,6 +18,9 @@
 #define BASIC_ATTACK_RANGE 100
 #define ABILITY1_RANGE 100
 
+#define ABILITY1_DURATION 5
+#define ABILITY3_DURATION 6
+
 Navi::Navi(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30, 40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
@@ -181,8 +184,50 @@ bool Navi::Draw(float dt)
 	{
 		bool reset = false;
 		// Basic atack --------------------
+		if (ability1)
+		{
+			if (ability1_timer.ReadSec() < ABILITY1_DURATION)
+			{
+				int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+				App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x-140, GetPos().y-140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), main_view);
+			}
+			else
+			{
+				ability1 = false;
+				reset = true;
+			}
+		}
+		// Ability 3 ----------------------
+		if (ability3)
+		{
+			if (ability3_timer.ReadSec() < ABILITY3_DURATION)
+			{
+				// Get enemy team
+				int enemy_team = 0;
+				if (GetTeam() == 1)
+					enemy_team = 2;
+				else
+					enemy_team = 1;
 
+				vector<int> view = App->scene->main_scene->player_manager->GetTeamViewports(enemy_team);
+
+				for (int i = 0; i < view.size(); i++)
+				{
+					App->view->LayerBlit(0, game_object->GetTexture(), { 0, 0 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), view.at(i));
+				}
+			}
+			else
+			{
+				ability3 = false;
+				reset = true;
+			}
+		}
 		// -------------------------------
+
+		if (reset)
+		{
+			attacking = false;
+		}
 	}
 
 	return ret;
@@ -409,23 +454,25 @@ void Navi::Ability1Up()
 {
 	if (!attacking)
 	{
-
+		ability1 = true;
+		ability1_timer.Start();
+		attacking = true;
 	}
 }
 
 void Navi::Ability1Down()
 {
-
+	Ability1Up();
 }
 
 void Navi::Ability1Left()
 {
-
+	Ability1Up();
 }
 
 void Navi::Ability1Right()
 {
-
+	Ability1Up();
 }
 
 void Navi::ShowAbility1Up()

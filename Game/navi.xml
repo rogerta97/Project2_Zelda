@@ -41,7 +41,7 @@
  	  <rect x = "192" y = "50" w = "48" h = "50"/>
 	  <rect x = "240" y = "50" w = "48" h = "50"/>
      </anim>
-<anim speed = "10" name = "blink_side" loop = "false">
+<anim speed = "30" name = "blink_side" loop = "false">
           <rect x = "288" y = "100" w = "48" h = "50"/>
  	  <rect x = "336" y = "100" w = "48" h = "50"/>
  	  <rect x = "192" y = "50" w = "48" h = "50"/>
@@ -81,7 +81,7 @@
    </animations>
   <stats hp="100" speed="160" power="20" rupees="100">
     <ability1 mult="1.5" cd="1" bd="3"/>
-    <ability2 mult="1" cd="4" bd="15"/>
+    <ability2 mult="0" cd="4" bd="0"/>
     <ability3 mult="0" cd="10" bd="0"/>
     <ability4 mult="0" cd="60" bd="0"/>
     <basic_attack_spell mult ="1"/>

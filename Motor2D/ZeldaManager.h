@@ -20,8 +20,7 @@ private:
 public:
 
 private:
-	Zelda*	zelda = nullptr;
-
+	Zelda* zelda = nullptr;
 };
 
 #endif

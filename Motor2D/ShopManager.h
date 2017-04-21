@@ -73,7 +73,6 @@ private:
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
 
 	Animator*		shop_icon_anim = nullptr;
-	
 };
 
 #endif // !_SHOPMANAGER_H_

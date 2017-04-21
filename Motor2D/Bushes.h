@@ -18,16 +18,18 @@ public:
 	void SetBushColor(const char* color); 
 	void SetMiddle(bush_color type);
 
-	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB); 
-
 	// CleanUp
 	bool CleanUp();
 
 	~Bush();
 
-	bool		is_middle = false; 
-	bool		is_moving = false; 
+private:
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+
+private:
+	bool is_middle = false; 
+	bool is_moving = false; 
 };
 
 #endif

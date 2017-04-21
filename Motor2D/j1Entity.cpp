@@ -59,8 +59,13 @@ bool j1Entity::PreUpdate()
 
 	RemoveEntities();
 
-	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		ret = (*it)->PreUpdate();
+	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
+		if (!(*it)->to_delete)
+		{
+			ret = (*it)->PreUpdate();
+		}
+	}
 
 	return ret;
 }
@@ -71,8 +76,11 @@ bool j1Entity::Update(float dt)
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
-		ret = (*it)->Update(dt);
-		(*it)->Draw(dt);
+		if (!(*it)->to_delete)
+		{
+			ret = (*it)->Update(dt);
+			(*it)->Draw(dt);
+		}
 	}
 
 	SlowEntities();
@@ -87,7 +95,12 @@ bool j1Entity::PostUpdate()
 	bool ret = true;
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		ret = (*it)->PostUpdate();
+	{
+		if (!(*it)->to_delete)
+		{
+			ret = (*it)->PostUpdate();
+		}
+	}
 
 	return ret;
 }

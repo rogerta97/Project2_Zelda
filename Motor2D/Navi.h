@@ -110,7 +110,12 @@ private:
 	int			 rupee_reward = 0;
 
 	// Ability 1
-	Animator* ability_animations = nullptr;;
+	j1Timer      ability1_timer;
+	bool		 ability1 = false;
+
+	// Ability 3
+	j1Timer	     ability3_timer;
+	bool	     ability3 = false;
 };
 
 #endif

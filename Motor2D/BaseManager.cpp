@@ -19,13 +19,15 @@ BaseManager::~BaseManager()
 
 bool BaseManager::CleanUp()
 {
+	bool ret = true;
+
 	if(team1 != nullptr)
 		App->entity->DeleteEntity(team1);
 
 	if (team2 != nullptr)
 		App->entity->DeleteEntity(team2);
 
-	return true;
+	return ret;
 }
 
 void BaseManager::KillBase(Base* base)

@@ -43,7 +43,12 @@ bool j1Spell::PreUpdate()
 	if (!spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-			ret = (*it)->PreUpdate();
+		{
+			if (!(*it)->to_delete)
+			{
+				ret = (*it)->PreUpdate();
+			}
+		}
 	}
 
 	return ret;
@@ -57,8 +62,11 @@ bool j1Spell::Update(float dt)
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 		{
-			ret = (*it)->Update(dt);
-			(*it)->Draw(dt);
+			if (!(*it)->to_delete)
+			{
+				ret = (*it)->Update(dt);
+				(*it)->Draw(dt);
+			}
 		}
 	}
 
@@ -72,7 +80,12 @@ bool j1Spell::PostUpdate()
 	if (!spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-			ret = (*it)->PostUpdate();
+		{
+			if (!(*it)->to_delete)
+			{
+				ret = (*it)->PostUpdate();
+			}
+		}
 	}
 
 	RemoveSpells();
