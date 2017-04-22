@@ -116,6 +116,8 @@ private:
 	// Ability 3
 	j1Timer	     ability3_timer;
 	bool	     ability3 = false;
+
+	// 
 };
 
 #endif
