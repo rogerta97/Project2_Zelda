@@ -1,4 +1,4 @@
-/*#ifndef _CUCO_H_
+#ifndef _CUCO_H_
 #define _CUCO_H_
 
 #include "Entity.h"
@@ -15,10 +15,8 @@ enum CUCO_STATE
 
 enum CUCO_MOVE_STATE
 {
-	Move_FollowBasePath,
-	Move_AproachTarget,
-	Move_ReturnToPath,
-	Move_Idle,
+	cMove_FollowBasePath,
+	cMove_Idle,
 };
 
 class Cuco :public Entity
@@ -72,7 +70,7 @@ public:
 
 	iPoint GetPos() const;
 
-	void SetBasePath(std::list<iPoint>& path);
+	void SetBasePath(const std::list<iPoint>* path);
 
 private:
 
@@ -81,9 +79,7 @@ private:
 
 	void CheckState();
 
-	void SetTargetPath(const std::list<iPoint>* path);
-
-	void PathToTarget();
+	void GetNewPath();
 
 	void Move(int delta_x, int delta_y);
 
@@ -96,12 +92,12 @@ private:
 	bool				flip = false;
 
 	CUCO_STATE		state = Cuco_Idle;
-	CUCO_MOVE_STATE	move_state = Move_FollowBasePath;
+
+	CUCO_MOVE_STATE	move_state = cMove_Idle;
 
 	std::vector<iPoint>	base_path;
-	std::vector<iPoint>	target_path;
+
 	int					base_path_index = 0;
-	int					target_path_index = 0;
 
 	float				speed = 0;
 
@@ -110,4 +106,4 @@ private:
 	EventThrower*       event_thrower = nullptr;
 };
 
-#endif // !CUCO_H_*/
+#endif // !CUCO_H_

@@ -77,6 +77,13 @@ enum states
 	mskeleton_attack_lateral,
 	mskeleton_attack_down,
 
+	basic_chicken,
+	cap_chicken,
+	black_chicken,
+	pink_chicken,
+	cook_chicken,
+	stone_chicken,
+
 	states_null,
 };
 
