@@ -6,6 +6,15 @@
 class GameObject;
 class Animator;
 
+enum navi_ability2_dir
+{
+	a2_up,
+	a2_down,
+	a2_left,
+	a2_right,
+	a2_direction_null
+};
+
 class Navi : public Entity
 {
 public:
@@ -104,18 +113,25 @@ public:
 public:
 
 private:
-	int		      camera = 1;
-	bool	      flip = false;
+	int		 camera = 1;
+	bool	 flip = false;
 
-	int			 rupee_reward = 0;
+	int		 rupee_reward = 0;
 
 	// Ability 1
-	j1Timer      ability1_timer;
-	bool		 ability1 = false;
+	j1Timer  ability1_timer;
+	bool	 ability1 = false;
+	vector<Entity*> to_heal;
+
+	// Ability 2
+	bool	 ability2 = false;
+	navi_ability2_dir ability2_dir = navi_ability2_dir::a2_direction_null;
+	iPoint   ability2_point = NULLPOINT;
+	bool	 find = false;
 
 	// Ability 3
-	j1Timer	     ability3_timer;
-	bool	     ability3 = false;
+	j1Timer	ability3_timer;
+	bool	ability3 = false;
 
 	// 
 };

@@ -6,9 +6,9 @@
 #include "j1XMLLoader.h"
 
 #define ROTATION_SPEED 300
-#define DESTRUCTION_TIME 1.0f
+#define DESTRUCTION_TIME 0.9f
 #define SPEED 300
-#define DEAD_ANIMATION_TIME 0.3F
+#define DEAD_ANIMATION_TIME 0.3f
 
 NaviBasicAttack::NaviBasicAttack(iPoint pos)
 {

@@ -15,10 +15,15 @@
 #include "j1XMLLoader.h"
 #include "NaviBasicAttack.h"
 
-#define BASIC_ATTACK_RANGE 100
-#define ABILITY1_RANGE 100
+#define BASIC_ATTACK_RANGE 270
 
+#define ABILITY1_RANGE 140
 #define ABILITY1_DURATION 5
+#define ABILITY1_HEAL 20
+
+#define ABILITY2_RANGE 150
+#define ABILITY2_MOVE_SAFE_OFFSET 15
+
 #define ABILITY3_DURATION 6
 
 Navi::Navi(iPoint pos)
@@ -135,17 +140,7 @@ bool Navi::Update(float dt)
 		// Friendly attacks
 		else
 		{
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
-			{
-				if (spell->owner == this)
-				{
-					if (spell->can_delete)
-					{
-						GetAbility(2)->cd_timer.SubstractTimeFromStart(7);
-						App->spell->DeleteSpell(spell);
-					}
-				}
-			}
+		
 		}
 
 		// Dies
@@ -163,17 +158,107 @@ bool Navi::Update(float dt)
 
 	LifeBar(iPoint(60, 5), iPoint(-29, -40));
 
-	// Basic atack --------------------
+	// Ability 1 --------------------
 	if (ability1)
 	{
 		if (ability1_timer.ReadSec() < ABILITY1_DURATION)
 		{
 			App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);
+
+			if (to_heal.empty())
+			{
+				vector<Entity*> players = App->entity->FindEntitiesByBodyType(pbody_type::p_t_player);
+				vector<Entity*> minions = App->entity->FindEntitiesByName("minion");
+
+				for (int i = 0; i < players.size(); i++)
+				{
+					if(players.at(i)->GetTeam() == GetTeam())
+						to_heal.push_back(players.at(i));
+				}
+
+				for (int i = 0; i < minions.size(); i++)
+				{
+					if(minions.at(i)->GetTeam() == GetTeam())
+						to_heal.push_back(minions.at(i));
+				}
+			}
+
+			for(vector<Entity*>::iterator it = to_heal.begin(); it != to_heal.end();)
+			{
+				if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, (*it)->GetPos().x, (*it)->GetPos().y)) <= ABILITY1_RANGE)
+				{
+					(*it)->Heal(20);
+					it = to_heal.erase(it);
+				}
+				else
+					++it;
+			}
 		}
 		else
 		{
 			ability1 = false;
+			to_heal.clear();
 		}
+	}
+	// Ability 2 --------------------
+	if (attacking && ability2)
+	{
+		switch (ability2_dir)
+		{
+		case navi_ability2_dir::a2_down:
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+			{
+				ability2_point = iPoint(ability2_point.x, ability2_point.y - 30);
+				find = true;
+			}
+			if (find)
+				ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
+			else
+				ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+			break;
+		case navi_ability2_dir::a2_up:
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+			{
+				ability2_point = iPoint(ability2_point.x, ability2_point.y + 30);
+				find = true;
+			}
+			if (find)
+				ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
+			else
+				ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+			break;
+		case navi_ability2_dir::a2_left:
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+			{
+				ability2_point = iPoint(ability2_point.x + 30, ability2_point.y);
+				find = true;
+			}
+			if (find)
+				ability2_point.x += ABILITY2_MOVE_SAFE_OFFSET;
+			else
+				ability2_point.x -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+			break;
+		case navi_ability2_dir::a2_right:
+			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+			{
+				ability2_point = iPoint(ability2_point.x - 30, ability2_point.y);
+				find = true;
+			}
+			if (find)
+				ability2_point.x -= ABILITY2_MOVE_SAFE_OFFSET;
+			else
+				ability2_point.x += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+			break;
+		}
+
+		game_object->SetPos({ (float)ability2_point.x, (float)ability2_point.y });
+
+		// Reset
+		ability2_dir = navi_ability2_dir::a2_direction_null;
+		attacking = false;
+		ability2 = false;
+		ability2_point = NULLPOINT;
+		find = false;
 	}
 	// Ability 3 ----------------------
 	if (ability3)
@@ -218,8 +303,6 @@ bool Navi::Draw(float dt)
 	// -------------
 	// End atacking (It's down the blit because of a reason)
 	// -------------
-
-	
 
 	return ret;
 }
@@ -420,7 +503,7 @@ void Navi::BasicAttackRight()
 void Navi::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85, 25, (int)(BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12, 25, (int)(-BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Navi::ShowBasicAttackDown()
@@ -432,7 +515,7 @@ void Navi::ShowBasicAttackDown()
 void Navi::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(-BASIC_ATTACK_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, (int)(-BASIC_ATTACK_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Navi::ShowBasicAttackRight()
@@ -465,7 +548,7 @@ void Navi::Ability1Right()
 void Navi::ShowAbility1Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ABILITY1_RANGE, 51, 153, 255, 100, blit_layer - 1, main_view, false, true);
+	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ABILITY1_RANGE, 255, 255, 255, 255, blit_layer - 1, main_view, false, true);
 }
 
 void Navi::ShowAbility1Down()
@@ -485,42 +568,70 @@ void Navi::ShowAbility1Right()
 
 void Navi::Ability2Up()
 {
-
+	if (!attacking)
+	{
+		ability2 = true;
+		attacking = true;
+		ability2_dir = navi_ability2_dir::a2_up;
+		ability2_point = { GetPos().x, GetPos().y - ABILITY2_RANGE };
+	}
 }
 
 void Navi::Ability2Down()
 {
-
+	if (!attacking)
+	{
+		ability2 = true;
+		attacking = true;
+		ability2_dir = navi_ability2_dir::a2_down;
+		ability2_point = { GetPos().x, GetPos().y + ABILITY2_RANGE };
+	}
 }
 
 void Navi::Ability2Left()
 {
-
+	if (!attacking)
+	{
+		ability2 = true;
+		attacking = true;
+		ability2_dir = navi_ability2_dir::a2_left;
+		ability2_point = { GetPos().x - ABILITY2_RANGE , GetPos().y};
+	}
 }
 
 void Navi::Ability2Right()
 {
-
+	if (!attacking)
+	{
+		ability2 = true;
+		attacking = true;
+		ability2_dir = navi_ability2_dir::a2_right;
+		ability2_point = { GetPos().x + ABILITY2_RANGE , GetPos().y };
+	}
 }
 
 void Navi::ShowAbility2Up()
 {
-	
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 20, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Down()
 {
-	
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 20, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Left()
 {
-	
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 20, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Right()
 {
-	
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 20, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::Ability3Up()

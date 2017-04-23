@@ -5,7 +5,7 @@
 
 class GameObject;
 
-enum ability3_dir
+enum link_ability3_dir
 {
 	a3_up,
 	a3_down,
@@ -134,7 +134,7 @@ private:
 	bool		 get_down = true;
 	bool		 get_left = true;
 	bool		 get_right = true;
-	ability3_dir ab3_dir = ability3_dir::a3_direction_null;
+	link_ability3_dir ab3_dir = link_ability3_dir::a3_direction_null;
 	bool		 find = false;
 	b2Fixture*   link_collision = nullptr;
 
