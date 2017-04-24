@@ -87,6 +87,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventThrower.cpp" />
     <ClCompile Include="Eyes.cpp" />
+    <ClCompile Include="FinalScreen.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="j1Console.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EventThrower.h" />
     <ClInclude Include="Eyes.h" />
+    <ClInclude Include="FinalScreen.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Item.h" />

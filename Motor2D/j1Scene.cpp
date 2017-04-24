@@ -11,6 +11,7 @@
 #include "MenuScene.h"
 #include "j1Console.h"
 #include "TeamSelectScene.h"
+#include "FinalScreen.h"
 #include "CharacterSelectionScene.h"
 #include "LogoScene.h"
 
@@ -55,10 +56,12 @@ bool j1Scene::Start()
 	scenes.push_back(charselect_screen); 
 	logo_scene = new LogoScene();
 	scenes.push_back(logo_scene);
+	final_screen = new FinalScreen(); 
+	scenes.push_back(final_screen); 
 	// -------------
 
 	// Starting scene
-	current_scene = logo_scene;
+	current_scene = final_screen;
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();

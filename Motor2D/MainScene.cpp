@@ -236,7 +236,7 @@ bool MainScene::Update(float dt)
 	// End Game
 	if (winner != 0 && game_timer.ReadSec() > end_delay)
 	{
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		App->scene->ChangeScene((Scene*)App->scene->final_screen);
 		App->view->SetViews(1);
 	}
 

@@ -196,6 +196,9 @@
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
+    <ClCompile Include="FinalScreen.cpp">
+      <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -423,6 +426,9 @@
     <ClInclude Include="NaviBasicAttack.h">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClInclude>
+    <ClInclude Include="FinalScreen.h">
+      <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -520,6 +526,9 @@
     </Filter>
     <Filter Include="Engine\5. Spells ===========\NaviBasicAttack">
       <UniqueIdentifier>{af1164c2-4c7a-4302-9657-90a3aa0b08e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\FinalScreen">
+      <UniqueIdentifier>{6e1c8ebe-370f-4096-966b-82307e69392d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
