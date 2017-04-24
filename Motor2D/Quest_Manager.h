@@ -70,8 +70,6 @@ public:
 
 	iPoint           placer = NULLPOINT;
 
-	int lerandomnumero;
-
 	vector<Entity*> cucos;
 private:
 	int				active_quest = -1;

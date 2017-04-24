@@ -158,10 +158,7 @@ void QuestManager::Update()
 	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 	{
 
-		lerandomnumero = GetRandomValue(1, 10);
-
-		if (lerandomnumero < 5) active_quest = 1;
-		else active_quest = 3;
+		active_quest = 2;
 
 		change_state(active_quest, active);
 		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
@@ -428,6 +425,7 @@ void QuestManager::SpawnCucos(int num)
 		{
 			App->map->WorldToMap(pos.x = GetRandomValue(0, App->map->data.width), pos.y = GetRandomValue(0, App->map->data.height));
 		}
-		cucos.push_back(App->entity->CreateEntity(cuco, pos));
+	iPoint poss = App->map->MapToWorld(pos.x, pos.y);
+		cucos.push_back((Cuco*)App->entity->CreateEntity(cuco,poss));
 	}
 }

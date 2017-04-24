@@ -22,7 +22,7 @@
 #include "j1XMLLoader.h"
 #include "Waterfall.h"
 #include "MageSkeleton.h"
-#include"Cuco.h"
+#include "Cuco.h"
 
 j1Entity::j1Entity()
 {

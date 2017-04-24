@@ -35,8 +35,6 @@ Cuco::Cuco(iPoint pos)
 
 	event_thrower = new EventThrower();
 
-	target.x = GetRandomValue(0, App->map->data.width);
-	target.y = GetRandomValue(0, App->map->data.height);
 	int cuco_type_int = GetRandomValue(1, 6);
 	switch (cuco_type_int)
 	{
@@ -116,7 +114,6 @@ bool Cuco::Update(float dt)
 	else
 		SetIdleAnim();
 
-	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 	return ret;
 }
 
@@ -261,9 +258,18 @@ void Cuco::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fix
 	case pbody_type::p_t_npc:
 		break;
 	case pbody_type::p_t_player:
-		if (App->scene->main_scene->quest_manager->vquest[1]->state == active)
+		if (bodyB == this->game_object->pbody && dead == false)
 		{
-			App->scene->main_scene->quest_manager->add_progress(1, App->scene->main_scene->player_manager->GetPlayerFromBody(bodyA)->team);
+			if (App->scene->main_scene->quest_manager->vquest[1]->state == active)
+			{
+				Entity* entity = App->entity->FindEntityByBody(bodyA);
+				if (entity->is_player)
+				{
+					App->entity->DeleteEntity(this);
+					App->scene->main_scene->quest_manager->add_progress(2, entity->GetTeam());
+					dead = true;
+				}
+			}
 		}
 		//Delete
 		break;

@@ -102,6 +102,8 @@ private:
 
 	float				speed = 0;
 
+	bool				dead = false;
+
 	states				anim_state = states_null;
 
 	EventThrower*       event_thrower = nullptr;
