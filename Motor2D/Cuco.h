@@ -88,6 +88,7 @@ private:
 public:
 	p2Point<int> target;
 private:
+	string cuco_type;
 
 	bool				flip = false;
 

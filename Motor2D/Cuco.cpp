@@ -22,7 +22,6 @@ Cuco::Cuco(iPoint pos)
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30, 40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
-	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
@@ -38,7 +37,30 @@ Cuco::Cuco(iPoint pos)
 
 	target.x = GetRandomValue(0, App->map->data.width);
 	target.y = GetRandomValue(0, App->map->data.height);
-
+	int cuco_type_int = GetRandomValue(1, 6);
+	switch (cuco_type_int)
+	{
+	case 1: 
+		cuco_type = "basic_chicken";
+		break;
+	case 2:
+		cuco_type = "cap_chicken";
+		break;
+	case 3:
+		cuco_type = "black_chicken";
+		break;
+	case 4:
+		cuco_type = "pink_chicken";
+		break;
+	case 5:
+		cuco_type = "cook_chicken";
+		break;
+	case 6:
+		cuco_type = "stone_chicken";
+		break;
+	default:
+		break;
+	}
 	GetNewPath();
 	name = "Cuco";
 }
@@ -174,21 +196,21 @@ void Cuco::MoveDownLeft(float speed)
 
 void Cuco::RunUp()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
 	anim_state = run_up;
 }
 
 void Cuco::RunDown()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
 	anim_state = run_down;
 }
 
 void Cuco::RunLeft()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
 	anim_state = run_left;
 	draw_offset.x = 8;
@@ -196,7 +218,7 @@ void Cuco::RunLeft()
 
 void Cuco::RunRight()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
 	anim_state = run_right;
 	draw_offset.x = -8;
@@ -204,21 +226,21 @@ void Cuco::RunRight()
 
 void Cuco::IdleUp()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
 	anim_state = idle_up;
 }
 
 void Cuco::IdleDown()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
 	anim_state = idle_down;
 }
 
 void Cuco::IdleLeft()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
 	anim_state = idle_left;
 	draw_offset.x = 8;
@@ -226,7 +248,7 @@ void Cuco::IdleLeft()
 
 void Cuco::IdleRight()
 {
-	game_object->SetAnimation("basic_chicken");
+	game_object->SetAnimation(cuco_type.c_str());;
 	flip = false;
 	anim_state = idle_right;
 	draw_offset.x = -8;
@@ -283,7 +305,7 @@ void Cuco::CucoMove()
 	{
 		if (base_path_index < base_path.size() - 1)
 		{
-			if (map_pos == base_path.at(base_path_index))
+ 			if (map_pos == base_path.at(base_path_index))
 				base_path_index++;
 		}
 		else

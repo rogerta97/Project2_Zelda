@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include "PlayerManager.h"
 #include "j1XMLLoader.h"
+#include "j1Map.h"
+#include "j1Pathfinding.h"
 
 QuestManager::QuestManager()
 {
@@ -412,5 +414,20 @@ void QuestManager::update_progress()
 				}
 				j++;
 			}
+	}
+}
+
+void QuestManager::SpawnCucos(int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		p2Point<int> pos;
+
+		App->map->WorldToMap(pos.x = GetRandomValue(0, App->map->data.width), pos.y = GetRandomValue(0, App->map->data.height));
+		while (!App->pathfinding->IsWalkable(pos))
+		{
+			App->map->WorldToMap(pos.x = GetRandomValue(0, App->map->data.width), pos.y = GetRandomValue(0, App->map->data.height));
+		}
+		cucos.push_back(App->entity->CreateEntity(cuco, pos));
 	}
 }

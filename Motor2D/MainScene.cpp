@@ -194,6 +194,7 @@ bool MainScene::Start()
 	App->audio->PlayMusic("Audio/Music/overworld.ogg");
 
 	App->entity->CreateEntity(cuco, iPoint(800, 800));
+	App->entity->CreateEntity(cuco, iPoint(802, 802));
 
 	return ret;
 }

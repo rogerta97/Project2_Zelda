@@ -5,6 +5,7 @@
 #include <vector>
 #include "PugiXml\src\pugixml.hpp"
 #include "j1Gui.h"
+#include "Cuco.h"
 
 class Entity;
 
@@ -62,6 +63,7 @@ public:
 	void add_progress(int id, int team);
 	int get_progress(int id, int team);
 	void update_progress();
+	void SpawnCucos(int num);
 	std::vector<quest*> vquest;
 
 	vector<PlayerText*> player_text_list; 
@@ -70,6 +72,7 @@ public:
 
 	int lerandomnumero;
 
+	vector<Entity*> cucos;
 private:
 	int				active_quest = -1;
 	uint			timer_read = 0;
