@@ -179,7 +179,7 @@ void j1Spell::DeleteSpellIfTarget(Entity * target)
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 		{
-			if ((*it)->target == target)
+			if ((*it)->target != nullptr && (*it)->target == target)
 			{
 				DeleteSpell(*it);
 			}

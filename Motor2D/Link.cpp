@@ -20,7 +20,6 @@
 #define ABILITY3_MOVE_SPEED 50
 #define ABILITY3_MOVE_SAFE_OFFSET 15
 
-
 Link::Link(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30,40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
@@ -169,7 +168,10 @@ bool Link::Update(float dt)
 	// Ability3 movement ------------------------------
 	if (ab3_dir != link_ability3_dir::a3_direction_null)
 	{
-		game_object->SetAnimation("ultimate_attack");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("ultimate_attack");
+		else
+			game_object->SetAnimation("ultimate_attack_2");
 
 		can_move = false;
 
@@ -281,8 +283,10 @@ bool Link::Draw(float dt)
 	{
 		bool reset = false;
 		// Basic atack --------------------
-		if (game_object->animator->IsCurrentAnimation("basic_attack_up") || game_object->animator->IsCurrentAnimation("basic_attack_down") 
-			|| game_object->animator->IsCurrentAnimation("basic_attack_left") || game_object->animator->IsCurrentAnimation("basic_attack_right"))
+		if (game_object->animator->IsCurrentAnimation("basic_attack_up") || game_object->animator->IsCurrentAnimation("basic_attack_up_2") 
+			|| game_object->animator->IsCurrentAnimation("basic_attack_down") || game_object->animator->IsCurrentAnimation("basic_attack_down_2")
+			|| game_object->animator->IsCurrentAnimation("basic_attack_left") || game_object->animator->IsCurrentAnimation("basic_attack_left_2")
+			|| game_object->animator->IsCurrentAnimation("basic_attack_right") || game_object->animator->IsCurrentAnimation("basic_attack_right_2"))
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
@@ -291,7 +295,7 @@ bool Link::Draw(float dt)
 			}
 		}
 
-		if (game_object->animator->IsCurrentAnimation("spin_attack"))
+		if (game_object->animator->IsCurrentAnimation("spin_attack") || game_object->animator->IsCurrentAnimation("spin_attack_2"))
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
@@ -402,7 +406,7 @@ void Link::RunUp()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("run_up");
 		else
 			game_object->SetAnimation("run_up_2");
@@ -414,7 +418,7 @@ void Link::RunDown()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("run_down");
 		else
 			game_object->SetAnimation("run_down_2");
@@ -426,7 +430,7 @@ void Link::RunLeft()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("run_lateral");
 		else
 			game_object->SetAnimation("run_lateral_2");
@@ -438,7 +442,7 @@ void Link::RunRight()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("run_lateral");
 		else
 			game_object->SetAnimation("run_lateral_2");
@@ -450,7 +454,7 @@ void Link::IdleUp()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("idle_up");
 		else
 			game_object->SetAnimation("idle_up_2");
@@ -462,7 +466,7 @@ void Link::IdleDown()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("idle_down");
 		else
 			game_object->SetAnimation("idle_down_2");
@@ -474,7 +478,7 @@ void Link::IdleLeft()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("idle_lateral");
 		else
 			game_object->SetAnimation("idle_lateral_2");
@@ -486,7 +490,7 @@ void Link::IdleRight()
 {
 	if (can_move)
 	{
-		if (GetTeam() == 1)
+		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("idle_lateral");
 		else
 			game_object->SetAnimation("idle_lateral_2");
@@ -498,7 +502,11 @@ void Link::BasicAttackUp()
 {
 	if (!attacking)
 	{
-		game_object->SetAnimation("basic_attack_up");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_up");
+		else
+			game_object->SetAnimation("basic_attack_up_2");
+
 		draw_offset = { draw_offset.x, 58 };
 		attacking = true;
 		can_move = false;
@@ -511,7 +519,11 @@ void Link::BasicAttackDown()
 {
 	if (!attacking)
 	{
-		game_object->SetAnimation("basic_attack_down");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_down");
+		else
+			game_object->SetAnimation("basic_attack_down_2");
+
 		draw_offset = { 22, 24 };
 		attacking = true;
 		can_move = false;
@@ -524,7 +536,10 @@ void Link::BasicAttackLeft()
 {
 	if (!attacking)
 	{
-		game_object->SetAnimation("basic_attack_left");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_left");
+		else
+			game_object->SetAnimation("basic_attack_left_2");
 		draw_offset = { 48, draw_offset.y };
 		attacking = true;
 		can_move = false;
@@ -537,7 +552,11 @@ void Link::BasicAttackRight()
 {
 	if (!attacking)
 	{
-		game_object->SetAnimation("basic_attack_right");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_right");
+		else
+			game_object->SetAnimation("basic_attack_right_2");
+
 		attacking = true;
 		can_move = false;
 		flip = false;
@@ -574,7 +593,10 @@ void Link::Ability1Up()
 	if (!attacking)
 	{
 		draw_offset = { 44, 60 };
-		game_object->SetAnimation("spin_attack");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("spin_attack");
+		else
+			game_object->SetAnimation("spin_attack_2");
 		attacking = true;
 		can_move = false;
 		flip = false;

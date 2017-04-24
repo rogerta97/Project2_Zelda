@@ -208,6 +208,14 @@ void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fi
 
 void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 {
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			(*it)->ListenEv(type, origin, id);
+		}
+	}
+
 	Event* curr_event = nullptr;
 
 	if (type = static_cast<int>(event_type::e_t_death))

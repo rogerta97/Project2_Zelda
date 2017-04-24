@@ -8,5 +8,12 @@
         <rect x = "44" y = "1306" w = "20" h = "20"/>
         <rect x = "66" y = "1306" w = "20" h = "20"/>
       </anim>
+
+     <anim speed = "20" name = "spin_2" loop = "true">
+       <rect x = "86" y = "1306" w = "20" h = "20"/>
+       <rect x = "108" y = "1306" w = "20" h = "20"/>
+       <rect x = "130" y = "1306" w = "20" h = "20"/>
+       <rect x = "152" y = "1306" w = "20" h = "20"/>
+     </anim>
    </animations>
 </file>

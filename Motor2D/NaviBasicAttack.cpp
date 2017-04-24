@@ -140,7 +140,9 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 	// Delete if hits another enemy entity
 	if (fixtureB->type == fixture_type::f_t_hit_box && bodyB != game_object->pbody)
 	{
-		Entity* e = App->entity->FindEntityByBody(bodyB);
+		Entity* e = nullptr;
+
+		e = App->entity->FindEntityByBody(bodyB);
 
 		if (e != nullptr && e->GetTeam() != owner->GetTeam())
 		{

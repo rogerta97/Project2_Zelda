@@ -105,6 +105,7 @@ public:
 	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void ListenEv(int type, EventThrower* origin, int id);
 
 	//Set Camera to this player. 1<=id<=4
 	void SetCamera(int id);
@@ -122,6 +123,7 @@ private:
 	j1Timer  ability1_timer;
 	bool	 ability1 = false;
 	vector<Entity*> to_heal;
+	bool	 look_for_entities = true;
 
 	// Ability 2
 	bool	 ability2 = false;

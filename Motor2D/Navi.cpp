@@ -165,7 +165,7 @@ bool Navi::Update(float dt)
 		{
 			App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);
 
-			if (to_heal.empty())
+			if (look_for_entities)
 			{
 				vector<Entity*> players = App->entity->FindEntitiesByBodyType(pbody_type::p_t_player);
 				vector<Entity*> minions = App->entity->FindEntitiesByName("minion");
@@ -181,6 +181,7 @@ bool Navi::Update(float dt)
 					if(minions.at(i)->GetTeam() == GetTeam())
 						to_heal.push_back(minions.at(i));
 				}
+				look_for_entities = false;
 			}
 
 			for(vector<Entity*>::iterator it = to_heal.begin(); it != to_heal.end();)
@@ -197,6 +198,7 @@ bool Navi::Update(float dt)
 		else
 		{
 			ability1 = false;
+			look_for_entities = true;
 			to_heal.clear();
 		}
 	}
@@ -687,6 +689,34 @@ void Navi::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA,
 
 void Navi::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
+
+}
+
+void Navi::ListenEv(int type, EventThrower * origin, int id)
+{
+	Event* curr_event = nullptr;
+
+	if (type = static_cast<int>(event_type::e_t_death))
+	{
+		curr_event = origin->GetEvent(id);
+
+		if (curr_event == nullptr)
+			return;
+
+		if (!to_heal.empty())
+		{
+			for (vector<Entity*>::iterator it = to_heal.begin(); it != to_heal.end();)
+			{
+				if ((*it) == curr_event->event_data.entity)
+				{
+					it = to_heal.erase(it);
+					break;
+				}
+				else
+					++it;
+			}
+		}
+	}
 
 }
 

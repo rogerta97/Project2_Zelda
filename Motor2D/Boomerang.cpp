@@ -48,7 +48,10 @@ bool Boomerang::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("spin");
+	if(owner->GetTeam() == ANIMATIONS_TEAM)
+		game_object->SetAnimation("spin");
+	else
+		game_object->SetAnimation("spin_2");
 
 	return ret;
 }
