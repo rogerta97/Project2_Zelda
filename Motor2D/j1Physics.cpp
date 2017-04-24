@@ -4,7 +4,6 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1Physics.h"
-#include "p2Point.h"
 #include "math.h"
 #include "Functions.h"
 #include "j1Viewports.h"
@@ -24,7 +23,7 @@ j1Physics::j1Physics()
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -778,8 +777,6 @@ void j1Physics::DeleteJoint(b2Joint* joint)
 // 
 bool j1Physics::PostUpdate()
 {
-	debug = App->debug_mode;
-
 	if(!debug)
 		return true;
 

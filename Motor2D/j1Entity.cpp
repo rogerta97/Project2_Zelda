@@ -21,7 +21,8 @@
 #include "j1Viewports.h"
 #include "j1XMLLoader.h"
 #include "Waterfall.h"
-
+#include "MageSkeleton.h"
+#include "Navi.h"
 
 j1Entity::j1Entity()
 {
@@ -58,8 +59,13 @@ bool j1Entity::PreUpdate()
 
 	RemoveEntities();
 
-	for(list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		ret = (*it)->PreUpdate();
+	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+	{
+		if (!(*it)->to_delete)
+		{
+			ret = (*it)->PreUpdate();
+		}
+	}
 
 	return ret;
 }
@@ -70,8 +76,11 @@ bool j1Entity::Update(float dt)
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
-		ret = (*it)->Update(dt);
-		(*it)->Draw(dt);
+		if (!(*it)->to_delete)
+		{
+			ret = (*it)->Update(dt);
+			(*it)->Draw(dt);
+		}
 	}
 
 	SlowEntities();
@@ -86,7 +95,12 @@ bool j1Entity::PostUpdate()
 	bool ret = true;
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
-		ret = (*it)->PostUpdate();
+	{
+		if (!(*it)->to_delete)
+		{
+			ret = (*it)->PostUpdate();
+		}
+	}
 
 	return ret;
 }
@@ -194,6 +208,14 @@ void j1Entity::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fi
 
 void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 {
+	if (!entity_list.empty())
+	{
+		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
+		{
+			(*it)->ListenEv(type, origin, id);
+		}
+	}
+
 	Event* curr_event = nullptr;
 
 	if (type = static_cast<int>(event_type::e_t_death))
@@ -236,6 +258,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 	case link:
 		ret = new Link(pos);
 		break;
+	case navi:
+		ret = new Navi(pos);
+		break;
 	case minion:
 		ret = new Minion(pos);
 		break;
@@ -268,6 +293,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case waterfall:
 		ret = new Waterfall(pos);
+		break;
+	case mskeleton:
+		ret = new MageSkeleton(pos);
 		break;
 	default:
 		break;
@@ -491,7 +519,8 @@ void j1Entity::AddRupeesIfPlayer(Entity * entity, int amount)
 
 void j1Entity::DeleteEntity(Entity* entity)
 {
-	entity->to_delete = true;
+	if(entity != nullptr)
+		entity->to_delete = true;
 }
 
 void j1Entity::RemoveEntities()

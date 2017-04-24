@@ -5,7 +5,6 @@
 #include "PlayerManager.h"
 #include "j1Input.h"
 #include "j1App.h"
-#include "j1Scene.h"
 #include "j1Map.h"
 #include "j1XMLLoader.h"
 #include "Animation.h"
@@ -85,7 +84,6 @@ bool ShopManager::Start()
 		}
 		item_num++;
 	}
-
 
 	item_num = 0;
 	for (pugi::xml_node item = file_node.child("item"); item != NULL; item = item.next_sibling("item"))
@@ -389,7 +387,6 @@ bool ShopManager::Update()
 				}
 			}
 		}
-
 	}
 
 	return true;

@@ -6,6 +6,7 @@
 #include "j1App.h"
 #include "j1Entity.h"
 #include "Eyes.h"
+#include "p2Log.h"
 
 AestheticsManager::AestheticsManager()
 {
@@ -17,11 +18,11 @@ AestheticsManager::~AestheticsManager()
 
 void AestheticsManager::Start()
 {
-	//Trunk
+	// Trunk
 	trunk_entity = App->entity->CreateEntity(trunk, App->map->GetTrunkPosition()); 
 	// -----
 
-	//Trees
+	// Trees
 	App->map->GetTreesPosition(trees_nodes); 
 	
 	int z = 0; 
@@ -43,7 +44,8 @@ void AestheticsManager::Start()
 			trees_entity.at(z)->SetTreeColor("purple");
 			break;
 		}
-		z++; 	
+
+		++z; 	
 	}
 	// -----
 
@@ -79,20 +81,21 @@ void AestheticsManager::Start()
 			bushes_entity.at(z)->SetMiddle(purple_half_bush);
 			break;
 		}
-		z++;
+
+		++z;
 	}
 	// -----
 
-	//Eyes
+	// Eyes
 	std::vector<iPoint> eyes_positions = App->map->GetEyesPositions();
 
-	for (std::vector<iPoint>::iterator it = eyes_positions.begin(); it != eyes_positions.end(); ++it)
+	for (std::vector<iPoint>::iterator it = eyes_positions.begin(); it != eyes_positions.end(); it++)
 	{
 		eyes.push_back((Eyes*)App->entity->CreateEntity(entity_name::eyes, *it));
 	}
 	// -----
 
-	//Waterfall
+	// Waterfall
 	App->entity->CreateEntity(entity_name::waterfall, App->map->GetWaterfallPosition());
 	// -----
 
@@ -100,7 +103,9 @@ void AestheticsManager::Start()
 
 void AestheticsManager::CleanUp()
 {
-	//Clear Trees
+	LOG("Unloading AestheticsManager");
+
+	// Clear Trees
 	if (!trees_entity.empty())
 	{
 		for (std::vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
@@ -111,10 +116,10 @@ void AestheticsManager::CleanUp()
 	}
 	// -----
 
-	//Clear Eyes
+	// Clear Eyes
 	if (!eyes.empty())
 	{
-		for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end(); ++it)
+		for (std::vector<Eyes*>::iterator it = eyes.begin(); it != eyes.end();)
 		{
 			App->entity->DeleteEntity(*it);
 			it = eyes.erase(it);
@@ -122,7 +127,7 @@ void AestheticsManager::CleanUp()
 	}
 	// -----
 
-	//Clear bushes
+	// Clear bushes
 	if (!bushes_entity.empty())
 	{
 		for (std::vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
@@ -132,6 +137,7 @@ void AestheticsManager::CleanUp()
 		}
 	}
 
+	// Clear trees
 	if (!trees_nodes.empty())
 	{
 		for (vector<TreeNode*>::iterator it = trees_nodes.begin(); it != trees_nodes.end();)
@@ -141,6 +147,17 @@ void AestheticsManager::CleanUp()
 		}
 	}
 
+	if (!trees_entity.empty())
+	{
+		for (vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
+		{
+			App->entity->DeleteEntity(*it);
+			it = trees_entity.erase(it);
+		}
+	}
+	// -----
+
+	// Clear bushes
 	if (!bushes_nodes.empty())
 	{
 		for (vector<BushNode*>::iterator it = bushes_nodes.begin(); it != bushes_nodes.end();)
@@ -150,6 +167,17 @@ void AestheticsManager::CleanUp()
 		}
 	}
 
+	if (!bushes_entity.empty())
+	{
+		for (vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
+		{
+			App->entity->DeleteEntity(*it);
+			it = bushes_entity.erase(it);
+		}
+	}
+	// -----
+
+	// Delete trunk xD
 	App->entity->DeleteEntity(trunk_entity);
 }
 

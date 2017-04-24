@@ -8,23 +8,41 @@
 
 class Entity;
 
-struct Objectives {
-	int current_progress;
-	int requirement;
-	int times_completed;
+struct objectives 
+{
+	int current_progress = 0;
+	int requirement = 0;
+	int times_completed = 0;
 };
-enum Quest_State {
+
+enum quest_state 
+{
 	inactive,
 	active,
+	q_s_null,
 };
-struct Quest {
-	int id;
+
+struct quest 
+{
+	quest() {};
+	~quest() {};
+
+	int         id = 0;
 	std::string name;
 	std::string description;
-	Quest_State state;
-	std::vector<Objectives*> task;
+	quest_state state = q_s_null;
+	std::vector<objectives*> task;
 };
-class QuestManager {
+
+struct PlayerText
+{
+	vector<UI_Text*> player_text;
+
+	vector<UI_Text*> active_quest_text;
+};
+
+class QuestManager 
+{
 public:
 	QuestManager();
 	~QuestManager();
@@ -40,23 +58,19 @@ public:
 	pugi::xml_node quests_node;
 
 public:
-	void change_state(int id,Quest_State new_state);
-	void add_progress(int id,int team);
-	int get_progress(int id,int team);
+	void change_state(int id, quest_state new_state);
+	void add_progress(int id, int team);
+	int get_progress(int id, int team);
 	void update_progress();
-	std::vector<Quest*> vquest;
+	std::vector<quest*> vquest;
 
-	vector<UI_Text*> player_1_text;
-	vector<UI_Text*> player_2_text;
-	vector<UI_Text*> player_3_text;
-	vector<UI_Text*> player_4_text;
-
-	vector<UI_Text*> active_quest_text;
+	vector<PlayerText*> player_text_list; 
 
 	iPoint           placer = NULLPOINT;
 
-private:
+	int lerandomnumero;
 
+private:
 	int				active_quest = -1;
 	uint			timer_read = 0;
 

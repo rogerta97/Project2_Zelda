@@ -28,9 +28,9 @@ public:
 		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
 		uint win_w, win_h;
 		App->win->GetWindowSize(win_w, win_h);
-		int x = 20 + ((viewport - 1) % 2)*win_w / 2;
+		int x = 27 + ((viewport - 1) % 2)*win_w / 2;
 		int y = 30 + ((viewport - 1) / 2)*win_h / 2;
-		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
+		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_12);
 		UpdateRupees();
 		team = entity->GetTeam();
 		respawn = _respawn;
@@ -76,6 +76,15 @@ public:
 	j1Timer     base_travel_timer;
 
 	float		last_heal_time = 0.0f;
+
+	float		last_rupee_time = 60.0f;
+};
+
+struct PlayerManagerUI
+{
+	vector<UI_Image*>	abilities;
+	vector<UI_Text*>    abilities_cd;
+	UI_Text*			death_text;
 };
 
 class PlayerManager
@@ -128,7 +137,6 @@ public:
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
-
 private:
 	void PlayerInput(Player* player);
 	void MoveCamera(Player* player);
@@ -137,35 +145,23 @@ private:
 	void UpdateUI(Player* player);
 	void UpdateDeathUI(Player* player);
 	void PasiveHP(Player* player);
-
+	void PasiveRupee(Player* player);
 
 public:
 	vector<Player*>     players;
 
 private:
-	// UI
-	vector<UI_Image*>	abilities_1;
-	vector<UI_Text*>    abilities_cd_1;
-	UI_Text*			death_text_1 = nullptr;
+	// UI Elements
+	vector<PlayerManagerUI> p_manager_ui_elements; 
 
-	vector<UI_Image*>	abilities_2;
-	vector<UI_Text*>    abilities_cd_2;
-	UI_Text*			death_text_2 = nullptr;
+	EventThrower*           event_thrower = nullptr;
 
-	vector<UI_Image*>	abilities_3;
-	vector<UI_Text*>    abilities_cd_3;
-	UI_Text*			death_text_3 = nullptr;
+	SDL_Color               death_rect_color = NULLRECT;
+	SDL_Rect			    death_rect = NULLRECT;
 
-	vector<UI_Image*>   abilities_4;
-	vector<UI_Text*>    abilities_cd_4;
-	UI_Text*			death_text_4 = nullptr;
+	uint					last_heal_time = 0;
 
-	EventThrower*       event_thrower = nullptr;
-
-	SDL_Color           death_rect_color = NULLRECT;
-	SDL_Rect			death_rect = NULLRECT;
-
-	uint				last_heal_time = 0;
+	uint			     	death_sound_effect = 100;
 };
 
 

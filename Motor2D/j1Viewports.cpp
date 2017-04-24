@@ -271,30 +271,30 @@ void j1Viewports::CenterCamera(int id, int x, int y)
 
 void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, bool use_camera, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
 {
-	layer_blit lblit(texture, pos, section, viewport, scale, use_camera, _flip, angle, pivot_x, pivot_y);
+	layer_blit lblit(layer, texture, pos, section, viewport, scale, use_camera, _flip, angle, pivot_x, pivot_y);
 
 	switch (viewport)
 	{
 	case 1:
-		layer_list1.Push(lblit, layer);
+		layer_list1.push(lblit);
 		break;
 	case 2:
-		layer_list2.Push(lblit, layer);
+		layer_list2.push(lblit);
 		break;
 	case 3:
-		layer_list3.Push(lblit, layer);
+		layer_list3.push(lblit);
 		break;
 	case 4:
-		layer_list4.Push(lblit, layer);
+		layer_list4.push(lblit);
 		break;
 	default:
-		layer_list1.Push(lblit, layer);
+		layer_list1.push(lblit);
 		if(number_of_views > 1)
-			layer_list2.Push(lblit, layer);
+			layer_list2.push(lblit);
 		if (number_of_views > 3)
 		{
-			layer_list3.Push(lblit, layer);
-			layer_list4.Push(lblit, layer);
+			layer_list3.push(lblit);
+			layer_list4.push(lblit);
 		}
 		break;
 	}
@@ -302,30 +302,30 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 
 void j1Viewports::LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, int layer, int viewport, bool use_camera)
 {
-	layer_quad q(rect, r, g, b, a, filled, use_camera);
+	layer_quad q(layer, rect, r, g, b, a, filled, use_camera);
 
 	switch (viewport)
 	{
 	case 1:
-		quad_list1.Push(q, layer);
+		quad_list1.push(q);
 		break;
 	case 2:
-		quad_list2.Push(q, layer);
+		quad_list2.push(q);
 		break;
 	case 3:
-		quad_list3.Push(q, layer);
+		quad_list3.push(q);
 		break;
 	case 4:
-		quad_list4.Push(q, layer);
+		quad_list4.push(q);
 		break;
 	default:
-		quad_list1.Push(q, layer);
+		quad_list1.push(q);
 		if (number_of_views > 1)
-			quad_list2.Push(q, layer);
+			quad_list2.push(q);
 		if (number_of_views > 3)
 		{
-			quad_list3.Push(q, layer);
-			quad_list4.Push(q, layer);
+			quad_list3.push(q);
+			quad_list4.push(q);
 		}
 		break;
 	}
@@ -333,36 +333,36 @@ void j1Viewports::LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, 
 
 void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
-	layer_line l(x1, y1, x2, y2, r, g, b, a, use_camera);
+	layer_line l(0, x1, y1, x2, y2, r, g, b, a, use_camera);
 	line_list.push_back(l);
 }
 
 void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int layer, int viewport, bool filled, bool use_camera)
 {
-	layer_circle c(x1, y1, redius, r, g, b, a, filled, use_camera);
+	layer_circle c(layer, x1, y1, redius, r, g, b, a, filled, use_camera);
 
 	switch (viewport)
 	{
 	case 1:
-		circle_list1.Push(c, layer);
+		circle_list1.push(c);
 		break;
 	case 2:
-		circle_list2.Push(c, layer);
+		circle_list2.push(c);
 		break;
 	case 3:
-		circle_list3.Push(c, layer);
+		circle_list3.push(c);
 		break;
 	case 4:
-		circle_list4.Push(c, layer);
+		circle_list4.push(c);
 		break;
 	default:
-		circle_list1.Push(c, layer);
+		circle_list1.push(c);
 		if (number_of_views > 1)
-			circle_list2.Push(c, layer);
+			circle_list2.push(c);
 		if (number_of_views > 3)
 		{
-			circle_list3.Push(c, layer);
-			circle_list4.Push(c, layer);
+			circle_list3.push(c);
+			circle_list4.push(c);
 		}
 		break;
 	}
@@ -376,22 +376,28 @@ void j1Viewports::DoLayerPrint()
 	{
 		case 1:
 		{
-			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
+			while (!layer_list1.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
-				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list1.top();
 
-			}
-			
-			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
-			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+
+				layer_list1.pop();
+			}
+
+			while (!quad_list1.empty())
+			{
+				layer_quad curr = quad_list1.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				else
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list1.pop();
 			}
 		
 			for (int i = 0; i < line_list.size(); i++)
@@ -400,9 +406,12 @@ void j1Viewports::DoLayerPrint()
 				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list1.start; curr != nullptr; curr = curr->next)
+			while (!circle_list1.empty())
 			{
-				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_circle curr = circle_list1.top();
+				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				circle_list1.pop();
 			}
 
 		}
@@ -419,22 +428,28 @@ void j1Viewports::DoLayerPrint()
 			// View 1
 			App->render->SetViewPort(view2_1);
 
-			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
+			while (!layer_list1.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
-				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list1.top();
 
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+				else
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+
+				layer_list1.pop();
 			}
 
-			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
+			while (!quad_list1.empty())
 			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_quad curr = quad_list1.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list1.pop();
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -443,41 +458,47 @@ void j1Viewports::DoLayerPrint()
 				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list1.start; curr != nullptr; curr = curr->next)
+			while (!circle_list1.empty())
 			{
-				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_circle curr = circle_list1.top();
+				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				circle_list1.pop();
 			}
 
 			// View 2
 			App->render->SetViewPort(view2_2);
 
-			for (p2PQueue_item<layer_blit>* curr = layer_list2.start; curr != nullptr; curr = curr->next)
+			while (!layer_list2.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list2.top();
+
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
+				layer_list2.pop();
 			}
 
-			for (p2PQueue_item<layer_quad>* curr = quad_list2.start; curr != nullptr; curr = curr->next)
+			while (!quad_list2.empty())
 			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_quad curr = quad_list2.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list2.pop();
 			}
 
-			for (int i = 0; i < line_list.size(); i++)
+			while (!circle_list2.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
-			}
+				layer_circle curr = circle_list2.top();
+				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list2.start; curr != nullptr; curr = curr->next)
-			{
-				App->render->DrawCircle(curr->data.x1 + camera2.x, curr->data.y1 + camera2.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				circle_list2.pop();
 			}
 
 			App->render->ResetViewPort();
@@ -497,21 +518,28 @@ void j1Viewports::DoLayerPrint()
 			// View 1
 			App->render->SetViewPort(view4_1);
 
-			for (p2PQueue_item<layer_blit>* curr = layer_list1.start; curr != nullptr; curr = curr->next)
+			while (!layer_list1.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera1.x, curr->data.pos.y + camera1.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list1.top();
+
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+
+				layer_list1.pop();
 			}
 
-			for (p2PQueue_item<layer_quad>* curr = quad_list1.start; curr != nullptr; curr = curr->next)
+			while (!quad_list1.empty())
 			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera1.x, curr->data.rect.y + camera1.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_quad curr = quad_list1.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list1.pop();
 			}
 
 			for (int i = 0; i < line_list.size(); i++)
@@ -520,102 +548,117 @@ void j1Viewports::DoLayerPrint()
 				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 			}
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list1.start; curr != nullptr; curr = curr->next)
+			while (!circle_list1.empty())
 			{
-				App->render->DrawCircle(curr->data.x1 + camera1.x, curr->data.y1 + camera1.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_circle curr = circle_list1.top();
+				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				circle_list1.pop();
 			}
 
 			// View 2
 			App->render->SetViewPort(view4_2);
 
-			for (p2PQueue_item<layer_blit>* curr = layer_list2.start; curr != nullptr; curr = curr->next)
+			while (!layer_list2.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera2.x, curr->data.pos.y + camera2.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list2.top();
+
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+
+				layer_list2.pop();
 			}
 
-			for (p2PQueue_item<layer_quad>* curr = quad_list2.start; curr != nullptr; curr = curr->next)
+			while (!quad_list2.empty())
 			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera2.x, curr->data.rect.y + camera2.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_quad curr = quad_list2.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list2.pop();
 			}
 
-			for (int i = 0; i < line_list.size(); i++)
+			while (!circle_list2.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
-			}
+				layer_circle curr = circle_list2.top();
+				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list2.start; curr != nullptr; curr = curr->next)
-			{
-				App->render->DrawCircle(curr->data.x1 + camera2.x, curr->data.y1 + camera2.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				circle_list2.pop();
 			}
 
 			// View 3
 			App->render->SetViewPort(view4_3);
 
-			for (p2PQueue_item<layer_blit>* curr = layer_list3.start; curr != nullptr; curr = curr->next)
+			while (!layer_list3.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera3.x, curr->data.pos.y + camera3.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list3.top();
+
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera3.x, curr.pos.y + camera3.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+
+				layer_list3.pop();
 			}
 
-			for (p2PQueue_item<layer_quad>* curr = quad_list3.start; curr != nullptr; curr = curr->next)
+			while (!quad_list3.empty())
 			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera3.x, curr->data.rect.y + camera3.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_quad curr = quad_list3.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera3.x, curr.rect.y + camera3.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list3.pop();
 			}
 
-			for (int i = 0; i < line_list.size(); i++)
+			while (!circle_list3.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.x2 + camera3.x, curr.y2 + camera3.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
-			}
+				layer_circle curr = circle_list3.top();
+				App->render->DrawCircle(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list3.start; curr != nullptr; curr = curr->next)
-			{
-				App->render->DrawCircle(curr->data.x1 + camera3.x, curr->data.y1 + camera3.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				circle_list3.pop();
 			}
 
 			// View 4
 			App->render->SetViewPort(view4_4);
 
-			for (p2PQueue_item<layer_blit>* curr = layer_list4.start; curr != nullptr; curr = curr->next)
+			while (!layer_list4.empty())
 			{
-				float blit_scale = (curr->data.scale != -1.0f) ? curr->data.scale : scale;
-				if(curr->data.use_camera)
-					App->render->Blit(curr->data.texture, curr->data.pos.x + camera4.x, curr->data.pos.y + camera4.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+				layer_blit curr = layer_list4.top();
+
+				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+				if (curr.use_camera)
+					App->render->Blit(curr.texture, curr.pos.x + camera4.x, curr.pos.y + camera4.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
-					App->render->Blit(curr->data.texture, curr->data.pos.x, curr->data.pos.y, &curr->data.section, blit_scale, curr->data.use_camera, curr->data.flip, curr->data.angle, curr->data.pivot_x, curr->data.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+
+				layer_list4.pop();
 			}
 
-			for (p2PQueue_item<layer_quad>* curr = quad_list4.start; curr != nullptr; curr = curr->next)
+			while (!quad_list4.empty())
 			{
-				if (curr->data.use_camera)
-					App->render->DrawQuad({ curr->data.rect.x + camera4.x, curr->data.rect.y + camera4.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				layer_quad curr = quad_list4.top();
+				if (curr.use_camera)
+					App->render->DrawQuad({ curr.rect.x + camera4.x, curr.rect.y + camera4.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
-					App->render->DrawQuad({ curr->data.rect.x, curr->data.rect.y, curr->data.rect.w, curr->data.rect.h }, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+
+				quad_list4.pop();
 			}
 
-			for (int i = 0; i < line_list.size(); i++)
+			while (!circle_list4.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.x2 + camera4.x, curr.y2 + camera4.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
-			}
+				layer_circle curr = circle_list4.top();
+				App->render->DrawCircle(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
-			for (p2PQueue_item<layer_circle>* curr = circle_list4.start; curr != nullptr; curr = curr->next)
-			{
-				App->render->DrawCircle(curr->data.x1 + camera4.x, curr->data.y1 + camera4.y, curr->data.redius, curr->data.r, curr->data.g, curr->data.b, scale, curr->data.a, curr->data.filled, curr->data.use_camera);
+				circle_list4.pop();
 			}
 
 			App->render->ResetViewPort();
@@ -623,21 +666,7 @@ void j1Viewports::DoLayerPrint()
 		break;
 	}
 
-		layer_list1.Clear();
-		layer_list2.Clear();
-		layer_list3.Clear();
-		layer_list4.Clear();
-
-		quad_list1.Clear();
-		quad_list2.Clear();
-		quad_list3.Clear();
-		quad_list4.Clear();
-
-		line_list.clear();
-		circle_list1.Clear();
-		circle_list2.Clear();
-		circle_list3.Clear();
-		circle_list4.Clear();
+	line_list.clear();
 }
 
 void j1Viewports::OnCommand(std::list<std::string>& tokens)

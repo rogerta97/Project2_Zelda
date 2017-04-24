@@ -151,17 +151,22 @@ bool j1App::Start()
 
 	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 1, false);
 	debug_colored_rect = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 0), 200, 115, { 20, 20, 20, 255 }, true);
-	debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 5), App->font->default_15, 15);
+	debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 5), App->font->default_15, 15); debug_text->click_through = true;
 	
 	bug_report_button_color = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 115), 100, 25, { 20, 20, 20, 255 }, true);
 	bug_report_button = (UI_Button*)debug_window->CreateButton(iPoint(0, 115), 100, 25);
-	bug_report_text = (UI_Text*)debug_window->CreateText(iPoint(5, 115), App->font->default_15, 15);
+	bug_report_text = (UI_Text*)debug_window->CreateText(iPoint(5, 115), App->font->default_15, 15); bug_report_text->click_through = true;
 	bug_report_text->SetText("Report a bug");
-	bug_report_text->click_through = true;
 
-	//game_states = (UI_Window*)App->gui->UI_CreateWin(iPoint(App->win->GetWindowSize().x - 200, 0), 200, 115, 1, false);
-	//game_states_rect = (UI_ColoredRect*)game_states->CreateColoredRect(iPoint(App->win->GetWindowSize().x - 200, 0), 200, 115, { 20, 20, 20, 255 }, true);
-	//game_states_text = (UI_Text*)game_states->CreateText(iPoint(App->win->GetWindowSize().x - 195, 5), App->font->default_15, 15);
+	physics_debug_button_color = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 140), 100, 25, { 20, 20, 20, 255 }, true);
+	physics_debug_button = (UI_Button*)debug_window->CreateButton(iPoint(0, 140), 100, 25);
+	physics_debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 140), App->font->default_15, 15); physics_debug_text->click_through = true;
+	physics_debug_text->SetText("Physics");
+
+	ui_debug_button_color = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 165), 100, 25, { 20, 20, 20, 255 }, true);
+	ui_debug_button = (UI_Button*)debug_window->CreateButton(iPoint(0, 165), 100, 25);
+	ui_debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 165), App->font->default_15, 15); physics_debug_text->click_through = true;
+	ui_debug_text->SetText("UI");
 
 	PERF_PEEK(ptimer);
 
@@ -477,6 +482,34 @@ void j1App::FrameRateCalculations()
 	{
 		OpenWebPage("https://github.com/rogerta97/Project2_Zelda/issues");
 		bug_report_button_color->SetColor({ 30, 30, 30, 255 });
+	}
+
+	// Physics button
+	if (physics_debug_button->MouseEnter())
+		physics_debug_button_color->SetColor({ 30, 30, 30, 255 });
+	else if (physics_debug_button->MouseOut())
+		physics_debug_button_color->SetColor({ 20, 20, 20, 255 });
+
+	if (physics_debug_button->MouseClickEnterLeft())
+		physics_debug_button_color->SetColor({ 50, 50, 50, 255 });
+	if (physics_debug_button->MouseClickOutLeft())
+	{
+		App->physics->debug = !App->physics->debug;
+		physics_debug_button_color->SetColor({ 30, 30, 30, 255 });
+	}
+
+	// UI button
+	if (ui_debug_button->MouseEnter())
+		ui_debug_button_color->SetColor({ 30, 30, 30, 255 });
+	else if (ui_debug_button->MouseOut())
+		ui_debug_button_color->SetColor({ 20, 20, 20, 255 });
+
+	if (ui_debug_button->MouseClickEnterLeft())
+		ui_debug_button_color->SetColor({ 50, 50, 50, 255 });
+	if (ui_debug_button->MouseClickOutLeft())
+	{
+		App->gui->debug = !App->gui->debug;
+		ui_debug_button_color->SetColor({ 30, 30, 30, 255 });
 	}
 
 	if (debug_mode && !debug_window->enabled)

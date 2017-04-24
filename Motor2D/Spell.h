@@ -12,6 +12,7 @@ class b2Fixture;
 class PhysBody;
 class GameObject;
 class Entity;
+class Ability;
 
 struct personal_stats
 {
@@ -64,6 +65,8 @@ public:
 	{
 		return team;
 	}
+
+	virtual void Effects(Entity* entity, Ability * ability) {};
 
 private:
 

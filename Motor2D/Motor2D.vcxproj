@@ -79,6 +79,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseManager.cpp" />
+    <ClCompile Include="BezierEasing.cpp" />
     <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
@@ -107,11 +108,14 @@
     <ClCompile Include="j1XMLLoader.cpp" />
     <ClCompile Include="JungleCampManager.cpp" />
     <ClCompile Include="LogoScene.cpp" />
+    <ClCompile Include="MageSkeleton.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="MinionManager.cpp" />
+    <ClCompile Include="Navi.cpp" />
+    <ClCompile Include="NaviBasicAttack.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
@@ -125,6 +129,7 @@
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SnakePoison.cpp" />
     <ClCompile Include="Snakes.cpp" />
+    <ClCompile Include="TacoAttack.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -141,6 +146,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseManager.h" />
+    <ClInclude Include="BezierEasing.h" />
     <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Bushes.h" />
@@ -167,11 +173,14 @@
     <ClInclude Include="j1XMLLoader.h" />
     <ClInclude Include="JungleCampManager.h" />
     <ClInclude Include="LogoScene.h" />
+    <ClInclude Include="MageSkeleton.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="MinionManager.h" />
+    <ClInclude Include="Navi.h" />
+    <ClInclude Include="NaviBasicAttack.h" />
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="j1Audio.h" />
     <ClInclude Include="j1Input.h" />
@@ -198,6 +207,7 @@
     <ClInclude Include="SnakePoison.h" />
     <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
+    <ClInclude Include="TacoAttack.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
@@ -220,9 +230,12 @@
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\mageskeleton.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\menu_scene.xml" />
     <Xml Include="..\Game\minion.xml" />
+    <Xml Include="..\Game\navi.xml" />
+    <Xml Include="..\Game\navibasicattack.xml" />
     <Xml Include="..\Game\Quests.xml" />
     <Xml Include="..\Game\Shop_config.xml" />
     <Xml Include="..\Game\skeleton.xml" />

@@ -160,7 +160,7 @@ private:
 	uint32				prev_last_sec_frame_count = 0;
 	float				dt = 0.0f;
 
-	// Debug ui
+	// Debug ui -----------
 	UI_Window*			debug_window = nullptr;
 	UI_ColoredRect*		debug_colored_rect = nullptr;
 	UI_Text*			debug_text = nullptr;
@@ -168,10 +168,26 @@ private:
 	UI_ColoredRect*		bug_report_button_color = nullptr;
 	UI_Text*			bug_report_text = nullptr;
 
-	// Game states
-	UI_Window*			game_states = nullptr;
-	UI_ColoredRect*		game_states_rect = nullptr;
-	UI_Text*			game_states_text = nullptr;
+	// Debug the physics
+	UI_Button*			physics_debug_button = nullptr;
+	UI_ColoredRect*		physics_debug_button_color = nullptr;
+	UI_Text*			physics_debug_text = nullptr;
+
+	// Debug ui
+	UI_Button*			ui_debug_button = nullptr;
+	UI_ColoredRect*		ui_debug_button_color = nullptr;
+	UI_Text*			ui_debug_text = nullptr;
+
+	// Debug gamestats
+	UI_Button*			stats_debug_button = nullptr;
+	UI_ColoredRect*		stats_debug_button_color = nullptr;
+	UI_Text*			stats_debug_text = nullptr;
+
+	// Debug engine
+	UI_Button*			engine_debug_button = nullptr;
+	UI_ColoredRect*		engine_debug_button_color = nullptr;
+	UI_Text*			engine_debug_text = nullptr;
+	// ---------------------
 };
 
 extern j1App* App;

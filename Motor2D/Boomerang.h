@@ -54,12 +54,18 @@ public:
 
 	void Set(direction dir);
 
+	void Effects(Entity* entity, Ability * ability);
+
 private:
 	direction dir = direction::null;
 	float			initial_speed = 0;
 	iPoint			starting_pos = NULLPOINT;
 
 	j1Timer			timer;
+
+	float			damage_multiplicator_first = 0.0f;
+	float			damage_multiplicator_second = 0.0f;
+	float			damage_multiplicator_return = 0.0f;
 
 };
 

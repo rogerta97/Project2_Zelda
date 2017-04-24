@@ -4,6 +4,8 @@
 #include "TowerAttack.h"
 #include "SnakePoison.h"
 #include "BoneAttack.h"
+#include "TacoAttack.h"
+#include "NaviBasicAttack.h"
 #include "EventThrower.h"
 #include "GameObject.h"
 
@@ -41,7 +43,12 @@ bool j1Spell::PreUpdate()
 	if (!spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-			ret = (*it)->PreUpdate();
+		{
+			if (!(*it)->to_delete)
+			{
+				ret = (*it)->PreUpdate();
+			}
+		}
 	}
 
 	return ret;
@@ -55,8 +62,11 @@ bool j1Spell::Update(float dt)
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 		{
-			ret = (*it)->Update(dt);
-			(*it)->Draw(dt);
+			if (!(*it)->to_delete)
+			{
+				ret = (*it)->Update(dt);
+				(*it)->Draw(dt);
+			}
 		}
 	}
 
@@ -70,7 +80,12 @@ bool j1Spell::PostUpdate()
 	if (!spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-			ret = (*it)->PostUpdate();
+		{
+			if (!(*it)->to_delete)
+			{
+				ret = (*it)->PostUpdate();
+			}
+		}
 	}
 
 	RemoveSpells();
@@ -138,6 +153,12 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 	case bone_attack:
 		ret = new BoneAttack(pos);
 		break;
+	case taco_attack:
+		ret = new TacoAttack(pos);
+		break;
+	case navi_basic_attack:
+		ret = new NaviBasicAttack(pos);
+		break;
 	}
 	
 	ret->owner = owner;
@@ -148,16 +169,17 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 
 void j1Spell::DeleteSpell(Spell * spell)
 {
-	spell->to_delete = true;
+	if(spell != nullptr)
+		spell->to_delete = true;
 }
 
 void j1Spell::DeleteSpellIfTarget(Entity * target)
 {
-	if (!spell_list.empty())
+	if (target != nullptr && !spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 		{
-			if ((*it)->target == target)
+			if ((*it)->target != nullptr && (*it)->target == target)
 			{
 				DeleteSpell(*it);
 			}
