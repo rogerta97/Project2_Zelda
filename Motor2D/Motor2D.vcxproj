@@ -176,6 +176,7 @@
     <ClInclude Include="MageSkeleton.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
+    <ClInclude Include="Mapping.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="MinionManager.h" />
