@@ -383,4 +383,5 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 	}
 	App->entity->DeleteEntity(camp);
 	App->audio->PlayFx(death_sound_effect, 0);
+	}
 }
