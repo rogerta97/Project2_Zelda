@@ -46,7 +46,7 @@ bool MinimapManager::Start()
 	// Add points here ----------------------------
 	// --------------------------------------------
 
-	AddPoint("zelda", { 0, 0, 31, 28 }, { 0,0 }); GetPoint("zelda")->show = false;
+	AddPoint("zelda", { 0, 0, 31, 28 }, { 0,0 })->show = false;
 	AddPoint("player1", { 0, 0, 31, 28 }, { 0,0 });
 	AddPoint("player2", { 0, 0, 31, 28 }, { 0,0 });
 	AddPoint("player3", { 0, 0, 31, 28 }, { 0,0 });

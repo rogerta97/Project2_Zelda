@@ -521,6 +521,11 @@ void j1Entity::AddRupeesIfPlayer(Entity * entity, int amount)
 	}
 }
 
+Animator * j1Entity::GetEntityEffectsAnimator()
+{
+	return entity_effects_animator;
+}
+
 void j1Entity::DeleteEntity(Entity* entity)
 {
 	if(entity != nullptr)
@@ -582,10 +587,14 @@ void j1Entity::StunEntities()
 				if ((*it).time <= (*it).timer.ReadSec())
 				{
 					(*it).entity->stuned = false;
+					(*it).CleanUp();
 					it = stuned_entities.erase(it);
 				}
 				else
+				{
+					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-20, (*it).entity->GetPos().y }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
 					++it;
+				}
 			}
 			else
 				it = (stuned_entities.erase(it));

@@ -163,19 +163,24 @@ bool MainScene::Start()
 	tower_manager = new TowerManager();
   
 	// Zelda manager
+	LOG("Creating zelda manager");
 	zelda_manager = new ZeldaManager();
   
 	// Aesth manager
+	LOG("Creating aesthetics manager");
 	aest_manager = new AestheticsManager(); 
 	aest_manager->Start(); 
 
 	// Base manager
+	LOG("Creating base manager");
 	base_manager = new BaseManager();
 
 	//Quest manager
+	LOG("Creating quest manager");
 	quest_manager = new QuestManager();
 
 	// Minimap
+	LOG("Creating minimap manager");
 	minimap_manager = new MinimapManager();
 	minimap_manager->Start();
 

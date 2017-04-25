@@ -111,7 +111,7 @@ void Entity::Slow(float speed_multiplicator, float time)
 void Entity::Stun(float time)
 {
 	stuned = true;
-	stun s(time, this);
+	stun s(time, this, App->entity->GetEntityEffectsAnimator()->GetAnimation("stun"));
 	App->entity->stuned_entities.push_back(s);
 }
 
