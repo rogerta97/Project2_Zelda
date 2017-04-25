@@ -155,9 +155,9 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 	{
-		active_quest = GetRandomValue(1, 3);
+		active_quest = GetRandomValue(1,3);
 
 		if (active_quest == 2)
 		{
@@ -366,6 +366,14 @@ void QuestManager::update_progress()
 			{
 				if (vquest[i]->task[j]->current_progress == vquest[i]->task[j]->requirement)
 				{
+					if (vquest[i]->id == 2)
+					{
+						for (int i = 0; i < cucos.size(); i++)
+						{
+							App->entity->DeleteEntity(cucos[i]);
+						}
+						cucos.clear();
+					}
 					vquest[i]->state = inactive;
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
