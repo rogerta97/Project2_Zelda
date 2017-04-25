@@ -199,6 +199,9 @@
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
+    <ClCompile Include="Mapping.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -428,6 +431,9 @@
     </ClInclude>
     <ClInclude Include="NaviBasicAttack.h">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Mapping.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

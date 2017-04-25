@@ -9,6 +9,8 @@
 #include "j1XMLLoader.h"
 #include "Animation.h"
 #include "j1Window.h"
+#include "Mapping.h"
+#include "j1Scene.h"
 
 #define FADE_SPEED 150
 
@@ -240,37 +242,42 @@ bool MenuScene::Update(float dt)
 
 bool MenuScene::PostUpdate()
 {
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	//Testing remapping
+	int accept_key_id = -1;
+	if (App->scene->players[0].mapping->GetKey(m_k_confirm, &accept_key_id))
 	{
-
-		switch (current_button)
+		if (App->input->GetControllerButton(0, accept_key_id) == KEY_DOWN)
 		{
-		case START:
-			App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
-			return true;
-			break;
 
-		case OPTIONS:
-			//is_options = true; 
-			//GoOptions();
-			break;
+			switch (current_button)
+			{
+			case START:
+				App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
+				return true;
+				break;
 
-		case CREDITS:
+			case OPTIONS:
+				//is_options = true; 
+				//GoOptions();
+				break;
 
-			break;
+			case CREDITS:
 
-		case QUIT:
-			App->console->AddText("quit", Input);
-			break;
+				break;
 
-		case FX:
-			options_checkbox->SetBox(!options_checkbox->GetBox("fx"), "fx");
-			break; 
+			case QUIT:
+				App->console->AddText("quit", Input);
+				break;
 
-		case MUSIC:
-			options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
-			break; 
+			case FX:
+				options_checkbox->SetBox(!options_checkbox->GetBox("fx"), "fx");
+				break;
 
+			case MUSIC:
+				options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
+				break;
+
+			}
 		}
 	}
 
