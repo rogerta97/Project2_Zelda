@@ -18,7 +18,7 @@ class PhysBody;
 class GameObject;
 class Spell;
 
-#define ANIMATIONS_TEAM 2
+#define ANIMATIONS_TEAM 1
 
 enum states
 {
