@@ -16,7 +16,38 @@ enum button_action
 	QUIT,
 	FX,
 	MUSIC
+};
 
+struct remap_ui
+{
+	UI_Image* confirm_key = nullptr;
+	UI_Image* back_key = nullptr;
+	UI_Image* minimap_key = nullptr;
+	UI_Image* shop_key = nullptr;
+	UI_Image* a1_key = nullptr;
+	UI_Image* a2_key = nullptr;
+	UI_Image* a3_key = nullptr;
+	UI_Image* a4_key = nullptr;
+
+	UI_Text* confirm_text = nullptr;
+	UI_Text* back_text = nullptr;
+	UI_Text* minimap_text = nullptr;
+	UI_Text* shop_text = nullptr;
+	UI_Text* a1_text = nullptr;
+	UI_Text* a2_text = nullptr;
+	UI_Text* a3_text = nullptr;
+	UI_Text* a4_text = nullptr;
+
+	UI_Image* a = nullptr;
+	UI_Image* b = nullptr;
+	UI_Image* x = nullptr;
+	UI_Image* y = nullptr;
+	UI_Image* rb = nullptr;
+	UI_Image* lb = nullptr;
+	UI_Image* rt = nullptr;
+	UI_Image* lt = nullptr;
+
+	UI_Image* cursor = nullptr;
 };
 
 class MenuScene : public Scene
@@ -89,6 +120,9 @@ private:
 	iPoint			   background_pos = NULLPOINT;
 	SDL_Rect		   background_image_rect = NULLRECT;
 	float              fade_value = 255.0f;
+
+	//Remapping ui
+	remap_ui		   remapping_ui[4];
 
 };
 
