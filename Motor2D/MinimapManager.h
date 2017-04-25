@@ -28,7 +28,7 @@ struct viewport
 	~viewport() {};
 
 	int  view = 0;
-	bool enabled = true;
+	bool enabled = false;
 };
 
 class MinimapManager

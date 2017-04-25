@@ -5,6 +5,7 @@
 #include "j1Map.h"
 #include "GameObject.h"
 #include "j1Audio.h"
+#include "MinimapManager.h"
 
 #define DEATH_CAMERA_SPEED 500
 #define BASE_TRAVEL_TIME 4
@@ -397,11 +398,23 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	if (curr_player->entity == nullptr)
 		return;
 
+	// Base travel
 	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
 	{
 		curr_player->BaseTravel();
 		curr_player->move = stop;
 	}
+
+	// Minimap
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	{
+		App->scene->main_scene->minimap_manager->SetActive(true, curr_player->viewport);
+	}
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_UP)
+	{
+		App->scene->main_scene->minimap_manager->SetActive(false, curr_player->viewport);
+	}
+
 
 	// Diagonal moves
 	if (curr_player->entity->stuned || curr_player->disable_controller)

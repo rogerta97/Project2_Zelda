@@ -24,13 +24,17 @@ bool MinimapManager::Start()
 	// Minimap setup ------------------------------
 	// --------------------------------------------
 
-	SDL_Rect minimap_rect = {0, 589, 472, 312};
+	SDL_Rect view = App->view->GetViewportRect(1);
+
+	SDL_Rect minimap_rect = {0, 621, 468, 235};
 	SDL_Texture* minimap_texture = App->tex->LoadTexture("gui/UI_sheet_final.png");
-	SDL_Rect real_map_rect = {0, 0, 5730, 2500};
+	iPoint minimap_pos = {(int)(view.w*0.5) - (int)(minimap_rect.w * 0.5), (int)(view.h*0.5) - (int)(minimap_rect.h * 0.5) };
+
+	SDL_Rect real_map_rect = {610, 0, 4490, 2600}; // X and Y are for the map offset
 	SDL_Texture* minimap_points_texture = minimap_texture;
 
 	if (minimap_texture != nullptr && minimap_points_texture != nullptr)
-		SetMinimapInfo(iPoint(0, 0), minimap_texture, minimap_rect, real_map_rect, minimap_points_texture);
+		SetMinimapInfo(minimap_pos, minimap_texture, minimap_rect, real_map_rect, minimap_points_texture);
 
 	// --------------------------------------------
 
@@ -84,9 +88,8 @@ bool MinimapManager::Update(float dt)
 			if (!curr_point->show)
 				continue;
 
-			iPoint map_pos = { minimap_position.x + (int)(curr_point->real_pos.x*multiplication_factor_x), minimap_position.y + (int)(curr_point->real_pos.y*multiplication_factor_y) };
-			App->view->LayerBlit(MINIMAP_LAYER + 1, minimap_points_texture, map_pos, curr_point->image, curr_view.view, -1.0f, false);
-
+			iPoint map_pos = { minimap_position.x + (int)((curr_point->real_pos.x - real_map_rect.x)*multiplication_factor_x), minimap_position.y + (int)((curr_point->real_pos.y -real_map_rect.y)*multiplication_factor_y) };
+			App->view->LayerBlit(MINIMAP_LAYER + curr_point->real_pos.y, minimap_points_texture, map_pos, curr_point->image, curr_view.view, -1.0f, false);
 		}
 
 	}
@@ -138,7 +141,7 @@ void MinimapManager::SetMinimapInfo(iPoint _minimap_position, SDL_Texture * _min
 		for (int i = 1; i <= 4; i++)
 		{
 			viewport view;
-			view.enabled = true;
+			view.enabled = false;
 			view.view = i;
 			viewports.push_back(view);
 		}
@@ -197,9 +200,12 @@ void MinimapManager::DeletePoint(char * name)
 
 void MinimapManager::SetActive(bool set, int viewport)
 {
-	for (int i = 1; i <= viewports.size(); i++)
+	for (int i = 0; i < viewports.size(); i++)
 	{
-		if (i == viewport)
+		if (viewports.at(i).view == viewport)
+		{
 			viewports.at(i).enabled = set;
+			break;
+		}
 	}
 }
