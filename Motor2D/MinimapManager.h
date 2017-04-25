@@ -5,14 +5,18 @@
 
 #define MINIMAP_LAYER 99999
 
+class Player;
+
 struct minimap_point
 {
 	minimap_point() {};
-	minimap_point(char* _name, SDL_Rect _image, iPoint _real_pos, int _viewport = 0) 
+	minimap_point(char* _name, SDL_Rect _image, int _viewport = 0) 
 	{
-		name = _name; image = _image; real_pos = _real_pos; viewport = _viewport;
+		name = _name; image = _image; viewport = _viewport;
 	};
 	~minimap_point() {};
+
+	void SetImage(SDL_Rect _image) { image = _image; };
 
 	bool     show = true;
 	SDL_Rect image = NULLRECT;
@@ -47,7 +51,7 @@ public:
 	void SetMinimapInfo(iPoint minimap_position, SDL_Texture* minimap_texture, SDL_Rect minimap_rect, SDL_Rect real_map_rect, SDL_Texture* minimap_points_texture, int viewport = 0);
 
 	// Add a minimap point
-	minimap_point* AddPoint(char* name, SDL_Rect image, iPoint real_pos, int viewport = 0);
+	minimap_point* AddPoint(char* name, SDL_Rect image = NULLRECT, int viewport = 0);
 
 	// Get a minimap point
 	minimap_point* GetPoint(char* name);
@@ -59,6 +63,7 @@ public:
 	void SetActive(bool set, int viewport);
 
 private:
+	SDL_Rect GetPlayerRect(Player* pl);
 
 public:
 
@@ -78,5 +83,11 @@ private:
 
 	float        multiplication_factor_x = 0.0f;
 	float        multiplication_factor_y = 0.0f;
+
+	SDL_Rect     zelda_rect = NULLRECT;
+	SDL_Rect	 link_1_rect = NULLRECT;
+	SDL_Rect     link_2_rect = NULLRECT;
+	SDL_Rect     navi_1_rect = NULLRECT;
+	SDL_Rect     navi_2_rect = NULLRECT;
 };
 #endif // !_BASEMANAGER_H_

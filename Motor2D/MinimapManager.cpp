@@ -21,6 +21,12 @@ bool MinimapManager::Start()
 {
 	bool ret = true;
 
+	zelda_rect = { 0, 0, 31, 28 };
+	link_1_rect = { 348, 535, 16, 14 };
+	link_2_rect = { 364, 535, 16, 14 };
+	navi_1_rect = { 380, 535, 16, 15 };
+	navi_2_rect = { 396, 535, 16, 15 };
+
 	// --------------------------------------------
 	// Minimap setup ------------------------------
 	// --------------------------------------------
@@ -31,7 +37,7 @@ bool MinimapManager::Start()
 	SDL_Texture* minimap_texture = App->tex->LoadTexture("gui/UI_sheet_final.png");
 	iPoint minimap_pos = {(int)(view.w*0.5) - (int)(minimap_rect.w * 0.5), (int)(view.h*0.5) - (int)(minimap_rect.h * 0.5) };
 
-	SDL_Rect real_map_rect = {610, 0, 4490, 2600}; // X and Y are for the map offset
+	SDL_Rect real_map_rect = {550, -80, 4490, 2500}; // X and Y are for the map offset
 	SDL_Texture* minimap_points_texture = minimap_texture;
 
 	if (minimap_texture != nullptr && minimap_points_texture != nullptr)
@@ -46,11 +52,27 @@ bool MinimapManager::Start()
 	// Add points here ----------------------------
 	// --------------------------------------------
 
-	AddPoint("zelda", { 0, 0, 31, 28 }, { 0,0 })->show = false;
-	AddPoint("player1", { 0, 0, 31, 28 }, { 0,0 });
-	AddPoint("player2", { 0, 0, 31, 28 }, { 0,0 });
-	AddPoint("player3", { 0, 0, 31, 28 }, { 0,0 });
-	AddPoint("player4", { 0, 0, 31, 28 }, { 0,0 });
+	// Zelda
+	AddPoint("zelda", zelda_rect)->show = false;
+
+	// Players
+	if (App->scene->main_scene->player_manager != nullptr && App->scene->main_scene->player_manager->players.size() >= 4)
+	{
+		Player* curr_player = nullptr;
+
+		curr_player = App->scene->main_scene->player_manager->players.at(0);
+		AddPoint("player1", GetPlayerRect(curr_player));
+
+		curr_player = App->scene->main_scene->player_manager->players.at(1);
+		AddPoint("player2", GetPlayerRect(curr_player));
+
+		curr_player = App->scene->main_scene->player_manager->players.at(2);
+		AddPoint("player3", GetPlayerRect(curr_player));
+
+		curr_player = App->scene->main_scene->player_manager->players.at(3);
+		AddPoint("player4", GetPlayerRect(curr_player));
+
+	}
 
 	// --------------------------------------------
 	
@@ -238,11 +260,11 @@ minimap_point* MinimapManager::GetPoint(char * name)
 	return m_p;
 }
 
-minimap_point * MinimapManager::AddPoint(char * name, SDL_Rect image, iPoint real_pos, int viewport)
+minimap_point * MinimapManager::AddPoint(char * name, SDL_Rect image, int viewport)
 {
 	minimap_point * ret = nullptr;
 
-	minimap_point* m_p = new minimap_point(name, image, real_pos, viewport);
+	minimap_point* m_p = new minimap_point(name, image, viewport);
 	minimap_points.push_back(m_p);
 
 	if (m_p != nullptr)
@@ -279,4 +301,36 @@ void MinimapManager::SetActive(bool set, int viewport)
 			break;
 		}
 	}
+}
+
+SDL_Rect MinimapManager::GetPlayerRect(Player * curr_player)
+{
+	SDL_Rect ret = NULLRECT;
+
+	switch (curr_player->team)
+	{
+	case 1:
+		switch (curr_player->type)
+		{
+		case entity_name::link:
+			ret = link_1_rect;
+			break;
+		case entity_name::navi:
+			ret = navi_1_rect;
+			break;
+		}
+		break;
+	case 2:
+		switch (curr_player->type)
+		{
+		case entity_name::link:
+			ret = link_2_rect;
+			break;
+		case entity_name::navi:
+			ret = navi_2_rect;
+			break;
+		}
+	}
+
+	return ret;
 }
