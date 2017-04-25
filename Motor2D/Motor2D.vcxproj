@@ -114,6 +114,7 @@
     <ClCompile Include="j1Physics.cpp" />
     <ClCompile Include="Mapping.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="MinimapManager.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="MinionManager.cpp" />
     <ClCompile Include="Navi.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="j1Physics.h" />
     <ClInclude Include="Mapping.h" />
     <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="MinimapManager.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="MinionManager.h" />
     <ClInclude Include="Navi.h" />

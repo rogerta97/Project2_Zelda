@@ -27,6 +27,7 @@
 #include "EventThrower.h"
 #include "j1Audio.h"
 #include "j1XMLLoader.h"
+#include "MinimapManager.h"
 
 MainScene::MainScene()
 {
@@ -163,6 +164,10 @@ bool MainScene::Start()
 	//Quest manager
 	quest_manager = new QuestManager();
 
+	// Minimap
+	minimap_manager = new MinimapManager();
+	minimap_manager->Start();
+
 
 	//Load Victory/Defeat Animations
 	pugi::xml_document gs;
@@ -226,6 +231,8 @@ bool MainScene::Update(float dt)
 		jungleCamp_manager->Update(dt);
 	if (quest_manager != nullptr)
 		quest_manager->Update();
+	if (minimap_manager != nullptr)
+		minimap_manager->Update(dt);
 	// ------
 
 	// Update progress bar
@@ -280,6 +287,7 @@ bool MainScene::CleanUp()
 	player_manager->CleanUp();	   RELEASE(player_manager);
 	jungleCamp_manager->CleanUp(); RELEASE(jungleCamp_manager);
 	quest_manager->CleanUp();	   RELEASE(quest_manager);
+	minimap_manager->CleanUp();    RELEASE(minimap_manager);
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 	App->spell->ClearSpells();

@@ -54,7 +54,7 @@ public:
 
 	void Set(direction dir);
 
-	void Effects(Entity* entity, Ability * ability);
+	void Effects(Entity * spell_owner, Entity* reciever, Ability * ability);
 
 private:
 	direction dir = direction::null;

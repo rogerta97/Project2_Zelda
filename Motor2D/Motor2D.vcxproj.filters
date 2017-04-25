@@ -199,6 +199,9 @@
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
+    <ClCompile Include="MinimapManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+     </ClCompile>
     <ClCompile Include="Mapping.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
@@ -431,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="NaviBasicAttack.h">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="MinimapManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Mapping.h">
       <Filter>Engine\2. Components ======</Filter>

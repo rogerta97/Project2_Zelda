@@ -66,7 +66,7 @@ public:
 		return team;
 	}
 
-	virtual void Effects(Entity* entity, Ability * ability) {};
+	virtual void Effects(Entity * spell_owner, Entity* reciever, Ability * ability) {};
 
 private:
 

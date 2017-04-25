@@ -128,7 +128,7 @@ bool Navi::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				spell->Effects(entity, ability);
+				spell->Effects(entity, this, ability);
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
