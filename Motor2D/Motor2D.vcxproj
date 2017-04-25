@@ -111,6 +111,7 @@
     <ClCompile Include="MageSkeleton.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
+    <ClCompile Include="Mapping.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="MinionManager.cpp" />

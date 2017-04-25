@@ -14,20 +14,27 @@ enum map_keys
 	m_k_null,
 };
 
+struct key_mapping
+{
+	int key_id = -1;
+	bool is_button = true;
+};
+
 class Mapping
 {
 public:
 	Mapping();
 	~Mapping();
 
-	MapKey(map_keys key, )
+	void MapKey(map_keys function, int key_id);
+	void GetKey(map_keys function);
 
 private:
 
 public:
 
 private:
-	map_keys* mapping = nullptr;
+	key_mapping* mapping = nullptr;
 
 
 };

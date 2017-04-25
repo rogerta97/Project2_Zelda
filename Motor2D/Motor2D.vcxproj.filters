@@ -196,6 +196,9 @@
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
+    <ClCompile Include="Mapping.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
