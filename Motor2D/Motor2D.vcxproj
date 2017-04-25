@@ -90,6 +90,7 @@
     <ClCompile Include="Eyes.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Guards.cpp" />
     <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Eyes.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Guards.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />

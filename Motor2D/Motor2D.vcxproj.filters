@@ -192,12 +192,15 @@
     </ClCompile>
     <ClCompile Include="Cuco.cpp">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Navi.cpp">
       <Filter>Engine\4. Entities ==========\Navi</Filter>
     </ClCompile>
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Guards.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,12 +425,15 @@
     </ClInclude>
     <ClInclude Include="Cuco.h">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Navi.h">
       <Filter>Engine\4. Entities ==========\Navi</Filter>
     </ClInclude>
     <ClInclude Include="NaviBasicAttack.h">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Guards.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -523,7 +529,7 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Cuco">
       <UniqueIdentifier>{d9e4eae2-e1c2-476f-9988-67a5d49dbee9}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Engine\4. Entities ==========\Navi">
       <UniqueIdentifier>{dc840a14-aa38-42bd-9623-77bb68548b8b}</UniqueIdentifier>
     </Filter>
