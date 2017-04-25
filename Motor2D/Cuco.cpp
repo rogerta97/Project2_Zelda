@@ -122,9 +122,9 @@ bool Cuco::Draw(float dt)
 	bool ret = true;
 
 	if (flip)
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x , game_object->GetPos().y - draw_offset.y - 19 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x -20, game_object->GetPos().y - draw_offset.y - 19 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -365,10 +365,10 @@ void Cuco::CheckState()
 
 void Cuco::GetNewPath()
 {
-	App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
+	target = App->map->WorldToMap(GetRandomValue(GetPos().x - 320, GetPos().x + 320), GetRandomValue(GetPos().y - 320, GetPos().y + 320));
 	while (!App->pathfinding->IsWalkable(target) && target!=GetPos())
 	{
-		App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
+		target = App->map->WorldToMap(GetRandomValue(GetPos().x - 320, GetPos().x + 320), GetRandomValue(GetPos().y - 320, GetPos().y + 320));
 	}
 	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
 	{

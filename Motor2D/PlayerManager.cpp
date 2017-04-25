@@ -5,7 +5,9 @@
 #include "j1Map.h"
 #include "GameObject.h"
 #include "j1Audio.h"
+
 #include "MinimapManager.h"
+#include "Mapping.h"
 
 #define DEATH_CAMERA_SPEED 500
 #define BASE_TRAVEL_TIME 4
@@ -93,7 +95,7 @@ bool PlayerManager::Update(float dt)
 		if (!curr_player->is_dead)
 		{
 			// Take player input
-			PlayerInput(curr_player);
+			PlayerInput(curr_player, i);
 
 			// Update pasive heal
 			PasiveHP(curr_player);
@@ -391,8 +393,15 @@ void PlayerManager::AllowInput(int player)
 	}
 }
 
-void PlayerManager::PlayerInput(Player * curr_player)
+void PlayerManager::PlayerInput(Player * curr_player, int index)
 {
+	// Get abilities mapping
+	key_mapping a1, a2, a3, a4;
+	a1 = App->scene->players[index].mapping->GetMapping(m_k_ability1);
+	a2 = App->scene->players[index].mapping->GetMapping(m_k_ability2);
+	a3 = App->scene->players[index].mapping->GetMapping(m_k_ability3);
+	a4 = App->scene->players[index].mapping->GetMapping(m_k_ability4);
+
 	// Left Joystick -------
 
 	if (curr_player->entity == nullptr)
@@ -532,7 +541,14 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	// Abilities PRESS
 	if (!curr_player->entity->stuned && !curr_player->disable_controller)
 	{
-		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+		bool a1_press = false, a2_press = false, a3_press = false, a4_press = false;
+
+		a1_press = (a1.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a1.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a1.key_id) > 22000;
+		a2_press = (a2.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a2.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a2.key_id) > 22000;
+		a3_press = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) > 22000;
+		a4_press = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) > 22000;
+
+		if (a1_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 1))
 			{
@@ -546,7 +562,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 					curr_player->show = shows::show_basic_atack_right;
 			}
 		}
-		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
+		else if (a2_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 2))
 			{
@@ -560,7 +576,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 					curr_player->show = shows::show_ability1_right;
 			}
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
+		else if (a3_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 3))
 			{
@@ -574,7 +590,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 					curr_player->show = shows::show_ability2_right;
 			}
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
+		else if (a4_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 4))
 			{
@@ -591,7 +607,14 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	}
 
 	// Abilities RELEASE
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE)
+	bool a1_release = false, a2_release = false, a3_release = false, a4_release = false;
+
+	a1_release = (a1.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a1.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a1.key_id) < 22000;
+	a2_release = (a2.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a2.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a2.key_id) < 22000;
+	a3_release = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) < 22000;
+	a4_release = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) < 22000;
+
+	if (a1_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -622,7 +645,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		}
 	}
 
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
+	if (a2_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -653,7 +676,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		}
 	}
 
-	if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) < 22000)
+	if (a3_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -684,7 +707,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		}
 	}
 
-	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) < 22000)
+	if (a4_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
