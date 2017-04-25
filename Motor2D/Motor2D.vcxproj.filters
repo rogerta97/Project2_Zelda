@@ -192,6 +192,7 @@
     </ClCompile>
     <ClCompile Include="Cuco.cpp">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
+	</ClCompile>
     <ClCompile Include="Navi.cpp">
       <Filter>Engine\4. Entities ==========\Navi</Filter>
     </ClCompile>
@@ -421,6 +422,7 @@
     </ClInclude>
     <ClInclude Include="Cuco.h">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
+	</ClInclude>
     <ClInclude Include="Navi.h">
       <Filter>Engine\4. Entities ==========\Navi</Filter>
     </ClInclude>
@@ -521,6 +523,7 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Cuco">
       <UniqueIdentifier>{d9e4eae2-e1c2-476f-9988-67a5d49dbee9}</UniqueIdentifier>
+	</Filter>
     <Filter Include="Engine\4. Entities ==========\Navi">
       <UniqueIdentifier>{dc840a14-aa38-42bd-9623-77bb68548b8b}</UniqueIdentifier>
     </Filter>
