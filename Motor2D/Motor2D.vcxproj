@@ -84,6 +84,7 @@
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
+    <ClCompile Include="Cuco.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventThrower.cpp" />
     <ClCompile Include="Eyes.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
+    <ClInclude Include="Cuco.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EventThrower.h" />
