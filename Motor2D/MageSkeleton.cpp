@@ -128,7 +128,7 @@ bool MageSkeleton::Update(float dt)
 
 			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
 			{
-				if (this->GetPos().x > HALFMAP)
+				if (this->GetPos().x < HALFMAP)
 				{
 					if (App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.empty())
 						if (entity->is_player)
