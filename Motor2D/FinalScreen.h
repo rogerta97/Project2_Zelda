@@ -11,28 +11,32 @@ struct final_screen_player_info
 	int				kills = -1;
 	int				minions = -1;
 	int				towers = -1;
+
+	SDL_Rect		items[3]; 
+
+	string			character_name; 
 };
 
 struct final_screen_element
 {
-	UI_Image*		character_image = nullptr; 
-	UI_Image*		rectangle_image = nullptr; 
+	UI_Image*				character_image = nullptr; 
+	UI_Image*				rectangle_image = nullptr; 
 
-	UI_Text*		kills_text = nullptr; 
-	UI_Text*		deaths_text = nullptr;
-	UI_Text*		minions_text = nullptr;
-	UI_Text*		towers_text = nullptr;
-	UI_Text*		items_text = nullptr; 
+	UI_Text*				kills_text = nullptr; 
+	UI_Text*				deaths_text = nullptr;
+	UI_Text*				minions_text = nullptr;
+	UI_Text*				towers_text = nullptr;
+	UI_Text*				items_text = nullptr; 
 
-	UI_Text*		kills_num = nullptr;
-	UI_Text*		deaths_num = nullptr;
-	UI_Text*		minions_num = nullptr;
-	UI_Text*		towers_num = nullptr;
-	UI_Text*		items_num = nullptr;
+	UI_Text*				kills_num = nullptr;
+	UI_Text*				deaths_num = nullptr;
+	UI_Text*				minions_num = nullptr;
+	UI_Text*				towers_num = nullptr;
+	UI_Text*				items_num = nullptr;
 
-	UI_Image*		item_1_image = nullptr; 
-	UI_Image*		item_2_image = nullptr;
-	UI_Image*		item_3_image = nullptr;
+	UI_Image*				item_images_1; 
+	UI_Image*				item_images_2;
+	UI_Image*				item_images_3;
 
 	void SetInfo(final_screen_player_info player_info);
 };
@@ -43,7 +47,7 @@ public:
 
 	bool Start();
 
-	bool Update(); 
+	bool Update(float dt); 
 
 	bool CleanUp(); 
 
