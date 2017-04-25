@@ -1,0 +1,35 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/soldiercamp_spritesheet.png">
+    <anim speed = "5" name = "guard_down" loop = "true">
+      <rect x = "32" y = "0" w = "32" h = "48"/>
+      <rect x = "0" y = "76" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "guard_attack_down" loop = "true">
+      <rect x = "0" y = "0" w = "32" h = "48"/>
+      <rect x = "32" y = "0" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "guard_up" loop = "true">
+      <rect x = "160" y = "0" w = "32" h = "48"/>
+      <rect x = "96" y = "76" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "guard_attack_up" loop = "true">
+      <rect x = "128" y = "0" w = "32" h = "48"/>
+      <rect x = "160" y = "0" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "guard_lateral" loop = "true">
+      <rect x = "32" y = "76" w = "32" h = "48"/>
+      <rect x = "64" y = "76" w = "32" h = "48"/>
+    </anim>
+    <anim speed = "3" name = "guard_attack_lateral" loop = "true">
+      <rect x = "64" y = "0" w = "32" h = "48"/>
+      <rect x = "96" y = "0" w = "32" h = "48"/>
+    </anim>
+
+
+  </animations>
+  <stats hp="40" speed="100" power="15" rupees="10">
+    <ability1 mult="1" cd="1.25" bd="2"/>
+  </stats>
+</file>

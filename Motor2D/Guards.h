@@ -10,6 +10,9 @@ class GameObject;
 enum GUARDS_STATE
 {
 	g_s_null,
+	g_s_idle,
+	g_s_run,
+	g_s_attack,
 	
 };
 

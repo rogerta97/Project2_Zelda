@@ -4,6 +4,7 @@
 #include "CollisionFilters.h"
 #include "j1App.h"
 #include "j1Map.h"
+#include "j1Pathfinding.h"
 #include "PlayerManager.h"
 #include "JungleCampManager.h"
 #include "Entity.h"
@@ -28,7 +29,7 @@ Guards::Guards(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	/*pugi::xml_document doc;
+	pugi::xml_document doc;
 	App->xml->LoadXML("guards.xml", doc);
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 
@@ -42,7 +43,7 @@ Guards::Guards(iPoint pos)
 	
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-	*/
+	
 	name = "guards";
 }
 

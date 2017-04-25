@@ -232,6 +232,7 @@
     <Xml Include="..\Game\entity_effects.xml" />
     <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
+    <Xml Include="..\Game\guards.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\mageskeleton.xml" />
