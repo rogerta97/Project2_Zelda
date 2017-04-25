@@ -18,6 +18,8 @@
 #define GUARD_W 32
 
 #define FOLLOW_RANGE 150
+#define ATTACK_RANGE 60
+
 #define HALFMAP 81*32
 
 Guards::Guards(iPoint pos)
@@ -57,6 +59,8 @@ bool Guards::Start()
 
 	show_life_bar = true;
 
+	game_object->SetAnimation("guard_down");
+
 	return ret;
 }
 
@@ -70,6 +74,11 @@ bool Guards::PreUpdate()
 bool Guards::Update(float dt)
 {
 	bool ret = true;
+
+	if (to_delete)
+		return true;
+
+
 
 	return ret;
 }

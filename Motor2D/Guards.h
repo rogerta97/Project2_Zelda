@@ -11,10 +11,19 @@ enum GUARDS_STATE
 {
 	g_s_null,
 	g_s_idle,
-	g_s_run,
+	g_s_follow,
 	g_s_attack,
+	g_s_reset,
 	
 };
+
+enum GUARDS_MOVE_STATE
+{
+	gMove_AproachTarget,
+	gMove_Idle,
+
+};
+
 
 class Guards :public Entity
 {
@@ -48,24 +57,57 @@ public:
 
 	iPoint GetPos() const;
 
+	void MoveUp(float speed);
+	void MoveDown(float speed);
+	void MoveLeft(float speed);
+	void MoveRight(float speed);
+
+	void MoveUpRight(float speed);
+	void MoveDownRight(float speed);
+	void MoveUpLeft(float speed);
+	void MoveDownLeft(float speed);
+
+	void RunUp();
+	void RunDown();
+	void RunLeft();
+	void RunRight();
+
+	void IdleUp();
+	void IdleDown();
+	void IdleLeft();
+	void IdleRight();
+
+
 
 private:
 
-	void Idle();
+	void SetTargetPath(const std::list<iPoint>* path);
 
-	void DoAttack();
+	void PathToTarget();
 
-	void AttackLeft();
-	void AttackRight();
-	void AttackUp();
-	void AttackDown();
+	void GuardIdle();
+	void GuardMove();
+	void GuardAttack();
+
+	void CheckState();
 
 	bool LookForTarget();
+
+	void Move(int delta_x, int delta_y);
+
+	void BasicAttackUp();
+	void BasicAttackDown();
+	void BasicAttackLeft();
+	void BasicAttackRight();
+
+	void FaceTarget();
+	void Attack();
+
+	void SetIdleAnim();
 
 public:
 	Entity*					target = nullptr;
 private:
-
 	j1Timer					cd_timer;
 
 	bool					flip = false;
@@ -73,12 +115,16 @@ private:
 	bool					is_attacked = false;
 
 	int						rel_angle = 0;
+	float					speed = 0;
 
 	GUARDS_STATE			state = g_s_null;
 
 	states					anim_state = states_null;
 
 	int						rupee_reward = 0;
+
+	std::vector<iPoint>		target_path;
+	int						target_path_index = 0;
 
 };
 #endif // !_GUARDS_H_
