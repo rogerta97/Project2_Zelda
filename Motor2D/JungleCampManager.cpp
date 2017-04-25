@@ -6,6 +6,7 @@
 #include "Snakes.h"
 #include "Skeleton.h"
 #include "MageSkeleton.h"
+#include "Guards.h"
 #include "p2Log.h"
 #include "j1Audio.h"
 

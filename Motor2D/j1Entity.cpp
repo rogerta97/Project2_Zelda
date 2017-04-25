@@ -22,6 +22,7 @@
 #include "j1XMLLoader.h"
 #include "Waterfall.h"
 #include "MageSkeleton.h"
+#include "Guards.h"
 #include "Cuco.h"
 #include "Navi.h"
 
@@ -300,6 +301,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case cuco:
 		ret = new Cuco(pos);
+		break;
+	case guards:
+		ret = new Guards(pos);
 		break;
 	default:
 		break;
