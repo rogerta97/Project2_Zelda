@@ -365,10 +365,10 @@ void Cuco::CheckState()
 
 void Cuco::GetNewPath()
 {
-	App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
+	target = App->map->WorldToMap(GetRandomValue(GetPos().x - 320, GetPos().x + 320), GetRandomValue(GetPos().y - 320, GetPos().y + 320));
 	while (!App->pathfinding->IsWalkable(target) && target!=GetPos())
 	{
-		App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
+		target = App->map->WorldToMap(GetRandomValue(GetPos().x - 320, GetPos().x + 320), GetRandomValue(GetPos().y - 320, GetPos().y + 320));
 	}
 	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
 	{
