@@ -29,11 +29,6 @@
      <anim speed = "10" name = "basic_attack_side" loop = "false">
           <rect x = "144" y = "100" w = "48" h = "50"/>
      </anim>
- <anim speed = "10" name = "basic_projectile" loop = "true">
-          <rect x = "192" y = "0" w = "48" h = "50"/>
- 	  <rect x = "240" y = "0" w = "48" h = "50"/>
- 	  <rect x = "240" y = "0" w = "48" h = "50"/>
-     </anim>
 <anim speed = "10" name = "blink_up" loop = "false">
           <rect x = "288" y = "0" w = "48" h = "50"/>
  	  <rect x = "336" y = "0" w = "48" h = "50"/>
@@ -46,7 +41,7 @@
  	  <rect x = "192" y = "50" w = "48" h = "50"/>
 	  <rect x = "240" y = "50" w = "48" h = "50"/>
      </anim>
-<anim speed = "10" name = "blink_side" loop = "false">
+<anim speed = "30" name = "blink_side" loop = "false">
           <rect x = "288" y = "100" w = "48" h = "50"/>
  	  <rect x = "336" y = "100" w = "48" h = "50"/>
  	  <rect x = "192" y = "50" w = "48" h = "50"/>
@@ -59,35 +54,93 @@
 <anim speed = "10" name = "heal_area" loop = "true">
  	  <rect x = "774" y = "0" w = "280" h = "280"/>
 	  <rect x = "774" y = "280" w = "280" h = "280"/>
-          <rect x = "774" y = "560" w = "280" h = "280"/>
+        <rect x = "774" y = "560" w = "280" h = "280"/>
  	  <rect x = "774" y = "280" w = "280" h = "280"/>
      </anim>
-<anim speed = "10" name = "ulti_letters" loop = "false">
- 	  <rect x = "1" y = "151" w = "387" h = "282"/>
-	  <rect x = "1" y = "433" w = "387" h = "282"/>
-	  <rect x = "1" y = "715" w = "387" h = "282"/>
-	  <rect x = "1" y = "997" w = "387" h = "282"/>
-	  <rect x = "1" y = "1279" w = "387" h = "282"/>
-	  <rect x = "1" y = "1561" w = "387" h = "282"/>
-	  <rect x = "1" y = "1843" w = "387" h = "282"/>
-	  <rect x = "1" y = "2125" w = "387" h = "282"/>
- 	  <rect x = "388" y = "1" w = "387" h = "282"/>
+<anim speed = "5" name = "ulti_letters" loop = "true">
+ 	  <rect x = "1" y = "151" w = "385" h = "280"/>
+	  <rect x = "1" y = "433" w = "385" h = "280"/>
+	  <rect x = "1" y = "715" w = "385" h = "280"/>
+	  <rect x = "1" y = "997" w = "385" h = "280"/>
+	  <rect x = "1" y = "1279" w = "385" h = "280"/>
+	  <rect x = "1" y = "1561" w = "385" h = "280"/>
+	  <rect x = "1" y = "1843" w = "385" h = "280"/>
+	  <rect x = "1" y = "2125" w = "385" h = "280"/>
+ 	  <rect x = "388" y = "1" w = "385" h = "280"/>
 
-          <rect x = "388" y = "283" w = "387" h = "282"/>
-	  <rect x = "388" y = "565" w = "387" h = "282"/>
-	  <rect x = "388" y = "847" w = "387" h = "282"/>
-	  <rect x = "388" y = "1129" w = "387" h = "282"/>
-	  <rect x = "388" y = "1411" w = "387" h = "282"/>
-	  <rect x = "388" y = "1693" w = "387" h = "282"/>
-	  <rect x = "1" y = "1843" w = "387" h = "282"/>
-  	  <rect x = "388" y = "1975" w = "387" h = "282"/>
-	  <rect x = "388" y = "1" w = "387" h = "282"/>
+    <rect x = "388" y = "283" w = "385" h = "280"/>
+	  <rect x = "388" y = "565" w = "385" h = "280"/>
+	  <rect x = "388" y = "847" w = "385" h = "280"/>
+	  <rect x = "388" y = "1129" w = "385" h = "280"/>
+	  <rect x = "388" y = "1411" w = "385" h = "280"/>
+	  <rect x = "388" y = "1693" w = "385" h = "280"/>
+	  <rect x = "1" y = "1843" w = "385" h = "280"/>
+  	  <rect x = "388" y = "1975" w = "385" h = "280"/>
+	  <rect x = "388" y = "1" w = "385" h = "280"/>
+     </anim>
+
+
+     <anim speed = "10" name = "down_2" loop = "true">
+       <rect x = "0" y = "2406" w = "48" h = "50"/>
+       <rect x = "48" y = "2406" w = "48" h = "50"/>
+       <rect x = "96" y = "2406" w = "48" h = "50"/>
+       <rect x = "48" y = "2406" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "up_2" loop = "true">
+       <rect x = "0" y = "2456" w = "48" h = "50"/>
+       <rect x = "48" y = "2456" w = "48" h = "50"/>
+       <rect x = "96" y = "2456" w = "48" h = "50"/>
+       <rect x = "48" y = "2456" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "lateral_2" loop = "true">
+       <rect x = "0" y = "2506" w = "48" h = "50"/>
+       <rect x = "48" y = "2506" w = "48" h = "50"/>
+       <rect x = "96" y = "2506" w = "48" h = "50"/>
+       <rect x = "48" y = "2506" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_up_2" loop = "false">
+       <rect x = "144" y = "2406" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_down_2" loop = "false">
+       <rect x = "144" y = "2456" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_side_2" loop = "false">
+       <rect x = "144" y = "2506" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "blink_up_2" loop = "false">
+       <rect x = "288" y = "2406" w = "48" h = "50"/>
+       <rect x = "336" y = "2406" w = "48" h = "50"/>
+       <rect x = "192" y = "2456" w = "48" h = "50"/>
+       <rect x = "240" y = "2456" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "blink_down_2" loop = "false">
+       <rect x = "288" y = "2456" w = "48" h = "50"/>
+       <rect x = "336" y = "2456" w = "48" h = "50"/>
+       <rect x = "192" y = "2456" w = "48" h = "50"/>
+       <rect x = "240" y = "2456" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "30" name = "blink_side_2" loop = "false">
+       <rect x = "288" y = "2506" w = "48" h = "50"/>
+       <rect x = "336" y = "2506" w = "48" h = "50"/>
+       <rect x = "192" y = "2456" w = "48" h = "50"/>
+       <rect x = "240" y = "2456" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "blink_movement_2" loop = "true">
+       <rect x = "192" y = "2506" w = "48" h = "50"/>
+       <rect x = "240" y = "2506" w = "48" h = "50"/>
+     </anim>
+     <anim speed = "10" name = "heal_area_2" loop = "true">
+       <rect x = "774" y = "840" w = "280" h = "280"/>
+       <rect x = "774" y = "1120" w = "280" h = "280"/>
+       <rect x = "774" y = "1400" w = "280" h = "280"/>
+       <rect x = "774" y = "1120" w = "280" h = "280"/>
      </anim>
    </animations>
   <stats hp="100" speed="160" power="20" rupees="100">
     <ability1 mult="1.5" cd="1" bd="3"/>
-    <ability2 mult="1" cd="4" bd="15"/>
-    <ability3 mult="0" cd="10" bd="0"/>
-    <ability4 mult="0" cd="60" bd="0"/>
+    <ability2 mult="0" cd="1" bd="0"/>
+    <ability3 mult="0" cd="1" bd="0"/>
+    <ability4 mult="0" cd="3" bd="0"/>
+    <basic_attack_spell mult ="1"/>
   </stats>
 </file>

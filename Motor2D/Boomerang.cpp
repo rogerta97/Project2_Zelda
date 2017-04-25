@@ -48,7 +48,10 @@ bool Boomerang::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("spin");
+	if(owner->GetTeam() == ANIMATIONS_TEAM)
+		game_object->SetAnimation("spin");
+	else
+		game_object->SetAnimation("spin_2");
 
 	return ret;
 }
@@ -166,4 +169,12 @@ void Boomerang::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA,
 void Boomerang::Set(direction _dir)
 {
 	dir = _dir;
+}
+
+void Boomerang::Effects(Entity * entity, Ability * ability)
+{
+	if (stats.slow_duration > 0)
+		entity->Slow(stats.slow_multiplicator, stats.slow_duration);
+	if (stats.stun_duration > 0)
+		entity->Stun(stats.stun_duration);
 }

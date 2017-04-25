@@ -45,7 +45,8 @@ enum class pbody_type
 	p_t_trunk,
 	p_t_tree,
 	p_t_bush,
-	p_t_taco
+	p_t_taco,
+	p_t_navi_basic_attack,
 };
 
 // Fixture enum

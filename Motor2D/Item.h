@@ -12,7 +12,6 @@ public:
 private:
 
 public:
-
 	string		name;
 	int			power = 0;
 	int			hp = 0;

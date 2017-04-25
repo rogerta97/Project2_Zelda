@@ -137,7 +137,6 @@ public:
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
-
 private:
 	void PlayerInput(Player* player);
 	void MoveCamera(Player* player);
@@ -153,17 +152,16 @@ public:
 
 private:
 	// UI Elements
+	vector<PlayerManagerUI> p_manager_ui_elements; 
 
-	vector<PlayerManagerUI*> p_manager_ui_elements; 
+	EventThrower*           event_thrower = nullptr;
 
-	EventThrower*       event_thrower = nullptr;
+	SDL_Color               death_rect_color = NULLRECT;
+	SDL_Rect			    death_rect = NULLRECT;
 
-	SDL_Color           death_rect_color = NULLRECT;
-	SDL_Rect			death_rect = NULLRECT;
+	uint					last_heal_time = 0;
 
-	uint				last_heal_time = 0;
-
-	uint				death_sound_effect = 100;
+	uint			     	death_sound_effect = 100;
 };
 
 

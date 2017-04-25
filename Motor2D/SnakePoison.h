@@ -15,7 +15,6 @@ class b2Fixture;
 class PhysBody;
 class GameObject;
 
-
 class SnakePoison : public Spell
 {
 public:

@@ -50,8 +50,8 @@ Base::Base(iPoint pos)
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
-	uchar* matrix = new uchar[72];
-	uchar data[72] =   { 1,1,1,0,0,1,1,1,
+	uchar* matrix = new uchar[80];
+	uchar data[80] =   { 1,1,1,0,0,1,1,1,
 						 1,0,0,0,0,0,0,1,
 				 		 1,0,0,0,0,0,0,1,
 						 0,0,0,0,0,0,0,0,
@@ -59,12 +59,14 @@ Base::Base(iPoint pos)
 						 0,0,0,0,0,0,0,0,
 						 1,0,0,0,0,0,0,1,
 						 1,0,0,0,0,0,0,1,
-						 1,1,1,0,0,1,1,1 };
+						 1,0,0,0,0,0,0,1,
+						 1,1,1,0,0,1,1,1
+	};
 
-	memcpy_s(matrix, 72, data, 72);
+	memcpy_s(matrix, 80, data, 80);
 
 	iPoint map_pos = App->map->WorldToMap(GetPos().x - 242 / 2, GetPos().y - 290 / 2);
-	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 8, 9);
+	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 8, 10);
 
 	RELEASE_ARRAY(matrix);
 

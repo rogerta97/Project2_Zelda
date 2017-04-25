@@ -27,7 +27,7 @@ bool JungleCampManager::Start()
 {
 	bool ret = true;
 
-	//stopping timers
+	// Stopping timers
 	snakes_timer_camp1.Stop();
 	snakes_timer_camp2.Stop();
 
@@ -37,7 +37,7 @@ bool JungleCampManager::Start()
 	mageskeleton_timer_camp1.Stop();
 	mageskeleton_timer_camp2.Stop();
 
-	//spawning jungle camps
+	// Spawning jungle camps
 	SpawnSkeleton(0);
 	SpawnSnake(0);
 	SpawnMageSkeleton(0);
@@ -124,19 +124,21 @@ bool JungleCampManager::CleanUp()
 {
 	LOG("Unloading JungleCampManager");
 
-	for (int i = 0;i<snakes_camp1.size();i++)
+	// Cleaning snakes
+	for (int i = 0; i < snakes_camp1.size(); i++)
 	{
 		App->entity->DeleteEntity(snakes_camp1[i]);
 	}
-
 	snakes_camp1.clear();
 
-	for (int i = 0; i<snakes_camp2.size(); i++)
+	for (int i = 0; i < snakes_camp2.size(); i++)
 	{
 		App->entity->DeleteEntity(snakes_camp2[i]);
 	}
 	snakes_camp2.clear();
+	// ------
 
+	// Cleaning skeletons
 	if(skeleton_camp1 != nullptr)
 	{
 		App->entity->DeleteEntity(skeleton_camp1);
@@ -146,19 +148,21 @@ bool JungleCampManager::CleanUp()
 	{
 		App->entity->DeleteEntity(skeleton_camp2);
 	}
+	// ------
 
-	for (int i = 0; i<mageskeleton_camp1.size(); i++)
+	// Cleaning megaeskeletons
+	for (int i = 0; i < mageskeleton_camp1.size(); i++)
 	{
 		App->entity->DeleteEntity(mageskeleton_camp1[i]);
 	}
-
-	snakes_camp1.clear();
+	mageskeleton_camp1.clear();
 
 	for (int i = 0; i<mageskeleton_camp2.size(); i++)
 	{
 		App->entity->DeleteEntity(mageskeleton_camp2[i]);
 	}
-	snakes_camp2.clear();
+	mageskeleton_camp2.clear();
+	// ------
 
 	return true;
 }
@@ -208,7 +212,6 @@ void JungleCampManager::SpawnSnake(uint camp)
 	default:
 		break;
 	}
-
 }
 
 void JungleCampManager::SpawnMageSkeleton(uint camp)
@@ -253,8 +256,10 @@ void JungleCampManager::SpawnMageSkeleton(uint camp)
 		mageskeleton_camp1.push_back(s2);
 		mageskeleton_camp1.push_back(s3);
 		mageskeleton_camp1.push_back(s4);
+
 		break;
 	}
+	break;
 	case 2:
 	{
 		std::vector<iPoint> mskeleton_positions = App->map->GetMageSkeletonSpawns();
@@ -267,6 +272,7 @@ void JungleCampManager::SpawnMageSkeleton(uint camp)
 		mageskeleton_camp2.push_back(s6);
 		mageskeleton_camp2.push_back(s7);
 		mageskeleton_camp2.push_back(s8);
+
 		break;
 	}
 	default:
@@ -303,18 +309,19 @@ void JungleCampManager::SpawnSkeleton(uint camp)
 	default:
 		break;
 	}
-
 }
 
 void JungleCampManager::KillJungleCamp(Entity * camp)
 {
-	if (camp->type == snake)
+	switch (camp->type)
+	{
+	case snake:
 	{
 		if (camp->GetPos().x > HALFMAP)
 		{
-			for (std::vector<Entity*>::iterator it = snakes_camp1.begin(); it != snakes_camp1.end(); ++it)
+			for (std::vector<Entity*>::iterator it = snakes_camp1.begin(); it != snakes_camp1.end(); it++)
 			{
-				if (camp == *it) 
+				if (camp == *it)
 				{
 					snakes_camp1.erase(it);
 					break;
@@ -323,18 +330,19 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 		}
 		else
 		{
-			for (std::vector<Entity*>::iterator it = snakes_camp2.begin(); it != snakes_camp2.end(); ++it)
+			for (std::vector<Entity*>::iterator it = snakes_camp2.begin(); it != snakes_camp2.end(); it++)
 			{
-				if (camp == *it) {
+				if (camp == *it)
+				{
 					snakes_camp2.erase(it);
 					break;
 				}
 			}
 		}
-	}
-	
 
-	if (camp->type == skeleton)
+		break;
+	}
+	case skeleton:
 	{
 		if (camp->GetPos().x < HALFMAP)
 		{
@@ -344,13 +352,14 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 		{
 			skeleton_camp2 = nullptr;
 		}
-	}
 
-	if (camp->type == mskeleton)
+		break;
+	}
+	case mskeleton:
 	{
 		if (camp->GetPos().x < HALFMAP)
 		{
-			for (std::vector<Entity*>::iterator it = mageskeleton_camp1.begin(); it != mageskeleton_camp1.end(); ++it)
+			for (std::vector<Entity*>::iterator it = mageskeleton_camp1.begin(); it != mageskeleton_camp1.end(); it++)
 			{
 				if (camp == *it)
 				{
@@ -361,7 +370,7 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 		}
 		else
 		{
-			for (std::vector<Entity*>::iterator it = mageskeleton_camp2.begin(); it != mageskeleton_camp2.end(); ++it)
+			for (std::vector<Entity*>::iterator it = mageskeleton_camp2.begin(); it != mageskeleton_camp2.end(); it++)
 			{
 				if (camp == *it) {
 					mageskeleton_camp2.erase(it);
@@ -369,6 +378,8 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 				}
 			}
 		}
+
+		break;
 	}
 	App->entity->DeleteEntity(camp);
 	App->audio->PlayFx(death_sound_effect, 0);

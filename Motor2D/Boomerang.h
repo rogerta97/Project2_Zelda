@@ -54,6 +54,8 @@ public:
 
 	void Set(direction dir);
 
+	void Effects(Entity* entity, Ability * ability);
+
 private:
 	direction dir = direction::null;
 	float			initial_speed = 0;

@@ -47,7 +47,6 @@ public:
 	~AestheticsManager();
 
 	void Start(); 
-
 	void CleanUp(); 
 
 private:
@@ -59,17 +58,14 @@ private:
 
 	// Trees
 	std::vector<Tree*>		trees_entity;
-
 	std::vector<TreeNode*>	trees_nodes; 
 
 	// Bushes 
 	std::vector<Bush*>		bushes_entity;
-
 	std::vector<BushNode*>	bushes_nodes;
 
 	// Eyes
 	std::vector<Eyes*>		eyes;
-
 };
 
 #endif

@@ -192,6 +192,11 @@
     </ClCompile>
     <ClCompile Include="Cuco.cpp">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
+    <ClCompile Include="Navi.cpp">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviBasicAttack.cpp">
+      <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +421,11 @@
     </ClInclude>
     <ClInclude Include="Cuco.h">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
+    <ClInclude Include="Navi.h">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviBasicAttack.h">
+      <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +521,11 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Cuco">
       <UniqueIdentifier>{d9e4eae2-e1c2-476f-9988-67a5d49dbee9}</UniqueIdentifier>
+    <Filter Include="Engine\4. Entities ==========\Navi">
+      <UniqueIdentifier>{dc840a14-aa38-42bd-9623-77bb68548b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\NaviBasicAttack">
+      <UniqueIdentifier>{af1164c2-4c7a-4302-9657-90a3aa0b08e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -585,6 +600,12 @@
     </Xml>
     <Xml Include="..\Game\mageskeleton.xml">
       <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\navi.xml">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </Xml>
+    <Xml Include="..\Game\navibasicattack.xml">
+      <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </Xml>
   </ItemGroup>
 </Project>
