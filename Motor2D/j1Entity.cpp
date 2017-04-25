@@ -592,7 +592,7 @@ void j1Entity::StunEntities()
 				}
 				else
 				{
-					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
 					++it;
 				}
 			}
