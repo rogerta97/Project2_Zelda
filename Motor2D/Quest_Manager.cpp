@@ -155,11 +155,14 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
 	{
+		active_quest = GetRandomValue(1, 3);
 
-		active_quest = 2;
-
+		if (active_quest == 2)
+		{
+			SpawnCucos(5);
+		}
 		change_state(active_quest, active);
 		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 		update_progress();
@@ -177,6 +180,14 @@ void QuestManager::Update()
 
 	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
 	{
+		if (active_quest == 2)
+		{
+			for (int i = 0; i < cucos.size(); i++)
+			{
+				App->entity->DeleteEntity(cucos[i]);
+			}
+			cucos.clear();
+		}
 		reset_progress(active_quest);
 		change_state(active_quest, inactive);
 		active_quest = -1;

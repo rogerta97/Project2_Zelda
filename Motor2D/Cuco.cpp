@@ -311,6 +311,10 @@ void Cuco::CucoMove()
 	{
 		if (base_path_index < base_path.size() - 1)
 		{
+			while(base_path.size() == 0)
+			{
+				GetNewPath();
+			}
  			if (map_pos == base_path.at(base_path_index))
 				base_path_index++;
 		}
@@ -362,7 +366,7 @@ void Cuco::CheckState()
 void Cuco::GetNewPath()
 {
 	App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
-	while (!App->pathfinding->IsWalkable(target))
+	while (!App->pathfinding->IsWalkable(target) && target!=GetPos())
 	{
 		App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
 	}
