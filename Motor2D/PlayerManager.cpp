@@ -126,16 +126,6 @@ bool PlayerManager::Update(float dt)
 			// Update death text
 			UpdateDeathUI(curr_player);
 		}
-
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-		{
-			App->scene->main_scene->ui_viewports[i].minimapstate.Enable(); 
-		}
-
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
-		{
-			App->scene->main_scene->ui_viewports[i].minimapstate.Disable();
-		}
 	}
 
 	return true;
@@ -415,13 +405,15 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	}
 
 	// Minimap
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 	{
 		App->scene->main_scene->minimap_manager->SetActive(true, curr_player->viewport);
+		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Enable();
 	}
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_UP)
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
 	{
 		App->scene->main_scene->minimap_manager->SetActive(false, curr_player->viewport);
+		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Disable();
 	}
 
 

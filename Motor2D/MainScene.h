@@ -31,8 +31,6 @@ enum GameStates
 
 struct MinimapState 
 {
-	UI_Image* minimap = nullptr;
-
 	UI_Image* stats_back_image = nullptr; 
 
 	UI_Text* hp_text = nullptr;

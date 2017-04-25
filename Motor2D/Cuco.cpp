@@ -324,11 +324,11 @@ void Cuco::CucoMove()
 			break;
 		}
 
-		iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
-		target_pos.y += Half_Tile;
-		target_pos.x += Half_Tile;
+		//iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
+		//target_pos.y += Half_Tile;
+		//target_pos.x += Half_Tile;
 
-		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+		//Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
 
 		break;
 	}

@@ -28,6 +28,7 @@
 #include "j1Audio.h"
 #include "j1XMLLoader.h"
 #include "MinimapManager.h"
+#include "MinimapManager.h"
 
 MainScene::MainScene()
 {
@@ -66,6 +67,9 @@ bool MainScene::Start()
 
 	for (int i = 0; i < 4;i++)
 	{
+		MainSceneViewport curr_viewport;
+
+		// Player UI
 		curr_viewport.main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 		curr_viewport.main_window->viewport = i + 1; 
 		curr_viewport.progress_bar = curr_viewport.main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
@@ -74,13 +78,20 @@ bool MainScene::Start()
 		curr_viewport.minimap_icon = curr_viewport.main_window->CreateImage(minimap_pos, minimap_rect);
 		curr_viewport.win_text = curr_viewport.main_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
-		curr_viewport.minimapstate.minimap = curr_viewport.main_window->CreateImage(minimap_img_pos, minimap_img_rect);
-		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
+
+		// Minimap UI
+		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect); 
+		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.hp_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.hp_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.power_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.power_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.speed_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.speed_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.kills_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.kills_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.minions_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.minions_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.Disable(); 
 
 		ui_viewports.push_back(curr_viewport);
@@ -534,7 +545,6 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 
 void MinimapState::Enable()
 {
-	minimap->enabled = true; 
 	stats_back_image->enabled = true;
 
 	hp_text->SetText("HP: 300");
@@ -555,7 +565,6 @@ void MinimapState::Enable()
 
 void MinimapState::Disable()
 {
-	minimap->enabled = false;
 	stats_back_image->enabled = false;
 	hp_text->enabled = false;
 	power_text->enabled = false;

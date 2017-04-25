@@ -7,6 +7,7 @@
 #include "MainScene.h"
 #include "ZeldaManager.h"
 #include "PlayerManager.h"
+#include "Zelda.h"
 
 MinimapManager::MinimapManager()
 {
@@ -45,7 +46,11 @@ bool MinimapManager::Start()
 	// Add points here ----------------------------
 	// --------------------------------------------
 
-	AddPoint("zelda", { 0, 0, 31, 28 }, { 0,0 });
+	AddPoint("zelda", { 0, 0, 31, 28 }, { 0,0 }); GetPoint("zelda")->show = false;
+	AddPoint("player1", { 0, 0, 31, 28 }, { 0,0 });
+	AddPoint("player2", { 0, 0, 31, 28 }, { 0,0 });
+	AddPoint("player3", { 0, 0, 31, 28 }, { 0,0 });
+	AddPoint("player4", { 0, 0, 31, 28 }, { 0,0 });
 
 	// --------------------------------------------
 	
@@ -55,8 +60,74 @@ bool MinimapManager::Start()
 void MinimapManager::UpdatePointsPos()
 {
 	// Zelda
-	if (App->scene->main_scene->zelda_manager != nullptr)
-		GetPoint("zelda")->real_pos = App->scene->main_scene->player_manager->players.at(0)->entity->GetPos();
+	if (App->scene->main_scene->zelda_manager != nullptr && App->scene->main_scene->zelda_manager->GetZelda()->GetZeldaState() != zelda_states::z_s_wait)
+	{
+		minimap_point* zelda = GetPoint("zelda");
+		zelda->show = true;
+		zelda->real_pos = App->scene->main_scene->zelda_manager->GetZeldaPos();
+	}
+
+	// Players
+	if (App->scene->main_scene->player_manager != nullptr && App->scene->main_scene->player_manager->players.size() >= 4)
+	{
+		Player* curr_player = nullptr;
+
+		// Player 1
+		curr_player = App->scene->main_scene->player_manager->players.at(0);
+		minimap_point* p1 = GetPoint("player1");
+
+		if (curr_player->is_dead)
+		{
+			p1->show = false;
+		}
+		else if (curr_player->entity != nullptr)
+		{
+			p1->real_pos = curr_player->entity->GetPos();
+			p1->show = true;
+		}
+
+		// Player 2
+		curr_player = App->scene->main_scene->player_manager->players.at(1);
+		minimap_point* p2 = GetPoint("player2");
+
+		if (curr_player->is_dead)
+		{
+			p2->show = false;
+		}
+		else if (curr_player->entity != nullptr)
+		{
+			p2->real_pos = curr_player->entity->GetPos();
+			p2->show = true;
+		}
+
+		// Player 3
+		curr_player = App->scene->main_scene->player_manager->players.at(2);
+		minimap_point* p3 = GetPoint("player3");
+
+		if (curr_player->is_dead)
+		{
+			p3->show = false;
+		}
+		else if (curr_player->entity != nullptr)
+		{
+			p3->real_pos = curr_player->entity->GetPos();
+			p3->show = true;
+		}
+
+		// Player 4
+		curr_player = App->scene->main_scene->player_manager->players.at(3);
+		minimap_point* p4 = GetPoint("player4");
+
+		if (curr_player->is_dead)
+		{
+			p4->show = false;
+		}
+		else if (curr_player->entity != nullptr)
+		{
+			p4->real_pos = curr_player->entity->GetPos();
+			p4->show = true;
+		}
+	}
 }
 
 bool MinimapManager::Update(float dt)

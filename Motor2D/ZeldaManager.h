@@ -14,6 +14,7 @@ public:
 	void CleanUp();
 
 	iPoint GetZeldaPos();
+	Zelda* GetZelda();
 
 private:
 
