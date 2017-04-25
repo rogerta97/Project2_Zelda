@@ -26,8 +26,10 @@ public:
 	Mapping();
 	~Mapping();
 
-	void MapKey(map_keys function, int key_id);
-	void GetKey(map_keys function);
+	void MapKey(map_keys function, int key_id, bool trigger = false);
+	bool GetKey(map_keys function, int* id);
+
+	key_mapping GetMapping(map_keys function) const;
 
 private:
 

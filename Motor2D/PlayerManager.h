@@ -138,7 +138,7 @@ public:
 	void AllowInput(int player);
 
 private:
-	void PlayerInput(Player* player);
+	void PlayerInput(Player* player, int index);
 	void MoveCamera(Player* player);
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
