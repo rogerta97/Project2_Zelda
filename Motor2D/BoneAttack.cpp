@@ -57,7 +57,7 @@ bool BoneAttack::Update(float dt)
 {
 	bool ret = true;
 
-	int speed = SPEED*dt;
+	float speed = SPEED*dt;
 
 	game_object->SetPos({ game_object->fGetPos().x + (speed * cos(DEGTORAD * angle)), game_object->fGetPos().y + (speed * sin(DEGTORAD * angle))});
 		
