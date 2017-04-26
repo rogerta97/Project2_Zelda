@@ -157,7 +157,7 @@ void QuestManager::Update()
 {
 	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 	{
-		active_quest = 2;
+		active_quest = GetRandomValue(1,3);
 
 		if (active_quest == 2)
 		{
@@ -439,10 +439,10 @@ void QuestManager::SpawnCucos(int num)
 	{
 		iPoint pos;
 
-		pos = App->map->WorldToMap(GetRandomValue(0, App->map->data.width), GetRandomValue(0, App->map->data.height));
+		pos = iPoint(GetRandomValue(0, App->map->data.width), GetRandomValue(0, App->map->data.height));
 		while (!App->pathfinding->IsWalkable(pos))
 		{
-			pos = App->map->WorldToMap(pos.x = GetRandomValue(0, App->map->data.width), pos.y = GetRandomValue(0, App->map->data.height));
+			pos = iPoint(pos.x = GetRandomValue(0, App->map->data.width), pos.y = GetRandomValue(0, App->map->data.height));
 		}
 
 	//iPoint poss = App->map->MapToWorld(pos.x, pos.y);

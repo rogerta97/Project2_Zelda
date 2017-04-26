@@ -195,60 +195,60 @@ void Cuco::RunUp()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = run_up;
+	anim_state = basic_chicken;
 }
 
 void Cuco::RunDown()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = run_down;
+	anim_state = basic_chicken;
 }
 
 void Cuco::RunLeft()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
-	anim_state = run_left;
-	draw_offset.x = 8;
+	anim_state = basic_chicken;
+	//draw_offset.x = 8;
 }
 
 void Cuco::RunRight()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = run_right;
-	draw_offset.x = -8;
+	anim_state = basic_chicken;
+	//draw_offset.x = -8;
 }
 
 void Cuco::IdleUp()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = idle_up;
+	anim_state = basic_chicken;
 }
 
 void Cuco::IdleDown()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = idle_down;
+	anim_state = basic_chicken;
 }
 
 void Cuco::IdleLeft()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
-	anim_state = idle_left;
-	draw_offset.x = 8;
+	anim_state = basic_chicken;
+//	draw_offset.x = 8;
 }
 
 void Cuco::IdleRight()
 {
 	game_object->SetAnimation(cuco_type.c_str());;
 	flip = false;
-	anim_state = idle_right;
-	draw_offset.x = -8;
+	anim_state = basic_chicken;
+//	draw_offset.x = -8;
 }
 
 void Cuco::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -324,11 +324,11 @@ void Cuco::CucoMove()
 			break;
 		}
 
-		//iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
-		//target_pos.y += Half_Tile;
-		//target_pos.x += Half_Tile;
+		iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
 
-		//Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
 
 		break;
 	}
@@ -365,10 +365,11 @@ void Cuco::CheckState()
 
 void Cuco::GetNewPath()
 {
-	target = App->map->WorldToMap(GetRandomValue(GetPos().x - 320, GetPos().x + 320), GetRandomValue(GetPos().y - 320, GetPos().y + 320));
+	target = App->map->WorldToMap(GetRandomValue(GetPos().x - 520, GetPos().x + 520), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
+
 	while (!App->pathfinding->IsWalkable(target) && target!=GetPos())
 	{
-		target = App->map->WorldToMap(GetRandomValue(GetPos().x - 320, GetPos().x + 320), GetRandomValue(GetPos().y - 320, GetPos().y + 320));
+		target = App->map->WorldToMap(GetRandomValue(GetPos().x - 520, GetPos().x + 520), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
 	}
 	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
 	{
