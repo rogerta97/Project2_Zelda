@@ -181,6 +181,33 @@
     <ClCompile Include="LogoScene.cpp">
       <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
     </ClCompile>
+    <ClCompile Include="BezierEasing.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
+    <ClCompile Include="MageSkeleton.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
+    <ClCompile Include="TacoAttack.cpp">
+      <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Cuco.cpp">
+      <Filter>Engine\4. Entities ==========\Cuco</Filter>
+	</ClCompile>
+    <ClCompile Include="Navi.cpp">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviBasicAttack.cpp">
+      <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="FinalScreen.cpp">
+      <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
+	</ClCompile>
+    <ClCompile Include="MinimapManager.cpp">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+     </ClCompile>
+    <ClCompile Include="Mapping.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -393,6 +420,33 @@
     <ClInclude Include="LogoScene.h">
       <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
     </ClInclude>
+    <ClInclude Include="BezierEasing.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="MageSkeleton.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
+    <ClInclude Include="TacoAttack.h">
+      <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Cuco.h">
+      <Filter>Engine\4. Entities ==========\Cuco</Filter>
+	</ClInclude>
+    <ClInclude Include="Navi.h">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviBasicAttack.h">
+      <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="FinalScreen.h">
+      <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>	 
+	</ClInclude>
+    <ClInclude Include="MinimapManager.h">
+      <Filter>Engine\2. Components ======\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mapping.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -482,6 +536,21 @@
     <Filter Include="Engine\3. Scenes ==========\LogoScene">
       <UniqueIdentifier>{2a7db05e-620f-44c4-aa2c-95a40dfdd87a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\5. Spells ===========\TacoAttack">
+      <UniqueIdentifier>{2eae4e44-1c45-45b2-8890-97b995dc6d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Cuco">
+      <UniqueIdentifier>{d9e4eae2-e1c2-476f-9988-67a5d49dbee9}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="Engine\4. Entities ==========\Navi">
+      <UniqueIdentifier>{dc840a14-aa38-42bd-9623-77bb68548b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\NaviBasicAttack">
+      <UniqueIdentifier>{af1164c2-4c7a-4302-9657-90a3aa0b08e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\FinalScreen">
+      <UniqueIdentifier>{6e1c8ebe-370f-4096-966b-82307e69392d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -552,6 +621,15 @@
     </Xml>
     <Xml Include="..\Game\menu_scene.xml">
       <Filter>Engine\3. Scenes ==========\Menu</Filter>
+    </Xml>
+    <Xml Include="..\Game\mageskeleton.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\navi.xml">
+      <Filter>Engine\4. Entities ==========\Navi</Filter>
+    </Xml>
+    <Xml Include="..\Game\navibasicattack.xml">
+      <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </Xml>
   </ItemGroup>
 </Project>

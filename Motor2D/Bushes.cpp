@@ -2,7 +2,6 @@
 #include "Bushes.h"
 #include "GameObject.h"
 #include "j1Viewports.h"
-#include "PlayerManager.h"
 #include "j1FileSystem.h"
 
 Bush::Bush(iPoint _pos)

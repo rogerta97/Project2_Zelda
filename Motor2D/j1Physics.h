@@ -97,8 +97,9 @@ public:
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);
 
-private:
+public:
 	bool			debug = false;
+private:
 	b2World*	    world = nullptr;
 	b2MouseJoint*   mouse_joint = nullptr;
 	b2Body*			ground = nullptr;

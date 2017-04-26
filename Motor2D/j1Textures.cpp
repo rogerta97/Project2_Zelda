@@ -101,6 +101,9 @@ SDL_Surface * const j1Textures::LoadSurface(const char * path)
 // Unload texture
 bool j1Textures::UnLoadTexture(SDL_Texture* texture)
 {
+	if (texture == nullptr)
+		return false;
+
 	for (std::list<Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
 	{
 		if (texture == (*it)->tex)

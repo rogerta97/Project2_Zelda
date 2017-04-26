@@ -1,14 +1,10 @@
 #include "Entity.h"
 #include "j1Viewports.h"
-#include "j1Scene.h"
-#include "MainScene.h"
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
 #include "Functions.h"
 #include "Quest_Manager.h"
-
-#define LIFE_BAR_COLOR_1 {30, 30, 30, 255}
 
 void Entity::CleanEntity()
 {
@@ -115,18 +111,9 @@ void Entity::Slow(float speed_multiplicator, float time)
 void Entity::Stun(float time)
 {
 	stuned = true;
-	stun s(time, this);
+	stun s(time, this, App->entity->GetEntityEffectsAnimator()->GetAnimation("stun"));
 	App->entity->stuned_entities.push_back(s);
 }
-
-void Entity::BoomerangEffects(Entity* entity, Ability * ability, Spell * spell)
-{
-	if (spell->stats.slow_duration > 0)
-		Slow(spell->stats.slow_multiplicator, spell->stats.slow_duration);
-	if (spell->stats.stun_duration > 0)
-		Stun(spell->stats.stun_duration);
-}
-
 
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
@@ -141,7 +128,7 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 			life.w = 0;
 
 		// Back bar
-		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 10, 0, true);
+		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 9, 0, true);
 
 		// Get the viewports of my team
 		vector<int> my_team = App->scene->main_scene->player_manager->GetTeamViewports(team);
@@ -185,18 +172,20 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 
 void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 {
-	stats.speed = stats.restore_speed = stats.base_speed + extra_speed;
-	stats.max_life = stats.base_hp + extra_hp;
 	switch (team)
 	{
 	case 1:
 	{
 		stats.power = (stats.base_power + extra_power)*(1 + (App->scene->main_scene->quest_manager->get_progress(1,GetTeam()))*0.1);
+		stats.max_life = (stats.base_hp + extra_hp) + (10 * (App->scene->main_scene->quest_manager->get_progress(3, GetTeam())));
+		stats.speed = (stats.base_speed + extra_speed) + (5 * (App->scene->main_scene->quest_manager->get_progress(2, GetTeam())));
 		break;
 	}
 	case 2:
 	{
 		stats.power = (stats.base_power + extra_power)*(1 + (App->scene->main_scene->quest_manager->get_progress(1, GetTeam()))*0.1);
+		stats.max_life = (stats.base_hp + extra_hp) + (10 * (App->scene->main_scene->quest_manager->get_progress(3, GetTeam())));
+		stats.speed = (stats.base_speed + extra_speed) + (5 * (App->scene->main_scene->quest_manager->get_progress(2, GetTeam())));
 		break;
 	}
 	default:

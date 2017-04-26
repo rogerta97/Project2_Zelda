@@ -25,6 +25,12 @@ Boomerang::Boomerang(iPoint pos)
 	App->xml->LoadXML("boomerang.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
+	App->xml->LoadXML("link.xml", doc);
+	pugi::xml_node stats_node = doc.child("file").child("stats").child("boomerang");
+	damage_multiplicator_first = stats_node.attribute("first").as_float(0.0f);
+	damage_multiplicator_second = stats_node.attribute("second").as_float(0.0f);
+	damage_multiplicator_return = stats_node.attribute("return").as_float(0.0f);
+
 	draw_offset = restore_draw_offset = { 7, 9 };
 
 	name = "boomerang";
@@ -42,7 +48,10 @@ bool Boomerang::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("spin");
+	if(owner->GetTeam() == ANIMATIONS_TEAM)
+		game_object->SetAnimation("spin");
+	else
+		game_object->SetAnimation("spin_2");
 
 	return ret;
 }
@@ -81,12 +90,12 @@ bool Boomerang::Update(float dt)
 		if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) < BOOMERANG_RANGE * 0.5f)
 		{
 			stats.stun_duration = 1.0f;
-			stats.damage_multiplicator = 0.3f;
+			stats.damage_multiplicator = damage_multiplicator_first;
 		}
 		else if (DistanceFromTwoPoints(starting_pos.x, starting_pos.y, game_object->GetPos().x, game_object->GetPos().y) > BOOMERANG_RANGE * 0.5f)
 		{
 			stats.stun_duration = 0.0f;
-			stats.damage_multiplicator = 0.15f;
+			stats.damage_multiplicator = damage_multiplicator_second;
 			stats.slow_duration = SLOW_TIME;
 			stats.slow_multiplicator = SLOW_MULTIPLICATOR;
 		}
@@ -94,7 +103,7 @@ bool Boomerang::Update(float dt)
 	else
 	{
 		stats.stun_duration = 0.0f;
-		stats.damage_multiplicator = 0.15f;
+		stats.damage_multiplicator = damage_multiplicator_return;
 		stats.slow_duration = 0.0f;
 		stats.slow_multiplicator = 0.0f;
 	}
@@ -160,4 +169,12 @@ void Boomerang::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA,
 void Boomerang::Set(direction _dir)
 {
 	dir = _dir;
+}
+
+void Boomerang::Effects(Entity * spell_owner, Entity* reciever, Ability * ability)
+{
+	if (stats.slow_duration > 0)
+		reciever->Slow(stats.slow_multiplicator, stats.slow_duration);
+	if (stats.stun_duration > 0)
+		reciever->Stun(stats.stun_duration);
 }

@@ -11,8 +11,10 @@
 #include "MenuScene.h"
 #include "j1Console.h"
 #include "TeamSelectScene.h"
+#include "FinalScreen.h"
 #include "CharacterSelectionScene.h"
 #include "LogoScene.h"
+#include "Mapping.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -55,6 +57,8 @@ bool j1Scene::Start()
 	scenes.push_back(charselect_screen); 
 	logo_scene = new LogoScene();
 	scenes.push_back(logo_scene);
+	final_screen = new FinalScreen(); 
+	scenes.push_back(final_screen); 
 	// -------------
 
 	// Starting scene
@@ -71,6 +75,12 @@ bool j1Scene::Start()
 	players[1].team = 2;
 	players[2].team = 1;
 	players[3].team = 2;
+
+	//Create mapping for players
+	players[0].mapping = new Mapping();
+	players[1].mapping = new Mapping();
+	players[2].mapping = new Mapping();
+	players[3].mapping = new Mapping();
 
 	return ret;
 }

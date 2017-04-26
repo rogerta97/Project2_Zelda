@@ -21,6 +21,8 @@ public:
 	// CleanUp
 	bool CleanUp();
 
+	iPoint GetPos()const;
+
 private:
 
 public:

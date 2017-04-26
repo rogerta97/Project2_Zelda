@@ -22,12 +22,39 @@ class ZeldaManager;
 class BaseManager;
 class QuestManager;
 class JungleCampManager;
+class MinimapManager;
 
 enum GameStates
 {
 
 };
 
+struct MinimapState 
+{
+	UI_Image* stats_back_image = nullptr; 
+
+	UI_Text* hp_text = nullptr;
+	UI_Text* power_text = nullptr;
+	UI_Text* speed_text = nullptr;
+	UI_Text* kills_text = nullptr;
+	UI_Text* minions_text = nullptr;
+
+	void Enable();
+	void Disable();
+
+};
+
+struct MainSceneViewport
+{
+	UI_Window*			main_window = nullptr;
+	UI_Image*			princess = nullptr;
+	UI_Image*			progress_bar = nullptr;
+	UI_Image*			rupiees_img = nullptr;
+	UI_Image*			minimap_icon = nullptr;
+	UI_Image*			win_text = nullptr;
+
+	MinimapState		minimapstate;
+};
 class MainScene : public Scene 
 {
 public:
@@ -56,14 +83,6 @@ private:
 	void UpdateWinnerAnim(uint winner, float dt);
 
 public:
-	UI_Window*			main_window_1 = nullptr;
-	UI_Image*			princess_1 = nullptr;
-	UI_Window*			main_window_2 = nullptr;
-	UI_Image*			princess_2 = nullptr;
-	UI_Window*			main_window_3 = nullptr;
-	UI_Image*			princess_3 = nullptr;
-	UI_Window*			main_window_4 = nullptr;
-	UI_Image*			princess_4 = nullptr;
 
 	MinionManager*		minion_manager = nullptr;
 	TowerManager*	    tower_manager = nullptr;;
@@ -74,33 +93,14 @@ public:
 	QuestManager*		quest_manager = nullptr;
 	JungleCampManager*	jungleCamp_manager = nullptr;
 	PlayerManager*      player_manager = nullptr;
+	MinimapManager*     minimap_manager = nullptr;
+
+	// UI Elements
+
+	vector<MainSceneViewport>	ui_viewports;
 
 private:
-	//UI elements
-	// P1
-	UI_Image*			progress_bar_1 = nullptr; 
-	UI_Image*			rupiees_img_1 = nullptr;
-	UI_Image*			minimap_icon_1 = nullptr;
-	UI_Image*			win_text_1 = nullptr;
-
-	// P2
-	UI_Image*			progress_bar_2 = nullptr;
-	UI_Image*			rupiees_img_2 = nullptr;
-	UI_Image*			minimap_icon_2 = nullptr;
-	UI_Image*			win_text_2 = nullptr;
-
-	// P3
-	UI_Image*			progress_bar_3 = nullptr;
-	UI_Image*			rupiees_img_3 = nullptr;
-	UI_Image*			minimap_icon_3 = nullptr;
-	UI_Image*			win_text_3 = nullptr;
-
-	// P4
-	UI_Image*			progress_bar_4 = nullptr;
-	UI_Image*			rupiees_img_4 = nullptr;
-	UI_Image*			minimap_icon_4 = nullptr;
-	UI_Image*			win_text_4 = nullptr;
-
+	
 	vector<PhysBody*>	map_collisions;
 
 	j1Timer				game_timer;

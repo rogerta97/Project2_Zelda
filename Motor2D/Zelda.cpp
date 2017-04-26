@@ -139,6 +139,11 @@ iPoint Zelda::GetPos() const
 	return game_object->GetPos();
 }
 
+zelda_states Zelda::GetZeldaState()
+{
+	return state;
+}
+
 void Zelda::MoveUp(float speed)
 {
 	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });

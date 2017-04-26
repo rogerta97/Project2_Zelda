@@ -9,9 +9,11 @@
 struct SDL_Texture;
 class MenuScene; 
 class MainScene;
+class FinalScreen; 
 class CharacterSelectionScene; 
 class TeamSelectScene;
 class LogoScene;
+class Mapping;
 
 struct player_info
 {
@@ -20,6 +22,8 @@ struct player_info
 	uint			team = 3;
 	uint			player = 5;
 	entity_name		character = e_n_null;
+	Mapping*		mapping = nullptr;
+
 	void Reset() { gamepad = 5; viewport = 5;  team = 3; player = 5; character = e_n_null; };
 };
 
@@ -73,6 +77,7 @@ public:
 	MainScene*					 main_scene = nullptr;
 	CharacterSelectionScene*	 charselect_screen = nullptr; 
 	TeamSelectScene*			 team_select = nullptr;
+	FinalScreen*				 final_screen = nullptr; 
 	LogoScene*					 logo_scene = nullptr;
 
 	player_info					 players[4];

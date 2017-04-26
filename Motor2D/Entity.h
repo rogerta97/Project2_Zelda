@@ -18,6 +18,8 @@ class PhysBody;
 class GameObject;
 class Spell;
 
+#define ANIMATIONS_TEAM 1
+
 enum states
 {
 	run_up,
@@ -69,6 +71,20 @@ enum states
 	skeleton_stunned,
 	skeleton_spin,
 	skeleton_bone,
+
+	mskeleton_up,
+	mskeleton_lateral,
+	mskeleton_down,
+	mskeleton_attack_up,
+	mskeleton_attack_lateral,
+	mskeleton_attack_down,
+
+	basic_chicken,
+	cap_chicken,
+	black_chicken,
+	pink_chicken,
+	cook_chicken,
+	stone_chicken,
 
 	states_null,
 };
@@ -273,6 +289,7 @@ public:
 	virtual void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
+	virtual void ListenEv(int type, EventThrower* origin, int id) {};
 
 	Ability* AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name = "no_name");
 	Ability* GetAbility(int number);
@@ -283,7 +300,6 @@ public:
 	void Heal(int heal);
 	void Slow(float speed_multiplicator, float time);
 	void Stun(float time);
-	void BoomerangEffects(Entity* entity, Ability* ability, Spell* spell);
 
 	//Set Team if not set already
 	void SetTeam(uint _team) 

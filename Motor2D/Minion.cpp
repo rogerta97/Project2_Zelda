@@ -8,10 +8,8 @@
 #include "PlayerManager.h"
 #include "j1Entity.h"
 #include "Entity.h"
-#include <vector>
 #include "p2Log.h"
 #include "MinionManager.h"
-#include "j1Scene.h"
 #include "MainScene.h"
 #include "Tower.h"
 #include "TowerManager.h"
@@ -128,8 +126,7 @@ bool Minion::Update(float dt)
 				{
 					DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-					if (TextCmp(spell->name.c_str(), "boomerang"))
-						BoomerangEffects(entity, ability, spell);
+					spell->Effects(entity, this, ability);
 				}
 			}
 			else

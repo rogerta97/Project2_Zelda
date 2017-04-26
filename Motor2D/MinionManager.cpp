@@ -5,6 +5,8 @@
 #include "j1Entity.h"
 #include "Minion.h"
 #include "j1XMLLoader.h"
+#include "p2Log.h"
+#include "j1Audio.h"
 
 // Coment code, ty
 MinionManager::MinionManager()
@@ -60,6 +62,9 @@ MinionManager::MinionManager()
 	}
 
 	state = game_start;
+
+	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
+
 	StartTimer();
 
 }
@@ -116,6 +121,8 @@ bool MinionManager::Update()
 
 bool MinionManager::CleanUp()
 {
+	LOG("Unloading MinionManager");
+
 	for (list<Minion*>::iterator it = team1_minions.begin(); it != team1_minions.end();)
 	{
 		App->entity->DeleteEntity(*it);
@@ -177,6 +184,8 @@ void MinionManager::KillMinion(Entity * minion)
 		}
 
 	}
+
+	App->audio->PlayFx(death_sound_effect, 0);
 }
 
 void MinionManager::StartTimer()

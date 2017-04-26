@@ -8,14 +8,11 @@
 #include "JungleCampManager.h"
 #include "Entity.h"
 #include "j1Entity.h"
-#include <vector>
 #include "p2Log.h"
-#include "MainScene.h"
-#include "j1Scene.h"
-#include "j1Spell.h"
 #include "Spell.h"
 #include "SnakePoison.h"
 #include "j1XMLLoader.h"
+#include "Quest_Manager.h"
 
 #define SNAKE_H 32
 #define SNAKE_W 32
@@ -93,8 +90,7 @@ bool Snakes::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				if (TextCmp(spell->name.c_str(), "boomerang"))
-					BoomerangEffects(entity, ability, spell);
+				spell->Effects(entity, this, ability);
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -111,6 +107,22 @@ bool Snakes::Update(float dt)
 		{
 			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+
+			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+			{
+				if (this->GetPos().x > HALFMAP)
+				{
+					if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
+						if (entity->is_player)
+							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
+				}
+				else
+				{
+					if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
+						if (entity->is_player)
+							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
+				}
+			}
 		}
 	}
 

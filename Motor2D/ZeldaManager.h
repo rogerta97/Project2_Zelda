@@ -14,14 +14,14 @@ public:
 	void CleanUp();
 
 	iPoint GetZeldaPos();
+	Zelda* GetZelda();
 
 private:
 
 public:
 
 private:
-	Zelda*	zelda = nullptr;
-
+	Zelda* zelda = nullptr;
 };
 
 #endif

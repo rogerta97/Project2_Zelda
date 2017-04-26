@@ -31,14 +31,13 @@ ZeldaManager::ZeldaManager()
 			}
 			i++;
 		}
+
 		path_sorted.push_back(path_unsorted.at(index));
 		path_unsorted.erase(path_unsorted.begin() + index);
-
 	}
 
 	zelda->SetPath(path_sorted);
-	//-----
-
+	// -----
 }
 
 ZeldaManager::~ZeldaManager()
@@ -53,4 +52,14 @@ void ZeldaManager::CleanUp()
 iPoint ZeldaManager::GetZeldaPos()
 {
 	return zelda->GetPos();
+}
+
+Zelda * ZeldaManager::GetZelda()
+{
+	Zelda* ret = nullptr;
+
+	if(zelda!= nullptr)
+		ret = zelda;
+
+	return ret;
 }
