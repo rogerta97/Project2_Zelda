@@ -10,14 +10,23 @@ enum remaping_state
 {
 	r_s_state_null,
 
-	r_s_confirm,
-	r_s_back, 
-	r_s_minimap,
-	r_s_shop,
-	r_s_a1,
-	r_s_a2,
-	r_s_a3,
-	r_s_a4,
+	r_s_confirm_out,
+	r_s_back_out,
+	r_s_minimap_out,
+	r_s_shop_out,
+	r_s_a1_out,
+	r_s_a2_out,
+	r_s_a3_out,
+	r_s_a4_out,
+
+	r_s_confirm_in,
+	r_s_back_in,
+	r_s_minimap_in,
+	r_s_shop_in,
+	r_s_a1_in,
+	r_s_a2_in,
+	r_s_a3_in,
+	r_s_a4_in,
 
 };
 
@@ -60,8 +69,9 @@ struct remap_ui
 	UI_Image* lt = nullptr;
 
 	UI_Image* cursor = nullptr;
+	UI_Image* button_support = nullptr; 
 
-	remaping_state current_state = r_s_a4;
+	remaping_state current_state = r_s_a4_out;
 };
 
 class RemapingScene : public Scene
@@ -81,6 +91,13 @@ public:
 private:
 
 	iPoint GetCursorPosFromCurrentState(remaping_state curr_state);
+	void UpdateKeys(int i); 
+	void EnterOption(int i); 
+	void QuitOption(int i); 
+
+	void OpenFreeButtonList(int i); 
+
+	bool IsInside(int i); 
 	
 private:
 

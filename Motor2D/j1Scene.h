@@ -90,6 +90,7 @@ private:
 
 	// Current scene
 	Scene*						 current_scene = nullptr;
+	Scene*						 last_scene = nullptr; 
 		
 };
 
