@@ -94,9 +94,10 @@ bool RemapingScene::Start()
 		remapping_ui[i].a2_background = window->CreateImage({ a2_background_pos.x + offset_x, a2_background_pos.y + offset_y }, rectangle_background_rect);
 		remapping_ui[i].a3_background = window->CreateImage({ a3_background_pos.x + offset_x, a3_background_pos.y + offset_y }, rectangle_background_rect);
 		remapping_ui[i].a4_background = window->CreateImage({ a4_background_pos.x + offset_x, a4_background_pos.y + offset_y }, rectangle_background_rect);
-		remapping_ui[i].cursor = window->CreateImage({ GetCursorPosFromCurrentState(remapping_ui[i].current_state).x + offset_x, GetCursorPosFromCurrentState(remapping_ui[i].current_state).y + offset_y }, cursor_rect);
 		remapping_ui[i].button_support = window->CreateImage({ 0,0 }, button_suport_rect);
-		remapping_ui[i].button_support->enabled = false; 
+		remapping_ui[i].button_support->enabled = false;
+		remapping_ui[i].cursor = window->CreateImage({ GetCursorPosFromCurrentState(remapping_ui[i].current_state).x + offset_x, GetCursorPosFromCurrentState(remapping_ui[i].current_state).y + offset_y }, cursor_rect);
+
 		// ----
 
 		// Setting text to the buttons 
@@ -187,6 +188,34 @@ bool RemapingScene::Update(float dt)
 			{
 				int curr = remapping_ui[i].current_state;
 				curr++;
+
+				remapping_ui[i].current_state = static_cast<remaping_state> (curr);
+
+				remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
+			}
+
+		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN)
+		{
+			if (remapping_ui[i].current_state <= r_s_a4_out && remapping_ui[i].current_state > r_s_shop_out)
+			{
+				int curr = remapping_ui[i].current_state;
+				curr -= 4; 
+
+				remapping_ui[i].current_state = static_cast<remaping_state> (curr);
+
+				remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
+			}
+
+		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN)
+		{
+			if (remapping_ui[i].current_state <= r_s_shop_out && remapping_ui[i].current_state > 0)
+			{
+				int curr = remapping_ui[i].current_state;
+				curr += 4;
 
 				remapping_ui[i].current_state = static_cast<remaping_state> (curr);
 
@@ -560,6 +589,11 @@ void RemapingScene::OpenFreeButtonList(int i)
 {
 	remapping_ui[i].button_support->SetPos({ remapping_ui[i].cursor->GetPos().x + 280, remapping_ui[i].cursor->GetPos().y});
 	remapping_ui[i].button_support->enabled = true; 
+
+	remapping_ui[i].cursor->SetPos(remapping_ui[i].button_support->GetPos()); 
+	remapping_ui[i].cursor->image = {687, 444, 38, 38};
+
+
 
 }
 
