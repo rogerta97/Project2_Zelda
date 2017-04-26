@@ -24,7 +24,7 @@
 
 Tower::Tower(iPoint pos) 
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_TOWER, App->cf->MASK_TOWER, pbody_type::p_t_tower, 0);
 	
 	game_object->CreateCollision(iPoint(0, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -123,12 +123,13 @@ bool Tower::Update(float dt)
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
 	if (GotHit(entity, ability, spell))
+	{
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
 			if (spell != nullptr)
 			{
-
+				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -139,7 +140,7 @@ bool Tower::Update(float dt)
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
-
+	}
 	return ret;
 }
 

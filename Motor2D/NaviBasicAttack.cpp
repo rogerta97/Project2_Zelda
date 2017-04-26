@@ -31,8 +31,6 @@ NaviBasicAttack::NaviBasicAttack(iPoint pos)
 
 	name = "navi_basic_attack";
 
-	timer.Start();
-
 	starting_pos = pos;
 }
 
@@ -46,7 +44,9 @@ bool NaviBasicAttack::Start()
 
 	die = false;
 
-	if (GetTeam() == ANIMATIONS_TEAM)
+	timer.Start();
+
+	if (owner->GetTeam() == ANIMATIONS_TEAM)
 		game_object->SetAnimation("basic_projectile");
 	else
 		game_object->SetAnimation("basic_projectile_2");
@@ -96,10 +96,12 @@ bool NaviBasicAttack::Update(float dt)
 	{
 		die = true;
 		timer.Start();
-		if (GetTeam() == ANIMATIONS_TEAM)
+
+		if (owner->GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("destroy");
 		else
 			game_object->SetAnimation("destroy_2");
+
 		draw_offset = { 15, 15 };
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 	}
@@ -145,7 +147,7 @@ void NaviBasicAttack::CleanSpell()
 void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	// Delete if hits another enemy entity
-	if (fixtureB->type == fixture_type::f_t_hit_box && bodyB != game_object->pbody)
+	if (fixtureB->type == fixture_type::f_t_hit_box && bodyB != owner->game_object->pbody)
 	{
 		Entity* e = nullptr;
 
@@ -155,10 +157,12 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 		{
 			die = true;
 			timer.Start();
-			if (GetTeam() == ANIMATIONS_TEAM)
+
+			if (owner->GetTeam() == ANIMATIONS_TEAM)
 				game_object->SetAnimation("destroy");
 			else
 				game_object->SetAnimation("destroy_2");
+
 			draw_offset = { 15, 15 };
 			game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 		}
