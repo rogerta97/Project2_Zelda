@@ -9,6 +9,7 @@
 struct SDL_Texture;
 class MenuScene; 
 class MainScene;
+class FinalScreen; 
 class CharacterSelectionScene; 
 class TeamSelectScene;
 class LogoScene;
@@ -76,6 +77,7 @@ public:
 	MainScene*					 main_scene = nullptr;
 	CharacterSelectionScene*	 charselect_screen = nullptr; 
 	TeamSelectScene*			 team_select = nullptr;
+	FinalScreen*				 final_screen = nullptr; 
 	LogoScene*					 logo_scene = nullptr;
 
 	player_info					 players[4];
