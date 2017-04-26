@@ -129,6 +129,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Quest_Manager.cpp" />
+    <ClCompile Include="RemapingScene.cpp" />
     <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SnakePoison.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Quest_Manager.h" />
+    <ClInclude Include="RemapingScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
     <ClInclude Include="Skeleton.h" />
