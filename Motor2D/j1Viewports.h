@@ -151,6 +151,7 @@ public:
 	void SetViews(uint number);
 	uint GetViews();
 	SDL_Rect GetViewportRect(uint viewport);
+	SDL_Rect GetViewportSize();
 
 	void MoveCamera(int id, int x, int y);
 	void SetCamera(int id, int x, int y);
@@ -212,6 +213,8 @@ private:
 	float				 scale = -1.0;
 
 	j1PerfTimer			 timer;
+
+	SDL_Rect			 viewport_size = NULLRECT;
 };
 
 #endif // __j1VIEWPORTS_H__

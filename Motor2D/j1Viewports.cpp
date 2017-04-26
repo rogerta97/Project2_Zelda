@@ -70,8 +70,7 @@ bool j1Viewports::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		camera1.y--;
 
-
-	//LOG("viewports time: %f", timer.ReadMs());
+	viewport_size = GetViewportRect(1);
 
 	return ret;
 }
@@ -163,6 +162,11 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 	}
 	}
 	return ret;
+}
+
+SDL_Rect j1Viewports::GetViewportSize()
+{
+	return viewport_size;
 }
 
 void j1Viewports::MoveCamera(int id, int x, int y)
@@ -296,7 +300,7 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 {
 	layer_blit lblit(layer, texture, pos, section, viewport, scale, use_camera, _flip, angle, pivot_x, pivot_y);
 
-	SDL_Rect view = GetViewportRect(1);
+	SDL_Rect view = GetViewportSize();
 
 	if(viewport == 0 || viewport == 1)
 	{
