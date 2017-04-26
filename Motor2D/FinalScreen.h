@@ -62,6 +62,10 @@ private:
 	UI_Image*		title_background = nullptr; 
 	UI_Text*		title_text = nullptr; 
 
+	UI_Image*		X_changescreen_button_image = nullptr;
+	UI_Image*		X_changescreen_background_image = nullptr;
+	UI_Text*		changescreen_text = nullptr; 
+
 public: 
 
 private: 

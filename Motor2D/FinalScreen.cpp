@@ -17,12 +17,29 @@ bool FinalScreen::Start()
 
 	window = App->gui->UI_CreateWin({0, 0}, screen.w, screen.h, 0, false);
 
-	SDL_Rect background_title_rect = { 652, 526, 316, 69}; 
-	iPoint background_title_rect_pos = { screen.w/2 - background_title_rect.w / 2, 20 };
+	SDL_Rect background_title_rect = { 0, 2203, 316, 69}; 
+	iPoint background_title_rect_pos = { screen.w/2 - background_title_rect.w / 2, screen.h/25 };
+
 	title_background = window->CreateImage(background_title_rect_pos, background_title_rect);
 
 	title_text = window->CreateText({ background_title_rect_pos.x + 75, background_title_rect_pos.y + 13 }, App->font->game_font_20);
 	title_text->SetText("GAME STATS");
+
+
+	SDL_Rect background_X_rect = { 0, 2203, 316, 69 };
+	iPoint background_X_pos = { screen.w - (screen.w/4) - 15, screen.h / 25 };
+
+	X_changescreen_background_image = window->CreateImage(background_X_pos, background_X_rect);
+
+	SDL_Rect button_X_rect = {244, 195, 40, 40}; 
+	iPoint button_X_pos = { background_X_pos.x + 20, background_X_pos.y + 15};
+
+	X_changescreen_button_image = window->CreateImage(button_X_pos, button_X_rect);
+
+	iPoint changescreen_text_pos = { background_X_pos.x + 70, background_X_pos.y + 15 };
+
+	changescreen_text = window->CreateText(changescreen_text_pos, App->font->game_font_20);
+	changescreen_text->SetText("RETURN TO MENU"); 
 
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
 
@@ -30,8 +47,8 @@ bool FinalScreen::Start()
 
 	//Creating player info 
 
-	SDL_Rect placeholder_item = { 1321, 587, 45, 45 };
-	SDL_Rect placeholder_character = { 1321, 587, 90,90 };
+	SDL_Rect placeholder_item = { 460, 2240, 45, 45 };
+	SDL_Rect placeholder_character = { 460, 2240, 90,90 };
 
 	// This need to be modified to adapt how we save characters data
 
@@ -61,8 +78,8 @@ bool FinalScreen::Start()
 	int y_offset = 0; 
 	int offset_increment = screen.h / 5; 
 
-	SDL_Rect background_card_rect_team1 = { 1112, 208, 858, 122 };
-	SDL_Rect background_card_rect_team2 = { 727, 364, 858, 122 };
+	SDL_Rect background_card_rect_team1 = { 0, 1959, 857, 123 };
+	SDL_Rect background_card_rect_team2 = { 0, 2080, 857, 123 };
 
 	iPoint background_card_pos = { screen.w/2 - background_card_rect_team1.w/2, screen.h/6};
 
@@ -131,7 +148,7 @@ bool FinalScreen::Update(float dt)
 	// Printing background
 		App->view->LayerBlit(0, background_image, App->view->camera1, {0,0,1994, 1359}, 0,1);
 
-		if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
+		if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
 			App->scene->ChangeScene((Scene*)App->scene->menu_scene); 
 
 	return false;
@@ -148,8 +165,8 @@ bool FinalScreen::CleanUp()
 void final_screen_element::SetInfo(final_screen_player_info player_info)
 {
 
-	SDL_Rect placeholder_character = { 1321, 587, 90, 90 };
-	SDL_Rect placeholder_item = { 1321, 587, 45, 45 };
+	SDL_Rect placeholder_character = { 460, 2240, 90, 90 };
+	SDL_Rect placeholder_item = { 460, 2240, 45, 45 };
 
 	string kills_num_str = to_string(player_info.kills); 
 	string deaths_num_str = to_string(player_info.deaths);
@@ -162,13 +179,13 @@ void final_screen_element::SetInfo(final_screen_player_info player_info)
 	towers_num->SetText(towers_num_str);
 
 	if (player_info.character_name == "link")
-		character_image->image = placeholder_character;
+		character_image->image = {0, 2272, 108, 96};
 
 	else if (player_info.character_name == "ganon")
 		character_image->image = placeholder_character;
 
 	else if (player_info.character_name == "navi")
-		character_image->image = placeholder_character;
+		character_image->image = { 216, 2272, 108, 96 };
 
 	item_images_1->image = player_info.items[0]; 
 	item_images_2->image = player_info.items[1];
