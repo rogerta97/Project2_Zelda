@@ -60,6 +60,7 @@ Cuco::Cuco(iPoint pos)
 		break;
 	}
 	GetNewPath();
+
 	name = "Cuco";
 }
 
@@ -210,7 +211,7 @@ void Cuco::RunLeft()
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
 	anim_state = basic_chicken;
-	//draw_offset.x = 8;
+	draw_offset.x = 8;
 }
 
 void Cuco::RunRight()
@@ -218,7 +219,7 @@ void Cuco::RunRight()
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
 	anim_state = basic_chicken;
-	//draw_offset.x = -8;
+	draw_offset.x = -8;
 }
 
 void Cuco::IdleUp()
@@ -240,7 +241,6 @@ void Cuco::IdleLeft()
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
 	anim_state = basic_chicken;
-//	draw_offset.x = 8;
 }
 
 void Cuco::IdleRight()
@@ -248,7 +248,6 @@ void Cuco::IdleRight()
 	game_object->SetAnimation(cuco_type.c_str());;
 	flip = false;
 	anim_state = basic_chicken;
-//	draw_offset.x = -8;
 }
 
 void Cuco::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -335,7 +334,6 @@ void Cuco::CucoMove()
 	default:
 		break;
 	}
-
 }
 
 
@@ -349,7 +347,8 @@ void Cuco::CheckState()
 			state = Cuco_Move;
 			move_state = cMove_FollowBasePath;
 		}
-		else {
+		else 
+		{
 			GetNewPath();
 		}
 		break;
@@ -371,6 +370,7 @@ void Cuco::GetNewPath()
 	{
 		target = App->map->WorldToMap(GetRandomValue(GetPos().x - 520, GetPos().x + 520), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
 	}
+
 	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
 	{
 		base_path.clear();

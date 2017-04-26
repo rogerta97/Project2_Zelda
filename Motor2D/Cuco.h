@@ -73,7 +73,6 @@ public:
 	void SetBasePath(const std::list<iPoint>* path);
 
 private:
-
 	void CucoIdle();
 	void CucoMove();
 
@@ -87,21 +86,18 @@ private:
 
 public:
 	p2Point<int> target;
-private:
-	string cuco_type;
 
+private:
 	bool				flip = false;
 
-	CUCO_STATE		state = Cuco_Idle;
-
-	CUCO_MOVE_STATE	move_state = cMove_Idle;
+	string              cuco_type;
+	CUCO_STATE		    state = Cuco_Idle;
+	CUCO_MOVE_STATE	    move_state = cMove_Idle;
 
 	std::vector<iPoint>	base_path;
-
 	int					base_path_index = 0;
 
 	float				speed = 0;
-
 	bool				dead = false;
 
 	states				anim_state = states_null;

@@ -269,34 +269,62 @@ void j1Viewports::CenterCamera(int id, int x, int y)
 	}
 }
 
-void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, bool use_camera, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
+iPoint j1Viewports::GetCameraPos(uint viewport)
 {
-	layer_blit lblit(layer, texture, pos, section, viewport, scale, use_camera, _flip, angle, pivot_x, pivot_y);
+	iPoint ret = NULLPOINT;
 
 	switch (viewport)
 	{
 	case 1:
-		layer_list1.push(lblit);
+		ret = camera1;
 		break;
 	case 2:
-		layer_list2.push(lblit);
-		break;
-	case 3:
-		layer_list3.push(lblit);
-		break;
+		ret = camera2;
+			break;
+	case 3: 
+		ret = camera3;
+			break;
 	case 4:
-		layer_list4.push(lblit);
+		ret = camera4;
 		break;
-	default:
-		layer_list1.push(lblit);
-		if(number_of_views > 1)
+	}
+
+	return ret;
+}
+
+void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const SDL_Rect section, int viewport, float scale, bool use_camera, SDL_RendererFlip _flip, double angle, int pivot_x, int pivot_y)
+{
+	layer_blit lblit(layer, texture, pos, section, viewport, scale, use_camera, _flip, angle, pivot_x, pivot_y);
+
+	SDL_Rect view = GetViewportRect(1);
+
+	if(viewport == 0 || viewport == 1)
+	{
+		if (use_camera && !(-camera1.x > pos.x + section.w || -camera1.x + view.w < pos.x || -camera1.y > pos.y + section.h || -camera1.y + view.h < pos.y))
+			layer_list1.push(lblit);
+		else if (!use_camera)
+			layer_list1.push(lblit);
+	}
+	if (viewport == 0 || viewport == 2)
+	{
+		if (use_camera && !(-camera2.x > pos.x + section.w || -camera2.x + view.w < pos.x || -camera2.y > pos.y + section.h || -camera2.y + view.h < pos.y))
 			layer_list2.push(lblit);
-		if (number_of_views > 3)
-		{
+		else if (!use_camera)
+			layer_list2.push(lblit);
+	}
+	if (viewport == 0 || viewport == 3)
+	{
+		if (use_camera && !(-camera3.x > pos.x + section.w || -camera3.x + view.w < pos.x || -camera3.y > pos.y + section.h || -camera3.y + view.h < pos.y))
 			layer_list3.push(lblit);
+		else if (!use_camera)
+			layer_list3.push(lblit);
+	}
+	if (viewport == 0 || viewport == 4)
+	{
+		if (use_camera && !(-camera4.x > pos.x + section.w || -camera4.x + view.w < pos.x || -camera4.y > pos.y + section.h || -camera4.y + view.h < pos.y))
 			layer_list4.push(lblit);
-		}
-		break;
+		else if (!use_camera)
+			layer_list4.push(lblit);
 	}
 }
 

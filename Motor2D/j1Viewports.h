@@ -155,6 +155,7 @@ public:
 	void MoveCamera(int id, int x, int y);
 	void SetCamera(int id, int x, int y);
 	void CenterCamera(int id, int x, int y);
+	iPoint GetCameraPos(uint viewport);
 
 	void OnCommand(std::list<std::string>& tokens);
 
@@ -211,7 +212,6 @@ private:
 	float				 scale = -1.0;
 
 	j1PerfTimer			 timer;
-
 };
 
 #endif // __j1VIEWPORTS_H__
