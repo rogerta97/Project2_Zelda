@@ -9,6 +9,8 @@
 #include "j1XMLLoader.h"
 #include "Animation.h"
 #include "j1Window.h"
+#include "Mapping.h"
+#include "j1Scene.h"
 
 #define FADE_SPEED 150
 
@@ -131,7 +133,48 @@ bool MenuScene::Start()
 	// ---------
 
 	button_list.push_back(fx_button);
-	button_list.push_back(music_button); 
+	button_list.push_back(music_button);
+
+	//Remapping ui
+	for (int i = 0; i < 4; i++)
+	{
+		int x = 0 + screen.w / 2 * (i % 2);
+		int y = 0 + screen.w / 2 * (i / 2);
+
+		remapping_ui[i].a = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].b = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].x = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].y = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].rb = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].lb = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].rt = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+		remapping_ui[i].lt = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].a1_text = menu_window->CreateText();
+		remapping_ui[i].a1_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].a2_text = menu_window->CreateText();
+		remapping_ui[i].a2_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].a3_text = menu_window->CreateText();
+		remapping_ui[i].a3_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].a4_text = menu_window->CreateText();
+		remapping_ui[i].a4_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].confirm_text = menu_window->CreateText();
+		remapping_ui[i].confirm_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].back_text = menu_window->CreateText();
+		remapping_ui[i].back_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].minimap_text = menu_window->CreateText();
+		remapping_ui[i].minimap_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+
+		//remapping_ui[i].shop_text = menu_window->CreateText();
+		remapping_ui[i].shop_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
+	}
+
 
 	// Cursor --
 	cursor_1 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2), {80, 52, 48, 48 }, false);
@@ -240,37 +283,42 @@ bool MenuScene::Update(float dt)
 
 bool MenuScene::PostUpdate()
 {
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	//Testing remapping
+	int accept_key_id = -1;
+	if (App->scene->players[0].mapping->GetKey(m_k_confirm, &accept_key_id))
 	{
-
-		switch (current_button)
+		if (App->input->GetControllerButton(0, accept_key_id) == KEY_DOWN)
 		{
-		case START:
-			App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
-			return true;
-			break;
 
-		case OPTIONS:
-			//is_options = true; 
-			//GoOptions();
-			break;
+			switch (current_button)
+			{
+			case START:
+				App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
+				return true;
+				break;
 
-		case CREDITS:
+			case OPTIONS:
+				is_options = true; 
+				GoOptions();
+				break;
 
-			break;
+			case CREDITS:
 
-		case QUIT:
-			App->console->AddText("quit", Input);
-			break;
+				break;
 
-		case FX:
-			options_checkbox->SetBox(!options_checkbox->GetBox("fx"), "fx");
-			break; 
+			case QUIT:
+				App->console->AddText("quit", Input);
+				break;
 
-		case MUSIC:
-			options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
-			break; 
+			case FX:
+				options_checkbox->SetBox(!options_checkbox->GetBox("fx"), "fx");
+				break;
 
+			case MUSIC:
+				options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
+				break;
+
+			}
 		}
 	}
 

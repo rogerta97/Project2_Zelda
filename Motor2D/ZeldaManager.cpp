@@ -53,3 +53,13 @@ iPoint ZeldaManager::GetZeldaPos()
 {
 	return zelda->GetPos();
 }
+
+Zelda * ZeldaManager::GetZelda()
+{
+	Zelda* ret = nullptr;
+
+	if(zelda!= nullptr)
+		ret = zelda;
+
+	return ret;
+}

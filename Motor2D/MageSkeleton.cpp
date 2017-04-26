@@ -90,7 +90,7 @@ bool MageSkeleton::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				spell->Effects(entity, ability);
+				spell->Effects(entity, this, ability);
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -128,7 +128,7 @@ bool MageSkeleton::Update(float dt)
 
 			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
 			{
-				if (this->GetPos().x > HALFMAP)
+				if (this->GetPos().x < HALFMAP)
 				{
 					if (App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.empty())
 						if (entity->is_player)

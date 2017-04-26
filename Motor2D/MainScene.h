@@ -22,6 +22,7 @@ class ZeldaManager;
 class BaseManager;
 class QuestManager;
 class JungleCampManager;
+class MinimapManager;
 
 enum GameStates
 {
@@ -30,8 +31,6 @@ enum GameStates
 
 struct MinimapState 
 {
-	UI_Image* minimap = nullptr;
-
 	UI_Image* stats_back_image = nullptr; 
 
 	UI_Text* hp_text = nullptr;
@@ -94,6 +93,7 @@ public:
 	QuestManager*		quest_manager = nullptr;
 	JungleCampManager*	jungleCamp_manager = nullptr;
 	PlayerManager*      player_manager = nullptr;
+	MinimapManager*     minimap_manager = nullptr;
 
 	// UI Elements
 

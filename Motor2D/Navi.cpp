@@ -89,7 +89,10 @@ bool Navi::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("down");
+	if (GetTeam() == ANIMATIONS_TEAM)
+		game_object->SetAnimation("down");
+	else
+		game_object->SetAnimation("down_2");
 
 	can_move = true;
 
@@ -125,7 +128,7 @@ bool Navi::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				spell->Effects(entity, ability);
+				spell->Effects(entity, this, ability);
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -163,7 +166,10 @@ bool Navi::Update(float dt)
 	{
 		if (ability1_timer.ReadSec() < ABILITY1_DURATION)
 		{
-			App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);
+			if (GetTeam() == ANIMATIONS_TEAM)
+				App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);
+			else
+				App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area_2")->GetAnimationFrame(dt), 0);
 
 			if (look_for_entities)
 			{
@@ -398,7 +404,10 @@ void Navi::RunUp()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("up");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("up");
+		else
+			game_object->SetAnimation("up_2");
 		flip = false;
 	}
 }
@@ -407,7 +416,10 @@ void Navi::RunDown()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("down");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("down");
+		else
+			game_object->SetAnimation("down_2");
 		flip = false;
 	}
 }
@@ -416,7 +428,10 @@ void Navi::RunLeft()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("lateral");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("lateral");
+		else
+			game_object->SetAnimation("lateral_2");
 		flip = true;
 	}
 }
@@ -425,7 +440,10 @@ void Navi::RunRight()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("lateral");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("lateral");
+		else
+			game_object->SetAnimation("lateral_2");
 		flip = false;
 	}
 }
@@ -434,7 +452,10 @@ void Navi::IdleUp()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("up");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("up");
+		else
+			game_object->SetAnimation("up_2");
 		flip = false;
 	}
 }
@@ -443,7 +464,10 @@ void Navi::IdleDown()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("down");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("down");
+		else
+			game_object->SetAnimation("down_2");
 		flip = false;
 	}
 }
@@ -452,7 +476,10 @@ void Navi::IdleLeft()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("lateral");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("lateral");
+		else
+			game_object->SetAnimation("lateral_2");
 		flip = true;
 	}
 }
@@ -461,7 +488,10 @@ void Navi::IdleRight()
 {
 	if (can_move)
 	{
-		game_object->SetAnimation("lateral");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("lateral");
+		else
+			game_object->SetAnimation("lateral_2");
 		flip = false;
 	}
 }

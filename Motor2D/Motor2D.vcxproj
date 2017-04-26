@@ -84,6 +84,7 @@
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
+    <ClCompile Include="Cuco.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventThrower.cpp" />
     <ClCompile Include="Eyes.cpp" />
@@ -112,7 +113,9 @@
     <ClCompile Include="MageSkeleton.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
+    <ClCompile Include="Mapping.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="MinimapManager.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="MinionManager.cpp" />
     <ClCompile Include="Navi.cpp" />
@@ -152,6 +155,7 @@
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
+    <ClInclude Include="Cuco.h" />
     <ClInclude Include="CollisionFilters.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EventThrower.h" />
@@ -178,7 +182,9 @@
     <ClInclude Include="MageSkeleton.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
+    <ClInclude Include="Mapping.h" />
     <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="MinimapManager.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="MinionManager.h" />
     <ClInclude Include="Navi.h" />

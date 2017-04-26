@@ -27,6 +27,8 @@
 #include "EventThrower.h"
 #include "j1Audio.h"
 #include "j1XMLLoader.h"
+#include "MinimapManager.h"
+#include "MinimapManager.h"
 
 MainScene::MainScene()
 {
@@ -65,6 +67,9 @@ bool MainScene::Start()
 
 	for (int i = 0; i < 4;i++)
 	{
+		MainSceneViewport curr_viewport;
+
+		// Player UI
 		curr_viewport.main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 		curr_viewport.main_window->viewport = i + 1; 
 		curr_viewport.progress_bar = curr_viewport.main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
@@ -73,13 +78,20 @@ bool MainScene::Start()
 		curr_viewport.minimap_icon = curr_viewport.main_window->CreateImage(minimap_pos, minimap_rect);
 		curr_viewport.win_text = curr_viewport.main_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
-		curr_viewport.minimapstate.minimap = curr_viewport.main_window->CreateImage(minimap_img_pos, minimap_img_rect);
-		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
+
+		// Minimap UI
+		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect); 
+		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.hp_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.hp_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.power_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.power_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.speed_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.speed_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.kills_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.kills_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.minions_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.minions_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.Disable(); 
 
 		ui_viewports.push_back(curr_viewport);
@@ -121,16 +133,16 @@ bool MainScene::Start()
 	}
 	if (!def)
 	{
-		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), App->scene->players[0].gamepad, App->scene->players[0].viewport, App->scene->players[0].team,1);
-		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), App->scene->players[1].gamepad, App->scene->players[1].viewport, App->scene->players[1].team,1);
-		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), App->scene->players[2].gamepad, App->scene->players[2].viewport, App->scene->players[2].team,2);
-		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), App->scene->players[3].gamepad, App->scene->players[3].viewport, App->scene->players[3].team,2);
+		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
+		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), 2, 2, 2, 1);
+		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), 3, 3, 1, 2);
+		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), 4, 4, 2, 2);
 	}
 	else
 	{
 		Player* p1 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 1, 1, 1, 1);
-		Player* p2 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 1, 2);
-		Player* p3 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 2, 1);
+		Player* p2 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 2, 1);
+		Player* p3 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 1, 2);
 		Player* p4 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2, 2);
 	}
 
@@ -151,17 +163,26 @@ bool MainScene::Start()
 	tower_manager = new TowerManager();
   
 	// Zelda manager
+	LOG("Creating zelda manager");
 	zelda_manager = new ZeldaManager();
   
 	// Aesth manager
+	LOG("Creating aesthetics manager");
 	aest_manager = new AestheticsManager(); 
 	aest_manager->Start(); 
 
 	// Base manager
+	LOG("Creating base manager");
 	base_manager = new BaseManager();
 
 	//Quest manager
+	LOG("Creating quest manager");
 	quest_manager = new QuestManager();
+
+	// Minimap
+	LOG("Creating minimap manager");
+	minimap_manager = new MinimapManager();
+	minimap_manager->Start();
 
 
 	//Load Victory/Defeat Animations
@@ -226,6 +247,8 @@ bool MainScene::Update(float dt)
 		jungleCamp_manager->Update(dt);
 	if (quest_manager != nullptr)
 		quest_manager->Update();
+	if (minimap_manager != nullptr)
+		minimap_manager->Update(dt);
 	// ------
 
 	// Update progress bar
@@ -280,6 +303,7 @@ bool MainScene::CleanUp()
 	player_manager->CleanUp();	   RELEASE(player_manager);
 	jungleCamp_manager->CleanUp(); RELEASE(jungleCamp_manager);
 	quest_manager->CleanUp();	   RELEASE(quest_manager);
+	minimap_manager->CleanUp();    RELEASE(minimap_manager);
 	App->map->CleanUp();
 	App->entity->ClearEntities();
 	App->spell->ClearSpells();
@@ -526,7 +550,6 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 
 void MinimapState::Enable()
 {
-	minimap->enabled = true; 
 	stats_back_image->enabled = true;
 
 	hp_text->SetText("HP: 300");
@@ -547,7 +570,6 @@ void MinimapState::Enable()
 
 void MinimapState::Disable()
 {
-	minimap->enabled = false;
 	stats_back_image->enabled = false;
 	hp_text->enabled = false;
 	power_text->enabled = false;

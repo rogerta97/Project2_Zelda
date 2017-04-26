@@ -1129,9 +1129,9 @@ bool UI_Button::update()
 		else
 		{
 			if (is_ui)
-				App->view->LayerBlit(LAYER + layer, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
+				App->view->LayerBlit(LAYER + blit_layer + layer, App->gui->atlas, iPoint(rect.x, rect.y), curr, viewport, -1.0f, false);
 			else
-				App->view->LayerBlit(LAYER + layer, App->gui->atlas, iPoint(rect.x, rect.y), curr);
+				App->view->LayerBlit(LAYER + blit_layer + layer, App->gui->atlas, iPoint(rect.x, rect.y), curr);
 		}
 	}
 
@@ -1464,9 +1464,9 @@ bool UI_Text::update()
 					else
 					{
 						if (is_ui)
-							App->view->LayerBlit(LAYER + layer, (*it).texture, iPoint(rect.x, rect.y + space), (*it).size, viewport, -1.0f, false);
+							App->view->LayerBlit(LAYER + blit_layer + layer, (*it).texture, iPoint(rect.x, rect.y + space), (*it).size, viewport, -1.0f, false);
 						else
-							App->view->LayerBlit(LAYER + layer, (*it).texture, iPoint(rect.x, rect.y + space), (*it).size);
+							App->view->LayerBlit(LAYER + blit_layer + layer, (*it).texture, iPoint(rect.x, rect.y + space), (*it).size);
 					}
 					space += spacing;
 				}
@@ -1540,9 +1540,9 @@ bool UI_Image::update()
 		else
 		{
 			if (is_ui)
-				App->view->LayerBlit(LAYER + layer, App->gui->atlas, iPoint(rect.x, rect.y), image, viewport, -1.0f, false);
+				App->view->LayerBlit(LAYER + blit_layer + layer, App->gui->atlas, iPoint(rect.x, rect.y), image, viewport, -1.0f, false);
 			else
-				App->view->LayerBlit(LAYER + layer, App->gui->atlas, iPoint(rect.x, rect.y), image);
+				App->view->LayerBlit(LAYER + blit_layer + layer, App->gui->atlas, iPoint(rect.x, rect.y), image);
 		}
 	}
 
@@ -2303,9 +2303,9 @@ bool UI_ColoredRect::update()
 	else
 	{
 		if (is_ui)
-			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER, viewport, false);
+			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER + blit_layer + layer, viewport, false);
 		else
-			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER, viewport, true);
+			App->view->LayerDrawQuad(rect, color.r, color.g, color.b, color.a, filled, LAYER + blit_layer + layer, viewport, true);
 	}
 
 	return true;
@@ -2372,9 +2372,9 @@ bool UI_Check_Box::update()
 		else
 		{
 			if (is_ui)
-				App->view->LayerBlit(LAYER + layer, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button, viewport, -1.0f, false);
+				App->view->LayerBlit(LAYER + blit_layer + layer, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button, viewport, -1.0f, false);
 			else
-				App->view->LayerBlit(LAYER + layer, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button);
+				App->view->LayerBlit(LAYER + blit_layer + layer, App->gui->atlas, iPoint(check_box_list.at(i)->button->rect.x, check_box_list.at(i)->button->rect.y), button);
 		}
 	}
 

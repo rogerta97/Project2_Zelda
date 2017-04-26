@@ -45,7 +45,11 @@ bool NaviBasicAttack::Start()
 	bool ret = true;
 
 	die = false;
-	game_object->SetAnimation("basic_projectile");
+
+	if (GetTeam() == ANIMATIONS_TEAM)
+		game_object->SetAnimation("basic_projectile");
+	else
+		game_object->SetAnimation("basic_projectile_2");
 
 	return ret;
 }
@@ -92,7 +96,10 @@ bool NaviBasicAttack::Update(float dt)
 	{
 		die = true;
 		timer.Start();
-		game_object->SetAnimation("destroy");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("destroy");
+		else
+			game_object->SetAnimation("destroy_2");
 		draw_offset = { 15, 15 };
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 	}
@@ -148,7 +155,10 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 		{
 			die = true;
 			timer.Start();
-			game_object->SetAnimation("destroy");
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("destroy");
+			else
+				game_object->SetAnimation("destroy_2");
 			draw_offset = { 15, 15 };
 			game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 		}

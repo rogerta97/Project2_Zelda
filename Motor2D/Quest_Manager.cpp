@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include "PlayerManager.h"
 #include "j1XMLLoader.h"
+#include "j1Map.h"
+#include "j1Pathfinding.h"
 
 QuestManager::QuestManager()
 {
@@ -153,14 +155,14 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 	{
+		active_quest = GetRandomValue(1,3);
 
-		lerandomnumero = GetRandomValue(1, 10);
-
-		if (lerandomnumero < 5) active_quest = 1;
-		else active_quest = 3;
-
+		if (active_quest == 2)
+		{
+			SpawnCucos(5);
+		}
 		change_state(active_quest, active);
 		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 		update_progress();
@@ -178,6 +180,14 @@ void QuestManager::Update()
 
 	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
 	{
+		if (active_quest == 2)
+		{
+			for (int i = 0; i < cucos.size(); i++)
+			{
+				App->entity->DeleteEntity(cucos[i]);
+			}
+			cucos.clear();
+		}
 		reset_progress(active_quest);
 		change_state(active_quest, inactive);
 		active_quest = -1;
@@ -356,6 +366,14 @@ void QuestManager::update_progress()
 			{
 				if (vquest[i]->task[j]->current_progress == vquest[i]->task[j]->requirement)
 				{
+					if (vquest[i]->id == 2)
+					{
+						for (int i = 0; i < cucos.size(); i++)
+						{
+							App->entity->DeleteEntity(cucos[i]);
+						}
+						cucos.clear();
+					}
 					vquest[i]->state = inactive;
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
@@ -412,5 +430,22 @@ void QuestManager::update_progress()
 				}
 				j++;
 			}
+	}
+}
+
+void QuestManager::SpawnCucos(int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		iPoint pos;
+
+		pos = iPoint(GetRandomValue(0, App->map->data.width), GetRandomValue(0, App->map->data.height));
+		while (!App->pathfinding->IsWalkable(pos))
+		{
+			pos = iPoint(pos.x = GetRandomValue(0, App->map->data.width), pos.y = GetRandomValue(0, App->map->data.height));
+		}
+
+	//iPoint poss = App->map->MapToWorld(pos.x, pos.y);
+		cucos.push_back((Cuco*)App->entity->CreateEntity(cuco,App->map->MapToWorld(pos.x,pos.y)));
 	}
 }

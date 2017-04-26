@@ -20,7 +20,7 @@ enum class pbody_type;
 
 enum entity_name
 {
-	e_n_null, link, zelda, navi, ganon, minion, tower, trunk, base, tree, eyes, bush, snake, skeleton, waterfall, mskeleton
+	e_n_null, link, zelda, navi, minion, tower, ganon, trunk, base, tree, eyes, bush, snake, skeleton, waterfall, mskeleton,cuco
 };
 
 class slow
@@ -50,12 +50,23 @@ class stun
 {
 public:
 	stun() {};
-	stun(float _time, Entity* _entity)
+	stun(float _time, Entity* _entity, Animation* ani)
 	{
+
 		time = _time; entity = _entity;
 		timer.Start();
+		Animation* a = new Animation(*ani);
+		animator = new Animator();
+		animator->AddAnimation(a);
+		animator->SetAnimation("stun");
 	};
 	~stun() {};
+
+	void CleanUp()
+	{
+		animator->CleanUp();
+		RELEASE(animator);
+	};
 
 	bool operator==(stun s)
 	{
@@ -64,9 +75,10 @@ public:
 		return false;
 	}
 
-	float   time = 0.0f;
-	Entity* entity = nullptr;
-	j1Timer timer;
+	float     time = 0.0f;
+	Entity*   entity = nullptr;
+	j1Timer   timer;
+	Animator* animator = nullptr;
 };
 
 class die
@@ -90,7 +102,7 @@ public:
 	};
 
 	iPoint     pos = NULLPOINT;
-	Animator*  animator;
+	Animator*  animator = nullptr;
 };
 
 class Entity;
@@ -139,11 +151,14 @@ public:
 	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
 	void DeathAnimation(Entity* die);
 	void AddRupeesIfPlayer(Entity* entity, int amount);
+	Animator* GetEntityEffectsAnimator();
 
 private:
 	void RemoveEntities();
 	void SlowEntities();
+	void DeleteFromSlow(Entity* entity);
 	void StunEntities();
+	void DeleteFromStun(Entity* entity);
 	void DieEntities();
 
 public:

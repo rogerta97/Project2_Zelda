@@ -18,7 +18,7 @@ class PhysBody;
 class GameObject;
 class Spell;
 
-#define ANIMATIONS_TEAM 2
+#define ANIMATIONS_TEAM 1
 
 enum states
 {
@@ -78,6 +78,13 @@ enum states
 	mskeleton_attack_up,
 	mskeleton_attack_lateral,
 	mskeleton_attack_down,
+
+	basic_chicken,
+	cap_chicken,
+	black_chicken,
+	pink_chicken,
+	cook_chicken,
+	stone_chicken,
 
 	states_null,
 };

@@ -11,5 +11,16 @@
       <rect x ="204" y = "61" w = "26" h = "30"/>
       <rect x ="251" y = "61" w = "26" h = "30"/>
     </anim>
+
+
+    <anim speed = "10" name = "basic_projectile_2" loop = "true">
+      <rect x = "192" y = "2406" w = "48" h = "50"/>
+      <rect x = "240" y = "2406" w = "48" h = "50"/>
+      <rect x = "240" y = "2406" w = "48" h = "50"/>
+    </anim>
+    <anim speed = "5" name = "destroy_2" loop = "true">
+      <rect x ="204" y = "2467" w = "26" h = "30"/>
+      <rect x ="251" y = "2467" w = "26" h = "30"/>
+    </anim>
   </animations>
 </file>

@@ -14,6 +14,7 @@
 #include "FinalScreen.h"
 #include "CharacterSelectionScene.h"
 #include "LogoScene.h"
+#include "Mapping.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -74,6 +75,12 @@ bool j1Scene::Start()
 	players[1].team = 2;
 	players[2].team = 1;
 	players[3].team = 2;
+
+	//Create mapping for players
+	players[0].mapping = new Mapping();
+	players[1].mapping = new Mapping();
+	players[2].mapping = new Mapping();
+	players[3].mapping = new Mapping();
 
 	return ret;
 }
