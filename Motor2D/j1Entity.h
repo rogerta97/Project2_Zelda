@@ -156,7 +156,9 @@ public:
 private:
 	void RemoveEntities();
 	void SlowEntities();
+	void DeleteFromSlow(Entity* entity);
 	void StunEntities();
+	void DeleteFromStun(Entity* entity);
 	void DieEntities();
 
 public:

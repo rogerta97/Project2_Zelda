@@ -223,6 +223,14 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 	{
 		curr_event = origin->GetEvent(id);
 
+		if (curr_event->event_data.entity != nullptr)
+		{
+			DeleteFromSlow(curr_event->event_data.entity);
+
+			if (curr_event->event_data.entity->stuned)
+				DeleteFromStun(curr_event->event_data.entity);
+		}
+
 		// Snake kills player
 		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player)
 		{
@@ -576,6 +584,23 @@ void j1Entity::SlowEntities()
 	}
 }
 
+void j1Entity::DeleteFromSlow(Entity * entity)
+{
+	if (!slowed_entities.empty())
+	{
+		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
+		{
+			if ((*it).entity == entity)
+			{
+				it = slowed_entities.erase(it);
+				break;
+			}
+			else
+				++it;
+		}
+	}
+}
+
 void j1Entity::StunEntities()
 {
 	if (!stuned_entities.empty())
@@ -598,6 +623,23 @@ void j1Entity::StunEntities()
 			}
 			else
 				it = (stuned_entities.erase(it));
+		}
+	}
+}
+
+void j1Entity::DeleteFromStun(Entity * entity)
+{
+	if (!stuned_entities.empty())
+	{
+		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
+		{
+			if ((*it).entity == entity)
+			{
+				(*it).CleanUp();
+				it = stuned_entities.erase(it);
+			}
+			else
+				++it;
 		}
 	}
 }
