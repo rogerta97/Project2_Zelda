@@ -203,9 +203,6 @@ bool MinimapManager::CleanUp()
 		}
 	}
 
-	App->tex->UnLoadTexture(minimap_texture);
-	App->tex->UnLoadTexture(minimap_points_texture);
-
 	return ret;
 }
 
