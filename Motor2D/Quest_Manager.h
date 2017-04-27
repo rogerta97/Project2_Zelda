@@ -70,12 +70,14 @@ public:
 
 	iPoint           placer = NULLPOINT;
 
-	vector<Entity*> cucos;
+	vector<Entity*>  cucos;
 
 	bool quests_enabled = true;
 private:
 	int				active_quest = -1;
 	uint			timer_read = 0;
+
+	UI_ColoredRect*	    player_text_window;
 
 };
 

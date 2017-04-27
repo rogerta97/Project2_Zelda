@@ -146,7 +146,7 @@ QuestManager::QuestManager()
 	{
 		(*it)->active_quest_text.at(0)->enabled = false; 
 	}
-
+	player_text_window = App->scene->main_scene->ui_viewports[0].main_window->CreateColoredRect(iPoint(0,0), 200, 200, SDL_Color{ 255,255,255,255 }, true);
 }
 
 QuestManager::~QuestManager()
