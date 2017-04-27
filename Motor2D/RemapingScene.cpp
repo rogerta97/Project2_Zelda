@@ -38,7 +38,9 @@ bool RemapingScene::Start()
 	SDL_Rect RT_trigger_rect = placeholder_trigger;
 	SDL_Rect LT_trigger_rect = placeholder_trigger;
 	//{ 651, 446, 35, 35 };
+
 	SDL_Rect cursor_rect = {80,52, 48,48 };
+	SDL_Rect cursor_selector_rect = { 260, 242, 42, 42 }; 
 	SDL_Rect button_suport_rect = {583, 100, 52, 147}; 
 
 	SDL_Rect rectangle_background_rect = { 490, 2272, 135, 40 };
@@ -101,6 +103,8 @@ bool RemapingScene::Start()
 		remapping_ui[i].button_support = window->CreateImage({ 0,0 }, button_suport_rect);
 		remapping_ui[i].button_support->enabled = false;
 		remapping_ui[i].cursor = window->CreateImage({ GetCursorPosFromCurrentState(remapping_ui[i].current_state).x + offset_x, GetCursorPosFromCurrentState(remapping_ui[i].current_state).y + offset_y }, cursor_rect);
+		remapping_ui[i].button_selector_cursor = window->CreateImage( {0,0}, cursor_selector_rect);
+		remapping_ui[i].button_selector_cursor->enabled = false; 
 
 		// ----
 
@@ -174,35 +178,52 @@ bool RemapingScene::Update(float dt)
 	{
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN)
 		{
-			if (remapping_ui[i].current_state != r_s_confirm_out)
+			if (inside)
 			{
-				int curr = remapping_ui[i].current_state;
-				curr--; 
+				MoveSelectorCursor(true, i);
+			}
 
-				remapping_ui[i].current_state = static_cast<remaping_state> (curr);
+			else
+			{
+				if (remapping_ui[i].current_state != r_s_confirm)
+				{
+					int curr = remapping_ui[i].current_state;
+					curr--;
 
-				remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
+					remapping_ui[i].current_state = static_cast<remaping_state> (curr);
+
+					remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
+				}
 			}
 				
 		}
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
 		{
-			if (remapping_ui[i].current_state != r_s_a4_out)
+			if (inside)
 			{
-				int curr = remapping_ui[i].current_state;
-				curr++;
-
-				remapping_ui[i].current_state = static_cast<remaping_state> (curr);
-
-				remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
+				MoveSelectorCursor(false, i); 
 			}
+
+			else
+			{
+				if (remapping_ui[i].current_state != r_s_a4)
+				{
+					int curr = remapping_ui[i].current_state;
+					curr++;
+
+					remapping_ui[i].current_state = static_cast<remaping_state> (curr);
+
+					remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
+				}
+			}
+			
 
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN)
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && inside == false)
 		{
-			if (remapping_ui[i].current_state <= r_s_a4_out && remapping_ui[i].current_state > r_s_shop_out)
+			if (remapping_ui[i].current_state <= r_s_a4 && remapping_ui[i].current_state > r_s_shop)
 			{
 				int curr = remapping_ui[i].current_state;
 				curr -= 4; 
@@ -214,9 +235,9 @@ bool RemapingScene::Update(float dt)
 
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN)
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN && inside == false)
 		{
-			if (remapping_ui[i].current_state <= r_s_shop_out && remapping_ui[i].current_state > 0)
+			if (remapping_ui[i].current_state <= r_s_shop && remapping_ui[i].current_state > 0)
 			{
 				int curr = remapping_ui[i].current_state;
 				curr += 4;
@@ -230,13 +251,13 @@ bool RemapingScene::Update(float dt)
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 		{
-			if(!IsInside(i))
+			if(!inside)
 				App->scene->ChangeScene((Scene*)App->scene->menu_scene);
 			else
 				QuitOption(i);
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN && inside == false)
 		{
 			EnterOption(i);
 		}
@@ -263,35 +284,35 @@ iPoint RemapingScene::GetCursorPosFromCurrentState(remaping_state curr_state)
 	switch (curr_state) 
 	{
 
-	case r_s_confirm_out:
+	case r_s_confirm:
 		ret = { remapping_ui[0].confirm_background->GetPos().x - 50, remapping_ui[0].confirm_background->GetPos().y };
 			break; 
 
-	case r_s_back_out:
+	case r_s_back:
 		ret = { remapping_ui[0].back_background->GetPos().x - 50, remapping_ui[0].back_background->GetPos().y };
 		break;
 
-	case r_s_minimap_out:
+	case r_s_minimap:
 		ret = { remapping_ui[0].minimap_background->GetPos().x - 50, remapping_ui[0].minimap_background->GetPos().y  };
 		break;
 
-	case r_s_shop_out:
+	case r_s_shop:
 		ret = { remapping_ui[0].shop_background->GetPos().x - 50, remapping_ui[0].shop_background->GetPos().y  };
 		break;
 
-	case r_s_a1_out:
+	case r_s_a1:
 		ret = { remapping_ui[0].a1_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a1_background->GetPos().y };
 		break;
 
-	case r_s_a2_out:
+	case r_s_a2:
 		ret = { remapping_ui[0].a2_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a2_background->GetPos().y };
 		break;
 
-	case r_s_a3_out:
+	case r_s_a3:
 		ret = { remapping_ui[0].a3_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a3_background->GetPos().y };
 		break;
 
-	case r_s_a4_out:
+	case r_s_a4:
 		ret = { remapping_ui[0].a4_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a4_background->GetPos().y  };
 		break;
 
@@ -511,81 +532,31 @@ void RemapingScene::UpdateKeys(int i)
 
 void RemapingScene::EnterOption(int i)
 {
-	switch (remapping_ui[i].current_state)
-	{
-	case r_s_confirm_out:
-		remapping_ui[i].current_state = r_s_confirm_in;
-		break;
-
-	case r_s_back_out:
-		remapping_ui[i].current_state = r_s_back_in;
-		break;
-
-	case r_s_minimap_out:
-		remapping_ui[i].current_state = r_s_minimap_in;
-		break;
-
-	case r_s_shop_out:
-		remapping_ui[i].current_state = r_s_shop_in;
-		break;
-
-	case r_s_a1_out:
-		remapping_ui[i].current_state = r_s_a1_in;
-		break;
-
-	case r_s_a2_out:
-		remapping_ui[i].current_state = r_s_a2_in;
-		break;
-
-	case r_s_a3_out:
-		remapping_ui[i].current_state = r_s_a3_in;
-		break;
-
-	case r_s_a4_out:
-		remapping_ui[i].current_state = r_s_a4_in;
-		break;
-	}
-
+	remapping_ui[i].prev_state = remapping_ui[i].current_state; 
 	OpenFreeButtonList(i);
+	inside = true; 
+	
+
 
 }
 
 void RemapingScene::QuitOption(int i)
 {
-	switch (remapping_ui[i].current_state)
-	{
-	case r_s_confirm_in:
-		remapping_ui[i].current_state = r_s_confirm_out;
-		break;
+	remapping_ui[i].current_state = remapping_ui[i].prev_state; 
+	
+	remapping_ui[i].button_support->enabled = false; 
 
-	case r_s_back_in:
-		remapping_ui[i].current_state = r_s_back_out;
-		break;
+	remapping_ui[i].a->enabled = false; 
+	remapping_ui[i].b->enabled = false;
+	remapping_ui[i].x->enabled = false;
+	remapping_ui[i].y->enabled = false;
+	remapping_ui[i].rb->enabled = false;
+	remapping_ui[i].rt->enabled = false;
+	remapping_ui[i].lb->enabled = false;
+	remapping_ui[i].lt->enabled = false;
+	remapping_ui[i].button_selector_cursor->enabled = false;
 
-	case r_s_minimap_in:
-		remapping_ui[i].current_state = r_s_minimap_out;
-		break;
-
-	case r_s_shop_in:
-		remapping_ui[i].current_state = r_s_shop_out;
-		break;
-
-	case r_s_a1_in:
-		remapping_ui[i].current_state = r_s_a1_out;
-		break;
-
-	case r_s_a2_in:
-		remapping_ui[i].current_state = r_s_a2_out;
-		break;
-
-	case r_s_a3_in:
-		remapping_ui[i].current_state = r_s_a3_out;
-		break;
-
-	case r_s_a4_in:
-		remapping_ui[i].current_state = r_s_a4_out;
-		break;
-	}
+	inside = false; 
 
 }
 
@@ -597,15 +568,206 @@ void RemapingScene::OpenFreeButtonList(int i)
 	remapping_ui[i].button_support->SetPos({suport_pos.x -10, suport_pos.y});
 	remapping_ui[i].button_support->enabled = true; 
 
+	remaping_state curr_state = remapping_ui[i].current_state; 
+	key_mapping curr_key; 
+	
+	
+		switch (remapping_ui[i].current_state)
+		{
+		case r_s_confirm:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_confirm);
+			break;
 
+		case r_s_back:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_back);
+			break;
+
+		case r_s_minimap:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_minimap);
+			break;
+
+		case r_s_shop:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_shop);
+			break;
+
+		case r_s_a1:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability1);
+			break;
+
+		case r_s_a2:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability2);
+			break;
+
+		case r_s_a3:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability3);
+			break;
+
+		case r_s_a4:
+			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability4);
+			break;
+		}
+	
+	SetButtonsFromID(curr_key, i);
+
+	remapping_ui[i].button_selector_cursor->SetPos({ suport_pos.x - 4, suport_pos.y + 2 });
+	remapping_ui[i].button_selector_cursor->enabled = true; 
 
 }
 
-bool RemapingScene::IsInside(int i)
+bool RemapingScene::IsButton(int id)
 {
-	if (remapping_ui[i].current_state == r_s_confirm_out || remapping_ui[i].current_state == r_s_back_out || remapping_ui[i].current_state == r_s_minimap_out || remapping_ui[i].current_state == r_s_shop_out || remapping_ui[i].current_state == r_s_a1_out || remapping_ui[i].current_state == r_s_a2_out || remapping_ui[i].current_state == r_s_a3_out || remapping_ui[i].current_state == r_s_a4_out)
+	if (id == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || id == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER || id == LEFT_TRIGGER || id == RIGHT_TRIGGER)
 		return false;
 
 	else
 		return true; 
 }
+
+void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
+{
+	iPoint positions[3];
+
+	positions[0] = { remapping_ui[viewport].button_support->GetPos().x + 6, remapping_ui[viewport].button_support->GetPos().y + 5 };
+	positions[1] = { remapping_ui[viewport].button_support->GetPos().x + 6, remapping_ui[viewport].button_support->GetPos().y + 53 };
+	positions[2] = { remapping_ui[viewport].button_support->GetPos().x + 6, remapping_ui[viewport].button_support->GetPos().y + 101 };
+
+	remapping_ui[viewport].selected_buttons.clear(); 
+
+	switch (curr_key.key_id)
+	{
+	case SDL_CONTROLLER_BUTTON_A:
+	{
+		remapping_ui[viewport].b->SetPos(positions[0]);
+		remapping_ui[viewport].b->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].b);
+		remapping_ui[viewport].x->SetPos(positions[1]);
+		remapping_ui[viewport].x->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].x);
+		remapping_ui[viewport].y->SetPos(positions[2]);
+		remapping_ui[viewport].y->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].y);
+
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_B:
+	{
+		remapping_ui[viewport].a->SetPos(positions[0]);
+		remapping_ui[viewport].a->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].a);
+		remapping_ui[viewport].x->SetPos(positions[1]);
+		remapping_ui[viewport].x->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].x);
+		remapping_ui[viewport].y->SetPos(positions[2]);
+		remapping_ui[viewport].y->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].y);
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_X:
+	{
+		remapping_ui[viewport].b->SetPos(positions[0]);
+		remapping_ui[viewport].b->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].b);
+		remapping_ui[viewport].a->SetPos(positions[1]);
+		remapping_ui[viewport].a->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].a);
+		remapping_ui[viewport].y->SetPos(positions[2]);
+		remapping_ui[viewport].y->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].y);
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_Y:
+	{
+		remapping_ui[viewport].b->SetPos(positions[0]);
+		remapping_ui[viewport].b->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].b);
+		remapping_ui[viewport].x->SetPos(positions[1]);
+		remapping_ui[viewport].x->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].x);
+		remapping_ui[viewport].a->SetPos(positions[2]);
+		remapping_ui[viewport].a->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].a);
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+	{
+		remapping_ui[viewport].rt->SetPos(positions[0]);
+		remapping_ui[viewport].rt->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].rt);
+		remapping_ui[viewport].lb->SetPos(positions[1]);
+		remapping_ui[viewport].lb->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].lb);
+		remapping_ui[viewport].lt->SetPos(positions[2]);
+		remapping_ui[viewport].lt->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].lt);
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+	{
+		if (curr_key.is_button)
+		{
+			remapping_ui[viewport].rb->SetPos(positions[0]);
+			remapping_ui[viewport].rb->enabled = true;
+			remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].rb);
+			remapping_ui[viewport].lt->SetPos(positions[1]);
+			remapping_ui[viewport].lt->enabled = true;
+			remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].lt);
+			remapping_ui[viewport].rt->SetPos(positions[2]);
+			remapping_ui[viewport].rt->enabled = true;
+			remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].rt);
+		}
+		else
+		{
+			remapping_ui[viewport].rb->SetPos(positions[0]);
+			remapping_ui[viewport].rb->enabled = true;
+			remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].rb);
+			remapping_ui[viewport].lb->SetPos(positions[1]);
+			remapping_ui[viewport].lb->enabled = true;
+			remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].lb);
+			remapping_ui[viewport].lt->SetPos(positions[2]);
+			remapping_ui[viewport].lt->enabled = true;
+			remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].lt);
+		}
+
+	}
+	break;
+
+	case LEFT_TRIGGER:
+	{
+		remapping_ui[viewport].rb->SetPos(positions[0]);
+		remapping_ui[viewport].rb->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].rb);
+		remapping_ui[viewport].lb->SetPos(positions[1]);
+		remapping_ui[viewport].lb->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].lb);
+		remapping_ui[viewport].rt->SetPos(positions[2]);
+		remapping_ui[viewport].rt->enabled = true;
+		remapping_ui[viewport].selected_buttons.push_back(remapping_ui[viewport].rt);
+	}
+	break;
+
+	}
+
+}
+
+void RemapingScene::MoveSelectorCursor(bool up, int viewport)
+{
+	remapping_ui[viewport].selected_buttons; 
+
+	if (up && remapping_ui[viewport].button_selector_cursor->GetPos().y >= remapping_ui[viewport].button_support->GetPos().y)
+	{
+		remapping_ui[viewport].button_selector_cursor->SetPos({ remapping_ui[viewport].button_selector_cursor->GetPos().x, remapping_ui[viewport].button_selector_cursor->GetPos().y - 50 });
+	}
+	else if ((remapping_ui[viewport].button_selector_cursor->GetPos().y + 42 <= remapping_ui[viewport].button_support->GetPos().y + remapping_ui[viewport].button_support->image.h))
+	{
+		remapping_ui[viewport].button_selector_cursor->SetPos({ remapping_ui[viewport].button_selector_cursor->GetPos().x, remapping_ui[viewport].button_selector_cursor->GetPos().y + 50 });
+	}
+	
+	
+	
+}
+

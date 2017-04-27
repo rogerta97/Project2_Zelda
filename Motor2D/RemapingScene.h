@@ -3,6 +3,7 @@
 //
 #include "Scene.h"
 #include "j1Gui.h"
+#include "Mapping.h"
 #include "j1App.h"
 #include "j1Viewports.h"
 
@@ -10,23 +11,23 @@ enum remaping_state
 {
 	r_s_state_null,
 
-	r_s_confirm_out,
-	r_s_back_out,
-	r_s_minimap_out,
-	r_s_shop_out,
-	r_s_a1_out,
-	r_s_a2_out,
-	r_s_a3_out,
-	r_s_a4_out,
+	r_s_confirm,
+	r_s_back,
+	r_s_minimap,
+	r_s_shop,
+	r_s_a1,
+	r_s_a2,
+	r_s_a3,
+	r_s_a4,
 
-	r_s_confirm_in,
-	r_s_back_in,
-	r_s_minimap_in,
-	r_s_shop_in,
-	r_s_a1_in,
-	r_s_a2_in,
-	r_s_a3_in,
-	r_s_a4_in,
+	r_s_a,
+	r_s_b,
+	r_s_x,
+	r_s_y,
+	r_s_rb,
+	r_s_rt,
+	r_s_lb,
+	r_s_lt,
 
 };
 
@@ -69,9 +70,13 @@ struct remap_ui
 	UI_Image* lt = nullptr;
 
 	UI_Image* cursor = nullptr;
+	UI_Image* button_selector_cursor = nullptr; 
 	UI_Image* button_support = nullptr; 
 
-	remaping_state current_state = r_s_a4_out;
+	remaping_state current_state = r_s_confirm;
+	remaping_state prev_state = r_s_confirm; 
+
+	vector<UI_Image*> selected_buttons; 
 };
 
 class RemapingScene : public Scene
@@ -90,19 +95,35 @@ public:
 
 private:
 
+	// Gets the position of the cursor depending on what the state is
 	iPoint GetCursorPosFromCurrentState(remaping_state curr_state);
+
+	// Change the current key content 
 	void UpdateKeys(int i); 
+
+	// Executed when the player press A to open the list of avalible buttons
 	void EnterOption(int i); 
+
+	// Hides button selection information 
 	void QuitOption(int i); 
 
-	void OpenFreeButtonList(int i); 
+	// Check what buttons have to appear and puts them in the support
+	void OpenFreeButtonList(int i);
 
-	bool IsInside(int i); 
+	// Check if it's a button or a back-triger 
+	bool IsButton(int id); 
+
+	void SetButtonsFromID(key_mapping curr_key, int viewport);
+
+	void MoveSelectorCursor(bool up, int viewport);
+
 	
 private:
 
 	remap_ui		   remapping_ui[4];
 	SDL_Texture*	   background_image = nullptr; 
+
+	bool			   inside = false; 
 
 };
 
