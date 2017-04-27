@@ -176,6 +176,7 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+	BROFILER_CATEGORY("UpdateLogic", Profiler::Color::Azure);
 	bool ret = true;
 	PrepareUpdate();
 
