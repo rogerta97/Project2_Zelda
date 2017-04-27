@@ -93,14 +93,25 @@ bool MenuScene::Start()
 	music_text->SetText("MUSIC");
 	music_text->enabled = false;
 
+	quests_button = menu_window->CreateButton(iPoint(screen.w / 2 - 110, 360), 223, 60, false);
+	quests_button->AddImage("idle", { 128, 52, 220, 55 });
+	quests_button->SetImage("idle");
+
+	quests_button->enabled = false;
+
+	quests_text = menu_window->CreateText(iPoint(quests_button->rect.x + 60, 370), App->font->game_font);
+	quests_text->SetText("QUESTS");
+	quests_text->enabled = false;
 	//Check Box 
 
 	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
 	options_checkbox->AddBox(iPoint(fx_button->GetPos().x + fx_button->rect.w - options_checkbox->rect.w - 13, fx_button->GetPos().y + 5), 44, 44, "fx");
 	options_checkbox->AddBox(iPoint(music_button->GetPos().x + music_button->rect.w - options_checkbox->rect.w - 13, music_button->GetPos().y + 5), 44, 44, "music");
+	options_checkbox->AddBox(iPoint(quests_button->GetPos().x + quests_button->rect.w - options_checkbox->rect.w - 13, quests_button->GetPos().y + 5), 44, 44, "quests");
 
 	options_checkbox->SetBox(true, "fx"); 
 	options_checkbox->SetBox(true, "music");
+	options_checkbox->SetBox(true, "quests");
 
 	options_checkbox->enabled = false;
 	
@@ -134,6 +145,7 @@ bool MenuScene::Start()
 
 	button_list.push_back(fx_button);
 	button_list.push_back(music_button);
+	button_list.push_back(quests_button);
 
 	//Remapping ui
 	for (int i = 0; i < 4; i++)
@@ -206,7 +218,7 @@ bool MenuScene::Update(float dt)
 	{
 		if (is_options) 
 		{
-			if (current_button < 5)
+			if (current_button < 6)
 			{
 				int current_button_int = current_button;
 				current_button_int++;
@@ -318,6 +330,10 @@ bool MenuScene::PostUpdate()
 				options_checkbox->SetBox(!options_checkbox->GetBox("music"), "music");
 				break;
 
+			case QUESTS:
+				options_checkbox->SetBox(!options_checkbox->GetBox("quests"), "quests");
+				break;
+
 			}
 		}
 	}
@@ -334,6 +350,9 @@ bool MenuScene::PostUpdate()
 
 bool MenuScene::CleanUp()
 {
+	//Enable/Disable Quests
+	quests_enabled = QuestsEnabled();
+	//
 	// Free UI
 	if(App->scene->GetCurrentScene() != App->scene->menu_scene)
 		App->gui->DeleteElement(menu_window);
@@ -384,9 +403,12 @@ void MenuScene::GoOptions()
 
 	fx_button->enabled = true; 
 	music_button->enabled = true; 
+	quests_button->enabled = true;
 	fx_text->enabled = true; 
 	music_text->enabled = true; 
+	quests_text->enabled = true;
 	options_checkbox->enabled = true; 
+
 
 	current_button = FX; 
 }
@@ -404,11 +426,19 @@ void MenuScene::GoMenu()
 
 	fx_button->enabled = false;
 	music_button->enabled = false;
+	quests_button->enabled = false;
 	fx_text->enabled = false;
 	music_text->enabled = false;
+	quests_text->enabled = false;
 	options_checkbox->enabled = false;
 
 	current_button = START;
+}
+
+bool MenuScene::QuestsEnabled()
+{
+	if (options_checkbox->GetBox("quests")) return true;
+	else return false;
 }
 
 void MenuScene::FadeOut()

@@ -71,6 +71,8 @@ public:
 	iPoint           placer = NULLPOINT;
 
 	vector<Entity*> cucos;
+
+	bool quests_enabled = true;
 private:
 	int				active_quest = -1;
 	uint			timer_read = 0;

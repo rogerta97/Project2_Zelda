@@ -178,6 +178,7 @@ bool MainScene::Start()
 	//Quest manager
 	LOG("Creating quest manager");
 	quest_manager = new QuestManager();
+	quest_manager->quests_enabled = App->scene->menu_scene->quests_enabled;
 
 	// Minimap
 	LOG("Creating minimap manager");
