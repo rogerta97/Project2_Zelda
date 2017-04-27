@@ -103,8 +103,8 @@ private:
 	
 	vector<PhysBody*>	map_collisions;
 
-	j1Timer				game_timer;
-	j1Timer				quest_timer;
+	j1Timer*			game_timer;
+	j1Timer*			quest_timer;
 	bool				first_quest_completed;
 	uint				end_delay = 10;
 

@@ -30,7 +30,6 @@ private:
 	std::list<Tower*> team2_towers;
 
 	uint			  death_sound_effect = 100;
-
 };
 
 #endif // !_TOWER_MANAGER_H_

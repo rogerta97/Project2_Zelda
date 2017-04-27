@@ -89,6 +89,9 @@ bool Navi::Start()
 {
 	bool ret = true;
 
+	ability1_timer = App->AddGameplayTimer();
+	ability3_timer = App->AddGameplayTimer();
+
 	if (GetTeam() == ANIMATIONS_TEAM)
 		game_object->SetAnimation("down");
 	else
@@ -159,12 +162,10 @@ bool Navi::Update(float dt)
 		}
 	}
 
-	LifeBar(iPoint(60, 5), iPoint(-29, -40));
-
 	// Ability 1 --------------------
 	if (ability1)
 	{
-		if (ability1_timer.ReadSec() < ABILITY1_DURATION)
+		if (ability1_timer->ReadSec() < ABILITY1_DURATION)
 		{
 			if (GetTeam() == ANIMATIONS_TEAM)
 				App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);
@@ -271,7 +272,7 @@ bool Navi::Update(float dt)
 	// Ability 3 ----------------------
 	if (ability3)
 	{
-		if (ability3_timer.ReadSec() < ABILITY3_DURATION)
+		if (ability3_timer->ReadSec() < ABILITY3_DURATION)
 		{
 			// Get enemy team
 			int enemy_team = 0;
@@ -301,6 +302,8 @@ bool Navi::Draw(float dt)
 {
 	bool ret = true;
 
+	LifeBar(iPoint(60, 5), iPoint(-29, -40));
+
 	// Blit
 	if (flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
@@ -327,6 +330,9 @@ bool Navi::PostUpdate()
 bool Navi::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(ability1_timer);
+	App->DeleteGameplayTimer(ability3_timer);
 
 	return ret;
 }
@@ -559,7 +565,7 @@ void Navi::ShowBasicAttackRight()
 void Navi::Ability1Up()
 {
 	ability1 = true;
-	ability1_timer.Start();
+	ability1_timer->Start();
 }
 
 void Navi::Ability1Down()
@@ -669,7 +675,7 @@ void Navi::ShowAbility2Right()
 void Navi::Ability3Up()
 {
 	ability3 = true;
-	ability3_timer.Start();
+	ability3_timer->Start();
 }
 
 void Navi::Ability3Down()

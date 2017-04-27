@@ -52,7 +52,7 @@ private:
 
 	std::list<iPoint>	 minions_path;
 
-	j1Timer				 spawn_timer;
+	j1Timer*		     spawn_timer = nullptr;
 	float				 wave_time = 0.0f;
 	float				 minion_time_difference = 0.0f;
 	uint				 minions_wave = 0.0f;

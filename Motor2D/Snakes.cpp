@@ -73,11 +73,6 @@ bool Snakes::Update(float dt)
 {
 	bool ret = true;
 
-	if (to_delete)
-		return true;
-
-	LifeBar(iPoint(32, 4), iPoint(-20, -32));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -180,6 +175,8 @@ bool Snakes::Draw(float dt)
 {
 	bool ret = true;
 
+	LifeBar(iPoint(32, 4), iPoint(-20, -32));
+
 	if(!flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	else
@@ -245,8 +242,7 @@ void Snakes::DoAttack()
 			if (!LookForTarget())
 				Idle();
 
-
-		abilities.at(0)->cd_timer.Start();
+		abilities.at(0)->cd_timer->Start();
 	}
 }
 

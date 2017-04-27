@@ -61,10 +61,7 @@ private:
 
 
 private:
-
-	j1Timer					cd_timer;
-
-	j1Timer					stun_timer;
+	j1Timer*				stun_timer = nullptr;;
 
 	bool					flip = false;
 

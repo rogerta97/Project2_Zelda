@@ -30,9 +30,14 @@ public:
 	slow(float _time, Entity* _entity) 
 	{
 		time = _time; entity = _entity;
-		timer.Start();
+		timer = App->AddGameplayTimer();
 	};
 	~slow() {};
+
+	void CleanUp()
+	{
+		App->DeleteGameplayTimer(timer);
+	}
 
 	bool operator==(slow s)
 	{
@@ -41,9 +46,9 @@ public:
 		return false;
 	}
 
-	float   time = 0.0f;
-	Entity* entity = nullptr;
-	j1Timer timer;
+	float    time = 0.0f;
+	Entity*  entity = nullptr;
+	j1Timer* timer = nullptr;
 };
 
 class stun
@@ -54,7 +59,7 @@ public:
 	{
 
 		time = _time; entity = _entity;
-		timer.Start();
+		timer = App->AddGameplayTimer();
 		Animation* a = new Animation(*ani);
 		animator = new Animator();
 		animator->AddAnimation(a);
@@ -66,6 +71,7 @@ public:
 	{
 		animator->CleanUp();
 		RELEASE(animator);
+		App->DeleteGameplayTimer(timer);
 	};
 
 	bool operator==(stun s)
@@ -77,7 +83,7 @@ public:
 
 	float     time = 0.0f;
 	Entity*   entity = nullptr;
-	j1Timer   timer;
+	j1Timer*  timer = nullptr;
 	Animator* animator = nullptr;
 };
 

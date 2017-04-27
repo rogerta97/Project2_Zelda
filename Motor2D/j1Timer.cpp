@@ -27,7 +27,12 @@ void j1Timer::Start()
 uint32 j1Timer::Read() const
 {
 	if (active)
-		return SDL_GetTicks() - started_at;
+	{
+		if (paused)
+			return (paused_at - started_at);
+		else
+			return (SDL_GetTicks() - started_at);
+	}
 	else
 		return 0;
 }
@@ -35,10 +40,7 @@ uint32 j1Timer::Read() const
 // ---------------------------------------------
 float j1Timer::ReadSec() const
 {
-	if (active)
-		return float(SDL_GetTicks() - started_at) / 1000.0f;
-	else
-		return 0;
+	return float(Read()) / 1000.0f;
 }
 
 void j1Timer::SubstractTimeFromStart(float sec)
@@ -49,6 +51,26 @@ void j1Timer::SubstractTimeFromStart(float sec)
 void j1Timer::Stop()
 {
 	active = false;
+}
+
+void j1Timer::PauseOn()
+{
+	if (paused == false)
+	{
+		paused_at = SDL_GetTicks();
+		paused = true;
+	}
+}
+
+void j1Timer::PauseOff()
+{	
+	if (paused == true)
+	{
+		started_at += (SDL_GetTicks() - paused_at);
+
+		paused_at = 0;
+		paused = false;
+	}
 }
 
 bool j1Timer::IsActive()

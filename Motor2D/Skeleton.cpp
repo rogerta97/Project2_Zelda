@@ -65,6 +65,8 @@ bool Skeleton::Start()
 {
 	bool ret = true;
 
+	stun_timer = App->AddGameplayTimer();
+
 	Idle();
 
 	show_life_bar = true;
@@ -85,8 +87,6 @@ bool Skeleton::Update(float dt)
 
 	if (to_delete)
 		return true;
-
-	LifeBar(iPoint(50, 4), iPoint(-27, -52));
 
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -145,9 +145,9 @@ bool Skeleton::Update(float dt)
 		break;
 	case s_s_stunned:
 		Stunned();
-		if (stun_timer.ReadSec() > STUN)
+		if (stun_timer->ReadSec() > STUN)
 		{
-			stun_timer.Stop();
+			stun_timer->Stop();
 			state = s_s_attack;
 		}
 	default:
@@ -159,6 +159,8 @@ bool Skeleton::Update(float dt)
 bool Skeleton::Draw(float dt)
 {
 	bool ret = true;
+
+	LifeBar(iPoint(50, 4), iPoint(-27, -52));
 
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 42 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	if (App->debug_mode)
@@ -177,6 +179,8 @@ bool Skeleton::PostUpdate()
 bool Skeleton::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(stun_timer);
 
 	return ret;
 }
@@ -205,8 +209,8 @@ void Skeleton::Stunned()
 
 	draw_offset = NULLPOINT;
 
-	if (!stun_timer.IsActive())
-		stun_timer.Start();
+	if (!stun_timer->IsActive())
+		stun_timer->Start();
 
 }
 

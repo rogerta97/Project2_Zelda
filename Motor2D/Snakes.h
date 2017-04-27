@@ -62,9 +62,6 @@ private:
 public:
 	Entity*					target = nullptr;
 private:
-
-	j1Timer					cd_timer;
-
 	bool					flip = false;
 
 	bool					is_attacked = false;

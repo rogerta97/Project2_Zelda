@@ -61,7 +61,7 @@ private:
 	float			initial_speed = 0;
 	iPoint			starting_pos = NULLPOINT;
 
-	j1Timer			timer;
+	j1Timer*		timer = nullptr;
 
 	float			damage_multiplicator_first = 0.0f;
 	float			damage_multiplicator_second = 0.0f;

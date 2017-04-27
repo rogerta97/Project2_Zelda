@@ -11,6 +11,8 @@
 // Coment code, ty
 MinionManager::MinionManager()
 {
+	spawn_timer = App->AddGameplayTimer();
+
 	pugi::xml_document doc;
 	App->xml->LoadXML("GameSettings.xml", doc);
 
@@ -80,7 +82,7 @@ bool MinionManager::Update()
 	switch (state)
 	{
 	case game_start:
-		if (spawn_timer.ReadSec() > first_wave_delay) 
+		if (spawn_timer->ReadSec() > first_wave_delay) 
 		{
 			state = spawn_minions;
 			StartTimer();
@@ -93,7 +95,7 @@ bool MinionManager::Update()
 		StartTimer();
 		break;
 	case wait_wave:
-		if (spawn_timer.ReadSec() > wave_time)
+		if (spawn_timer->ReadSec() > wave_time)
 		{
 			state = spawn_minions;
 		}
@@ -101,7 +103,7 @@ bool MinionManager::Update()
 	case wait_between_minions:
 		if (minion_num < minions_wave)
 		{
-			if (spawn_timer.ReadSec() > minion_time_difference)
+			if (spawn_timer->ReadSec() > minion_time_difference)
 			{
 				state = spawn_minions;
 			}
@@ -137,6 +139,8 @@ bool MinionManager::CleanUp()
 
 	team1_minions.clear();
 	team2_minions.clear();
+
+	App->DeleteGameplayTimer(spawn_timer);
 
 	return true;
 }
@@ -190,7 +194,7 @@ void MinionManager::KillMinion(Entity * minion)
 
 void MinionManager::StartTimer()
 {
-	spawn_timer.Start();
+	spawn_timer->Start();
 }
 
 void MinionManager::AddMinions()

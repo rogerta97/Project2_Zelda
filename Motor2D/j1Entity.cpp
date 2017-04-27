@@ -62,7 +62,7 @@ bool j1Entity::PreUpdate()
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
-		if (!(*it)->to_delete)
+		if (!(*it)->to_delete && !App->GetGamePause())
 		{
 			ret = (*it)->PreUpdate();
 		}
@@ -79,8 +79,14 @@ bool j1Entity::Update(float dt)
 	{
 		if (!(*it)->to_delete)
 		{
-			ret = (*it)->Update(dt);
-			(*it)->Draw(dt);
+			if (!App->GetGamePause())
+			{
+				//LOG("%s", (*it)->name.c_str());
+				ret = (*it)->Update(dt);
+				(*it)->Draw(dt);
+			}
+			else
+				(*it)->Draw(0);
 		}
 	}
 
@@ -97,7 +103,7 @@ bool j1Entity::PostUpdate()
 
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
-		if (!(*it)->to_delete)
+		if (!(*it)->to_delete && !App->GetGamePause())
 		{
 			ret = (*it)->PostUpdate();
 		}
@@ -570,9 +576,10 @@ void j1Entity::SlowEntities()
 		{
 			if ((*it).entity != nullptr)
 			{
-				if ((*it).time <= (*it).timer.ReadSec())
+				if ((*it).time <= (*it).timer->ReadSec())
 				{
 					(*it).entity->stats.speed = (*it).entity->stats.restore_speed;
+					(*it).CleanUp();
 					it = slowed_entities.erase(it);
 				}
 				else
@@ -609,7 +616,7 @@ void j1Entity::StunEntities()
 		{
 			if ((*it).entity != nullptr)
 			{
-				if ((*it).time <= (*it).timer.ReadSec())
+				if ((*it).time <= (*it).timer->ReadSec())
 				{
 					(*it).entity->stuned = false;
 					(*it).CleanUp();

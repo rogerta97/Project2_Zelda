@@ -117,8 +117,6 @@ bool Tower::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(75, 6), iPoint(-36, -92));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -147,6 +145,8 @@ bool Tower::Update(float dt)
 bool Tower::Draw(float dt)
 {
 	bool ret = true;
+
+	LifeBar(iPoint(75, 6), iPoint(-36, -92));
 
 	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
@@ -208,7 +208,7 @@ void Tower::DoAttack()
 
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
 		ta->SetTarget(target);
-		abilities.at(0)->cd_timer.Start();
+		abilities.at(0)->cd_timer->Start();
 	}
 }
 
