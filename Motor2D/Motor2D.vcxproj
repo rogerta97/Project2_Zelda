@@ -153,6 +153,7 @@
     <ClInclude Include="BezierEasing.h" />
     <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
+    <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="Cuco.h" />
