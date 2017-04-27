@@ -147,46 +147,6 @@ bool MenuScene::Start()
 	button_list.push_back(music_button);
 	button_list.push_back(quests_button);
 
-	//Remapping ui
-	for (int i = 0; i < 4; i++)
-	{
-		int x = 0 + screen.w / 2 * (i % 2);
-		int y = 0 + screen.w / 2 * (i / 2);
-
-		remapping_ui[i].a = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].b = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].x = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].y = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].rb = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].lb = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].rt = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-		remapping_ui[i].lt = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].a1_text = menu_window->CreateText();
-		remapping_ui[i].a1_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].a2_text = menu_window->CreateText();
-		remapping_ui[i].a2_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].a3_text = menu_window->CreateText();
-		remapping_ui[i].a3_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].a4_text = menu_window->CreateText();
-		remapping_ui[i].a4_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].confirm_text = menu_window->CreateText();
-		remapping_ui[i].confirm_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].back_text = menu_window->CreateText();
-		remapping_ui[i].back_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].minimap_text = menu_window->CreateText();
-		remapping_ui[i].minimap_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-
-		//remapping_ui[i].shop_text = menu_window->CreateText();
-		remapping_ui[i].shop_key = menu_window->CreateImage({ x,y }, { 0,0,0,0 });
-	}
-
 
 	// Cursor --
 	cursor_1 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2), {80, 52, 48, 48 }, false);
