@@ -5,8 +5,8 @@
 #include "j1Scene.h"
 #include "j1Textures.h"
 
-#define SPACING_BETWEEN_BUTTONS 80
-#define COLUMNS_SEPARATIONS 300
+#define SPACING_BETWEEN_BUTTONS 70
+#define COLUMNS_SEPARATIONS 350
 
 RemapingScene::RemapingScene()
 {
@@ -37,12 +37,16 @@ bool RemapingScene::Start()
 	SDL_Rect LB_trigger_rect = {164, 259, 48, 24};
 	SDL_Rect RT_trigger_rect = placeholder_trigger;
 	SDL_Rect LT_trigger_rect = placeholder_trigger;
-
-	SDL_Rect cursor_rect = { 80, 52, 48, 48 };
+	//{ 651, 446, 35, 35 };
+	SDL_Rect cursor_rect = {80,52, 48,48 };
 	SDL_Rect button_suport_rect = {583, 100, 52, 147}; 
 
-	SDL_Rect rectangle_background_rect = {490, 2272, 150, 45}; 	
-	iPoint confirm_background_pos = { viewport_rect.w/ 8, viewport_rect.h/ 6};
+	SDL_Rect rectangle_background_rect = { 490, 2272, 135, 40 };
+
+	int block_w = (cursor_rect.w * 2) + 10 + rectangle_background_rect.w*2 + (COLUMNS_SEPARATIONS - rectangle_background_rect.w - 100);
+	int block_h = rectangle_background_rect.h * 4 + ((SPACING_BETWEEN_BUTTONS - rectangle_background_rect.h) * 4);
+
+	iPoint confirm_background_pos = { viewport_rect.w/ 2 - block_w/2, viewport_rect.h/2 - block_h/2};
 	iPoint back_background_pos = { confirm_background_pos.x, confirm_background_pos.y + SPACING_BETWEEN_BUTTONS };
 	iPoint minimap_background_pos = { back_background_pos.x, back_background_pos.y + SPACING_BETWEEN_BUTTONS };
 	iPoint shop_background_pos = { minimap_background_pos.x, minimap_background_pos.y + SPACING_BETWEEN_BUTTONS };
@@ -149,10 +153,10 @@ bool RemapingScene::Start()
 		remapping_ui[i].back_key = window->CreateImage({ back_background_pos.x + rectangle_background_rect.w + 10 + offset_x, back_background_pos.y + offset_y }, { 0,0,0,0 });
 		remapping_ui[i].minimap_key = window->CreateImage({ minimap_background_pos.x + rectangle_background_rect.w + 10 + offset_x, minimap_background_pos.y + offset_y }, { 0,0,0,0 });
 		remapping_ui[i].shop_key = window->CreateImage({ shop_background_pos.x + rectangle_background_rect.w + 10 + offset_x, shop_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a1_key = window->CreateImage({ a1_background_pos.x + rectangle_background_rect.w + 10 + offset_x, a1_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a2_key = window->CreateImage({ a2_background_pos.x + rectangle_background_rect.w + 10 + offset_x, a2_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a3_key = window->CreateImage({ a3_background_pos.x + rectangle_background_rect.w + 10 + offset_x, a3_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a4_key = window->CreateImage({ a4_background_pos.x + rectangle_background_rect.w + 10 + offset_x, a4_background_pos.y + offset_y}, { 0,0,0,0 });
+		remapping_ui[i].a1_key = window->CreateImage({ a1_background_pos.x - 60 + offset_x, a1_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a2_key = window->CreateImage({ a2_background_pos.x - 60 + offset_x, a2_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a3_key = window->CreateImage({ a3_background_pos.x - 60 + offset_x, a3_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a4_key = window->CreateImage({ a4_background_pos.x - 60 + offset_x, a4_background_pos.y + offset_y}, { 0,0,0,0 });
 
 		UpdateKeys(i); 
 		
@@ -260,35 +264,35 @@ iPoint RemapingScene::GetCursorPosFromCurrentState(remaping_state curr_state)
 	{
 
 	case r_s_confirm_out:
-		ret = {20, 60}; 
+		ret = { remapping_ui[0].confirm_background->GetPos().x - 50, remapping_ui[0].confirm_background->GetPos().y };
 			break; 
 
 	case r_s_back_out:
-		ret = { 20, 140 };
+		ret = { remapping_ui[0].back_background->GetPos().x - 50, remapping_ui[0].back_background->GetPos().y };
 		break;
 
 	case r_s_minimap_out:
-		ret = { 20, 220 };
+		ret = { remapping_ui[0].minimap_background->GetPos().x - 50, remapping_ui[0].minimap_background->GetPos().y  };
 		break;
 
 	case r_s_shop_out:
-		ret = { 20, 300 };
+		ret = { remapping_ui[0].shop_background->GetPos().x - 50, remapping_ui[0].shop_background->GetPos().y  };
 		break;
 
 	case r_s_a1_out:
-		ret = { 320, 60 };
+		ret = { remapping_ui[0].a1_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a1_background->GetPos().y };
 		break;
 
 	case r_s_a2_out:
-		ret = { 320, 140 };
+		ret = { remapping_ui[0].a2_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a2_background->GetPos().y };
 		break;
 
 	case r_s_a3_out:
-		ret = { 320, 220 };
+		ret = { remapping_ui[0].a3_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a3_background->GetPos().y };
 		break;
 
 	case r_s_a4_out:
-		ret = { 320, 300};
+		ret = { remapping_ui[0].a4_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a4_background->GetPos().y  };
 		break;
 
 
@@ -587,11 +591,11 @@ void RemapingScene::QuitOption(int i)
 
 void RemapingScene::OpenFreeButtonList(int i)
 {
-	remapping_ui[i].button_support->SetPos({ remapping_ui[i].cursor->GetPos().x + 280, remapping_ui[i].cursor->GetPos().y});
-	remapping_ui[i].button_support->enabled = true; 
+	SDL_Rect viewport_rect = App->view->GetViewportRect(1);
 
-	remapping_ui[i].cursor->SetPos(remapping_ui[i].button_support->GetPos()); 
-	remapping_ui[i].cursor->image = {687, 444, 38, 38};
+	iPoint suport_pos = { viewport_rect.w / 2 - remapping_ui[i].button_support->image.w / 2, viewport_rect.h / 2 - remapping_ui[i].button_support->image.h / 2 };
+	remapping_ui[i].button_support->SetPos({suport_pos.x -10, suport_pos.y});
+	remapping_ui[i].button_support->enabled = true; 
 
 
 
