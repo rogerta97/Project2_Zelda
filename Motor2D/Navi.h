@@ -124,6 +124,7 @@ private:
 	bool	  ability1 = false;
 	vector<Entity*> to_heal;
 	bool	  look_for_entities = true;
+	float	  heal = 0.0f;
 
 	// Ability 2
 	bool	  ability2 = false;

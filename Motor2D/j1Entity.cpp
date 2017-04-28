@@ -237,6 +237,40 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				DeleteFromStun(curr_event->event_data.entity);
 		}
 
+		bool end = false;
+
+		// Tower kills player
+		if (curr_event->event_data.entity != nullptr && !end)
+		{
+			vector<Entity*> towers = FindEntitiesByName("tower");
+			for (int i = 0; i < towers.size(); i++)
+			{
+				Tower* s = (Tower*)towers.at(i);
+				if (s->target == curr_event->event_data.entity)
+				{
+					s->target = nullptr;
+					end = true;
+					break;
+				}
+			}
+		}
+
+		// Skeleton kills player
+		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player && !end)
+		{
+			vector<Entity*> skeletons = FindEntitiesByName("skeleton");
+			for (int i = 0; i < skeletons.size(); i++)
+			{
+				Skeleton* s = (Skeleton*)skeletons.at(i);
+				if (s->target == curr_event->event_data.entity)
+				{
+					s->target = nullptr;
+					end = true;
+					break;
+				}
+			}
+		}
+
 		// Snake kills player
 		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player)
 		{
@@ -245,12 +279,32 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 			{
 				Snakes* s = (Snakes*)snakes.at(i);
 				if (s->target == curr_event->event_data.entity)
+				{
 					s->target = nullptr;
+					end = true;
+					break;
+				}
+			}
+		}
+
+		// Mage kills player
+		if (curr_event->event_data.entity != nullptr && curr_event->event_data.entity->is_player && !end)
+		{
+			vector<Entity*> mages = FindEntitiesByName("mageskeleton");
+			for (int i = 0; i < mages.size(); i++)
+			{
+				MageSkeleton* s = (MageSkeleton*)mages.at(i);
+				if (s->target == curr_event->event_data.entity)
+				{
+					s->target = nullptr;
+					end = true;
+					break;
+				}
 			}
 		}
 
 		// Minion kills
-		if (curr_event->event_data.entity != nullptr)
+		if (curr_event->event_data.entity != nullptr && !end)
 		{
 			vector<Entity*> minions = FindEntitiesByName("minion");
 
@@ -258,7 +312,11 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 			{
 				Minion* m = (Minion*)minions.at(i);
 				if (m->target == curr_event->event_data.entity)
+				{
 					m->target = nullptr;
+					end = true;
+					break;
+				}
 			}
 		}
 	}
@@ -347,20 +405,29 @@ void j1Entity::ClearEntities()
 	if (!slowed_entities.empty())
 	{
 		for (list<slow>::iterator it = slowed_entities.begin(); it != slowed_entities.end();)
+		{
+			(*it).CleanUp();
 			it = slowed_entities.erase(it);
+		}
 	}
 
 
 	if (!stuned_entities.empty())
 	{
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
+		{
+			(*it).CleanUp();
 			it = stuned_entities.erase(it);
+		}
 	}
 
 	if (!dying_entities.empty())
 	{
 		for (list<die>::iterator it = dying_entities.begin(); it != dying_entities.end();)
+		{
+			(*it).CleanUp();
 			it = dying_entities.erase(it);
+		}
 	}
 }
 
@@ -381,7 +448,7 @@ Entity* j1Entity::FindEntityByBody(PhysBody* body)
 	{
 		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
-			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody && !(*it)->to_delete)
 			{
 				ret = *it;
 				break;
@@ -394,7 +461,7 @@ Entity* j1Entity::FindEntityByBody(PhysBody* body)
 	{
 		for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 		{
-			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody)
+			if ((*it)->game_object != nullptr && body == (*it)->game_object->pbody && !(*it)->to_delete)
 			{
 				ret = (*it)->owner;
 				break;
@@ -462,7 +529,7 @@ Spell * j1Entity::FindSpellByBody(PhysBody * spell)
 		{
 			for (list<Spell*>::iterator it = App->spell->spell_list.begin(); it != App->spell->spell_list.end(); it++)
 			{
-				if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody)
+				if ((*it)->game_object != nullptr && spell == (*it)->game_object->pbody && !(*it)->to_delete)
 				{
 					ret = (*it);
 					break;
@@ -483,7 +550,7 @@ vector<Entity*> j1Entity::FindEntitiesByName(char* name)
 	{
 		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
-			if (TextCmp((*it)->name.c_str(), name))
+			if (TextCmp((*it)->name.c_str(), name) && !(*it)->to_delete)
 			{
 				ret.push_back(*it);
 			}
@@ -502,7 +569,7 @@ vector<Entity*> j1Entity::FindEntitiesByBodyType(pbody_type type)
 	{
 		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 		{
-			if ((*it)->game_object->pbody->type == type)
+			if ((*it)->game_object->pbody->type == type && !(*it)->to_delete)
 			{
 				ret.push_back(*it);
 			}

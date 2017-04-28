@@ -267,7 +267,12 @@ bool MainScene::Update(float dt)
 
 	//Update Victory/Defeat animation
 	if (winner != 0)
-		UpdateWinnerAnim(winner, dt);
+	{
+		if(!App->GetGamePause())
+			UpdateWinnerAnim(winner, dt);
+		else
+			UpdateWinnerAnim(winner, 0);
+	}
 
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
@@ -322,6 +327,7 @@ bool MainScene::CleanUp()
 
 	App->DeleteGameplayTimer(game_timer);
 	App->DeleteGameplayTimer(quest_timer);
+	App->ClearGameplayTimers();
 
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	

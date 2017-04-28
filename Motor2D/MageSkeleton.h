@@ -14,11 +14,9 @@ enum MSKL_STATE
 	MSkl_S_Attack,
 };
 
-
 class MageSkeleton :public Entity
 {
 public:
-
 	MageSkeleton(iPoint pos);
 
 	~MageSkeleton();
@@ -43,13 +41,10 @@ public:
 
 	// On Collision
 	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	iPoint GetPos() const;
 
-
 private:
-
 	void Idle();
 	void DoAttack();
 	void AttackLeft();
@@ -61,19 +56,16 @@ private:
 
 public:
 	Entity*					target = nullptr;
-private:
 
+private:
 	bool					flip = false;
 
 	bool					is_attacked = false;
-
 	int						rel_angle = 0;
 
 	MSKL_STATE				state = MSkl_S_Null;
-
 	states					anim_state = states_null;
 
 	int						rupee_reward = 0;
-
 };
 #endif //_MAGESKELETON_H_

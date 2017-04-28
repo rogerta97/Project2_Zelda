@@ -98,6 +98,7 @@ bool SnakePoison::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

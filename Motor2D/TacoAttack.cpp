@@ -100,6 +100,7 @@ bool TacoAttack::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

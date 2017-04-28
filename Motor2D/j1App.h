@@ -82,6 +82,7 @@ public:
 	bool GetGamePause();
 	j1Timer* AddGameplayTimer();
 	void DeleteGameplayTimer(j1Timer* t);
+	void ClearGameplayTimers();
 
 private:
 	// Load config file

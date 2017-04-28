@@ -608,3 +608,15 @@ void j1App::DeleteGameplayTimer(j1Timer * t)
 			++it;
 	}
 }
+
+void j1App::ClearGameplayTimers()
+{
+	if (!gameplay_timers.empty())
+	{
+		for (vector<j1Timer*>::iterator it = gameplay_timers.begin(); it != gameplay_timers.end();)
+		{
+			RELEASE((*it));
+			it = gameplay_timers.erase(it);
+		}
+	}
+}

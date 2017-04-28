@@ -122,7 +122,6 @@ bool Skeleton::Update(float dt)
 		}
 	}
 
-
 	switch (state)
 	{
 	case s_s_null:
@@ -133,7 +132,7 @@ bool Skeleton::Update(float dt)
 		break;
 	case s_s_attack:
 		Attack();
-		if (!LookForTarget())
+		if (!LookForTarget() || target == nullptr)
 		{
 			if (!game_object->animator->GetCurrentAnimation()->Finished())
 			{
