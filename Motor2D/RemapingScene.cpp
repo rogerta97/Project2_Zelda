@@ -43,8 +43,7 @@ bool RemapingScene::Start()
 	SDL_Rect button_suport_rect = {858, 1959, 70, 184}; 
 
 	SDL_Rect up_left_pick = { 928, 2003, 40, 28 };
-	SDL_Rect left_pick = {928, 1959, 24, 22}; 
-	SDL_Rect bottom_left_pick = { 928, 2032, 40, 28 };
+
 
 	SDL_Rect rectangle_background_rect = { 0, 2368, 136, 50};
 
@@ -108,6 +107,8 @@ bool RemapingScene::Start()
 		remapping_ui[i].cursor = window->CreateImage({ GetCursorPosFromCurrentState(remapping_ui[i].current_state).x + offset_x, GetCursorPosFromCurrentState(remapping_ui[i].current_state).y + offset_y }, cursor_rect);
 		remapping_ui[i].button_selector_cursor = window->CreateImage( {0,0}, cursor_selector_rect);
 		remapping_ui[i].button_selector_cursor->enabled = false; 
+		remapping_ui[i].support_pick = window->CreateImage({0,0}, up_left_pick);
+		remapping_ui[i].support_pick->enabled = false; 
 
 		// ----
 
@@ -156,14 +157,14 @@ bool RemapingScene::Start()
 
 		// Setting current keys of the players 
 
-		remapping_ui[i].confirm_key = window->CreateImage({ confirm_background_pos.x + rectangle_background_rect.w + 10 + offset_x, confirm_background_pos.y + offset_y }, {0,0,0,0});
-		remapping_ui[i].back_key = window->CreateImage({ back_background_pos.x + rectangle_background_rect.w + 10 + offset_x, back_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].minimap_key = window->CreateImage({ minimap_background_pos.x + rectangle_background_rect.w + 10 + offset_x, minimap_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].shop_key = window->CreateImage({ shop_background_pos.x + rectangle_background_rect.w + 10 + offset_x, shop_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a1_key = window->CreateImage({ a1_background_pos.x - 60 + offset_x, a1_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a2_key = window->CreateImage({ a2_background_pos.x - 60 + offset_x, a2_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a3_key = window->CreateImage({ a3_background_pos.x - 60 + offset_x, a3_background_pos.y + offset_y }, { 0,0,0,0 });
-		remapping_ui[i].a4_key = window->CreateImage({ a4_background_pos.x - 60 + offset_x, a4_background_pos.y + offset_y}, { 0,0,0,0 });
+		remapping_ui[i].confirm_key = window->CreateImage({ confirm_background_pos.x + rectangle_background_rect.w + 5 + offset_x, confirm_background_pos.y + offset_y }, {0,0,0,0});
+		remapping_ui[i].back_key = window->CreateImage({ back_background_pos.x + rectangle_background_rect.w + 5 + offset_x, back_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].minimap_key = window->CreateImage({ minimap_background_pos.x + rectangle_background_rect.w + 5 + offset_x, minimap_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].shop_key = window->CreateImage({ shop_background_pos.x + rectangle_background_rect.w + 5 + offset_x, shop_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a1_key = window->CreateImage({ a1_background_pos.x - 55 + offset_x, a1_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a2_key = window->CreateImage({ a2_background_pos.x - 55 + offset_x, a2_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a3_key = window->CreateImage({ a3_background_pos.x - 55 + offset_x, a3_background_pos.y + offset_y }, { 0,0,0,0 });
+		remapping_ui[i].a4_key = window->CreateImage({ a4_background_pos.x - 55 + offset_x, a4_background_pos.y + offset_y}, { 0,0,0,0 });
 
 		UpdateKeys(i); 
 		
@@ -254,11 +255,16 @@ bool RemapingScene::Update(float dt)
 
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
 		{
 			if(!inside)
 				App->scene->ChangeScene((Scene*)App->scene->menu_scene);
-			else
+		
+		}
+
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+		{
+			if (inside)
 				QuitOption(i);
 		}
 
@@ -566,6 +572,7 @@ void RemapingScene::QuitOption(int i)
 	remapping_ui[i].lb->enabled = false;
 	remapping_ui[i].lt->enabled = false;
 	remapping_ui[i].button_selector_cursor->enabled = false;
+	remapping_ui[i].support_pick->enabled = false; 
 
 	inside = false; 
 
@@ -575,8 +582,15 @@ void RemapingScene::OpenFreeButtonList(int i)
 {
 	SDL_Rect viewport_rect = App->view->GetViewportRect(1);
 
+	SDL_Rect up_left_pick = { 928, 2003, 40, 28 };
+	SDL_Rect up_right_pick = { 968, 2003, 40, 28 };
+	SDL_Rect left_pick = { 928, 1959, 24, 22 };
+	SDL_Rect right_pick = { 298, 1981, 24, 22 };
+	SDL_Rect bottom_left_pick = { 928, 2032, 40, 28 };
+	SDL_Rect bottom_right_pick = { 968, 2032, 40, 28 };
+
 	iPoint suport_pos = { viewport_rect.w / 2 - remapping_ui[i].button_support->image.w / 2, viewport_rect.h / 2 - remapping_ui[i].button_support->image.h / 2 };
-	remapping_ui[i].button_support->SetPos({suport_pos.x -10, suport_pos.y});
+	remapping_ui[i].button_support->SetPos({suport_pos.x -10, suport_pos.y - 10});
 	remapping_ui[i].button_support->enabled = true; 
 
 	remaping_state curr_state = remapping_ui[i].current_state; 
@@ -587,40 +601,65 @@ void RemapingScene::OpenFreeButtonList(int i)
 		{
 		case r_s_confirm:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_confirm);
+			remapping_ui[i].support_pick->image = up_left_pick;
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x + 10, remapping_ui[i].button_support->GetPos().y - 20});
+			remapping_ui[i].support_pick->enabled = true; 
 			break;
 
 		case r_s_back:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_back);
+			remapping_ui[i].support_pick->image = left_pick;
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x - 16, remapping_ui[i].button_support->GetPos().y + 40 });
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 
 		case r_s_minimap:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_minimap);
+			remapping_ui[i].support_pick->image = left_pick;
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x - 16, remapping_ui[i].button_support->GetPos().y + 110 });
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 
 		case r_s_shop:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_shop);
+			remapping_ui[i].support_pick->image = bottom_left_pick;
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x + 10, remapping_ui[i].button_support->GetPos().y + remapping_ui[i].button_support->image.h - 8});
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 
 		case r_s_a1:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability1);
+			remapping_ui[i].support_pick->image = up_right_pick;
+
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x + 15, remapping_ui[i].button_support->GetPos().y - 20 });
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 
 		case r_s_a2:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability2);
+			remapping_ui[i].support_pick->image = { 298, 1981, 24, 22 };
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x + remapping_ui[i].button_support->image.w, remapping_ui[i].button_support->GetPos().y + 40});
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 
 		case r_s_a3:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability3);
+			remapping_ui[i].support_pick->image = { 298, 1981, 24, 22 };
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x + remapping_ui[i].button_support->image.w, remapping_ui[i].button_support->GetPos().y + 110 });
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 
 		case r_s_a4:
 			curr_key = App->scene->players[i].mapping->GetMapping(m_k_ability4);
+			remapping_ui[i].support_pick->image = bottom_right_pick;
+			remapping_ui[i].support_pick->SetPos({ remapping_ui[i].button_support->GetPos().x + 15, remapping_ui[i].button_support->GetPos().y + remapping_ui[i].button_support->image.h - 8 });
+			remapping_ui[i].support_pick->enabled = true;
 			break;
 		}
 	
 	SetButtonsFromID(curr_key, i);
 
-	remapping_ui[i].button_selector_cursor->SetPos({ suport_pos.x + 2, suport_pos.y + 11 });
+	remapping_ui[i].button_selector_cursor->SetPos({ suport_pos.x + 2, suport_pos.y });
 	remapping_ui[i].button_selector_cursor->enabled = true; 
 
 }

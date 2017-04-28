@@ -84,13 +84,15 @@ public:
 
 	player_info					 players[4];
 
+	Scene*						 last_scene = nullptr;
+
 private:
 	// Scenes list
 	list<Scene*>				 scenes;
 
 	// Current scene
 	Scene*						 current_scene = nullptr;
-	Scene*						 last_scene = nullptr; 
+
 		
 };
 
