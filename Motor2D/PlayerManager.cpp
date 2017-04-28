@@ -95,7 +95,7 @@ bool PlayerManager::Update(float dt)
 		if (!curr_player->is_dead)
 		{
 			// Take player input
-			if(!App->GetGamePause())
+			if (!curr_player->disable_controller && !App->GetGamePause())
 				PlayerInput(curr_player, i);
 
 			// Update pasive heal
@@ -118,7 +118,7 @@ bool PlayerManager::Update(float dt)
 		else
 		{
 			// Enable camera movement
-			if (!curr_player->disable_controller)
+			if (!curr_player->disable_controller && !App->GetGamePause())
 				MoveCamera(curr_player);
 
 			// Check if it has to respawn
