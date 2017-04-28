@@ -305,10 +305,13 @@ bool MenuScene::PostUpdate()
 	}
 
 
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN && is_options == true)
+	if (App->scene->players[0].mapping->GetKey(m_k_back, &accept_key_id))
 	{
-		is_options = false; 
-		GoMenu(); 
+		if (App->input->GetControllerButton(0, accept_key_id) == KEY_DOWN)
+		{
+			is_options = false;
+			GoMenu();
+		}
 	}
 
 	return true;

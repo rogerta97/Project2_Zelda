@@ -20,63 +20,59 @@ enum remaping_state
 	r_s_a3,
 	r_s_a4,
 
-	r_s_a,
-	r_s_b,
-	r_s_x,
-	r_s_y,
-	r_s_rb,
-	r_s_rt,
-	r_s_lb,
-	r_s_lt,
+	r_s_inside,
 
 };
 
 struct remap_ui
 {
-	UI_Image* confirm_key = nullptr;
-	UI_Image* back_key = nullptr;
-	UI_Image* minimap_key = nullptr;
-	UI_Image* shop_key = nullptr;
-	UI_Image* a1_key = nullptr;
-	UI_Image* a2_key = nullptr;
-	UI_Image* a3_key = nullptr;
-	UI_Image* a4_key = nullptr;
+	UI_Image*      confirm_key = nullptr;
+	UI_Image*      back_key = nullptr;
+	UI_Image*      minimap_key = nullptr;
+	UI_Image*      shop_key = nullptr;
+	UI_Image*      a1_key = nullptr;
+	UI_Image*      a2_key = nullptr;
+	UI_Image*      a3_key = nullptr;
+	UI_Image*      a4_key = nullptr;
 
-	UI_Image* confirm_background = nullptr;
-	UI_Image* back_background = nullptr;
-	UI_Image* minimap_background = nullptr;
-	UI_Image* shop_background = nullptr;
-	UI_Image* a1_background	= nullptr;
-	UI_Image* a2_background	= nullptr;
-	UI_Image* a3_background	= nullptr;
-	UI_Image* a4_background	= nullptr;
+	UI_Image*      confirm_background = nullptr;
+	UI_Image*      back_background = nullptr;
+	UI_Image*      minimap_background = nullptr;
+	UI_Image*      shop_background = nullptr;
+	UI_Image*      a1_background = nullptr;
+	UI_Image*      a2_background = nullptr;
+	UI_Image*      a3_background = nullptr;
+	UI_Image*      a4_background = nullptr;
 
-	UI_Text* confirm_text = nullptr;
-	UI_Text* back_text = nullptr;
-	UI_Text* minimap_text = nullptr;
-	UI_Text* shop_text = nullptr;
-	UI_Text* a1_text = nullptr;
-	UI_Text* a2_text = nullptr;
-	UI_Text* a3_text = nullptr;
-	UI_Text* a4_text = nullptr;
+	UI_Text*       confirm_text = nullptr;
+	UI_Text*       back_text = nullptr;
+	UI_Text*       minimap_text = nullptr;
+	UI_Text*       shop_text = nullptr;
+	UI_Text*       a1_text = nullptr;
+	UI_Text*       a2_text = nullptr;
+	UI_Text*       a3_text = nullptr;
+	UI_Text*       a4_text = nullptr;
 
-	UI_Image* a = nullptr;
-	UI_Image* b = nullptr;
-	UI_Image* x = nullptr;
-	UI_Image* y = nullptr;
-	UI_Image* rb = nullptr;
-	UI_Image* lb = nullptr;
-	UI_Image* rt = nullptr;
-	UI_Image* lt = nullptr;
+	UI_Image*	   a = nullptr;
+	UI_Image*	   b = nullptr;
+	UI_Image*	   x = nullptr;
+	UI_Image*	   y = nullptr;
+	UI_Image*	   rb = nullptr;
+	UI_Image*	   lb = nullptr;
+	UI_Image*	   rt = nullptr;
+	UI_Image*	   lt = nullptr;
 
-	UI_Image* cursor = nullptr;
-	UI_Image* button_selector_cursor = nullptr; 
-	UI_Image* button_support = nullptr; 
+	UI_Image*	   cursor = nullptr;
+	UI_Image*	   button_selector_cursor = nullptr; 
+	UI_Image*	   button_support = nullptr; 
+	UI_Image*	   support_pick = nullptr; 
 
 	remaping_state current_state = r_s_confirm;
 	remaping_state prev_state = r_s_confirm; 
+	
+	int				curr_inside_pos = -1; 
 
-	vector<UI_Image*> selected_buttons; 
+	vector<key_mapping>	   sdl_code;
 };
 
 class RemapingScene : public Scene
@@ -116,6 +112,8 @@ private:
 	void SetButtonsFromID(key_mapping curr_key, int viewport);
 
 	void MoveSelectorCursor(bool up, int viewport);
+
+	void RemapKey(remaping_state curr_state, int sdl_scancode, bool isbutton, int viewport); 
 
 	
 private:
