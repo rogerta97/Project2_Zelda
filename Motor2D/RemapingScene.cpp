@@ -907,35 +907,35 @@ void RemapingScene::RemapKey(remaping_state curr_state, int sdl_scancode, bool i
 	switch (curr_state)
 	{
 	case r_s_confirm:
-		App->scene->players[viewport].mapping->MapKey(m_k_confirm, sdl_scancode, isbutton); 
+		App->scene->players[viewport].mapping->MapKey(m_k_confirm, sdl_scancode, !isbutton); 
 		break; 
 
 	case r_s_back:
-		App->scene->players[viewport].mapping->MapKey(m_k_back, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_back, sdl_scancode, !isbutton);
 		break;
 
 	case r_s_minimap:
-		App->scene->players[viewport].mapping->MapKey(m_k_minimap, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_minimap, sdl_scancode, !isbutton);
 		break;
 
 	case r_s_shop:
-		App->scene->players[viewport].mapping->MapKey(m_k_shop, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_shop, sdl_scancode, !isbutton);
 		break;
 
 	case r_s_a1:
-		App->scene->players[viewport].mapping->MapKey(m_k_ability1, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_ability1, sdl_scancode, !isbutton);
 		break;
 
 	case r_s_a2:
-		App->scene->players[viewport].mapping->MapKey(m_k_ability2, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_ability2, sdl_scancode, !isbutton);
 		break;
 
 	case r_s_a3:
-		App->scene->players[viewport].mapping->MapKey(m_k_ability3, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_ability3, sdl_scancode, !isbutton);
 		break;
 
 	case r_s_a4:
-		App->scene->players[viewport].mapping->MapKey(m_k_ability4, sdl_scancode, isbutton);
+		App->scene->players[viewport].mapping->MapKey(m_k_ability4, sdl_scancode, !isbutton);
 		break;
 
 
