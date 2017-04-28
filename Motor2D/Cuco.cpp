@@ -15,7 +15,8 @@
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
 
-#define Half_Tile 16
+#define HALF_TILE 16
+#define	PATH_SEARCH_RADIOUS 520
 
 Cuco::Cuco(iPoint pos)
 {
@@ -293,8 +294,8 @@ void Cuco::CucoMove()
 	iPoint target_map_pos = base_path.front();
 
 	iPoint target_world_pos = App->map->MapToWorld(target_map_pos.x, target_map_pos.y);
-	target_world_pos.y += Half_Tile;
-	target_world_pos.x += Half_Tile;
+	target_world_pos.y += HALF_TILE;
+	target_world_pos.x += HALF_TILE;
 
 	Move(target_world_pos.x - GetPos().x, target_world_pos.y - GetPos().y);
 
@@ -307,11 +308,11 @@ void Cuco::CucoMove()
 
 void Cuco::GetNewPath()
 {
-	target = App->map->WorldToMap(GetRandomValue(GetPos().x - 520, GetPos().x + 520), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
+	target = App->map->WorldToMap(GetRandomValue(GetPos().x - PATH_SEARCH_RADIOUS, GetPos().x + PATH_SEARCH_RADIOUS), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
 
 	while (!App->pathfinding->IsWalkable(target) && target!=GetPos())
 	{
-		target = App->map->WorldToMap(GetRandomValue(GetPos().x - 520, GetPos().x + 520), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
+		target = App->map->WorldToMap(GetRandomValue(GetPos().x - PATH_SEARCH_RADIOUS, GetPos().x + PATH_SEARCH_RADIOUS), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
 	}
 
 	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
