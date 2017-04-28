@@ -146,7 +146,7 @@ public:
 	// Blit choosing the layer
 	void LayerBlit(int layer, SDL_Texture* texture, iPoint pos, const SDL_Rect section = NULLRECT, int viewport = 0, float scale = -1.0f, bool use_camera = true, SDL_RendererFlip _flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX);
 	void LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, int layer = 0, int viewport = 0, bool use_camera = true);
-	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true);
+	void LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, int layer = 0, int viewport = 0, bool use_camera = true);
 	void LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, int layer = 0, int viewport = 0, bool filled = false, bool use_camera = true);
 	void SetViews(uint number);
 	uint GetViews();
@@ -179,7 +179,10 @@ public:
 
 private:
 	// Layer Blit list
-	vector<layer_line>   line_list;
+	priority_queue<layer_line, std::vector<layer_line>, layer_line> line_list1;
+	priority_queue<layer_line, std::vector<layer_line>, layer_line> line_list2;
+	priority_queue<layer_line, std::vector<layer_line>, layer_line> line_list3;
+	priority_queue<layer_line, std::vector<layer_line>, layer_line> line_list4;
 
 	priority_queue<layer_blit, std::vector<layer_blit>, layer_blit> layer_list1;
 	priority_queue<layer_blit, std::vector<layer_blit>, layer_blit> layer_list2;
@@ -215,6 +218,8 @@ private:
 	j1PerfTimer			 timer;
 
 	SDL_Rect			 viewport_size = NULLRECT;
+
+	int test = 0;
 };
 
 #endif // __j1VIEWPORTS_H__

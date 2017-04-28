@@ -2,7 +2,7 @@
 
 <file>
   <animations texture ="textures/Base_entity.png">
-    <anim speed = "4" name = "idle" loop = "true">
+    <anim speed = "8" name = "idle" loop = "true">
       <rect x = "0" y = "0" w = "242" h = "290"/>
       <rect x = "242" y = "0" w = "242" h = "290"/>
       <rect x = "0" y = "290" w = "242" h = "290"/>
