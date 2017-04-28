@@ -73,10 +73,7 @@ public:
 	void SetBasePath(const std::list<iPoint>* path);
 
 private:
-	void CucoIdle();
 	void CucoMove();
-
-	void CheckState();
 
 	void GetNewPath();
 
@@ -92,9 +89,8 @@ private:
 
 	string              cuco_type;
 	CUCO_STATE		    state = Cuco_Idle;
-	CUCO_MOVE_STATE	    move_state = cMove_Idle;
 
-	std::vector<iPoint>	base_path;
+	std::queue<iPoint>	base_path;
 	int					base_path_index = 0;
 
 	float				speed = 0;
