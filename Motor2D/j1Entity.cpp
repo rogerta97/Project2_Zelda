@@ -689,6 +689,7 @@ void j1Entity::DeleteFromSlow(Entity * entity)
 		{
 			if ((*it).entity == entity)
 			{
+				(*it).CleanUp();
 				it = slowed_entities.erase(it);
 				break;
 			}
