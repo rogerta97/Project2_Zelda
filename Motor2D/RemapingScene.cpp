@@ -838,9 +838,9 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 			new_key.is_button = true;
 			remapping_ui[viewport].sdl_code.push_back(new_key);
 
-			remapping_ui[viewport].rt->SetPos(positions[2]);
-			remapping_ui[viewport].rt->enabled = true;
-			new_key.key_id = RIGHT_TRIGGER;
+			remapping_ui[viewport].lt->SetPos(positions[2]);
+			remapping_ui[viewport].lt->enabled = true;
+			new_key.key_id = LEFT_TRIGGER;
 			new_key.is_button = false;
 			remapping_ui[viewport].sdl_code.push_back(new_key);
 
@@ -853,19 +853,19 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 	{
 		remapping_ui[viewport].rb->SetPos(positions[0]);
 		remapping_ui[viewport].rb->enabled = true;
-		new_key.key_id = SDL_CONTROLLER_BUTTON_B;
+		new_key.key_id = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
 		new_key.is_button = true;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
 
 		remapping_ui[viewport].lb->SetPos(positions[1]);
 		remapping_ui[viewport].lb->enabled = true;
-		new_key.key_id = SDL_CONTROLLER_BUTTON_B;
+		new_key.key_id = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
 		new_key.is_button = true;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
 
 		remapping_ui[viewport].rt->SetPos(positions[2]);
 		remapping_ui[viewport].rt->enabled = true;
-		new_key.key_id = SDL_CONTROLLER_BUTTON_B;
+		new_key.key_id = RIGHT_TRIGGER;
 		new_key.is_button = false;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
 
