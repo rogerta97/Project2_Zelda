@@ -24,6 +24,7 @@
 #include "MageSkeleton.h"
 #include "Cuco.h"
 #include "Navi.h"
+#include "EventThrower.h"
 
 j1Entity::j1Entity()
 {
@@ -51,6 +52,8 @@ bool j1Entity::Start()
 	App->xml->LoadXML("entity_effects.xml", doc);
 	entity_effects_texture = entity_effects_animator->LoadAnimationsFromXML(doc, "animations");
 
+	event_thrower = new EventThrower();
+
 	return ret;
 }
 
@@ -75,24 +78,24 @@ bool j1Entity::Update(float dt)
 {
 	bool ret = true;
 
+	if (App->GetGamePause())
+		dt = 0;
+
 	for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)
 	{
 		if (!(*it)->to_delete)
 		{
 			if (!App->GetGamePause())
-			{
-				//LOG("%s", (*it)->name.c_str());
 				ret = (*it)->Update(dt);
-				(*it)->Draw(dt);
-			}
-			else
-				(*it)->Draw(0);
+
+			(*it)->Draw(dt);
 		}
 	}
 
-	SlowEntities();
-	StunEntities();
-	DieEntities();
+	SlowEntities(dt);
+	StunEntities(dt);
+	DieEntities(dt);
+	WinRupeesPlayers(dt);
 
 	return ret;
 }
@@ -120,6 +123,8 @@ bool j1Entity::CleanUp()
 
 	entity_effects_animator->CleanUp();
 	RELEASE(entity_effects_animator);
+
+	RELEASE(event_thrower);
 
 	return ret;
 }
@@ -429,6 +434,15 @@ void j1Entity::ClearEntities()
 			it = dying_entities.erase(it);
 		}
 	}
+
+	if (!win_rupees_players.empty())
+	{
+		for (list<win_rupees>::iterator it = win_rupees_players.begin(); it != win_rupees_players.end();)
+		{
+			(*it).CleanUp();
+			it = win_rupees_players.erase(it);
+		}
+	}
 }
 
 int j1Entity::GetEntitiesNumber()
@@ -595,8 +609,10 @@ void j1Entity::AddRupeesIfPlayer(Entity * entity, int amount)
 		{
 			if (entity->is_player)
 			{
-				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(entity->game_object->pbody);
-				p->AddRupees(amount);
+				Player* pl = App->scene->main_scene->player_manager->GetPlayerFromBody(entity->game_object->pbody);
+				pl->AddRupees(amount);
+
+				win_rupees_players.push_back(win_rupees(pl, entity_effects_animator->GetAnimation("win_rupees_green")));
 			}
 		}
 	}
@@ -609,8 +625,15 @@ Animator * j1Entity::GetEntityEffectsAnimator()
 
 void j1Entity::DeleteEntity(Entity* entity)
 {
-	if(entity != nullptr)
+	if (entity != nullptr)
+	{
 		entity->to_delete = true;
+
+		Event* die = new Event();
+		die->event_data.entity = entity;
+		die->type = event_type::e_t_death;
+		event_thrower->AddEvent(die);
+	}
 }
 
 void j1Entity::RemoveEntities()
@@ -635,7 +658,7 @@ void j1Entity::RemoveEntities()
 	}
 }
 
-void j1Entity::SlowEntities()
+void j1Entity::SlowEntities(float dt)
 {
 	if (!slowed_entities.empty())
 	{
@@ -675,7 +698,7 @@ void j1Entity::DeleteFromSlow(Entity * entity)
 	}
 }
 
-void j1Entity::StunEntities()
+void j1Entity::StunEntities(float dt)
 {
 	if (!stuned_entities.empty())
 	{
@@ -691,7 +714,7 @@ void j1Entity::StunEntities()
 				}
 				else
 				{
-					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
 					++it;
 				}
 			}
@@ -718,7 +741,7 @@ void j1Entity::DeleteFromStun(Entity * entity)
 	}
 }
 
-void j1Entity::DieEntities()
+void j1Entity::DieEntities(float dt)
 {
 	if (!dying_entities.empty())
 	{
@@ -731,10 +754,30 @@ void j1Entity::DieEntities()
 			}
 			else
 			{
-				App->view->LayerBlit(3, entity_effects_texture, { (*it).pos.x - 20, (*it).pos.y - 20 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+				App->view->LayerBlit(3, entity_effects_texture, { (*it).pos.x - 20, (*it).pos.y - 20 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
 				++it;
 			}
 				
+		}
+	}
+}
+
+void j1Entity::WinRupeesPlayers(float dt)
+{
+	if (!win_rupees_players.empty())
+	{
+		for (list<win_rupees>::iterator it = win_rupees_players.begin(); it != win_rupees_players.end();)
+		{
+			if ((*it).animator->GetCurrentAnimation()->Finished() || (*it).player->is_dead)
+			{
+				(*it).CleanUp();
+				it = win_rupees_players.erase(it);
+			}
+			else
+			{
+				App->view->LayerBlit((*it).player->entity->GetPos().y, entity_effects_texture, { (*it).player->entity->GetPos().x - ((*it).player->entity->game_object->GetHitBoxSize().x / 2) + 8, (*it).player->entity->GetPos().y - 90 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
+				++it;
+			}
 		}
 	}
 }

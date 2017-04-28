@@ -987,11 +987,6 @@ void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
 	{
-		Event* event_die = new Event();
-		event_die->type = e_t_death;
-		event_die->event_data.entity = player->entity;
-		event_thrower->AddEvent(event_die);
-
 		p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(true);
 
     	player->Kill();

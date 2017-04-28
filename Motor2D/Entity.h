@@ -366,8 +366,6 @@ protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;
 	iPoint		     restore_draw_offset = NULLPOINT;
-
-	j1Timer*		 stun_slow_timer = nullptr;
 };
 
 #endif
