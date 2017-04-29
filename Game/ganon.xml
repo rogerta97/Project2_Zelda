@@ -1,0 +1,241 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="textures/ganon_spritesheet.png">
+      <!--<anim speed = "10" name = "run_down" loop = "true">
+	       <rect x = "0" y = "156" w = "32" h = "48"/>
+	       <rect x = "36" y = "156" w = "32" h = "48"/>
+	       <rect x = "72" y = "156" w = "32" h = "48"/>
+         <rect x = "108" y = "156" w = "32" h = "48"/>
+	       <rect x = "144" y = "156" w = "32" h = "48"/>
+	       <rect x = "180" y = "156" w = "32" h = "48"/>
+	       <rect x = "216" y = "156" w = "32" h = "48"/>
+	       <rect x = "252" y = "156" w = "32" h = "48"/>
+      </anim>
+      <anim speed = "10" name = "run_up" loop = "true">
+	       <rect x = "0" y = "206" w = "34" h = "48"/>
+	       <rect x = "36" y = "206" w = "34" h = "48"/>
+	       <rect x = "72" y = "206" w = "34" h = "48"/>
+         <rect x = "108" y = "206" w = "34" h = "48"/>
+	       <rect x = "144" y = "206" w = "34" h = "48"/>
+	       <rect x = "180" y = "206" w = "34" h = "48"/>
+	       <rect x = "216" y = "206" w = "34" h = "48"/>
+	       <rect x = "252" y = "206" w = "34" h = "48"/>
+      </anim>
+      <anim speed = "10" name = "run_lateral" loop = "true">
+	       <rect x = "0" y = "256" w = "38" h = "48"/>
+	       <rect x = "38" y = "256" w = "36" h = "48"/>
+	       <rect x = "74" y = "256" w = "38" h = "48"/>
+         <rect x = "112" y = "256" w = "38" h = "48"/>
+	       <rect x = "150" y = "256" w = "36" h = "48"/>
+	       <rect x = "186" y = "256" w = "36" h = "48"/>
+	       <rect x = "222" y = "256" w = "36" h = "48"/>
+	       <rect x = "258" y = "256" w = "38" h = "48"/>
+      </anim>
+     -->
+      <anim speed = "10" name = "idle_lateral" loop = "true">
+	       <rect x = "0" y = "186" w = "112" h = "80"/>
+      </anim>
+      <anim speed = "10" name = "idle_up" loop = "true">
+	       <rect x = "0" y = "92" w = "112" h = "94"/>
+      </anim>
+      <anim speed = "10" name = "idle_down" loop = "true">
+	        <rect x = "0" y = "0" w = "112" h = "92"/>
+      </anim>
+   <!--  <anim speed = "10" name = "basic_attack_down" loop = "false">
+         <rect x = "0" y = "324" w = "40" h = "66"/>
+         <rect x = "42" y = "319" w = "40" h = "68"/>
+         <rect x = "86" y = "313" w = "40" h = "77"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_up" loop = "false">
+       <rect x = "146" y = "310" w = "40" h = "80"/>
+       <rect x = "188" y = "314" w = "40" h = "75"/>
+       <rect x = "232" y = "316" w = "40" h = "74"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_right" loop = "false">
+       <rect x = "40" y = "395" w = "60" h = "45"/>
+       <rect x = "120" y = "395" w = "80" h = "45"/>
+       <rect x = "214" y = "395" w = "85" h = "45"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_left" loop = "false">
+       <rect x = "40" y = "395" w = "70" h = "45"/>
+       <rect x = "89" y = "395" w = "100" h = "45"/>
+       <rect x = "187" y = "395" w = "100" h = "45"/>
+     </anim>
+     -->
+     <anim speed = "60" name = "bat_particles" loop = "false">
+      <rect x = "0" y = "268" w = "56" h = "32"/>
+      <rect x = "56" y = "268" w = "56" h = "32"/>
+      <rect x = "112" y = "268" w = "56" h = "32"/>
+      <rect x = "168" y = "268" w = "56" h = "32"/>
+      <rect x = "224" y = "268" w = "56" h = "32"/>
+      <rect x = "280" y = "268" w = "56" h = "32"/>
+      <rect x = "168" y = "268" w = "56" h = "32"/>
+      <rect x = "224" y = "268" w = "56" h = "32"/>
+      <rect x = "280" y = "268" w = "56" h = "32"/>
+      <rect x = "168" y = "268" w = "56" h = "32"/>
+      <rect x = "224" y = "268" w = "56" h = "32"/>
+      <rect x = "280" y = "268" w = "56" h = "32"/>
+      <rect x = "168" y = "268" w = "56" h = "32"/>
+      <rect x = "224" y = "268" w = "56" h = "32"/>
+      <rect x = "280" y = "268" w = "56" h = "32"/>
+     </anim>
+     <anim speed = "60" name = "fire_trail" loop = "false">
+      <rect x = "336" y = "268" w = "56" h = "32"/>
+      <rect x = "392" y = "268" w = "56" h = "32"/>
+      <rect x = "336" y = "268" w = "56" h = "32"/>
+      <rect x = "392" y = "268" w = "56" h = "32"/>
+      <rect x = "336" y = "268" w = "56" h = "32"/>
+      <rect x = "392" y = "268" w = "56" h = "32"/>
+      <rect x = "448" y = "268" w = "56" h = "32"/>
+      <rect x = "504" y = "268" w = "56" h = "32"/>
+       <rect x = "448" y = "268" w = "56" h = "32"/>
+      <rect x = "504" y = "268" w = "56" h = "32"/>
+       <rect x = "448" y = "268" w = "56" h = "32"/>
+      <rect x = "504" y = "268" w = "56" h = "32"/>
+     </anim>
+     
+     <anim speed = "60" name = "ultimate_attack" loop = "false">
+        <rect x = "1" y = "305" w = "140" h = "180"/>
+        <rect x = "143" y = "305" w = "140" h = "180"/>
+        <rect x = "285" y = "305" w = "140" h = "180"/>
+        <rect x = "427" y = "305" w = "140" h = "180"/>
+        <rect x = "1" y = "487" w = "140" h = "180"/>
+        <rect x = "143" y = "487" w = "140" h = "180"/>
+        <rect x = "285" y = "487" w = "140" h = "180"/>
+        <rect x = "285" y = "487" w = "140" h = "180"/>
+        <rect x = "285" y = "487" w = "140" h = "180"/>
+        <rect x = "285" y = "487" w = "140" h = "180"/>
+
+     </anim>
+
+
+
+<!--
+     <anim speed = "10" name = "run_down_2" loop = "true">
+       <rect x = "313" y = "156" w = "32" h = "48"/>
+       <rect x = "349" y = "156" w = "32" h = "48"/>
+       <rect x = "385" y = "156" w = "32" h = "48"/>
+       <rect x = "421" y = "156" w = "32" h = "48"/>
+       <rect x = "457" y = "156" w = "32" h = "48"/>
+       <rect x = "494" y = "156" w = "32" h = "48"/>
+       <rect x = "529" y = "156" w = "32" h = "48"/>
+       <rect x = "565" y = "156" w = "32" h = "48"/>
+     </anim>
+     <anim speed = "10" name = "run_up_2" loop = "true">
+       <rect x = "313" y = "206" w = "34" h = "48"/>
+       <rect x = "349" y = "206" w = "34" h = "48"/>
+       <rect x = "385" y = "206" w = "34" h = "48"/>
+       <rect x = "421" y = "206" w = "34" h = "48"/>
+       <rect x = "457" y = "206" w = "34" h = "48"/>
+       <rect x = "494" y = "206" w = "34" h = "48"/>
+       <rect x = "529" y = "206" w = "34" h = "48"/>
+       <rect x = "565" y = "206" w = "34" h = "48"/>
+     </anim>
+     <anim speed = "10" name = "run_lateral_2" loop = "true">
+       <rect x = "313" y = "256" w = "38" h = "48"/>
+       <rect x = "351" y = "256" w = "36" h = "48"/>
+       <rect x = "387" y = "256" w = "38" h = "48"/>
+       <rect x = "425" y = "256" w = "37" h = "48"/>
+       <rect x = "465" y = "256" w = "34" h = "48"/>
+       <rect x = "499" y = "256" w = "36" h = "48"/>
+       <rect x = "535" y = "256" w = "36" h = "48"/>
+       <rect x = "571" y = "256" w = "38" h = "48"/>
+     </anim>
+     <anim speed = "10" name = "idle_lateral_2" loop = "true">
+       <rect x = "425" y = "258" w = "38" h = "46"/>
+     </anim>
+     <anim speed = "10" name = "idle_up_2" loop = "true">
+       <rect x = "421" y = "206" w = "34" h = "48"/>
+     </anim>
+     <anim speed = "10" name = "idle_down_2" loop = "true">
+       <rect x = "421" y = "156" w = "32" h = "48"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_down_2" loop = "false">
+       <rect x = "413" y = "324" w = "40" h = "66"/>
+       <rect x = "355" y = "319" w = "40" h = "68"/>
+       <rect x = "399" y = "313" w = "40" h = "77"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_up_2" loop = "false">
+       <rect x = "459" y = "310" w = "40" h = "80"/>
+       <rect x = "501" y = "314" w = "40" h = "75"/>
+       <rect x = "545" y = "316" w = "40" h = "74"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_right_2" loop = "false">
+       <rect x = "353" y = "395" w = "60" h = "45"/>
+       <rect x = "433" y = "395" w = "80" h = "45"/>
+       <rect x = "527" y = "395" w = "85" h = "45"/>
+     </anim>
+     <anim speed = "10" name = "basic_attack_left_2" loop = "false">
+       <rect x = "353" y = "395" w = "70" h = "45"/>
+       <rect x = "402" y = "395" w = "100" h = "45"/>
+       <rect x = "500" y = "395" w = "100" h = "45"/>
+     </anim>
+     <anim speed = "60" name = "spin_attack_2" loop = "false">
+       <rect x = "317" y = "442" w = "103" h = "109"/>
+       <rect x = "422" y = "442" w = "103" h = "109"/>
+       <rect x = "524" y = "442" w = "100" h = "109"/>
+
+       <rect x = "318" y = "550" w = "103" h = "109"/>
+       <rect x = "423" y = "551" w = "103" h = "109"/>
+       <rect x = "524" y = "551" w = "100" h = "109"/>
+
+       <rect x = "316" y = "659" w = "103" h = "109"/>
+       <rect x = "422" y = "659" w = "103" h = "109"/>
+       <rect x = "522" y = "658" w = "103" h = "108"/>
+
+       <rect x = "314" y = "766" w = "103" h = "109"/>
+       <rect x = "420" y = "766" w = "103" h = "109"/>
+       <rect x = "524" y = "768" w = "101" h = "109"/>
+
+       <rect x = "319" y = "876" w = "103" h = "109"/>
+       <rect x = "421" y = "876" w = "103" h = "109"/>
+       <rect x = "523" y = "876" w = "101" h = "109"/>
+
+       <rect x = "319" y = "984" w = "100" h = "109"/>
+       <rect x = "422" y = "982" w = "95" h = "109"/>
+       <rect x = "522" y = "982" w = "100" h = "109"/>
+
+       <rect x = "322" y = "1090" w = "100" h = "109"/>
+       <rect x = "423" y = "1090" w = "100" h = "109"/>
+       <rect x = "521" y = "1090" w = "100" h = "109"/>
+
+       <rect x = "319" y = "1198" w = "100" h = "90"/>
+       <rect x = "423" y = "1198" w = "100" h = "90"/>
+       <rect x = "521" y = "1198" w = "97" h = "90"/>
+     </anim>
+     <anim speed = "60" name = "ultimate_attack_2" loop = "true">
+       <rect x = "317" y = "442" w = "103" h = "109"/>
+       <rect x = "422" y = "442" w = "103" h = "109"/>
+       <rect x = "524" y = "442" w = "100" h = "109"/>
+
+       <rect x = "318" y = "550" w = "103" h = "109"/>
+       <rect x = "423" y = "551" w = "103" h = "109"/>
+       <rect x = "524" y = "551" w = "100" h = "109"/>
+
+       <rect x = "316" y = "659" w = "103" h = "109"/>
+       <rect x = "422" y = "659" w = "103" h = "109"/>
+       <rect x = "522" y = "658" w = "103" h = "108"/>
+
+       <rect x = "314" y = "766" w = "103" h = "109"/>
+       <rect x = "429" y = "766" w = "103" h = "109"/>
+       <rect x = "524" y = "768" w = "101" h = "109"/>
+
+       <rect x = "319" y = "876" w = "103" h = "109"/>
+       <rect x = "421" y = "876" w = "103" h = "109"/>
+       <rect x = "523" y = "876" w = "101" h = "109"/>
+
+       <rect x = "319" y = "984" w = "100" h = "109"/>
+       <rect x = "422" y = "982" w = "95" h = "109"/>
+       <rect x = "522" y = "982" w = "100" h = "109"/>
+
+     </anim>
+     -->
+   </animations>
+  <stats hp="160" speed="200" power="10" rupees="100">
+    <ability1 mult="1" cd="1" bd="3"/>
+    <ability2 mult="0.6" cd="8" bd="30"/>
+    <ability3 mult="0.5" cd="15" bd="8"/>
+    <ability4 mult="0" cd="60" bd="0"/>
+  </stats>
+</file>
