@@ -42,12 +42,14 @@
           <rect x = "224" y = "668" w = "112" h = "118"/>
           <rect x = "224" y = "668" w = "112" h = "118"/>
      </anim>
-      <!-- 
+     
      <anim speed = "10" name = "basic_attack_up" loop = "false">
-       <rect x = "146" y = "310" w = "40" h = "80"/>
-       <rect x = "188" y = "314" w = "40" h = "75"/>
-       <rect x = "232" y = "316" w = "40" h = "74"/>
+       <rect x = "0" y = "778" w = "112" h = "130"/>
+       <rect x = "112" y = "778" w = "112" h = "130"/>
+       <rect x = "224" y = "778" w = "112" h = "130"/>
+       <rect x = "224" y = "778" w = "112" h = "130"/>
      </anim>
+       <!-- 
      <anim speed = "10" name = "basic_attack_right" loop = "false">
        <rect x = "40" y = "395" w = "60" h = "45"/>
        <rect x = "120" y = "395" w = "80" h = "45"/>
