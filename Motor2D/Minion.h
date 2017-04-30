@@ -102,6 +102,8 @@ private:
 
 	void SetIdleAnim();
 
+	void CheckNearestPathTile();
+
 public:
 	Entity*				target = nullptr;
 

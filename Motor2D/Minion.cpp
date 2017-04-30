@@ -15,6 +15,7 @@
 #include "TowerManager.h"
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
+#include <climits>
 
 #define Half_Tile 16
 
@@ -460,6 +461,7 @@ void Minion::CheckState()
 						target_path_index = 0;
 						target = nullptr;
 						move_state = Move_ReturnToPath;
+						CheckNearestPathTile();
 						PathToBasePath();
 					}
 				}
@@ -755,31 +757,46 @@ void Minion::Attack()
 	}
 }
 
-	void Minion::SetIdleAnim()
+void Minion::SetIdleAnim()
+{
+	switch (anim_state)
 	{
-		switch (anim_state)
-		{
-		case run_up:
-		case idle_up:
-		case basic_atack_up:
-			IdleUp();
-			break;
-		case run_left:
-		case idle_left:
-		case basic_atack_left:
-			IdleLeft();
-			break;
-		case run_down:
-		case idle_down:
-		case basic_atack_down:
-			IdleDown();
-			break;
-		case run_right:
-		case idle_right:
-		case basic_atack_right:
-			IdleRight();
-			break;
-		default:
-			break;
-		}
+	case run_up:
+	case idle_up:
+	case basic_atack_up:
+		IdleUp();
+		break;
+	case run_left:
+	case idle_left:
+	case basic_atack_left:
+		IdleLeft();
+		break;
+	case run_down:
+	case idle_down:
+	case basic_atack_down:
+		IdleDown();
+		break;
+	case run_right:
+	case idle_right:
+	case basic_atack_right:
+		IdleRight();
+		break;
+	default:
+		break;
 	}
+}
+
+void Minion::CheckNearestPathTile()
+{
+	int distance = INT_MAX, i = 0;
+	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+	for (; i < base_path.size(); ++i)
+	{
+		if (abs(base_path[i].x - map_pos.x) < distance)
+			distance = abs(base_path[i].x - map_pos.x);
+		else
+			break;
+	}
+
+	base_path_index = i;
+}
