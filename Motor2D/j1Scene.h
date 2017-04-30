@@ -13,6 +13,7 @@ class FinalScreen;
 class CharacterSelectionScene; 
 class TeamSelectScene;
 class LogoScene;
+class RemapingScene; 
 class Mapping;
 
 struct player_info
@@ -79,8 +80,11 @@ public:
 	TeamSelectScene*			 team_select = nullptr;
 	FinalScreen*				 final_screen = nullptr; 
 	LogoScene*					 logo_scene = nullptr;
+	RemapingScene*				 remaping_scene = nullptr; 
 
 	player_info					 players[4];
+
+	Scene*						 last_scene = nullptr;
 
 private:
 	// Scenes list
@@ -88,6 +92,7 @@ private:
 
 	// Current scene
 	Scene*						 current_scene = nullptr;
+
 		
 };
 
