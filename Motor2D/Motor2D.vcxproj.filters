@@ -208,6 +208,9 @@
     <ClCompile Include="Mapping.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="RemapingScene.cpp">
+      <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -447,6 +450,9 @@
     <ClInclude Include="Mapping.h">
       <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
+    <ClInclude Include="RemapingScene.h">
+      <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
+    </ClInclude>
     <ClInclude Include="Brofiler\Brofiler.h">
       <Filter>Engine\6. Tools ===========\Brofiler</Filter>
     </ClInclude>
@@ -553,6 +559,9 @@
     </Filter>
     <Filter Include="Engine\3. Scenes ==========\FinalScreen">
       <UniqueIdentifier>{6e1c8ebe-370f-4096-966b-82307e69392d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\RemapingScene">
+      <UniqueIdentifier>{207df101-4630-4235-976c-f1a561c292ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\6. Tools ===========\Brofiler">
       <UniqueIdentifier>{e681b116-f05a-4592-b556-eb75364e7da1}</UniqueIdentifier>
