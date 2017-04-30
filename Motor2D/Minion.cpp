@@ -15,6 +15,7 @@
 #include "TowerManager.h"
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
+#include "BaseManager.h"
 #include <climits>
 
 #define Half_Tile 16
@@ -424,7 +425,10 @@ void Minion::CheckState()
 		}
 		else {
 			if (LookForTarget())
-				PathToTarget();
+			{
+				PathToTarget(); 
+				state = Minion_Move;
+			}
 		}
 		break;
 	case Minion_Move:
@@ -445,7 +449,7 @@ void Minion::CheckState()
 			}
 			else
 			{
-				if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4)
+				if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4) // Improve
 					state = Minion_Attack;
 				else
 				{
@@ -619,6 +623,16 @@ bool Minion::LookForTarget()
 				break;
 			}
 		}
+	}
+
+	if (base_path_index >= base_path.size() - 1)
+	{
+		if (GetTeam() == 1)
+			target = App->scene->main_scene->base_manager->GetBase(2);
+		else
+			target = App->scene->main_scene->base_manager->GetBase(1);
+
+		ret = true;
 	}
 
 	return ret;

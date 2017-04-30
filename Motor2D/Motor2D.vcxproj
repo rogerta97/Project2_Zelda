@@ -137,6 +137,7 @@
     <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="TacoAttack.cpp" />
     <ClCompile Include="Spell.cpp" />
+    <ClCompile Include="TacticAI.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TacoAttack.h" />
+    <ClInclude Include="TacticAI.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />

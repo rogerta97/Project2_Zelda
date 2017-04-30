@@ -208,6 +208,9 @@
     <ClCompile Include="Mapping.cpp">
       <Filter>Engine\2. Components ======</Filter>
     </ClCompile>
+    <ClCompile Include="TacticAI.cpp">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -449,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="Brofiler\Brofiler.h">
       <Filter>Engine\6. Tools ===========\Brofiler</Filter>
+    </ClInclude>
+    <ClInclude Include="TacticAI.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
