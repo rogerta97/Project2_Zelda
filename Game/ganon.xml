@@ -49,13 +49,12 @@
        <rect x = "224" y = "778" w = "112" h = "130"/>
        <rect x = "224" y = "778" w = "112" h = "130"/>
      </anim>
-       <!-- 
      <anim speed = "10" name = "basic_attack_right" loop = "false">
-       <rect x = "40" y = "395" w = "60" h = "45"/>
-       <rect x = "120" y = "395" w = "80" h = "45"/>
-       <rect x = "214" y = "395" w = "85" h = "45"/>
+        <rect x = "0" y = "908" w = "124" h = "80"/>
+       <rect x = "124" y = "908" w = "124" h = "80"/>
+       <rect x = "248" y = "908" w = "124" h = "80"/>
+       <rect x = "248" y = "908" w = "124" h = "80"/>
      </anim>
-     -->
      <anim speed = "60" name = "bat_particles" loop = "false">
       <rect x = "0" y = "268" w = "56" h = "32"/>
       <rect x = "56" y = "268" w = "56" h = "32"/>
