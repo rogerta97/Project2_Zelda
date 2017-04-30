@@ -30,7 +30,6 @@ Zelda::Zelda(iPoint pos)
 
 	state = z_s_wait;
 
-
 	name = "zelda";
 }
 

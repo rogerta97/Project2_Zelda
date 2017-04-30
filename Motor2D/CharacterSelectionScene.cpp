@@ -149,14 +149,11 @@ bool CharacterSelectionScene::Update(float dt)
 
 	if (all_ready)
 	{
-		for (int i = 0; i < 4; i++)
-			App->scene->players[i].character = entity_name::link;
-
-		//// Set characters when finished
-		//App->scene->players[0].character = curr_player_data1->entity;
-		//App->scene->players[1].character = curr_player_data2->entity;
-		//App->scene->players[2].character = curr_player_data3->entity;
-		//App->scene->players[3].character = curr_player_data4->entity;
+		// Set characters when finished
+		App->scene->players[0].character = curr_player_data1->entity;
+		App->scene->players[1].character = curr_player_data2->entity;
+		App->scene->players[2].character = curr_player_data3->entity;
+		App->scene->players[3].character = curr_player_data4->entity;
 
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}

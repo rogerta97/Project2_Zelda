@@ -69,7 +69,7 @@ bool MenuScene::Start()
 	options_text = menu_window->CreateText(iPoint(options_button->rect.x + 66, (screen.h / 2) + 110), App->font->game_font);
 	options_text->SetText("OPTIONS");
 
-	iPoint fx_button_pos = { screen.w / 2 - 110, screen.h - (screen.h / 2) + 70 }; 
+	iPoint fx_button_pos = { screen.w / 2 - 110, screen.h - (screen.h / 2) + 40 }; 
 
 	fx_button = menu_window->CreateButton(fx_button_pos, 223, 60, false);
 
@@ -82,7 +82,7 @@ bool MenuScene::Start()
 	fx_text->SetText("FX");
 	fx_text->enabled = false;
 
-	iPoint music_button_pos = { screen.w / 2 - 110, screen.h - (screen.h / 2) + 140 };
+	iPoint music_button_pos = { fx_button_pos.x, fx_button_pos.y + 70 };
 
 	music_button = menu_window->CreateButton(music_button_pos, 223, 60, false);
 
@@ -95,7 +95,19 @@ bool MenuScene::Start()
 	music_text->SetText("MUSIC");
 	music_text->enabled = false;
 
-	iPoint remap_button_pos = { screen.w / 2 - 110, screen.h - (screen.h / 2) + 210 };
+	iPoint quests_button_pos = { music_button_pos.x, music_button_pos.y + 70 };
+
+	quests_button = menu_window->CreateButton(quests_button_pos, 223, 60, false);
+	quests_button->AddImage("idle", { 128, 52, 220, 55 });
+	quests_button->SetImage("idle");
+
+	quests_button->enabled = false;
+
+	quests_text = menu_window->CreateText(iPoint(quests_button_pos.x + 60, quests_button_pos.y + 10), App->font->game_font);
+	quests_text->SetText("QUESTS");
+	quests_text->enabled = false;
+
+	iPoint remap_button_pos = { quests_button_pos.x, quests_button_pos.y + 70 };
 
 	remap_button = menu_window->CreateButton(remap_button_pos, 223, 60, false);
 
@@ -108,14 +120,17 @@ bool MenuScene::Start()
 	remap_text->SetText("REMAPING");
 	remap_text->enabled = false;
 
+
 	//Check Box 
 
 	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
 	options_checkbox->AddBox(iPoint(fx_button->GetPos().x + fx_button->rect.w - options_checkbox->rect.w - 13, fx_button->GetPos().y + 5), 44, 44, "fx");
 	options_checkbox->AddBox(iPoint(music_button->GetPos().x + music_button->rect.w - options_checkbox->rect.w - 13, music_button->GetPos().y + 5), 44, 44, "music");
+	options_checkbox->AddBox(iPoint(quests_button->GetPos().x + quests_button->rect.w - options_checkbox->rect.w - 13, quests_button->GetPos().y + 5), 44, 44, "quests");
 
 	options_checkbox->SetBox(true, "fx"); 
 	options_checkbox->SetBox(true, "music");
+	options_checkbox->SetBox(true, "quests");
 
 	options_checkbox->enabled = false;
 	
@@ -148,7 +163,8 @@ bool MenuScene::Start()
 
 	button_list.push_back(fx_button);
 	button_list.push_back(music_button);
-	button_list.push_back(remap_button); 
+	button_list.push_back(quests_button);
+	button_list.push_back(remap_button);
 
 	// Cursor --
 	cursor_1 = menu_window->CreateImage(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2), {80, 52, 48, 48 }, false);
@@ -187,23 +203,22 @@ bool MenuScene::Update(float dt)
 {
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
 	{
+		int enum_num = current_button;
+
 		if (is_options) 
 		{
-			if (current_button < 6)
-			{
-				int current_button_int = current_button;
-				current_button_int++;
 
-				current_button = static_cast<button_action> (current_button_int);
+			if (enum_num < 7)
+			{
+				enum_num++;
+				current_button = static_cast<button_action> (enum_num);
 			}
 		}
 		else 
 		{
-			if (current_button < 3) {
-				int current_button_int = current_button;
-				current_button_int++;
-
-				current_button = static_cast<button_action> (current_button_int);
+			if (enum_num < 3) {		
+				enum_num++;
+				current_button = static_cast<button_action> (enum_num);
 			}	
 		}
 	}
@@ -276,6 +291,7 @@ bool MenuScene::PostUpdate()
 			switch (current_button)
 			{
 			case START:
+				quests_enabled = QuestsEnabled();
 				App->scene->ChangeScene((Scene*)App->scene->charselect_screen);
 				return true;
 				break;
@@ -304,6 +320,11 @@ bool MenuScene::PostUpdate()
 				App->scene->ChangeScene((Scene*)App->scene->remaping_scene);
 				break; 
 
+			case QUESTS:
+				options_checkbox->SetBox(!options_checkbox->GetBox("quests"), "quests");
+				break;
+
+
 			}
 		}
 	}
@@ -323,6 +344,8 @@ bool MenuScene::PostUpdate()
 
 bool MenuScene::CleanUp()
 {
+
+	//
 	// Free UI
 	if(App->scene->GetCurrentScene() != App->scene->menu_scene)
 		App->gui->DeleteElement(menu_window);
@@ -373,14 +396,15 @@ void MenuScene::GoOptions()
 
 	fx_button->enabled = true; 
 	music_button->enabled = true; 
+	quests_button->enabled = true;
 	fx_text->enabled = true; 
 	music_text->enabled = true; 
+	quests_text->enabled = true;
 	options_checkbox->enabled = true; 
-
 	remap_button->enabled = true; 
 	remap_text->enabled = true; 
-
 	current_button = FX; 
+; 
 }
 
 void MenuScene::GoMenu()
@@ -396,14 +420,22 @@ void MenuScene::GoMenu()
 
 	fx_button->enabled = false;
 	music_button->enabled = false;
+	quests_button->enabled = false;
 	fx_text->enabled = false;
 	music_text->enabled = false;
+	quests_text->enabled = false;
 	options_checkbox->enabled = false;
 
 	remap_button->enabled = false;
 	remap_text->enabled = false;
 
 	current_button = START;
+}
+
+bool MenuScene::QuestsEnabled()
+{
+	if (options_checkbox->GetBox("quests")) return true;
+	else return false;
 }
 
 void MenuScene::FadeOut()

@@ -44,6 +44,9 @@ bool MainScene::Start()
 
 	LOG("Start MainScene");
 
+	game_timer = App->AddGameplayTimer();
+	quest_timer = App->AddGameplayTimer();
+
 	//Create UI ---------
 	SDL_Rect screen = App->view->GetViewportRect(1);
 
@@ -178,6 +181,7 @@ bool MainScene::Start()
 	//Quest manager
 	LOG("Creating quest manager");
 	quest_manager = new QuestManager();
+	quest_manager->quests_enabled = App->scene->menu_scene->quests_enabled;
 
 	// Minimap
 	LOG("Creating minimap manager");
@@ -203,8 +207,6 @@ bool MainScene::Start()
 	player_manager->AllowInput(0);
 	// ----
 
-	game_timer.Start();
-	quest_timer.Start();
 	first_quest_completed = false;
 	App->console->AddText("viewports.set 4", Input);
 
@@ -257,7 +259,7 @@ bool MainScene::Update(float dt)
 	// ------
 
 	// End Game
-	if (winner != 0 && game_timer.ReadSec() > end_delay)
+	if (winner != 0 && game_timer->ReadSec() > end_delay)
 	{
 		App->scene->ChangeScene((Scene*)App->scene->final_screen);
 		App->view->SetViews(1);
@@ -265,12 +267,21 @@ bool MainScene::Update(float dt)
 
 	//Update Victory/Defeat animation
 	if (winner != 0)
-		UpdateWinnerAnim(winner, dt);
+	{
+		if(!App->GetGamePause())
+			UpdateWinnerAnim(winner, dt);
+		else
+			UpdateWinnerAnim(winner, 0);
+	}
 
 	// Test
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
 		EndGame(1);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		App->SetGamePause(!App->GetGamePause());
 	}
 	// ------
 	
@@ -314,6 +325,10 @@ bool MainScene::CleanUp()
 	RELEASE(victory);
 	RELEASE(defeat);
 
+	App->DeleteGameplayTimer(game_timer);
+	App->DeleteGameplayTimer(quest_timer);
+	App->ClearGameplayTimers();
+
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
 	{
@@ -350,7 +365,7 @@ bool MainScene::CleanUp()
 
 j1Timer * MainScene::GetGameTimer()
 {
-	return &game_timer;
+	return game_timer;
 }
 
 void MainScene::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -421,7 +436,7 @@ void MainScene::EndGame(int _winner)
 	App->audio->ChangeVolume(75);
 	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
 
-	game_timer.Start();
+	game_timer->Start();
 
 	minion_manager->StunMinions();
 }

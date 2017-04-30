@@ -35,8 +35,6 @@ Boomerang::Boomerang(iPoint pos)
 
 	name = "boomerang";
 
-	timer.Start();
-
 	starting_pos = pos;
 }
 
@@ -47,6 +45,8 @@ Boomerang::~Boomerang()
 bool Boomerang::Start()
 {
 	bool ret = true;
+
+	timer = App->AddGameplayTimer();
 
 	if(owner->GetTeam() == ANIMATIONS_TEAM)
 		game_object->SetAnimation("spin");
@@ -72,7 +72,7 @@ bool Boomerang::Update(float dt)
 	// Speed calculations
 	initial_speed = ((BOOMERANG_RANGE - (0.5 * ACCELERATION * (TIME*TIME))) / TIME);
 
-	float speed = ((initial_speed) + (ACCELERATION * timer.ReadSec())) * dt;
+	float speed = ((initial_speed) + (ACCELERATION * timer->ReadSec())) * dt;
 
 	// Can be taken when is returning
 	if (!can_delete && speed < 0)
@@ -126,7 +126,7 @@ bool Boomerang::Update(float dt)
 		break;
 	}
 
-	if (timer.ReadSec() > DESTRUCTION_TIME)
+	if (timer->ReadSec() > DESTRUCTION_TIME)
 		App->spell->DeleteSpell(this);
 
 	return ret;
@@ -153,6 +153,8 @@ bool Boomerang::PostUpdate()
 bool Boomerang::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

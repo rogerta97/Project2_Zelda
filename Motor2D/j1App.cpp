@@ -176,6 +176,7 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+	BROFILER_CATEGORY("UpdateLogic", Profiler::Color::Azure);
 	bool ret = true;
 	PrepareUpdate();
 
@@ -555,4 +556,67 @@ void j1App::ExpandEvent(int type, EventThrower * origin, int id)
 {
 	for (list<j1Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
 		(*it)->ListenEvent(type, origin, id);
+}
+
+void j1App::SetGamePause(bool set)
+{
+	if (set != game_paused)
+	{
+		switch (set)
+		{
+		case true:
+			for (int i = 0; i < gameplay_timers.size(); i++)
+				gameplay_timers.at(i)->PauseOn();
+			break;
+		case false:
+			for (int i = 0; i < gameplay_timers.size(); i++)
+				gameplay_timers.at(i)->PauseOff();
+			break;
+		}
+
+		game_paused = set;
+	}
+}
+
+bool j1App::GetGamePause()
+{
+	return game_paused;
+}
+
+j1Timer * j1App::AddGameplayTimer()
+{
+	j1Timer* ret = nullptr;
+
+	ret = new j1Timer();
+	ret->Start();
+	gameplay_timers.push_back(ret);
+
+	return ret;
+}
+
+void j1App::DeleteGameplayTimer(j1Timer * t)
+{
+	for (vector<j1Timer*>::iterator it = gameplay_timers.begin(); it != gameplay_timers.end();)
+	{
+		if ((*it) == t)
+		{
+			RELEASE((*it));
+			gameplay_timers.erase(it);
+			break;
+		}
+		else
+			++it;
+	}
+}
+
+void j1App::ClearGameplayTimers()
+{
+	if (!gameplay_timers.empty())
+	{
+		for (vector<j1Timer*>::iterator it = gameplay_timers.begin(); it != gameplay_timers.end();)
+		{
+			RELEASE((*it));
+			it = gameplay_timers.erase(it);
+		}
+	}
 }

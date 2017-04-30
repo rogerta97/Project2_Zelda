@@ -137,7 +137,7 @@
      </anim>
    </animations>
   <stats hp="100" speed="160" power="20" rupees="100">
-    <ability1 mult="1.5" cd="1" bd="3"/>
+    <ability1 heal="20" cd="1"/>
     <ability2 mult="0" cd="1" bd="0"/>
     <ability3 mult="0" cd="1" bd="0"/>
     <ability4 mult="0" cd="3" bd="0"/>

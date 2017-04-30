@@ -22,10 +22,10 @@ bool MinimapManager::Start()
 	bool ret = true;
 
 	zelda_rect = { 0, 0, 31, 28 };
-	link_1_rect = { 348, 535, 16, 14 };
-	link_2_rect = { 364, 535, 16, 14 };
-	navi_1_rect = { 380, 535, 16, 15 };
-	navi_2_rect = { 396, 535, 16, 15 };
+	link_1_rect = { 348, 535, 32, 29 };
+	link_2_rect = { 380, 535, 32, 29 };
+	navi_1_rect = { 412, 535, 34, 29 };
+	navi_2_rect = { 445, 535, 34, 29 };
 
 	// --------------------------------------------
 	// Minimap setup ------------------------------
@@ -37,7 +37,7 @@ bool MinimapManager::Start()
 	SDL_Texture* minimap_texture = App->tex->LoadTexture("gui/UI_sheet_final.png");
 	iPoint minimap_pos = {(int)(view.w*0.5) - (int)(minimap_rect.w * 0.5), (int)(view.h*0.5) - (int)(minimap_rect.h * 0.5) };
 
-	SDL_Rect real_map_rect = {550, -80, 4490, 2500}; // X and Y are for the map offset
+	SDL_Rect real_map_rect = {430, -80, 4490, 2500}; // X and Y are for the map offset
 	SDL_Texture* minimap_points_texture = minimap_texture;
 
 	if (minimap_texture != nullptr && minimap_points_texture != nullptr)
@@ -181,7 +181,7 @@ bool MinimapManager::Update(float dt)
 			if (!curr_point->show)
 				continue;
 
-			iPoint map_pos = { minimap_position.x + (int)((curr_point->real_pos.x - real_map_rect.x)*multiplication_factor_x), minimap_position.y + (int)((curr_point->real_pos.y -real_map_rect.y)*multiplication_factor_y) };
+			iPoint map_pos = { minimap_position.x + (int)((curr_point->real_pos.x - real_map_rect.x)*multiplication_factor_x) - (int)(curr_point->image.w*0.5f), minimap_position.y + (int)((curr_point->real_pos.y -real_map_rect.y)*multiplication_factor_y) - (int)(curr_point->image.h*0.5f) };
 			App->view->LayerBlit(MINIMAP_LAYER + curr_point->real_pos.y, minimap_points_texture, map_pos, curr_point->image, curr_view.view, -1.0f, false);
 		}
 

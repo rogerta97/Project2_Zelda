@@ -155,54 +155,57 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
+	if (quests_enabled)
 	{
-		active_quest = GetRandomValue(1,3);
-
-		if (active_quest == 2)
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 		{
-			SpawnCucos(5);
-		}
-		change_state(active_quest, active);
-		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
-		update_progress();
+			active_quest = GetRandomValue(1, 3);
 
-		for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
-		{
-			(*it)->active_quest_text.at(0)->enabled = true;
-		}
-
-		/*active_quest_text[0]->enabled = true;
-		active_quest_text[1]->enabled = true;
-		active_quest_text[2]->enabled = true;
-		active_quest_text[3]->enabled = true;*/
-	}
-
-	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
-	{
-		if (active_quest == 2)
-		{
-			for (int i = 0; i < cucos.size(); i++)
+			if (active_quest == 2)
 			{
-				App->entity->DeleteEntity(cucos[i]);
+				SpawnCucos(5);
 			}
-			cucos.clear();
-		}
-		reset_progress(active_quest);
-		change_state(active_quest, inactive);
-		active_quest = -1;
-		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+			change_state(active_quest, active);
+			timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+			update_progress();
 
-		for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
+			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
+			{
+				(*it)->active_quest_text.at(0)->enabled = true;
+			}
+
+			/*active_quest_text[0]->enabled = true;
+			active_quest_text[1]->enabled = true;
+			active_quest_text[2]->enabled = true;
+			active_quest_text[3]->enabled = true;*/
+		}
+
+		if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
 		{
-			(*it)->active_quest_text.at(0)->enabled = false;
+			if (active_quest == 2)
+			{
+				for (int i = 0; i < cucos.size(); i++)
+				{
+					App->entity->DeleteEntity(cucos[i]);
+				}
+				cucos.clear();
+			}
+			reset_progress(active_quest);
+			change_state(active_quest, inactive);
+			active_quest = -1;
+			timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+
+			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
+			{
+				(*it)->active_quest_text.at(0)->enabled = false;
+			}
+
+
+			/*	active_quest_text[0]->enabled = false;
+				active_quest_text[1]->enabled = false;
+				active_quest_text[2]->enabled = false;
+				active_quest_text[3]->enabled = false;*/
 		}
-
-
-	/*	active_quest_text[0]->enabled = false;
-		active_quest_text[1]->enabled = false;
-		active_quest_text[2]->enabled = false;
-		active_quest_text[3]->enabled = false;*/
 	}
 }
 

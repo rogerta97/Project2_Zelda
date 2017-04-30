@@ -453,6 +453,9 @@
     <ClInclude Include="RemapingScene.h">
       <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
     </ClInclude>
+    <ClInclude Include="Brofiler\Brofiler.h">
+      <Filter>Engine\6. Tools ===========\Brofiler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -559,6 +562,9 @@
     </Filter>
     <Filter Include="Engine\3. Scenes ==========\RemapingScene">
       <UniqueIdentifier>{207df101-4630-4235-976c-f1a561c292ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\6. Tools ===========\Brofiler">
+      <UniqueIdentifier>{e681b116-f05a-4592-b556-eb75364e7da1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

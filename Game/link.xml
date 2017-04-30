@@ -94,6 +94,7 @@
        <rect x = "110" y = "1198" w = "100" h = "90"/>
        <rect x = "208" y = "1198" w = "97" h = "90"/>
      </anim>
+     
      <anim speed = "60" name = "ultimate_attack" loop = "true">
        <rect x = "4" y = "442" w = "103" h = "109"/>
        <rect x = "109" y = "442" w = "103" h = "109"/>

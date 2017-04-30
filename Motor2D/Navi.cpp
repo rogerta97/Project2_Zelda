@@ -19,7 +19,6 @@
 
 #define ABILITY1_RANGE 140
 #define ABILITY1_DURATION 5
-#define ABILITY1_HEAL 20
 
 #define ABILITY2_RANGE 150
 #define ABILITY2_MOVE_SAFE_OFFSET 15
@@ -47,10 +46,11 @@ Navi::Navi(iPoint pos)
 	stats.base_power = stats.power = stats_node.attribute("power").as_int();
 	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
 
-	float dmg_mult = stats_node.child("ability1").attribute("mult").as_float();
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
-	int bd = stats_node.child("ability1").attribute("bd").as_int();
-	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
+	float dmg_mult;
+	float bd;
+	heal = stats_node.child("ability1").attribute("heal").as_float();
+	Ability* a1 = AddAbility(0, cd, 0, 0, "navi_basic_attack");
 	a1->SetImages({ 481, 0, 80, 48 }, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
@@ -88,6 +88,9 @@ Navi::~Navi()
 bool Navi::Start()
 {
 	bool ret = true;
+
+	ability1_timer = App->AddGameplayTimer();
+	ability3_timer = App->AddGameplayTimer();
 
 	if (GetTeam() == ANIMATIONS_TEAM)
 		game_object->SetAnimation("down");
@@ -159,12 +162,10 @@ bool Navi::Update(float dt)
 		}
 	}
 
-	LifeBar(iPoint(60, 5), iPoint(-29, -40));
-
 	// Ability 1 --------------------
 	if (ability1)
 	{
-		if (ability1_timer.ReadSec() < ABILITY1_DURATION)
+		if (ability1_timer->ReadSec() < ABILITY1_DURATION)
 		{
 			if (GetTeam() == ANIMATIONS_TEAM)
 				App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);
@@ -194,7 +195,7 @@ bool Navi::Update(float dt)
 			{
 				if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, (*it)->GetPos().x, (*it)->GetPos().y)) <= ABILITY1_RANGE)
 				{
-					(*it)->Heal(20);
+					(*it)->Heal(heal);
 					it = to_heal.erase(it);
 				}
 				else
@@ -268,10 +269,26 @@ bool Navi::Update(float dt)
 		ability2_point = NULLPOINT;
 		find = false;
 	}
+
+	return ret;
+}
+
+bool Navi::Draw(float dt)
+{
+	bool ret = true;
+
+	LifeBar(iPoint(60, 5), iPoint(-29, -40));
+
+	// Blit
+	if (flip)
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	else
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+
 	// Ability 3 ----------------------
 	if (ability3)
 	{
-		if (ability3_timer.ReadSec() < ABILITY3_DURATION)
+		if (ability3_timer->ReadSec() < ABILITY3_DURATION)
 		{
 			// Get enemy team
 			int enemy_team = 0;
@@ -294,20 +311,6 @@ bool Navi::Update(float dt)
 	}
 	// -------------------------------
 
-	return ret;
-}
-
-bool Navi::Draw(float dt)
-{
-	bool ret = true;
-
-	// Blit
-	if (flip)
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
-	else
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
-
-
 	// -------------
 	// End atacking (It's down the blit because of a reason)
 	// -------------
@@ -327,6 +330,9 @@ bool Navi::PostUpdate()
 bool Navi::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(ability1_timer);
+	App->DeleteGameplayTimer(ability3_timer);
 
 	return ret;
 }
@@ -559,7 +565,7 @@ void Navi::ShowBasicAttackRight()
 void Navi::Ability1Up()
 {
 	ability1 = true;
-	ability1_timer.Start();
+	ability1_timer->Start();
 }
 
 void Navi::Ability1Down()
@@ -669,7 +675,7 @@ void Navi::ShowAbility2Right()
 void Navi::Ability3Up()
 {
 	ability3 = true;
-	ability3_timer.Start();
+	ability3_timer->Start();
 }
 
 void Navi::Ability3Down()

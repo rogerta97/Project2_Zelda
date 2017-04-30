@@ -13,7 +13,6 @@ enum TOWER_STATE
 	Tower_Attack,
 };
 
-
 class Tower :public Entity
 {
 public:
@@ -47,21 +46,18 @@ public:
 
 private:
 	void DoAttack();
-
 	void Idle();
-
 	bool LookForTarget();
 
-private:
+public:
+	Entity*				target = nullptr;
 
+private:
 	bool				flip = false;
 
 	uint				attack_range = 150;
 
 	TOWER_STATE			state = Tower_Idle;
-
-	Entity*				target = nullptr;
-
 	states				anim_state = states_null;
 
 	int					rupee_reward = 0;

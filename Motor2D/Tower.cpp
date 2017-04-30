@@ -24,7 +24,7 @@
 
 Tower::Tower(iPoint pos) 
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_SCENERY, App->cf->MASK_SCENERY, pbody_type::p_t_tower, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(TOWER_W, TOWER_H), App->cf->CATEGORY_TOWER, App->cf->MASK_TOWER, pbody_type::p_t_tower, 0);
 	
 	game_object->CreateCollision(iPoint(0, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
@@ -117,18 +117,17 @@ bool Tower::Update(float dt)
 		break;
 	}
 
-	LifeBar(iPoint(75, 6), iPoint(-36, -92));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
 	if (GotHit(entity, ability, spell))
+	{
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
 			if (spell != nullptr)
 			{
-
+				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -139,13 +138,15 @@ bool Tower::Update(float dt)
 				App->scene->main_scene->tower_manager->KillTower(this);
 			}
 		}
-
+	}
 	return ret;
 }
 
 bool Tower::Draw(float dt)
 {
 	bool ret = true;
+
+	LifeBar(iPoint(75, 6), iPoint(-36, -92));
 
 	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
@@ -207,7 +208,7 @@ void Tower::DoAttack()
 
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
 		ta->SetTarget(target);
-		abilities.at(0)->cd_timer.Start();
+		abilities.at(0)->cd_timer->Start();
 	}
 }
 

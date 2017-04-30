@@ -13,12 +13,6 @@ enum CUCO_STATE
 	Cuco_Move,
 };
 
-enum CUCO_MOVE_STATE
-{
-	cMove_FollowBasePath,
-	cMove_Idle,
-};
-
 class Cuco :public Entity
 {
 public:
@@ -73,11 +67,7 @@ public:
 	void SetBasePath(const std::list<iPoint>* path);
 
 private:
-
-	void CucoIdle();
 	void CucoMove();
-
-	void CheckState();
 
 	void GetNewPath();
 
@@ -86,27 +76,23 @@ private:
 	void SetIdleAnim();
 
 public:
-	p2Point<int> target;
+	p2Point<int>        target;
+
 private:
-	string cuco_type;
+	bool			   flip = false;
 
-	bool				flip = false;
+	string             cuco_type;
+	CUCO_STATE		   state = Cuco_Idle;
 
-	CUCO_STATE		state = Cuco_Idle;
+	std::queue<iPoint> base_path;
+	int				   base_path_index = 0;
 
-	CUCO_MOVE_STATE	move_state = cMove_Idle;
+	float			   speed = 0;
+	bool			   dead = false;
 
-	std::vector<iPoint>	base_path;
+	states			   anim_state = states_null;
 
-	int					base_path_index = 0;
-
-	float				speed = 0;
-
-	bool				dead = false;
-
-	states				anim_state = states_null;
-
-	EventThrower*       event_thrower = nullptr;
+	EventThrower*      event_thrower = nullptr;
 };
 
 #endif // !CUCO_H_

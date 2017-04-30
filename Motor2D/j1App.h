@@ -6,6 +6,7 @@
 #include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
 #include "CollisionFilters.h"
+#include "Brofiler\Brofiler.h"
 
 class UI_Window;
 class UI_Text;
@@ -77,8 +78,13 @@ public:
 
 	void ExpandEvent(int type, EventThrower* origin, int id);
 
-private:
+	void SetGamePause(bool set);
+	bool GetGamePause();
+	j1Timer* AddGameplayTimer();
+	void DeleteGameplayTimer(j1Timer* t);
+	void ClearGameplayTimers();
 
+private:
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
 
@@ -106,7 +112,6 @@ private:
 	void GameStates();
 
 public:
-
 	// Modules
 	j1Window*			win = NULL;
 	j1Input*			input = NULL;
@@ -132,11 +137,13 @@ public:
 	bool			    debug_mode = false;
 	bool				deleting_engine = false;
 
-	collision_filters* cf;
+	collision_filters*  cf;
 
 private:
-
 	bool                end_program = false;
+
+	bool				game_paused = false;
+	vector<j1Timer*>    gameplay_timers;
 
 	list<j1Module*>  	modules;
 	int					argc;
