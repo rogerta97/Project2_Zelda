@@ -146,7 +146,13 @@ QuestManager::QuestManager()
 	{
 		(*it)->active_quest_text.at(0)->enabled = false; 
 	}
-	player_text_window = App->scene->main_scene->ui_viewports[0].main_window->CreateColoredRect(iPoint(0,0), 200, 200, SDL_Color{ 255,255,255,255 }, true);
+	player_text_window = App->scene->main_scene->ui_viewports[0].main_window->CreateImage(iPoint(screen.w - 150, 50), SDL_Rect{ 200,200,150,150 },true);
+	window_text_test = App->scene->main_scene->ui_viewports[0].main_window->CreateText(iPoint(200, 50), App->font->game_font_12, 15, true, 0, 0, 0);
+	player_text_window->blit_layer = 1;
+	window_text_test->blit_layer = 2;
+
+	window_text_test->SetText("this is \n atest");
+	player_text_window->AddChild(window_text_test);
 }
 
 QuestManager::~QuestManager()

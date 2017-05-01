@@ -77,7 +77,9 @@ private:
 	int				active_quest = -1;
 	uint			timer_read = 0;
 
-	UI_ColoredRect*	    player_text_window;
+	SDL_Rect		test_rect;
+	UI_Image*	    player_text_window;
+	UI_Text*			window_text_test;
 
 };
 
