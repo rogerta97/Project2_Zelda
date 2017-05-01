@@ -21,7 +21,7 @@ enum GUARDS_MOVE_STATE
 {
 	gMove_AproachTarget,
 	gMove_Idle,
-
+	gMove_ReturnToPath,
 };
 
 
@@ -78,18 +78,16 @@ public:
 	void IdleRight();
 
 
-
 private:
 
-	void SetTargetPath(const std::list<iPoint>* path);
+	void CheckState();
 
+	void SetTargetPath(const std::list<iPoint>* path);
 	void PathToTarget();
 
 	void GuardIdle();
 	void GuardMove();
 	void GuardAttack();
-
-	void CheckState();
 
 	bool LookForTarget();
 
@@ -118,6 +116,7 @@ private:
 	float					speed = 0;
 
 	GUARDS_STATE			state = g_s_null;
+	GUARDS_MOVE_STATE		move_state = gMove_Idle;
 
 	states					anim_state = states_null;
 
