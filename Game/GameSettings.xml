@@ -31,4 +31,15 @@
       <rect x = "754" y = "1304" w = "372" h = "96"/>
     </anim>
   </victory_animations>
+  <death_text>
+    <anim speed = "10" name = "idle" loop = "true" texture = "gui/UI_sheet_final.png">
+      <rect x = "0" y = "1050" w = "262" h = "26"/>
+      <rect x = "0" y = "1080" w = "362" h = "26"/>
+      <rect x = "0" y = "1110" w = "362" h = "26"/>
+      <rect x = "0" y = "1140" w = "362" h = "26"/>
+      <rect x = "0" y = "1170" w = "362" h = "26"/>
+      <rect x = "0" y = "1200" w = "362" h = "26"/>
+      <rect x = "0" y = "1220" w = "362" h = "26"/>
+    </anim>
+  </death_text>
 </file>

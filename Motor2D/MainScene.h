@@ -112,6 +112,7 @@ private:
 
 	Animator*			victory = nullptr;
 	Animator*			defeat = nullptr;
+
 };
 
 
