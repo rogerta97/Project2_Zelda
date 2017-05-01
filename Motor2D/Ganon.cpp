@@ -402,6 +402,74 @@ void Ganon::IdleRight()
 	}
 }
 
+void Ganon::BasicAttackUp()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_up");
+		else
+			game_object->SetAnimation("basic_attack_up_2");
+
+		draw_offset = { draw_offset.x, 100 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 15, 50, fixture_type::f_t_attack);
+	}
+}
+
+void Ganon::BasicAttackDown()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_down");
+		else
+			game_object->SetAnimation("basic_attack_down_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 15, 50, fixture_type::f_t_attack);
+	}
+}
+
+void Ganon::BasicAttackLeft()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_left");
+		else
+			game_object->SetAnimation("basic_attack_left_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 15, 50, fixture_type::f_t_attack);
+	}
+}
+
+void Ganon::BasicAttackRight()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_right");
+		else
+			game_object->SetAnimation("basic_attack_right_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-8, -35), 15, 50, fixture_type::f_t_attack);
+	}
+}
+
 void Ganon::SetCamera(int id)
 {
 	if (id > 0 && id < 5)

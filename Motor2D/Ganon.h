@@ -51,10 +51,10 @@ public:
 	void IdleLeft();
 	void IdleRight();
 
-	//void BasicAttackUp();
-	//void BasicAttackDown();
-	//void BasicAttackLeft();
-	//void BasicAttackRight();
+	void BasicAttackUp();
+	void BasicAttackDown();
+	void BasicAttackLeft();
+	void BasicAttackRight();
 
 	//void ShowBasicAttackUp();
 	//void ShowBasicAttackDown();
