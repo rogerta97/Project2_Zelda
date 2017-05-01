@@ -84,6 +84,7 @@ private:
 
 	void SetTargetPath(const std::list<iPoint>* path);
 	void PathToTarget();
+	void PathToInitialPos();
 
 	void GuardIdle();
 	void GuardMove();
@@ -98,7 +99,6 @@ private:
 	void BasicAttackLeft();
 	void BasicAttackRight();
 
-	void FaceTarget();
 	void Attack();
 
 	void SetIdleAnim();
@@ -124,6 +124,10 @@ private:
 
 	std::vector<iPoint>		target_path;
 	int						target_path_index = 0;
+
+	iPoint					initialPos = { 3000,3000 };
+
+	EventThrower*       event_thrower = nullptr;
 
 };
 #endif // !_GUARDS_H_
