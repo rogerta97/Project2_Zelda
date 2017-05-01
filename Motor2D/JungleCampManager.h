@@ -38,14 +38,14 @@ public:
 	std::vector<Entity*> mageskeleton_camp2;
 
 private:
-	j1Timer				 snakes_timer_camp1;
-	j1Timer				 snakes_timer_camp2;
+	j1Timer*			 snakes_timer_camp1 = nullptr;
+	j1Timer*			 snakes_timer_camp2 = nullptr;
 
-	j1Timer				 skeleton_timer_camp1;
-	j1Timer				 skeleton_timer_camp2;
+	j1Timer*			 skeleton_timer_camp1 = nullptr;
+	j1Timer*			 skeleton_timer_camp2 = nullptr;
 
-	j1Timer				 mageskeleton_timer_camp1;
-	j1Timer				 mageskeleton_timer_camp2;
+	j1Timer*			 mageskeleton_timer_camp1 = nullptr;
+	j1Timer*			 mageskeleton_timer_camp2 = nullptr;
 
 	uint				 death_sound_effect = 100;
 };

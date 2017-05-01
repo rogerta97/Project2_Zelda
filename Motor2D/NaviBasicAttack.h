@@ -63,7 +63,7 @@ private:
 	float			rotation = 0.0f;
 	float			die = false;
 	
-	j1Timer			timer;
+	j1Timer*		timer = nullptr;
 };
 
 #endif // _NAVI_BASIC_ATTACK_

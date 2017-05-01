@@ -47,7 +47,7 @@ public:
 
 private:
 	bool			reached = false;
-	j1Timer			timer;
+	j1Timer*		timer = nullptr;
 };
 
 #endif // _SNAKEPOISON_H

@@ -143,7 +143,7 @@ bool Link::Update(float dt)
 				{
 					if (spell->can_delete)
 					{
-						GetAbility(2)->cd_timer.SubstractTimeFromStart(7);
+						GetAbility(2)->cd_timer->SubstractTimeFromStart(7);
 						App->spell->DeleteSpell(spell);
 					}
 				}
@@ -162,8 +162,6 @@ bool Link::Update(float dt)
 			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 		}
 	}
-
-	LifeBar(iPoint(60, 5), iPoint(-25, -40));
 
 	// Ability3 movement ------------------------------
 	if (ab3_dir != link_ability3_dir::a3_direction_null)
@@ -268,7 +266,9 @@ bool Link::Update(float dt)
 bool Link::Draw(float dt)
 {
 	bool ret = true;
-	
+
+	LifeBar(iPoint(60, 5), iPoint(-25, -40));
+
 	// Blit
 	if(flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);

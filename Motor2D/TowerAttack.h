@@ -30,8 +30,6 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
-	void CleanSpell();
-
 	virtual bool Load(pugi::xml_node&)
 	{
 		return true;
@@ -48,7 +46,7 @@ public:
 
 private:
 	bool			reached = false;
-	j1Timer			timer;
+	j1Timer*		timer = nullptr;
 };
 
 #endif // _TOWERATTACK_H

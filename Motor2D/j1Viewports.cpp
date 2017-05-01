@@ -55,20 +55,23 @@ bool j1Viewports::Update(float dt)
 {
 	bool ret = true;
 
+	//LOG("%d", test);
+	//test = 0;
+
 	timer.Start();
 
 	// Blit different layers
 	DoLayerPrint();
 	// ---------------------
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		camera1.x++;
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		camera1.x--;
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		camera1.y++;
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		camera1.y--;
+	//if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	//	camera1.x++;
+	//if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	//	camera1.x--;
+	//if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	//	camera1.y++;
+	//if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	//	camera1.y--;
 
 	viewport_size = GetViewportRect(1);
 
@@ -309,21 +312,21 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 		else if (!use_camera)
 			layer_list1.push(lblit);
 	}
-	if (viewport == 0 || viewport == 2)
+	if ((viewport == 0 || viewport == 2) && number_of_views >= 2)
 	{
 		if (use_camera && !(-camera2.x > pos.x + section.w || -camera2.x + view.w < pos.x || -camera2.y > pos.y + section.h || -camera2.y + view.h < pos.y))
 			layer_list2.push(lblit);
 		else if (!use_camera)
 			layer_list2.push(lblit);
 	}
-	if (viewport == 0 || viewport == 3)
+	if ((viewport == 0 || viewport == 3) && number_of_views >= 4)
 	{
 		if (use_camera && !(-camera3.x > pos.x + section.w || -camera3.x + view.w < pos.x || -camera3.y > pos.y + section.h || -camera3.y + view.h < pos.y))
 			layer_list3.push(lblit);
 		else if (!use_camera)
 			layer_list3.push(lblit);
 	}
-	if (viewport == 0 || viewport == 4)
+	if ((viewport == 0 || viewport == 4) && number_of_views >= 4)
 	{
 		if (use_camera && !(-camera4.x > pos.x + section.w || -camera4.x + view.w < pos.x || -camera4.y > pos.y + section.h || -camera4.y + view.h < pos.y))
 			layer_list4.push(lblit);
@@ -336,67 +339,108 @@ void j1Viewports::LayerDrawQuad(const SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, 
 {
 	layer_quad q(layer, rect, r, g, b, a, filled, use_camera);
 
-	switch (viewport)
+	SDL_Rect view = GetViewportSize();
+
+	if (viewport == 0 || viewport == 1)
 	{
-	case 1:
-		quad_list1.push(q);
-		break;
-	case 2:
-		quad_list2.push(q);
-		break;
-	case 3:
-		quad_list3.push(q);
-		break;
-	case 4:
-		quad_list4.push(q);
-		break;
-	default:
-		quad_list1.push(q);
-		if (number_of_views > 1)
+		if (use_camera && !(-camera1.x > rect.x + rect.w || -camera1.x + view.w < rect.x || -camera1.y > rect.y + rect.h || -camera1.y + view.h < rect.y))
+			quad_list1.push(q);
+		else if (!use_camera)
+			quad_list1.push(q);
+	}
+	if ((viewport == 0 || viewport == 2) && number_of_views >= 2)
+	{
+		if (use_camera && !(-camera2.x > rect.x + rect.w || -camera2.x + view.w < rect.x || -camera2.y > rect.y + rect.h || -camera2.y + view.h < rect.y))
 			quad_list2.push(q);
-		if (number_of_views > 3)
-		{
+		else if (!use_camera)
+			quad_list2.push(q);
+	}
+	if ((viewport == 0 || viewport == 3) && number_of_views >= 4)
+	{
+		if (use_camera && !(-camera3.x > rect.x + rect.w || -camera3.x + view.w < rect.x || -camera3.y > rect.y + rect.h || -camera3.y + view.h < rect.y))
 			quad_list3.push(q);
+		else if (!use_camera)
+			quad_list3.push(q);
+	}
+	if ((viewport == 0 || viewport == 4) && number_of_views >= 4)
+	{
+		if (use_camera && !(-camera4.x > rect.x + rect.w || -camera4.x + view.w < rect.x || -camera4.y > rect.y + rect.h || -camera4.y + view.h < rect.y))
 			quad_list4.push(q);
-		}
-		break;
+		else if (!use_camera)
+			quad_list4.push(q);
 	}
 }
 
-void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
+void j1Viewports::LayerDrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int layer, int viewport, bool use_camera)
 {
-	layer_line l(0, x1, y1, x2, y2, r, g, b, a, use_camera);
-	line_list.push_back(l);
+	layer_line l(layer, x1, y1, x2, y2, r, g, b, a, use_camera);
+
+	SDL_Rect view = GetViewportSize();
+
+	if (viewport == 0 || viewport == 1)
+	{
+		if (use_camera && !((-camera1.x > x1 && -camera1.x > x2) || (-camera1.x + view.w < x1 && -camera1.x + view.w < x2) || (-camera1.y > y1 && -camera1.y > y2) || (-camera1.y + view.h < y1 && -camera1.y + view.h < y2)))
+			line_list1.push(l);
+		else if (!use_camera)
+			line_list1.push(l);
+	
+	}
+	if ((viewport == 0 || viewport == 2) && number_of_views >= 2)
+	{
+		if (use_camera && !((-camera2.x > x1 && -camera2.x > x2) || (-camera2.x + view.w < x1 && -camera2.x + view.w < x2) || (-camera2.y > y1 && -camera2.y > y2) || (-camera2.y + view.h < y1 && -camera2.y + view.h < y2)))
+			line_list2.push(l);
+		else if (!use_camera)
+			line_list3.push(l);
+	}
+	if ((viewport == 0 || viewport == 3) && number_of_views >= 4)
+	{
+		if (use_camera && !((-camera3.x > x1 && -camera3.x > x2) || (-camera3.x + view.w < x1 && -camera3.x + view.w < x2) || (-camera3.y > y1 && -camera3.y > y2) || (-camera3.y + view.h < y1 && -camera3.y + view.h < y2)))
+			line_list3.push(l);
+		else if (!use_camera)
+			line_list3.push(l);
+	}
+	if ((viewport == 0 || viewport == 4) && number_of_views >= 4)
+	{
+		if (use_camera && !((-camera4.x > x1 && -camera4.x > x2) || (-camera4.x + view.w < x1 && -camera4.x + view.w < x2) || (-camera4.y > y1 && -camera4.y > y2) || (-camera4.y + view.h < y1 && -camera4.y + view.h < y2)))
+			line_list4.push(l);
+		else if (!use_camera)
+			line_list4.push(l);
+	}
 }
 
 void j1Viewports::LayerDrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int layer, int viewport, bool filled, bool use_camera)
 {
 	layer_circle c(layer, x1, y1, redius, r, g, b, a, filled, use_camera);
 
-	switch (viewport)
+	SDL_Rect view = GetViewportSize();
+
+	if (viewport == 0 || viewport == 1)
 	{
-	case 1:
-		circle_list1.push(c);
-		break;
-	case 2:
-		circle_list2.push(c);
-		break;
-	case 3:
-		circle_list3.push(c);
-		break;
-	case 4:
-		circle_list4.push(c);
-		break;
-	default:
-		circle_list1.push(c);
-		if (number_of_views > 1)
+		if (use_camera && !(-camera1.x > x1 + redius || -camera1.x + view.w < x1 - redius || -camera1.y > y1 + redius || -camera1.y + view.h < y1 - redius))
+			circle_list1.push(c);
+		else if (!use_camera)
+			circle_list1.push(c);
+	}
+	if ((viewport == 0 || viewport == 2) && number_of_views >= 2)
+	{
+		if (use_camera && !(-camera2.x > x1 + redius || -camera2.x + view.w < x1 - redius || -camera2.y > y1 + redius || -camera2.y + view.h < y1 - redius))
 			circle_list2.push(c);
-		if (number_of_views > 3)
-		{
+		else if (!use_camera)
+			circle_list2.push(c);
+	}
+	if ((viewport == 0 || viewport == 3) && number_of_views >= 4)
+	{
+		if (use_camera && !(-camera3.x > x1 + redius || -camera3.x + view.w < x1 - redius || -camera3.y > y1 + redius || -camera3.y + view.h < y1 - redius))
 			circle_list3.push(c);
+		else if (!use_camera)
+			circle_list3.push(c);
+	}
+	if ((viewport == 0 || viewport == 4) && number_of_views >= 4)
+	{
+		if (use_camera && !(-camera4.x > x1 + redius || -camera4.x + view.w < x1 - redius || -camera4.y > y1 + redius || -camera4.y + view.h < y1 - redius))
 			circle_list4.push(c);
-		}
-		break;
+		else if (!use_camera)
+			circle_list4.push(c);
 	}
 }
 
@@ -431,11 +475,16 @@ void j1Viewports::DoLayerPrint()
 
 				quad_list1.pop();
 			}
-		
-			for (int i = 0; i < line_list.size(); i++)
+			
+			while (!line_list1.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				layer_line curr = line_list1.top();
+				if(curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list1.pop();
 			}
 
 			while (!circle_list1.empty())
@@ -484,10 +533,15 @@ void j1Viewports::DoLayerPrint()
 				quad_list1.pop();
 			}
 
-			for (int i = 0; i < line_list.size(); i++)
+			while (!line_list1.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				layer_line curr = line_list1.top();
+				if (curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list1.pop();
 			}
 
 			while (!circle_list1.empty())
@@ -523,6 +577,17 @@ void j1Viewports::DoLayerPrint()
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				quad_list2.pop();
+			}
+
+			while (!line_list2.empty())
+			{
+				layer_line curr = line_list2.top();
+				if (curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list2.pop();
 			}
 
 			while (!circle_list2.empty())
@@ -574,10 +639,15 @@ void j1Viewports::DoLayerPrint()
 				quad_list1.pop();
 			}
 
-			for (int i = 0; i < line_list.size(); i++)
+			while (!line_list1.empty())
 			{
-				layer_line curr = line_list.at(i);
-				App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				layer_line curr = line_list1.top();
+				if (curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list1.pop();
 			}
 
 			while (!circle_list1.empty())
@@ -615,6 +685,17 @@ void j1Viewports::DoLayerPrint()
 				quad_list2.pop();
 			}
 
+			while (!line_list2.empty())
+			{
+				layer_line curr = line_list2.top();
+				if (curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list2.pop();
+			}
+
 			while (!circle_list2.empty())
 			{
 				layer_circle curr = circle_list2.top();
@@ -648,6 +729,17 @@ void j1Viewports::DoLayerPrint()
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				quad_list3.pop();
+			}
+
+			while (!line_list3.empty())
+			{
+				layer_line curr = line_list3.top();
+				if (curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.x2 + camera3.x, curr.y2 + camera3.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list3.pop();
 			}
 
 			while (!circle_list3.empty())
@@ -685,6 +777,17 @@ void j1Viewports::DoLayerPrint()
 				quad_list4.pop();
 			}
 
+			while (!line_list4.empty())
+			{
+				layer_line curr = line_list4.top();
+				if (curr.use_camera)
+					App->render->DrawLine(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.x2 + camera4.x, curr.y2 + camera4.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+				else
+					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+
+				line_list4.pop();
+			}
+
 			while (!circle_list4.empty())
 			{
 				layer_circle curr = circle_list4.top();
@@ -697,8 +800,6 @@ void j1Viewports::DoLayerPrint()
 		}
 		break;
 	}
-
-	line_list.clear();
 }
 
 void j1Viewports::OnCommand(std::list<std::string>& tokens)

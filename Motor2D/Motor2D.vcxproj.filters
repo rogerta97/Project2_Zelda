@@ -192,7 +192,7 @@
     </ClCompile>
     <ClCompile Include="Cuco.cpp">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Navi.cpp">
       <Filter>Engine\4. Entities ==========\Navi</Filter>
     </ClCompile>
@@ -201,12 +201,15 @@
     </ClCompile>
     <ClCompile Include="FinalScreen.cpp">
       <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="MinimapManager.cpp">
       <Filter>Engine\2. Components ======\Managers</Filter>
-     </ClCompile>
+    </ClCompile>
     <ClCompile Include="Mapping.cpp">
       <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
+    <ClCompile Include="RemapingScene.cpp">
+      <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -431,7 +434,7 @@
     </ClInclude>
     <ClInclude Include="Cuco.h">
       <Filter>Engine\4. Entities ==========\Cuco</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Navi.h">
       <Filter>Engine\4. Entities ==========\Navi</Filter>
     </ClInclude>
@@ -439,13 +442,19 @@
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClInclude>
     <ClInclude Include="FinalScreen.h">
-      <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>	 
-	</ClInclude>
+      <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
+    </ClInclude>
     <ClInclude Include="MinimapManager.h">
       <Filter>Engine\2. Components ======\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Mapping.h">
       <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="RemapingScene.h">
+      <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Brofiler\Brofiler.h">
+      <Filter>Engine\6. Tools ===========\Brofiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -541,7 +550,7 @@
     </Filter>
     <Filter Include="Engine\4. Entities ==========\Cuco">
       <UniqueIdentifier>{d9e4eae2-e1c2-476f-9988-67a5d49dbee9}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Engine\4. Entities ==========\Navi">
       <UniqueIdentifier>{dc840a14-aa38-42bd-9623-77bb68548b8b}</UniqueIdentifier>
     </Filter>
@@ -550,6 +559,12 @@
     </Filter>
     <Filter Include="Engine\3. Scenes ==========\FinalScreen">
       <UniqueIdentifier>{6e1c8ebe-370f-4096-966b-82307e69392d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\RemapingScene">
+      <UniqueIdentifier>{207df101-4630-4235-976c-f1a561c292ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\6. Tools ===========\Brofiler">
+      <UniqueIdentifier>{e681b116-f05a-4592-b556-eb75364e7da1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

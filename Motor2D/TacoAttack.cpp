@@ -32,6 +32,8 @@ bool TacoAttack::Start()
 {
 	bool ret = true;
 
+	timer = App->AddGameplayTimer();
+
 	game_object->SetAnimation("projectile");
 
 	return ret;
@@ -59,7 +61,7 @@ bool TacoAttack::Update(float dt)
 	}
 	else if (target != nullptr)
 	{
-		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
+		float speed = (INITIAL_SPEED + (ACCELERATION * timer->ReadSec())) * dt;
 
 		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
 
@@ -98,6 +100,7 @@ bool TacoAttack::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

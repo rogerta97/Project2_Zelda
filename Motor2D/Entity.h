@@ -153,7 +153,8 @@ struct Ability
 	{
 		index = _number; damage = _damage; damage_multiplicator = _damage_multiplicator, cd = _cd; cd = _cd;
 		name = _name;
-		cd_timer.SubstractTimeFromStart(_cd);
+		cd_timer = App->AddGameplayTimer();
+		cd_timer->SubstractTimeFromStart(_cd);
 	};
 
 	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd)
@@ -163,13 +164,18 @@ struct Ability
 
 	bool CdCompleted()
 	{
-		return cd_timer.ReadSec() >= cd;
+		return cd_timer->ReadSec() >= cd;
 	}
 
 	void CdReset() 
 	{
-		cd_timer.Start();
+		cd_timer->Start();
 	}
+
+	void CleanUp() 
+	{
+		App->DeleteGameplayTimer(cd_timer);
+	};
 
 	float GetCdTimeLeft();
 
@@ -185,7 +191,7 @@ struct Ability
 	b2Fixture* fixture = nullptr;
 	string     name;
 
-	j1Timer    cd_timer;
+	j1Timer*   cd_timer = nullptr;
 
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
@@ -360,8 +366,6 @@ protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;
 	iPoint		     restore_draw_offset = NULLPOINT;
-
-	j1Timer			 stun_slow_timer;
 };
 
 #endif

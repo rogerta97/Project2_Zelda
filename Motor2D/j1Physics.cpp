@@ -804,7 +804,7 @@ bool j1Physics::PostUpdate()
 					pos_x = (PIXELS_PER_METER * pos.x) + sin(-b->GetAngle() - ((angle_between - 90) * DEGTORAD)) * (dist) + App->render->camera.x;
 					pos_y = (PIXELS_PER_METER * pos.y) + cos(-b->GetAngle() - ((angle_between - 90) * DEGTORAD)) * (dist) + App->render->camera.y;
 					
-					App->view->LayerDrawCircle(pos_x, pos_y, METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+					App->view->LayerDrawCircle(pos_x, pos_y, METERS_TO_PIXELS(shape->m_radius), 255, 255, 255, 255, 0, 0);
 
 				}
 				break;
@@ -820,13 +820,13 @@ bool j1Physics::PostUpdate()
 					{
 						v = b->GetWorldPoint(polygonShape->GetVertex(i));
 						if(i > 0)
-							App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 0, 0, 255);
+							App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 0, 0, 255, 255, 0, 0);
 
 						prev = v;
 					}
 
 					v = b->GetWorldPoint(polygonShape->GetVertex(0));
-						App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 0, 0, 255);
+						App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 0, 0, 255, 255, 0, 0);
 				}
 				break;
 
@@ -840,12 +840,12 @@ bool j1Physics::PostUpdate()
 					{
 						v = b->GetWorldPoint(shape->m_vertices[i]);
 						if(i > 0)
-							App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
+							App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100, 255, 0, 0);
 						prev = v;
 					}
 
 					v = b->GetWorldPoint(shape->m_vertices[0]);
-					App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
+					App->view->LayerDrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100, 255, 0, 0);
 				}
 				break;
 
@@ -857,7 +857,7 @@ bool j1Physics::PostUpdate()
 
 					v1 = b->GetWorldPoint(shape->m_vertex0);
 					v1 = b->GetWorldPoint(shape->m_vertex1);
-					App->view->LayerDrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255);
+					App->view->LayerDrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255, 255, 0, 0);
 				}
 				break;
 			}
@@ -918,7 +918,7 @@ bool j1Physics::PostUpdate()
 		b2Vec2 mouse_pix(mouse_x, mouse_y);
 
 		mouse_joint->SetTarget(mouse);
-		App->view->LayerDrawLine(mouse_pix.x, mouse_pix.y, METERS_TO_PIXELS(selected->GetPosition().x), METERS_TO_PIXELS(selected->GetPosition().y), 255, 0, 0, 255);
+		App->view->LayerDrawLine(mouse_pix.x, mouse_pix.y, METERS_TO_PIXELS(selected->GetPosition().x), METERS_TO_PIXELS(selected->GetPosition().y), 255, 0, 0, 255, 255, 0, 0);
 	}
 	//If the player releases the mouse button, destroy the joint
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && selected != nullptr) {

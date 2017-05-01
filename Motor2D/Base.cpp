@@ -96,11 +96,6 @@ bool Base::Start()
 
 bool Base::Update(float dt)
 {
-	if (to_delete)
-		return true;
-
-	LifeBar(iPoint(120, 10), iPoint(-55, -160));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -127,6 +122,8 @@ bool Base::Update(float dt)
 
 bool Base::Draw(float dt)
 {
+	LifeBar(iPoint(120, 10), iPoint(-55, -160));
+
 	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 120, game_object->GetPos().y - 144}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	return true;
 }

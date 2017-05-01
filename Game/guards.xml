@@ -1,0 +1,47 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="textures/soldiercamp_spritesheet.png">
+    <anim speed = "5" name = "guard_walk_down" loop = "true">
+      <rect x = "0" y = "0" w = "23" h = "36"/>
+      <rect x = "23" y = "0" w = "23" h = "36"/>
+    </anim>
+    <anim speed = "5" name = "guard_idle_down" loop = "true">
+      <rect x = "0" y = "36" w = "23" h = "36"/>
+      <rect x = "23" y = "36" w = "23" h = "36"/>
+    </anim>
+    <anim speed = "3" name = "guard_attack_down" loop = "true">
+       <rect x = "0" y = "72" w = "23" h = "36"/>
+      <rect x = "23" y = "72" w = "23" h = "36"/>
+    </anim>
+  <anim speed = "5" name = "guard_walk_up" loop = "true">
+      <rect x = "46" y = "0" w = "23" h = "36"/>
+      <rect x = "69" y = "0" w = "23" h = "36"/>
+    </anim>
+    <anim speed = "5" name = "guard_idle_up" loop = "true">
+      <rect x = "46" y = "36" w = "23" h = "36"/>
+      <rect x = "69" y = "36" w = "23" h = "36"/>
+    </anim>
+    <anim speed = "3" name = "guard_attack_up" loop = "true">
+       <rect x = "46" y = "72" w = "23" h = "36"/>
+      <rect x = "69" y = "72" w = "23" h = "36"/>
+    </anim>
+      <anim speed = "5" name = "guard_walk_side" loop = "true">
+      <rect x = "92" y = "0" w = "23" h = "36"/>
+      <rect x = "115" y = "0" w = "23" h = "36"/>
+    </anim>
+    <anim speed = "5" name = "guard_idle_side" loop = "true">
+      <rect x = "92" y = "36" w = "23" h = "36"/>
+      <rect x = "115" y = "36" w = "23" h = "36"/>
+    </anim>
+    <anim speed = "3" name = "guard_attack_side" loop = "true">
+       <rect x = "92" y = "72" w = "23" h = "36"/>
+      <rect x = "115" y = "72" w = "23" h = "36"/>
+    </anim>
+    
+    
+  </animations>
+  <stats hp="40" speed="100" power="15" rupees="10">
+    <ability1 mult="1" cd="1.25" bd="2"/>
+  </stats>
+</file>
