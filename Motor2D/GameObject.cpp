@@ -52,6 +52,12 @@ void GameObject::SetRotation(float angle)
 	pbody->body->SetTransform(b2Vec2(pbody->body->GetPosition().x, pbody->body->GetPosition().y), DEGTORAD * angle);
 }
 
+void GameObject::SetHitBoxSize(uint w, uint h)
+{
+	hitbox_size.x = w; 
+	hitbox_size.y = h; 
+}
+
 void GameObject::SetFixedRotation(bool set)
 {
 	pbody->body->SetFixedRotation(set);
@@ -135,6 +141,11 @@ b2Fixture* GameObject::CreateCollision(iPoint offset, int width, int height, fix
 b2Fixture* GameObject::CreateCollision(iPoint offset, int rad, fixture_type type)
 {
 	return App->physics->AddCircleToBody(pbody, offset.x, offset.y, rad, type, density, 0, friction);
+}
+
+b2Fixture* GameObject::CreateCollision(iPoint offset, iPoint dim, fixture_type type)
+{
+	return App->physics->AddRectangleToBody(pbody, offset.x, offset.y, dim.x, dim.y, type, density, 0, friction);
 }
 
 b2Fixture* GameObject::CreateCollision(iPoint offset, int* data, int size, fixture_type type)

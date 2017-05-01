@@ -174,9 +174,13 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 		
 		position = GetFreePlayerSpawn(team, respawn);
-		position.x += 16;
-		position.y += 9;
 
+		if (name != ganon)
+		{
+			position.x += 16;
+			position.y += 9;
+		}
+	
 		// Create player
 		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
