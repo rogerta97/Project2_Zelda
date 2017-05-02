@@ -326,6 +326,9 @@ public:
 	//Update Stats
 	void UpdateStats(int extra_power, int extra_hp, int extra_speed);
 
+	//set invulnerability
+	void SetInvulnerable();
+
 private:
 	
 private:
@@ -343,6 +346,7 @@ public:
 	bool             attacking = false;
 	bool			 is_player = false;
 	bool			 stuned = false;
+	bool			 invulnerable = false;
 
 	// Life bar
 	bool			 show_life_bar = false;

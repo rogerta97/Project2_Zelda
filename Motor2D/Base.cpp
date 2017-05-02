@@ -105,14 +105,17 @@ bool Base::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			if (spell == nullptr)
-				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-			if (stats.life <= 0)
+			if (!invulnerable)
 			{
-				App->entity->AddRupeesIfPlayer(entity, 1);
-				App->scene->main_scene->base_manager->KillBase(this);
-				App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
+				if (spell == nullptr)
+					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+
+				if (stats.life <= 0)
+				{
+					App->entity->AddRupeesIfPlayer(entity, 1);
+					App->scene->main_scene->base_manager->KillBase(this);
+					App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
+				}
 			}
 		}
 	}
