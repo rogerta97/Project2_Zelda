@@ -39,7 +39,7 @@ struct PlayerText
 {
 	vector<UI_Text*> player_text;
 
-	vector<UI_Text*> active_quest_text;
+	UI_Text* active_quest_text;
 };
 
 class QuestManager 
@@ -67,6 +67,7 @@ public:
 	std::vector<quest*> vquest;
 
 	vector<PlayerText*> player_text_list; 
+	vector<UI_Image*>   player_quest_windows;
 
 	iPoint          placer = NULLPOINT;
 
@@ -76,10 +77,7 @@ public:
 private:
 	int				active_quest = -1;
 	uint			timer_read = 0;
-
 	SDL_Rect		test_rect;
-	UI_Image*	    player_text_window;
-	UI_Text*			window_text_test;
 
 };
 
