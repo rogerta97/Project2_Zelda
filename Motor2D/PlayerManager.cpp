@@ -1044,9 +1044,9 @@ void PlayerManager::UpdateUI(Player* curr_player)
 
 			if (curr_player->entity->GetAbility(i)->CdCompleted())
 			{				
-					p_manager_ui_elements.at(0).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-					p_manager_ui_elements.at(0).abilities_cd.at(i)->enabled = false;
-			
+				p_manager_ui_elements.at(0).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(0).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(0).abilities_icon.at(i)->enabled = true;			
 			}
 
 			else
@@ -1055,6 +1055,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(0).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(0).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(0).abilities_cd.at(i)->SetText(str);
 			}
 		}
@@ -1067,6 +1068,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 			{
 				p_manager_ui_elements.at(1).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(1).abilities_icon.at(i)->enabled = true;
 			}
 			else
 			{
@@ -1074,6 +1076,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(1).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->SetText(str);
 			}
 		}
@@ -1085,6 +1088,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 			{
 				p_manager_ui_elements.at(2).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(2).abilities_icon.at(i)->enabled = true;
 			}
 			else
 			{
@@ -1092,6 +1096,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(2).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->SetText(str);
 			}
 		}
@@ -1103,6 +1108,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 			{
 				p_manager_ui_elements.at(3).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(3).abilities_icon.at(i)->enabled = true;
 			}
 			else
 			{
@@ -1110,6 +1116,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(3).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->SetText(str);
 			}
 		}
