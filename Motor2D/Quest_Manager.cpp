@@ -32,8 +32,8 @@ QuestManager::QuestManager()
 			offset += 24;
 		}
 
-		curr_player_text->active_quest_text.push_back(it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
-		curr_player_text->active_quest_text[0]->SetText(" ");
+		curr_player_text->active_quest_text = (it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
+		curr_player_text->active_quest_text->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
 		offset = 0;
@@ -144,7 +144,7 @@ QuestManager::QuestManager()
 
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
-		(*it)->active_quest_text.at(0)->enabled = false; 
+		(*it)->active_quest_text->enabled = false; 
 	}
 	player_text_window = App->scene->main_scene->ui_viewports[0].main_window->CreateImage(iPoint(screen.w - 150, 50), SDL_Rect{ 200,200,150,150 },true);
 	window_text_test = App->scene->main_scene->ui_viewports[0].main_window->CreateText(iPoint(200, 50), App->font->game_font_12, 15, true, 0, 0, 0);
@@ -177,7 +177,7 @@ void QuestManager::Update()
 
 			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 			{
-				(*it)->active_quest_text.at(0)->enabled = true;
+				(*it)->active_quest_text->enabled = true;
 			}
 
 			/*active_quest_text[0]->enabled = true;
@@ -203,7 +203,7 @@ void QuestManager::Update()
 
 			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 			{
-				(*it)->active_quest_text.at(0)->enabled = false;
+				(*it)->active_quest_text->enabled = false;
 			}
 
 
@@ -323,14 +323,14 @@ void QuestManager::update_progress()
 				team_1 += "Power quest is active, slay 2 enemy players. Progress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l2";
-				player_text_list[0]->active_quest_text[0]->SetText(team_1);
-				player_text_list[2]->active_quest_text[0]->SetText(team_1);
+				player_text_list[0]->active_quest_text->SetText(team_1);
+				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
 				team_2 += "Power quest is active, slay 2 enemy players. Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l2";
-				player_text_list[1]->active_quest_text[0]->SetText(team_2);
-				player_text_list[3]->active_quest_text[0]->SetText(team_2);
+				player_text_list[1]->active_quest_text->SetText(team_2);
+				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
 			}
 			case 1:
@@ -339,14 +339,14 @@ void QuestManager::update_progress()
 				team_1 += "SPEED quest is active. Progress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
-				player_text_list[0]->active_quest_text[0]->SetText(team_1);
-				player_text_list[2]->active_quest_text[0]->SetText(team_1);
+				player_text_list[0]->active_quest_text->SetText(team_1);
+				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
 				team_2 += "SPEED quest is active. Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l3";
-				player_text_list[1]->active_quest_text[0]->SetText(team_2);
-				player_text_list[3]->active_quest_text[0]->SetText(team_2);
+				player_text_list[1]->active_quest_text->SetText(team_2);
+				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
 			}
 			case 2:
@@ -355,14 +355,14 @@ void QuestManager::update_progress()
 				team_1 += "KILL STUFF TO GET HP. Progress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
-				player_text_list[0]->active_quest_text[0]->SetText(team_1);
-				player_text_list[2]->active_quest_text[0]->SetText(team_1);
+				player_text_list[0]->active_quest_text->SetText(team_1);
+				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
 				team_2 += "KILL STUFF TO GET HP. Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l3";
-				player_text_list[1]->active_quest_text[0]->SetText(team_2);
-				player_text_list[3]->active_quest_text[0]->SetText(team_2);
+				player_text_list[1]->active_quest_text->SetText(team_2);
+				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
 			}
 			default:
@@ -386,10 +386,10 @@ void QuestManager::update_progress()
 					vquest[i]->state = inactive;
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
-					player_text_list[0]->active_quest_text[0] ->enabled = false;
-					player_text_list[1]->active_quest_text[0] ->enabled = false;
-					player_text_list[2]->active_quest_text[0] ->enabled = false;
-					player_text_list[3]->active_quest_text[0] ->enabled = false;
+					player_text_list[0]->active_quest_text->enabled = false;
+					player_text_list[1]->active_quest_text->enabled = false;
+					player_text_list[2]->active_quest_text->enabled = false;
+					player_text_list[3]->active_quest_text->enabled = false;
 
 					for (int k = 0; k < App->scene->main_scene->player_manager->players.size(); k++)
 					{

@@ -39,7 +39,7 @@ struct PlayerText
 {
 	vector<UI_Text*> player_text;
 
-	vector<UI_Text*> active_quest_text;
+	UI_Text* active_quest_text;
 };
 
 class QuestManager 
