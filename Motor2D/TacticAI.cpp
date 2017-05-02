@@ -15,11 +15,13 @@ iPoint TacticAI::GetTargetPos(Entity * actual_ent, Entity * target)
 
 	//Look if target is regidtered for ai tactics
 	bool exist = false;
+	tactic_entity* ent = nullptr;
 	for (std::list<tactic_entity*>::iterator it = ai_entity_list.begin(); it != ai_entity_list.end(); ++it)
 	{
 		if ((*it)->entity == target)
 		{
 			exist = true;
+			ent = *it;
 			break;
 		}
 	}	
@@ -27,7 +29,7 @@ iPoint TacticAI::GetTargetPos(Entity * actual_ent, Entity * target)
 	//Add to tactic ai list if target doesn't exist
 	if (!exist)
 	{
-		tactic_entity* ent = new tactic_entity();
+		ent = new tactic_entity();
 
 		ent->entity = target;
 
@@ -40,9 +42,16 @@ iPoint TacticAI::GetTargetPos(Entity * actual_ent, Entity * target)
 		side = -1;
 	else side = 1;
 
-	//chech if target can move
+	//check if target can move
 	bool can_move = true;
-	if(target->type == tower || target->type == base
+	if (target->type == tower || target->type == base || ent->field_spots[0] || ent->field_spots[1] || ent->field_spots[2] || ent->field_spots[3])
+		can_move = false;
+
+	//approach target pos
+	if (can_move)
+	{
+		
+	}
 
 	return ret;
 }
