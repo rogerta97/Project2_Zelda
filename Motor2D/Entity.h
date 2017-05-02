@@ -157,9 +157,9 @@ struct Ability
 		cd_timer->SubstractTimeFromStart(_cd);
 	};
 
-	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd)
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd, SDL_Rect _ability_icon)
 	{
-		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd;
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd; ability_icon = _ability_icon; 
 	}
 
 	bool CdCompleted()
@@ -196,12 +196,13 @@ struct Ability
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
 	SDL_Rect   ability_in_cd = NULLRECT;
+	SDL_Rect   ability_icon = NULLRECT; 
 };
 
 class Entity
 {
 public:
-	Entity() {};
+	Entity(){};
 
 	virtual ~Entity() {};
 
@@ -328,6 +329,8 @@ public:
 
 	//set invulnerability
 	void SetInvulnerable();
+
+	void SetAbilityImages(int ability_id, SDL_Rect icon_rect); 
 
 private:
 	
