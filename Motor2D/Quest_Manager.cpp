@@ -31,9 +31,9 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-
 		//curr_player_text->active_quest_text.push_back(it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
 		curr_player_text->active_quest_text = (it->main_window->CreateText(iPoint(screen.w- 150, 50), App->font->game_font_12, 15, false, 255, 215, 0));
+
 		curr_player_text->active_quest_text->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -316,10 +316,12 @@ void QuestManager::update_progress()
 					vquest[i]->state = inactive;
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
+
 					player_text_list[0]->active_quest_text ->enabled = false;
 					player_text_list[1]->active_quest_text ->enabled = false;
 					player_text_list[2]->active_quest_text ->enabled = false;
 					player_text_list[3]->active_quest_text ->enabled = false;
+
 
 					for (int k = 0; k < App->scene->main_scene->player_manager->players.size(); k++)
 					{
