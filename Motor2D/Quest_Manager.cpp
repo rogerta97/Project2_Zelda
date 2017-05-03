@@ -18,6 +18,7 @@ QuestManager::QuestManager()
 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
+		player_quest_windows.push_back(it->main_window->CreateImage(iPoint(screen.w - 150, 50), SDL_Rect{ 200,200,150,150 }, true)); 
 		curr_player_text = new PlayerText(); 
 
 		for (int i = 0; i<3; i++)
@@ -40,7 +41,6 @@ QuestManager::QuestManager()
 		offset = 0;
 
 		player_text_list.push_back(curr_player_text); 
-	//	player_quest_windows.push_back(it->main_window->CreateImage(iPoint(screen.w - 150, 50), SDL_Rect{ 200,200,150,150 }, false));
 	}
 
 
@@ -250,13 +250,13 @@ void QuestManager::update_progress()
 			case 0:
 			{
 				string team_1;
-				team_1 += "Power quest\nis active, s\nlay 2 enemy \nplayers. Progress ";
+				team_1 += "Power quest\nis active, slay\n 2 enemy players.\n Progress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l2";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Power quest\nis active, s\nlay 2 enemy \nplayers. Progress ";
+				team_2 += "Power quest\nis active, slay\n 2 enemy players.\n Progress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l2";
 				player_text_list[1]->active_quest_text->SetText(team_2);
