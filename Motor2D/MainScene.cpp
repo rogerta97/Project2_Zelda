@@ -73,28 +73,28 @@ bool MainScene::Start()
 		MainSceneViewport curr_viewport;
 
 		// Player UI
-		curr_viewport.main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-		curr_viewport.main_window->viewport = i + 1; 
-		curr_viewport.progress_bar = curr_viewport.main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-		curr_viewport.princess = curr_viewport.main_window->CreateImage(iPoint(curr_viewport.progress_bar->rect.x + (curr_viewport.progress_bar->rect.w / 2) - 15, curr_viewport.progress_bar->rect.y - 5), { 0,0,32,28 });
-		curr_viewport.rupiees_img = curr_viewport.main_window->CreateImage(rupiees_pos, rupiees_rect);
-		curr_viewport.minimap_icon = curr_viewport.main_window->CreateImage(minimap_pos, minimap_rect);
-		curr_viewport.win_text = curr_viewport.main_window->CreateImage(win_text_pos, NULLRECT);
+		curr_viewport.viewport_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+		curr_viewport.viewport_window->viewport = i + 1;
+		curr_viewport.progress_bar = curr_viewport.viewport_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
+		curr_viewport.princess = curr_viewport.viewport_window->CreateImage(iPoint(curr_viewport.progress_bar->rect.x + (curr_viewport.progress_bar->rect.w / 2) - 15, curr_viewport.progress_bar->rect.y - 5), { 0,0,32,28 });
+		curr_viewport.rupiees_img = curr_viewport.viewport_window->CreateImage(rupiees_pos, rupiees_rect);
+		curr_viewport.minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
+		curr_viewport.win_text = curr_viewport.viewport_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
 
 
 		// Minimap UI
-		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect); 
+		curr_viewport.minimapstate.stats_back_image = curr_viewport.viewport_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
 		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.hp_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.hp_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
 		curr_viewport.minimapstate.hp_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.power_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.power_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
 		curr_viewport.minimapstate.power_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.speed_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.speed_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
 		curr_viewport.minimapstate.speed_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.kills_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.kills_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
 		curr_viewport.minimapstate.kills_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.minions_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.minions_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
 		curr_viewport.minimapstate.minions_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.Disable(); 
 
@@ -135,6 +135,7 @@ bool MainScene::Start()
 			break;
 		}
 	}
+	def = true; 
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
@@ -217,6 +218,37 @@ bool MainScene::Start()
 	App->audio->ChangeVolume(25);
 	App->audio->PlayMusic("Audio/Music/overworld.ogg");
 
+	// Creating pause UI
+
+	uint w, h; 
+	App->win->GetWindowSize(w, h); 
+	main_scene_window = App->gui->UI_CreateWin({ 0,0 }, w, h, 10, false);
+
+	SDL_Rect win_size = { 0,0, w,h }; 
+
+	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
+
+	iPoint resume_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 - 35};
+	iPoint quit_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 + 35}; 
+
+	pause_ui.resume_background = main_scene_window->CreateImage(resume_button_pos, back_button_rect);
+	pause_ui.quit_background = main_scene_window->CreateImage(quit_button_pos, back_button_rect);
+
+	pause_ui.resume_text = main_scene_window->CreateText({ resume_button_pos.x + 57, resume_button_pos.y + 7}, App->font->game_font_20);
+	pause_ui.quit_text = main_scene_window->CreateText({ quit_button_pos.x + 75, quit_button_pos.y + 7 }, App->font->game_font_20);
+
+	pause_ui.resume_text->SetText("RESUME");
+	pause_ui.quit_text->SetText("QUIT");
+
+	pause_ui.cursor_1 = main_scene_window->CreateImage({ 0,0 }, {80, 52, 48, 47});
+	pause_ui.cursor_2 = main_scene_window->CreateImage({ 0,0 }, { 80, 52, 48, 47 });
+
+	pause_ui.cursor_state = p_e_resume; 
+
+	pause_ui.SetPauseUI(false); 
+
+	App->render->DrawQuad(win_size, 0,0,0,0, 1 , 60, true);
+	
 	return ret;
 }
 
@@ -280,10 +312,27 @@ bool MainScene::Update(float dt)
 	{
 		EndGame(1);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
+		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
+		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
+		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
 		App->SetGamePause(!App->GetGamePause());
+		pause_ui.SetPauseUI(true);
 	}
+	else if (App->GetGamePause() == false)
+	{
+		pause_ui.SetPauseUI(false);
+	}
+	else
+		pause_ui.UpdatePause(); 
+
+		
+
+
+	
+
 	// ------
 	
 	//DrawScreenSeparation();
@@ -335,8 +384,9 @@ bool MainScene::CleanUp()
 	{
 		for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++) 
 		{
-			App->gui->DeleteElement(it->main_window);
+			App->gui->DeleteElement(it->viewport_window);
 		}	
+		App->gui->DeleteElement(main_scene_window); 
 	}
 	// -------
 
@@ -592,4 +642,80 @@ void MinimapState::Disable()
 	speed_text->enabled = false;
 	kills_text->enabled = false;
 	minions_text->enabled = false;
+}
+
+void PauseUI::SetPauseUI(bool ui_state)
+{
+	resume_background->enabled = ui_state; 
+	resume_text->enabled = ui_state;
+
+	quit_background->enabled = ui_state;
+	quit_text->enabled = ui_state;
+
+	cursor_1->enabled = ui_state;
+	cursor_2->enabled = ui_state;
+
+	cursor_state = p_e_resume; 
+}
+
+void PauseUI::MoveCursor()
+{
+
+	switch (cursor_state)
+	{
+
+	case p_e_resume:
+		cursor_1->SetPos({resume_background->GetPos().x - 60, resume_background->GetPos().y});
+		cursor_2->SetPos({ resume_background->GetPos().x + resume_background->image.w + 10, resume_background->GetPos().y});
+		break; 
+
+	case p_e_quit:
+		cursor_1->SetPos({ quit_background->GetPos().x - 60, quit_background->GetPos().y });
+		cursor_2->SetPos({ quit_background->GetPos().x + quit_background->image.w + 10, quit_background->GetPos().y });
+		break; 
+
+	case p_e_null:
+		cursor_1->SetPos({0,0});
+		cursor_2->SetPos({0,0});
+		break; 
+
+	}
+
+	
+}
+
+void PauseUI::UpdatePause()
+{
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && cursor_state == p_e_quit)
+	{
+		cursor_state = p_e_resume;
+	}
+
+	else if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN  && cursor_state == p_e_resume)
+	{
+		cursor_state = p_e_quit;
+	}
+
+	else if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	{
+		switch (cursor_state)
+		{
+		case p_e_resume:
+			App->SetGamePause(!App->GetGamePause());
+			break;
+
+		case p_e_quit:
+			App->console->AddText("quit", Input); 
+			break;
+
+		case p_e_null:
+			cursor_1->SetPos({ 0,0 });
+			cursor_2->SetPos({ 0,0 });
+			break;
+
+		}
+	}
+
+	MoveCursor(); 
 }

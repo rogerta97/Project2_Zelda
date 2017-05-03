@@ -23,16 +23,16 @@ QuestManager::QuestManager()
 		for (int i = 0; i<3; i++)
 		{
 			placer = iPoint(screen.w - 30, screen.h - 30);
-			it->main_window->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+			it->viewport_window->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
 
-			curr_player_text->player_text.push_back(it->main_window->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
 			curr_player_text->player_text[i]->SetText("0");
 
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
 
-		curr_player_text->active_quest_text.push_back(it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
+		curr_player_text->active_quest_text.push_back(it->viewport_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
 		curr_player_text->active_quest_text[0]->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);

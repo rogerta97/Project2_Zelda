@@ -23,6 +23,7 @@ class Player
 {
 public:
 	Player() {  };
+
 	Player(Entity* _entity, uint _controller_index, uint _viewport, iPoint _respawn)
 	{
 		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
@@ -85,7 +86,8 @@ public:
 
 struct PlayerManagerUI
 {
-	vector<UI_Image*>	abilities;
+	vector<UI_Image*>	abilities_button;
+	vector<UI_Image*>	abilities_icon;
 	vector<UI_Text*>    abilities_cd;
 	UI_Image*			death_text = nullptr; 
 };
@@ -149,6 +151,7 @@ private:
 	void UpdateDeathUI(int player, float dt);
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
+	void SetAbilitiesIcon(int index);
 
 public:
 	vector<Player*>     players;

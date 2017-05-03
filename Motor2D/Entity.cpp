@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
+#include "Mapping.h"
 #include "Functions.h"
 #include "Quest_Manager.h"
 
@@ -39,6 +40,7 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 	}
 	return false;
 }
+
 
 Ability* Entity::AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name)
 {
@@ -200,6 +202,11 @@ void Entity::SetInvulnerable()
 
 	show_life_bar = false;
 
+}
+
+void Entity::SetAbilityImages(int ability_id, SDL_Rect icon_rect)
+{
+	abilities[ability_id - 1]->ability_icon = icon_rect; 
 }
 
 float Ability::GetCdTimeLeft()
