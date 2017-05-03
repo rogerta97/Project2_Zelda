@@ -93,6 +93,7 @@
     <ClCompile Include="FinalScreen.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Ganon.cpp" />
     <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
@@ -131,13 +132,13 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Quest_Manager.cpp" />
+    <ClCompile Include="RemapingScene.cpp" />
     <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SnakePoison.cpp" />
     <ClCompile Include="Snakes.cpp" />
     <ClCompile Include="TacoAttack.cpp" />
     <ClCompile Include="Spell.cpp" />
-    <ClCompile Include="TacticAI.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="FinalScreen.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Ganon.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Quest_Manager.h" />
+    <ClInclude Include="RemapingScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
     <ClInclude Include="Skeleton.h" />
@@ -220,7 +223,6 @@
     <ClInclude Include="Snakes.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TacoAttack.h" />
-    <ClInclude Include="TacticAI.h" />
     <ClInclude Include="TeamSelectScene.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
@@ -241,6 +243,7 @@
     <Xml Include="..\Game\entity_effects.xml" />
     <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
+    <Xml Include="..\Game\ganon.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\mageskeleton.xml" />

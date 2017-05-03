@@ -46,8 +46,6 @@ Minion::Minion(iPoint pos)
 	
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	cd_timer.Start();
-
 	event_thrower = new EventThrower();
 
 	name = "minion";
@@ -106,8 +104,6 @@ bool Minion::Update(float dt)
 	}
 	else
 		SetIdleAnim();
-
-	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 	
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -136,11 +132,6 @@ bool Minion::Update(float dt)
 
 			if (stats.life <=0)
 			{
-				Event* event_die = new Event();
-				event_die->type = e_t_death;
-				event_die->event_data.entity = this;
-				event_thrower->AddEvent(event_die);
-
 				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 				App->scene->main_scene->minion_manager->KillMinion(this);
 			}
@@ -153,6 +144,8 @@ bool Minion::Update(float dt)
 bool Minion::Draw(float dt)
 {
 	bool ret = true;
+
+	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 
 	if (flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
@@ -398,10 +391,10 @@ void Minion::MinionAttack()
 
 	//FaceTarget();
 
-	if (cd_timer.ReadSec()>abilities.at(0)->cd)
+	if (abilities.at(0)->CdCompleted())
 	{
 		Attack();
-		cd_timer.Start();
+		abilities.at(0)->CdReset();
 	}
 }
 

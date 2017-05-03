@@ -275,7 +275,7 @@ bool ShopManager::Update()
 
 	for (std::vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
 	{
-		if ((*it)->is_dead)
+		if ((*it)->is_dead || App->GetGamePause())
 			return true;
 
 		if (team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200 && !shops[(*it)->viewport - 1]->active)

@@ -22,8 +22,10 @@ public:
 
 	//Delete a tower from their team list
 	void KillTower(Entity* tower);
+	void SetHP(Entity* tower, uint hp);
+	void t_Invulnerable(Entity* tower);
 
-private:
+	bool TowersAlive(uint team);
 
 private:
 	std::list<Tower*> team1_towers;
@@ -31,6 +33,10 @@ private:
 
 	uint			  death_sound_effect = 100;
 
+	Tower*			  t1 = nullptr;
+	Tower*			  t2 = nullptr;
+	Tower*			  t3 = nullptr;
+	Tower*			  t4 = nullptr;
 };
 
 #endif // !_TOWER_MANAGER_H_

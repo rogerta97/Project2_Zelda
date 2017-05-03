@@ -17,6 +17,7 @@ void Entity::CleanAbilities()
 {
 	for (int i = 0; i < abilities.size(); i++)
 	{
+		abilities.at(i)->CleanUp();
 		RELEASE(abilities.at(i));
 	}
 	abilities.clear();
@@ -193,9 +194,17 @@ void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 	}
 }
 
+void Entity::SetInvulnerable()
+{
+	invulnerable = true;
+
+	show_life_bar = false;
+
+}
+
 float Ability::GetCdTimeLeft()
 {
-	float ret = cd - cd_timer.ReadSec();
+	float ret = cd - cd_timer->ReadSec();
 
 	if (ret < 0)
 		ret = 0;

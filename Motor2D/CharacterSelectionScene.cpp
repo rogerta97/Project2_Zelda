@@ -142,7 +142,7 @@ bool CharacterSelectionScene::Update(float dt)
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
 		for (int i = 0; i < 4; i++)
-			App->scene->players[i].character = entity_name::navi;
+			App->scene->players[i].character = entity_name::ganon;
 
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}

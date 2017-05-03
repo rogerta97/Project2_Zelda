@@ -15,8 +15,9 @@ enum button_action
 	CREDITS,
 	QUIT,
 	FX,
-	MUSIC,
-	QUESTS
+	MUSIC, 
+	QUESTS,
+	REMAP
 };
 
 class MenuScene : public Scene
@@ -62,7 +63,10 @@ private:
 
 	UI_Button*		   fx_button = nullptr;
 	UI_Button*		   music_button = nullptr;
+
+	UI_Button*		   remap_button = nullptr;
 	UI_Button*		   quests_button = nullptr;
+
 
 	UI_Text*		   start_text = nullptr; 
 	UI_Text*		   options_text = nullptr;
@@ -71,7 +75,10 @@ private:
 
 	UI_Text*		   fx_text = nullptr;
 	UI_Text*		   music_text = nullptr;
+
+	UI_Text*		   remap_text = nullptr;
 	UI_Text*		   quests_text = nullptr;
+
 
 	UI_Check_Box*	   options_checkbox = nullptr; 
 

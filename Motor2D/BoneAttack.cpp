@@ -25,8 +25,6 @@ BoneAttack::BoneAttack(iPoint pos)
 
 	name = "bone";
 
-	timer.Start();
-
 	starting_pos = pos;
 }
 
@@ -38,8 +36,9 @@ bool BoneAttack::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("spin");
+	timer = App->AddGameplayTimer();
 
+	game_object->SetAnimation("spin");
 
 	return ret;
 }
@@ -62,7 +61,7 @@ bool BoneAttack::Update(float dt)
 	game_object->SetPos({ game_object->fGetPos().x + (speed * cos(DEGTORAD * angle)), game_object->fGetPos().y + (speed * sin(DEGTORAD * angle))});
 		
 	
-	if (timer.ReadSec() > DESTRUCTION_TIME)
+	if (timer->ReadSec() > DESTRUCTION_TIME)
 		App->spell->DeleteSpell(this);
 
 	return ret;
@@ -88,6 +87,8 @@ bool BoneAttack::PostUpdate()
 bool BoneAttack::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

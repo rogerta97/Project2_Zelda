@@ -34,6 +34,8 @@ public:
 		UpdateRupees();
 		team = entity->GetTeam();
 		respawn = _respawn;
+		death_timer = App->AddGameplayTimer();
+		base_travel_timer = App->AddGameplayTimer();
 	}
 
 	void BuyItem(Item* item, int price);
@@ -42,6 +44,7 @@ public:
 	void BaseTravel();
 	void ApplyItemStats();
 	void AddRupees(int add);
+	void CleanUp();
 
 private:
 	void UpdateRupees();
@@ -62,7 +65,7 @@ public:
 	UI_Text*    rupees_num = nullptr;
 	uint	    rupees = 0;
 
-	j1Timer     death_timer;
+	j1Timer*    death_timer = nullptr;
 	float		death_time = 5.0f;
 
 	bool		is_dead = false;
@@ -73,7 +76,7 @@ public:
 	bool		disable_controller = false;
 
 	bool		base_travel = false;
-	j1Timer     base_travel_timer;
+	j1Timer*    base_travel_timer = nullptr;
 
 	float		last_heal_time = 0.0f;
 
@@ -84,7 +87,7 @@ struct PlayerManagerUI
 {
 	vector<UI_Image*>	abilities;
 	vector<UI_Text*>    abilities_cd;
-	UI_Text*			death_text;
+	UI_Image*			death_text = nullptr; 
 };
 
 class PlayerManager
@@ -143,7 +146,7 @@ private:
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
-	void UpdateDeathUI(Player* player);
+	void UpdateDeathUI(int player, float dt);
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
 
@@ -162,6 +165,8 @@ private:
 	uint					last_heal_time = 0;
 
 	uint			     	death_sound_effect = 100;
+
+	Animator*				death_text_anim = nullptr; 
 };
 
 

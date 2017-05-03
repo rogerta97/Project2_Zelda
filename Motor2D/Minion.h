@@ -127,8 +127,6 @@ private:
 
 	states				anim_state = states_null;
 
-	j1Timer				cd_timer;
-
 	EventThrower*       event_thrower = nullptr;
 
 	int					rupee_reward = 0;

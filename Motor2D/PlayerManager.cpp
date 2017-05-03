@@ -3,6 +3,7 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Map.h"
+#include "j1XMLLoader.h"
 #include "GameObject.h"
 #include "j1Audio.h"
 
@@ -47,7 +48,16 @@ bool PlayerManager::Start()
 
 	death_rect_color = { 32, 32, 32, 100 };
 	death_rect = { 0, 0, screen.w ,  screen.h };
-	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
+	iPoint death_text_pos = { int(screen.w*0.5f) - 131, int(screen.h*0.5f) - 13 };
+
+	pugi::xml_document doc; 
+	death_text_anim = new Animator(); 
+
+	App->xml->LoadXML("GameSettings.xml", doc);
+
+	death_text_anim->LoadAnimationsFromXML(doc, "death_text"); 
+
+	death_text_anim->SetAnimation("idle"); 
 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
@@ -62,8 +72,8 @@ bool PlayerManager::Start()
 		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text2_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text3_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text4_pos, text_font));
-				   
-		ui_elements.death_text = it->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
+			   
+		ui_elements.death_text = it->main_window->CreateImage(death_text_pos, NULLRECT, false);
 		ui_elements.death_text->enabled = false; 
 		ui_elements.death_text->blit_layer += 1;
 		p_manager_ui_elements.push_back(ui_elements);
@@ -95,7 +105,8 @@ bool PlayerManager::Update(float dt)
 		if (!curr_player->is_dead)
 		{
 			// Take player input
-			PlayerInput(curr_player, i);
+			if (!curr_player->disable_controller && !App->GetGamePause())
+				PlayerInput(curr_player, i);
 
 			// Update pasive heal
 			PasiveHP(curr_player);
@@ -117,14 +128,14 @@ bool PlayerManager::Update(float dt)
 		else
 		{
 			// Enable camera movement
-			if (!curr_player->disable_controller)
+			if (!curr_player->disable_controller && !App->GetGamePause())
 				MoveCamera(curr_player);
 
 			// Check if it has to respawn
 			CheckIfRespawn(curr_player);
 
 			// Update death text
-			UpdateDeathUI(curr_player);
+			UpdateDeathUI(i, dt);
 		}
 	}
 
@@ -163,9 +174,13 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 		
 		position = GetFreePlayerSpawn(team, respawn);
-		position.x += 16;
-		position.y += 9;
 
+		if (name != ganon)
+		{
+			position.x += 16;
+			position.y += 9;
+		}
+	
 		// Create player
 		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
@@ -189,7 +204,7 @@ void PlayerManager::DeletePlayer(int controller_index)
 		{
 			if ((*it)->controller_index == controller_index - 1)
 			{
-				App->entity->DeleteEntity((*it)->entity);
+				(*it)->CleanUp();
 				RELEASE(*it);
 				players.erase(it);
 				break;
@@ -204,7 +219,7 @@ void PlayerManager::ClearPlayers()
 	{
 		for (vector<Player*>::iterator it = players.begin(); it != players.end();)
 		{
-			App->entity->DeleteEntity((*it)->entity);
+			(*it)->CleanUp();
 			RELEASE(*it);
 			it = players.erase(it);
 		}
@@ -293,7 +308,7 @@ bool PlayerManager::IsAbilityCdCompleted(Player* player, int ability)
 void PlayerManager::ResetAbilityTimer(Player* player, int ability)
 {
 	if (player->entity->GetAbility(ability - 1) != nullptr)
-		player->entity->GetAbility(ability - 1)->cd_timer.Start();
+		player->entity->GetAbility(ability - 1)->cd_timer->Start();
 }
 
 int PlayerManager::GetPlayerTeamFromBody(PhysBody * body)
@@ -973,7 +988,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 	{
 		App->view->LayerDrawQuad(death_rect, death_rect_color.r, death_rect_color.g, death_rect_color.b, death_rect_color.a, true, 1, player->viewport, false);
 
-		if (player->death_timer.ReadSec() > player->death_time)
+		if (player->death_timer->ReadSec() > player->death_time)
 		{
 			p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(false);
 			player->Respawn();
@@ -986,11 +1001,6 @@ void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
 	{
-		Event* event_die = new Event();
-		event_die->type = e_t_death;
-		event_die->event_data.entity = player->entity;
-		event_thrower->AddEvent(event_die);
-
 		p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(true);
 
     	player->Kill();
@@ -1084,14 +1094,12 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	// --------------
 }
 
-void PlayerManager::UpdateDeathUI(Player * player)
+void PlayerManager::UpdateDeathUI(int player, float dt)
 {
-	string str("You have been slain, respawn time ");
-	int time = player->death_time + 1 - player->death_timer.ReadSec();
-	 
-	str += std::to_string(time);
+	SDL_Rect death_rect = death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt); 
 
-	p_manager_ui_elements.at(player->viewport - 1).death_text->SetText(str);
+	p_manager_ui_elements[player].death_text->image = death_rect; 
+
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)
@@ -1188,7 +1196,7 @@ void Player::Kill()
 		base_travel = false;
 		App->entity->DeleteEntity(entity);
 		is_dead = true;
-		death_timer.Start();
+		death_timer->Start();
 	}
 }
 
@@ -1210,7 +1218,7 @@ void Player::BaseTravel()
 {
 	if (!base_travel)
 	{
-		base_travel_timer.Start();
+		base_travel_timer->Start();
 		base_travel = true;
 	}
 	else if(!is_dead)
@@ -1219,13 +1227,13 @@ void Player::BaseTravel()
 
 		SDL_Rect base_rect = { (win.w / 2 - (BASE_TRAVEL_RECT_W / 2)), win.h - 20, BASE_TRAVEL_RECT_W, BASE_TRAVEL_RECT_H };
 
-		float width = (base_rect.w * base_travel_timer.ReadSec()) / BASE_TRAVEL_TIME;
+		float width = (base_rect.w * base_travel_timer->ReadSec()) / BASE_TRAVEL_TIME;
 		SDL_Rect time_rect = { base_rect.x, base_rect.y, width, base_rect.h };
 
 		App->view->LayerDrawQuad(base_rect, 32, 32, 32, 200, true, 1, viewport, false);
 		App->view->LayerDrawQuad(time_rect, 208, 240, 208, 200, true, 1, viewport, false);
 
-		if (base_travel_timer.ReadSec() > BASE_TRAVEL_TIME)
+		if (base_travel_timer->ReadSec() > BASE_TRAVEL_TIME)
 		{
 			fPoint r; r.x = respawn.x; r.y = respawn.y;
 			entity->game_object->SetPos(r);
@@ -1277,6 +1285,13 @@ void Player::AddRupees(int add)
 		rupees_num->SetPos({ rupees_num->GetPos().x - 6, rupees_num->GetPos().y });
 
 	UpdateRupees();
+}
+
+void Player::CleanUp()
+{
+	App->entity->DeleteEntity(entity);
+	App->DeleteGameplayTimer(death_timer);
+	App->DeleteGameplayTimer(base_travel_timer);
 }
 
 void Player::UpdateRupees()

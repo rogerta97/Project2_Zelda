@@ -68,7 +68,7 @@ public:
 
 	vector<PlayerText*> player_text_list; 
 
-	iPoint           placer = NULLPOINT;
+	iPoint          placer = NULLPOINT;
 
 	vector<Entity*> cucos;
 
