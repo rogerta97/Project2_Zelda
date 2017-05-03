@@ -490,6 +490,8 @@ void MainScene::EndGame(int _winner)
 	game_timer->Start();
 
 	minion_manager->StunMinions();
+
+	GetPlayerItemsRects();
 }
 
 void MainScene::UpdateProgressBar()
@@ -611,6 +613,18 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 		break;
 	default:
 		break;
+	}
+}
+
+void MainScene::GetPlayerItemsRects()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			if(player_manager->players[i]->items[j] != nullptr)
+				App->scene->players[i].items_rects[j] = player_manager->players[i]->items[j]->image_rect;
+		}
 	}
 }
 

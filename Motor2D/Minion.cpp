@@ -134,6 +134,12 @@ bool Minion::Update(float dt)
 			{
 				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
 				App->scene->main_scene->minion_manager->KillMinion(this);
+
+				if (entity->is_player)
+				{
+					//Add kill to killer
+					App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].minions++;
+				}
 			}
 		}
 	}

@@ -54,16 +54,24 @@ bool FinalScreen::Start()
 
 	for (int i = 0; i < 4; i++)
 	{
+		// I don't like that...
+		int index = i;
+		if (i == 1)
+			index = 2;
+		else if (i == 2)
+			index = 1;
+		// -----
+
 		final_screen_player_info new_info; 
 
-		new_info.deaths = 0; 
-		new_info.kills = 0;
-		new_info.minions = 0;
-		new_info.towers = 0;
+		new_info.deaths = App->scene->players[index].deaths; 
+		new_info.kills = App->scene->players[index].kills;
+		new_info.minions = App->scene->players[index].minions;
+		new_info.towers = App->scene->players[index].towers;
 
-		new_info.items[0] = placeholder_item;
-		new_info.items[1] = placeholder_item;
-		new_info.items[2] = placeholder_item;
+		new_info.items[0] = App->scene->players[index].items_rects[0];
+		new_info.items[1] = App->scene->players[index].items_rects[1];
+		new_info.items[2] = App->scene->players[index].items_rects[2];
 
 		new_info.character_name = "link"; 
 

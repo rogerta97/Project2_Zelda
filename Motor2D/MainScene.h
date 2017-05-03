@@ -107,6 +107,8 @@ private:
 
 	void UpdateWinnerAnim(uint winner, float dt);
 
+	void GetPlayerItemsRects();
+
 public:
 
 	MinionManager*		minion_manager = nullptr;
