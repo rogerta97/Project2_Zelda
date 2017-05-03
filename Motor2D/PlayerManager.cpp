@@ -63,22 +63,22 @@ bool PlayerManager::Start()
 	{
 		PlayerManagerUI ui_elements;
 
-		ui_elements.abilities_button.push_back(it->main_window->CreateImage(ability1_pos, { 0,0,0,0 })); 
-		ui_elements.abilities_button.push_back(it->main_window->CreateImage(ability2_pos, { 0,0,0,0 }));
-		ui_elements.abilities_button.push_back(it->main_window->CreateImage(ability3_pos, { 0,0,0,0 }));
-		ui_elements.abilities_button.push_back(it->main_window->CreateImage(ability4_pos, { 0,0,0,0 }));
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability1_pos, { 0,0,0,0 })); 
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability2_pos, { 0,0,0,0 }));
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability3_pos, { 0,0,0,0 }));
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability4_pos, { 0,0,0,0 }));
 
-		ui_elements.abilities_icon.push_back(it->main_window->CreateImage({ ability1_pos.x + 20, ability1_pos.y + 7 }, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->main_window->CreateImage({ability2_pos.x + 21, ability2_pos.y + 6}, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->main_window->CreateImage({ability3_pos.x + 9, ability3_pos.y + 21}, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->main_window->CreateImage({ability4_pos.x + 7, ability4_pos.y + 21}, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability1_pos.x + 20, ability1_pos.y + 7 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability2_pos.x + 21, ability2_pos.y + 6}, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability3_pos.x + 9, ability3_pos.y + 21}, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability4_pos.x + 7, ability4_pos.y + 21}, { 0,0,0,0 }));
 				   
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text1_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text2_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text3_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text4_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text1_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text2_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text3_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, text_font));
 			   
-		ui_elements.death_text = it->main_window->CreateImage(death_text_pos, NULLRECT, false);
+		ui_elements.death_text = it->viewport_window->CreateImage(death_text_pos, NULLRECT, false);
 		ui_elements.death_text->enabled = false; 
 		ui_elements.death_text->blit_layer += 1;
 		p_manager_ui_elements.push_back(ui_elements);

@@ -46,7 +46,7 @@ struct MinimapState
 
 struct MainSceneViewport
 {
-	UI_Window*			main_window = nullptr;
+	UI_Window*			viewport_window = nullptr;
 	UI_Image*			princess = nullptr;
 	UI_Image*			progress_bar = nullptr;
 	UI_Image*			rupiees_img = nullptr;
@@ -112,6 +112,14 @@ private:
 
 	Animator*			victory = nullptr;
 	Animator*			defeat = nullptr;
+
+	// Pause UI
+
+	UI_Image*			resume_start_back = nullptr; 
+	UI_Text*			resume_start_text = nullptr; 
+
+	UI_Image*			quit_start_back = nullptr;
+	UI_Text*			quit_start_text = nullptr;
 
 };
 

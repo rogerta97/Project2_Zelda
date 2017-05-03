@@ -73,28 +73,28 @@ bool MainScene::Start()
 		MainSceneViewport curr_viewport;
 
 		// Player UI
-		curr_viewport.main_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
-		curr_viewport.main_window->viewport = i + 1; 
-		curr_viewport.progress_bar = curr_viewport.main_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
-		curr_viewport.princess = curr_viewport.main_window->CreateImage(iPoint(curr_viewport.progress_bar->rect.x + (curr_viewport.progress_bar->rect.w / 2) - 15, curr_viewport.progress_bar->rect.y - 5), { 0,0,32,28 });
-		curr_viewport.rupiees_img = curr_viewport.main_window->CreateImage(rupiees_pos, rupiees_rect);
-		curr_viewport.minimap_icon = curr_viewport.main_window->CreateImage(minimap_pos, minimap_rect);
-		curr_viewport.win_text = curr_viewport.main_window->CreateImage(win_text_pos, NULLRECT);
+		curr_viewport.viewport_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
+		curr_viewport.viewport_window->viewport = i + 1;
+		curr_viewport.progress_bar = curr_viewport.viewport_window->CreateImage(iPoint(screen.w / 2 - 192, screen.h / 40), { 0, 28, 385, 24 });
+		curr_viewport.princess = curr_viewport.viewport_window->CreateImage(iPoint(curr_viewport.progress_bar->rect.x + (curr_viewport.progress_bar->rect.w / 2) - 15, curr_viewport.progress_bar->rect.y - 5), { 0,0,32,28 });
+		curr_viewport.rupiees_img = curr_viewport.viewport_window->CreateImage(rupiees_pos, rupiees_rect);
+		curr_viewport.minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
+		curr_viewport.win_text = curr_viewport.viewport_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
 
 
 		// Minimap UI
-		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect); 
+		curr_viewport.minimapstate.stats_back_image = curr_viewport.viewport_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
 		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.hp_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.hp_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
 		curr_viewport.minimapstate.hp_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.power_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.power_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
 		curr_viewport.minimapstate.power_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.speed_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.speed_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
 		curr_viewport.minimapstate.speed_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.kills_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.kills_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
 		curr_viewport.minimapstate.kills_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.minions_text = curr_viewport.main_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.minions_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
 		curr_viewport.minimapstate.minions_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.Disable(); 
 
@@ -218,6 +218,10 @@ bool MainScene::Start()
 	App->audio->ChangeVolume(25);
 	App->audio->PlayMusic("Audio/Music/overworld.ogg");
 
+	// Creating pause UI
+
+	
+
 	return ret;
 }
 
@@ -336,7 +340,7 @@ bool MainScene::CleanUp()
 	{
 		for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++) 
 		{
-			App->gui->DeleteElement(it->main_window);
+			App->gui->DeleteElement(it->viewport_window);
 		}	
 	}
 	// -------
