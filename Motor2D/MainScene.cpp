@@ -313,10 +313,10 @@ bool MainScene::Update(float dt)
 		EndGame(1);
 	}
 
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
-		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
-		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
-		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
 	{
 		App->SetGamePause(!App->GetGamePause());
 		pause_ui.SetPauseUI(true);

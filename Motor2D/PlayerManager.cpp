@@ -423,7 +423,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		return;
 
 	// Base travel
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
 		curr_player->BaseTravel();
 		curr_player->move = stop;
