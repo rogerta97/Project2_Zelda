@@ -310,12 +310,6 @@ bool MageSkeleton::LookForTarget()
 		{
 			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
 			target = *it;
-			for (int i = 0; App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.size(); i++)
-			{
-				
-				MageSkeleton* test = (MageSkeleton*)App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1[i];
-				test->target = *it;
-			}
 			ret = true;
 			break;
 		}
@@ -327,12 +321,6 @@ bool MageSkeleton::LookForTarget()
 		{
 			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
 			target = *it;
-			for (int i = 0; App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1.size(); i++)
-			{
-
-				MageSkeleton* test = (MageSkeleton*)App->scene->main_scene->jungleCamp_manager->mageskeleton_camp1[i];
-				test->target = *it;
-			}
 			ret = true;
 			break;
 		}

@@ -289,6 +289,9 @@ void Cuco::CucoMove()
 {
 	draw_offset.SetToZero();
 
+	if (base_path.empty())
+		GetNewPath();
+
 	iPoint cuco_map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 
 	iPoint target_map_pos = base_path.front();
