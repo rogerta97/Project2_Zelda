@@ -70,6 +70,15 @@ void BaseManager::KillBase(Base* base)
 	}
 }
 
+
+Entity * BaseManager::GetBase(int team) const
+{
+	if (team == 1)
+		return team1;
+	else
+		return team2;
+}
+
 void BaseManager::b_Invulnerable(Base * base)
 {
 	base->SetInvulnerable();
