@@ -220,8 +220,35 @@ bool MainScene::Start()
 
 	// Creating pause UI
 
-	
+	uint w, h; 
+	App->win->GetWindowSize(w, h); 
+	main_scene_window = App->gui->UI_CreateWin({ 0,0 }, w, h, 10, false);
 
+	SDL_Rect win_size = { 0,0, w,h }; 
+
+	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
+
+	iPoint resume_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 - 35};
+	iPoint quit_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 + 35}; 
+
+	pause_ui.resume_background = main_scene_window->CreateImage(resume_button_pos, back_button_rect);
+	pause_ui.quit_background = main_scene_window->CreateImage(quit_button_pos, back_button_rect);
+
+	pause_ui.resume_text = main_scene_window->CreateText({ resume_button_pos.x + 57, resume_button_pos.y + 7}, App->font->game_font_20);
+	pause_ui.quit_text = main_scene_window->CreateText({ quit_button_pos.x + 75, quit_button_pos.y + 7 }, App->font->game_font_20);
+
+	pause_ui.resume_text->SetText("RESUME");
+	pause_ui.quit_text->SetText("QUIT");
+
+	pause_ui.cursor_1 = main_scene_window->CreateImage({ 0,0 }, {80, 52, 48, 47});
+	pause_ui.cursor_2 = main_scene_window->CreateImage({ 0,0 }, { 80, 52, 48, 47 });
+
+	pause_ui.cursor_state = p_e_resume; 
+
+	pause_ui.SetPauseUI(false); 
+
+	App->render->DrawQuad(win_size, 0,0,0,0, 1 , 60, true);
+	
 	return ret;
 }
 
@@ -285,10 +312,27 @@ bool MainScene::Update(float dt)
 	{
 		EndGame(1);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
+		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
+		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN ||
+		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
 		App->SetGamePause(!App->GetGamePause());
+		pause_ui.SetPauseUI(true);
 	}
+	else if (App->GetGamePause() == false)
+	{
+		pause_ui.SetPauseUI(false);
+	}
+	else
+		pause_ui.UpdatePause(); 
+
+		
+
+
+	
+
 	// ------
 	
 	//DrawScreenSeparation();
@@ -342,6 +386,7 @@ bool MainScene::CleanUp()
 		{
 			App->gui->DeleteElement(it->viewport_window);
 		}	
+		App->gui->DeleteElement(main_scene_window); 
 	}
 	// -------
 
@@ -597,4 +642,80 @@ void MinimapState::Disable()
 	speed_text->enabled = false;
 	kills_text->enabled = false;
 	minions_text->enabled = false;
+}
+
+void PauseUI::SetPauseUI(bool ui_state)
+{
+	resume_background->enabled = ui_state; 
+	resume_text->enabled = ui_state;
+
+	quit_background->enabled = ui_state;
+	quit_text->enabled = ui_state;
+
+	cursor_1->enabled = ui_state;
+	cursor_2->enabled = ui_state;
+
+	cursor_state = p_e_resume; 
+}
+
+void PauseUI::MoveCursor()
+{
+
+	switch (cursor_state)
+	{
+
+	case p_e_resume:
+		cursor_1->SetPos({resume_background->GetPos().x - 60, resume_background->GetPos().y});
+		cursor_2->SetPos({ resume_background->GetPos().x + resume_background->image.w + 10, resume_background->GetPos().y});
+		break; 
+
+	case p_e_quit:
+		cursor_1->SetPos({ quit_background->GetPos().x - 60, quit_background->GetPos().y });
+		cursor_2->SetPos({ quit_background->GetPos().x + quit_background->image.w + 10, quit_background->GetPos().y });
+		break; 
+
+	case p_e_null:
+		cursor_1->SetPos({0,0});
+		cursor_2->SetPos({0,0});
+		break; 
+
+	}
+
+	
+}
+
+void PauseUI::UpdatePause()
+{
+
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && cursor_state == p_e_quit)
+	{
+		cursor_state = p_e_resume;
+	}
+
+	else if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN  && cursor_state == p_e_resume)
+	{
+		cursor_state = p_e_quit;
+	}
+
+	else if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	{
+		switch (cursor_state)
+		{
+		case p_e_resume:
+			App->SetGamePause(!App->GetGamePause());
+			break;
+
+		case p_e_quit:
+			App->console->AddText("quit", Input); 
+			break;
+
+		case p_e_null:
+			cursor_1->SetPos({ 0,0 });
+			cursor_2->SetPos({ 0,0 });
+			break;
+
+		}
+	}
+
+	MoveCursor(); 
 }
