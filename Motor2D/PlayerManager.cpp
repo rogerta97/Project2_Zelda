@@ -33,7 +33,7 @@ bool PlayerManager::Awake(pugi::xml_node &)
 
 bool PlayerManager::Start()
 {
-	// Abilities UI
+	// Abilities UI ------
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	iPoint ability1_pos = { screen.w - 120 , screen.h - 126 };
 	iPoint ability2_pos = { 13, screen.h - 126 };
@@ -46,19 +46,26 @@ bool PlayerManager::Start()
 	iPoint text3_pos = { screen.w - 75, screen.h - 56 };
 	iPoint text4_pos = { 27, screen.h - 56 };
 
-	death_rect_color = { 32, 32, 32, 100 };
-	death_rect = { 0, 0, screen.w ,  screen.h };
-	iPoint death_text_pos = { int(screen.w*0.5f) - 131, int(screen.h*0.5f) - 13 };
+	// Death timer
+	iPoint death_timer_pos = { (screen.w / 2) - 5, (screen.h / 2) + 15};
 
-	pugi::xml_document doc; 
+	// Death quad
+	death_quad_rect = {0, 1400, 1125, 561};
+	death_quad_pos = { -(death_quad_rect.w /2 - screen.w/2), -(death_quad_rect.h / 2 - screen.h / 2) };
+
+	// Death text animation
+	death_text_pos = { int(screen.w * 0.5f) - 131, int(screen.h * 0.5f) - 13 };
 	death_text_anim = new Animator(); 
 
+	pugi::xml_document doc;
 	App->xml->LoadXML("GameSettings.xml", doc);
 
-	death_text_anim->LoadAnimationsFromXML(doc, "death_text"); 
+	death_text_anim->LoadAnimationsFromXML(doc, "death_text");
+	death_text_texture = App->gui->atlas;
 
 	death_text_anim->SetAnimation("idle"); 
-
+	// ---------------
+    
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
 		PlayerManagerUI ui_elements;
@@ -76,13 +83,14 @@ bool PlayerManager::Start()
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text1_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text2_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text3_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, App->font->game_font_40));
+
+		ui_elements.death_time = it->viewport_window->CreateText(death_timer_pos, App->font->game_font_60);
+		ui_elements.death_time->enabled = false; ui_elements.death_time->blit_layer = 9999;
 			   
-		ui_elements.death_text = it->viewport_window->CreateImage(death_text_pos, NULLRECT, false);
-		ui_elements.death_text->enabled = false; 
-		ui_elements.death_text->blit_layer += 1;
 		p_manager_ui_elements.push_back(ui_elements);
 	}
+	// ---------------------
 
 	// Event
 	event_thrower = new EventThrower();
@@ -140,7 +148,7 @@ bool PlayerManager::Update(float dt)
 			CheckIfRespawn(curr_player);
 
 			// Update death text
-			UpdateDeathUI(i, dt);
+			UpdateDeathUI(curr_player, dt);
 		}
 	}
 
@@ -169,6 +177,10 @@ bool PlayerManager::CleanUp()
 
 	RELEASE(event_thrower);
 
+	// Release animator
+	death_text_anim->CleanUp();
+	RELEASE(death_text_anim);
+
 	return ret;
 }
 
@@ -181,13 +193,10 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 		
 		position = GetFreePlayerSpawn(team, respawn);
-
-		if (name != ganon)
-		{
-			position.x += 16;
-			position.y += 9;
-		}
-	
+		
+		position.x += 16;
+		position.y += 9;
+		
 		// Create player
 		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
@@ -200,7 +209,6 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		p->team = team;
 
 		SetAbilitiesIcon(players.size() - 1);
-
 	}
 
 	return ret;
@@ -996,13 +1004,11 @@ void PlayerManager::CheckIfRespawn(Player * player)
 {
 	if (player->is_dead)
 	{
-		App->view->LayerDrawQuad(death_rect, death_rect_color.r, death_rect_color.g, death_rect_color.b, death_rect_color.a, true, 1, player->viewport, false);
-
 		if (player->death_timer->ReadSec() > player->death_time)
 		{
-			p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(false);
 			player->Respawn();
 			player->ApplyItemStats();
+			p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = false;
 		}
 	}
 }
@@ -1011,12 +1017,12 @@ void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
 	{
-		p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(true);
-
     	player->Kill();
 		player->show = shows::show_null;
 
 		App->audio->PlayFx(death_sound_effect, 0);
+
+		p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = true;
 	}
 }
 
@@ -1081,15 +1087,42 @@ void PlayerManager::UpdateUI(Player* curr_player)
 
 		break;
 	case 2:
+		if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
 			{
 				p_manager_ui_elements.at(1).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->enabled = false;
 				p_manager_ui_elements.at(1).abilities_icon.at(i)->enabled = true;
 			}
-			else
+			else if (showing_attack != true)
 			{
 				p_manager_ui_elements.at(1).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
@@ -1101,15 +1134,42 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		}
 		break;
 	case 3:
+		if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
 			{
 				p_manager_ui_elements.at(2).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->enabled = false;
 				p_manager_ui_elements.at(2).abilities_icon.at(i)->enabled = true;
 			}
-			else
+			else if (showing_attack != true)
 			{
 				p_manager_ui_elements.at(2).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
@@ -1121,15 +1181,42 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		}
 		break;
 	case 4:
+		if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
 			{
 				p_manager_ui_elements.at(3).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->enabled = false;
 				p_manager_ui_elements.at(3).abilities_icon.at(i)->enabled = true;
 			}
-			else
+			else if (showing_attack != true)
 			{
 				p_manager_ui_elements.at(3).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
@@ -1145,12 +1232,13 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	// --------------
 }
 
-void PlayerManager::UpdateDeathUI(int player, float dt)
+void PlayerManager::UpdateDeathUI(Player* curr_player, float dt)
 {
-	SDL_Rect death_rect = death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt); 
-
-	p_manager_ui_elements[player].death_text->image = death_rect; 
-
+	App->view->LayerBlit(9999, death_text_texture, death_text_pos, death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt), curr_player->viewport, -1.0f, false);
+	App->view->LayerBlit(9998, death_text_texture, death_quad_pos, death_quad_rect, curr_player->viewport, -1.0f, false);
+	
+	string time(""); time += std::to_string((int)curr_player->death_time - (int)curr_player->death_timer->ReadSec());
+	p_manager_ui_elements.at(curr_player->viewport-1).death_time->SetText(time);
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)
@@ -1627,6 +1715,7 @@ void Player::Respawn()
 		entity->is_player = true;
 		base_travel = false; 
 		is_dead = false;
+		state = idle_down;
 	}
 }
 

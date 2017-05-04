@@ -418,6 +418,10 @@ bool ShopManager::CleanUp()
 		RELEASE(shops[i]);
 	}
 
+	// Release animator
+	shop_icon_anim->CleanUp();
+	RELEASE(shop_icon_anim);
+
 	return true;
 }
 

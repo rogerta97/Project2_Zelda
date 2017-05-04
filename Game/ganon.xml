@@ -7,53 +7,57 @@
         <rect x = "112" y = "0" w = "112" h = "92"/>
         <rect x = "224" y = "0" w = "112" h = "92"/>
          <rect x = "0" y = "0" w = "112" h = "92"/>
-        <rect x = "336" y = "0" w = "112" h = "92"/>
-        <rect x = "448" y = "0" w = "112" h = "92"/>
+        <rect x = "336" y = "0" w = "112" h = "100"/>
+        <rect x = "448" y = "0" w = "112" h = "100"/>
       </anim>
       <anim speed = "10" name = "run_up" loop = "true">
-	        <rect x = "0" y = "92" w = "112" h = "95"/>
-        <rect x = "112" y = "92" w = "112" h = "95"/>
-        <rect x = "224" y = "92" w = "112" h = "95"/>
-         <rect x = "0" y = "92" w = "112" h = "95"/>
-        <rect x = "336" y = "92" w = "112" h = "95"/>
-        <rect x = "448" y = "92" w = "112" h = "95"/>
+	        <rect x = "0" y = "96" w = "112" h = "94"/>
+        <rect x = "112" y = "96" w = "112" h = "94"/>
+        <rect x = "224" y = "96" w = "112" h = "94"/>
+         <rect x = "0" y = "96" w = "112" h = "94"/>
+        <rect x = "336" y = "96" w = "112" h = "94"/>
+        <rect x = "448" y = "96" w = "112" h = "94"/>
       </anim>
       <anim speed = "10" name = "run_lateral" loop = "true">
-	        <rect x = "0" y = "186" w = "112" h = "80"/>
-        <rect x = "112" y = "186" w = "112" h = "80"/>
-        <rect x = "224" y = "186" w = "112" h = "80"/>
-         <rect x = "0" y = "186" w = "112" h = "80"/>
-        <rect x = "336" y = "186" w = "112" h = "80"/>
-        <rect x = "448" y = "186" w = "112" h = "80"/>
+	        <rect x = "0" y = "189" w = "112" h = "79"/>
+        <rect x = "112" y = "189" w = "112" h = "79"/>
+        <rect x = "224" y = "189" w = "112" h = "79"/>
+         <rect x = "0" y = "189" w = "112" h = "79"/>
+        <rect x = "336" y = "189" w = "112" h = "79"/>
+        <rect x = "448" y = "189" w = "112" h = "79"/>
       </anim>
      
       <anim speed = "10" name = "idle_lateral" loop = "true">
-	       <rect x = "0" y = "186" w = "112" h = "80"/>
+	      <rect x = "0" y = "189" w = "112" h = "79"/>
       </anim>
       <anim speed = "10" name = "idle_up" loop = "true">
-	       <rect x = "0" y = "92" w = "112" h = "94"/>
+	      <rect x = "0" y = "96" w = "112" h = "94"/>
       </anim>
       <anim speed = "10" name = "idle_down" loop = "true">
-	        <rect x = "0" y = "0" w = "112" h = "92"/>
+	         <rect x = "0" y = "0" w = "112" h = "92"/>
       </anim>
      <anim speed = "10" name = "basic_attack_down" loop = "false">
-         <rect x = "0" y = "668" w = "112" h = "118"/>
-          <rect x = "112" y = "668" w = "112" h = "118"/>
-          <rect x = "224" y = "668" w = "112" h = "118"/>
-          <rect x = "224" y = "668" w = "112" h = "118"/>
+       <rect x = "0" y = "676" w = "109" h = "118"/>
+       <rect x = "220" y = "676" w = "109" h = "118"/>
+       <rect x = "110" y = "676" w = "109" h = "116"/>
+       <rect x = "220" y = "676" w = "109" h = "118"/>
+       <rect x = "0" y = "676" w = "109" h = "118"/>
      </anim>
      
      <anim speed = "10" name = "basic_attack_up" loop = "false">
-       <rect x = "0" y = "778" w = "112" h = "130"/>
-       <rect x = "112" y = "778" w = "112" h = "130"/>
-       <rect x = "224" y = "778" w = "112" h = "130"/>
-       <rect x = "224" y = "778" w = "112" h = "130"/>
+       <rect x = "0" y = "792" w = "112" h = "117"/>
+       <rect x = "224" y = "792" w = "112" h = "117"/>
+       <rect x = "112" y = "792" w = "112" h = "117"/>
+       <rect x = "224" y = "792" w = "112" h = "117"/>
+       <rect x = "0" y = "792" w = "112" h = "117"/>
      </anim>
-     <anim speed = "10" name = "basic_attack_right" loop = "false">
-        <rect x = "0" y = "908" w = "124" h = "80"/>
-       <rect x = "124" y = "908" w = "124" h = "80"/>
-       <rect x = "248" y = "908" w = "124" h = "80"/>
-       <rect x = "248" y = "908" w = "124" h = "80"/>
+     
+     <anim speed = "10" name = "basic_attack_lateral" loop = "false">
+        <rect x = "0" y = "914" w = "124" h = "75"/>
+       <rect x = "248" y = "914" w = "124" h = "75"/>
+       <rect x = "124" y = "914" w = "124" h = "75"/>
+       <rect x = "248" y = "914" w = "124" h = "75"/>
+       <rect x = "0" y = "914" w = "124" h = "75"/>
      </anim>
      <anim speed = "60" name = "bat_particles" loop = "false">
       <rect x = "0" y = "268" w = "56" h = "32"/>

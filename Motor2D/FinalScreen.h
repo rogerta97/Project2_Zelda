@@ -44,15 +44,11 @@ struct final_screen_element
 class FinalScreen : public Scene
 {
 public:
-
 	bool Start();
-
 	bool Update(float dt); 
-
 	bool CleanUp(); 
 
 private:
-
 	vector<final_screen_element> elements; 
 	vector<final_screen_player_info> player_info;
 
@@ -65,12 +61,6 @@ private:
 	UI_Image*		X_changescreen_button_image = nullptr;
 	UI_Image*		X_changescreen_background_image = nullptr;
 	UI_Text*		changescreen_text = nullptr; 
-
-public: 
-
-private: 
-
-
 };
 #endif // !_FINALSCREEN_H_
 

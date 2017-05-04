@@ -89,5 +89,7 @@ private:
 	SDL_Rect     link_2_rect = NULLRECT;
 	SDL_Rect     navi_1_rect = NULLRECT;
 	SDL_Rect     navi_2_rect = NULLRECT;
+	SDL_Rect	 ganon_1_rect = NULLRECT;
+	SDL_Rect     ganon_2_rect = NULLRECT;
 };
 #endif // !_BASEMANAGER_H_

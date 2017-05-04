@@ -51,15 +51,15 @@ public:
 	void IdleLeft();
 	void IdleRight();
 
-	//void BasicAttackUp();
-	//void BasicAttackDown();
-	//void BasicAttackLeft();
-	//void BasicAttackRight();
+	void BasicAttackUp();
+	void BasicAttackDown();
+	void BasicAttackLeft();
+	void BasicAttackRight();
 
-	//void ShowBasicAttackUp();
-	//void ShowBasicAttackDown();
-	//void ShowBasicAttackLeft();
-	//void ShowBasicAttackRight();
+	void ShowBasicAttackUp();
+	void ShowBasicAttackDown();
+	void ShowBasicAttackLeft();
+	void ShowBasicAttackRight();
 
 	//void Ability1Up();
 	//void Ability1Down();

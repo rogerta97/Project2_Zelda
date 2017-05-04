@@ -32,7 +32,7 @@ QuestManager::QuestManager()
 			offset += 24;
 		}
 
-		curr_player_text->active_quest_text.push_back(it->viewport_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
+		curr_player_text->active_quest_text.push_back(it->viewport_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_25, 0, false, 255, 215, 0));
 		curr_player_text->active_quest_text[0]->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -211,7 +211,7 @@ void QuestManager::Update()
 
 void QuestManager::CleanUp()
 {
-	// Quests
+	// Clear Quests
 	if (!vquest.empty())
 	{
 		for(int i = 0;i<vquest.size();i++)
@@ -226,13 +226,24 @@ void QuestManager::CleanUp()
 		vquest.clear();
 	}
 
-	// Texts
-
+	// Clear Texts
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
 		(*it)->player_text.clear();
+		(*it)->active_quest_text.clear();
 	}
-	
+	player_text_list.clear();
+
+	// Clear Cucos
+	if (!cucos.empty())
+	{
+		for (int i = 0; i < cucos.size(); i++)
+		{
+			App->entity->DeleteEntity(cucos.at(i));
+		}
+
+		cucos.clear();
+	}
 }
 
 void QuestManager::DeathQuestEvent(Entity * attacant, Entity * victim)

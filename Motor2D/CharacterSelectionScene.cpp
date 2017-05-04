@@ -118,10 +118,10 @@ bool CharacterSelectionScene::CleanUp()
 	// Background image
 	App->tex->UnLoadTexture(background_image);
 
-	all_ready = false;
-
 	//Stop Music
 	App->audio->StopMusic();
+
+	all_ready = false;
 
 	return true;
 }
