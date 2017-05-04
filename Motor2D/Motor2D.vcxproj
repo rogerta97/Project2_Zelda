@@ -109,7 +109,6 @@
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Spell.cpp" />
     <ClCompile Include="j1Timer.cpp" />
-    <ClCompile Include="j1Video.cpp" />
     <ClCompile Include="j1Viewports.cpp" />
     <ClCompile Include="j1XMLLoader.cpp" />
     <ClCompile Include="JungleCampManager.cpp" />
@@ -141,7 +140,6 @@
     <ClCompile Include="TacoAttack.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
-    <ClCompile Include="theoraplay.c" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
@@ -183,7 +181,6 @@
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Spell.h" />
     <ClInclude Include="j1Timer.h" />
-    <ClInclude Include="j1Video.h" />
     <ClInclude Include="j1Viewports.h" />
     <ClInclude Include="j1XMLLoader.h" />
     <ClInclude Include="JungleCampManager.h" />
@@ -227,7 +224,6 @@
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TacoAttack.h" />
     <ClInclude Include="TeamSelectScene.h" />
-    <ClInclude Include="theoraplay.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
