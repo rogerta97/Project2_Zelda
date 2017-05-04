@@ -135,7 +135,7 @@ bool MainScene::Start()
 			break;
 		}
 	}
-	def = true; 
+	
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
@@ -400,10 +400,10 @@ bool MainScene::CleanUp()
 
 	winner = 0;
 
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		App->scene->players[i].character = e_n_null;
-	}
+	}*/
 
 	//Stop Music
 	App->audio->StopMusic();

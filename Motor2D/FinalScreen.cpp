@@ -73,7 +73,18 @@ bool FinalScreen::Start()
 		new_info.items[1] = App->scene->players[index].items_rects[1];
 		new_info.items[2] = App->scene->players[index].items_rects[2];
 
-		new_info.character_name = "link"; 
+		switch (App->scene->players[index].character)
+		{
+		case link:
+			new_info.character_name = "link";
+			break;
+		case ganon:
+			new_info.character_name = "ganon";
+			break;
+		case navi:
+			new_info.character_name = "navi";
+			break;
+		}
 
 		player_info.push_back(new_info); 
 	} 
@@ -187,13 +198,13 @@ void final_screen_element::SetInfo(final_screen_player_info player_info)
 	towers_num->SetText(towers_num_str);
 
 	if (player_info.character_name == "link")
-		character_image->image = {0, 2272, 108, 96};
+		character_image->image = { 0, 2272, 108, 96 };
 
 	else if (player_info.character_name == "ganon")
-		character_image->image = placeholder_character;
+		character_image->image = { 216,2362,108,96 };
 
 	else if (player_info.character_name == "navi")
-		character_image->image = { 216, 2272, 108, 96 };
+		character_image->image = { 216, 2272, 108, 90 };
 
 	item_images_1->image = player_info.items[0]; 
 	item_images_2->image = player_info.items[1];
