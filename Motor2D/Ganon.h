@@ -71,15 +71,15 @@ public:
 	void ShowAbility1Left();
 	void ShowAbility1Right();
 
-	//void Ability2Up();
-	//void Ability2Down();
-	//void Ability2Left();
-	//void Ability2Right();
+	void Ability2Up();
+	void Ability2Down();
+	void Ability2Left();
+	void Ability2Right();
 
-	//void ShowAbility2Up();
-	//void ShowAbility2Down();
-	//void ShowAbility2Left();
-	//void ShowAbility2Right();
+	void ShowAbility2Up();
+	void ShowAbility2Down();
+	void ShowAbility2Left();
+	void ShowAbility2Right();
 
 	//void Ability3Up();
 	//void Ability3Down();
@@ -115,6 +115,8 @@ private:
 	b2Fixture*	  ganon_collision; 
 
 	int			  rupee_reward = 0;
+
+	int			  shield = 0;
 };
 
 #endif

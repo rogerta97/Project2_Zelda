@@ -91,9 +91,23 @@ int Entity::GetLife()
 void Entity::DealDamage(int damage)
 {
 	if (stats.life > 0)
-		stats.life -= damage;
+	{
+		if (stats.shield > 0)
+		{
+			stats.shield -= damage;
+
+			if (stats.shield < 0)
+				stats.life += stats.shield;
+		}
+		else 
+			stats.life -= damage;
+	}
+
 	if (stats.life < 0)
 		stats.life = 0;
+
+	if (stats.shield < 0)
+		stats.shield = 0;
 }
 
 void Entity::Heal(int heal)
@@ -118,17 +132,23 @@ void Entity::Stun(float time)
 	App->entity->stuned_entities.push_back(s);
 }
 
-void Entity::LifeBar(iPoint size, iPoint offset)
+void Entity::LifeBar(iPoint size, iPoint offset, int shield)
 {
 	if (game_object != nullptr)
 	{
 		SDL_Rect rect = { game_object->GetPos().x + offset.x, game_object->GetPos().y + offset.y, size.x, size.y };
 		SDL_Rect life = rect;
+		SDL_Rect shld = rect;
 
 		// Rule of thirds
 		life.w = (rect.w*stats.life) / stats.max_life;
 		if (life.w < 0)
 			life.w = 0;
+
+		shld.x = life.x + life.w + 2;
+		shld.w = (float)(rect.w * shield) / (float)stats.max_life;
+		if (shld.w < 0)
+			shld.w = 0;
 
 		// Back bar
 		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 9, 0, true);
@@ -150,6 +170,11 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 			if (viewport == main_view)
 			{
 				App->view->LayerDrawQuad(life, 255, 255, 51, 255, true, 10, viewport, true);
+				if (shield > 0)
+				{
+					App->view->LayerDrawQuad({ shld.x - 2, shld.y - 2, shld.w + 4, shld.h + 4 }, 85, 85, 51, 255, true, 11, viewport, true);
+					App->view->LayerDrawQuad(shld, 165, 165, 51, 255, true, 12, viewport, true);
+				}
 			}
 			else
 			{
@@ -160,14 +185,28 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 					if (viewport == my_team.at(i))
 					{
 						App->view->LayerDrawQuad(life, 51, 153, 255, 255, true, 10, viewport, true);
+
+						if (shield > 0)
+						{
+							App->view->LayerDrawQuad({ shld.x - 2, shld.y - 2, shld.w + 4, shld.h + 4 }, 51, 50, 100, 255, true, 11, viewport, true);
+							App->view->LayerDrawQuad(shld, 51, 103, 165, 255, true, 12, viewport, true);
+						}
 						enemy = false;
 						break;
 					}
 				}
 
 				// Enemy printing (red)
-				if(enemy)
+				if (enemy)
+				{
 					App->view->LayerDrawQuad(life, 255, 0, 0, 255, true, 10, viewport, true);
+
+					if (shield > 0)
+					{
+						App->view->LayerDrawQuad({ shld.x - 2, shld.y - 2, shld.w + 4, shld.h + 4 }, 100, 0, 0, 255, true, 11, viewport, true);
+						App->view->LayerDrawQuad(shld, 165, 0, 0, 255, true, 12, viewport, true);
+					}
+				}
 			}
 		}
 	}

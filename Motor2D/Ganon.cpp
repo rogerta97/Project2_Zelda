@@ -15,8 +15,11 @@
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
 #include "GanonBat.h"
+#include "j1Input.h"
 
 #define ABILITY1_RANGE 260
+
+#define ABILITY2_TIME 7
 
 Ganon::Ganon(iPoint pos)
 {
@@ -155,7 +158,7 @@ bool Ganon::Draw(float dt)
 {
 	bool ret = true;
 
-	LifeBar(iPoint(60, 5), iPoint(-25, -65));
+	LifeBar(iPoint(60, 5), iPoint(-25, -65), stats.shield);
 
 	// Blit
 	if (flip)
@@ -538,6 +541,43 @@ void Ganon::ShowAbility1Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::Ability2Up()
+{
+	stats.shield = 10;
+}
+
+void Ganon::Ability2Down()
+{
+	stats.shield = 10;
+}
+
+void Ganon::Ability2Left()
+{
+	stats.shield = 10;
+}
+
+void Ganon::Ability2Right()
+{
+	stats.shield = 10;
+}
+
+void Ganon::ShowAbility2Up()
+{
+	stats.shield = 10;
+}
+
+void Ganon::ShowAbility2Down()
+{
+}
+
+void Ganon::ShowAbility2Left()
+{
+}
+
+void Ganon::ShowAbility2Right()
+{
 }
 
 void Ganon::SetCamera(int id)

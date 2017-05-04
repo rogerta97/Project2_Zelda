@@ -658,7 +658,8 @@ void j1Physics::CleanBodies()
 
 void j1Physics::DeleteBody(PhysBody * object)
 {
-	world->DestroyBody(object->body);
+	if(object != nullptr)
+		world->DestroyBody(object->body);
 }
 
 void j1Physics::DeleteFixture(b2Fixture* fixture, PhysBody * object)
