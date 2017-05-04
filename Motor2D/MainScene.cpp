@@ -135,7 +135,7 @@ bool MainScene::Start()
 			break;
 		}
 	}
-	
+	def = true; 
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
@@ -149,6 +149,7 @@ bool MainScene::Start()
 		Player* p2 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 2, 2, 2, 1);
 		Player* p3 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 3, 3, 1, 2);
 		Player* p4 = player_manager->AddPlayer(entity_name::link, iPoint(300, 700), 4, 4, 2, 2);
+
 	}
 
 	// Disable player input until level is loaded
