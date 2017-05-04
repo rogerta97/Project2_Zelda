@@ -535,3 +535,8 @@ void ShopManager::UpdatePlayerItems(int view, Player * player)
 		shops[view]->player_items[i]->image = player->items[i]->image_rect;
 	}
 }
+
+SDL_Rect ShopManager::GetPlayerItem(int player_index, int item_index)
+{
+	return shops[player_index]->player_items[item_index]->image; 
+}

@@ -142,6 +142,9 @@ public:
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
+	// Get player from index 
+	Entity* GetPlayer(int index);
+
 private:
 	void PlayerInput(Player* player, int index);
 	void MoveCamera(Player* player);

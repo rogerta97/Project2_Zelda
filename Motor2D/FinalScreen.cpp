@@ -176,9 +176,13 @@ bool FinalScreen::CleanUp()
 	if(App->scene->GetCurrentScene() != App->scene->final_screen)
 		App->gui->DeleteElement(window);
 
+	for (int i = 0; i < 4; ++i)
+	{
+		App->scene->players[i].Reset();
+	}
+
 	elements.clear();
 	player_info.clear();
-
 	return false;
 }
 
