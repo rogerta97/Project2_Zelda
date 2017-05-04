@@ -663,7 +663,8 @@ void j1Physics::DeleteBody(PhysBody * object)
 
 void j1Physics::DeleteFixture(b2Fixture* fixture, PhysBody * object)
 {
-	object->body->DestroyFixture(fixture);
+	if(fixture != nullptr && object != nullptr)
+		object->body->DestroyFixture(fixture);
 }
 
 b2RevoluteJoint* j1Physics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, iPoint anchor_offset, iPoint body_offset, bool enable_limit,

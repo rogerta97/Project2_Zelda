@@ -54,7 +54,7 @@ Ganon::Ganon(iPoint pos)
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
-	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); // Name references to the Spell name
+	Ability* a3 = AddAbility(2, cd, bd, dmg_mult); //
 	a3->SetImages({ 816, 399, 48, 73 }, { 816, 521, 48, 73 }, { 1013, 2008, 48, 73 }, { 0,0,0,0 });
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
@@ -135,17 +135,7 @@ bool Ganon::Update(float dt)
 		// Friendly attacks
 		else
 		{
-			if (spell != nullptr && TextCmp(spell->name.c_str(), "boomerang"))
-			{
-				if (spell->owner == this)
-				{
-					if (spell->can_delete)
-					{
-						GetAbility(2)->cd_timer->SubstractTimeFromStart(7);
-						App->spell->DeleteSpell(spell);
-					}
-				}
-			}
+		
 		}
 
 		// Dies
@@ -193,22 +183,12 @@ bool Ganon::Draw(float dt)
 		// Basic atack --------------------
 		if (game_object->animator->IsCurrentAnimation("basic_attack_up") || game_object->animator->IsCurrentAnimation("basic_attack_up_2")
 			|| game_object->animator->IsCurrentAnimation("basic_attack_down") || game_object->animator->IsCurrentAnimation("basic_attack_down_2")
-			|| game_object->animator->IsCurrentAnimation("basic_attack_left") || game_object->animator->IsCurrentAnimation("basic_attack_left_2")
-			|| game_object->animator->IsCurrentAnimation("basic_attack_right") || game_object->animator->IsCurrentAnimation("basic_attack_right_2"))
+			|| game_object->animator->IsCurrentAnimation("basic_attack_lateral") || game_object->animator->IsCurrentAnimation("basic_attack_lateral_2"))
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
 				reset = true;
 				game_object->DeleteFixture(abilities.at(0)->fixture);
-			}
-		}
-
-		if (game_object->animator->IsCurrentAnimation("spin_attack") || game_object->animator->IsCurrentAnimation("spin_attack_2"))
-		{
-			if (game_object->animator->GetCurrentAnimation()->Finished())
-			{
-				reset = true;
-				game_object->DeleteFixture(abilities.at(1)->fixture);
 			}
 		}
 
@@ -219,7 +199,6 @@ bool Ganon::Draw(float dt)
 			can_move = true;
 			draw_offset = restore_draw_offset;
 		}
-		// -------------------------------
 	}
 
 	return ret;
@@ -349,7 +328,7 @@ void Ganon::RunLeft()
 			game_object->SetAnimation("run_lateral_2");
 		flip = true;
 
-		draw_offset = { 56,  44 };
+		draw_offset = { 56, 44 };
 	}
 }
 
@@ -363,7 +342,7 @@ void Ganon::RunRight()
 			game_object->SetAnimation("run_lateral_2");
 		flip = false;
 
-		draw_offset = { 56,  44 };
+		draw_offset = { 56, 44 };
 	}
 }
 
@@ -377,7 +356,7 @@ void Ganon::IdleUp()
 			game_object->SetAnimation("idle_up_2");
 		flip = false;
 
-		draw_offset = { 54,  60 };
+		draw_offset = { 54, 60 };
 	}
 }
 
@@ -405,7 +384,7 @@ void Ganon::IdleLeft()
 			game_object->SetAnimation("idle_lateral_2");
 		flip = true;
 
-		draw_offset = { 56,  44 };
+		draw_offset = { 56, 44 };
 	}
 }
 
@@ -419,8 +398,108 @@ void Ganon::IdleRight()
 			game_object->SetAnimation("idle_lateral_2");
 		flip = false;
 
-		draw_offset = { 56,  44 };
+		draw_offset = { 56, 44 };
 	}
+}
+
+void Ganon::BasicAttackUp()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_up");
+		else
+			game_object->SetAnimation("basic_attack_up_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(0, -45), 25, 85, fixture_type::f_t_attack);
+
+		draw_offset = { 54, 86 };
+	}
+}
+
+void Ganon::BasicAttackDown()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_down");
+		else
+			game_object->SetAnimation("basic_attack_down_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-2, 45), 25, 50, fixture_type::f_t_attack);
+
+		draw_offset = { 54, 40 };
+	}
+}
+
+void Ganon::BasicAttackLeft()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_lateral");
+		else
+			game_object->SetAnimation("basic_attack_lateral_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = true;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-45, 7), 60, 25, fixture_type::f_t_attack);
+
+		draw_offset = { 70, 45 };
+	}
+}
+
+void Ganon::BasicAttackRight()
+{
+	if (!attacking)
+	{
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("basic_attack_lateral");
+		else
+			game_object->SetAnimation("basic_attack_lateral_2");
+
+		draw_offset = { draw_offset.x, 58 };
+		attacking = true;
+		can_move = false;
+		flip = false;
+		GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(43, 7), 60, 25, fixture_type::f_t_attack);
+
+		draw_offset = { 54, 45 };
+	}
+}
+
+void Ganon::ShowBasicAttackUp()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 90, 25, 70 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::ShowBasicAttackDown()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 14, game_object->GetPos().y + 25, 25, 55 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::ShowBasicAttackLeft()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::ShowBasicAttackRight()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 0 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Ganon::SetCamera(int id)
