@@ -31,7 +31,7 @@ public:
 		App->win->GetWindowSize(win_w, win_h);
 		int x = 27 + ((viewport - 1) % 2)*win_w / 2;
 		int y = 30 + ((viewport - 1) / 2)*win_h / 2;
-		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_12);
+		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_25);
 		UpdateRupees();
 		team = entity->GetTeam();
 		respawn = _respawn;
@@ -89,7 +89,7 @@ struct PlayerManagerUI
 	vector<UI_Image*>	abilities_button;
 	vector<UI_Image*>	abilities_icon;
 	vector<UI_Text*>    abilities_cd;
-	UI_Image*			death_text = nullptr; 
+	UI_Text*			death_time = nullptr;
 };
 
 class PlayerManager
@@ -148,7 +148,7 @@ private:
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
-	void UpdateDeathUI(int player, float dt);
+	void UpdateDeathUI(Player* player, float dt);
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
 	void SetAbilitiesIcon(int index);
@@ -162,14 +162,16 @@ private:
 
 	EventThrower*           event_thrower = nullptr;
 
-	SDL_Color               death_rect_color = NULLRECT;
-	SDL_Rect			    death_rect = NULLRECT;
-
 	uint					last_heal_time = 0;
 
 	uint			     	death_sound_effect = 100;
 
-	Animator*				death_text_anim = nullptr; 
+	Animator*				death_text_anim = nullptr;
+	SDL_Texture*		    death_text_texture = nullptr;
+	iPoint                  death_text_pos = NULLPOINT;
+
+	iPoint					death_quad_pos = NULLPOINT;
+	SDL_Rect				death_quad_rect = NULLRECT;
 };
 
 

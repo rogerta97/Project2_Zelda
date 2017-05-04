@@ -38,7 +38,6 @@ struct quest
 struct PlayerText
 {
 	vector<UI_Text*> player_text;
-
 	vector<UI_Text*> active_quest_text;
 };
 
@@ -55,15 +54,16 @@ public:
 	void DeathQuestEvent(Entity* attacant, Entity* victim);
 
 	void reset_progress(int id);
-	pugi::xml_document quests_file;
-	pugi::xml_node quests_node;
-
-public:
 	void change_state(int id, quest_state new_state);
 	void add_progress(int id, int team);
 	int get_progress(int id, int team);
 	void update_progress();
 	void SpawnCucos(int num);
+
+public:
+	pugi::xml_document quests_file;
+	pugi::xml_node     quests_node;
+
 	std::vector<quest*> vquest;
 
 	vector<PlayerText*> player_text_list; 
@@ -72,7 +72,8 @@ public:
 
 	vector<Entity*> cucos;
 
-	bool quests_enabled = true;
+	bool            quests_enabled = true;
+
 private:
 	int				active_quest = -1;
 	uint			timer_read = 0;

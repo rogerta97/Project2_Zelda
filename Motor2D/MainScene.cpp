@@ -86,15 +86,15 @@ bool MainScene::Start()
 		// Minimap UI
 		curr_viewport.minimapstate.stats_back_image = curr_viewport.viewport_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
 		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.hp_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.hp_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x, first_text_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.hp_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.power_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.power_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 130 , first_text_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.power_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.speed_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_12);
+		curr_viewport.minimapstate.speed_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 280, first_text_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.speed_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.kills_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.kills_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 60, first_text_pos.y + 25), App->font->game_font_25);
 		curr_viewport.minimapstate.kills_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.minions_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_12);
+		curr_viewport.minimapstate.minions_text = curr_viewport.viewport_window->CreateText(iPoint(first_text_pos.x + 210, first_text_pos.y + 25), App->font->game_font_25);
 		curr_viewport.minimapstate.minions_text->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.Disable(); 
 
@@ -102,6 +102,36 @@ bool MainScene::Start()
 	}
 	// ------------------
 
+	// Creating pause UI
+	uint w, h;
+	App->win->GetWindowSize(w, h);
+	main_scene_window = App->gui->UI_CreateWin({ 0,0 }, w, h, 10, false);
+
+	SDL_Rect win_size = { 0,0, w,h };
+
+	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
+
+	iPoint resume_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 - 35 };
+	iPoint quit_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 + 35 };
+
+	pause_ui.resume_background = main_scene_window->CreateImage(resume_button_pos, back_button_rect);
+	pause_ui.quit_background = main_scene_window->CreateImage(quit_button_pos, back_button_rect);
+
+	pause_ui.resume_text = main_scene_window->CreateText({ resume_button_pos.x + 57, resume_button_pos.y + 7 }, App->font->game_font_40);
+	pause_ui.quit_text = main_scene_window->CreateText({ quit_button_pos.x + 75, quit_button_pos.y + 7 }, App->font->game_font_40);
+
+	pause_ui.resume_text->SetText("RESUME");
+	pause_ui.quit_text->SetText("QUIT");
+
+	pause_ui.cursor_1 = main_scene_window->CreateImage({ 0,0 }, { 80, 52, 48, 47 });
+	pause_ui.cursor_2 = main_scene_window->CreateImage({ 0,0 }, { 80, 52, 48, 47 });
+
+	pause_ui.cursor_state = p_e_resume;
+
+	pause_ui.SetPauseUI(false);
+
+	App->render->DrawQuad(win_size, 0, 0, 0, 0, 1, 60, true);
+	// -------------------
 
 	App->console->AddText("viewports.set 4", Input);
 	//Load Map
@@ -115,6 +145,7 @@ bool MainScene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	// Map collisions
 	CreateMapCollisions();
 
 	// Shop Manager
@@ -156,15 +187,15 @@ bool MainScene::Start()
 	player_manager->DisableInput(0);
 	// ----
 
-	//Test Jungle Camp
+	//Jungle Camp manager
 	jungleCamp_manager = new JungleCampManager();
 	jungleCamp_manager->Start();
 
-	//Test Minion
+	//Minion manager
 	LOG("Creating minion manager");
 	minion_manager = new MinionManager();
 
-	//Test Tower
+	//Tower manager
 	LOG("Creating tower manager");
 	tower_manager = new TowerManager();
   
@@ -181,12 +212,12 @@ bool MainScene::Start()
 	LOG("Creating base manager");
 	base_manager = new BaseManager();
 
-	//Quest manager
+	// Quest manager
 	LOG("Creating quest manager");
 	quest_manager = new QuestManager();
 	quest_manager->quests_enabled = App->scene->menu_scene->quests_enabled;
 
-	// Minimap
+	// Minimap manager
 	LOG("Creating minimap manager");
 	minimap_manager = new MinimapManager();
 	minimap_manager->Start();
@@ -218,37 +249,6 @@ bool MainScene::Start()
 
 	App->audio->ChangeVolume(25);
 	App->audio->PlayMusic("Audio/Music/overworld.ogg");
-
-	// Creating pause UI
-
-	uint w, h; 
-	App->win->GetWindowSize(w, h); 
-	main_scene_window = App->gui->UI_CreateWin({ 0,0 }, w, h, 10, false);
-
-	SDL_Rect win_size = { 0,0, w,h }; 
-
-	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
-
-	iPoint resume_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 - 35};
-	iPoint quit_button_pos = { win_size.w / 2 - back_button_rect.w / 2, win_size.h / 2 - back_button_rect.h / 2 + 35}; 
-
-	pause_ui.resume_background = main_scene_window->CreateImage(resume_button_pos, back_button_rect);
-	pause_ui.quit_background = main_scene_window->CreateImage(quit_button_pos, back_button_rect);
-
-	pause_ui.resume_text = main_scene_window->CreateText({ resume_button_pos.x + 57, resume_button_pos.y + 7}, App->font->game_font_20);
-	pause_ui.quit_text = main_scene_window->CreateText({ quit_button_pos.x + 75, quit_button_pos.y + 7 }, App->font->game_font_20);
-
-	pause_ui.resume_text->SetText("RESUME");
-	pause_ui.quit_text->SetText("QUIT");
-
-	pause_ui.cursor_1 = main_scene_window->CreateImage({ 0,0 }, {80, 52, 48, 47});
-	pause_ui.cursor_2 = main_scene_window->CreateImage({ 0,0 }, { 80, 52, 48, 47 });
-
-	pause_ui.cursor_state = p_e_resume; 
-
-	pause_ui.SetPauseUI(false); 
-
-	App->render->DrawQuad(win_size, 0,0,0,0, 1 , 60, true);
 	
 	return ret;
 }
@@ -328,12 +328,6 @@ bool MainScene::Update(float dt)
 	}
 	else
 		pause_ui.UpdatePause(); 
-
-		
-
-
-	
-
 	// ------
 	
 	//DrawScreenSeparation();
@@ -389,6 +383,7 @@ bool MainScene::CleanUp()
 		}	
 		App->gui->DeleteElement(main_scene_window); 
 	}
+	ui_viewports.clear();
 	// -------
 
 	// Delete Map Collisions
@@ -399,18 +394,15 @@ bool MainScene::CleanUp()
 	map_collisions.clear();
 	// -------
 
-	winner = 0;
-
-	/*for (int i = 0; i < 4; i++)
-	{
-		App->scene->players[i].character = e_n_null;
-	}*/
-
 	//Stop Music
 	App->audio->StopMusic();
 
 	//Reset cameras position
 	App->view->ResetCameras();
+
+	// Reset vars
+	first_quest_completed = false;
+	winner = 0;
 
 	return ret;
 }

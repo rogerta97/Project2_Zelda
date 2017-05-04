@@ -26,7 +26,6 @@ bool BaseManager::Update()
 {
 	bool ret = true;
 
-
 	if (team1->invulnerable == true)
 	{
 		if (!App->scene->main_scene->tower_manager->TowersAlive(1))

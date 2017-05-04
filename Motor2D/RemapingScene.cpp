@@ -18,7 +18,8 @@ RemapingScene::~RemapingScene()
 
 bool RemapingScene::Start()
 {
-	
+	bool ret = true;
+
 	SDL_Rect viewport_rect = App->view->GetViewportRect(1); 
 
 	uint w, h;
@@ -172,11 +173,12 @@ bool RemapingScene::Start()
 
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
 
-	return false;
+	return ret;
 }
 
 bool RemapingScene::Update(float dt)
 {
+	bool ret = true;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -284,15 +286,19 @@ bool RemapingScene::Update(float dt)
 
 	App->view->LayerBlit(0, background_image, App->view->camera1, { 0,0,1994, 1359 }, 0, 1);
 
-	return false;
+	return ret;
 }
 
 bool RemapingScene::CleanUp()
 {
+	bool ret = true;
+
 	if (App->scene->GetCurrentScene() != App->scene->remaping_scene)
 		App->gui->DeleteElement(window);
 
-	return false;
+	inside = false;
+
+	return ret;
 }
 
 iPoint RemapingScene::GetCursorPosFromCurrentState(remaping_state curr_state)

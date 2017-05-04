@@ -110,7 +110,7 @@ private:
 	void GetPlayerItemsRects();
 
 public:
-
+	// Managers
 	MinionManager*		minion_manager = nullptr;
 	TowerManager*	    tower_manager = nullptr;;
 	ShopManager*		shop_manager = nullptr;
@@ -123,18 +123,16 @@ public:
 	MinimapManager*     minimap_manager = nullptr;
 
 	// UI Elements
-
 	vector<MainSceneViewport>	ui_viewports;
 
 private:
-
 	UI_Window*			main_scene_window = nullptr;
 	
 	vector<PhysBody*>	map_collisions;
 
-	j1Timer*			game_timer;
-	j1Timer*			quest_timer;
-	bool				first_quest_completed;
+	j1Timer*			game_timer = nullptr;
+	j1Timer*			quest_timer = nullptr;
+	bool				first_quest_completed = false;
 	uint				end_delay = 10;
 
 	uint				winner = 0;
@@ -143,9 +141,7 @@ private:
 	Animator*			defeat = nullptr;
 
 	// Pause UI
-
 	PauseUI				pause_ui; 
-
 };
 
 
