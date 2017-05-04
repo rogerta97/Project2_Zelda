@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "j1XMLLoader.h"
 #include "Functions.h"
+#include "p2Log.h"
 
 #define BAT_DESTRUCTION_TIME 0.5f
 #define SPEED 400

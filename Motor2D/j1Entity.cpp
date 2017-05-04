@@ -494,7 +494,7 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 {
 	Ability* ret = nullptr;
 
-	if (entity != nullptr)
+	if (entity != nullptr && !entity->to_delete && fixture != nullptr)
 	{
 		for (int i = 0; i < entity->abilities.size(); i++)
 		{
@@ -519,7 +519,7 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 
 	sp = FindSpellByBody(spell);
 
-	if (sp != nullptr && sp->owner != nullptr)
+	if (sp != nullptr && sp->owner != nullptr && !sp->owner->to_delete)
 	{
 		if (!sp->owner->abilities.empty())
 		{

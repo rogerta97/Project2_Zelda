@@ -47,6 +47,7 @@ Base::Base(iPoint pos)
 
 	game_object->CreateCollision(iPoint(-242/2, -290/2), Base_entity, 56, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 

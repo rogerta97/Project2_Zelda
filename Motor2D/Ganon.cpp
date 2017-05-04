@@ -27,6 +27,7 @@ Ganon::Ganon(iPoint pos)
 
 	ganon_collision = game_object->CreateCollision(iPoint(0, 10), 70, 30, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 

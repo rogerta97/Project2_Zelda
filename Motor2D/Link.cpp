@@ -27,6 +27,7 @@ Link::Link(iPoint pos)
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	link_collision = game_object->CreateCollision(iPoint(2, 10), 13, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
