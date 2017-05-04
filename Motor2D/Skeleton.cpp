@@ -111,14 +111,15 @@ bool Skeleton::Update(float dt)
 			}
 
 		}
-		if (stats.life <= 0)
+	}
+
+	if (stats.life <= 0 && !to_delete && entity != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
+		App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+		if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
 		{
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
-			{
-				App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-			}
+			App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
 		}
 	}
 

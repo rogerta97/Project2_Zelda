@@ -14,6 +14,9 @@
 #include "j1Map.h"
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
+#include "GanonBat.h"
+
+#define ABILITY1_RANGE 260
 
 Ganon::Ganon(iPoint pos)
 {
@@ -48,7 +51,7 @@ Ganon::Ganon(iPoint pos)
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
-	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);
+	Ability* a2 = AddAbility(1, cd, bd, dmg_mult, "ganon_bat");
 	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, { 0,0,0,0 });
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
@@ -137,24 +140,23 @@ bool Ganon::Update(float dt)
 		{
 		
 		}
-
-		// Dies
-		if (stats.life <= 0)
-		{
-			if (entity->is_player)
-			{
-				// Update quests
-				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
-
-				//Add kill to killer
-				App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].kills++;
-			}
-
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
-		}
 	}
 
+	// Dies
+	if (stats.life <= 0 && !to_delete && entity != nullptr)
+	{
+		if (entity->is_player)
+		{
+			// Update quests
+			App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
+
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].kills++;
+		}
+
+		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
+		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
+	}
 	
 	// ------------------------------------------------
 
@@ -169,9 +171,9 @@ bool Ganon::Draw(float dt)
 
 	// Blit
 	if (flip)
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(GetPos().y + 15, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(GetPos().y + 15, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 
 	// -------------
@@ -500,6 +502,54 @@ void Ganon::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 0 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::Ability1Up()
+{
+	GanonBat* s = (GanonBat*)App->spell->CreateSpell(spell_name::ganon_bat, game_object->GetPos(), this);
+	s->Set(g_b_direction::g_b_up);
+}
+
+void Ganon::Ability1Down()
+{
+	GanonBat* s = (GanonBat*)App->spell->CreateSpell(spell_name::ganon_bat, game_object->GetPos(), this);
+	s->Set(g_b_direction::g_b_down);
+}
+
+void Ganon::Ability1Left()
+{
+	GanonBat* s = (GanonBat*)App->spell->CreateSpell(spell_name::ganon_bat, game_object->GetPos(), this);
+	s->Set(g_b_direction::g_b_left);
+}
+
+void Ganon::Ability1Right()
+{
+	GanonBat* s = (GanonBat*)App->spell->CreateSpell(spell_name::ganon_bat, game_object->GetPos(), this);
+	s->Set(g_b_direction::g_b_right);
+}
+
+void Ganon::ShowAbility1Up()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - ABILITY1_RANGE, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::ShowAbility1Down()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::ShowAbility1Left()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, (int)(-ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+}
+
+void Ganon::ShowAbility1Right()
+{
+	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Ganon::SetCamera(int id)

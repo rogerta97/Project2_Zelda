@@ -61,15 +61,15 @@ public:
 	void ShowBasicAttackLeft();
 	void ShowBasicAttackRight();
 
-	//void Ability1Up();
-	//void Ability1Down();
-	//void Ability1Left();
-	//void Ability1Right();
+	void Ability1Up();
+	void Ability1Down();
+	void Ability1Left();
+	void Ability1Right();
 
-	//void ShowAbility1Up();
-	//void ShowAbility1Down();
-	//void ShowAbility1Left();
-	//void ShowAbility1Right();
+	void ShowAbility1Up();
+	void ShowAbility1Down();
+	void ShowAbility1Left();
+	void ShowAbility1Right();
 
 	//void Ability2Up();
 	//void Ability2Down();

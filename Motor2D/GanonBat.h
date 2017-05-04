@@ -1,5 +1,5 @@
-#ifndef _NAVI_BASIC_ATTACK_
-#define _NAVI_BASIC_ATTACK_
+#ifndef _GANON_BAT_
+#define _GANON_BAT_
 
 #include "j1App.h"
 #include "j1Render.h"
@@ -12,22 +12,32 @@ class b2Fixture;
 class PhysBody;
 class GameObject;
 class Spell;
+class GameObject;
 
-enum n_b_a_direction
+enum g_b_direction
 {
-	n_b_a_null,
-	n_b_a_up,
-	n_b_a_down,
-	n_b_a_left,
-	n_b_a_right,
+	g_b_null,
+	g_b_up,
+	g_b_down,
+	g_b_left,
+	g_b_right,
 };
 
-class NaviBasicAttack : public Spell
+struct fire
+{
+	void CleanUp();
+
+	GameObject* game_object = nullptr;
+	j1Timer*	death_timer = nullptr;
+	bool		to_die = false;
+};
+
+class GanonBat : public Spell
 {
 public:
-	NaviBasicAttack(iPoint pos);
+	GanonBat(iPoint pos);
 
-	virtual ~NaviBasicAttack();
+	virtual ~GanonBat();
 
 	bool Start();
 	bool PreUpdate();
@@ -50,18 +60,26 @@ public:
 
 	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-	void Set(n_b_a_direction dir);
+	void Set(g_b_direction dir);
 
 	void Effects(Entity* entity, Ability * ability);
 
 private:
-	n_b_a_direction dir = n_b_a_direction::n_b_a_null;
+	void CreateFire(iPoint pos);
+
+private:
+	g_b_direction   dir = g_b_direction::g_b_null;
 	float			initial_speed = 0;
-	iPoint			starting_pos = NULLPOINT;
-	float			rotation = 0.0f;
-	float			die = false;
-	
+	bool			bat_print = true;
+
 	j1Timer*		timer = nullptr;
+
+	vector<fire>    fires;
+
+	iPoint			last_spawn_pos = NULLPOINT;
+
+	int				fire_bd = 0;
+	float			fire_mult = 0;
 };
 
 #endif // _NAVI_BASIC_ATTACK_

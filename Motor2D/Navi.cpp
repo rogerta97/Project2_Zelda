@@ -147,22 +147,22 @@ bool Navi::Update(float dt)
 		{
 		
 		}
+	}
 
-		// Dies
-		if (stats.life <= 0)
+	// Dies
+	if (stats.life <= 0 && !to_delete && entity != nullptr)
+	{
+		if (entity->is_player)
 		{
-			if (entity->is_player)
-			{
-				// Update quests
-				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
+			// Update quests
+			App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
 
-				//Add kill to killer
-				App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].kills++;
-			}
-
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].kills++;
 		}
+
+		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
+		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
 	}
 
 	// Ability 1 --------------------
@@ -544,7 +544,7 @@ void Navi::BasicAttackRight()
 void Navi::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12, 25, (int)(-BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - BASIC_ATTACK_RANGE, 25, (int)(BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Navi::ShowBasicAttackDown()

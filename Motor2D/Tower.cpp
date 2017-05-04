@@ -133,21 +133,22 @@ bool Tower::Update(float dt)
 				}
 				else
 					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-				if (stats.life <= 0)
-				{
-					App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-					App->scene->main_scene->tower_manager->KillTower(this);
-
-					if (entity->is_player)
-					{
-						//Add kill to killer
-						App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].towers++;
-					}
-				}
 			}	
 		}
 	}
+
+	if (stats.life <= 0 && !to_delete && entity != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
+		App->scene->main_scene->tower_manager->KillTower(this);
+
+		if (entity->is_player)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].towers++;
+		}
+	}
+
 	return ret;
 }
 

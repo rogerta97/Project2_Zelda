@@ -824,11 +824,11 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		curr_player->state = idle_up;
 		break;
 	case ability1_left:
-		curr_player->entity->Ability1Down();
+		curr_player->entity->Ability1Left();
 		curr_player->state = idle_left;
 		break;
 	case ability1_down:
-		curr_player->entity->Ability1Left();
+		curr_player->entity->Ability1Down();
 		curr_player->state = idle_down;
 		break;
 	case ability1_right:
@@ -925,10 +925,10 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		curr_player->entity->ShowAbility1Up();
 		break;
 	case show_ability1_left:
-		curr_player->entity->ShowAbility1Down();
+		curr_player->entity->ShowAbility1Left();
 		break;
 	case show_ability1_down:
-		curr_player->entity->ShowAbility1Left();
+		curr_player->entity->ShowAbility1Down();
 		break;
 	case show_ability1_right:
 		curr_player->entity->ShowAbility1Right();

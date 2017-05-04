@@ -129,18 +129,18 @@ bool Minion::Update(float dt)
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+		}
+	}
 
-			if (stats.life <=0)
-			{
-				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-				App->scene->main_scene->minion_manager->KillMinion(this);
+	if (stats.life <= 0 && !to_delete)
+	{
+		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
+		App->scene->main_scene->minion_manager->KillMinion(this);
 
-				if (entity->is_player)
-				{
-					//Add kill to killer
-					App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].minions++;
-				}
-			}
+		if (entity != nullptr && entity->is_player && entity != nullptr)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].minions++;
 		}
 	}
 

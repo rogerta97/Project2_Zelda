@@ -120,7 +120,7 @@ void Entity::Stun(float time)
 
 void Entity::LifeBar(iPoint size, iPoint offset)
 {
-	if (show_life_bar && game_object != nullptr)
+	if (game_object != nullptr)
 	{
 		SDL_Rect rect = { game_object->GetPos().x + offset.x, game_object->GetPos().y + offset.y, size.x, size.y };
 		SDL_Rect life = rect;

@@ -1,0 +1,43 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture = "textures/ganon_spritesheet.png">
+    <anim speed = "10" name = "bat_spawn" loop = "false">
+      <rect x = "0" y = "268" w = "56" h = "28"/>
+      <rect x = "56" y = "268" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "bat_fly" loop = "true">
+      <rect x = "112" y = "268" w = "56" h = "28"/>
+      <rect x = "168" y = "268" w = "56" h = "28"/>
+      <rect x = "224" y = "268" w = "56" h = "28"/>
+      <rect x = "280" y = "268" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "bat_die" loop = "false">
+      <rect x = "112" y = "268" w = "56" h = "28"/>
+      <rect x = "56" y = "268" w = "56" h = "28"/>
+      <rect x = "0" y = "268" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "fire_spawn" loop = "false">
+      <rect x = "502" y = "268" w = "56" h = "32"/>
+      <rect x = "448" y = "268" w = "56" h = "32"/>
+    </anim>
+    <anim speed = "7" name = "fire_burn" loop = "true">
+      <rect x = "336" y = "268" w = "56" h = "32"/>
+      <rect x = "392" y = "268" w = "56" h = "32"/>
+    </anim>
+    <anim speed = "10" name = "fire_die" loop = "false">
+      <rect x = "448" y = "268" w = "56" h = "32"/>
+      <rect x = "502" y = "268" w = "56" h = "32"/>
+    </anim>
+
+    <anim speed = "10" name = "basic_projectile_2" loop = "true">
+      <rect x = "192" y = "2406" w = "48" h = "50"/>
+      <rect x = "240" y = "2406" w = "48" h = "50"/>
+      <rect x = "240" y = "2406" w = "48" h = "50"/>
+    </anim>
+    <anim speed = "5" name = "destroy_2" loop = "true">
+      <rect x ="204" y = "2467" w = "26" h = "30"/>
+      <rect x ="251" y = "2467" w = "26" h = "30"/>
+    </anim>
+  </animations>
+</file>

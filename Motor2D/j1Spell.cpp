@@ -8,6 +8,7 @@
 #include "NaviBasicAttack.h"
 #include "EventThrower.h"
 #include "GameObject.h"
+#include "GanonBat.h"
 
 
 j1Spell::j1Spell()
@@ -163,6 +164,9 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 		break;
 	case navi_basic_attack:
 		ret = new NaviBasicAttack(pos);
+		break;
+	case ganon_bat:
+		ret = new GanonBat(pos);
 		break;
 	}
 	
