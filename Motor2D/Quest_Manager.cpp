@@ -18,22 +18,22 @@ QuestManager::QuestManager()
 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->main_window->CreateImage(iPoint(screen.w - 150, 50), SDL_Rect{ 200,200,150,150 }, true)); 
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w - 150, 50), SDL_Rect{ 689,2204,150,130 }, true)); 
 		curr_player_text = new PlayerText(); 
 
 		for (int i = 0; i<3; i++)
 		{
 			placer = iPoint(screen.w - 30, screen.h - 30);
-			it->main_window->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+			it->viewport_window->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
 
-			curr_player_text->player_text.push_back(it->main_window->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
 			curr_player_text->player_text[i]->SetText("0");
 
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
 		//curr_player_text->active_quest_text.push_back(it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
-		curr_player_text->active_quest_text = (it->main_window->CreateText(iPoint(screen.w- 150, 50), App->font->game_font_12, 15, false, 255, 215, 0));
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w- 150, 50), App->font->game_font_12, 15, false, 255, 215, 0));
 
 		curr_player_text->active_quest_text->SetText(" ");
 
@@ -266,7 +266,7 @@ void QuestManager::update_progress()
 			case 1:
 			{
 				string team_1;
-				team_1 += "SPEED quest is active. Progress ";
+				team_1 += "SPEED quest\n is active.\n Progress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
 				player_text_list[0]->active_quest_text->SetText(team_1);
