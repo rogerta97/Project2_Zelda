@@ -2,6 +2,7 @@
 #define _BASEMANAGER_H_
 
 class Base;
+class Entity;
 
 class BaseManager
 {
@@ -13,6 +14,8 @@ public:
 	bool CleanUp();
 	void KillBase(Base* base);
 
+
+	Entity* GetBase(int team)const;
 	void b_Invulnerable(Base* base);
 
 private:

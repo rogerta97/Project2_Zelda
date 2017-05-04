@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1XMLLoader.h"
 #include "Animation.h"
+#include "Mapping.h"
 
 ShopManager::ShopManager()
 {
@@ -295,7 +296,9 @@ bool ShopManager::Update()
 				shops[(*it)->viewport - 1]->shop_icon->enabled = false;
 		}
 
-		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
+		int shop_key;
+		App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_shop, &shop_key);
+		if (App->input->GetControllerButton((*it)->controller_index, shop_key) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
 			ChangeShopState((*it)->viewport - 1);
 		}
@@ -326,7 +329,9 @@ bool ShopManager::Update()
 				UpdateItemInfo((*it)->viewport - 1);
 			}
 
-			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			int accept_key;
+			App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_confirm, &accept_key);
+			if (App->input->GetControllerButton((*it)->controller_index, accept_key) == KEY_DOWN)
 			{
 				if (shops[(*it)->viewport - 1]->item_selected)
 				{
@@ -378,7 +383,9 @@ bool ShopManager::Update()
 				}
 			}
 
-			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+			int back_key;
+			App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_back, &back_key);
+			if (App->input->GetControllerButton((*it)->controller_index, back_key) == KEY_DOWN)
 			{
 				if (shops[(*it)->viewport - 1]->item_selected)
 				{

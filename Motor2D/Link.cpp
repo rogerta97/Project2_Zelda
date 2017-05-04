@@ -45,25 +45,25 @@ Link::Link(iPoint pos)
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);
-	a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
+	a1->SetImages({816, 351, 80, 48}, { 816, 473, 80, 48 }, { 1013, 1960, 80, 48 }, { 0,0,0,0 });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
 	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);
-	a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
+	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, {0, 0, 0, 0});
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
 	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); // Name references to the Spell name
-	a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); 
+	a3->SetImages({ 816, 399, 48, 73 }, { 816, 521, 48, 73 }, { 1013, 2008, 48, 73 }, {0, 0, 0, 0});
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
-	a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+	a4->SetImages({ 864, 399, 48, 73 }, { 864, 521,48, 73 }, { 1061, 2008, 48, 73 }, { 0,0,0,0 });
 	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -157,9 +157,13 @@ bool Link::Update(float dt)
 			{
 				// Update quests
 				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
+
+				//Add kill to killer
+				App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].kills++;
 			}
 			
 			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
 		}
 	}
 

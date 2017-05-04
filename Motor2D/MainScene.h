@@ -29,6 +29,31 @@ enum GameStates
 
 };
 
+enum PauseUIStates
+{
+	p_e_resume, 
+	p_e_quit, 
+	p_e_null, 
+};
+
+struct PauseUI
+{
+	UI_Image*			resume_background = nullptr;
+	UI_Text*			resume_text = nullptr;
+
+	UI_Image*			quit_background = nullptr;
+	UI_Text*			quit_text = nullptr;
+
+	UI_Image*			cursor_1 = nullptr;
+	UI_Image*			cursor_2 = nullptr;
+
+	PauseUIStates		cursor_state = p_e_null; 
+
+	void				SetPauseUI(bool ui_state); 
+	void				MoveCursor(); 
+	void				UpdatePause(); 
+};
+
 struct MinimapState 
 {
 	UI_Image* stats_back_image = nullptr; 
@@ -46,7 +71,7 @@ struct MinimapState
 
 struct MainSceneViewport
 {
-	UI_Window*			main_window = nullptr;
+	UI_Window*			viewport_window = nullptr;
 	UI_Image*			princess = nullptr;
 	UI_Image*			progress_bar = nullptr;
 	UI_Image*			rupiees_img = nullptr;
@@ -82,6 +107,8 @@ private:
 
 	void UpdateWinnerAnim(uint winner, float dt);
 
+	void GetPlayerItemsRects();
+
 public:
 
 	MinionManager*		minion_manager = nullptr;
@@ -100,6 +127,8 @@ public:
 	vector<MainSceneViewport>	ui_viewports;
 
 private:
+
+	UI_Window*			main_scene_window = nullptr;
 	
 	vector<PhysBody*>	map_collisions;
 
@@ -112,6 +141,10 @@ private:
 
 	Animator*			victory = nullptr;
 	Animator*			defeat = nullptr;
+
+	// Pause UI
+
+	PauseUI				pause_ui; 
 
 };
 

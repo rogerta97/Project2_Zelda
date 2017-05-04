@@ -20,8 +20,6 @@ enum button_action
 	REMAP
 };
 
-
-
 class MenuScene : public Scene
 {
 public:

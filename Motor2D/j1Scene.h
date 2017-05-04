@@ -25,6 +25,13 @@ struct player_info
 	entity_name		character = e_n_null;
 	Mapping*		mapping = nullptr;
 
+	uint			kills = 0;
+	uint			deaths = 0;
+	uint			minions = 0;
+	uint			towers = 0;
+
+	SDL_Rect		items_rects[3] = { {0,0,0,0},{ 0,0,0,0 },{ 0,0,0,0 } };
+
 	void Reset() { gamepad = 5; viewport = 5;  team = 3; player = 5; character = e_n_null; };
 };
 

@@ -33,13 +33,13 @@
   </victory_animations>
   <death_text>
     <anim speed = "10" name = "idle" loop = "true" texture = "gui/UI_sheet_final.png">
-      <rect x = "0" y = "1050" w = "262" h = "26"/>
-      <rect x = "0" y = "1080" w = "362" h = "26"/>
-      <rect x = "0" y = "1110" w = "362" h = "26"/>
-      <rect x = "0" y = "1140" w = "362" h = "26"/>
-      <rect x = "0" y = "1170" w = "362" h = "26"/>
-      <rect x = "0" y = "1200" w = "362" h = "26"/>
-      <rect x = "0" y = "1220" w = "362" h = "26"/>
+      <rect x = "0" y = "1048" w = "262" h = "28"/>
+      <rect x = "0" y = "1076" w = "262" h = "28"/>
+      <rect x = "0" y = "1104" w = "262" h = "28"/>
+      <rect x = "0" y = "1132" w = "262" h = "28"/>
+      <rect x = "0" y = "1160" w = "262" h = "28"/>
+      <rect x = "0" y = "1188" w = "262" h = "28"/>
+      <rect x = "0" y = "1216" w = "262" h = "28"/>
     </anim>
   </death_text>
 </file>

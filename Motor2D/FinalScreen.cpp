@@ -54,18 +54,37 @@ bool FinalScreen::Start()
 
 	for (int i = 0; i < 4; i++)
 	{
+		// I don't like that...
+		int index = i;
+		if (i == 1)
+			index = 2;
+		else if (i == 2)
+			index = 1;
+		// -----
+
 		final_screen_player_info new_info; 
 
-		new_info.deaths = 0; 
-		new_info.kills = 0;
-		new_info.minions = 0;
-		new_info.towers = 0;
+		new_info.deaths = App->scene->players[index].deaths; 
+		new_info.kills = App->scene->players[index].kills;
+		new_info.minions = App->scene->players[index].minions;
+		new_info.towers = App->scene->players[index].towers;
 
-		new_info.items[0] = placeholder_item;
-		new_info.items[1] = placeholder_item;
-		new_info.items[2] = placeholder_item;
+		new_info.items[0] = App->scene->players[index].items_rects[0];
+		new_info.items[1] = App->scene->players[index].items_rects[1];
+		new_info.items[2] = App->scene->players[index].items_rects[2];
 
-		new_info.character_name = "link"; 
+		switch (App->scene->players[index].character)
+		{
+		case link:
+			new_info.character_name = "link";
+			break;
+		case ganon:
+			new_info.character_name = "ganon";
+			break;
+		case navi:
+			new_info.character_name = "navi";
+			break;
+		}
 
 		player_info.push_back(new_info); 
 	} 
@@ -179,13 +198,13 @@ void final_screen_element::SetInfo(final_screen_player_info player_info)
 	towers_num->SetText(towers_num_str);
 
 	if (player_info.character_name == "link")
-		character_image->image = {0, 2272, 108, 96};
+		character_image->image = { 0, 2272, 108, 96 };
 
 	else if (player_info.character_name == "ganon")
-		character_image->image = placeholder_character;
+		character_image->image = { 216,2362,108,96 };
 
 	else if (player_info.character_name == "navi")
-		character_image->image = { 216, 2272, 108, 96 };
+		character_image->image = { 216, 2272, 108, 90 };
 
 	item_images_1->image = player_info.items[0]; 
 	item_images_2->image = player_info.items[1];
