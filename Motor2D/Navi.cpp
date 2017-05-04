@@ -46,17 +46,16 @@ Navi::Navi(iPoint pos)
 	stats.base_power = stats.power = stats_node.attribute("power").as_int();
 	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
 
-	float cd = stats_node.child("ability1").attribute("cd").as_float();
-	float dmg_mult;
-	float bd;
+	float dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
+	float cd = stats_node.child("ability2").attribute("cd").as_float();
+	float bd = stats_node.child("ability2").attribute("bd").as_int();
 	heal = stats_node.child("ability1").attribute("heal").as_float();
-	Ability* a1 = AddAbility(0, cd, 0, 0, "navi_basic_attack");
+	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
 	a1->SetImages({ 816, 351, 80, 48 }, { 816, 473, 80, 48 }, { 1013, 1960, 80, 48 }, { 0,0,0,0 });
 
-	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
-	bd = stats_node.child("ability2").attribute("bd").as_int();
-	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);
+	heal = stats_node.child("ability1").attribute("heal").as_float();
+	Ability* a2 = AddAbility(1, cd, 0, 0);
 	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, { 0,0,0,0 });
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();

@@ -152,7 +152,7 @@ bool j1App::Start()
 
 	debug_mode = false;
 
-	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 1, false);
+	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 9999999, false);
 	debug_colored_rect = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 0), 200, 115, { 20, 20, 20, 255 }, true);
 	debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 5), App->font->default_15, 15); debug_text->click_through = true;
 	

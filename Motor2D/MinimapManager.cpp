@@ -39,7 +39,7 @@ bool MinimapManager::Start()
 	SDL_Texture* minimap_texture = App->tex->LoadTexture("gui/UI_sheet_final.png");
 	iPoint minimap_pos = {(int)(view.w*0.5) - (int)(minimap_rect.w * 0.5), (int)(view.h*0.5) - (int)(minimap_rect.h * 0.5) };
 
-	SDL_Rect real_map_rect = {430, -80, 4490, 2500}; // X and Y are for the map offset
+	SDL_Rect real_map_rect = {430, -80, 4490, 2300}; // X and Y are for the map offset
 	SDL_Texture* minimap_points_texture = minimap_texture;
 
 	if (minimap_texture != nullptr && minimap_points_texture != nullptr)

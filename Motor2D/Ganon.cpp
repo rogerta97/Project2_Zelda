@@ -20,10 +20,9 @@ Ganon::Ganon(iPoint pos)
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(30, 40), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_player, 0);
 	game_object->SetHitBoxSize(80, 80); 
 
-	game_object->CreateCollisionSensor(iPoint(5,2), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollisionSensor(iPoint(0,0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 
-	uint w = 70, h = 30; 
-	ganon_collision = game_object->CreateCollision(iPoint(0,10), w, h, fixture_type::f_t_collision_box);
+	ganon_collision = game_object->CreateCollision(iPoint(0, 10), 70, 30, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
@@ -67,7 +66,7 @@ Ganon::Ganon(iPoint pos)
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	draw_offset = restore_draw_offset = {  50,  48 };
+	draw_offset = restore_draw_offset = { 56,  48 };
 
 	blit_layer = 2;
 
@@ -320,6 +319,8 @@ void Ganon::RunUp()
 		else
 			game_object->SetAnimation("run_up_2");
 		flip = false;
+
+		draw_offset = { 54,  60 };
 	}
 }
 
@@ -332,6 +333,9 @@ void Ganon::RunDown()
 		else
 			game_object->SetAnimation("run_down_2");
 		flip = false;
+
+
+		draw_offset = restore_draw_offset;
 	}
 }
 
@@ -344,6 +348,8 @@ void Ganon::RunLeft()
 		else
 			game_object->SetAnimation("run_lateral_2");
 		flip = true;
+
+		draw_offset = { 56,  44 };
 	}
 }
 
@@ -356,6 +362,8 @@ void Ganon::RunRight()
 		else
 			game_object->SetAnimation("run_lateral_2");
 		flip = false;
+
+		draw_offset = { 56,  44 };
 	}
 }
 
@@ -368,6 +376,8 @@ void Ganon::IdleUp()
 		else
 			game_object->SetAnimation("idle_up_2");
 		flip = false;
+
+		draw_offset = { 54,  60 };
 	}
 }
 
@@ -380,6 +390,8 @@ void Ganon::IdleDown()
 		else
 			game_object->SetAnimation("idle_down_2");
 		flip = false;
+
+		draw_offset = restore_draw_offset;
 	}
 }
 
@@ -392,6 +404,8 @@ void Ganon::IdleLeft()
 		else
 			game_object->SetAnimation("idle_lateral_2");
 		flip = true;
+
+		draw_offset = { 56,  44 };
 	}
 }
 
@@ -404,6 +418,8 @@ void Ganon::IdleRight()
 		else
 			game_object->SetAnimation("idle_lateral_2");
 		flip = false;
+
+		draw_offset = { 56,  44 };
 	}
 }
 
