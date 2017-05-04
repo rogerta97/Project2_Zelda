@@ -66,9 +66,22 @@ bool PlayerManager::Start()
 	death_text_anim->SetAnimation("idle"); 
 	// ---------------
     
+	int count = 0; 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
 		PlayerManagerUI ui_elements;
+
+		if (count == 0)
+		{
+			ability1_pos.y -= 10; 
+			ability3_pos.y -= 10;
+
+		}
+		else if (count == 1)
+		{
+			ability2_pos.y -= 10;
+			ability4_pos.y -= 10;
+		}
 
 		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability1_pos, { 0,0,0,0 })); 
 		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability2_pos, { 0,0,0,0 }));
@@ -76,9 +89,22 @@ bool PlayerManager::Start()
 		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability4_pos, { 0,0,0,0 }));
 
 		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability1_pos.x + 20, ability1_pos.y + 7 }, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability2_pos.x + 21, ability2_pos.y + 6}, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability3_pos.x + 9, ability3_pos.y + 21}, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability4_pos.x + 7, ability4_pos.y + 21}, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability2_pos.x + 21, ability2_pos.y + 6 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability3_pos.x + 9, ability3_pos.y + 21 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability4_pos.x + 7, ability4_pos.y + 21 }, { 0,0,0,0 }));
+
+		if (count == 0)
+		{
+			ability1_pos.y += 10;
+			ability3_pos.y += 10;
+		}
+		else if (count == 1)
+		{
+			ability2_pos.y += 10;
+			ability4_pos.y += 10;
+		}
+
+	
 				   
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text1_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text2_pos, text_font));
@@ -89,6 +115,7 @@ bool PlayerManager::Start()
 		ui_elements.death_time->enabled = false; ui_elements.death_time->blit_layer = 9999;
 			   
 		p_manager_ui_elements.push_back(ui_elements);
+		count++; 
 	}
 	// ---------------------
 

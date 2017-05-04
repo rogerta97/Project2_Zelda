@@ -75,9 +75,13 @@ bool MainScene::Start()
 
 	MainSceneViewport curr_viewport;
 
+	int count = 0; 
 	for (int i = 0; i < 4;i++)
 	{
 		MainSceneViewport curr_viewport;
+
+		if (count == 2)
+			minimap_pos.y += 10; 
 
 		// Player UI
 		curr_viewport.viewport_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
@@ -86,7 +90,6 @@ bool MainScene::Start()
 		curr_viewport.minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
 		curr_viewport.win_text = curr_viewport.viewport_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
-
 
 		// Minimap UI
 		curr_viewport.minimapstate.stats_back_image = curr_viewport.viewport_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
@@ -141,6 +144,7 @@ bool MainScene::Start()
 		curr_viewport.minimapstate.Disable(); 
 
 		ui_viewports.push_back(curr_viewport);
+		count++;
 	}
 	// ------------------
 
@@ -155,7 +159,7 @@ bool MainScene::Start()
 
 	// Common UI
 	progress_bar = main_scene_window->CreateImage(iPoint(w / 2 - 192, h / 2 - 12), { 0, 28, 385, 24 });
-	princess = main_scene_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 5), { 0,0,32,28 });
+	princess = main_scene_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 2), { 0,0,32,28 });
 
 	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
 
