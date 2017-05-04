@@ -60,10 +60,13 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	SDL_Rect GetPlayerItem(int player_index, int item_index);
+
 private:
 	void ChangeShopState(int view);
 	void UpdateItemInfo(int view);
 	void UpdatePlayerItems(int view, Player* player);
+
 
 public:
 	UI_Window*		shop_window = nullptr;

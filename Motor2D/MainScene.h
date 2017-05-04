@@ -59,21 +59,38 @@ struct MinimapState
 	UI_Image* stats_back_image = nullptr; 
 
 	UI_Text* hp_text = nullptr;
-	UI_Text* power_text = nullptr;
-	UI_Text* speed_text = nullptr;
-	UI_Text* kills_text = nullptr;
-	UI_Text* minions_text = nullptr;
+	UI_Text* hp_num = nullptr; 
 
-	void Enable();
-	void Disable();
+	UI_Text* power_text = nullptr;
+	UI_Text* power_num = nullptr;
+
+	UI_Text* speed_text = nullptr;
+	UI_Text* speed_num = nullptr;
+
+	UI_Text* kills_text = nullptr;
+	UI_Text* kills_num = nullptr;
+
+	UI_Text* minions_text = nullptr;
+	UI_Text* minions_num = nullptr;
+
+	UI_Image* items_background = nullptr; 
+	UI_Text*  items_text = nullptr; 
+
+	UI_Image* item_1_img = nullptr; 
+	UI_Image* item_2_img = nullptr;
+	UI_Image* item_3_img = nullptr;
+
+	void Enable(); 
+	void Disable(); 
+
+	// Sets the number of the player stats 
+	void SetPlayerStats(int player);
 
 };
 
 struct MainSceneViewport
 {
 	UI_Window*			viewport_window = nullptr;
-	UI_Image*			princess = nullptr;
-	UI_Image*			progress_bar = nullptr;
 	UI_Image*			rupiees_img = nullptr;
 	UI_Image*			minimap_icon = nullptr;
 	UI_Image*			win_text = nullptr;
@@ -124,6 +141,9 @@ public:
 
 	// UI Elements
 	vector<MainSceneViewport>	ui_viewports;
+
+	UI_Image*			progress_bar = nullptr;
+	UI_Image*			princess = nullptr;
 
 private:
 	UI_Window*			main_scene_window = nullptr;

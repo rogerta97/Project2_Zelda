@@ -416,6 +416,11 @@ void PlayerManager::AllowInput(int player)
 	}
 }
 
+Entity* PlayerManager::GetPlayer(int index)
+{
+	return players.at(index)->entity; 
+}
+
 void PlayerManager::PlayerInput(Player * curr_player, int index)
 {
 	// Get abilities mapping
