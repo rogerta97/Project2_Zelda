@@ -48,6 +48,9 @@ public:
 	// Inputs rotation in degrees and rotates the GameObject
 	void SetRotation(float angle);
 
+	// Sets the size of the sensor 
+	void SetHitBoxSize(uint w, uint h);
+
 	// Enable or disable the ability to rotate of the GameObject
 	void SetFixedRotation(bool set);
 
@@ -86,6 +89,9 @@ public:
 
 	// Adds a circle shape to the current body
 	b2Fixture* CreateCollision(iPoint offset, int rad, fixture_type type);
+
+	// Adds a rectangular shape to the current body
+	b2Fixture * CreateCollision(iPoint offset, iPoint dim, fixture_type type);
 
 	// Adds a chain shape shape to the current body
 	b2Fixture* CreateCollision(iPoint offset, int* data, int size, fixture_type type);

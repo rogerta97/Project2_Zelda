@@ -9,20 +9,24 @@ TowerManager::TowerManager()
 {
 	//Team 1 towers
 	std::vector<iPoint> tower_positions1 = App->map->GetTowerSpawns(1);
-	Tower* t1 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[0]);
+	t1 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[0]);
 	t1->SetTeam(1);
 	team1_towers.push_back(t1);
-	Tower* t2 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[1]);
+	t2 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[1]);
 	t2->SetTeam(1);
+	t_Invulnerable(t2);
+	SetHP(t2, t2->stats.base_hp + 100);
 	team1_towers.push_back(t2);
 
 	//Team 2 towers
 	std::vector<iPoint> tower_positions2 = App->map->GetTowerSpawns(2);
-	Tower* t3 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[0]);
+	t3 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[0]);
 	t3->SetTeam(2);
 	team2_towers.push_back(t3);
-	Tower* t4 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[1]);
+	t4 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[1]);
 	t4->SetTeam(2);
+	t_Invulnerable(t4);
+	SetHP(t4, t4->stats.base_hp + 100);
 	team2_towers.push_back(t4);
 
 	//to-improve: using for loop to create towers inside
@@ -97,6 +101,11 @@ void TowerManager::KillTower(Entity * tower)
 		{
 			if (tower == (*it))
 			{
+				if (tower == t1)
+				{
+					t2->show_life_bar = true;
+					t2->invulnerable = false;
+				}
 				team1_towers.erase(it);
 				break;
 			}
@@ -111,6 +120,11 @@ void TowerManager::KillTower(Entity * tower)
 		{
 			if (tower == (*it))
 			{
+				if (tower = t3)
+				{
+					t4->show_life_bar = true;
+					t4->invulnerable = false;
+				}
 				team2_towers.erase(it);
 				break;
 			}
@@ -123,4 +137,36 @@ void TowerManager::KillTower(Entity * tower)
 	}
 
 	App->audio->PlayFx(death_sound_effect, 0);
+}
+
+void TowerManager::SetHP(Entity * tower, uint hp)
+{
+	tower->stats.base_hp = tower->stats.max_life = tower->stats.life = hp;
+}
+
+void TowerManager::t_Invulnerable(Entity * tower)
+{
+	tower->SetInvulnerable();
+}
+
+bool TowerManager::TowersAlive(uint team)
+{
+	bool ret = true;
+
+	switch (team)
+	{
+	case 1:
+		if (team1_towers.empty())
+			ret = false;
+		break;
+	case 2:
+		if (team2_towers.empty())
+			ret = false;
+		break;		
+	default:
+		ret = true;
+		break;
+	}
+
+	return ret;
 }

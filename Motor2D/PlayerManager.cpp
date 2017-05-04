@@ -3,6 +3,7 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Map.h"
+#include "j1XMLLoader.h"
 #include "GameObject.h"
 #include "j1Audio.h"
 
@@ -47,7 +48,16 @@ bool PlayerManager::Start()
 
 	death_rect_color = { 32, 32, 32, 100 };
 	death_rect = { 0, 0, screen.w ,  screen.h };
-	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
+	iPoint death_text_pos = { int(screen.w*0.5f) - 131, int(screen.h*0.5f) - 13 };
+
+	pugi::xml_document doc; 
+	death_text_anim = new Animator(); 
+
+	App->xml->LoadXML("GameSettings.xml", doc);
+
+	death_text_anim->LoadAnimationsFromXML(doc, "death_text"); 
+
+	death_text_anim->SetAnimation("idle"); 
 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
@@ -62,8 +72,8 @@ bool PlayerManager::Start()
 		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text2_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text3_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text4_pos, text_font));
-				   
-		ui_elements.death_text = it->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
+			   
+		ui_elements.death_text = it->main_window->CreateImage(death_text_pos, NULLRECT, false);
 		ui_elements.death_text->enabled = false; 
 		ui_elements.death_text->blit_layer += 1;
 		p_manager_ui_elements.push_back(ui_elements);
@@ -125,7 +135,7 @@ bool PlayerManager::Update(float dt)
 			CheckIfRespawn(curr_player);
 
 			// Update death text
-			UpdateDeathUI(curr_player);
+			UpdateDeathUI(i, dt);
 		}
 	}
 
@@ -164,9 +174,13 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 		
 		position = GetFreePlayerSpawn(team, respawn);
-		position.x += 16;
-		position.y += 9;
 
+		if (name != ganon)
+		{
+			position.x += 16;
+			position.y += 9;
+		}
+	
 		// Create player
 		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
@@ -1080,14 +1094,12 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	// --------------
 }
 
-void PlayerManager::UpdateDeathUI(Player * player)
+void PlayerManager::UpdateDeathUI(int player, float dt)
 {
-	string str("You have been slain, respawn time ");
-	int time = player->death_time + 1 - player->death_timer->ReadSec();
-	 
-	str += std::to_string(time);
+	SDL_Rect death_rect = death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt); 
 
-	p_manager_ui_elements.at(player->viewport - 1).death_text->SetText(str);
+	p_manager_ui_elements[player].death_text->image = death_rect; 
+
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)

@@ -82,6 +82,7 @@ bool MainScene::Start()
 		curr_viewport.win_text = curr_viewport.main_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
 
+
 		// Minimap UI
 		curr_viewport.minimapstate.stats_back_image = curr_viewport.main_window->CreateImage(stats_back_img_pos, stats_back_img_rect); 
 		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
@@ -272,7 +273,7 @@ bool MainScene::Update(float dt)
 			UpdateWinnerAnim(winner, dt);
 		else
 			UpdateWinnerAnim(winner, 0);
-	}
+	}		
 
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
@@ -543,20 +544,20 @@ void MainScene::UpdateWinnerAnim(uint winner, float dt)
 	case 1:	
 		ui_viewports.at(0).win_text->image = win_rect;	
 
-		ui_viewports.at(1).win_text->image = win_rect;
+		ui_viewports.at(1).win_text->image = lose_rect;
 
-		ui_viewports.at(2).win_text->image = lose_rect;
+		ui_viewports.at(2).win_text->image = win_rect;
 
 		ui_viewports.at(3).win_text->image = lose_rect;
 		break;
 	case 2:
-		ui_viewports.at(0).win_text->image = win_rect;
+		ui_viewports.at(0).win_text->image = lose_rect;
 
 		ui_viewports.at(1).win_text->image = win_rect;
 
 		ui_viewports.at(2).win_text->image = lose_rect;
 
-		ui_viewports.at(3).win_text->image = lose_rect;
+		ui_viewports.at(3).win_text->image = win_rect;
 		break;
 	default:
 		break;

@@ -194,6 +194,14 @@ void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 	}
 }
 
+void Entity::SetInvulnerable()
+{
+	invulnerable = true;
+
+	show_life_bar = false;
+
+}
+
 float Ability::GetCdTimeLeft()
 {
 	float ret = cd - cd_timer->ReadSec();

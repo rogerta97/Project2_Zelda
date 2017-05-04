@@ -9,12 +9,11 @@ public:
 	BaseManager();
 	~BaseManager();
 
+	bool Update();
 	bool CleanUp();
 	void KillBase(Base* base);
 
-private:
-
-public:
+	void b_Invulnerable(Base* base);
 
 private:
 	Base* team1 = nullptr;

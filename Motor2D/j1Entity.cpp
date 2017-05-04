@@ -15,6 +15,7 @@
 #include "j1Timer.h"
 #include "Zelda.h"
 #include "Base.h"
+#include "Ganon.h"
 #include "Eyes.h"
 #include "Snakes.h"
 #include "Skeleton.h"
@@ -377,6 +378,9 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 		break;
 	case cuco:
 		ret = new Cuco(pos);
+		break;
+	case ganon:
+		ret = new Ganon(pos);
 		break;
 	default:
 		break;

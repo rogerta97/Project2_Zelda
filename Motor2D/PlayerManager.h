@@ -87,7 +87,7 @@ struct PlayerManagerUI
 {
 	vector<UI_Image*>	abilities;
 	vector<UI_Text*>    abilities_cd;
-	UI_Text*			death_text;
+	UI_Image*			death_text = nullptr; 
 };
 
 class PlayerManager
@@ -146,7 +146,7 @@ private:
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
-	void UpdateDeathUI(Player* player);
+	void UpdateDeathUI(int player, float dt);
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
 
@@ -165,6 +165,8 @@ private:
 	uint					last_heal_time = 0;
 
 	uint			     	death_sound_effect = 100;
+
+	Animator*				death_text_anim = nullptr; 
 };
 
 
