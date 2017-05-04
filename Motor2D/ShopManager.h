@@ -48,6 +48,8 @@ struct shop
 	bool				active = false;
 
 	UI_Image*			shop_icon = nullptr;
+
+	Animator*		shop_icon_anim = nullptr;
 };
 
 class ShopManager
@@ -74,8 +76,6 @@ public:
 
 private:
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
-
-	Animator*		shop_icon_anim = nullptr;
 };
 
 #endif // !_SHOPMANAGER_H_
