@@ -32,6 +32,14 @@ struct fire
 	bool		to_die = false;
 };
 
+struct entity_hit
+{
+	void CleanUp();
+
+	Entity*		entity = nullptr;
+	j1Timer*	hit_timer = nullptr;
+};
+
 class GanonBat : public Spell
 {
 public:
@@ -58,14 +66,17 @@ public:
 		return true;
 	}
 
-	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	void Set(g_b_direction dir);
 
 	void Effects(Entity* entity, Ability * ability);
 
+	void DeleteEntityFromHitList(Entity* entity);
+
 private:
 	void CreateFire(iPoint pos);
+	bool CanDealDamage(Entity* entity);
 
 private:
 	g_b_direction   dir = g_b_direction::g_b_null;
@@ -75,6 +86,7 @@ private:
 	j1Timer*		timer = nullptr;
 
 	vector<fire>    fires;
+	vector<entity_hit> entities_hit;
 
 	iPoint			last_spawn_pos = NULLPOINT;
 

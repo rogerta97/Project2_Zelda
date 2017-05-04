@@ -130,18 +130,8 @@ bool Minion::Update(float dt)
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 		}
-	}
 
-	if (stats.life <= 0 && !to_delete)
-	{
-		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-		App->scene->main_scene->minion_manager->KillMinion(this);
-
-		if (entity != nullptr && entity->is_player && entity != nullptr)
-		{
-			//Add kill to killer
-			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].minions++;
-		}
+		Die(entity);
 	}
 
 	return ret;
@@ -304,6 +294,21 @@ void Minion::SetBasePath(std::list<iPoint>& path)
 	for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
 	{
 		base_path.push_back(*it);
+	}
+}
+
+void Minion::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->minion_manager->KillMinion(this);
+
+		if (killed_by != nullptr && killed_by->is_player && killed_by != nullptr)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].minions++;
+		}
 	}
 }
 

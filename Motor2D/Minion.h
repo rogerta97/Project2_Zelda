@@ -75,6 +75,8 @@ public:
 
 	void SetBasePath(std::list<iPoint>& path);
 
+	void Die(Entity* killed_by);
+
 private:
 
 	void MinionIdle();

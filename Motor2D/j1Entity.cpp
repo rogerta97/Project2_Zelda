@@ -780,7 +780,7 @@ void j1Entity::WinRupeesPlayers(float dt)
 			}
 			else
 			{
-				App->view->LayerBlit((*it).player->entity->GetPos().y, entity_effects_texture, { (*it).player->entity->GetPos().x - ((*it).player->entity->game_object->GetHitBoxSize().x / 2) + 8, (*it).player->entity->GetPos().y - 90 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
+				App->view->LayerBlit((*it).player->entity->GetPos().y, entity_effects_texture, { (*it).player->entity->GetPos().x - 8, (*it).player->entity->GetPos().y - (*it).player->entity->game_object->GetHitBoxSize().y/2 - 75 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
 				++it;
 			}
 		}

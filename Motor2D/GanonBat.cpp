@@ -11,11 +11,12 @@
 
 #define DROP_DISTANCE 35
 #define FIRE_DESTRUCTION_TIME 3.0f
+#define HIT_TIME 0.7
 
 GanonBat::GanonBat(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_ABILITIES, App->cf->MASK_ABILITIES, pbody_type::p_t_ganon_bat, 0);
-	hit_box = game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
+	hit_box = game_object->CreateCollisionSensor(iPoint(5, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
@@ -34,7 +35,7 @@ GanonBat::GanonBat(iPoint pos)
 
 	//stats.damage_multiplicator = stats_node.attribute("mult").as_float(0.0f);
 
-	draw_offset = restore_draw_offset = { 25, 20 };
+	draw_offset = restore_draw_offset = { 25, 10 };
 
 	name = "ganon_bat";
 
@@ -199,6 +200,24 @@ bool GanonBat::CleanUp()
 
 	App->DeleteGameplayTimer(timer);
 
+	if (!fires.empty())
+	{
+		for (vector<fire>::iterator it = fires.begin(); it != fires.end();)
+		{
+			(*it).CleanUp();
+			it = fires.erase(it);
+		}
+	}
+
+	if (!entities_hit.empty())
+	{
+		for (vector<entity_hit>::iterator it = entities_hit.begin(); it != entities_hit.end();)
+		{
+			(*it).CleanUp();
+			it = entities_hit.erase(it);
+		}
+	}
+
 	return ret;
 }
 
@@ -206,7 +225,7 @@ void GanonBat::CleanSpell()
 {
 }
 
-void GanonBat::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+void GanonBat::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	for (int i = 0; i < fires.size(); i++)
 	{
@@ -216,7 +235,11 @@ void GanonBat::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtu
 
 			if (e != nullptr && owner != nullptr &&  e != owner && e->GetTeam() != owner->GetTeam() && !owner->to_delete)
 			{
-				e->DealDamage((owner->stats.power * fire_mult) + (fire_bd));
+				if (CanDealDamage(e))
+				{
+					e->DealDamage((owner->stats.power * fire_mult) + (fire_bd));
+					e->Die(owner);
+				}
 			}
 
 			break;
@@ -234,12 +257,33 @@ void GanonBat::Effects(Entity * entity, Ability * ability)
 
 }
 
+void GanonBat::DeleteEntityFromHitList(Entity * entity)
+{
+	if (entity == nullptr)
+		return;
+
+	if (!entities_hit.empty())
+	{
+		for (vector<entity_hit>::iterator it = entities_hit.begin(); it != entities_hit.end();)
+		{
+			if ((*it).entity == entity)
+			{
+				(*it).CleanUp();
+				it = entities_hit.erase(it);
+				break;
+			}
+			else
+				++it;
+		}
+	}
+}
+
 void GanonBat::CreateFire(iPoint pos)
 {
 	fire f;
 
 	GameObject* g_o = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_ABILITIES, App->cf->MASK_ABILITIES, pbody_type::p_t_ganon_bat, 0);
-	hit_box = g_o->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
+	hit_box = g_o->CreateCollisionSensor(iPoint(0, +10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_attack);
 	g_o->SetListener((j1Module*)App->entity);
 	g_o->SetListener((j1Module*)App->spell);
 	g_o->SetFixedRotation(true);
@@ -260,10 +304,46 @@ void GanonBat::CreateFire(iPoint pos)
 	fires.push_back(f);
 }
 
+bool GanonBat::CanDealDamage(Entity * entity)
+{
+	bool ret = true;
+
+	if (entity == nullptr)
+		return false;
+
+	for (int i = 0; i < entities_hit.size(); i++)
+	{
+		if (entity == entities_hit.at(i).entity)
+		{
+			if (entities_hit.at(i).hit_timer->ReadSec() < HIT_TIME)
+			{
+				return false;
+			}
+			else
+			{
+				entities_hit.at(i).hit_timer->Start();
+				return true;
+			}
+		}
+	}
+
+	entity_hit eh;
+	eh.entity = entity;
+	eh.hit_timer = App->AddGameplayTimer();
+	entities_hit.push_back(eh);
+
+	return ret;
+}
+
 void fire::CleanUp()
 {
 	game_object->CleanUp();
 	RELEASE(game_object);
 
 	App->DeleteGameplayTimer(death_timer);
+}
+
+void entity_hit::CleanUp()
+{
+	App->DeleteGameplayTimer(hit_timer);
 }

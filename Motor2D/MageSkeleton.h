@@ -44,6 +44,8 @@ public:
 
 	iPoint GetPos() const;
 
+	void Die(Entity* killed_by);
+
 private:
 	void Idle();
 	void DoAttack();

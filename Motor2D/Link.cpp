@@ -149,22 +149,8 @@ bool Link::Update(float dt)
 				}
 			}
 		}
-	}
 
-	// Dies
-	if (stats.life <= 0 && !to_delete && entity != nullptr)
-	{
-		if (entity->is_player)
-		{
-			// Update quests
-			App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
-
-			//Add kill to killer
-			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].kills++;
-		}
-
-		App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
+		Die(entity);
 	}
 
 	// Ability3 movement ------------------------------
@@ -812,6 +798,25 @@ void Link::SetCamera(int id)
 iPoint Link::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Link::Die(Entity * killed_by)
+{
+	// Dies
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		if (killed_by->is_player)
+		{
+			// Update quests
+			App->scene->main_scene->quest_manager->DeathQuestEvent(killed_by, this);
+
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].kills++;
+		}
+
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
+	}
 }
 
 void Link::CreateAbility3Test()

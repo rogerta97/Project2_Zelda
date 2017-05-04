@@ -101,6 +101,8 @@ public:
 
 	iPoint GetPos() const;
 
+	void Die(Entity* killed_by);
+
 private:
 	//void CreateAbility3Test();
 	//void DeleteAbility3Test();

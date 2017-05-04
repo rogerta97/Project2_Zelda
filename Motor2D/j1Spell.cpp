@@ -137,6 +137,16 @@ void j1Spell::ListenEvent(int type, EventThrower * origin, int id)
 		if (curr_event->event_data.entity != nullptr)
 		{
 			DeleteSpellIfTarget(curr_event->event_data.entity);
+
+			// Delete from ganon bat timer checker
+			for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+			{
+				if ((*it)->type == spell_name::ganon_bat)
+				{
+					GanonBat* gb = (GanonBat*)(*it);
+					gb->DeleteEntityFromHitList(curr_event->event_data.entity);
+				}
+			}
 		}
 	}
 }
@@ -170,9 +180,14 @@ Spell * j1Spell::CreateSpell(spell_name spell, iPoint pos, Entity * owner)
 		break;
 	}
 	
-	ret->owner = owner;
-	ret->Start();
-	spell_list.push_back(ret);
+	if (ret != nullptr)
+	{
+		ret->type = spell;
+		ret->owner = owner;
+		ret->Start();
+		spell_list.push_back(ret);
+	}
+
 	return ret;
 }
 

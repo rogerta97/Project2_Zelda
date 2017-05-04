@@ -332,6 +332,8 @@ public:
 
 	void SetAbilityImages(int ability_id, SDL_Rect icon_rect); 
 
+	virtual void Die(Entity* killed_by) {};
+
 private:
 	
 private:
