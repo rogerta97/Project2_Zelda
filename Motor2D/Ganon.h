@@ -5,6 +5,12 @@
 
 class GameObject;
 
+struct ball
+{
+	GameObject* game_object = nullptr;
+	int			angle = 0;
+};
+
 class Ganon : public Entity
 {
 public:
@@ -91,9 +97,9 @@ public:
 	//void ShowAbility3Left();
 	//void ShowAbility3Right();
 
-	//// On Collision
+	// On Collision
 	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	//void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	//void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	//Set Camera to this player. 1<=id<=4
@@ -104,19 +110,22 @@ public:
 	void Die(Entity* killed_by);
 
 private:
-	//void CreateAbility3Test();
-	//void DeleteAbility3Test();
+	void CreateAbility2Balls();
+	void DeleteAbility2BallByPbody(PhysBody* body);
+	void ClearAbility2Balls();
 public:
 
 private:
 	int		      camera = 1;
 	bool	      flip = false;
 
-	b2Fixture*	  ganon_collision; 
-
 	int			  rupee_reward = 0;
 
+	// Ability2
 	int			  shield = 0;
+	vector<ball>  balls;
+	j1Timer*	  ability2_timer = nullptr;
+	bool		  ability2 = false;
 };
 
 #endif

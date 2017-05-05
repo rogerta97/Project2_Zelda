@@ -20,6 +20,8 @@
 #define ABILITY1_RANGE 260
 
 #define ABILITY2_TIME 7
+#define ABILITY2_RADIOUS 100
+#define ABILITY2_TOTATION_SPEED 300
 
 Ganon::Ganon(iPoint pos)
 {
@@ -28,7 +30,7 @@ Ganon::Ganon(iPoint pos)
 
 	game_object->CreateCollisionSensor(iPoint(0,0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 
-	ganon_collision = game_object->CreateCollision(iPoint(0, 10), 70, 30, fixture_type::f_t_collision_box);
+	game_object->CreateCollision(iPoint(0, 10), 70, 30, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
@@ -76,6 +78,8 @@ Ganon::Ganon(iPoint pos)
 	draw_offset = restore_draw_offset = { 56,  48 };
 
 	blit_layer = 2;
+
+	ability2_timer = App->AddGameplayTimer();
 
 	name = "ganon";
 }
@@ -148,6 +152,26 @@ bool Ganon::Update(float dt)
 		}
 	}
 
+	// Ability2 update
+	if (ability2)
+	{
+		if (ability2_timer->ReadSec() > ABILITY2_TIME)
+		{
+			ability2 = false;
+			ClearAbility2Balls();
+			stats.shield = 0;
+		}
+
+		if (!balls.empty())
+		{
+			for (int i = 0; i < balls.size(); i++)
+			{
+				balls.at(i).angle += ABILITY2_TOTATION_SPEED*dt;
+				fPoint pos = { GetPos().x + (ABILITY2_RADIOUS*cos(DEGTORAD*balls.at(i).angle)), GetPos().y + (ABILITY2_RADIOUS*sin(DEGTORAD*balls.at(i).angle)) };
+				balls.at(i).game_object->SetPos(pos);
+			}
+		}
+	}
 
 	// ------------------------------------------------
 
@@ -158,7 +182,7 @@ bool Ganon::Draw(float dt)
 {
 	bool ret = true;
 
-	LifeBar(iPoint(60, 5), iPoint(-25, -65), stats.shield);
+	LifeBar(iPoint(60, 5), iPoint(-30, -65), stats.shield);
 
 	// Blit
 	if (flip)
@@ -166,6 +190,16 @@ bool Ganon::Draw(float dt)
 	else
 		App->view->LayerBlit(GetPos().y + 15, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
+
+	// Ability2 balls
+	if(!balls.empty())
+	{
+		for (int i = 0; i < balls.size(); i++)
+		{
+			ball curr_ball = balls.at(i);
+			App->view->LayerBlit(curr_ball.game_object->GetPos().y, game_object->GetTexture(), { curr_ball.game_object->GetPos().x - 25, curr_ball.game_object->GetPos().y -15}, game_object->animator->GetAnimation("shield_balls")->GetAnimationFrame(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		}
+	}
 
 	// -------------
 	// End atacking (It's down the blit because of a reason)
@@ -209,6 +243,10 @@ bool Ganon::PostUpdate()
 bool Ganon::CleanUp()
 {
 	bool ret = true;
+
+	ClearAbility2Balls();
+
+	App->DeleteGameplayTimer(ability2_timer);
 
 	return ret;
 }
@@ -546,26 +584,29 @@ void Ganon::ShowAbility1Right()
 void Ganon::Ability2Up()
 {
 	stats.shield = 10;
+	CreateAbility2Balls();
+	ability2 = true;
+	ability2_timer->Start();
 }
 
 void Ganon::Ability2Down()
 {
-	stats.shield = 10;
+	Ability2Up();
 }
 
 void Ganon::Ability2Left()
 {
-	stats.shield = 10;
+	Ability2Up();
 }
 
 void Ganon::Ability2Right()
 {
-	stats.shield = 10;
+	Ability2Up();
 }
 
 void Ganon::ShowAbility2Up()
 {
-	stats.shield = 10;
+	Ability2Up();
 }
 
 void Ganon::ShowAbility2Down()
@@ -578,6 +619,31 @@ void Ganon::ShowAbility2Left()
 
 void Ganon::ShowAbility2Right()
 {
+}
+
+void Ganon::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+	// Balls hitting
+	if (!balls.empty())
+	{
+		for (int i = 0; i < balls.size(); i++)
+		{
+			if (bodyA == balls.at(i).game_object->pbody)
+			{
+				Entity* e = App->entity->FindEntityByBody(bodyB);
+
+				if (e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete)
+				{
+					e->DealDamage((stats.power * GetAbility(2)->damage_multiplicator) + (GetAbility(2)->damage));
+					e->Die(this);
+					DeleteAbility2BallByPbody(bodyA);
+					stats.shield += 10;
+				}
+
+				break;
+			}
+		}
+	}
 }
 
 void Ganon::SetCamera(int id)
@@ -612,4 +678,58 @@ void Ganon::Die(Entity * killed_by)
 		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
 	}
 
+}
+
+void Ganon::CreateAbility2Balls()
+{
+	if (!balls.empty())
+		return;
+
+	ball b;
+
+	for (int i = 1; i <= 3; i++)
+	{
+		int angle = i * 120;
+		iPoint pos = { GetPos().x + (int)(ABILITY2_RADIOUS*cos(DEGTORAD*angle)), GetPos().y + (int)(ABILITY2_RADIOUS*sin(DEGTORAD*angle)) };
+
+		GameObject* g_o = new GameObject(iPoint(pos.x, pos.y), iPoint(20, 20), App->cf->CATEGORY_ABILITIES, App->cf->MASK_ABILITIES, pbody_type::p_t_ganon_bat, 0);
+		g_o->CreateCollisionSensor(iPoint(0, +10), g_o->GetHitBoxSize().x, g_o->GetHitBoxSize().y, fixture_type::f_t_attack);
+		g_o->SetListener((j1Module*)App->entity);
+		g_o->SetListener((j1Module*)App->spell);
+		g_o->SetFixedRotation(true);
+		g_o->pbody->body->SetBullet(true);
+
+		b.game_object = g_o;
+		b.angle = angle;
+
+		balls.push_back(b);
+	}
+}
+
+void Ganon::DeleteAbility2BallByPbody(PhysBody * body)
+{
+	for (vector<ball>::iterator it = balls.begin(); it != balls.end();)
+	{
+		if ((*it).game_object->pbody == body)
+		{
+			(*it).game_object->CleanUp();
+			RELEASE((*it).game_object);
+			it = balls.erase(it);
+		}
+		else
+			++it;
+	}
+}
+
+void Ganon::ClearAbility2Balls()
+{
+	if (!balls.empty())
+	{
+		for (vector<ball>::iterator it = balls.begin(); it != balls.end();)
+		{
+			(*it).game_object->CleanUp();
+			RELEASE((*it).game_object);
+			it = balls.erase(it);
+		}
+	}
 }

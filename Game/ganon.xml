@@ -59,37 +59,6 @@
        <rect x = "248" y = "914" w = "124" h = "75"/>
        <rect x = "0" y = "914" w = "124" h = "75"/>
      </anim>
-     <anim speed = "60" name = "bat_particles" loop = "false">
-      <rect x = "0" y = "268" w = "56" h = "32"/>
-      <rect x = "56" y = "268" w = "56" h = "32"/>
-      <rect x = "112" y = "268" w = "56" h = "32"/>
-      <rect x = "168" y = "268" w = "56" h = "32"/>
-      <rect x = "224" y = "268" w = "56" h = "32"/>
-      <rect x = "280" y = "268" w = "56" h = "32"/>
-      <rect x = "168" y = "268" w = "56" h = "32"/>
-      <rect x = "224" y = "268" w = "56" h = "32"/>
-      <rect x = "280" y = "268" w = "56" h = "32"/>
-      <rect x = "168" y = "268" w = "56" h = "32"/>
-      <rect x = "224" y = "268" w = "56" h = "32"/>
-      <rect x = "280" y = "268" w = "56" h = "32"/>
-      <rect x = "168" y = "268" w = "56" h = "32"/>
-      <rect x = "224" y = "268" w = "56" h = "32"/>
-      <rect x = "280" y = "268" w = "56" h = "32"/>
-     </anim>
-     <anim speed = "60" name = "fire_trail" loop = "false">
-      <rect x = "336" y = "268" w = "56" h = "32"/>
-      <rect x = "392" y = "268" w = "56" h = "32"/>
-      <rect x = "336" y = "268" w = "56" h = "32"/>
-      <rect x = "392" y = "268" w = "56" h = "32"/>
-      <rect x = "336" y = "268" w = "56" h = "32"/>
-      <rect x = "392" y = "268" w = "56" h = "32"/>
-      <rect x = "448" y = "268" w = "56" h = "32"/>
-      <rect x = "504" y = "268" w = "56" h = "32"/>
-       <rect x = "448" y = "268" w = "56" h = "32"/>
-      <rect x = "504" y = "268" w = "56" h = "32"/>
-       <rect x = "448" y = "268" w = "56" h = "32"/>
-      <rect x = "504" y = "268" w = "56" h = "32"/>
-     </anim>
      
      <anim speed = "60" name = "ultimate_attack" loop = "false">
         <rect x = "1" y = "305" w = "140" h = "180"/>
@@ -102,10 +71,14 @@
         <rect x = "285" y = "487" w = "140" h = "180"/>
         <rect x = "285" y = "487" w = "140" h = "180"/>
         <rect x = "285" y = "487" w = "140" h = "180"/>
-
      </anim>
 
-
+     <anim speed = "3" name = "shield_balls" loop = "true">
+       <rect x = "0" y = "268" w = "56" h = "28"/>
+       <rect x = "502" y = "268" w = "56" h = "32"/>
+       <rect x = "448" y = "268" w = "56" h = "32"/>
+       <rect x = "502" y = "268" w = "56" h = "32"/>
+     </anim>
 
 <!--
      <anim speed = "10" name = "run_down_2" loop = "true">
