@@ -87,15 +87,15 @@ public:
 	void ShowAbility2Left();
 	void ShowAbility2Right();
 
-	//void Ability3Up();
-	//void Ability3Down();
-	//void Ability3Left();
-	//void Ability3Right();
+	void Ability3Up();
+	void Ability3Down();
+	void Ability3Left();
+	void Ability3Right();
 
-	//void ShowAbility3Up();
-	//void ShowAbility3Down();
-	//void ShowAbility3Left();
-	//void ShowAbility3Right();
+	void ShowAbility3Up();
+	void ShowAbility3Down();
+	void ShowAbility3Left();
+	void ShowAbility3Right();
 
 	// On Collision
 	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
@@ -113,6 +113,8 @@ private:
 	void CreateAbility2Balls();
 	void DeleteAbility2BallByPbody(PhysBody* body);
 	void ClearAbility2Balls();
+	void MoveCamera();
+	iPoint DrawTarget();
 public:
 
 private:
@@ -126,6 +128,13 @@ private:
 	vector<ball>  balls;
 	j1Timer*	  ability2_timer = nullptr;
 	bool		  ability2 = false;
+	
+	// Ability3
+	bool		  ability3 = false;
+	bool		  look_for_target = false;
+	j1Timer*	  look_for_target_timer = nullptr;
+	iPoint		  target = NULLPOINT;
+	bool		  target_found = false;
 };
 
 #endif

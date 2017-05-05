@@ -60,17 +60,29 @@
        <rect x = "0" y = "914" w = "124" h = "75"/>
      </anim>
      
-     <anim speed = "60" name = "ultimate_attack" loop = "false">
-        <rect x = "1" y = "305" w = "140" h = "180"/>
-        <rect x = "143" y = "305" w = "140" h = "180"/>
-        <rect x = "285" y = "305" w = "140" h = "180"/>
-        <rect x = "427" y = "305" w = "140" h = "180"/>
-        <rect x = "1" y = "487" w = "140" h = "180"/>
-        <rect x = "143" y = "487" w = "140" h = "180"/>
-        <rect x = "285" y = "487" w = "140" h = "180"/>
-        <rect x = "285" y = "487" w = "140" h = "180"/>
-        <rect x = "285" y = "487" w = "140" h = "180"/>
-        <rect x = "285" y = "487" w = "140" h = "180"/>
+     <anim speed = "18" name = "ultimate_attack" loop = "false">
+        <rect x = "1" y = "307" w = "139" h = "179"/>
+        <rect x = "1" y = "307" w = "139" h = "179"/>
+        <rect x = "143" y = "307" w = "139" h = "179"/>
+        <rect x = "285" y = "307" w = "139" h = "179"/>
+        <rect x = "285" y = "307" w = "139" h = "179"/>
+        <rect x = "285" y = "307" w = "139" h = "179"/>
+        <rect x = "427" y = "307" w = "139" h = "179"/>
+        <rect x = "427" y = "307" w = "139" h = "179"/>
+        <rect x = "427" y = "307" w = "139" h = "179"/>
+        <rect x = "427" y = "307" w = "139" h = "179"/>
+        <rect x = "1" y = "489" w = "139" h = "179"/>
+        <rect x = "1" y = "489" w = "139" h = "179"/>
+        <rect x = "143" y = "489" w = "139" h = "179"/>
+        <rect x = "143" y = "489" w = "139" h = "179"/>
+        <rect x = "285" y = "489" w = "139" h = "179"/>
+        <rect x = "285" y = "489" w = "139" h = "179"/>
+        <rect x = "285" y = "489" w = "139" h = "179"/>
+        <rect x = "285" y = "489" w = "139" h = "179"/>
+     </anim>
+
+     <anim speed = "5" name = "look_for_target" loop = "true">
+       <rect x = "1" y = "307" w = "139" h = "179"/>
      </anim>
 
      <anim speed = "3" name = "shield_balls" loop = "true">
@@ -205,7 +217,7 @@
     <ability1 mult="1" cd="1" bd="3"/>
     <ability2 mult="0" cd="1" bd="5"/>
     <ability3 mult="0.5" cd="15" bd="8"/>
-    <ability4 mult="0" cd="60" bd="0"/>
+    <ability4 mult="1" cd="4" bd="10"/>
     <bat_spell mult ="0.6" bat_fire_bd ="2" bat_fire_dm ="0.3"/>
   </stats>
 </file>

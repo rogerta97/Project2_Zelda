@@ -35,16 +35,16 @@ bool PlayerManager::Start()
 {
 	// Abilities UI ------
 	SDL_Rect screen = App->view->GetViewportRect(1);
-	iPoint ability1_pos = { screen.w - 120 , screen.h - 126 };
-	iPoint ability2_pos = { 13, screen.h - 126 };
-	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
-	iPoint ability4_pos = { 13, screen.h - 76 };
+	iPoint ability1_pos = { screen.w - 120 , screen.h - 135 };
+	iPoint ability2_pos = { 13, screen.h - 135 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 85 };
+	iPoint ability4_pos = { 13, screen.h - 85 };
 	
 	_TTF_Font* text_font = App->font->game_font;
-	iPoint text1_pos = { screen.w - 85 , screen.h - 119 };
-	iPoint text2_pos = { (50), screen.h - 119 };
-	iPoint text3_pos = { screen.w - 75, screen.h - 56 };
-	iPoint text4_pos = { 27, screen.h - 56 };
+	iPoint text1_pos = { screen.w - 85 , screen.h - 128 };
+	iPoint text2_pos = { (50), screen.h - 128 };
+	iPoint text3_pos = { screen.w - 75, screen.h - 65 };
+	iPoint text4_pos = { 27, screen.h - 65 };
 
 	// Death timer
 	iPoint death_timer_pos = { (screen.w / 2) - 5, (screen.h / 2) + 15};
@@ -66,22 +66,9 @@ bool PlayerManager::Start()
 	death_text_anim->SetAnimation("idle"); 
 	// ---------------
     
-	int count = 0; 
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
 		PlayerManagerUI ui_elements;
-
-		if (count == 0)
-		{
-			ability1_pos.y -= 10; 
-			ability3_pos.y -= 10;
-
-		}
-		else if (count == 1)
-		{
-			ability2_pos.y -= 10;
-			ability4_pos.y -= 10;
-		}
 
 		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability1_pos, { 0,0,0,0 })); 
 		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability2_pos, { 0,0,0,0 }));
@@ -92,30 +79,16 @@ bool PlayerManager::Start()
 		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability2_pos.x + 21, ability2_pos.y + 6 }, { 0,0,0,0 }));
 		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability3_pos.x + 9, ability3_pos.y + 21 }, { 0,0,0,0 }));
 		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability4_pos.x + 7, ability4_pos.y + 21 }, { 0,0,0,0 }));
-
-		if (count == 0)
-		{
-			ability1_pos.y += 10;
-			ability3_pos.y += 10;
-		}
-		else if (count == 1)
-		{
-			ability2_pos.y += 10;
-			ability4_pos.y += 10;
-		}
-
-	
 				   
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text1_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text2_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text3_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, App->font->game_font_40));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, text_font));
 
 		ui_elements.death_time = it->viewport_window->CreateText(death_timer_pos, App->font->game_font_60);
 		ui_elements.death_time->enabled = false; ui_elements.death_time->blit_layer = 9999;
 			   
 		p_manager_ui_elements.push_back(ui_elements);
-		count++; 
 	}
 	// ---------------------
 
