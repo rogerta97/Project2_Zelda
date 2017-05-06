@@ -6,7 +6,7 @@
 #include "j1XMLLoader.h"
 #include "GameObject.h"
 #include "j1Audio.h"
-
+#include <string>
 #include "MinimapManager.h"
 #include "Mapping.h"
 
@@ -1014,6 +1014,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 			player->Respawn();
 			player->ApplyItemStats();
 			p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = false;
+			player->curr_char_text->enabled = player->curr_char->enabled = player->left_char->enabled = player->right_char->enabled = false;
 		}
 	}
 }
@@ -1028,6 +1029,7 @@ void PlayerManager::CheckIfDeath(Player * player)
 		App->audio->PlayFx(death_sound_effect, 0);
 
 		p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = true;
+		player->curr_char_text->enabled = player->curr_char->enabled = player->left_char->enabled = player->right_char->enabled = true;
 	}
 }
 
@@ -1244,6 +1246,82 @@ void PlayerManager::UpdateDeathUI(Player* curr_player, float dt)
 	
 	string time(""); time += std::to_string((int)curr_player->death_time - (int)curr_player->death_timer->ReadSec());
 	p_manager_ui_elements.at(curr_player->viewport-1).death_time->SetText(time);
+
+	//Change player while dead
+	bool change_player = false;
+
+	if (App->input->GetControllerButton(curr_player->viewport - 1, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN)
+	{
+		string left, curr, right;
+		left = curr_player->char_names[0];
+		curr = curr_player->char_names[1];
+		right = curr_player->char_names[2];
+
+		curr_player->char_names.clear();
+		curr_player->char_names.push_back(right);
+		curr_player->char_names.push_back(left);	
+		curr_player->char_names.push_back(curr);
+
+		change_player = true;
+	}
+
+	if (App->input->GetControllerButton(curr_player->viewport - 1, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN)
+	{
+		string left, curr, right;
+		left = curr_player->char_names[0];
+		curr = curr_player->char_names[1];
+		right = curr_player->char_names[2];
+
+		curr_player->char_names.clear();
+		curr_player->char_names.push_back(curr);
+		curr_player->char_names.push_back(right);
+		curr_player->char_names.push_back(left);
+
+		change_player = true;
+	}
+
+	if (change_player)
+	{
+		//Left
+		if (curr_player->char_names[0] == "Link")
+			curr_player->left_char->color = { 62,225,71,255 };
+		else if (curr_player->char_names[0] == "Navi")
+			curr_player->left_char->color = { 30,229,229,255 };
+		else if (curr_player->char_names[0] == "Ganon")
+			curr_player->left_char->color = { 225,26,26,255 };
+
+		curr_player->left_char->SetText(curr_player->char_names[0]);
+
+		//Curr
+		if (curr_player->char_names[1] == "Link")
+		{
+			curr_player->curr_char->color = { 62,225,71,255 };
+			curr_player->type = link;
+		}
+		else if (curr_player->char_names[1] == "Navi")
+		{
+			curr_player->curr_char->color = { 30,229,229,255 };
+			curr_player->type = navi;
+		}
+		else if (curr_player->char_names[1] == "Ganon")
+		{
+			curr_player->curr_char->color = { 225,26,26,255 };
+			curr_player->type = ganon;
+		}
+
+		curr_player->curr_char->SetText(curr_player->char_names[1]);
+
+		//Right
+		if (curr_player->char_names[2] == "Link")
+			curr_player->right_char->color = { 62,225,71,255 };
+		else if (curr_player->char_names[2] == "Navi")
+			curr_player->right_char->color = { 30,229,229,255 };
+		else if (curr_player->char_names[2] == "Ganon")
+			curr_player->right_char->color = { 225,26,26,255 };
+
+		curr_player->right_char->SetText(curr_player->char_names[2]);
+
+	}
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)

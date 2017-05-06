@@ -37,6 +37,55 @@ public:
 		respawn = _respawn;
 		death_timer = App->AddGameplayTimer();
 		base_travel_timer = App->AddGameplayTimer();
+
+		// Change char while dead
+		x = win_w / 4 - 75 + ((viewport - 1) % 2)*win_w / 2;
+		y -= 10;
+
+		curr_char_text= App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_25);
+		y += 20;
+		x += 50;
+		curr_char = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_25);
+		y += 3;
+		x -= 100;
+		left_char = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
+		x += 235;
+		right_char = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_small);
+
+		curr_char_text->enabled = curr_char->enabled = left_char->enabled = right_char->enabled = false;
+
+		switch (entity->type)
+		{
+		case link:
+			char_names.push_back(string("Navi"));
+			left_char->color = { 30,229,229,255 };
+			char_names.push_back(string("Link"));
+			curr_char->color = { 62,225,71,255 };
+			char_names.push_back(string("Ganon"));
+			right_char->color = { 225,26,26,255 };
+			break;
+		case ganon:
+			char_names.push_back(string("Link"));
+			left_char->color = { 62,225,71,255 };
+			char_names.push_back(string("Ganon"));
+			curr_char->color = { 225,26,26,255 };
+			char_names.push_back(string("Navi"));
+			right_char->color = { 30,229,229,255 };
+			break;
+		case navi:
+			char_names.push_back(string("Ganon"));
+			left_char->color = { 225,26,26,255 };
+			char_names.push_back(string("Navi"));
+			curr_char->color = { 30,229,229,255 };
+			char_names.push_back(string("Link"));
+			right_char->color = { 62,225,71,255 };
+			break;
+		}
+
+		curr_char_text->SetText("Current Character:");
+		left_char->SetText(char_names[0]);
+		curr_char->SetText(char_names[1]);
+		right_char->SetText(char_names[2]);
 	}
 
 	void BuyItem(Item* item, int price);
@@ -82,6 +131,12 @@ public:
 	float		last_heal_time = 0.0f;
 
 	float		last_rupee_time = 60.0f;
+
+	UI_Text*    curr_char_text = nullptr;
+	UI_Text*    curr_char = nullptr;
+	UI_Text*    left_char = nullptr;
+	UI_Text*    right_char = nullptr;
+	vector<string> char_names;
 };
 
 struct PlayerManagerUI
