@@ -249,7 +249,7 @@ bool MainScene::Start()
 	pause_ui.SetPauseUI(false); 
 
 	App->render->DrawQuad(win_size, 0,0,0,0, 1 , 60, true);
-	
+
 	return ret;
 }
 
@@ -282,7 +282,10 @@ bool MainScene::Update(float dt)
 	if (jungleCamp_manager != nullptr)
 		jungleCamp_manager->Update(dt);
 	if (quest_manager != nullptr)
+	{
 		quest_manager->Update();
+		quest_manager->UpdateWindows();
+	}
 	if (minimap_manager != nullptr)
 		minimap_manager->Update(dt);
 	// ------

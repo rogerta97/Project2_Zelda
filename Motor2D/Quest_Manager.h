@@ -64,6 +64,9 @@ public:
 	int get_progress(int id, int team);
 	void update_progress();
 	void SpawnCucos(int num);
+	void SwitchWindowState(int player);
+	void UpdateWindows();
+
 	std::vector<quest*> vquest;
 
 	vector<PlayerText*> player_text_list; 
@@ -72,6 +75,7 @@ public:
 	iPoint          placer = NULLPOINT;
 
 	vector<Entity*>  cucos;
+	vector<bool> windows_to_move;
 
 	bool quests_enabled = true;
 private:
