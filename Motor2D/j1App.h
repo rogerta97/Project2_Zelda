@@ -74,7 +74,6 @@ public:
 
 	void CapFps(float fps);
 	void EndSDL();
-
 	void OpenWebPage(char* url);
 
 	void ExpandEvent(int type, EventThrower* origin, int id);
