@@ -1158,6 +1158,59 @@ std::vector<iPoint> j1Map::GetMageSkeletonSpawns() const
 	return ret;
 }
 
+std::vector<iPoint> j1Map::GetGuardsSpawns(uint team) const
+{
+	std::vector<iPoint> ret;
+
+	std::list<MapLayer*>::const_iterator item;
+	item = data.layers.begin();
+
+	for (; item != data.layers.end(); item++)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->properties.Get("Entities", 0) == 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int id = layer->Get(x, y);
+				if (id != 0)
+				{
+					TileSet* tileset = (id > 0) ? GetTilesetFromTileId(id) : NULL;
+					if (tileset != NULL)
+					{
+						int relative_id = id - tileset->firstgid;
+
+						switch (team)
+						{
+						case 1:
+							if (relative_id == 0)
+							{
+								ret.push_back(MapToWorld(x, y));
+							}
+							break;
+						case 2:
+							if (relative_id == 1)
+							{
+								ret.push_back(MapToWorld(x, y));
+							}
+							break;
+						default:
+							break;
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
 std::vector<iPoint> j1Map::GetZeldaInitPath() const
 {
 	std::vector<iPoint> ret;

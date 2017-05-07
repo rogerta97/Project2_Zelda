@@ -13,6 +13,7 @@
 #define SNAKE_RESPAWN_TIME 60
 #define SKELETON_RESPAWN_TIME 100
 #define MAGESKELETON_RESPAWN_TIME 60
+#define GUARD_RESPAWN_TIME 80
 
 #define HALFMAP 81*32
 
@@ -38,10 +39,14 @@ bool JungleCampManager::Start()
 	mageskeleton_timer_camp1.Stop();
 	mageskeleton_timer_camp2.Stop();
 
+	guards_timer_camp1.Stop();
+	guards_timer_camp2.Stop();
+
 	// Spawning jungle camps
 	SpawnSkeleton(0);
 	SpawnSnake(0);
 	SpawnMageSkeleton(0);
+	SpawnGuard(0);
 
 	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
 
@@ -118,6 +123,28 @@ bool JungleCampManager::Update(float dt)
 		mageskeleton_timer_camp2.Stop();
 	}
 
+	if (guards_camp1.empty() && !guards_timer_camp1.IsActive())
+	{
+		guards_timer_camp1.Start();
+	}
+
+	if (guards_camp2.empty() && !guards_timer_camp2.IsActive())
+	{
+		guards_timer_camp2.Start();
+	}
+
+	if (guards_timer_camp1.ReadSec() > GUARD_RESPAWN_TIME)
+	{
+		SpawnGuard(1);
+		guards_timer_camp1.Stop();
+	}
+
+	if (guards_timer_camp2.ReadSec() > GUARD_RESPAWN_TIME)
+	{
+		SpawnGuard(2);
+		guards_timer_camp2.Stop();
+	}
+
 	return ret;
 }
 
@@ -164,7 +191,18 @@ bool JungleCampManager::CleanUp()
 	}
 	mageskeleton_camp2.clear();
 	// ------
+	//Cleaning guards
+	for (int i = 0; i < guards_camp1.size(); i++)
+	{
+		App->entity->DeleteEntity(guards_camp1[i]);
+	}
+	guards_camp1.clear();
 
+	for (int i = 0; i < guards_camp2.size(); i++)
+	{
+		App->entity->DeleteEntity(guards_camp2[i]);
+	}
+	guards_camp2.clear();
 	return true;
 }
 
@@ -281,6 +319,53 @@ void JungleCampManager::SpawnMageSkeleton(uint camp)
 	}
 }
 
+void JungleCampManager::SpawnGuard(uint camp)
+{
+	switch (camp)
+	{
+	case 0:
+	{
+		std::vector<iPoint> guard_positions1 = App->map->GetGuardsSpawns(1);
+		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions1[0]);
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions1[1]);
+
+		guards_camp1.push_back(g1);
+		guards_camp1.push_back(g2);
+
+		std::vector<iPoint> guard_positions2 = App->map->GetGuardsSpawns(2);
+		Guards* g3 = (Guards*)App->entity->CreateEntity(guards, guard_positions2[0]);
+		Guards* g4 = (Guards*)App->entity->CreateEntity(guards, guard_positions2[1]);
+
+		guards_camp2.push_back(g3);
+		guards_camp2.push_back(g4);
+
+		break;
+	}
+	case 1:
+	{
+		std::vector<iPoint> guard_positions1 = App->map->GetGuardsSpawns(1);
+		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions1[0]);
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions1[1]);
+
+		guards_camp1.push_back(g1);
+		guards_camp1.push_back(g2);
+		break;
+	}
+	case 2:
+	{
+		std::vector<iPoint> guard_positions2 = App->map->GetGuardsSpawns(2);
+		Guards* g3 = (Guards*)App->entity->CreateEntity(guards, guard_positions2[0]);
+		Guards* g4 = (Guards*)App->entity->CreateEntity(guards, guard_positions2[1]);
+
+		guards_camp2.push_back(g3);
+		guards_camp2.push_back(g4);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
 void JungleCampManager::SpawnSkeleton(uint camp)
 {
 	switch (camp)
@@ -375,6 +460,33 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 			{
 				if (camp == *it) {
 					mageskeleton_camp2.erase(it);
+					break;
+				}
+			}
+		}
+
+		break;
+	}
+	case guards:
+	{
+		if (camp->GetPos().x > HALFMAP)
+		{
+			for (std::vector<Entity*>::iterator it = guards_camp1.begin(); it != guards_camp1.end(); it++)
+			{
+				if (camp == *it)
+				{
+					guards_camp1.erase(it);
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (std::vector<Entity*>::iterator it = guards_camp2.begin(); it != guards_camp2.end(); it++)
+			{
+				if (camp == *it)
+				{
+					guards_camp2.erase(it);
 					break;
 				}
 			}
