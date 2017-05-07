@@ -22,6 +22,8 @@
 
 #define HALFMAP 81*32
 
+#define Half_Tile 16
+
 Guards::Guards(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(GUARD_H, GUARD_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
@@ -30,6 +32,8 @@ Guards::Guards(iPoint pos)
 	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
+
+	initialPos = { pos.x,pos.y };
 
 	pugi::xml_document doc;
 	App->xml->LoadXML("guards.xml", doc);
@@ -97,6 +101,7 @@ bool Guards::Update(float dt)
 			GuardAttack();
 			break;
 		case g_s_reset:
+			is_attacked = false;
 			GuardMove();
 			break;
 		default:
@@ -117,6 +122,7 @@ bool Guards::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
+			is_attacked = true;
 			if (spell != nullptr)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
@@ -141,14 +147,16 @@ bool Guards::Update(float dt)
 	}
 
 	return ret;
-
-
-	return ret;
 }
 
 bool Guards::Draw(float dt)
 {
 	bool ret = true;
+
+	if (flip)
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	else
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -337,7 +345,12 @@ void Guards::CheckState()
 			}
 			break;
 		case gMove_ReturnToPath:
-			
+			if (is_attacked && LookForTarget())
+			{
+				PathToTarget();
+				move_state = gMove_AproachTarget;
+				state = g_s_follow;
+			}			
 			break;
 		default:
 			break;
@@ -382,7 +395,18 @@ void Guards::CheckState()
 		}
 		break;
 	case g_s_reset:
-		is_attacked = false;
+		if (is_attacked && LookForTarget())
+		{
+			PathToTarget();
+			move_state = gMove_AproachTarget;
+			state = g_s_follow;
+		}
+		else if (GetPos().DistanceTo(initialPos) == 0)
+		{
+			move_state = gMove_Idle;
+			state = g_s_idle;
+			SetIdleAnim();
+		}
 		break;
 	default:
 		break;
@@ -437,7 +461,78 @@ void Guards::GuardIdle()
 
 void Guards::GuardMove()
 {
-	
+	CheckState();
+	draw_offset.SetToZero();
+
+	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+
+	switch (move_state)
+	{
+	case gMove_Idle:
+	{
+		if (target_path_index < target_path.size() - 1)
+		{
+			if (map_pos == target_path.at(target_path_index))
+				target_path_index++;
+		}
+		else
+		{
+			state = g_s_idle;
+			break;
+		}
+
+		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
+
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+
+		break;
+	}
+	case gMove_AproachTarget:
+	{
+		if (target_path_index < target_path.size() - 1)
+		{
+			if (map_pos == target_path.at(target_path_index))
+				target_path_index++;
+		}
+		else
+		{
+			move_state = gMove_Idle;
+			break;
+		}
+
+		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
+
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+
+		break;
+	}
+	case gMove_ReturnToPath:
+	{
+		if (target_path_index < target_path.size() - 1)
+		{
+			if (map_pos == target_path.at(target_path_index))
+				target_path_index++;
+		}
+		else {
+			move_state = gMove_Idle;
+			break;
+		}
+
+		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
+		target_pos.y += Half_Tile;
+		target_pos.x += Half_Tile;
+
+		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void Guards::GuardAttack()
