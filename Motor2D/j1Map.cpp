@@ -1158,7 +1158,7 @@ std::vector<iPoint> j1Map::GetMageSkeletonSpawns() const
 	return ret;
 }
 
-std::vector<iPoint> j1Map::GetGuardsSpawns(uint team) const
+std::vector<iPoint> j1Map::GetGuardsSpawns() const
 {
 	std::vector<iPoint> ret;
 
@@ -1184,22 +1184,9 @@ std::vector<iPoint> j1Map::GetGuardsSpawns(uint team) const
 					{
 						int relative_id = id - tileset->firstgid;
 
-						switch (team)
+						if (relative_id == 0)
 						{
-						case 1:
-							if (relative_id == 0)
-							{
-								ret.push_back(MapToWorld(x, y));
-							}
-							break;
-						case 2:
-							if (relative_id == 1)
-							{
-								ret.push_back(MapToWorld(x, y));
-							}
-							break;
-						default:
-							break;
+							ret.push_back(MapToWorld(x, y));
 						}
 
 					}

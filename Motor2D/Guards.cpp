@@ -66,7 +66,7 @@ bool Guards::Start()
 
 	show_life_bar = true;
 
-	game_object->SetAnimation("guard_down");
+	game_object->SetAnimation("guard_idle_down");
 
 	return ret;
 }
@@ -244,7 +244,7 @@ void Guards::RunDown()
 
 void Guards::RunLeft()
 {
-	game_object->SetAnimation("guard_move_left");
+	game_object->SetAnimation("guard_move_lateral");
 	flip = true;
 	anim_state = run_left;
 	draw_offset.x = 8;
@@ -252,7 +252,7 @@ void Guards::RunLeft()
 
 void Guards::RunRight()
 {
-	game_object->SetAnimation("guard_move_right");
+	game_object->SetAnimation("guard_move_lateral");
 	flip = false;
 	anim_state = run_right;
 	draw_offset.x = -8;
@@ -260,21 +260,21 @@ void Guards::RunRight()
 
 void Guards::IdleUp()
 {
-	game_object->SetAnimation("guard_up");
+	game_object->SetAnimation("guard_idle_up");
 	flip = false;
 	anim_state = guard_up;
 }
 
 void Guards::IdleDown()
 {
-	game_object->SetAnimation("guard_down");
+	game_object->SetAnimation("guard_idle_down");
 	flip = false;
 	anim_state = guard_down;
 }
 
 void Guards::IdleLeft()
 {
-	game_object->SetAnimation("guard_left");
+	game_object->SetAnimation("guard_idle_lateral");
 	flip = true;
 	anim_state = guard_left;
 	draw_offset.x = 8;
@@ -282,7 +282,7 @@ void Guards::IdleLeft()
 
 void Guards::IdleRight()
 {
-	game_object->SetAnimation("guard_right");
+	game_object->SetAnimation("guard_idle_lateral");
 	flip = false;
 	anim_state = guard_right;
 	draw_offset.x = 8;
@@ -637,6 +637,7 @@ void Guards::Move(int delta_x, int delta_y)
 void Guards::BasicAttackUp()
 {
 	game_object->animator->SetAnimation("guard_attack_up");
+	flip = false;
 	anim_state = guard_attack_up;
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(10, -25), 5, 10, fixture_type::f_t_attack);
 }
@@ -644,6 +645,7 @@ void Guards::BasicAttackUp()
 void Guards::BasicAttackDown()
 {
 	game_object->animator->SetAnimation("guard_attack_down");
+	flip = false;
 	anim_state = guard_attack_down;
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-10, 25), 5, 10, fixture_type::f_t_attack);
 	draw_offset.y = 10;
@@ -651,7 +653,8 @@ void Guards::BasicAttackDown()
 
 void Guards::BasicAttackLeft()
 {
-	game_object->animator->SetAnimation("guard_attack_left");
+	game_object->animator->SetAnimation("guard_attack_lateral");
+	flip = true;
 	anim_state = guard_attack_left;
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(-23, 11), 15, 5, fixture_type::f_t_attack);
 	draw_offset.x = 8;
@@ -659,7 +662,8 @@ void Guards::BasicAttackLeft()
 
 void Guards::BasicAttackRight()
 {
-	game_object->animator->SetAnimation("guard_attack_right");
+	game_object->animator->SetAnimation("guard_attack_lateral");
+	flip = false;
 	anim_state = guard_attack_right;
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(23, 11), 15, 5, fixture_type::f_t_attack);
 	draw_offset.x = -8;

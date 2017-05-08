@@ -2,29 +2,41 @@
 
 <file>
   <animations texture ="textures/soldiercamp_spritesheet.png">
-    <anim speed = "5" name = "guard_down" loop = "true">
-      <rect x = "32" y = "0" w = "32" h = "48"/>
-      <rect x = "0" y = "76" w = "32" h = "48"/>
+    <anim speed = "3" name = "guard_idle_down" loop = "true">
+      <rect x = "1" y = "28" w = "16" h = "28"/>
+      <rect x = "19" y = "28" w = "16" h = "28"/>
+    </anim>
+    <anim speed = "3" name = "guard_idle_up" loop = "true">
+      <rect x = "73" y = "28" w = "16" h = "28"/>
+      <rect x = "91" y = "28" w = "16" h = "28"/>
+    </anim>
+    <anim speed = "3" name = "guard_idle_lateral" loop = "true">
+      <rect x = "36" y = "28" w = "16" h = "28"/>
+      <rect x = "54" y = "28" w = "16" h = "28"/>
+    </anim>
+    <anim speed = "3" name = "guard_move_down" loop = "true">
+      <rect x = "1" y = "0" w = "16" h = "28"/>
+      <rect x = "19" y = "0" w = "16" h = "28"/>
+    </anim>
+    <anim speed = "3" name = "guard_move_up" loop = "true">
+      <rect x = "73" y = "0" w = "16" h = "28"/>
+      <rect x = "91" y = "0" w = "16" h = "28"/>
+    </anim>
+    <anim speed = "3" name = "guard_move_lateral" loop = "true">
+      <rect x = "36" y = "0" w = "16" h = "28"/>
+      <rect x = "54" y = "0" w = "16" h = "28"/>
     </anim>
     <anim speed = "3" name = "guard_attack_down" loop = "true">
-      <rect x = "0" y = "0" w = "32" h = "48"/>
-      <rect x = "32" y = "0" w = "32" h = "48"/>
-    </anim>
-    <anim speed = "3" name = "guard_up" loop = "true">
-      <rect x = "160" y = "0" w = "32" h = "48"/>
-      <rect x = "96" y = "76" w = "32" h = "48"/>
+      <rect x = "1" y = "56" w = "17" h = "33"/>
+      <rect x = "19" y = "56" w = "17" h = "33"/>
     </anim>
     <anim speed = "3" name = "guard_attack_up" loop = "true">
-      <rect x = "128" y = "0" w = "32" h = "48"/>
-      <rect x = "160" y = "0" w = "32" h = "48"/>
-    </anim>
-    <anim speed = "3" name = "guard_lateral" loop = "true">
-      <rect x = "32" y = "76" w = "32" h = "48"/>
-      <rect x = "64" y = "76" w = "32" h = "48"/>
+      <rect x = "108" y = "31" w = "17" h = "31"/>
+      <rect x = "126" y = "31" w = "17" h = "31"/>
     </anim>
     <anim speed = "3" name = "guard_attack_lateral" loop = "true">
-      <rect x = "64" y = "0" w = "32" h = "48"/>
-      <rect x = "96" y = "0" w = "32" h = "48"/>
+      <rect x = "108" y = "0" w = "23" h = "28"/>
+      <rect x = "131" y = "0" w = "23" h = "28"/>
     </anim>
 
 

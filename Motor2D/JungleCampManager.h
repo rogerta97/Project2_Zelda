@@ -38,8 +38,8 @@ public:
 	std::vector<Entity*> mageskeleton_camp1;
 	std::vector<Entity*> mageskeleton_camp2;
 
-	std::vector<Entity*> guards_camp1;
-	std::vector<Entity*> guards_camp2;
+	Guards* guards_camp1;
+	Guards* guards_camp2;
 
 private:
 	j1Timer				 snakes_timer_camp1;
