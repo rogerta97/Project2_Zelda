@@ -14,8 +14,8 @@
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
 
-#define GUARD_H 16
-#define GUARD_W 28
+#define GUARD_H 72
+#define GUARD_W 46
 
 #define FOLLOW_RANGE 150
 #define ATTACK_RANGE 60
@@ -567,25 +567,30 @@ bool Guards::LookForTarget()
 	players1 = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 	players2 = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 
-	for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
+	if (target == nullptr)
 	{
-		if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+		for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
 		{
-			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
-			target = *it;
-			ret = true;
-			break;
+			if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+			{
+				shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+				target = *it;
+				ret = true;
+				break;
+			}
 		}
 	}
-
-	for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
+	if (target == nullptr)
 	{
-		if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+		for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
 		{
-			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
-			target = *it;
-			ret = true;
-			break;
+			if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+			{
+				shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+				target = *it;
+				ret = true;
+				break;
+			}
 		}
 	}
 
