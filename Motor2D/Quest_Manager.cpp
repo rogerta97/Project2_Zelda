@@ -98,7 +98,7 @@ void QuestManager::Update()
 {
 	if (quests_enabled)
 	{
-		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 		{
 			active_quest = GetRandomValue(1, 3);
 			for (int i = 0; i < 4; i++)
