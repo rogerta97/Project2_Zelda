@@ -148,7 +148,10 @@ bool GanonBat::Update(float dt)
 				if (curr_fire.death_timer->ReadSec() > FIRE_DESTRUCTION_TIME)
 				{
 					curr_fire.to_die = true;
-					curr_fire.game_object->SetAnimation("fire_die");
+					if (owner->GetTeam() == ANIMATIONS_TEAM)
+						curr_fire.game_object->SetAnimation("fire_die");
+					else
+						curr_fire.game_object->SetAnimation("fire_die_2");
 				}
 			}
 

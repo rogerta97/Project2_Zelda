@@ -260,7 +260,10 @@ bool Ganon::Draw(float dt)
 		for (int i = 0; i < balls.size(); i++)
 		{
 			ball curr_ball = balls.at(i);
-			App->view->LayerBlit(curr_ball.game_object->GetPos().y, game_object->GetTexture(), { curr_ball.game_object->GetPos().x - 25, curr_ball.game_object->GetPos().y -15}, game_object->animator->GetAnimation("shield_balls")->GetAnimationFrame(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+			if (GetTeam() == ANIMATIONS_TEAM)
+				App->view->LayerBlit(curr_ball.game_object->GetPos().y, game_object->GetTexture(), { curr_ball.game_object->GetPos().x - 25, curr_ball.game_object->GetPos().y - 15 }, game_object->animator->GetAnimation("shield_balls")->GetAnimationFrame(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+			else
+				App->view->LayerBlit(curr_ball.game_object->GetPos().y, game_object->GetTexture(), { curr_ball.game_object->GetPos().x - 25, curr_ball.game_object->GetPos().y - 15 }, game_object->animator->GetAnimation("shield_balls_2")->GetAnimationFrame(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 		}
 	}
 
@@ -789,7 +792,7 @@ void Ganon::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 	{
 		Entity* e = App->entity->FindEntityByBody(bodyB);
 
-		if (e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete)
+		if (e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete && !e->to_delete)
 		{
 			e->Stun(1.0f);
 		}
