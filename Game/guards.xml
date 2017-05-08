@@ -1,47 +1,47 @@
+<?xml version="1.0"?>
+
 <!-- Config file for the game -->
 
 <file>
-  <animations texture ="textures/soldiercamp_spritesheet.png">
-    <anim speed = "3" name = "guard_idle_down" loop = "true">
-      <rect x = "1" y = "28" w = "16" h = "28"/>
-      <rect x = "19" y = "28" w = "16" h = "28"/>
+  <animations texture="textures/soldiercamp_spritesheet.png">
+    <anim loop="true" name="guard_walk_down" speed="5">
+      <rect h="72" w="46" y="0" x="0"/>
+      <rect h="72" w="46" y="0" x="46"/>
     </anim>
-    <anim speed = "3" name = "guard_idle_up" loop = "true">
-      <rect x = "73" y = "28" w = "16" h = "28"/>
-      <rect x = "91" y = "28" w = "16" h = "28"/>
+    <anim loop="true" name="guard_idle_down" speed="5">
+      <rect h="72" w="46" y="72" x="0"/>
+      <rect h="72" w="46" y="72" x="46"/>
     </anim>
-    <anim speed = "3" name = "guard_idle_lateral" loop = "true">
-      <rect x = "36" y = "28" w = "16" h = "28"/>
-      <rect x = "54" y = "28" w = "16" h = "28"/>
+    <anim loop="true" name="guard_attack_down" speed="3">
+      <rect h="72" w="46" y="144" x="0"/>
+      <rect h="72" w="46" y="144" x="46"/>
     </anim>
-    <anim speed = "3" name = "guard_move_down" loop = "true">
-      <rect x = "1" y = "0" w = "16" h = "28"/>
-      <rect x = "19" y = "0" w = "16" h = "28"/>
+    <anim loop="true" name="guard_walk_up" speed="5">
+      <rect h="72" w="46" y="0" x="92"/>
+      <rect h="72" w="46" y="0" x="138"/>
     </anim>
-    <anim speed = "3" name = "guard_move_up" loop = "true">
-      <rect x = "73" y = "0" w = "16" h = "28"/>
-      <rect x = "91" y = "0" w = "16" h = "28"/>
+    <anim loop="true" name="guard_idle_up" speed="5">
+      <rect h="72" w="46" y="72" x="92"/>
+      <rect h="72" w="46" y="72" x="138"/>
     </anim>
-    <anim speed = "3" name = "guard_move_lateral" loop = "true">
-      <rect x = "36" y = "0" w = "16" h = "28"/>
-      <rect x = "54" y = "0" w = "16" h = "28"/>
+    <anim loop="true" name="guard_attack_up" speed="3">
+      <rect h="72" w="46" y="144" x="184"/>
+      <rect h="72" w="46" y="144" x="138"/>
     </anim>
-    <anim speed = "3" name = "guard_attack_down" loop = "true">
-      <rect x = "1" y = "56" w = "17" h = "33"/>
-      <rect x = "19" y = "56" w = "17" h = "33"/>
+    <anim loop="true" name="guard_walk_side" speed="5">
+      <rect h="72" w="46" y="0" x="184"/>
+      <rect h="72" w="46" y="0" x="230"/>
     </anim>
-    <anim speed = "3" name = "guard_attack_up" loop = "true">
-      <rect x = "108" y = "31" w = "17" h = "31"/>
-      <rect x = "126" y = "31" w = "17" h = "31"/>
+    <anim loop="true" name="guard_idle_side" speed="5">
+      <rect h="72" w="46" y="72" x="184"/>
+      <rect h="72" w="46" y="72" x="230"/>
     </anim>
-    <anim speed = "3" name = "guard_attack_lateral" loop = "true">
-      <rect x = "108" y = "0" w = "23" h = "28"/>
-      <rect x = "131" y = "0" w = "23" h = "28"/>
+    <anim loop="true" name="guard_attack_side" speed="3">
+      <rect h="72" w="46" y="144" x="184"/>
+      <rect h="72" w="46" y="144" x="230"/>
     </anim>
-
-
   </animations>
-  <stats hp="1000" speed="100" power="15" rupees="10">
-    <ability1 mult="1" cd="1.25" bd="2"/>
+  <stats speed="100" rupees="10" power="15" hp="40">
+    <ability1 bd="2" cd="1.25" mult="1"/>
   </stats>
 </file>
