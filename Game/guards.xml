@@ -41,7 +41,7 @@
       <rect h="72" w="46" y="144" x="230"/>
     </anim>
   </animations>
-  <stats speed="100" rupees="10" power="15" hp="200">
+  <stats speed="100" rupees="10" power="15" hp="80">
     <ability1 bd="2" cd="1.25" mult="1"/>
   </stats>
 </file>

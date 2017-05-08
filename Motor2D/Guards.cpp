@@ -405,12 +405,16 @@ void Guards::CheckState()
 					abilities.at(0)->fixture = nullptr;
 				}
 
-				if (GetPos().DistanceTo(target->GetPos()) > ATTACK_RANGE)
+				if (target != nullptr)
 				{
-					state = g_s_follow;
-					move_state = gMove_AproachTarget;
-					PathToTarget();
+					if (GetPos().DistanceTo(target->GetPos()) > ATTACK_RANGE)
+					{
+						state = g_s_follow;
+						move_state = gMove_AproachTarget;
+						PathToTarget();
+					}
 				}
+				
 				game_object->animator->GetCurrentAnimation()->Reset();
 				draw_offset.SetToZero();
 				SetIdleAnim();
