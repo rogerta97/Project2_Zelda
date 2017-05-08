@@ -135,27 +135,26 @@ private:
 	void DrawScreenSeparation();
 
 public:
-
 	player_data* link = nullptr;
 	player_data* ganon = nullptr;
 	player_data* navi = nullptr;
 
 private:
 	vector<viewport_data> viewports_data;
-	vector<player_data*> players_data;
+	vector<player_data*>  players_data;
 
-	player_data* curr_player_data1 = nullptr;
-	player_data* curr_player_data2 = nullptr;
-	player_data* curr_player_data3 = nullptr;
-	player_data* curr_player_data4 = nullptr;
+	player_data*          curr_player_data1 = nullptr;
+	player_data*          curr_player_data2 = nullptr;
+	player_data*          curr_player_data3 = nullptr;
+	player_data*          curr_player_data4 = nullptr;
 
 	// Background image
-	SDL_Texture*	   background_image = nullptr;
-	iPoint			   background_pos = NULLPOINT;
-	SDL_Rect		   background_image_rect = NULLRECT;
-	float              fade_value = 255.0f;
+	SDL_Texture*	      background_image = nullptr;
+	iPoint			      background_pos = NULLPOINT;
+	SDL_Rect		      background_image_rect = NULLRECT;
+	float                 fade_value = 255.0f;
 
-	bool			   all_ready = false;
+	bool			      all_ready = false;
 };
 
 #endif

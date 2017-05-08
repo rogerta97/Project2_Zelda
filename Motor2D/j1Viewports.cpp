@@ -128,7 +128,7 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 	{
 	case 1:
 	{
-		ret = { -camera1.x, -camera1.y, view4_1.w, view4_1.h };
+		ret = { (int)-camera1.x, (int)-camera1.y, view4_1.w, view4_1.h };
 		break;
 	}
 	case 2:
@@ -136,10 +136,10 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 		switch (viewport)
 		{
 		case 1:
-			ret = { -camera1.x, -camera1.y, view4_1.w, view2_1.h };
+			ret = { (int)-camera1.x, (int)-camera1.y, view4_1.w, view2_1.h };
 			break;
 		case 2:
-			ret = { -camera2.x, -camera2.y, view4_2.w, view2_2.h };
+			ret = { (int)-camera2.x, (int)-camera2.y, view4_2.w, view2_2.h };
 			break;
 		}
 		break;
@@ -149,16 +149,16 @@ SDL_Rect j1Viewports::GetViewportRect(uint viewport)
 		switch (viewport)
 		{
 		case 1:
-			ret = { -camera1.x, -camera1.y, view4_1.w, view4_1.h };
+			ret = { (int)-camera1.x, (int)-camera1.y, view4_1.w, view4_1.h };
 			break;
 		case 2:
-			ret = { -camera2.x, -camera2.y, view4_2.w, view4_2.h };
+			ret = { (int)-camera2.x, (int)-camera2.y, view4_2.w, view4_2.h };
 			break;
 		case 3:
-			ret = { -camera3.x, -camera3.y, view4_3.w, view4_3.h };
+			ret = { (int)-camera3.x, (int)-camera3.y, view4_3.w, view4_3.h };
 			break;
 		case 4:
-			ret = { -camera4.x, -camera4.y, view4_4.w, view4_4.h };
+			ret = { (int)-camera4.x, (int)-camera4.y, view4_4.w, view4_4.h };
 			break;
 		}
 		break;
@@ -172,7 +172,7 @@ SDL_Rect j1Viewports::GetViewportSize()
 	return viewport_size;
 }
 
-void j1Viewports::MoveCamera(int id, int x, int y)
+void j1Viewports::MoveCamera(int id, float x, float y)
 {
 	switch (id)
 	{
@@ -222,27 +222,27 @@ void j1Viewports::SetCamera(int id, int x, int y)
 	}
 }
 
-void j1Viewports::CenterCamera(int id, int x, int y)
+void j1Viewports::CenterCamera(int id, float x, float y)
 {
 	switch (number_of_views)
 	{
 	case 1:
 		if (id == 1)
 		{
-			camera1.x = -x + win_w / 4;
-			camera1.y = -y + win_h / 4;
+			camera1.x = (int)(-x + win_w / 4);
+			camera1.y = (int)(-y + win_h / 4);
 		}
 		break;
 	case 2:
 		switch (id)
 		{
 		case 1:
-			camera1.x = -x + win_w / 4;
-			camera1.y = -y + win_h / 2;
+			camera1.x = (int)(-x + win_w / 4);
+			camera1.y = (int)(-y + win_h / 2);
 			break;
 		case 2:
-			camera2.x = -x + win_w / 4;
-			camera2.y = -y + win_h / 2;
+			camera2.x = (int)(-x + win_w / 4);
+			camera2.y = (int)(-y + win_h / 2);
 			break;
 		default:
 			break;
@@ -252,20 +252,20 @@ void j1Viewports::CenterCamera(int id, int x, int y)
 		switch (id)
 		{
 		case 1:
-			camera1.x = -x + win_w / 4;
-			camera1.y = -y + win_h / 4;
+			camera1.x = (int)(-x + win_w / 4);
+			camera1.y = (int)(-y + win_h / 4);
 			break;		
 		case 2:			
-			camera2.x = -x + win_w / 4;
-			camera2.y = -y + win_h / 4;
+			camera2.x = (int)(-x + win_w / 4);
+			camera2.y = (int)(-y + win_h / 4);
 			break;		
 		case 3:			
-			camera3.x = -x + win_w / 4;
-			camera3.y = -y + win_h / 4;
+			camera3.x = (int)(-x + win_w / 4);
+			camera3.y = (int)(-y + win_h / 4);
 			break;		
 		case 4:			
-			camera4.x = -x + win_w / 4;
-			camera4.y = -y + win_h / 4;
+			camera4.x = (int)(-x + win_w / 4);
+			camera4.y = (int)(-y + win_h / 4);
 			break;
 		default:
 			break;
@@ -283,16 +283,20 @@ iPoint j1Viewports::GetCameraPos(uint viewport)
 	switch (viewport)
 	{
 	case 1:
-		ret = camera1;
+		ret.x = (int)camera1.x;
+		ret.y = (int)camera1.y;
 		break;
 	case 2:
-		ret = camera2;
-			break;
+		ret.x = (int)camera2.x;
+		ret.y = (int)camera2.y;
+		break;
 	case 3: 
-		ret = camera3;
-			break;
+		ret.x = (int)camera3.x;
+		ret.y = (int)camera3.y;
+		break;
 	case 4:
-		ret = camera4;
+		ret.x = (int)camera4.x;
+		ret.y = (int)camera4.y;
 		break;
 	}
 
@@ -307,28 +311,28 @@ void j1Viewports::LayerBlit(int layer, SDL_Texture * texture, iPoint pos, const 
 
 	if(viewport == 0 || viewport == 1)
 	{
-		if (use_camera && !(-camera1.x > pos.x + section.w || -camera1.x + view.w < pos.x || -camera1.y > pos.y + section.h || -camera1.y + view.h < pos.y))
+		if (use_camera && !((int)-camera1.x > pos.x + section.w || (int)-camera1.x + view.w < pos.x || (int)-camera1.y > pos.y + section.h || (int)-camera1.y + view.h < pos.y))
 			layer_list1.push(lblit);
 		else if (!use_camera)
 			layer_list1.push(lblit);
 	}
 	if ((viewport == 0 || viewport == 2) && number_of_views >= 2)
 	{
-		if (use_camera && !(-camera2.x > pos.x + section.w || -camera2.x + view.w < pos.x || -camera2.y > pos.y + section.h || -camera2.y + view.h < pos.y))
+		if (use_camera && !((int)-camera2.x > pos.x + section.w || (int)-camera2.x + view.w < pos.x || (int)-camera2.y > pos.y + section.h || (int)-camera2.y + view.h < pos.y))
 			layer_list2.push(lblit);
 		else if (!use_camera)
 			layer_list2.push(lblit);
 	}
 	if ((viewport == 0 || viewport == 3) && number_of_views >= 4)
 	{
-		if (use_camera && !(-camera3.x > pos.x + section.w || -camera3.x + view.w < pos.x || -camera3.y > pos.y + section.h || -camera3.y + view.h < pos.y))
+		if (use_camera && !((int)-camera3.x > pos.x + section.w || (int)-camera3.x + view.w < pos.x || (int)-camera3.y > pos.y + section.h || (int)-camera3.y + view.h < pos.y))
 			layer_list3.push(lblit);
 		else if (!use_camera)
 			layer_list3.push(lblit);
 	}
 	if ((viewport == 0 || viewport == 4) && number_of_views >= 4)
 	{
-		if (use_camera && !(-camera4.x > pos.x + section.w || -camera4.x + view.w < pos.x || -camera4.y > pos.y + section.h || -camera4.y + view.h < pos.y))
+		if (use_camera && !((int)-camera4.x > pos.x + section.w || (int)-camera4.x + view.w < pos.x || (int)-camera4.y > pos.y + section.h || (int)-camera4.y + view.h < pos.y))
 			layer_list4.push(lblit);
 		else if (!use_camera)
 			layer_list4.push(lblit);
@@ -458,7 +462,7 @@ void j1Viewports::DoLayerPrint()
 
 				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera1.x, curr.pos.y + (int)camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -469,7 +473,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list1.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera1.x, curr.rect.y + (int)camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -480,7 +484,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list1.top();
 				if(curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera1.x, curr.y1 + (int)camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -490,7 +494,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list1.empty())
 			{
 				layer_circle curr = circle_list1.top();
-				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera1.x, curr.y1 + (int)camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list1.pop();
 			}
@@ -515,7 +519,7 @@ void j1Viewports::DoLayerPrint()
 
 				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera1.x, curr.pos.y + (int)camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -526,7 +530,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list1.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera1.x, curr.rect.y + (int)camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -537,7 +541,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list1.top();
 				if (curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera1.x, curr.y1 + (int)camera1.y, curr.x2 + (int)camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -547,7 +551,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list1.empty())
 			{
 				layer_circle curr = circle_list1.top();
-				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera1.x, curr.y1 + (int)camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list1.pop();
 			}
@@ -561,7 +565,7 @@ void j1Viewports::DoLayerPrint()
 
 				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera2.x, curr.pos.y + (int)camera2.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -572,7 +576,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list2.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera2.x, curr.rect.y + (int)camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -583,7 +587,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list2.top();
 				if (curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera2.x, curr.y1 + (int)camera2.y, curr.x2 + (int)camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -593,7 +597,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list2.empty())
 			{
 				layer_circle curr = circle_list2.top();
-				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera2.x, curr.y1 + (int)camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list2.pop();
 			}
@@ -621,7 +625,7 @@ void j1Viewports::DoLayerPrint()
 
 				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera1.x, curr.pos.y + camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera1.x, curr.pos.y + (int)camera1.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -632,7 +636,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list1.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera1.x, curr.rect.y + camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera1.x, curr.rect.y + (int)camera1.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -643,7 +647,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list1.top();
 				if (curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.x2 + camera1.x, curr.y2 + camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera1.x, curr.y1 + (int)camera1.y, curr.x2 + (int)camera1.x, curr.y2 + (int)camera1.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -653,7 +657,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list1.empty())
 			{
 				layer_circle curr = circle_list1.top();
-				App->render->DrawCircle(curr.x1 + camera1.x, curr.y1 + camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera1.x, curr.y1 + (int)camera1.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list1.pop();
 			}
@@ -665,9 +669,9 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_blit curr = layer_list2.top();
 
-				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
+					float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera2.x, curr.pos.y + camera2.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera2.x, curr.pos.y + (int)camera2.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -678,7 +682,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list2.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera2.x, curr.rect.y + camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera2.x, curr.rect.y + (int)camera2.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -689,7 +693,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list2.top();
 				if (curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.x2 + camera2.x, curr.y2 + camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera2.x, curr.y1 + (int)camera2.y, curr.x2 + (int)camera2.x, curr.y2 + (int)camera2.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -699,7 +703,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list2.empty())
 			{
 				layer_circle curr = circle_list2.top();
-				App->render->DrawCircle(curr.x1 + camera2.x, curr.y1 + camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera2.x, curr.y1 + (int)camera2.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list2.pop();
 			}
@@ -713,7 +717,7 @@ void j1Viewports::DoLayerPrint()
 
 				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera3.x, curr.pos.y + camera3.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera3.x, curr.pos.y + (int)camera3.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -724,7 +728,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list3.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera3.x, curr.rect.y + camera3.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera3.x, curr.rect.y + (int)camera3.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -735,7 +739,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list3.top();
 				if (curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.x2 + camera3.x, curr.y2 + camera3.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera3.x, curr.y1 + (int)camera3.y, curr.x2 + (int)camera3.x, curr.y2 + (int)camera3.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -745,7 +749,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list3.empty())
 			{
 				layer_circle curr = circle_list3.top();
-				App->render->DrawCircle(curr.x1 + camera3.x, curr.y1 + camera3.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera3.x, curr.y1 + (int)camera3.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list3.pop();
 			}
@@ -759,7 +763,7 @@ void j1Viewports::DoLayerPrint()
 
 				float blit_scale = (curr.scale != -1.0f) ? curr.scale : scale;
 				if (curr.use_camera)
-					App->render->Blit(curr.texture, curr.pos.x + camera4.x, curr.pos.y + camera4.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
+					App->render->Blit(curr.texture, curr.pos.x + (int)camera4.x, curr.pos.y + (int)camera4.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 				else
 					App->render->Blit(curr.texture, curr.pos.x, curr.pos.y, &curr.section, blit_scale, curr.use_camera, curr.flip, curr.angle, curr.pivot_x, curr.pivot_y);
 
@@ -770,7 +774,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_quad curr = quad_list4.top();
 				if (curr.use_camera)
-					App->render->DrawQuad({ curr.rect.x + camera4.x, curr.rect.y + camera4.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+					App->render->DrawQuad({ curr.rect.x + (int)camera4.x, curr.rect.y + (int)camera4.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 				else
 					App->render->DrawQuad({ curr.rect.x, curr.rect.y, curr.rect.w, curr.rect.h }, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
@@ -781,7 +785,7 @@ void j1Viewports::DoLayerPrint()
 			{
 				layer_line curr = line_list4.top();
 				if (curr.use_camera)
-					App->render->DrawLine(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.x2 + camera4.x, curr.y2 + camera4.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
+					App->render->DrawLine(curr.x1 + (int)camera4.x, curr.y1 + (int)camera4.y, curr.x2 + (int)camera4.x, curr.y2 + (int)camera4.y, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 				else
 					App->render->DrawLine(curr.x1, curr.y1, curr.x2, curr.y2, curr.r, curr.g, curr.b, scale, curr.a, curr.use_camera);
 
@@ -791,7 +795,7 @@ void j1Viewports::DoLayerPrint()
 			while (!circle_list4.empty())
 			{
 				layer_circle curr = circle_list4.top();
-				App->render->DrawCircle(curr.x1 + camera4.x, curr.y1 + camera4.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
+				App->render->DrawCircle(curr.x1 + (int)camera4.x, curr.y1 + (int)camera4.y, curr.redius, curr.r, curr.g, curr.b, scale, curr.a, curr.filled, curr.use_camera);
 
 				circle_list4.pop();
 			}

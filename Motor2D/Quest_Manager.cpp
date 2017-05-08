@@ -36,8 +36,8 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		//curr_player_text->active_quest_text.push_back(it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
-		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_12, 15, false, 255, 215, 0));
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_25, 15, false, 255, 215, 0));
+
 
 		curr_player_text->active_quest_text->SetText(" ");
 
@@ -147,7 +147,7 @@ void QuestManager::Update()
 
 void QuestManager::CleanUp()
 {
-	// Quests
+	// Clear Quests
 	if (!vquest.empty())
 	{
 		for(int i = 0;i<vquest.size();i++)
@@ -161,14 +161,23 @@ void QuestManager::CleanUp()
 		}
 		vquest.clear();
 	}
-
-	// Texts
-
+	// Clear Texts
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
 		(*it)->player_text.clear();
 	}
-	
+	player_text_list.clear();
+
+	// Clear Cucos
+	if (!cucos.empty())
+	{
+		for (int i = 0; i < cucos.size(); i++)
+		{
+			App->entity->DeleteEntity(cucos.at(i));
+		}
+
+		cucos.clear();
+	}
 }
 
 void QuestManager::DeathQuestEvent(Entity * attacant, Entity * victim)
@@ -317,10 +326,10 @@ void QuestManager::update_progress()
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
 
-					player_text_list[0]->active_quest_text ->enabled = false;
-					player_text_list[1]->active_quest_text ->enabled = false;
-					player_text_list[2]->active_quest_text ->enabled = false;
-					player_text_list[3]->active_quest_text ->enabled = false;
+					player_text_list[0]->active_quest_text->enabled = false;
+					player_text_list[1]->active_quest_text->enabled = false;
+					player_text_list[2]->active_quest_text->enabled = false;
+					player_text_list[3]->active_quest_text->enabled = false;
 
 
 					for (int i = 0; i < 4; i++)
@@ -335,16 +344,6 @@ void QuestManager::update_progress()
 
 						player_text_list[0]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						player_text_list[2]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-//=======
-//						player_1_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//						player_3_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//
-//						player_1_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//						player_3_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//
-//						player_1_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//						player_3_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//>>>>>>> refs/remotes/origin/development
 						break;
 					}
 					case 1:
@@ -352,17 +351,6 @@ void QuestManager::update_progress()
 
 						player_text_list[1]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						player_text_list[3]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-//=======
-//						player_2_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//						player_4_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//
-//						player_2_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//						player_4_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//
-//						player_2_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//						player_4_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//						break;
-//>>>>>>> refs/remotes/origin/development
 						break;
 					}
 					default:

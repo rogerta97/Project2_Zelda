@@ -78,7 +78,6 @@ struct remap_ui
 class RemapingScene : public Scene
 {
 public:
-
 	RemapingScene();
 	~RemapingScene();
 
@@ -90,7 +89,6 @@ public:
 	UI_Window* window; 
 
 private:
-
 	// Gets the position of the cursor depending on what the state is
 	iPoint GetCursorPosFromCurrentState(remaping_state curr_state);
 
@@ -117,12 +115,10 @@ private:
 
 	
 private:
-
 	remap_ui		   remapping_ui[4];
 	SDL_Texture*	   background_image = nullptr; 
 
 	bool			   inside = false; 
-
 };
 
 #endif

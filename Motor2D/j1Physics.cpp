@@ -52,7 +52,7 @@ bool j1Physics::PreUpdate()
 
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
-		if(c->GetFixtureA()->IsSensor() && c->IsTouching())
+		if(c->IsTouching())
 		{
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
@@ -658,12 +658,14 @@ void j1Physics::CleanBodies()
 
 void j1Physics::DeleteBody(PhysBody * object)
 {
-	world->DestroyBody(object->body);
+	if(object != nullptr)
+		world->DestroyBody(object->body);
 }
 
 void j1Physics::DeleteFixture(b2Fixture* fixture, PhysBody * object)
 {
-	object->body->DestroyFixture(fixture);
+	if(fixture != nullptr && object != nullptr)
+		object->body->DestroyFixture(fixture);
 }
 
 b2RevoluteJoint* j1Physics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, iPoint anchor_offset, iPoint body_offset, bool enable_limit,

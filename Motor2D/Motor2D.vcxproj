@@ -14,6 +14,7 @@
     <ProjectGuid>{2AF9969B-F202-497B-AF30-7BEF9CE8005E}</ProjectGuid>
     <RootNamespace>programacio_2</RootNamespace>
     <ProjectName>2DEngine</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -94,6 +95,7 @@
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ganon.cpp" />
+    <ClCompile Include="GanonBat.cpp" />
     <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
@@ -109,6 +111,7 @@
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Spell.cpp" />
     <ClCompile Include="j1Timer.cpp" />
+    <ClCompile Include="j1Video.cpp" />
     <ClCompile Include="j1Viewports.cpp" />
     <ClCompile Include="j1XMLLoader.cpp" />
     <ClCompile Include="JungleCampManager.cpp" />
@@ -140,6 +143,7 @@
     <ClCompile Include="TacoAttack.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="TeamSelectScene.cpp" />
+    <ClCompile Include="theoraplay.c" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
@@ -169,6 +173,7 @@
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ganon.h" />
+    <ClInclude Include="GanonBat.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />
@@ -181,6 +186,7 @@
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Spell.h" />
     <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1Video.h" />
     <ClInclude Include="j1Viewports.h" />
     <ClInclude Include="j1XMLLoader.h" />
     <ClInclude Include="JungleCampManager.h" />
@@ -224,6 +230,7 @@
     <ClInclude Include="Spell.h" />
     <ClInclude Include="TacoAttack.h" />
     <ClInclude Include="TeamSelectScene.h" />
+    <ClInclude Include="theoraplay.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
@@ -244,6 +251,7 @@
     <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\ganon.xml" />
+    <Xml Include="..\Game\ganon_bat.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\mageskeleton.xml" />

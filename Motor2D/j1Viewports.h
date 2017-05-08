@@ -153,9 +153,9 @@ public:
 	SDL_Rect GetViewportRect(uint viewport);
 	SDL_Rect GetViewportSize();
 
-	void MoveCamera(int id, int x, int y);
+	void MoveCamera(int id, float x, float y);
 	void SetCamera(int id, int x, int y);
-	void CenterCamera(int id, int x, int y);
+	void CenterCamera(int id, float x, float y);
 	iPoint GetCameraPos(uint viewport);
 
 	void OnCommand(std::list<std::string>& tokens);
@@ -172,10 +172,10 @@ private:
 
 
 public:
-	iPoint				 camera1 = NULLPOINT;
-	iPoint				 camera2 = NULLPOINT;
-	iPoint				 camera3 = NULLPOINT;
-	iPoint				 camera4 = NULLPOINT;
+	fPoint				 camera1 = NULLPOINT;
+	fPoint				 camera2 = NULLPOINT;
+	fPoint				 camera3 = NULLPOINT;
+	fPoint				 camera4 = NULLPOINT;
 
 private:
 	// Layer Blit list

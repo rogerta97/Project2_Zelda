@@ -111,6 +111,8 @@ public:
 	void SetCamera(int id);
 
 	iPoint GetPos() const;
+
+	void Die(Entity* killed_by);
 public:
 
 private:

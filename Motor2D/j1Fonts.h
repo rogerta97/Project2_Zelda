@@ -38,9 +38,10 @@ public:
 	_TTF_Font*			    default = nullptr;
 	_TTF_Font*			    default_15 = nullptr;
 	_TTF_Font*				game_font = nullptr; 
-	_TTF_Font*				game_font_12 = nullptr; 
+	_TTF_Font*				game_font_25 = nullptr; 
 	_TTF_Font*				game_font_small = nullptr;
-	_TTF_Font*				game_font_20 = nullptr;
+	_TTF_Font*				game_font_40 = nullptr;
+	_TTF_Font*				game_font_60 = nullptr;
 
 };
 

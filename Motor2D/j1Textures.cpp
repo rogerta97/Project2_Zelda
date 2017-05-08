@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1FileSystem.h"
 #include "j1Textures.h"
+#include "j1Window.h"
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
@@ -40,6 +41,9 @@ bool j1Textures::Start()
 {
 	LOG("Start module textures");
 	bool ret = true;
+
+	SDL_SetWindowIcon(App->win->window, LoadSurface("gui/appicon.png"));
+
 	return ret;
 }
 

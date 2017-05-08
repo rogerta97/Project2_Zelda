@@ -122,7 +122,6 @@ bool MenuScene::Start()
 
 
 	//Check Box 
-
 	options_checkbox = menu_window->CreateCheckBox(iPoint(0, 0), 44, 44, {404, 44, 44, 44}, { 404, 0, 44, 44 }, true);
 	options_checkbox->AddBox(iPoint(fx_button->GetPos().x + fx_button->rect.w - options_checkbox->rect.w - 13, fx_button->GetPos().y + 5), 44, 44, "fx");
 	options_checkbox->AddBox(iPoint(music_button->GetPos().x + music_button->rect.w - options_checkbox->rect.w - 13, music_button->GetPos().y + 5), 44, 44, "music");
@@ -133,7 +132,6 @@ bool MenuScene::Start()
 	options_checkbox->SetBox(true, "quests");
 
 	options_checkbox->enabled = false;
-	
 	// ---------
 
 	// Credits --
@@ -344,8 +342,6 @@ bool MenuScene::PostUpdate()
 
 bool MenuScene::CleanUp()
 {
-
-	//
 	// Free UI
 	if(App->scene->GetCurrentScene() != App->scene->menu_scene)
 		App->gui->DeleteElement(menu_window);
@@ -370,6 +366,8 @@ bool MenuScene::CleanUp()
 	// Background image
 	App->tex->UnLoadTexture(background_image);
 	fade_value = 255.0f;
+
+	//quests_enabled = false;
 
 	return true;
 }

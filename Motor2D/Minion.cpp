@@ -27,6 +27,7 @@ Minion::Minion(iPoint pos)
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 
 	pugi::xml_document doc;
@@ -129,19 +130,9 @@ bool Minion::Update(float dt)
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-			if (stats.life <=0)
-			{
-				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-				App->scene->main_scene->minion_manager->KillMinion(this);
-
-				if (entity->is_player)
-				{
-					//Add kill to killer
-					App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].minions++;
-				}
-			}
 		}
+
+		Die(entity);
 	}
 
 	return ret;
@@ -304,6 +295,21 @@ void Minion::SetBasePath(std::list<iPoint>& path)
 	for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
 	{
 		base_path.push_back(*it);
+	}
+}
+
+void Minion::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->minion_manager->KillMinion(this);
+
+		if (killed_by != nullptr && killed_by->is_player && killed_by != nullptr)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].minions++;
+		}
 	}
 }
 

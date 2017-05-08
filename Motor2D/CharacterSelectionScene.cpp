@@ -118,10 +118,10 @@ bool CharacterSelectionScene::CleanUp()
 	// Background image
 	App->tex->UnLoadTexture(background_image);
 
-	all_ready = false;
-
 	//Stop Music
 	App->audio->StopMusic();
+
+	all_ready = false;
 
 	return true;
 }
@@ -182,7 +182,7 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		// Move Left
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			switch (i)
 			{
@@ -202,7 +202,7 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		// Move right
-		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
+		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			switch (i)
 			{

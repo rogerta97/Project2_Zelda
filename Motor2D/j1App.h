@@ -31,6 +31,7 @@ class j1Entity;
 class j1Viewports;
 class j1Spell;
 class j1XMLLoader;
+class Video;
 
 //Events
 class EventThrower;
@@ -73,7 +74,6 @@ public:
 
 	void CapFps(float fps);
 	void EndSDL();
-
 	void OpenWebPage(char* url);
 
 	void ExpandEvent(int type, EventThrower* origin, int id);
@@ -130,6 +130,7 @@ public:
 	j1Viewports*        view = NULL;
 	j1Spell*			spell = NULL;
 	j1XMLLoader*		xml = NULL;
+	Video*				video = NULL;
 
 	// Console logs
 	list<string>        logs;
@@ -157,6 +158,7 @@ private:
 	p2SString			load_game;
 	mutable p2SString	save_game;
 
+	// Engine debug info
 	int					capped_ms = -1;
 	j1PerfTimer			ptimer;
 	uint64				frame_count = 0;

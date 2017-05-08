@@ -28,6 +28,7 @@ Tower::Tower(iPoint pos)
 	
 	game_object->CreateCollision(iPoint(0, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -133,21 +134,12 @@ bool Tower::Update(float dt)
 				}
 				else
 					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-				if (stats.life <= 0)
-				{
-					App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-					App->scene->main_scene->tower_manager->KillTower(this);
-
-					if (entity->is_player)
-					{
-						//Add kill to killer
-						App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].towers++;
-					}
-				}
 			}	
+
+			Die(entity);
 		}
 	}
+
 	return ret;
 }
 
@@ -182,6 +174,21 @@ bool Tower::CleanUp()
 iPoint Tower::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Tower::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->tower_manager->KillTower(this);
+
+		if (killed_by->is_player)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].towers++;
+		}
+	}
 }
 
 void Tower::Idle()

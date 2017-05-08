@@ -23,6 +23,7 @@
 #include "j1Viewports.h"
 #include "j1Spell.h"
 #include "j1XMLLoader.h"
+#include "j1Video.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -46,6 +47,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	view = new j1Viewports();
 	spell = new j1Spell();
 	xml = new j1XMLLoader();
+	video = new Video();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -66,6 +68,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Scene
 	AddModule(scene);
+	AddModule(video);
 
 	// Gui
 	AddModule(gui);
@@ -149,7 +152,7 @@ bool j1App::Start()
 
 	debug_mode = false;
 
-	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 1, false);
+	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 9999999, false);
 	debug_colored_rect = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 0), 200, 115, { 20, 20, 20, 255 }, true);
 	debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 5), App->font->default_15, 15); debug_text->click_through = true;
 	
