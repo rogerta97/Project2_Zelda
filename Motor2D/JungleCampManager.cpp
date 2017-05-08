@@ -123,12 +123,12 @@ bool JungleCampManager::Update(float dt)
 		mageskeleton_timer_camp2.Stop();
 	}
 
-	if (guards_camp1 == nullptr && !guards_timer_camp1.IsActive())
+	if (guards_camp1.empty() && !guards_timer_camp1.IsActive())
 	{
 		guards_timer_camp1.Start();
 	}
 
-	if (guards_camp2 == nullptr && !guards_timer_camp2.IsActive())
+	if (guards_camp2.empty() && !guards_timer_camp2.IsActive())
 	{
 		guards_timer_camp2.Start();
 	}
@@ -192,15 +192,17 @@ bool JungleCampManager::CleanUp()
 	mageskeleton_camp2.clear();
 	// ------
 	//Cleaning guards
-	if (guards_camp1 != nullptr)
+	for (int i = 0; i < guards_camp1.size(); i++)
 	{
-		App->entity->DeleteEntity(guards_camp1);
+		App->entity->DeleteEntity(guards_camp1[i]);
 	}
+	guards_camp1.clear();
 
-	if (guards_camp2 != nullptr)
+	for (int i = 0; i < guards_camp2.size(); i++)
 	{
-		App->entity->DeleteEntity(guards_camp2);
+		App->entity->DeleteEntity(guards_camp2[i]);
 	}
+	guards_camp2.clear();
 	return true;
 }
 
@@ -323,31 +325,54 @@ void JungleCampManager::SpawnGuard(uint camp)
 	{
 	case 0:
 	{
-		//std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
-		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, { 1000,900 }); //guard_positions[0]
-		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, { 1000, 1500 }); // guard_positions[1]
+		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
+		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions[0]);
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions[1]);
+		Guards* g3 = (Guards*)App->entity->CreateEntity(guards, guard_positions[2]);
 
+		guards_camp1.push_back(g1);
+		guards_camp1.push_back(g2);
+		guards_camp1.push_back(g3);
+
+
+		Guards* g4 = (Guards*)App->entity->CreateEntity(guards, guard_positions[3]);
+		Guards* g5 = (Guards*)App->entity->CreateEntity(guards, guard_positions[4]);
+		Guards* g6 = (Guards*)App->entity->CreateEntity(guards, guard_positions[5]);
+
+		guards_camp2.push_back(g4);
+		guards_camp2.push_back(g5);
+		guards_camp2.push_back(g6);
 		break;
 	}
 	case 1:
 	{
 		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
 		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions[0]);
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions[1]);
+		Guards* g3 = (Guards*)App->entity->CreateEntity(guards, guard_positions[2]);
 
+		guards_camp1.push_back(g1);
+		guards_camp1.push_back(g2);
+		guards_camp1.push_back(g3);
 		break;
 	}
 	case 2:
 	{
 		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
-		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions[1]);
+		Guards* g4 = (Guards*)App->entity->CreateEntity(guards, guard_positions[3]);
+		Guards* g5 = (Guards*)App->entity->CreateEntity(guards, guard_positions[4]);
+		Guards* g6 = (Guards*)App->entity->CreateEntity(guards, guard_positions[5]);
 
-
+		guards_camp2.push_back(g4);
+		guards_camp2.push_back(g5);
+		guards_camp2.push_back(g6);
 		break;
 	}
 	default:
 		break;
 	}
 }
+
 
 void JungleCampManager::SpawnSkeleton(uint camp)
 {
@@ -452,13 +477,27 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 	}
 	case guards:
 	{
-		if (camp->GetPos().x < HALFMAP)
+		if (camp->GetPos().x > HALFMAP)
 		{
-			guards_camp1 = nullptr;
+			for (std::vector<Entity*>::iterator it = guards_camp1.begin(); it != guards_camp1.end(); it++)
+			{
+				if (camp == *it)
+				{
+					guards_camp1.erase(it);
+					break;
+				}
+			}
 		}
 		else
 		{
-			guards_camp2 = nullptr;
+			for (std::vector<Entity*>::iterator it = guards_camp2.begin(); it != guards_camp2.end(); it++)
+			{
+				if (camp == *it)
+				{
+					guards_camp2.erase(it);
+					break;
+				}
+			}
 		}
 
 		break;
