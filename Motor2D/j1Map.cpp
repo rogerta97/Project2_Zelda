@@ -1184,7 +1184,7 @@ std::vector<iPoint> j1Map::GetGuardsSpawns() const
 					{
 						int relative_id = id - tileset->firstgid;
 
-						if (relative_id == 0)
+						if (relative_id == 26)
 						{
 							ret.push_back(MapToWorld(x, y));
 						}

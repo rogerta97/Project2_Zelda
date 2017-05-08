@@ -26,7 +26,7 @@
 
 Guards::Guards(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(GUARD_H, GUARD_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(GUARD_W, GUARD_H), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
@@ -89,6 +89,8 @@ bool Guards::Update(float dt)
 
 	speed = stats.speed*dt;
 
+	CheckState();
+
 	if (!stuned)
 	{
 		switch (state)
@@ -127,13 +129,15 @@ bool Guards::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			is_attacked = true;
 			if (spell != nullptr)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
 				spell->Effects(entity, ability);
-			
+				if (entity->GetPos().DistanceTo(initialPos) < FOLLOW_RANGE)
+				{
+					is_attacked = true;
+				}
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -151,8 +155,6 @@ bool Guards::Update(float dt)
 		}
 	}
 
-	CheckState();
-
 	return ret;
 }
 
@@ -166,7 +168,7 @@ bool Guards::Draw(float dt)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 8, game_object->GetPos().y - draw_offset.y - 14 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, FOLLOW_RANGE, 255, 0, 0);
+		App->view->LayerDrawCircle(initialPos.x, initialPos.y, FOLLOW_RANGE, 255, 0, 0);
 	return ret;
 }
 
@@ -335,7 +337,7 @@ void Guards::CheckState()
 					state = g_s_attack;
 				else
 				{
-					if (game_object->GetPos().DistanceTo(target->GetPos()) < FOLLOW_RANGE)
+					if (initialPos.DistanceTo(target->GetPos()) < FOLLOW_RANGE)
 					{
 						if (target != nullptr && App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
 						{
@@ -380,6 +382,14 @@ void Guards::CheckState()
 		{
 			if (game_object->animator->GetCurrentAnimation()->Finished())
 			{
+				if (initialPos.DistanceTo(target->GetPos()) > FOLLOW_RANGE)
+				{
+					target_path_index = 0;
+					target = nullptr;
+					move_state = gMove_ReturnToPath;
+					state = g_s_reset;
+					PathToInitialPos();
+				}
 				if (abilities.at(0)->fixture != nullptr)
 				{
 					game_object->DeleteFixture(abilities.at(0)->fixture);
@@ -390,6 +400,7 @@ void Guards::CheckState()
 				{
 					state = g_s_follow;
 					move_state = gMove_AproachTarget;
+					PathToTarget();
 				}
 				game_object->animator->GetCurrentAnimation()->Reset();
 				draw_offset.SetToZero();
@@ -420,6 +431,7 @@ void Guards::CheckState()
 	default:
 		break;
 	}
+
 }
 
 void Guards::SetTargetPath(const std::list<iPoint>* path)
@@ -437,6 +449,7 @@ void Guards::PathToTarget()
 		target_path.clear();
 		SetTargetPath(App->pathfinding->GetLastPath());
 		target_path_index = 0;
+		state = g_s_follow;
 		move_state = gMove_AproachTarget;
 	}
 	else
@@ -447,11 +460,12 @@ void Guards::PathToTarget()
 
 void Guards::PathToInitialPos()
 {
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), initialPos) > 0)
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(initialPos.x,initialPos.y)) > 0)
 	{
 		target_path.clear();
 		SetTargetPath(App->pathfinding->GetLastPath());
 		target_path_index = 0;
+		state = g_s_reset;
 		move_state = gMove_ReturnToPath;
 	}
 	else
@@ -567,20 +581,18 @@ bool Guards::LookForTarget()
 	players1 = App->scene->main_scene->player_manager->GetTeamPlayers(1);
 	players2 = App->scene->main_scene->player_manager->GetTeamPlayers(2);
 
-	if (target == nullptr)
+	for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
 	{
-		for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
+		if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
 		{
-			if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
-			{
-				shortest_distance = GetPos().DistanceTo((*it)->GetPos());
-				target = *it;
-				ret = true;
-				break;
-			}
+			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+			target = *it;
+			ret = true;
+			break;
 		}
 	}
-	if (target == nullptr)
+	
+	if (ret == false)
 	{
 		for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
 		{
