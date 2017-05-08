@@ -163,7 +163,7 @@ bool FinalScreen::Start()
 bool FinalScreen::Update(float dt)
 {
 	// Printing background
-	App->view->LayerBlit(0, background_image, App->view->camera1, {0,0, 1994, 1359}, 0, 1);
+	App->view->LayerBlit(0, background_image, App->view->GetCameraPos(1), {0,0, 1994, 1359}, 0, 1);
 
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
 		App->scene->ChangeScene((Scene*)App->scene->menu_scene); 

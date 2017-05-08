@@ -709,7 +709,7 @@ void j1Entity::StunEntities(float dt)
 	{
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
 		{
-			if ((*it).entity != nullptr)
+			if ((*it).entity != nullptr || (*it).entity->to_delete)
 			{
 				if ((*it).time <= (*it).timer->ReadSec())
 				{

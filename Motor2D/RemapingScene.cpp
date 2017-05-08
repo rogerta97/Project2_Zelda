@@ -284,7 +284,7 @@ bool RemapingScene::Update(float dt)
 
 	}
 
-	App->view->LayerBlit(0, background_image, App->view->camera1, { 0,0,1994, 1359 }, 0, 1);
+	App->view->LayerBlit(0, background_image, App->view->GetCameraPos(1), { 0,0,1994, 1359 }, 0, 1);
 
 	return ret;
 }
