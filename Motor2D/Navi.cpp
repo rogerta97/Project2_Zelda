@@ -427,10 +427,20 @@ void Navi::RunUp()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("up");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_up");
+			else
+				game_object->SetAnimation("blink_up_2");
+		}
 		else
-			game_object->SetAnimation("up_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("up");
+			else
+				game_object->SetAnimation("up_2");
+		}
 		flip = false;
 	}
 }
@@ -439,10 +449,20 @@ void Navi::RunDown()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("down");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_down");
+			else
+				game_object->SetAnimation("blink_down_2");
+		}
 		else
-			game_object->SetAnimation("down_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("down");
+			else
+				game_object->SetAnimation("down_2");
+		}
 		flip = false;
 	}
 }
@@ -451,10 +471,20 @@ void Navi::RunLeft()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_side");
+			else
+				game_object->SetAnimation("blink_side_2");
+		}
 		else
-			game_object->SetAnimation("lateral_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("lateral");
+			else
+				game_object->SetAnimation("lateral_2");
+		}
 		flip = true;
 	}
 }
@@ -463,10 +493,20 @@ void Navi::RunRight()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_side");
+			else
+				game_object->SetAnimation("blink_side_2");
+		}
 		else
-			game_object->SetAnimation("lateral_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("lateral");
+			else
+				game_object->SetAnimation("lateral_2");
+		}
 		flip = false;
 	}
 }
@@ -475,11 +515,7 @@ void Navi::IdleUp()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("up");
-		else
-			game_object->SetAnimation("up_2");
-		flip = false;
+		RunUp();
 	}
 }
 
@@ -487,11 +523,7 @@ void Navi::IdleDown()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("down");
-		else
-			game_object->SetAnimation("down_2");
-		flip = false;
+		RunDown();
 	}
 }
 
@@ -499,11 +531,7 @@ void Navi::IdleLeft()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
-		else
-			game_object->SetAnimation("lateral_2");
-		flip = true;
+		RunLeft();
 	}
 }
 
@@ -511,11 +539,7 @@ void Navi::IdleRight()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
-		else
-			game_object->SetAnimation("lateral_2");
-		flip = false;
+		RunRight();
 	}
 }
 
