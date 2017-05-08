@@ -719,7 +719,7 @@ void j1Entity::StunEntities(float dt)
 				}
 				else
 				{
-					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
+					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - ((*it).entity->game_object->GetHitBoxSize().y/2) - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
 					++it;
 				}
 			}
