@@ -22,6 +22,7 @@
 
 #define ABILITY2_RANGE 150
 #define ABILITY2_MOVE_SAFE_OFFSET 15
+#define ABILITY2_SPEED 350
 
 #define ABILITY3_DURATION 6
 
@@ -203,62 +204,87 @@ bool Navi::Update(float dt)
 	// Ability 2 --------------------
 	if (attacking && ability2)
 	{
-		switch (ability2_dir)
+		if (!point_found)
 		{
-		case navi_ability2_dir::a2_down:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+			switch (ability2_dir)
 			{
-				ability2_point = iPoint(ability2_point.x, ability2_point.y - 30);
-				find = true;
+			case navi_ability2_dir::a2_down:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x, ability2_point.y - 30);
+					find = true;
+				}
+				if (find)
+					ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
+			case navi_ability2_dir::a2_up:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x, ability2_point.y + 30);
+					find = true;
+				}
+				if (find)
+					ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
+			case navi_ability2_dir::a2_left:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x + 30, ability2_point.y);
+					find = true;
+				}
+				if (find)
+					ability2_point.x += ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.x -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
+			case navi_ability2_dir::a2_right:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x - 30, ability2_point.y);
+					find = true;
+				}
+				if (find)
+					ability2_point.x -= ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.x += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
 			}
-			if (find)
-				ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
+			point_found = true;
+
+			can_move = false;
+
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_movement");
 			else
-				ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
-		case navi_ability2_dir::a2_up:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
-			{
-				ability2_point = iPoint(ability2_point.x, ability2_point.y + 30);
-				find = true;
-			}
-			if (find)
-				ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
-			else
-				ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
-		case navi_ability2_dir::a2_left:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
-			{
-				ability2_point = iPoint(ability2_point.x + 30, ability2_point.y);
-				find = true;
-			}
-			if (find)
-				ability2_point.x += ABILITY2_MOVE_SAFE_OFFSET;
-			else
-				ability2_point.x -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
-		case navi_ability2_dir::a2_right:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
-			{
-				ability2_point = iPoint(ability2_point.x - 30, ability2_point.y);
-				find = true;
-			}
-			if (find)
-				ability2_point.x -= ABILITY2_MOVE_SAFE_OFFSET;
-			else
-				ability2_point.x += (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
+				game_object->SetAnimation("blink_movement_2");
+
+			game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+
 		}
 
-		game_object->SetPos({ (float)ability2_point.x, (float)ability2_point.y });
+		if (point_found)
+		{
+			App->view->LayerDrawCircle(ability2_point.x, ability2_point.y, 3, 255, 255, 255, 255, 99);
+			float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y);
+			MoveAngle(ABILITY2_SPEED, angle - 180);
 
-		// Reset
-		ability2_dir = navi_ability2_dir::a2_direction_null;
-		attacking = false;
-		ability2 = false;
-		ability2_point = NULLPOINT;
-		find = false;
+			if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y)) < 20)
+			{
+				// Reset
+				ability2_dir = navi_ability2_dir::a2_direction_null;
+				attacking = false;
+				ability2 = false;
+				ability2_point = NULLPOINT;
+				find = false;
+				point_found = false;
+				can_move = true;
+				game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
+			}
+		}
 	}
 
 	return ret;
