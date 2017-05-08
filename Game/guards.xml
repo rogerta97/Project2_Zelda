@@ -41,7 +41,7 @@
 
 
   </animations>
-  <stats hp="40" speed="100" power="15" rupees="10">
+  <stats hp="1000" speed="100" power="15" rupees="10">
     <ability1 mult="1" cd="1.25" bd="2"/>
   </stats>
 </file>

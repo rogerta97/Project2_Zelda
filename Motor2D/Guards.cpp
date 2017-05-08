@@ -14,8 +14,8 @@
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
 
-#define GUARD_H 32
-#define GUARD_W 32
+#define GUARD_H 16
+#define GUARD_W 28
 
 #define FOLLOW_RANGE 150
 #define ATTACK_RANGE 60
@@ -68,6 +68,8 @@ bool Guards::Start()
 
 	game_object->SetAnimation("guard_idle_down");
 
+	state = g_s_idle;
+
 	return ret;
 }
 
@@ -109,7 +111,10 @@ bool Guards::Update(float dt)
 		}
 	}
 	else
+	{
 		SetIdleAnim();
+	}
+		
 
 	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 
@@ -146,6 +151,8 @@ bool Guards::Update(float dt)
 		}
 	}
 
+	CheckState();
+
 	return ret;
 }
 
@@ -154,10 +161,12 @@ bool Guards::Draw(float dt)
 	bool ret = true;
 
 	if (flip)
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x , game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 8, game_object->GetPos().y - draw_offset.y - 14 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
+	if (App->debug_mode)
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, FOLLOW_RANGE, 255, 0, 0);
 	return ret;
 }
 

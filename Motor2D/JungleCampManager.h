@@ -11,6 +11,7 @@ class j1Timer;
 class Snakes;
 class Entity;
 class MageSkeleton;
+class Guards;
 
 class JungleCampManager
 {
@@ -38,8 +39,8 @@ public:
 	std::vector<Entity*> mageskeleton_camp1;
 	std::vector<Entity*> mageskeleton_camp2;
 
-	Guards* guards_camp1;
-	Guards* guards_camp2;
+	Guards*				 guards_camp1 = nullptr;
+	Guards*				 guards_camp2 = nullptr;
 
 private:
 	j1Timer				 snakes_timer_camp1;

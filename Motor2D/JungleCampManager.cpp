@@ -323,9 +323,9 @@ void JungleCampManager::SpawnGuard(uint camp)
 	{
 	case 0:
 	{
-		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
-		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions[0]);
-		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions[1]);
+		//std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
+		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, { 1000,900 }); //guard_positions[0]
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, { 1000, 1500 }); // guard_positions[1]
 
 		break;
 	}
