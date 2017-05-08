@@ -20,8 +20,8 @@
 #define ABILITY1_RANGE 140
 #define ABILITY1_DURATION 5
 
-#define ABILITY2_RANGE 150
-#define ABILITY2_MOVE_SAFE_OFFSET 15
+#define ABILITY2_RANGE 160
+#define ABILITY2_MOVE_SAFE_OFFSET 10
 #define ABILITY2_SPEED 350
 
 #define ABILITY3_DURATION 6
@@ -215,9 +215,9 @@ bool Navi::Update(float dt)
 					find = true;
 				}
 				if (find)
-					ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
+					ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
 				else
-					ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+					ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
 				break;
 			case navi_ability2_dir::a2_up:
 				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
@@ -226,9 +226,9 @@ bool Navi::Update(float dt)
 					find = true;
 				}
 				if (find)
-					ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
+					ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
 				else
-					ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+					ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
 				break;
 			case navi_ability2_dir::a2_left:
 				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
@@ -668,25 +668,29 @@ void Navi::Ability2Right()
 void Navi::ShowAbility2Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::Ability3Up()
