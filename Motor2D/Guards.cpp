@@ -66,7 +66,16 @@ bool Guards::Start()
 
 	show_life_bar = true;
 
-	game_object->SetAnimation("guard_idle_down");
+	if (game_object->GetPos().x < HALFMAP)
+	{
+		game_object->SetAnimation("guard_idle_lateral");
+	}
+	else
+	{
+		game_object->SetAnimation("guard_idle_lateral");
+		flip = true;
+	}
+	
 
 	state = g_s_idle;
 
