@@ -119,7 +119,17 @@ void Entity::Heal(int heal)
 }
 
 void Entity::Slow(float speed_multiplicator, float time)
-{
+{	
+	for (list<slow>::iterator it = App->entity->slowed_entities.begin(); it != App->entity->slowed_entities.end();)
+	{
+		if ((*it).entity == this)
+		{
+			return;
+		}
+		else
+			++it;
+	}
+
 	stats.speed *= speed_multiplicator;
 	slow s(time, this);
 	App->entity->slowed_entities.push_back(s);
@@ -127,6 +137,16 @@ void Entity::Slow(float speed_multiplicator, float time)
 
 void Entity::Stun(float time)
 {
+	for (list<stun>::iterator it = App->entity->stuned_entities.begin(); it != App->entity->stuned_entities.end();)
+	{
+		if ((*it).entity == this)
+		{
+			return;
+		}
+		else
+			++it;
+	}
+
 	stuned = true;
 	stun s(time, this, App->entity->GetEntityEffectsAnimator()->GetAnimation("stun"));
 	App->entity->stuned_entities.push_back(s);
