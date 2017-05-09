@@ -123,9 +123,7 @@ void Entity::Slow(float speed_multiplicator, float time)
 	for (list<slow>::iterator it = App->entity->slowed_entities.begin(); it != App->entity->slowed_entities.end();)
 	{
 		if ((*it).entity == this)
-		{
 			return;
-		}
 		else
 			++it;
 	}
@@ -140,9 +138,7 @@ void Entity::Stun(float time)
 	for (list<stun>::iterator it = App->entity->stuned_entities.begin(); it != App->entity->stuned_entities.end();)
 	{
 		if ((*it).entity == this)
-		{
 			return;
-		}
 		else
 			++it;
 	}

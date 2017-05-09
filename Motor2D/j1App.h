@@ -31,7 +31,6 @@ class j1Entity;
 class j1Viewports;
 class j1Spell;
 class j1XMLLoader;
-class Video;
 
 //Events
 class EventThrower;
@@ -130,7 +129,6 @@ public:
 	j1Viewports*        view = NULL;
 	j1Spell*			spell = NULL;
 	j1XMLLoader*		xml = NULL;
-	Video*				video = NULL;
 
 	// Console logs
 	list<string>        logs;

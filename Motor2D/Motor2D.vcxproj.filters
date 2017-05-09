@@ -214,12 +214,6 @@
     <ClCompile Include="Ganon.cpp">
       <Filter>Engine\4. Entities ==========\Ganon</Filter>
     </ClCompile>
-    <ClCompile Include="j1Video.cpp">
-      <Filter>Engine\1. Modules =========</Filter>
-    </ClCompile>
-    <ClCompile Include="theoraplay.c">
-      <Filter>Engine\2. Components ======</Filter>
-    </ClCompile>
     <ClCompile Include="GanonBat.cpp">
       <Filter>Engine\5. Spells ===========\GanonBat</Filter>
     </ClCompile>
@@ -470,12 +464,6 @@
     </ClInclude>
     <ClInclude Include="Ganon.h">
       <Filter>Engine\4. Entities ==========\Ganon</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Video.h">
-      <Filter>Engine\1. Modules =========</Filter>
-    </ClInclude>
-    <ClInclude Include="theoraplay.h">
-      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
     <ClInclude Include="GanonBat.h">
       <Filter>Engine\5. Spells ===========\GanonBat</Filter>

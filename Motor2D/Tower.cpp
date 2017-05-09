@@ -20,6 +20,8 @@
 #define TOWER_H 38
 #define TOWER_W 64
 
+#define FIRST_TARGET_WAIT 0.4
+
 #define HALFMAP 81*32
 
 Tower::Tower(iPoint pos) 
@@ -69,6 +71,8 @@ bool Tower::Start()
 	{
 		game_object->SetAnimation("tower2_idle");
 	}
+
+	wait_firest_timer = App->AddGameplayTimer();
 
 	return ret;
 }
@@ -151,8 +155,13 @@ bool Tower::Draw(float dt)
 
 	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
+	if (target != nullptr && !target->to_delete)
+	{
+		App->view->LayerDrawLine(game_object->GetPos().x, game_object->GetPos().y-72, target->game_object->GetPos().x, target->game_object->GetPos().y, 240, 10, 10, 255, 2);
+	}
+
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 150, 0, 0);
 
 	return ret;
 }
@@ -167,6 +176,8 @@ bool Tower::PostUpdate()
 bool Tower::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(wait_firest_timer);
 
 	return ret;
 }
@@ -209,7 +220,7 @@ void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2F
 
 void Tower::DoAttack()
 {
-	if (abilities.at(0)->CdCompleted())
+	if (abilities.at(0)->CdCompleted() && wait_firest_timer->ReadSec() > FIRST_TARGET_WAIT)
 	{
 		if (game_object->GetPos().x < HALFMAP)
 		{
@@ -225,6 +236,7 @@ void Tower::DoAttack()
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
 		ta->SetTarget(target);
 		abilities.at(0)->cd_timer->Start();
+		wait_first = false;
 	}
 }
 
@@ -266,6 +278,8 @@ bool Tower::LookForTarget()
 			{
 				target = *it;
 				ret = true;
+				wait_first = true;
+				wait_firest_timer->Start();
 				break;
 			}
 		}

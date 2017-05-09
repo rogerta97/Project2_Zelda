@@ -739,6 +739,7 @@ void j1Entity::DeleteFromStun(Entity * entity)
 			{
 				(*it).CleanUp();
 				it = stuned_entities.erase(it);
+				break;
 			}
 			else
 				++it;
