@@ -26,6 +26,8 @@ bool MinimapManager::Start()
 	link_2_rect = { 380, 535, 32, 29 };
 	navi_1_rect = { 412, 535, 34, 29 };
 	navi_2_rect = { 445, 535, 34, 29 };
+	ganon_1_rect = {476, 535, 32, 26};
+	ganon_2_rect = { 508, 535, 32, 26 };
 
 	// --------------------------------------------
 	// Minimap setup ------------------------------
@@ -37,7 +39,7 @@ bool MinimapManager::Start()
 	SDL_Texture* minimap_texture = App->tex->LoadTexture("gui/UI_sheet_final.png");
 	iPoint minimap_pos = {(int)(view.w*0.5) - (int)(minimap_rect.w * 0.5), (int)(view.h*0.5) - (int)(minimap_rect.h * 0.5) };
 
-	SDL_Rect real_map_rect = {430, -80, 4490, 2500}; // X and Y are for the map offset
+	SDL_Rect real_map_rect = {430, -80, 4490, 2300}; // X and Y are for the map offset
 	SDL_Texture* minimap_points_texture = minimap_texture;
 
 	if (minimap_texture != nullptr && minimap_points_texture != nullptr)
@@ -71,7 +73,6 @@ bool MinimapManager::Start()
 
 		curr_player = App->scene->main_scene->player_manager->players.at(3);
 		AddPoint("player4", GetPlayerRect(curr_player));
-
 	}
 
 	// --------------------------------------------
@@ -315,6 +316,9 @@ SDL_Rect MinimapManager::GetPlayerRect(Player * curr_player)
 		case entity_name::navi:
 			ret = navi_1_rect;
 			break;
+		case entity_name::ganon:
+			ret = ganon_1_rect;
+			break;
 		}
 		break;
 	case 2:
@@ -325,6 +329,9 @@ SDL_Rect MinimapManager::GetPlayerRect(Player * curr_player)
 			break;
 		case entity_name::navi:
 			ret = navi_2_rect;
+			break;
+		case entity_name::ganon:
+			ret = ganon_2_rect;
 			break;
 		}
 	}

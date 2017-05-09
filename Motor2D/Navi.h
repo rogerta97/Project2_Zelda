@@ -111,6 +111,8 @@ public:
 	void SetCamera(int id);
 
 	iPoint GetPos() const;
+
+	void Die(Entity* killed_by);
 public:
 
 private:
@@ -131,6 +133,7 @@ private:
 	navi_ability2_dir ability2_dir = navi_ability2_dir::a2_direction_null;
 	iPoint    ability2_point = NULLPOINT;
 	bool	  find = false;
+	bool      point_found = false;
 
 	// Ability 3
 	j1Timer* ability3_timer = nullptr;

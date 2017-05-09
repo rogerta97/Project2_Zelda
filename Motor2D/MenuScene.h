@@ -39,6 +39,7 @@ public:
 	void GoMenu(); 
 
 	bool QuestsEnabled();
+
 private:
 	void FadeOut();
 
@@ -47,7 +48,8 @@ public:
 
 	UI_Window*		   menu_window = nullptr;
 
-	bool			   quests_enabled;
+	bool			   quests_enabled = false;
+
 private:
 	UI_Image*		   triforce = nullptr;
 
@@ -67,7 +69,6 @@ private:
 	UI_Button*		   remap_button = nullptr;
 	UI_Button*		   quests_button = nullptr;
 
-
 	UI_Text*		   start_text = nullptr; 
 	UI_Text*		   options_text = nullptr;
 	UI_Text*		   credits_text = nullptr; 
@@ -78,7 +79,6 @@ private:
 
 	UI_Text*		   remap_text = nullptr;
 	UI_Text*		   quests_text = nullptr;
-
 
 	UI_Check_Box*	   options_checkbox = nullptr; 
 
@@ -100,7 +100,6 @@ private:
 	iPoint			   background_pos = NULLPOINT;
 	SDL_Rect		   background_image_rect = NULLRECT;
 	float              fade_value = 255.0f;
-
 };
 
 

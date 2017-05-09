@@ -62,6 +62,8 @@ public:
 	// Enable or disable the minimap on a viewport (1 to 4)
 	void SetActive(bool set, int viewport);
 
+
+
 private:
 	SDL_Rect GetPlayerRect(Player* pl);
 
@@ -89,5 +91,7 @@ private:
 	SDL_Rect     link_2_rect = NULLRECT;
 	SDL_Rect     navi_1_rect = NULLRECT;
 	SDL_Rect     navi_2_rect = NULLRECT;
+	SDL_Rect	 ganon_1_rect = NULLRECT;
+	SDL_Rect     ganon_2_rect = NULLRECT;
 };
 #endif // !_BASEMANAGER_H_

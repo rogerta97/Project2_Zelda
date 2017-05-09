@@ -32,10 +32,11 @@ struct player_info
 
 	SDL_Rect		items_rects[3] = { {0,0,0,0},{ 0,0,0,0 },{ 0,0,0,0 } };
 
-	void Reset() { gamepad = 5; viewport = 5;  team = 3; player = 5; character = e_n_null; };
-};
-
-class j1Scene : public j1Module
+	void Reset() { gamepad = 5; viewport = 5;  team = 3; player = 5; character = e_n_null; kills = 0; deaths = 0; minions = 0; towers = 0; }
+	
+};																						 
+																						 
+class j1Scene : public j1Module															  
 {
 public:
 

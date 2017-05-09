@@ -20,8 +20,6 @@ private:
 	void FadeIn();
 	void FadeOut();
 
-public:
-
 private:
 	iPoint       win_size = NULLPOINT;
 
@@ -32,7 +30,6 @@ private:
 	j1Timer      timer;
 
 	float        fade_value = 255.0f;
-
 };
 
 

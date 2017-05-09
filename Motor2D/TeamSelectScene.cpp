@@ -354,6 +354,8 @@ bool TeamSelectScene::PostUpdate()
 
 bool TeamSelectScene::CleanUp()
 {
+	bool ret = true;
+
 	// Free UI
 	if (App->scene->GetCurrentScene() != App->scene->team_select)
 		App->gui->DeleteElement(window);
@@ -370,13 +372,12 @@ bool TeamSelectScene::CleanUp()
 
 	for (int i = 0; i < 4; i++)
 	{
-		positioned[i] = 0;
-		fixed[i] = 0;
-		ready[i] = 0;
+		positioned[i] = false;
+		fixed[i] = false;
+		ready[i] = false;
 	}
 
-
-	return true;
+	return ret;
 }
 
 void TeamSelectScene::DrawScreenSeparation()

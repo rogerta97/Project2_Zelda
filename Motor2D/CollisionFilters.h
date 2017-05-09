@@ -49,6 +49,7 @@ enum class pbody_type
 	p_t_bush,
 	p_t_taco,
 	p_t_navi_basic_attack,
+	p_t_ganon_bat,
 };
 
 // Fixture enum

@@ -33,32 +33,39 @@ bool PlayerManager::Awake(pugi::xml_node &)
 
 bool PlayerManager::Start()
 {
-	// Abilities UI
+	// Abilities UI ------
 	SDL_Rect screen = App->view->GetViewportRect(1);
-	iPoint ability1_pos = { screen.w - 120 , screen.h - 126 };
-	iPoint ability2_pos = { 13, screen.h - 126 };
-	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
-	iPoint ability4_pos = { 13, screen.h - 76 };
+	iPoint ability1_pos = { screen.w - 120 , screen.h - 135 };
+	iPoint ability2_pos = { 13, screen.h - 135 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 85 };
+	iPoint ability4_pos = { 13, screen.h - 85 };
 	
 	_TTF_Font* text_font = App->font->game_font;
-	iPoint text1_pos = { screen.w - 85 , screen.h - 119 };
-	iPoint text2_pos = { (50), screen.h - 119 };
-	iPoint text3_pos = { screen.w - 75, screen.h - 56 };
-	iPoint text4_pos = { 27, screen.h - 56 };
+	iPoint text1_pos = { screen.w - 85 , screen.h - 128 };
+	iPoint text2_pos = { (50), screen.h - 128 };
+	iPoint text3_pos = { screen.w - 75, screen.h - 65 };
+	iPoint text4_pos = { 27, screen.h - 65 };
 
-	death_rect_color = { 32, 32, 32, 100 };
-	death_rect = { 0, 0, screen.w ,  screen.h };
-	iPoint death_text_pos = { int(screen.w*0.5f) - 131, int(screen.h*0.5f) - 13 };
+	// Death timer
+	iPoint death_timer_pos = { (screen.w / 2) - 5, (screen.h / 2) + 15};
 
-	pugi::xml_document doc; 
+	// Death quad
+	death_quad_rect = {0, 1400, 1125, 561};
+	death_quad_pos = { -(death_quad_rect.w /2 - screen.w/2), -(death_quad_rect.h / 2 - screen.h / 2) };
+
+	// Death text animation
+	death_text_pos = { int(screen.w * 0.5f) - 131, int(screen.h * 0.5f) - 13 };
 	death_text_anim = new Animator(); 
 
+	pugi::xml_document doc;
 	App->xml->LoadXML("GameSettings.xml", doc);
 
-	death_text_anim->LoadAnimationsFromXML(doc, "death_text"); 
+	death_text_anim->LoadAnimationsFromXML(doc, "death_text");
+	death_text_texture = App->gui->atlas;
 
 	death_text_anim->SetAnimation("idle"); 
-
+	// ---------------
+    
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
 		PlayerManagerUI ui_elements;
@@ -69,20 +76,21 @@ bool PlayerManager::Start()
 		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability4_pos, { 0,0,0,0 }));
 
 		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability1_pos.x + 20, ability1_pos.y + 7 }, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability2_pos.x + 21, ability2_pos.y + 6}, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability3_pos.x + 9, ability3_pos.y + 21}, { 0,0,0,0 }));
-		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ability4_pos.x + 7, ability4_pos.y + 21}, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability2_pos.x + 21, ability2_pos.y + 6 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability3_pos.x + 9, ability3_pos.y + 21 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability4_pos.x + 7, ability4_pos.y + 21 }, { 0,0,0,0 }));
 				   
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text1_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text2_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text3_pos, text_font));
 		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, text_font));
+
+		ui_elements.death_time = it->viewport_window->CreateText(death_timer_pos, App->font->game_font_60);
+		ui_elements.death_time->enabled = false; ui_elements.death_time->blit_layer = 9999;
 			   
-		ui_elements.death_text = it->viewport_window->CreateImage(death_text_pos, NULLRECT, false);
-		ui_elements.death_text->enabled = false; 
-		ui_elements.death_text->blit_layer += 1;
 		p_manager_ui_elements.push_back(ui_elements);
 	}
+	// ---------------------
 
 	// Event
 	event_thrower = new EventThrower();
@@ -140,7 +148,7 @@ bool PlayerManager::Update(float dt)
 			CheckIfRespawn(curr_player);
 
 			// Update death text
-			UpdateDeathUI(i, dt);
+			UpdateDeathUI(curr_player, dt);
 		}
 	}
 
@@ -169,6 +177,10 @@ bool PlayerManager::CleanUp()
 
 	RELEASE(event_thrower);
 
+	// Release animator
+	death_text_anim->CleanUp();
+	RELEASE(death_text_anim);
+
 	return ret;
 }
 
@@ -181,13 +193,10 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 		
 		position = GetFreePlayerSpawn(team, respawn);
-
-		if (name != ganon)
-		{
-			position.x += 16;
-			position.y += 9;
-		}
-	
+		
+		position.x += 16;
+		position.y += 9;
+		
 		// Create player
 		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
@@ -200,7 +209,6 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		p->team = team;
 
 		SetAbilitiesIcon(players.size() - 1);
-
 	}
 
 	return ret;
@@ -406,6 +414,11 @@ void PlayerManager::AllowInput(int player)
 		players[3]->disable_controller = false;
 		break;
 	}
+}
+
+Entity* PlayerManager::GetPlayer(int index)
+{
+	return players.at(index)->entity; 
 }
 
 void PlayerManager::PlayerInput(Player * curr_player, int index)
@@ -816,11 +829,11 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		curr_player->state = idle_up;
 		break;
 	case ability1_left:
-		curr_player->entity->Ability1Down();
+		curr_player->entity->Ability1Left();
 		curr_player->state = idle_left;
 		break;
 	case ability1_down:
-		curr_player->entity->Ability1Left();
+		curr_player->entity->Ability1Down();
 		curr_player->state = idle_down;
 		break;
 	case ability1_right:
@@ -917,10 +930,10 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		curr_player->entity->ShowAbility1Up();
 		break;
 	case show_ability1_left:
-		curr_player->entity->ShowAbility1Down();
+		curr_player->entity->ShowAbility1Left();
 		break;
 	case show_ability1_down:
-		curr_player->entity->ShowAbility1Left();
+		curr_player->entity->ShowAbility1Down();
 		break;
 	case show_ability1_right:
 		curr_player->entity->ShowAbility1Right();
@@ -996,13 +1009,11 @@ void PlayerManager::CheckIfRespawn(Player * player)
 {
 	if (player->is_dead)
 	{
-		App->view->LayerDrawQuad(death_rect, death_rect_color.r, death_rect_color.g, death_rect_color.b, death_rect_color.a, true, 1, player->viewport, false);
-
 		if (player->death_timer->ReadSec() > player->death_time)
 		{
-			p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(false);
 			player->Respawn();
 			player->ApplyItemStats();
+			p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = false;
 		}
 	}
 }
@@ -1011,12 +1022,12 @@ void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
 	{
-		p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(true);
-
     	player->Kill();
 		player->show = shows::show_null;
 
 		App->audio->PlayFx(death_sound_effect, 0);
+
+		p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = true;
 	}
 }
 
@@ -1226,12 +1237,13 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	// --------------
 }
 
-void PlayerManager::UpdateDeathUI(int player, float dt)
+void PlayerManager::UpdateDeathUI(Player* curr_player, float dt)
 {
-	SDL_Rect death_rect = death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt); 
-
-	p_manager_ui_elements[player].death_text->image = death_rect; 
-
+	App->view->LayerBlit(9999, death_text_texture, death_text_pos, death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt), curr_player->viewport, -1.0f, false);
+	App->view->LayerBlit(9998, death_text_texture, death_quad_pos, death_quad_rect, curr_player->viewport, -1.0f, false);
+	
+	string time(""); time += std::to_string((int)curr_player->death_time - (int)curr_player->death_timer->ReadSec());
+	p_manager_ui_elements.at(curr_player->viewport-1).death_time->SetText(time);
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)
@@ -1708,6 +1720,7 @@ void Player::Respawn()
 		entity->is_player = true;
 		base_travel = false; 
 		is_dead = false;
+		state = idle_down;
 	}
 }
 

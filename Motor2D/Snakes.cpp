@@ -26,6 +26,7 @@ Snakes::Snakes(iPoint pos)
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -96,31 +97,10 @@ bool Snakes::Update(float dt)
 				state = Snk_S_Attack;
 				target = entity;
 			}
-			
-		}
-		if (stats.life <= 0)
-		{
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
 
-			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
-			{
-				if (this->GetPos().x > HALFMAP)
-				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
-						if (entity->is_player)
-							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-				}
-				else
-				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
-						if (entity->is_player)
-							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-				}
-			}
+			Die(entity);
 		}
 	}
-
 
 	switch (state)
 	{
@@ -205,6 +185,31 @@ bool Snakes::CleanUp()
 iPoint Snakes::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Snakes::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete &&  killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+
+		if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+		{
+			if (this->GetPos().x > HALFMAP)
+			{
+				if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
+					if (killed_by->is_player)
+						App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+			}
+			else
+			{
+				if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
+					if (killed_by->is_player)
+						App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+			}
+		}
+	}
 }
 
 void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

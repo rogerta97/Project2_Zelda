@@ -144,7 +144,9 @@ public:
 	int life = 100;
 
 	int base_power = 0;
-	int power = 0;	
+	int power = 0;
+
+	int shield = 0;
 };
 
 struct Ability
@@ -322,7 +324,7 @@ public:
 		return team;
 	}
 
-	void LifeBar(iPoint size, iPoint offset = { 0, 0 }); 
+	void LifeBar(iPoint size, iPoint offset = { 0, 0 }, int shiled = 0); 
 
 	//Update Stats
 	void UpdateStats(int extra_power, int extra_hp, int extra_speed);
@@ -331,6 +333,8 @@ public:
 	void SetInvulnerable();
 
 	void SetAbilityImages(int ability_id, SDL_Rect icon_rect); 
+
+	virtual void Die(Entity* killed_by) {};
 
 private:
 	

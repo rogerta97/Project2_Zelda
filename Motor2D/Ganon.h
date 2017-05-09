@@ -5,6 +5,12 @@
 
 class GameObject;
 
+struct ball
+{
+	GameObject* game_object = nullptr;
+	int			angle = 0;
+};
+
 class Ganon : public Entity
 {
 public:
@@ -51,49 +57,49 @@ public:
 	void IdleLeft();
 	void IdleRight();
 
-	//void BasicAttackUp();
-	//void BasicAttackDown();
-	//void BasicAttackLeft();
-	//void BasicAttackRight();
+	void BasicAttackUp();
+	void BasicAttackDown();
+	void BasicAttackLeft();
+	void BasicAttackRight();
 
-	//void ShowBasicAttackUp();
-	//void ShowBasicAttackDown();
-	//void ShowBasicAttackLeft();
-	//void ShowBasicAttackRight();
+	void ShowBasicAttackUp();
+	void ShowBasicAttackDown();
+	void ShowBasicAttackLeft();
+	void ShowBasicAttackRight();
 
-	//void Ability1Up();
-	//void Ability1Down();
-	//void Ability1Left();
-	//void Ability1Right();
+	void Ability1Up();
+	void Ability1Down();
+	void Ability1Left();
+	void Ability1Right();
 
-	//void ShowAbility1Up();
-	//void ShowAbility1Down();
-	//void ShowAbility1Left();
-	//void ShowAbility1Right();
+	void ShowAbility1Up();
+	void ShowAbility1Down();
+	void ShowAbility1Left();
+	void ShowAbility1Right();
 
-	//void Ability2Up();
-	//void Ability2Down();
-	//void Ability2Left();
-	//void Ability2Right();
+	void Ability2Up();
+	void Ability2Down();
+	void Ability2Left();
+	void Ability2Right();
 
-	//void ShowAbility2Up();
-	//void ShowAbility2Down();
-	//void ShowAbility2Left();
-	//void ShowAbility2Right();
+	void ShowAbility2Up();
+	void ShowAbility2Down();
+	void ShowAbility2Left();
+	void ShowAbility2Right();
 
-	//void Ability3Up();
-	//void Ability3Down();
-	//void Ability3Left();
-	//void Ability3Right();
+	void Ability3Up();
+	void Ability3Down();
+	void Ability3Left();
+	void Ability3Right();
 
-	//void ShowAbility3Up();
-	//void ShowAbility3Down();
-	//void ShowAbility3Left();
-	//void ShowAbility3Right();
+	void ShowAbility3Up();
+	void ShowAbility3Down();
+	void ShowAbility3Left();
+	void ShowAbility3Right();
 
-	//// On Collision
+	// On Collision
 	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	//void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
+	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 	//void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	//Set Camera to this player. 1<=id<=4
@@ -101,18 +107,34 @@ public:
 
 	iPoint GetPos() const;
 
+	void Die(Entity* killed_by);
+
 private:
-	//void CreateAbility3Test();
-	//void DeleteAbility3Test();
+	void CreateAbility2Balls();
+	void DeleteAbility2BallByPbody(PhysBody* body);
+	void ClearAbility2Balls();
+	void MoveCamera();
+	iPoint DrawTarget();
 public:
 
 private:
 	int		      camera = 1;
 	bool	      flip = false;
 
-	b2Fixture*	  ganon_collision; 
-
 	int			  rupee_reward = 0;
+
+	// Ability2
+	int			  shield = 0;
+	vector<ball>  balls;
+	j1Timer*	  ability2_timer = nullptr;
+	bool		  ability2 = false;
+	
+	// Ability3
+	bool		  ability3 = false;
+	bool		  look_for_target = false;
+	j1Timer*	  look_for_target_timer = nullptr;
+	iPoint		  target = NULLPOINT;
+	bool		  target_found = false;
 };
 
 #endif

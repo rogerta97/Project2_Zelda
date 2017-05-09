@@ -13,8 +13,6 @@ class PhysBody;
 class GameObject;
 class Spell;
 
-#define BOOMERANG_RANGE 170
-
 enum n_b_a_direction
 {
 	n_b_a_null,

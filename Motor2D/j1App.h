@@ -73,7 +73,6 @@ public:
 
 	void CapFps(float fps);
 	void EndSDL();
-
 	void OpenWebPage(char* url);
 
 	void ExpandEvent(int type, EventThrower* origin, int id);
@@ -157,6 +156,7 @@ private:
 	p2SString			load_game;
 	mutable p2SString	save_game;
 
+	// Engine debug info
 	int					capped_ms = -1;
 	j1PerfTimer			ptimer;
 	uint64				frame_count = 0;

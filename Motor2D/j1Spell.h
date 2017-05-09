@@ -24,7 +24,7 @@ enum spell_name
 	bone_attack,
 	taco_attack,
 	navi_basic_attack,
-
+	ganon_bat,
 };
 
 class Spell;

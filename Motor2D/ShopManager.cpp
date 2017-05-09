@@ -258,22 +258,38 @@ bool ShopManager::Start()
 		int y = (win_h / 4 - win_h / 6) + (i / 2)*win_h / 2;
 
 		shops[i]->shop_icon = shop_window->CreateImage(iPoint(x, y), { 0,0,0,0 });
+
+		shops[i]->shop_icon_anim = new Animator();
+		shops[i]->shop_icon_anim->LoadAnimationsFromXML(shop_config, "animations");
+
+		key_mapping shop_key = App->scene->players[i].mapping->GetMapping(m_k_shop);
+
+		switch (shop_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_a");
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_b");
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_x");
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_y");
+			break;
+		}
+		
 	}
 
 	shop_window->SetEnabledAndChilds(false);
 	shop_window->enabled = true;
-
-	shop_icon_anim = new Animator();
-	shop_icon_anim->LoadAnimationsFromXML(shop_config, "animations");
-	shop_icon_anim->SetAnimation("shop_icon");
 
 	return true;
 }
 
 bool ShopManager::Update()
 {
-	bool shop_icon_updated = false;
-
 	for (std::vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
 	{
 		if ((*it)->is_dead || App->GetGamePause())
@@ -282,13 +298,8 @@ bool ShopManager::Update()
 		if (team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200 && !shops[(*it)->viewport - 1]->active)
 		{
 			shops[(*it)->viewport - 1]->shop_icon->enabled = true;
-			if (!shop_icon_updated)
-			{
-				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
-				shop_icon_updated = true;
-			}
-			else
-				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(0.0f);
+			shops[(*it)->viewport - 1]->shop_icon->image = shops[(*it)->viewport - 1]->shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
+				
 		}
 		else
 		{
@@ -415,8 +426,10 @@ bool ShopManager::CleanUp()
 	//Release shops memory
 	for (int i = 0; i < 4; i++)
 	{
+		shops[i]->shop_icon_anim->CleanUp();
+		RELEASE(shops[i]->shop_icon_anim);
 		RELEASE(shops[i]);
-	}
+	}	
 
 	return true;
 }
@@ -530,4 +543,9 @@ void ShopManager::UpdatePlayerItems(int view, Player * player)
 
 		shops[view]->player_items[i]->image = player->items[i]->image_rect;
 	}
+}
+
+SDL_Rect ShopManager::GetPlayerItem(int player_index, int item_index)
+{
+	return shops[player_index]->player_items[item_index]->image; 
 }

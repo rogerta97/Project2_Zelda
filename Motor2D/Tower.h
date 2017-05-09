@@ -44,6 +44,8 @@ public:
 
 	iPoint GetPos() const;
 
+	void Die(Entity* killed_by);
+
 private:
 	void DoAttack();
 	void Idle();
@@ -61,6 +63,9 @@ private:
 	states				anim_state = states_null;
 
 	int					rupee_reward = 0;
+
+	bool				wait_first = true;
+	j1Timer*			wait_firest_timer = nullptr;
 };
 
 #endif // !TOWER_H_

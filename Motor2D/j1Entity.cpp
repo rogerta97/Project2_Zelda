@@ -494,7 +494,7 @@ Ability* j1Entity::FindAbilityByFixture(Entity* entity, b2Fixture * fixture)
 {
 	Ability* ret = nullptr;
 
-	if (entity != nullptr)
+	if (entity != nullptr && !entity->to_delete && fixture != nullptr)
 	{
 		for (int i = 0; i < entity->abilities.size(); i++)
 		{
@@ -519,7 +519,7 @@ Ability * j1Entity::FindAbilityBySpellBody(PhysBody * spell)
 
 	sp = FindSpellByBody(spell);
 
-	if (sp != nullptr && sp->owner != nullptr)
+	if (sp != nullptr && sp->owner != nullptr && !sp->owner->to_delete)
 	{
 		if (!sp->owner->abilities.empty())
 		{
@@ -709,7 +709,7 @@ void j1Entity::StunEntities(float dt)
 	{
 		for (list<stun>::iterator it = stuned_entities.begin(); it != stuned_entities.end();)
 		{
-			if ((*it).entity != nullptr)
+			if ((*it).entity != nullptr || (*it).entity->to_delete)
 			{
 				if ((*it).time <= (*it).timer->ReadSec())
 				{
@@ -719,7 +719,7 @@ void j1Entity::StunEntities(float dt)
 				}
 				else
 				{
-					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
+					App->view->LayerBlit((*it).entity->GetPos().y + 1, entity_effects_texture, { (*it).entity->GetPos().x-16, (*it).entity->GetPos().y - ((*it).entity->game_object->GetHitBoxSize().y/2) - 10 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
 					++it;
 				}
 			}
@@ -739,6 +739,7 @@ void j1Entity::DeleteFromStun(Entity * entity)
 			{
 				(*it).CleanUp();
 				it = stuned_entities.erase(it);
+				break;
 			}
 			else
 				++it;
@@ -780,7 +781,7 @@ void j1Entity::WinRupeesPlayers(float dt)
 			}
 			else
 			{
-				App->view->LayerBlit((*it).player->entity->GetPos().y, entity_effects_texture, { (*it).player->entity->GetPos().x - ((*it).player->entity->game_object->GetHitBoxSize().x / 2) + 8, (*it).player->entity->GetPos().y - 90 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
+				App->view->LayerBlit((*it).player->entity->GetPos().y, entity_effects_texture, { (*it).player->entity->GetPos().x - 8, (*it).player->entity->GetPos().y - (*it).player->entity->game_object->GetHitBoxSize().y/2 - 75 }, (*it).animator->GetCurrentAnimation()->GetAnimationFrame(dt));
 				++it;
 			}
 		}

@@ -214,6 +214,9 @@
     <ClCompile Include="Ganon.cpp">
       <Filter>Engine\4. Entities ==========\Ganon</Filter>
     </ClCompile>
+    <ClCompile Include="GanonBat.cpp">
+      <Filter>Engine\5. Spells ===========\GanonBat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -462,6 +465,9 @@
     <ClInclude Include="Ganon.h">
       <Filter>Engine\4. Entities ==========\Ganon</Filter>
     </ClInclude>
+    <ClInclude Include="GanonBat.h">
+      <Filter>Engine\5. Spells ===========\GanonBat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -575,6 +581,9 @@
     <Filter Include="Engine\4. Entities ==========\Ganon">
       <UniqueIdentifier>{640b6707-e0cf-45d0-8e5c-f36569f30756}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\5. Spells ===========\GanonBat">
+      <UniqueIdentifier>{73871d8c-0b6f-4ef9-9fff-fbb6a564f10f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -657,6 +666,9 @@
     </Xml>
     <Xml Include="..\Game\ganon.xml">
       <Filter>Engine\4. Entities ==========\Ganon</Filter>
+    </Xml>
+    <Xml Include="..\Game\ganon_bat.xml">
+      <Filter>Engine\5. Spells ===========\GanonBat</Filter>
     </Xml>
   </ItemGroup>
 </Project>

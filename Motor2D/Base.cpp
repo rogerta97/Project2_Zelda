@@ -47,6 +47,7 @@ Base::Base(iPoint pos)
 
 	game_object->CreateCollision(iPoint(-242/2, -290/2), Base_entity, 56, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -110,12 +111,7 @@ bool Base::Update(float dt)
 				if (spell == nullptr)
 					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 
-				if (stats.life <= 0)
-				{
-					App->entity->AddRupeesIfPlayer(entity, 1);
-					App->scene->main_scene->base_manager->KillBase(this);
-					App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
-				}
+				Die(entity);
 			}
 		}
 	}
@@ -139,4 +135,14 @@ bool Base::CleanUp()
 iPoint Base::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Base::Die(Entity* killed_by)
+{
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, 1);
+		App->scene->main_scene->base_manager->KillBase(this);
+		App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
+	}
 }

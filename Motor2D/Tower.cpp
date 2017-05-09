@@ -20,6 +20,8 @@
 #define TOWER_H 38
 #define TOWER_W 64
 
+#define FIRST_TARGET_WAIT 0.4
+
 #define HALFMAP 81*32
 
 Tower::Tower(iPoint pos) 
@@ -28,6 +30,7 @@ Tower::Tower(iPoint pos)
 	
 	game_object->CreateCollision(iPoint(0, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -68,6 +71,8 @@ bool Tower::Start()
 	{
 		game_object->SetAnimation("tower2_idle");
 	}
+
+	wait_firest_timer = App->AddGameplayTimer();
 
 	return ret;
 }
@@ -133,21 +138,12 @@ bool Tower::Update(float dt)
 				}
 				else
 					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-				if (stats.life <= 0)
-				{
-					App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-					App->scene->main_scene->tower_manager->KillTower(this);
-
-					if (entity->is_player)
-					{
-						//Add kill to killer
-						App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(entity) - 1].towers++;
-					}
-				}
 			}	
+
+			Die(entity);
 		}
 	}
+
 	return ret;
 }
 
@@ -159,8 +155,13 @@ bool Tower::Draw(float dt)
 
 	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
+	if (target != nullptr && !target->to_delete)
+	{
+		App->view->LayerDrawLine(game_object->GetPos().x, game_object->GetPos().y-72, target->game_object->GetPos().x, target->game_object->GetPos().y, 240, 10, 10, 255, 2);
+	}
+
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 255, 0, 0);
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 150, 0, 0);
 
 	return ret;
 }
@@ -176,12 +177,29 @@ bool Tower::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(wait_firest_timer);
+
 	return ret;
 }
 
 iPoint Tower::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Tower::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->tower_manager->KillTower(this);
+
+		if (killed_by->is_player)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].towers++;
+		}
+	}
 }
 
 void Tower::Idle()
@@ -202,7 +220,7 @@ void Tower::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2F
 
 void Tower::DoAttack()
 {
-	if (abilities.at(0)->CdCompleted())
+	if (abilities.at(0)->CdCompleted() && wait_firest_timer->ReadSec() > FIRST_TARGET_WAIT)
 	{
 		if (game_object->GetPos().x < HALFMAP)
 		{
@@ -218,6 +236,7 @@ void Tower::DoAttack()
 		TowerAttack* ta = (TowerAttack*)App->spell->CreateSpell(t_attack, { game_object->GetPos().x, game_object->GetPos().y - 70 }, this);
 		ta->SetTarget(target);
 		abilities.at(0)->cd_timer->Start();
+		wait_first = false;
 	}
 }
 
@@ -259,6 +278,8 @@ bool Tower::LookForTarget()
 			{
 				target = *it;
 				ret = true;
+				wait_first = true;
+				wait_firest_timer->Start();
 				break;
 			}
 		}
