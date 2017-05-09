@@ -106,7 +106,7 @@ private:
 public:
 	Entity*					target = nullptr;
 private:
-	j1Timer					cd_timer;
+	j1Timer*				cd_timer = nullptr;
 
 	bool					flip = false;
 
@@ -125,7 +125,7 @@ private:
 	std::vector<iPoint>		target_path;
 	int						target_path_index = 0;
 
-	iPoint					initialPos;
+	iPoint					initialPos = NULLPOINT;
 
 };
 #endif // !_GUARDS_H_

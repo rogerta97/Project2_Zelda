@@ -51,7 +51,8 @@ Guards::Guards(iPoint pos)
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	cd_timer.Start();
+	cd_timer = App->AddGameplayTimer();
+	cd_timer->Start();
 
 	name = "guards";
 }
@@ -177,6 +178,8 @@ bool Guards::PostUpdate()
 bool Guards::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(cd_timer);
 
 	return ret;
 }
@@ -561,10 +564,10 @@ void Guards::GuardAttack()
 {
 	CheckState();
 
-	if (cd_timer.ReadSec()>abilities.at(0)->cd)
+	if (cd_timer->ReadSec()>abilities.at(0)->cd)
 	{
 		Attack();
-		cd_timer.Start();
+		cd_timer->Start();
 	}
 }
 
