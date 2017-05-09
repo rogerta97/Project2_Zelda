@@ -47,6 +47,7 @@ Base::Base(iPoint pos)
 
 	game_object->CreateCollision(iPoint(-242/2, -290/2), Base_entity, 56, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -96,11 +97,6 @@ bool Base::Start()
 
 bool Base::Update(float dt)
 {
-	if (to_delete)
-		return true;
-
-	LifeBar(iPoint(120, 10), iPoint(-55, -160));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -110,14 +106,12 @@ bool Base::Update(float dt)
 		// Enemy attacks
 		if (entity != nullptr && ability != nullptr && entity->GetTeam() != GetTeam())
 		{
-			if (spell == nullptr)
-				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-			if (stats.life <= 0)
+			if (!invulnerable)
 			{
-				App->entity->AddRupeesIfPlayer(entity, 1);
-				App->scene->main_scene->base_manager->KillBase(this);
-				App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
+				if (spell == nullptr)
+					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+
+				Die(entity);
 			}
 		}
 	}
@@ -127,6 +121,8 @@ bool Base::Update(float dt)
 
 bool Base::Draw(float dt)
 {
+	LifeBar(iPoint(120, 10), iPoint(-55, -160));
+
 	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 120, game_object->GetPos().y - 144}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	return true;
 }
@@ -139,4 +135,14 @@ bool Base::CleanUp()
 iPoint Base::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Base::Die(Entity* killed_by)
+{
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, 1);
+		App->scene->main_scene->base_manager->KillBase(this);
+		App->scene->main_scene->EndGame((GetTeam() == 1) ? 2 : 1);
+	}
 }

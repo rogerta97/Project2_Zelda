@@ -20,14 +20,16 @@ struct collision_filters
 	short int CATEGORY_NONCOLLISIONABLE = 0x0008;
 	short int CATEGORY_PAYLOAD_AREA = 0x0016;
 	short int CATEGORY_LINK_ULTIMATE = 0x0032;
+	short int CATEGORY_TOWER = 0x0064;
 
 	// Mask
 	short int MASK_PLAYER = CATEGORY_SCENERY | CATEGORY_ABILITIES | CATEGORY_PLAYER | CATEGORY_PAYLOAD_AREA;
-	short int MASK_ABILITIES = CATEGORY_PLAYER;
+	short int MASK_ABILITIES = CATEGORY_PLAYER | CATEGORY_TOWER;
 	short int MASK_SCENERY = -1;
 	short int MASK_NONCOLLISIONABLE = 0;
 	short int MASK_PAYLOAD_AREA = CATEGORY_SCENERY | CATEGORY_PLAYER;
 	short int MASK_LINK_ULTIMATE = CATEGORY_PLAYER;
+	short int MASK_TOWER = CATEGORY_PLAYER | CATEGORY_ABILITIES;
 };
 
 // PhysBody enum
@@ -47,6 +49,7 @@ enum class pbody_type
 	p_t_bush,
 	p_t_taco,
 	p_t_navi_basic_attack,
+	p_t_ganon_bat,
 };
 
 // Fixture enum

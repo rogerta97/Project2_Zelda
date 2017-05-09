@@ -15,6 +15,8 @@
 #include "TowerManager.h"
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
+#include "BaseManager.h"
+#include <climits>
 
 #define Half_Tile 16
 
@@ -25,6 +27,7 @@ Minion::Minion(iPoint pos)
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 
 	pugi::xml_document doc;
@@ -43,8 +46,6 @@ Minion::Minion(iPoint pos)
 	AddAbility(0, cd, bd, dmg_mult);
 	
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
-
-	cd_timer.Start();
 
 	event_thrower = new EventThrower();
 
@@ -104,8 +105,6 @@ bool Minion::Update(float dt)
 	}
 	else
 		SetIdleAnim();
-
-	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 	
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
@@ -126,23 +125,14 @@ bool Minion::Update(float dt)
 				{
 					DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-					spell->Effects(entity, ability);
+					spell->Effects(entity, this, ability);
 				}
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
-
-			if (stats.life <=0)
-			{
-				Event* event_die = new Event();
-				event_die->type = e_t_death;
-				event_die->event_data.entity = this;
-				event_thrower->AddEvent(event_die);
-
-				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-				App->scene->main_scene->minion_manager->KillMinion(this);
-			}
 		}
+
+		Die(entity);
 	}
 
 	return ret;
@@ -151,6 +141,8 @@ bool Minion::Update(float dt)
 bool Minion::Draw(float dt)
 {
 	bool ret = true;
+
+	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 
 	if (flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
@@ -306,6 +298,21 @@ void Minion::SetBasePath(std::list<iPoint>& path)
 	}
 }
 
+void Minion::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->minion_manager->KillMinion(this);
+
+		if (killed_by != nullptr && killed_by->is_player && killed_by != nullptr)
+		{
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].minions++;
+		}
+	}
+}
+
 void Minion::MinionIdle()
 {
 	CheckState();
@@ -396,10 +403,10 @@ void Minion::MinionAttack()
 
 	//FaceTarget();
 
-	if (cd_timer.ReadSec()>abilities.at(0)->cd)
+	if (abilities.at(0)->CdCompleted())
 	{
 		Attack();
-		cd_timer.Start();
+		abilities.at(0)->CdReset();
 	}
 }
 
@@ -423,7 +430,10 @@ void Minion::CheckState()
 		}
 		else {
 			if (LookForTarget())
-				PathToTarget();
+			{
+				PathToTarget(); 
+				state = Minion_Move;
+			}
 		}
 		break;
 	case Minion_Move:
@@ -444,7 +454,7 @@ void Minion::CheckState()
 			}
 			else
 			{
-				if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4)
+				if (GetPos().DistanceTo(target->GetPos()) < attack_range - attack_range / 4) // Improve
 					state = Minion_Attack;
 				else
 				{
@@ -460,6 +470,7 @@ void Minion::CheckState()
 						target_path_index = 0;
 						target = nullptr;
 						move_state = Move_ReturnToPath;
+						CheckNearestPathTile();
 						PathToBasePath();
 					}
 				}
@@ -619,6 +630,16 @@ bool Minion::LookForTarget()
 		}
 	}
 
+	if (base_path_index >= base_path.size() - 1)
+	{
+		if (GetTeam() == 1)
+			target = App->scene->main_scene->base_manager->GetBase(2);
+		else
+			target = App->scene->main_scene->base_manager->GetBase(1);
+
+		ret = true;
+	}
+
 	return ret;
 }
 
@@ -755,31 +776,46 @@ void Minion::Attack()
 	}
 }
 
-	void Minion::SetIdleAnim()
+void Minion::SetIdleAnim()
+{
+	switch (anim_state)
 	{
-		switch (anim_state)
-		{
-		case run_up:
-		case idle_up:
-		case basic_atack_up:
-			IdleUp();
-			break;
-		case run_left:
-		case idle_left:
-		case basic_atack_left:
-			IdleLeft();
-			break;
-		case run_down:
-		case idle_down:
-		case basic_atack_down:
-			IdleDown();
-			break;
-		case run_right:
-		case idle_right:
-		case basic_atack_right:
-			IdleRight();
-			break;
-		default:
-			break;
-		}
+	case run_up:
+	case idle_up:
+	case basic_atack_up:
+		IdleUp();
+		break;
+	case run_left:
+	case idle_left:
+	case basic_atack_left:
+		IdleLeft();
+		break;
+	case run_down:
+	case idle_down:
+	case basic_atack_down:
+		IdleDown();
+		break;
+	case run_right:
+	case idle_right:
+	case basic_atack_right:
+		IdleRight();
+		break;
+	default:
+		break;
 	}
+}
+
+void Minion::CheckNearestPathTile()
+{
+	int distance = INT_MAX, i = 0;
+	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+	for (; i < base_path.size(); ++i)
+	{
+		if (abs(base_path[i].x - map_pos.x) < distance)
+			distance = abs(base_path[i].x - map_pos.x);
+		else
+			break;
+	}
+
+	base_path_index = i;
+}

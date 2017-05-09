@@ -23,6 +23,7 @@ class Player
 {
 public:
 	Player() {  };
+
 	Player(Entity* _entity, uint _controller_index, uint _viewport, iPoint _respawn)
 	{
 		entity = _entity; state = states::idle_down; controller_index = _controller_index, viewport = _viewport;
@@ -30,10 +31,12 @@ public:
 		App->win->GetWindowSize(win_w, win_h);
 		int x = 27 + ((viewport - 1) % 2)*win_w / 2;
 		int y = 30 + ((viewport - 1) / 2)*win_h / 2;
-		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_12);
+		rupees_num = App->scene->main_scene->shop_manager->shop_window->CreateText(iPoint(x, y), App->font->game_font_25);
 		UpdateRupees();
 		team = entity->GetTeam();
 		respawn = _respawn;
+		death_timer = App->AddGameplayTimer();
+		base_travel_timer = App->AddGameplayTimer();
 	}
 
 	void BuyItem(Item* item, int price);
@@ -42,6 +45,7 @@ public:
 	void BaseTravel();
 	void ApplyItemStats();
 	void AddRupees(int add);
+	void CleanUp();
 
 private:
 	void UpdateRupees();
@@ -62,7 +66,7 @@ public:
 	UI_Text*    rupees_num = nullptr;
 	uint	    rupees = 0;
 
-	j1Timer     death_timer;
+	j1Timer*    death_timer = nullptr;
 	float		death_time = 5.0f;
 
 	bool		is_dead = false;
@@ -73,7 +77,7 @@ public:
 	bool		disable_controller = false;
 
 	bool		base_travel = false;
-	j1Timer     base_travel_timer;
+	j1Timer*    base_travel_timer = nullptr;
 
 	float		last_heal_time = 0.0f;
 
@@ -82,9 +86,10 @@ public:
 
 struct PlayerManagerUI
 {
-	vector<UI_Image*>	abilities;
+	vector<UI_Image*>	abilities_button;
+	vector<UI_Image*>	abilities_icon;
 	vector<UI_Text*>    abilities_cd;
-	UI_Text*			death_text;
+	UI_Text*			death_time = nullptr;
 };
 
 class PlayerManager
@@ -137,15 +142,19 @@ public:
 	//Allow player input. 0 to allow all
 	void AllowInput(int player);
 
+	// Get player from index 
+	Entity* GetPlayer(int index);
+
 private:
-	void PlayerInput(Player* player);
+	void PlayerInput(Player* player, int index);
 	void MoveCamera(Player* player);
 	void CheckIfRespawn(Player* player);
 	void CheckIfDeath(Player* player);
 	void UpdateUI(Player* player);
-	void UpdateDeathUI(Player* player);
+	void UpdateDeathUI(Player* player, float dt);
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
+	void SetAbilitiesIcon(int index);
 
 public:
 	vector<Player*>     players;
@@ -156,12 +165,16 @@ private:
 
 	EventThrower*           event_thrower = nullptr;
 
-	SDL_Color               death_rect_color = NULLRECT;
-	SDL_Rect			    death_rect = NULLRECT;
-
 	uint					last_heal_time = 0;
 
 	uint			     	death_sound_effect = 100;
+
+	Animator*				death_text_anim = nullptr;
+	SDL_Texture*		    death_text_texture = nullptr;
+	iPoint                  death_text_pos = NULLPOINT;
+
+	iPoint					death_quad_pos = NULLPOINT;
+	SDL_Rect				death_quad_rect = NULLRECT;
 };
 
 

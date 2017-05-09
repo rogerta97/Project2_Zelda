@@ -14,6 +14,7 @@
     <ProjectGuid>{2AF9969B-F202-497B-AF30-7BEF9CE8005E}</ProjectGuid>
     <RootNamespace>programacio_2</RootNamespace>
     <ProjectName>2DEngine</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -51,10 +52,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
+      <AdditionalIncludeDirectories>C:\Users\guillemdrdv\Documents\GitHub\Project2_Zelda\Game\Brofiler-1.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,9 +91,12 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventThrower.cpp" />
     <ClCompile Include="Eyes.cpp" />
+    <ClCompile Include="FinalScreen.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Guards.cpp" />
+    <ClCompile Include="Ganon.cpp" />
+    <ClCompile Include="GanonBat.cpp" />
     <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
@@ -113,7 +119,9 @@
     <ClCompile Include="MageSkeleton.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="j1Physics.cpp" />
+    <ClCompile Include="Mapping.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="MinimapManager.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="MinionManager.cpp" />
     <ClCompile Include="Navi.cpp" />
@@ -127,6 +135,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Quest_Manager.cpp" />
+    <ClCompile Include="RemapingScene.cpp" />
     <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SnakePoison.cpp" />
@@ -151,6 +160,7 @@
     <ClInclude Include="BezierEasing.h" />
     <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
+    <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Bushes.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="Cuco.h" />
@@ -158,9 +168,12 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EventThrower.h" />
     <ClInclude Include="Eyes.h" />
+    <ClInclude Include="FinalScreen.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Guards.h" />
+    <ClInclude Include="Ganon.h" />
+    <ClInclude Include="GanonBat.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />
@@ -180,7 +193,9 @@
     <ClInclude Include="MageSkeleton.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="j1Physics.h" />
+    <ClInclude Include="Mapping.h" />
     <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="MinimapManager.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="MinionManager.h" />
     <ClInclude Include="Navi.h" />
@@ -205,6 +220,7 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Quest_Manager.h" />
+    <ClInclude Include="RemapingScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShopManager.h" />
     <ClInclude Include="Skeleton.h" />
@@ -233,6 +249,8 @@
     <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
     <Xml Include="..\Game\guards.xml" />
+    <Xml Include="..\Game\ganon.xml" />
+    <Xml Include="..\Game\ganon_bat.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\mageskeleton.xml" />

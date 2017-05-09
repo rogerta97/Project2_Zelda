@@ -27,6 +27,7 @@ Link::Link(iPoint pos)
 	game_object->CreateCollisionSensor(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	link_collision = game_object->CreateCollision(iPoint(2, 10), 13, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->pbody->body->SetBullet(true);
 
@@ -45,25 +46,25 @@ Link::Link(iPoint pos)
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);
-	a1->SetImages({481, 0, 80, 48}, { 561, 0, 80, 48 }, { 481, 244, 80, 48 });
+	a1->SetImages({816, 351, 80, 48}, { 816, 473, 80, 48 }, { 1013, 1960, 80, 48 }, { 0,0,0,0 });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
 	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);
-	a2->SetImages({ 481, 48, 80, 48 }, { 561, 48, 80, 48 }, { 481, 292, 80, 48 });
+	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, {0, 0, 0, 0});
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
 	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); // Name references to the Spell name
-	a3->SetImages({ 481, 96, 48, 73 }, { 529, 96, 48, 73 }, { 481, 341, 48, 73 }); 
+	a3->SetImages({ 816, 399, 48, 73 }, { 816, 521, 48, 73 }, { 1013, 2008, 48, 73 }, {0, 0, 0, 0});
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
-	a4->SetImages({ 481, 170, 48, 73 }, { 529, 170, 48, 73 }, { 529, 341, 48, 73 });
+	a4->SetImages({ 864, 399, 48, 73 }, { 864, 521,48, 73 }, { 1061, 2008, 48, 73 }, { 0,0,0,0 });
 	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -122,7 +123,7 @@ bool Link::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				spell->Effects(entity, ability);
+				spell->Effects(entity, this, ability);
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -143,27 +144,15 @@ bool Link::Update(float dt)
 				{
 					if (spell->can_delete)
 					{
-						GetAbility(2)->cd_timer.SubstractTimeFromStart(7);
+						GetAbility(2)->cd_timer->SubstractTimeFromStart(7);
 						App->spell->DeleteSpell(spell);
 					}
 				}
 			}
 		}
 
-		// Dies
-		if (stats.life <= 0)
-		{
-			if (entity->is_player)
-			{
-				// Update quests
-				App->scene->main_scene->quest_manager->DeathQuestEvent(entity, this);
-			}
-			
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-		}
+		Die(entity);
 	}
-
-	LifeBar(iPoint(60, 5), iPoint(-25, -40));
 
 	// Ability3 movement ------------------------------
 	if (ab3_dir != link_ability3_dir::a3_direction_null)
@@ -268,7 +257,9 @@ bool Link::Update(float dt)
 bool Link::Draw(float dt)
 {
 	bool ret = true;
-	
+
+	LifeBar(iPoint(60, 5), iPoint(-25, -40));
+
 	// Blit
 	if(flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
@@ -808,6 +799,25 @@ void Link::SetCamera(int id)
 iPoint Link::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Link::Die(Entity * killed_by)
+{
+	// Dies
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		if (killed_by->is_player)
+		{
+			// Update quests
+			App->scene->main_scene->quest_manager->DeathQuestEvent(killed_by, this);
+
+			//Add kill to killer
+			App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(killed_by) - 1].kills++;
+		}
+
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
+	}
 }
 
 void Link::CreateAbility3Test()

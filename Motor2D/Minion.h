@@ -75,6 +75,8 @@ public:
 
 	void SetBasePath(std::list<iPoint>& path);
 
+	void Die(Entity* killed_by);
+
 private:
 
 	void MinionIdle();
@@ -102,6 +104,8 @@ private:
 
 	void SetIdleAnim();
 
+	void CheckNearestPathTile();
+
 public:
 	Entity*				target = nullptr;
 
@@ -124,8 +128,6 @@ private:
 	float				tower_dmg_mult = 0.0f;
 
 	states				anim_state = states_null;
-
-	j1Timer				cd_timer;
 
 	EventThrower*       event_thrower = nullptr;
 

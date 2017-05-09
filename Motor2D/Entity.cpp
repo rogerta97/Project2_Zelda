@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "PlayerManager.h"
 #include "p2Log.h"
+#include "Mapping.h"
 #include "Functions.h"
 #include "Quest_Manager.h"
 
@@ -17,6 +18,7 @@ void Entity::CleanAbilities()
 {
 	for (int i = 0; i < abilities.size(); i++)
 	{
+		abilities.at(i)->CleanUp();
 		RELEASE(abilities.at(i));
 	}
 	abilities.clear();
@@ -38,6 +40,7 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 	}
 	return false;
 }
+
 
 Ability* Entity::AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name)
 {
@@ -88,9 +91,23 @@ int Entity::GetLife()
 void Entity::DealDamage(int damage)
 {
 	if (stats.life > 0)
-		stats.life -= damage;
+	{
+		if (stats.shield > 0)
+		{
+			stats.shield -= damage;
+
+			if (stats.shield < 0)
+				stats.life += stats.shield;
+		}
+		else 
+			stats.life -= damage;
+	}
+
 	if (stats.life < 0)
 		stats.life = 0;
+
+	if (stats.shield < 0)
+		stats.shield = 0;
 }
 
 void Entity::Heal(int heal)
@@ -102,7 +119,15 @@ void Entity::Heal(int heal)
 }
 
 void Entity::Slow(float speed_multiplicator, float time)
-{
+{	
+	for (list<slow>::iterator it = App->entity->slowed_entities.begin(); it != App->entity->slowed_entities.end();)
+	{
+		if ((*it).entity == this)
+			return;
+		else
+			++it;
+	}
+
 	stats.speed *= speed_multiplicator;
 	slow s(time, this);
 	App->entity->slowed_entities.push_back(s);
@@ -110,22 +135,36 @@ void Entity::Slow(float speed_multiplicator, float time)
 
 void Entity::Stun(float time)
 {
+	for (list<stun>::iterator it = App->entity->stuned_entities.begin(); it != App->entity->stuned_entities.end();)
+	{
+		if ((*it).entity == this)
+			return;
+		else
+			++it;
+	}
+
 	stuned = true;
-	stun s(time, this);
+	stun s(time, this, App->entity->GetEntityEffectsAnimator()->GetAnimation("stun"));
 	App->entity->stuned_entities.push_back(s);
 }
 
-void Entity::LifeBar(iPoint size, iPoint offset)
+void Entity::LifeBar(iPoint size, iPoint offset, int shield)
 {
-	if (show_life_bar && game_object != nullptr)
+	if (game_object != nullptr)
 	{
 		SDL_Rect rect = { game_object->GetPos().x + offset.x, game_object->GetPos().y + offset.y, size.x, size.y };
 		SDL_Rect life = rect;
+		SDL_Rect shld = rect;
 
 		// Rule of thirds
 		life.w = (rect.w*stats.life) / stats.max_life;
 		if (life.w < 0)
 			life.w = 0;
+
+		shld.x = life.x + life.w + 2;
+		shld.w = (float)(rect.w * shield) / (float)stats.max_life;
+		if (shld.w < 0)
+			shld.w = 0;
 
 		// Back bar
 		App->view->LayerDrawQuad(rect, 30, 30, 30, 255, true, 9, 0, true);
@@ -147,6 +186,11 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 			if (viewport == main_view)
 			{
 				App->view->LayerDrawQuad(life, 255, 255, 51, 255, true, 10, viewport, true);
+				if (shield > 0)
+				{
+					App->view->LayerDrawQuad({ shld.x - 2, shld.y - 2, shld.w + 4, shld.h + 4 }, 85, 85, 51, 255, true, 11, viewport, true);
+					App->view->LayerDrawQuad(shld, 165, 165, 51, 255, true, 12, viewport, true);
+				}
 			}
 			else
 			{
@@ -157,14 +201,28 @@ void Entity::LifeBar(iPoint size, iPoint offset)
 					if (viewport == my_team.at(i))
 					{
 						App->view->LayerDrawQuad(life, 51, 153, 255, 255, true, 10, viewport, true);
+
+						if (shield > 0)
+						{
+							App->view->LayerDrawQuad({ shld.x - 2, shld.y - 2, shld.w + 4, shld.h + 4 }, 51, 50, 100, 255, true, 11, viewport, true);
+							App->view->LayerDrawQuad(shld, 51, 103, 165, 255, true, 12, viewport, true);
+						}
 						enemy = false;
 						break;
 					}
 				}
 
 				// Enemy printing (red)
-				if(enemy)
+				if (enemy)
+				{
 					App->view->LayerDrawQuad(life, 255, 0, 0, 255, true, 10, viewport, true);
+
+					if (shield > 0)
+					{
+						App->view->LayerDrawQuad({ shld.x - 2, shld.y - 2, shld.w + 4, shld.h + 4 }, 100, 0, 0, 255, true, 11, viewport, true);
+						App->view->LayerDrawQuad(shld, 165, 0, 0, 255, true, 12, viewport, true);
+					}
+				}
 			}
 		}
 	}
@@ -193,9 +251,22 @@ void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 	}
 }
 
+void Entity::SetInvulnerable()
+{
+	invulnerable = true;
+
+	show_life_bar = false;
+
+}
+
+void Entity::SetAbilityImages(int ability_id, SDL_Rect icon_rect)
+{
+	abilities[ability_id - 1]->ability_icon = icon_rect; 
+}
+
 float Ability::GetCdTimeLeft()
 {
-	float ret = cd - cd_timer.ReadSec();
+	float ret = cd - cd_timer->ReadSec();
 
 	if (ret < 0)
 		ret = 0;

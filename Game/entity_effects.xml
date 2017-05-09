@@ -12,5 +12,22 @@
       <rect x = "48" y = "72" w = "48" h = "44"/>
       <rect x = "96" y = "72" w = "48" h = "44"/>
     </anim>
+
+    <anim speed = "23" name = "stun" loop = "true">
+      <rect x = "0" y = "0" w = "32" h = "29"/>
+      <rect x = "32" y = "0" w = "32" h = "29"/>
+      <rect x = "64" y = "0" w = "32" h = "29"/>
+      <rect x = "96" y = "0" w = "32" h = "29"/>
+    </anim>
+
+    <anim speed = "13" name = "win_rupees_green" loop = "false">
+      <rect x = "0" y = "122" w = "16" h = "48"/>
+      <rect x = "16" y = "122" w = "16" h = "48"/>
+      <rect x = "32" y = "122" w = "16" h = "48"/>
+      <rect x = "48" y = "122" w = "16" h = "48"/>
+      <rect x = "64" y = "122" w = "16" h = "48"/>
+      <rect x = "80" y = "122" w = "16" h = "48"/>
+      <rect x = "96" y = "122" w = "16" h = "48"/>
+    </anim>
   </animations>
 </file>

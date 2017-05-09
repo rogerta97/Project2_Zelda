@@ -127,8 +127,6 @@ private:
 
 	iPoint					initialPos;
 
-	EventThrower*			event_thrower = nullptr;
-
 };
 #endif // !_GUARDS_H_
 

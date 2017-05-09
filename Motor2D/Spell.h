@@ -7,12 +7,14 @@
 #include "j1Physics.h"
 #include "Animation.h"
 #include "Entity.h"
+#include "j1Spell.h"
 
 class b2Fixture;
 class PhysBody;
 class GameObject;
 class Entity;
 class Ability;
+enum spell_name;
 
 struct personal_stats
 {
@@ -66,7 +68,7 @@ public:
 		return team;
 	}
 
-	virtual void Effects(Entity* entity, Ability * ability) {};
+	virtual void Effects(Entity * spell_owner, Entity* reciever, Ability * ability) {};
 
 private:
 
@@ -88,6 +90,8 @@ public:
 	string			 name;
 
 	personal_stats   stats;
+
+	spell_name		 type = spell_name::s_n_null;
 protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;

@@ -52,7 +52,7 @@ private:
 	iPoint			starting_pos = NULLPOINT;
 	int				angle = 0;
 
-	j1Timer			timer;
+	j1Timer*		timer = nullptr;
 
 };
 

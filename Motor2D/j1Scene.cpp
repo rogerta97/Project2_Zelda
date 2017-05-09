@@ -7,12 +7,15 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Scene.h"
+#include "RemapingScene.h"
 #include "MainScene.h"
 #include "MenuScene.h"
 #include "j1Console.h"
 #include "TeamSelectScene.h"
+#include "FinalScreen.h"
 #include "CharacterSelectionScene.h"
 #include "LogoScene.h"
+#include "Mapping.h"
 
 #define NUMBER_OF_PLAYERS 4
 
@@ -44,6 +47,21 @@ bool j1Scene::Start()
 
 	LOG("Start module scene");
 
+	players[0].player = players[0].gamepad = players[0].viewport = 1;
+	players[1].player = players[1].gamepad = players[1].viewport = 2;
+	players[2].player = players[2].gamepad = players[2].viewport = 3;
+	players[3].player = players[3].gamepad = players[3].viewport = 4;
+	players[0].team = 1;
+	players[1].team = 2;
+	players[2].team = 1;
+	players[3].team = 2;
+
+	//Create mapping for players
+	players[0].mapping = new Mapping();
+	players[1].mapping = new Mapping();
+	players[2].mapping = new Mapping();
+	players[3].mapping = new Mapping();
+
 	// Create scenes
 	menu_scene = new MenuScene(); 
 	scenes.push_back(menu_scene);
@@ -55,6 +73,10 @@ bool j1Scene::Start()
 	scenes.push_back(charselect_screen); 
 	logo_scene = new LogoScene();
 	scenes.push_back(logo_scene);
+	final_screen = new FinalScreen(); 
+	scenes.push_back(final_screen); 
+	remaping_scene = new RemapingScene();
+	scenes.push_back(remaping_scene); 
 	// -------------
 
 	// Starting scene
@@ -62,15 +84,6 @@ bool j1Scene::Start()
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();
-
-	players[0].player = players[0].gamepad = players[0].viewport = 1;
-	players[1].player = players[1].gamepad = players[1].viewport = 2;
-	players[2].player = players[2].gamepad = players[2].viewport = 3;
-	players[3].player = players[3].gamepad = players[3].viewport = 4;
-	players[0].team = 1;
-	players[1].team = 2;
-	players[2].team = 1;
-	players[3].team = 2;
 
 	return ret;
 }
@@ -127,7 +140,7 @@ void j1Scene::ChangeScene(Scene * new_scene)
 {
 	LOG("Changing current scene");
 
-	Scene* last_scene = current_scene;
+	last_scene = current_scene;
 	current_scene = new_scene;
 	last_scene->CleanUp();
 	current_scene->Start();

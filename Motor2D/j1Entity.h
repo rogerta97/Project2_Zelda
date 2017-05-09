@@ -12,27 +12,33 @@ class PlayerManager;
 class b2Fixture;
 class PhysBody;
 class Entity;
+class Player;
 class Ability;
 class Spell;
 class j1Timer;
+class EventThrower;
 
 enum class pbody_type;
 
 enum entity_name
 {
-	e_n_null, link, zelda, navi, minion, tower, ganon, trunk, base, tree, eyes, bush, snake, skeleton, waterfall, mskeleton,cuco, guards,
+	e_n_null, link, zelda, navi, minion, tower, ganon, trunk, base, tree, eyes, bush, snake, skeleton, waterfall, mskeleton, cuco, guards,
 };
 
 class slow
 {
 public:
-	slow() {};
 	slow(float _time, Entity* _entity) 
 	{
 		time = _time; entity = _entity;
-		timer.Start();
+		timer = App->AddGameplayTimer();
 	};
 	~slow() {};
+
+	void CleanUp()
+	{
+		App->DeleteGameplayTimer(timer);
+	}
 
 	bool operator==(slow s)
 	{
@@ -41,21 +47,32 @@ public:
 		return false;
 	}
 
-	float   time = 0.0f;
-	Entity* entity = nullptr;
-	j1Timer timer;
+	float    time = 0.0f;
+	Entity*  entity = nullptr;
+	j1Timer* timer = nullptr;
 };
 
 class stun
 {
 public:
-	stun() {};
-	stun(float _time, Entity* _entity)
+	stun(float _time, Entity* _entity, Animation* ani)
 	{
+
 		time = _time; entity = _entity;
-		timer.Start();
+		timer = App->AddGameplayTimer();
+		Animation* a = new Animation(*ani);
+		animator = new Animator();
+		animator->AddAnimation(a);
+		animator->SetAnimation("stun");
 	};
 	~stun() {};
+
+	void CleanUp()
+	{
+		animator->CleanUp();
+		RELEASE(animator);
+		App->DeleteGameplayTimer(timer);
+	};
 
 	bool operator==(stun s)
 	{
@@ -64,15 +81,15 @@ public:
 		return false;
 	}
 
-	float   time = 0.0f;
-	Entity* entity = nullptr;
-	j1Timer timer;
+	float     time = 0.0f;
+	Entity*   entity = nullptr;
+	j1Timer*  timer = nullptr;
+	Animator* animator = nullptr;
 };
 
 class die
 {
 public:
-	die() {};
 	die(iPoint _pos, Animation* ani)
 	{
 		pos = _pos;
@@ -90,14 +107,47 @@ public:
 	};
 
 	iPoint     pos = NULLPOINT;
-	Animator*  animator;
+	Animator*  animator = nullptr;
+};
+
+class win_rupees
+{
+public:
+	win_rupees(Player* _pl, Animation* ani)
+	{
+		player = _pl;
+		timer = App->AddGameplayTimer();
+
+		Animation* a = new Animation(*ani);
+		animator = new Animator();
+		animator->AddAnimation(a);
+		animator->SetAnimation("win_rupees_green");
+	};
+	~win_rupees() {};
+
+	void CleanUp()
+	{
+		App->DeleteGameplayTimer(timer);
+		animator->CleanUp();
+		RELEASE(animator);
+	}
+
+	bool operator==(win_rupees s)
+	{
+		if (player == s.player)
+			return true;
+		return false;
+	}
+
+	Player*    player = nullptr;
+	j1Timer*   timer = nullptr;
+	Animator*  animator = nullptr;
 };
 
 class Entity;
 class j1Entity : public j1Module
 {
 public:
-
 	j1Entity();
 
 	// Destructor
@@ -139,17 +189,22 @@ public:
 	vector<Entity*> FindEntitiesByBodyType(pbody_type type);
 	void DeathAnimation(Entity* die);
 	void AddRupeesIfPlayer(Entity* entity, int amount);
+	Animator* GetEntityEffectsAnimator();
 
 private:
 	void RemoveEntities();
-	void SlowEntities();
-	void StunEntities();
-	void DieEntities();
+	void SlowEntities(float dt);
+	void DeleteFromSlow(Entity* entity);
+	void StunEntities(float dt);
+	void DeleteFromStun(Entity* entity);
+	void DieEntities(float dt);
+	void WinRupeesPlayers(float dt);
 
 public:
-	list<slow>     slowed_entities;
-	list<stun>     stuned_entities;
-	list<die>	   dying_entities;
+	list<slow>       slowed_entities;
+	list<stun>       stuned_entities;
+	list<die>	     dying_entities;
+	list<win_rupees> win_rupees_players;
 
 private:
 	// List with all entities
@@ -158,6 +213,8 @@ private:
 	// Texture with effects animations
 	SDL_Texture*   entity_effects_texture = nullptr;
 	Animator*	   entity_effects_animator = nullptr;
+
+	EventThrower*  event_thrower = nullptr;
 };
 
 #endif // __j1ENTITY_H__

@@ -3,8 +3,13 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Map.h"
+#include "j1XMLLoader.h"
 #include "GameObject.h"
 #include "j1Audio.h"
+#include "Quest_Manager.h"
+
+#include "MinimapManager.h"
+#include "Mapping.h"
 
 #define DEATH_CAMERA_SPEED 500
 #define BASE_TRAVEL_TIME 4
@@ -29,42 +34,64 @@ bool PlayerManager::Awake(pugi::xml_node &)
 
 bool PlayerManager::Start()
 {
-	// Abilities UI
+	// Abilities UI ------
 	SDL_Rect screen = App->view->GetViewportRect(1);
-	iPoint ability1_pos = { screen.w - 120 , screen.h - 126 };
-	iPoint ability2_pos = { 13, screen.h - 126 };
-	iPoint ability3_pos = { screen.w - 90, screen.h - 76 };
-	iPoint ability4_pos = { 13, screen.h - 76 };
+	iPoint ability1_pos = { screen.w - 120 , screen.h - 135 };
+	iPoint ability2_pos = { 13, screen.h - 135 };
+	iPoint ability3_pos = { screen.w - 90, screen.h - 85 };
+	iPoint ability4_pos = { 13, screen.h - 85 };
 	
 	_TTF_Font* text_font = App->font->game_font;
-	iPoint text1_pos = { screen.w - 85 , screen.h - 119 };
-	iPoint text2_pos = { (50), screen.h - 119 };
-	iPoint text3_pos = { screen.w - 75, screen.h - 56 };
-	iPoint text4_pos = { 27, screen.h - 56 };
+	iPoint text1_pos = { screen.w - 85 , screen.h - 128 };
+	iPoint text2_pos = { (50), screen.h - 128 };
+	iPoint text3_pos = { screen.w - 75, screen.h - 65 };
+	iPoint text4_pos = { 27, screen.h - 65 };
 
-	death_rect_color = { 32, 32, 32, 100 };
-	death_rect = { 0, 0, screen.w ,  screen.h };
-	iPoint death_text_pos = { int(screen.w*0.5f) - 185, int(screen.h*0.5f) - 50 };
+	// Death timer
+	iPoint death_timer_pos = { (screen.w / 2) - 5, (screen.h / 2) + 15};
 
+	// Death quad
+	death_quad_rect = {0, 1400, 1125, 561};
+	death_quad_pos = { -(death_quad_rect.w /2 - screen.w/2), -(death_quad_rect.h / 2 - screen.h / 2) };
+
+	// Death text animation
+	death_text_pos = { int(screen.w * 0.5f) - 131, int(screen.h * 0.5f) - 13 };
+	death_text_anim = new Animator(); 
+
+	pugi::xml_document doc;
+	App->xml->LoadXML("GameSettings.xml", doc);
+
+	death_text_anim->LoadAnimationsFromXML(doc, "death_text");
+	death_text_texture = App->gui->atlas;
+
+	death_text_anim->SetAnimation("idle"); 
+	// ---------------
+    
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
 		PlayerManagerUI ui_elements;
 
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability1_pos, { 182, 78, 35, 35 })); 
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability2_pos, { 182, 78, 35, 35 }));
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability3_pos, { 182, 78, 35, 35 }));
-		ui_elements.abilities.push_back(it->main_window->CreateImage(ability4_pos, { 182, 78, 35, 35 }));
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability1_pos, { 0,0,0,0 })); 
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability2_pos, { 0,0,0,0 }));
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability3_pos, { 0,0,0,0 }));
+		ui_elements.abilities_button.push_back(it->viewport_window->CreateImage(ability4_pos, { 0,0,0,0 }));
+
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability1_pos.x + 20, ability1_pos.y + 7 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability2_pos.x + 21, ability2_pos.y + 6 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability3_pos.x + 9, ability3_pos.y + 21 }, { 0,0,0,0 }));
+		ui_elements.abilities_icon.push_back(it->viewport_window->CreateImage({ ability4_pos.x + 7, ability4_pos.y + 21 }, { 0,0,0,0 }));
 				   
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text1_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text2_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text3_pos, text_font));
-		ui_elements.abilities_cd.push_back(it->main_window->CreateText(text4_pos, text_font));
-				   
-		ui_elements.death_text = it->main_window->CreateText(death_text_pos, App->font->game_font_20, 0);
-		ui_elements.death_text->enabled = false; 
-		ui_elements.death_text->blit_layer += 1;
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text1_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text2_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text3_pos, text_font));
+		ui_elements.abilities_cd.push_back(it->viewport_window->CreateText(text4_pos, text_font));
+
+		ui_elements.death_time = it->viewport_window->CreateText(death_timer_pos, App->font->game_font_60);
+		ui_elements.death_time->enabled = false; ui_elements.death_time->blit_layer = 9999;
+			   
 		p_manager_ui_elements.push_back(ui_elements);
 	}
+	// ---------------------
 
 	// Event
 	event_thrower = new EventThrower();
@@ -92,7 +119,8 @@ bool PlayerManager::Update(float dt)
 		if (!curr_player->is_dead)
 		{
 			// Take player input
-			PlayerInput(curr_player);
+			if (!curr_player->disable_controller && !App->GetGamePause())
+				PlayerInput(curr_player, i);
 
 			// Update pasive heal
 			PasiveHP(curr_player);
@@ -114,24 +142,14 @@ bool PlayerManager::Update(float dt)
 		else
 		{
 			// Enable camera movement
-			if (!curr_player->disable_controller)
+			if (!curr_player->disable_controller && !App->GetGamePause())
 				MoveCamera(curr_player);
 
 			// Check if it has to respawn
 			CheckIfRespawn(curr_player);
 
 			// Update death text
-			UpdateDeathUI(curr_player);
-		}
-
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-		{
-			App->scene->main_scene->ui_viewports[i].minimapstate.Enable(); 
-		}
-
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
-		{
-			App->scene->main_scene->ui_viewports[i].minimapstate.Disable();
+			UpdateDeathUI(curr_player, dt);
 		}
 	}
 
@@ -153,10 +171,16 @@ bool PlayerManager::CleanUp()
 
 	for (vector<PlayerManagerUI>::iterator it = p_manager_ui_elements.begin(); it != p_manager_ui_elements.end(); it++)
 	{
-		(*it).abilities.clear(); 
+		(*it).abilities_button.clear(); 
+		(*it).abilities_cd.clear(); 
+		(*it).abilities_icon.clear(); 
 	}
 
 	RELEASE(event_thrower);
+
+	// Release animator
+	death_text_anim->CleanUp();
+	RELEASE(death_text_anim);
 
 	return ret;
 }
@@ -170,9 +194,10 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		iPoint position = pos;
 		
 		position = GetFreePlayerSpawn(team, respawn);
+		
 		position.x += 16;
 		position.y += 9;
-
+		
 		// Create player
 		Player* p = new Player(App->entity->CreateEntity(name, position), controller_index - 1, viewport, position);
 		p->entity->SetCamera(p->viewport);
@@ -183,6 +208,8 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		players.push_back(p);
 		ret = p;
 		p->team = team;
+
+		SetAbilitiesIcon(players.size() - 1);
 	}
 
 	return ret;
@@ -196,7 +223,7 @@ void PlayerManager::DeletePlayer(int controller_index)
 		{
 			if ((*it)->controller_index == controller_index - 1)
 			{
-				App->entity->DeleteEntity((*it)->entity);
+				(*it)->CleanUp();
 				RELEASE(*it);
 				players.erase(it);
 				break;
@@ -211,7 +238,7 @@ void PlayerManager::ClearPlayers()
 	{
 		for (vector<Player*>::iterator it = players.begin(); it != players.end();)
 		{
-			App->entity->DeleteEntity((*it)->entity);
+			(*it)->CleanUp();
 			RELEASE(*it);
 			it = players.erase(it);
 		}
@@ -300,7 +327,7 @@ bool PlayerManager::IsAbilityCdCompleted(Player* player, int ability)
 void PlayerManager::ResetAbilityTimer(Player* player, int ability)
 {
 	if (player->entity->GetAbility(ability - 1) != nullptr)
-		player->entity->GetAbility(ability - 1)->cd_timer.Start();
+		player->entity->GetAbility(ability - 1)->cd_timer->Start();
 }
 
 int PlayerManager::GetPlayerTeamFromBody(PhysBody * body)
@@ -390,18 +417,49 @@ void PlayerManager::AllowInput(int player)
 	}
 }
 
-void PlayerManager::PlayerInput(Player * curr_player)
+Entity* PlayerManager::GetPlayer(int index)
 {
+	return players.at(index)->entity; 
+}
+
+void PlayerManager::PlayerInput(Player * curr_player, int index)
+{
+	// Get abilities mapping
+	key_mapping a1, a2, a3, a4;
+	a1 = App->scene->players[index].mapping->GetMapping(m_k_ability1);
+	a2 = App->scene->players[index].mapping->GetMapping(m_k_ability2);
+	a3 = App->scene->players[index].mapping->GetMapping(m_k_ability3);
+	a4 = App->scene->players[index].mapping->GetMapping(m_k_ability4);
+
 	// Left Joystick -------
 
 	if (curr_player->entity == nullptr)
 		return;
 
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
+	// Base travel
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
 	{
 		curr_player->BaseTravel();
 		curr_player->move = stop;
 	}
+
+	// Minimap
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+	{
+		App->scene->main_scene->minimap_manager->SetActive(true, curr_player->viewport);
+		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Enable();
+	}
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
+	{
+		App->scene->main_scene->minimap_manager->SetActive(false, curr_player->viewport);
+		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Disable();
+	}
+	
+	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_UP && App->scene->main_scene->quest_manager->quests_enabled)
+	{
+		App->scene->main_scene->quest_manager->SwitchWindowState(curr_player->viewport);
+	}
+
 
 	// Diagonal moves
 	if (curr_player->entity->stuned || curr_player->disable_controller)
@@ -519,7 +577,14 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	// Abilities PRESS
 	if (!curr_player->entity->stuned && !curr_player->disable_controller)
 	{
-		if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_REPEAT)
+		bool a1_press = false, a2_press = false, a3_press = false, a4_press = false;
+
+		a1_press = (a1.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a1.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a1.key_id) > 22000;
+		a2_press = (a2.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a2.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a2.key_id) > 22000;
+		a3_press = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) > 22000;
+		a4_press = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_REPEAT : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) > 22000;
+
+		if (a1_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 1))
 			{
@@ -533,7 +598,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 					curr_player->show = shows::show_basic_atack_right;
 			}
 		}
-		else if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_REPEAT)
+		else if (a2_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 2))
 			{
@@ -547,7 +612,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 					curr_player->show = shows::show_ability1_right;
 			}
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) > 22000)
+		else if (a3_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 3))
 			{
@@ -561,7 +626,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 					curr_player->show = shows::show_ability2_right;
 			}
 		}
-		else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) > 22000)
+		else if (a4_press)
 		{
 			if (IsAbilityCdCompleted(curr_player, 4))
 			{
@@ -578,7 +643,14 @@ void PlayerManager::PlayerInput(Player * curr_player)
 	}
 
 	// Abilities RELEASE
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_IDLE)
+	bool a1_release = false, a2_release = false, a3_release = false, a4_release = false;
+
+	a1_release = (a1.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a1.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a1.key_id) < 22000;
+	a2_release = (a2.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a2.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a2.key_id) < 22000;
+	a3_release = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) < 22000;
+	a4_release = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) < 22000;
+
+	if (a1_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -609,7 +681,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		}
 	}
 
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_IDLE)
+	if (a2_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -640,7 +712,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		}
 	}
 
-	if (App->input->GetControllerJoystickMove(curr_player->controller_index, RIGHT_TRIGGER) < 22000)
+	if (a3_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -671,7 +743,7 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		}
 	}
 
-	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFT_TRIGGER) < 22000)
+	if (a4_release)
 	{
 		if (curr_player->show != shows::show_null)
 		{
@@ -763,11 +835,11 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		curr_player->state = idle_up;
 		break;
 	case ability1_left:
-		curr_player->entity->Ability1Down();
+		curr_player->entity->Ability1Left();
 		curr_player->state = idle_left;
 		break;
 	case ability1_down:
-		curr_player->entity->Ability1Left();
+		curr_player->entity->Ability1Down();
 		curr_player->state = idle_down;
 		break;
 	case ability1_right:
@@ -864,10 +936,10 @@ void PlayerManager::PlayerInput(Player * curr_player)
 		curr_player->entity->ShowAbility1Up();
 		break;
 	case show_ability1_left:
-		curr_player->entity->ShowAbility1Down();
+		curr_player->entity->ShowAbility1Left();
 		break;
 	case show_ability1_down:
-		curr_player->entity->ShowAbility1Left();
+		curr_player->entity->ShowAbility1Down();
 		break;
 	case show_ability1_right:
 		curr_player->entity->ShowAbility1Right();
@@ -943,13 +1015,11 @@ void PlayerManager::CheckIfRespawn(Player * player)
 {
 	if (player->is_dead)
 	{
-		App->view->LayerDrawQuad(death_rect, death_rect_color.r, death_rect_color.g, death_rect_color.b, death_rect_color.a, true, 1, player->viewport, false);
-
-		if (player->death_timer.ReadSec() > player->death_time)
+		if (player->death_timer->ReadSec() > player->death_time)
 		{
-			p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(false);
 			player->Respawn();
 			player->ApplyItemStats();
+			p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = false;
 		}
 	}
 }
@@ -958,17 +1028,12 @@ void PlayerManager::CheckIfDeath(Player * player)
 {
 	if (player->entity->stats.life <= 0)
 	{
-		Event* event_die = new Event();
-		event_die->type = e_t_death;
-		event_die->event_data.entity = player->entity;
-		event_thrower->AddEvent(event_die);
-
-		p_manager_ui_elements.at(player->viewport - 1).death_text->SetEnabled(true);
-
     	player->Kill();
 		player->show = shows::show_null;
 
 		App->audio->PlayFx(death_sound_effect, 0);
+
+		p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = true;
 	}
 }
 
@@ -976,77 +1041,199 @@ void PlayerManager::UpdateUI(Player* curr_player)
 {
 	// UI Control -----------
 
+	bool showing_attack = false; 
+
 	switch (curr_player->viewport)
 	{
 	case 1:
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+
+			if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
 			{
-				p_manager_ui_elements.at(0).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
-				p_manager_ui_elements.at(0).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(0).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+				showing_attack = true; 
 			}
-			else
+			
+
+			else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
 			{
-				p_manager_ui_elements.at(0).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(0).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+				showing_attack = true;
+			}
+			
+
+			else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right) && i == 2)
+			{
+				p_manager_ui_elements.at(0).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+				showing_attack = true;
+			}
+			
+
+			else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right) && i == 3)
+			{
+				p_manager_ui_elements.at(0).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+				showing_attack = true;
+			}
+			
+
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
+			{				
+				p_manager_ui_elements.at(0).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(0).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(0).abilities_icon.at(i)->enabled = true;			
+			}
+
+			else if(showing_attack != true)
+			{
+				p_manager_ui_elements.at(0).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(0).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(0).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(0).abilities_cd.at(i)->SetText(str);
 			}
 		}
 
 		break;
 	case 2:
+		if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
+		{
+			p_manager_ui_elements.at(1).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
 			{
-				p_manager_ui_elements.at(1).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(1).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(1).abilities_icon.at(i)->enabled = true;
 			}
-			else
+			else if (showing_attack != true)
 			{
-				p_manager_ui_elements.at(1).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(1).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(1).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(1).abilities_cd.at(i)->SetText(str);
 			}
 		}
 		break;
 	case 3:
+		if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
+		{
+			p_manager_ui_elements.at(2).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
 			{
-				p_manager_ui_elements.at(2).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(2).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(2).abilities_icon.at(i)->enabled = true;
 			}
-			else
+			else if (showing_attack != true)
 			{
-				p_manager_ui_elements.at(2).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(2).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(2).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(2).abilities_cd.at(i)->SetText(str);
 			}
 		}
 		break;
 	case 4:
+		if (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(0)->ChangeImage(curr_player->entity->GetAbility(0)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(1)->ChangeImage(curr_player->entity->GetAbility(1)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(2)->ChangeImage(curr_player->entity->GetAbility(2)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if ((curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
+		{
+			p_manager_ui_elements.at(3).abilities_button.at(3)->ChangeImage(curr_player->entity->GetAbility(3)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
-			if (curr_player->entity->GetAbility(i)->CdCompleted())
+			if (curr_player->entity->GetAbility(i)->CdCompleted() && showing_attack == false)
 			{
-				p_manager_ui_elements.at(3).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
+				p_manager_ui_elements.at(3).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ablility_avaliable);
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->enabled = false;
+				p_manager_ui_elements.at(3).abilities_icon.at(i)->enabled = true;
 			}
-			else
+			else if (showing_attack != true)
 			{
-				p_manager_ui_elements.at(3).abilities.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
+				p_manager_ui_elements.at(3).abilities_button.at(i)->ChangeImage(curr_player->entity->GetAbility(i)->ability_in_cd);
 				string str("");
 				str += std::to_string((int)curr_player->entity->GetAbility(i)->GetCdTimeLeft() + 1);
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->enabled = true;
+				p_manager_ui_elements.at(3).abilities_icon.at(i)->enabled = false;
 				p_manager_ui_elements.at(3).abilities_cd.at(i)->SetText(str);
 			}
 		}
@@ -1056,14 +1243,13 @@ void PlayerManager::UpdateUI(Player* curr_player)
 	// --------------
 }
 
-void PlayerManager::UpdateDeathUI(Player * player)
+void PlayerManager::UpdateDeathUI(Player* curr_player, float dt)
 {
-	string str("You have been slain, respawn time ");
-	int time = player->death_time + 1 - player->death_timer.ReadSec();
-	 
-	str += std::to_string(time);
-
-	p_manager_ui_elements.at(player->viewport - 1).death_text->SetText(str);
+	App->view->LayerBlit(9999, death_text_texture, death_text_pos, death_text_anim->GetCurrentAnimation()->GetAnimationFrame(dt), curr_player->viewport, -1.0f, false);
+	App->view->LayerBlit(9998, death_text_texture, death_quad_pos, death_quad_rect, curr_player->viewport, -1.0f, false);
+	
+	string time(""); time += std::to_string((int)curr_player->death_time - (int)curr_player->death_timer->ReadSec());
+	p_manager_ui_elements.at(curr_player->viewport-1).death_time->SetText(time);
 }
 
 void PlayerManager::PasiveHP(Player * curr_player)
@@ -1107,6 +1293,371 @@ void PlayerManager::PasiveRupee(Player * curr_player)
 	{
 		curr_player->last_rupee_time = App->scene->main_scene->GetGameTimer()->ReadSec();
 		curr_player->AddRupees(1);
+	}
+}
+
+void PlayerManager::SetAbilitiesIcon(int index)
+{
+	key_mapping new_key = App->scene->players[index].mapping->GetMapping(m_k_ability1);
+
+	switch (new_key.key_id)
+	{
+
+	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 978, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 978, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 978, 497, 32, 32 };
+
+			break;
+		}
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+	{
+		if (new_key.is_button)
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 978, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 978, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 978, 497, 32, 32 };
+				break;
+			}
+
+		}
+		else
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 978, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 978, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 978, 497, 32, 32 };
+				break;
+			}
+
+		}
+
+	}
+	break;
+
+	case LEFT_TRIGGER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 978, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 978, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 978, 497, 32, 32 };
+			break;
+		}
+
+	}
+	break;
+
+	}
+
+	// ----
+
+	new_key = App->scene->players[index].mapping->GetMapping(m_k_ability2);
+
+	switch (new_key.key_id)
+	{
+
+	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 497, 32, 32 };
+
+			break;
+		}
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+	{
+		if (new_key.is_button)
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 497, 32, 32 };
+				break;
+			}
+
+		}
+		else
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 497, 32, 32 };
+				break;
+			}
+
+		}
+
+	}
+	break;
+
+	case LEFT_TRIGGER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 497, 32, 32 };
+			break;
+		}
+
+	}
+	break;
+
+	}
+
+	// ---
+
+	new_key = App->scene->players[index].mapping->GetMapping(m_k_ability3);
+
+	switch (new_key.key_id)
+	{
+
+	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 497, 32, 32 };
+
+			break;
+		}
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+	{
+		if (new_key.is_button)
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 497, 32, 32 };
+				break;
+			}
+
+		}
+		else
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 497, 32, 32 };
+				break;
+			}
+
+		}
+
+	}
+	break;
+
+	case LEFT_TRIGGER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 497, 32, 32 };
+			break;
+		}
+
+	}
+	break;
+
+	}
+
+	// ----
+
+	new_key = App->scene->players[index].mapping->GetMapping(m_k_ability4);
+
+	switch (new_key.key_id)
+	{
+
+	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1086, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1086, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1086, 497, 32, 32 };
+
+			break;
+		}
+	}
+	break;
+
+	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+	{
+		if (new_key.is_button)
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1086, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1086, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1086, 497, 32, 32 };
+				break;
+			}
+
+		}
+		else
+		{
+			switch (players[index]->type)
+			{
+			case link:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1086, 353, 32, 32 };
+				break;
+
+			case navi:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1086, 425, 32, 32 };
+				break;
+
+			case ganon:
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1086, 497, 32, 32 };
+				break;
+			}
+
+		}
+
+	}
+	break;
+
+	case LEFT_TRIGGER:
+	{
+		switch (players[index]->type)
+		{
+		case link:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1086, 353, 32, 32 };
+			break;
+
+		case navi:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1086, 425, 32, 32 };
+			break;
+
+		case ganon:
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1086, 497, 32, 32 };
+			break;
+		}
+
+	}
+	break;
+
 	}
 }
 
@@ -1160,7 +1711,7 @@ void Player::Kill()
 		base_travel = false;
 		App->entity->DeleteEntity(entity);
 		is_dead = true;
-		death_timer.Start();
+		death_timer->Start();
 	}
 }
 
@@ -1175,6 +1726,7 @@ void Player::Respawn()
 		entity->is_player = true;
 		base_travel = false; 
 		is_dead = false;
+		state = idle_down;
 	}
 }
 
@@ -1182,7 +1734,7 @@ void Player::BaseTravel()
 {
 	if (!base_travel)
 	{
-		base_travel_timer.Start();
+		base_travel_timer->Start();
 		base_travel = true;
 	}
 	else if(!is_dead)
@@ -1191,13 +1743,13 @@ void Player::BaseTravel()
 
 		SDL_Rect base_rect = { (win.w / 2 - (BASE_TRAVEL_RECT_W / 2)), win.h - 20, BASE_TRAVEL_RECT_W, BASE_TRAVEL_RECT_H };
 
-		float width = (base_rect.w * base_travel_timer.ReadSec()) / BASE_TRAVEL_TIME;
+		float width = (base_rect.w * base_travel_timer->ReadSec()) / BASE_TRAVEL_TIME;
 		SDL_Rect time_rect = { base_rect.x, base_rect.y, width, base_rect.h };
 
 		App->view->LayerDrawQuad(base_rect, 32, 32, 32, 200, true, 1, viewport, false);
 		App->view->LayerDrawQuad(time_rect, 208, 240, 208, 200, true, 1, viewport, false);
 
-		if (base_travel_timer.ReadSec() > BASE_TRAVEL_TIME)
+		if (base_travel_timer->ReadSec() > BASE_TRAVEL_TIME)
 		{
 			fPoint r; r.x = respawn.x; r.y = respawn.y;
 			entity->game_object->SetPos(r);
@@ -1249,6 +1801,13 @@ void Player::AddRupees(int add)
 		rupees_num->SetPos({ rupees_num->GetPos().x - 6, rupees_num->GetPos().y });
 
 	UpdateRupees();
+}
+
+void Player::CleanUp()
+{
+	App->entity->DeleteEntity(entity);
+	App->DeleteGameplayTimer(death_timer);
+	App->DeleteGameplayTimer(base_travel_timer);
 }
 
 void Player::UpdateRupees()

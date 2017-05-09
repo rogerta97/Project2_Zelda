@@ -45,7 +45,8 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	for (int i = 1; i <= App->view->GetViews(); i++) {
+	for (int i = 1; i <= App->view->GetViews(); i++) 
+	{
 		fit_square = App->view->GetViewportRect(i);
 		for (std::list<MapLayer*>::iterator item = data.layers.begin(); item != data.layers.end(); item++)
 		{

@@ -15,7 +15,8 @@
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
 
-#define Half_Tile 16
+#define HALF_TILE 16
+#define	PATH_SEARCH_RADIOUS 520
 
 Cuco::Cuco(iPoint pos)
 {
@@ -60,6 +61,7 @@ Cuco::Cuco(iPoint pos)
 		break;
 	}
 	GetNewPath();
+
 	name = "Cuco";
 }
 
@@ -97,22 +99,18 @@ bool Cuco::Update(float dt)
 
 	speed = stats.speed*dt;
 
-	if (!stuned)
+	switch (state)
 	{
-		switch (state)
-		{
-		case Cuco_Idle:
-			CucoIdle();
-			break;
-		case Cuco_Move:
-			CucoMove();
-			break;
-		default:
-			break;
-		}
-	}
-	else
+	case Cuco_Idle:
 		SetIdleAnim();
+		GetNewPath();
+		break;
+	case Cuco_Move:
+		CucoMove();
+		break;
+	default:
+		break;
+	}
 
 	return ret;
 }
@@ -122,9 +120,9 @@ bool Cuco::Draw(float dt)
 	bool ret = true;
 
 	if (flip)
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 45, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x , game_object->GetPos().y - draw_offset.y - 19 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 	else
-		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 17, game_object->GetPos().y - draw_offset.y - 35 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x -20, game_object->GetPos().y - draw_offset.y - 19 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	return ret;
 }
@@ -195,21 +193,21 @@ void Cuco::RunUp()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = run_up;
+	anim_state = basic_chicken;
 }
 
 void Cuco::RunDown()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = run_down;
+	anim_state = basic_chicken;
 }
 
 void Cuco::RunLeft()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
-	anim_state = run_left;
+	anim_state = basic_chicken;
 	draw_offset.x = 8;
 }
 
@@ -217,7 +215,7 @@ void Cuco::RunRight()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = run_right;
+	anim_state = basic_chicken;
 	draw_offset.x = -8;
 }
 
@@ -225,45 +223,42 @@ void Cuco::IdleUp()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = idle_up;
+	anim_state = basic_chicken;
 }
 
 void Cuco::IdleDown()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = false;
-	anim_state = idle_down;
+	anim_state = basic_chicken;
 }
 
 void Cuco::IdleLeft()
 {
 	game_object->SetAnimation(cuco_type.c_str());
 	flip = true;
-	anim_state = idle_left;
-	draw_offset.x = 8;
+	anim_state = basic_chicken;
 }
 
 void Cuco::IdleRight()
 {
 	game_object->SetAnimation(cuco_type.c_str());;
 	flip = false;
-	anim_state = idle_right;
-	draw_offset.x = -8;
+	anim_state = basic_chicken;
 }
 
 void Cuco::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	switch (bodyA->type)
 	{
-	case pbody_type::p_t_npc:
-		break;
 	case pbody_type::p_t_player:
 		if (bodyB == this->game_object->pbody && dead == false)
 		{
 			if (App->scene->main_scene->quest_manager->vquest[1]->state == active)
 			{
 				Entity* entity = App->entity->FindEntityByBody(bodyA);
-				if (entity->is_player)
+
+				if (entity != nullptr && entity->is_player)
 				{
 					App->entity->DeleteEntity(this);
 					App->scene->main_scene->quest_manager->add_progress(2, entity->GetTeam());
@@ -271,7 +266,6 @@ void Cuco::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fix
 				}
 			}
 		}
-		//Delete
 		break;
 	default:
 		break;
@@ -287,97 +281,48 @@ void Cuco::SetBasePath(const std::list<iPoint>* path)
 {
 	for (std::list<iPoint>::const_iterator it = path->begin(); it != path->end(); it++)
 	{
-		base_path.push_back(*it);
+		base_path.push(*it);
 	}
-}
-
-void Cuco::CucoIdle()
-{
-	CheckState();
-
-	SetIdleAnim();
 }
 
 void Cuco::CucoMove()
 {
-	CheckState();
 	draw_offset.SetToZero();
 
-	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+	if (base_path.empty())
+		GetNewPath();
 
-	switch (move_state)
-	{
-	case cMove_FollowBasePath:
-	{
-		if (base_path_index < base_path.size() - 1)
-		{
-			while(base_path.size() == 0)
-			{
-				GetNewPath();
-			}
- 			if (map_pos == base_path.at(base_path_index))
-				base_path_index++;
-		}
-		else
-		{
-			state = Cuco_Idle;
-			break;
-		}
+	iPoint cuco_map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 
-		iPoint target_pos = App->map->MapToWorld(base_path.at(base_path_index).x, base_path.at(base_path_index).y);
-		target_pos.y += Half_Tile;
-		target_pos.x += Half_Tile;
+	iPoint target_map_pos = base_path.front();
 
-		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+	iPoint target_world_pos = App->map->MapToWorld(target_map_pos.x, target_map_pos.y);
+	target_world_pos.y += HALF_TILE;
+	target_world_pos.x += HALF_TILE;
 
-		break;
-	}
-	default:
-		break;
-	}
+	Move(target_world_pos.x - GetPos().x, target_world_pos.y - GetPos().y);
 
-}
+	if (cuco_map_pos == target_map_pos)
+		base_path.pop();
 
-
-void Cuco::CheckState()
-{
-	switch (state)
-	{
-	case Cuco_Idle:
-		if (base_path_index < base_path.size() - 1)
-		{
-			state = Cuco_Move;
-			move_state = cMove_FollowBasePath;
-		}
-		else {
-			GetNewPath();
-		}
-		break;
-	case Cuco_Move:
-	{
-		
-		break;
-	}
-	default:
-		break;
-	}
+	if (base_path.empty())
+		GetNewPath();
 }
 
 void Cuco::GetNewPath()
 {
-	App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
+	target = App->map->WorldToMap(GetRandomValue(GetPos().x - PATH_SEARCH_RADIOUS, GetPos().x + PATH_SEARCH_RADIOUS), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
+
 	while (!App->pathfinding->IsWalkable(target) && target!=GetPos())
 	{
-		App->map->WorldToMap(target.x = GetRandomValue(0, App->map->data.width), target.y = GetRandomValue(0, App->map->data.height));
-	}
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
-	{
-		base_path.clear();
-		SetBasePath(App->pathfinding->GetLastPath());
-		base_path_index = 0;
-		move_state = cMove_FollowBasePath;
+		target = App->map->WorldToMap(GetRandomValue(GetPos().x - PATH_SEARCH_RADIOUS, GetPos().x + PATH_SEARCH_RADIOUS), GetRandomValue(GetPos().y - 520, GetPos().y + 520));
 	}
 
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), target) > 0)
+	{
+		SetBasePath(App->pathfinding->GetLastPath());
+		state = Cuco_Move;
+	}
 }
 
 void Cuco::Move(int delta_x, int delta_y)

@@ -4,19 +4,19 @@
 
 We are a group of students from UPC studying a Design and Development of Videogames degree and this is a repository where we will be making a tribute to Zelda: link to the past, a pixel art adventure game originaly made by Nintendo. But for making it more interesting we will add some personal features to the game. The main character is Link, a Hyilian character that will serve us during the game.
 
-##Personal Features
+## Personal Features
 
 (have to be set yet)
 
-##Usage
+## Usage
 
 (have to be set yet)
 
-##Changelist
+## Changelist
 
 (have to be set yet)
 
-#Team Members
+# Team Members
 
   - Team Lead: Iban Mas
   - Management: ---
@@ -26,7 +26,7 @@ We are a group of students from UPC studying a Design and Development of Videoga
   - Design: Sergi Perez
   - UI: Roger Tello
   
-#Contact us
+# Contact us
 
 https://www.facebook.com/CatPad-1785899698399344/?fref=ts
 

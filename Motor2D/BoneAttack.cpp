@@ -25,8 +25,6 @@ BoneAttack::BoneAttack(iPoint pos)
 
 	name = "bone";
 
-	timer.Start();
-
 	starting_pos = pos;
 }
 
@@ -38,8 +36,9 @@ bool BoneAttack::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("spin");
+	timer = App->AddGameplayTimer();
 
+	game_object->SetAnimation("spin");
 
 	return ret;
 }
@@ -57,12 +56,12 @@ bool BoneAttack::Update(float dt)
 {
 	bool ret = true;
 
-	int speed = SPEED*dt;
+	float speed = SPEED*dt;
 
 	game_object->SetPos({ game_object->fGetPos().x + (speed * cos(DEGTORAD * angle)), game_object->fGetPos().y + (speed * sin(DEGTORAD * angle))});
 		
 	
-	if (timer.ReadSec() > DESTRUCTION_TIME)
+	if (timer->ReadSec() > DESTRUCTION_TIME)
 		App->spell->DeleteSpell(this);
 
 	return ret;
@@ -72,7 +71,7 @@ bool BoneAttack::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(1, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
+	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 3, game_object->GetPos().y - draw_offset.y }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_HORIZONTAL);
 
 	return ret;
 }
@@ -88,6 +87,8 @@ bool BoneAttack::PostUpdate()
 bool BoneAttack::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

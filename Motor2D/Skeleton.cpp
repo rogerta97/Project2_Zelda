@@ -15,8 +15,8 @@
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
 
-#define SKELETON_W 70
-#define SKELETON_H 70
+#define SKELETON_W 85
+#define SKELETON_H 75
 
 #define STUN 1.0f
 
@@ -29,8 +29,9 @@ Skeleton::Skeleton(iPoint pos)
 {
 	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SKELETON_H, SKELETON_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
-	game_object->CreateCollision(iPoint(10, 10), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
+	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -65,6 +66,8 @@ bool Skeleton::Start()
 {
 	bool ret = true;
 
+	stun_timer = App->AddGameplayTimer();
+
 	Idle();
 
 	show_life_bar = true;
@@ -86,8 +89,6 @@ bool Skeleton::Update(float dt)
 	if (to_delete)
 		return true;
 
-	LifeBar(iPoint(50, 4), iPoint(-23, -52));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -100,7 +101,7 @@ bool Skeleton::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				spell->Effects(entity, ability);
+				spell->Effects(entity, this, ability);
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
@@ -110,18 +111,9 @@ bool Skeleton::Update(float dt)
 				state = s_s_attack;
 			}
 
-		}
-		if (stats.life <= 0)
-		{
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
-			{
-				App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-			}
+			Die(entity);
 		}
 	}
-
 
 	switch (state)
 	{
@@ -133,7 +125,7 @@ bool Skeleton::Update(float dt)
 		break;
 	case s_s_attack:
 		Attack();
-		if (!LookForTarget())
+		if (!LookForTarget() || target == nullptr)
 		{
 			if (!game_object->animator->GetCurrentAnimation()->Finished())
 			{
@@ -145,9 +137,9 @@ bool Skeleton::Update(float dt)
 		break;
 	case s_s_stunned:
 		Stunned();
-		if (stun_timer.ReadSec() > STUN)
+		if (stun_timer->ReadSec() > STUN)
 		{
-			stun_timer.Stop();
+			stun_timer->Stop();
 			state = s_s_attack;
 		}
 	default:
@@ -160,7 +152,9 @@ bool Skeleton::Draw(float dt)
 {
 	bool ret = true;
 
-	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 24 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+	LifeBar(iPoint(50, 4), iPoint(-27, -52));
+
+	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 42 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, RANGE, 255, 0, 0);
 	
@@ -178,12 +172,27 @@ bool Skeleton::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(stun_timer);
+
 	return ret;
 }
 
 iPoint Skeleton::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Skeleton::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+		if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+		{
+			App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+		}
+	}
 }
 
 void Skeleton::Idle()
@@ -205,8 +214,8 @@ void Skeleton::Stunned()
 
 	draw_offset = NULLPOINT;
 
-	if (!stun_timer.IsActive())
-		stun_timer.Start();
+	if (!stun_timer->IsActive())
+		stun_timer->Start();
 
 }
 

@@ -31,8 +31,6 @@ NaviBasicAttack::NaviBasicAttack(iPoint pos)
 
 	name = "navi_basic_attack";
 
-	timer.Start();
-
 	starting_pos = pos;
 }
 
@@ -46,7 +44,9 @@ bool NaviBasicAttack::Start()
 
 	die = false;
 
-	if (GetTeam() == ANIMATIONS_TEAM)
+	timer = App->AddGameplayTimer();
+
+	if (owner->GetTeam() == ANIMATIONS_TEAM)
 		game_object->SetAnimation("basic_projectile");
 	else
 		game_object->SetAnimation("basic_projectile_2");
@@ -92,20 +92,22 @@ bool NaviBasicAttack::Update(float dt)
 	}
 
 	// Delete if life time over
-	if (!die && timer.ReadSec() > DESTRUCTION_TIME)
+	if (!die && timer->ReadSec() > DESTRUCTION_TIME)
 	{
 		die = true;
-		timer.Start();
-		if (GetTeam() == ANIMATIONS_TEAM)
+		timer->Start();
+
+		if (owner->GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("destroy");
 		else
 			game_object->SetAnimation("destroy_2");
+
 		draw_offset = { 15, 15 };
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 	}
 
 	// Delete entity if dead animation time over
-	if(die && timer.ReadSec() > DEAD_ANIMATION_TIME)
+	if(die && timer->ReadSec() > DEAD_ANIMATION_TIME)
 		App->spell->DeleteSpell(this);
 
 	return ret;
@@ -135,6 +137,8 @@ bool NaviBasicAttack::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(timer);
+
 	return ret;
 }
 
@@ -145,7 +149,7 @@ void NaviBasicAttack::CleanSpell()
 void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	// Delete if hits another enemy entity
-	if (fixtureB->type == fixture_type::f_t_hit_box && bodyB != game_object->pbody)
+	if (bodyA == game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box && bodyB != owner->game_object->pbody)
 	{
 		Entity* e = nullptr;
 
@@ -154,11 +158,13 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 		if (e != nullptr && e->GetTeam() != owner->GetTeam())
 		{
 			die = true;
-			timer.Start();
-			if (GetTeam() == ANIMATIONS_TEAM)
+			timer->Start();
+
+			if (owner->GetTeam() == ANIMATIONS_TEAM)
 				game_object->SetAnimation("destroy");
 			else
 				game_object->SetAnimation("destroy_2");
+
 			draw_offset = { 15, 15 };
 			game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 		}

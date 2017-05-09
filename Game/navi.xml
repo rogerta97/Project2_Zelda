@@ -29,23 +29,17 @@
      <anim speed = "10" name = "basic_attack_side" loop = "false">
           <rect x = "144" y = "100" w = "48" h = "50"/>
      </anim>
-<anim speed = "10" name = "blink_up" loop = "false">
+<anim speed = "4" name = "blink_down" loop = "true">
           <rect x = "288" y = "0" w = "48" h = "50"/>
  	  <rect x = "336" y = "0" w = "48" h = "50"/>
- 	  <rect x = "192" y = "50" w = "48" h = "50"/>
-	  <rect x = "240" y = "50" w = "48" h = "50"/>
      </anim>
-<anim speed = "10" name = "blink_down" loop = "false">
+<anim speed = "4" name = "blink_up" loop = "true">
           <rect x = "288" y = "50" w = "48" h = "50"/>
  	  <rect x = "336" y = "50" w = "48" h = "50"/>
- 	  <rect x = "192" y = "50" w = "48" h = "50"/>
-	  <rect x = "240" y = "50" w = "48" h = "50"/>
      </anim>
-<anim speed = "30" name = "blink_side" loop = "false">
+<anim speed = "4" name = "blink_side" loop = "true">
           <rect x = "288" y = "100" w = "48" h = "50"/>
  	  <rect x = "336" y = "100" w = "48" h = "50"/>
- 	  <rect x = "192" y = "50" w = "48" h = "50"/>
-	  <rect x = "240" y = "50" w = "48" h = "50"/>
      </anim>
 <anim speed = "10" name = "blink_movement" loop = "true">
  	  <rect x = "192" y = "100" w = "48" h = "50"/>
@@ -107,23 +101,17 @@
      <anim speed = "10" name = "basic_attack_side_2" loop = "false">
        <rect x = "144" y = "2506" w = "48" h = "50"/>
      </anim>
-     <anim speed = "10" name = "blink_up_2" loop = "false">
+     <anim speed = "4" name = "blink_down_2" loop = "true">
        <rect x = "288" y = "2406" w = "48" h = "50"/>
        <rect x = "336" y = "2406" w = "48" h = "50"/>
-       <rect x = "192" y = "2456" w = "48" h = "50"/>
-       <rect x = "240" y = "2456" w = "48" h = "50"/>
      </anim>
-     <anim speed = "10" name = "blink_down_2" loop = "false">
+     <anim speed = "4" name = "blink_up_2" loop = "true">
        <rect x = "288" y = "2456" w = "48" h = "50"/>
        <rect x = "336" y = "2456" w = "48" h = "50"/>
-       <rect x = "192" y = "2456" w = "48" h = "50"/>
-       <rect x = "240" y = "2456" w = "48" h = "50"/>
      </anim>
-     <anim speed = "30" name = "blink_side_2" loop = "false">
+     <anim speed = "4" name = "blink_side_2" loop = "true">
        <rect x = "288" y = "2506" w = "48" h = "50"/>
        <rect x = "336" y = "2506" w = "48" h = "50"/>
-       <rect x = "192" y = "2456" w = "48" h = "50"/>
-       <rect x = "240" y = "2456" w = "48" h = "50"/>
      </anim>
      <anim speed = "10" name = "blink_movement_2" loop = "true">
        <rect x = "192" y = "2506" w = "48" h = "50"/>
@@ -132,15 +120,13 @@
      <anim speed = "10" name = "heal_area_2" loop = "true">
        <rect x = "774" y = "840" w = "280" h = "280"/>
        <rect x = "774" y = "1120" w = "280" h = "280"/>
-       <rect x = "774" y = "1400" w = "280" h = "280"/>
-       <rect x = "774" y = "1120" w = "280" h = "280"/>
      </anim>
    </animations>
   <stats hp="100" speed="160" power="20" rupees="100">
-    <ability1 mult="1.5" cd="1" bd="3"/>
-    <ability2 mult="0" cd="1" bd="0"/>
+    <ability1 mult="0" cd="15" bd="0"/>
+    <ability2 heal="20" cd="1"/>
     <ability3 mult="0" cd="1" bd="0"/>
-    <ability4 mult="0" cd="3" bd="0"/>
+    <ability4 mult="0" cd="50" bd="0"/>
     <basic_attack_spell mult ="1"/>
   </stats>
 </file>

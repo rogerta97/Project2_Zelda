@@ -52,7 +52,7 @@ void AestheticsManager::Start()
 	// Bushes 
 	App->map->GetBushesPosition(bushes_nodes);
 
-	 z = 0;
+	z = 0;
 	while (z < bushes_nodes.size())
 	{
 		bushes_entity.push_back((Bush*)App->entity->CreateEntity(bush, iPoint(bushes_nodes.at(z)->bush_pos.x, bushes_nodes.at(z)->bush_pos.y)));

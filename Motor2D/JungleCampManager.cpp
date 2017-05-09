@@ -30,14 +30,14 @@ bool JungleCampManager::Start()
 	bool ret = true;
 
 	// Stopping timers
-	snakes_timer_camp1.Stop();
-	snakes_timer_camp2.Stop();
+	snakes_timer_camp1 = App->AddGameplayTimer(); snakes_timer_camp1->Stop();
+	snakes_timer_camp2 = App->AddGameplayTimer(); snakes_timer_camp2->Stop();
 
-	skeleton_timer_camp1.Stop();
-	skeleton_timer_camp2.Stop();
+	skeleton_timer_camp1 = App->AddGameplayTimer(); skeleton_timer_camp1->Stop();
+	skeleton_timer_camp2 = App->AddGameplayTimer(); skeleton_timer_camp2->Stop();
 
-	mageskeleton_timer_camp1.Stop();
-	mageskeleton_timer_camp2.Stop();
+	mageskeleton_timer_camp1 = App->AddGameplayTimer(); mageskeleton_timer_camp1->Stop();
+	mageskeleton_timer_camp2 = App->AddGameplayTimer(); mageskeleton_timer_camp2->Stop();
 
 	guards_timer_camp1.Stop();
 	guards_timer_camp2.Stop();
@@ -57,70 +57,70 @@ bool JungleCampManager::Update(float dt)
 {
 	bool ret = true;
 
-	if (snakes_camp1.empty() && !snakes_timer_camp1.IsActive())
+	if (snakes_camp1.empty() && !snakes_timer_camp1->IsActive())
 	{
-		snakes_timer_camp1.Start();
+		snakes_timer_camp1->Start();
 	}
 
-	if (snakes_camp2.empty() && !snakes_timer_camp2.IsActive())
+	if (snakes_camp2.empty() && !snakes_timer_camp2->IsActive())
 	{
-		snakes_timer_camp2.Start();
+		snakes_timer_camp2->Start();
 	}
 
-	if (snakes_timer_camp1.ReadSec() > SNAKE_RESPAWN_TIME)
+	if (snakes_timer_camp1->ReadSec() > SNAKE_RESPAWN_TIME)
 	{
 		SpawnSnake(1);
-		snakes_timer_camp1.Stop();
+		snakes_timer_camp1->Stop();
 	}
 
-	if (snakes_timer_camp2.ReadSec() > SNAKE_RESPAWN_TIME)
+	if (snakes_timer_camp2->ReadSec() > SNAKE_RESPAWN_TIME)
 	{
 		SpawnSnake(2);
-		snakes_timer_camp2.Stop();
+		snakes_timer_camp2->Stop();
 	}
 
-	if (skeleton_camp1 == nullptr && !skeleton_timer_camp1.IsActive())
+	if (skeleton_camp1 == nullptr && !skeleton_timer_camp1->IsActive())
 	{
-		skeleton_timer_camp1.Start();
+		skeleton_timer_camp1->Start();
 	}
 
-	if (skeleton_camp2 == nullptr && !skeleton_timer_camp2.IsActive())
+	if (skeleton_camp2 == nullptr && !skeleton_timer_camp2->IsActive())
 	{
-		skeleton_timer_camp2.Start();
+		skeleton_timer_camp2->Start();
 	}
 
-	if (skeleton_timer_camp1.ReadSec() > SKELETON_RESPAWN_TIME)
+	if (skeleton_timer_camp1->ReadSec() > SKELETON_RESPAWN_TIME)
 	{
 		SpawnSkeleton(1);
-		skeleton_timer_camp1.Stop();
+		skeleton_timer_camp1->Stop();
 	}
 
-	if (skeleton_timer_camp2.ReadSec() > SKELETON_RESPAWN_TIME)
+	if (skeleton_timer_camp2->ReadSec() > SKELETON_RESPAWN_TIME)
 	{
 		SpawnSkeleton(2);
-		skeleton_timer_camp2.Stop();
+		skeleton_timer_camp2->Stop();
 	}
 
-	if (mageskeleton_camp1.empty() && !mageskeleton_timer_camp1.IsActive())
+	if (mageskeleton_camp1.empty() && !mageskeleton_timer_camp1->IsActive())
 	{
-		mageskeleton_timer_camp1.Start();
+		mageskeleton_timer_camp1->Start();
 	}
 
-	if (mageskeleton_camp2.empty() && !mageskeleton_timer_camp2.IsActive())
+	if (mageskeleton_camp2.empty() && !mageskeleton_timer_camp2->IsActive())
 	{
-		mageskeleton_timer_camp2.Start();
+		mageskeleton_timer_camp2->Start();
 	}
 
-	if (mageskeleton_timer_camp1.ReadSec() > MAGESKELETON_RESPAWN_TIME)
+	if (mageskeleton_timer_camp1->ReadSec() > MAGESKELETON_RESPAWN_TIME)
 	{
 		SpawnMageSkeleton(1);
-		mageskeleton_timer_camp1.Stop();
+		mageskeleton_timer_camp1->Stop();
 	}
 
-	if (mageskeleton_timer_camp2.ReadSec() > MAGESKELETON_RESPAWN_TIME)
+	if (mageskeleton_timer_camp2->ReadSec() > MAGESKELETON_RESPAWN_TIME)
 	{
 		SpawnMageSkeleton(2);
-		mageskeleton_timer_camp2.Stop();
+		mageskeleton_timer_camp2->Stop();
 	}
 
 	if (guards_camp1.empty() && !guards_timer_camp1.IsActive())
@@ -203,6 +203,15 @@ bool JungleCampManager::CleanUp()
 		App->entity->DeleteEntity(guards_camp2[i]);
 	}
 	guards_camp2.clear();
+
+	App->DeleteGameplayTimer(snakes_timer_camp1);
+	App->DeleteGameplayTimer(snakes_timer_camp2);
+
+	App->DeleteGameplayTimer(skeleton_timer_camp1);
+	App->DeleteGameplayTimer(skeleton_timer_camp2);
+
+	App->DeleteGameplayTimer(mageskeleton_timer_camp1);
+	App->DeleteGameplayTimer(mageskeleton_timer_camp2);
 	return true;
 }
 
@@ -502,7 +511,8 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 
 		break;
 	}
+	}
+
 	App->entity->DeleteEntity(camp);
 	App->audio->PlayFx(death_sound_effect, 0);
-	}
 }

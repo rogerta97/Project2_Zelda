@@ -48,6 +48,8 @@ struct shop
 	bool				active = false;
 
 	UI_Image*			shop_icon = nullptr;
+
+	Animator*		shop_icon_anim = nullptr;
 };
 
 class ShopManager
@@ -60,10 +62,13 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	SDL_Rect GetPlayerItem(int player_index, int item_index);
+
 private:
 	void ChangeShopState(int view);
 	void UpdateItemInfo(int view);
 	void UpdatePlayerItems(int view, Player* player);
+
 
 public:
 	UI_Window*		shop_window = nullptr;
@@ -71,8 +76,6 @@ public:
 
 private:
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
-
-	Animator*		shop_icon_anim = nullptr;
 };
 
 #endif // !_SHOPMANAGER_H_

@@ -118,10 +118,10 @@ bool CharacterSelectionScene::CleanUp()
 	// Background image
 	App->tex->UnLoadTexture(background_image);
 
-	all_ready = false;
-
 	//Stop Music
 	App->audio->StopMusic();
+
+	all_ready = false;
 
 	return true;
 }
@@ -149,14 +149,11 @@ bool CharacterSelectionScene::Update(float dt)
 
 	if (all_ready)
 	{
-		for (int i = 0; i < 4; i++)
-			App->scene->players[i].character = entity_name::link;
-
-		//// Set characters when finished
-		//App->scene->players[0].character = curr_player_data1->entity;
-		//App->scene->players[1].character = curr_player_data2->entity;
-		//App->scene->players[2].character = curr_player_data3->entity;
-		//App->scene->players[3].character = curr_player_data4->entity;
+		// Set characters when finished
+		App->scene->players[0].character = curr_player_data1->entity;
+		App->scene->players[1].character = curr_player_data2->entity;
+		App->scene->players[2].character = curr_player_data3->entity;
+		App->scene->players[3].character = curr_player_data4->entity;
 
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
@@ -185,7 +182,7 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		// Move Left
-		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
+		if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			switch (i)
 			{
@@ -205,7 +202,7 @@ bool CharacterSelectionScene::Update(float dt)
 		}
 
 		// Move right
-		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) == KEY_DOWN && viewports_data[i].is_ready == false)
+		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN && viewports_data[i].is_ready == false)
 		{
 			switch (i)
 			{

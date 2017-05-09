@@ -30,7 +30,6 @@ Zelda::Zelda(iPoint pos)
 
 	state = z_s_wait;
 
-
 	name = "zelda";
 }
 
@@ -137,6 +136,11 @@ void Zelda::OnCollOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, 
 iPoint Zelda::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+zelda_states Zelda::GetZeldaState()
+{
+	return state;
 }
 
 void Zelda::MoveUp(float speed)

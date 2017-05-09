@@ -63,6 +63,7 @@ bool j1Input::Start()
 // Called each loop iteration
 bool j1Input::PreUpdate()
 {
+	BROFILER_CATEGORY("InputPreUpdate", Profiler::Color::Coral);
 	static SDL_Event event;
 	
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -226,8 +227,9 @@ bool j1Input::CleanUp()
 	// Clean GamePads ------
 	for (std::vector<GamePad*>::iterator it = gamepads.begin(); it != gamepads.end(); it++) {
 
-		if((*it) != nullptr && (*it)->pad != nullptr)
-			SDL_GameControllerClose((*it)->pad);
+		//if((*it) != nullptr && (*it)->pad != nullptr)
+		//	SDL_GameControllerClose((*it)->pad);
+
 		RELEASE(*it);
 	}
 	gamepads.clear();
