@@ -367,7 +367,7 @@ bool MenuScene::CleanUp()
 	App->tex->UnLoadTexture(background_image);
 	fade_value = 255.0f;
 
-	quests_enabled = false;
+	//quests_enabled = false;
 
 	return true;
 }

@@ -301,7 +301,7 @@ bool MainScene::Start()
 
 	App->audio->ChangeVolume(25);
 	App->audio->PlayMusic("Audio/Music/overworld.ogg");
-	
+
 	return ret;
 }
 
@@ -334,7 +334,10 @@ bool MainScene::Update(float dt)
 	if (jungleCamp_manager != nullptr)
 		jungleCamp_manager->Update(dt);
 	if (quest_manager != nullptr)
+	{
 		quest_manager->Update();
+		quest_manager->UpdateWindows();
+	}
 	if (minimap_manager != nullptr)
 		minimap_manager->Update(dt);
 	// ------
