@@ -20,8 +20,9 @@
 #define ABILITY1_RANGE 140
 #define ABILITY1_DURATION 5
 
-#define ABILITY2_RANGE 150
-#define ABILITY2_MOVE_SAFE_OFFSET 15
+#define ABILITY2_RANGE 160
+#define ABILITY2_MOVE_SAFE_OFFSET 10
+#define ABILITY2_SPEED 350
 
 #define ABILITY3_DURATION 6
 
@@ -203,62 +204,87 @@ bool Navi::Update(float dt)
 	// Ability 2 --------------------
 	if (attacking && ability2)
 	{
-		switch (ability2_dir)
+		if (!point_found)
 		{
-		case navi_ability2_dir::a2_down:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+			switch (ability2_dir)
 			{
-				ability2_point = iPoint(ability2_point.x, ability2_point.y - 30);
-				find = true;
+			case navi_ability2_dir::a2_down:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x, ability2_point.y - 30);
+					find = true;
+				}
+				if (find)
+					ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
+			case navi_ability2_dir::a2_up:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x, ability2_point.y + 30);
+					find = true;
+				}
+				if (find)
+					ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
+			case navi_ability2_dir::a2_left:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x + 30, ability2_point.y);
+					find = true;
+				}
+				if (find)
+					ability2_point.x += ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.x -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
+			case navi_ability2_dir::a2_right:
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
+				{
+					ability2_point = iPoint(ability2_point.x - 30, ability2_point.y);
+					find = true;
+				}
+				if (find)
+					ability2_point.x -= ABILITY2_MOVE_SAFE_OFFSET;
+				else
+					ability2_point.x += (ABILITY2_MOVE_SAFE_OFFSET * 2);
+				break;
 			}
-			if (find)
-				ability2_point.y += ABILITY2_MOVE_SAFE_OFFSET;
+			point_found = true;
+
+			can_move = false;
+
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_movement");
 			else
-				ability2_point.y -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
-		case navi_ability2_dir::a2_up:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
-			{
-				ability2_point = iPoint(ability2_point.x, ability2_point.y + 30);
-				find = true;
-			}
-			if (find)
-				ability2_point.y -= ABILITY2_MOVE_SAFE_OFFSET;
-			else
-				ability2_point.y += (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
-		case navi_ability2_dir::a2_left:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
-			{
-				ability2_point = iPoint(ability2_point.x + 30, ability2_point.y);
-				find = true;
-			}
-			if (find)
-				ability2_point.x += ABILITY2_MOVE_SAFE_OFFSET;
-			else
-				ability2_point.x -= (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
-		case navi_ability2_dir::a2_right:
-			while (!App->pathfinding->IsWalkable(App->map->WorldToMap(ability2_point.x, ability2_point.y)) && !to_delete)
-			{
-				ability2_point = iPoint(ability2_point.x - 30, ability2_point.y);
-				find = true;
-			}
-			if (find)
-				ability2_point.x -= ABILITY2_MOVE_SAFE_OFFSET;
-			else
-				ability2_point.x += (ABILITY2_MOVE_SAFE_OFFSET * 2);
-			break;
+				game_object->SetAnimation("blink_movement_2");
+
+			game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+
 		}
 
-		game_object->SetPos({ (float)ability2_point.x, (float)ability2_point.y });
+		if (point_found)
+		{
+			App->view->LayerDrawCircle(ability2_point.x, ability2_point.y, 3, 255, 255, 255, 255, 99);
+			float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y);
+			MoveAngle(ABILITY2_SPEED, angle - 180);
 
-		// Reset
-		ability2_dir = navi_ability2_dir::a2_direction_null;
-		attacking = false;
-		ability2 = false;
-		ability2_point = NULLPOINT;
-		find = false;
+			if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y)) < 20)
+			{
+				// Reset
+				ability2_dir = navi_ability2_dir::a2_direction_null;
+				attacking = false;
+				ability2 = false;
+				ability2_point = NULLPOINT;
+				find = false;
+				point_found = false;
+				can_move = true;
+				game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
+			}
+		}
 	}
 
 	return ret;
@@ -401,10 +427,20 @@ void Navi::RunUp()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("up");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_up");
+			else
+				game_object->SetAnimation("blink_up_2");
+		}
 		else
-			game_object->SetAnimation("up_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("up");
+			else
+				game_object->SetAnimation("up_2");
+		}
 		flip = false;
 	}
 }
@@ -413,10 +449,20 @@ void Navi::RunDown()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("down");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_down");
+			else
+				game_object->SetAnimation("blink_down_2");
+		}
 		else
-			game_object->SetAnimation("down_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("down");
+			else
+				game_object->SetAnimation("down_2");
+		}
 		flip = false;
 	}
 }
@@ -425,10 +471,20 @@ void Navi::RunLeft()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_side");
+			else
+				game_object->SetAnimation("blink_side_2");
+		}
 		else
-			game_object->SetAnimation("lateral_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("lateral");
+			else
+				game_object->SetAnimation("lateral_2");
+		}
 		flip = true;
 	}
 }
@@ -437,10 +493,20 @@ void Navi::RunRight()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
+		if (ability3)
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("blink_side");
+			else
+				game_object->SetAnimation("blink_side_2");
+		}
 		else
-			game_object->SetAnimation("lateral_2");
+		{
+			if (GetTeam() == ANIMATIONS_TEAM)
+				game_object->SetAnimation("lateral");
+			else
+				game_object->SetAnimation("lateral_2");
+		}
 		flip = false;
 	}
 }
@@ -449,11 +515,7 @@ void Navi::IdleUp()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("up");
-		else
-			game_object->SetAnimation("up_2");
-		flip = false;
+		RunUp();
 	}
 }
 
@@ -461,11 +523,7 @@ void Navi::IdleDown()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("down");
-		else
-			game_object->SetAnimation("down_2");
-		flip = false;
+		RunDown();
 	}
 }
 
@@ -473,11 +531,7 @@ void Navi::IdleLeft()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
-		else
-			game_object->SetAnimation("lateral_2");
-		flip = true;
+		RunLeft();
 	}
 }
 
@@ -485,11 +539,7 @@ void Navi::IdleRight()
 {
 	if (can_move)
 	{
-		if (GetTeam() == ANIMATIONS_TEAM)
-			game_object->SetAnimation("lateral");
-		else
-			game_object->SetAnimation("lateral_2");
-		flip = false;
+		RunRight();
 	}
 }
 
@@ -642,25 +692,29 @@ void Navi::Ability2Right()
 void Navi::ShowAbility2Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::ShowAbility2Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 20, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
 }
 
 void Navi::Ability3Up()
