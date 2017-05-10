@@ -456,7 +456,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	}
 	int shop_key;
 	App->scene->players[(curr_player)->controller_index].mapping->GetKey(m_k_shop, &shop_key);
-	if (App->input->GetControllerButton(curr_player->controller_index, shop_key) == KEY_UP && App->scene->main_scene->quest_manager->quests_enabled)
+	if (App->input->GetControllerButton(curr_player->controller_index, shop_key) == KEY_UP && App->scene->main_scene->quest_manager->quests_enabled && App->scene->main_scene->quest_manager->active_quest != -1)
 	{
 		App->scene->main_scene->quest_manager->SwitchWindowState(curr_player->viewport);
 	}

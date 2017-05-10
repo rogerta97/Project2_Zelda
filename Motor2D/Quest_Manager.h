@@ -82,9 +82,10 @@ public:
 	vector<bool> windows_to_move;
 
 	bool            quests_enabled = true;
+	int				active_quest = -1;
 
 private:
-	int				active_quest = -1;
+	
 	uint			timer_read = 0;
 	SDL_Rect		test_rect;
 

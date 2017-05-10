@@ -13,6 +13,7 @@
 
 QuestManager::QuestManager()
 {
+	player_text_list.clear();
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
 
@@ -192,7 +193,7 @@ void QuestManager::CleanUp()
 	{
 		(*it)->player_text.clear();
 	}
-	player_text_list.clear();
+	
 
 	// Clear Cucos
 	if (!cucos.empty())
