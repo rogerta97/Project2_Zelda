@@ -26,14 +26,20 @@ bool CharacterSelectionScene::Start()
 	background_pos = { 0 , 0 };
 	background_image_rect = { 0, 0, 1994, 1359 };
 
-	App->console->AddText("viewports.set 4", Input); 
+	App->console->AddText("viewports.set 4", Input);
 
 	// Create players and info
 	link = new player_data();
 	link->ability1_text = "    Basic Attack:\n\nFrontal smash with\n     the sword";
-	link->ability2_text = "     Sword Swing:\n\nLink swings his sword\n       around him."; 
+	link->ability2_text = "     Sword Swing:\n\nLink swings his sword\n       around him.";
 	link->ability3_text = "    Boomerang:\n\nLink shoots his boo-\nmerang, catch it when\n    it comes back!";
 	link->ability4_text = "         Charge:\n\n Link will run to target\n  location damaging.";
+
+	link->ability1_rect_icon = { 978, 353, 32, 32 };
+	link->ability2_rect_icon = { 1014, 353, 32, 32 };
+	link->ability3_rect_icon = { 1050, 353, 32, 32 };
+	link->ability4_rect_icon = { 1086, 353, 32, 32 };
+
 	link->big_image = {0, 294, 116, 147}; 
 	link->small_image = {348, 445, 74, 90};
 	link->name = "LINK"; 
@@ -45,6 +51,12 @@ bool CharacterSelectionScene::Start()
 	ganon->ability2_text = "           Bat:\n\nGanon shoot a bat\n to target direction.";
 	ganon->ability3_text = "    Flame Shield:\n\nGanon puts a shield\n     to himself. ";
 	ganon->ability4_text = "      Evil Jump:\n\nGanaon jumps to a\ntarget position and\n  stuns enemies.";
+
+	ganon->ability1_rect_icon = { 978, 497, 32, 32 };
+	ganon->ability2_rect_icon = { 1014, 497, 32, 32 };
+	ganon->ability3_rect_icon = { 1050, 497, 32, 32 };
+	ganon->ability4_rect_icon = { 1086, 497, 32, 32 };
+
 	ganon->big_image = { 116, 294, 116, 147 };
 	ganon->small_image = { 422, 445, 75, 90 };
 	ganon->name = "GANON";
@@ -56,6 +68,12 @@ bool CharacterSelectionScene::Start()
 	navi->ability2_text = "        Watch Out!:\n\n   Navi heals allies\n       around her.";
 	navi->ability3_text = "         Blink:\n\nNavi uses her magic\n energy to teleport a\n   small distance!";
 	navi->ability4_text = "      Hey Listen!:\n\ndisable enemy players\n view for 3  seconds.";
+
+	navi->ability1_rect_icon = { 978, 425, 32, 32 };
+	navi->ability2_rect_icon = { 1014, 425, 32, 32 };
+	navi->ability3_rect_icon = { 1050, 425, 32, 32 };
+	navi->ability4_rect_icon = { 1086, 425, 32, 32 };
+
 	navi->big_image = { 232, 294, 116, 147 };
 	navi->small_image = { 496, 445, 75, 90 };
 	navi->name = "NAVI";
@@ -230,6 +248,11 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info2->enabled = true;
 			viewports_data[i].abilities_info3->enabled = true;
 			viewports_data[i].abilities_info4->enabled = true;
+
+			viewports_data[i].abilities_image1->enabled = true;
+			viewports_data[i].abilities_image2->enabled = true;
+			viewports_data[i].abilities_image3->enabled = true;
+			viewports_data[i].abilities_image4->enabled = true;
 		}
 		else if (App->input->GetControllerButton(App->scene->players[i].gamepad - 1, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
 		{
@@ -239,6 +262,12 @@ bool CharacterSelectionScene::Update(float dt)
 			viewports_data[i].abilities_info2->enabled = false;
 			viewports_data[i].abilities_info3->enabled = false;
 			viewports_data[i].abilities_info4->enabled = false;
+
+			viewports_data[i].abilities_image1->enabled = false;
+			viewports_data[i].abilities_image2->enabled = false;
+			viewports_data[i].abilities_image3->enabled = false;
+			viewports_data[i].abilities_image4->enabled = false;
+
 		}
 
 		// Ready
@@ -342,6 +371,11 @@ void CharacterSelectionScene::SetDataToViewport(player_data * data, int viewport
 		viewports_data.at(viewport).abilities_info2->SetText(players_data.at(main_index)->ability2_text);
 		viewports_data.at(viewport).abilities_info3->SetText(players_data.at(main_index)->ability3_text);
 		viewports_data.at(viewport).abilities_info4->SetText(players_data.at(main_index)->ability4_text);
+
+		viewports_data.at(viewport).abilities_image1->image = data->ability1_rect_icon; 
+		viewports_data.at(viewport).abilities_image2->image = data->ability2_rect_icon;
+		viewports_data.at(viewport).abilities_image3->image = data->ability3_rect_icon;
+		viewports_data.at(viewport).abilities_image4->image = data->ability4_rect_icon;
 
 		// Card Images
 		viewports_data.at(viewport).big_image->ChangeImage(players_data.at(main_index)->big_image);

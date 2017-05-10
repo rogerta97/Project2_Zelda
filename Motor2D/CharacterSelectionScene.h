@@ -28,6 +28,11 @@ struct player_data
 	string      ability3_text;
 	string      ability4_text;
 
+	SDL_Rect    ability1_rect_icon;
+	SDL_Rect    ability2_rect_icon;
+	SDL_Rect    ability3_rect_icon;
+	SDL_Rect    ability4_rect_icon;
+
 	entity_name entity = entity_name::e_n_null;
 };
 
@@ -59,6 +64,11 @@ struct viewport_data
 		iPoint abilities_info3_pos = { background_info_image_pos.x + 30, background_info_image_pos.y + 190};
 		iPoint abilities_info4_pos = { background_info_image_pos.x + 280, background_info_image_pos.y + 190};
 
+		iPoint abilities_image1_pos = { abilities_info1_pos.x + 65, abilities_info1_pos.y - 35 };
+		iPoint abilities_image2_pos = { abilities_info2_pos.x + 75, abilities_info2_pos.y-  35};
+		iPoint abilities_image3_pos = { abilities_info3_pos.x + 75, abilities_info3_pos.y - 35 };
+		iPoint abilities_image4_pos = { abilities_info4_pos.x + 85 , abilities_info4_pos.y- 35 };
+
 		iPoint ready_text_pos = { view.w/3 - 25, view.h - view.h/6};
 
 		window = App->gui->UI_CreateWin(iPoint(0, 0), view.w, view.h, 1, true, false, true);
@@ -87,6 +97,17 @@ struct viewport_data
 		abilities_info3->enabled = false;
 		abilities_info4 = window->CreateText(abilities_info4_pos, App->font->game_font, 25);
 		abilities_info4->enabled = false;
+
+		abilities_image1 = window->CreateImage(abilities_image1_pos, {0,0,0,0});
+		abilities_image1->enabled = false;							
+		abilities_image2 = window->CreateImage(abilities_image2_pos, {0,0,0,0});
+		abilities_image2->enabled = false;							
+		abilities_image3 = window->CreateImage(abilities_image3_pos, {0,0,0,0});
+		abilities_image3->enabled = false;							 
+		abilities_image4 = window->CreateImage(abilities_image4_pos, {0,0,0,0});
+		abilities_image4->enabled = false;
+
+
 	};
 
 	~viewport_data() {};
@@ -109,6 +130,11 @@ struct viewport_data
 	UI_Text* abilities_info2 = nullptr;
 	UI_Text* abilities_info3 = nullptr;
 	UI_Text* abilities_info4 = nullptr;
+
+	UI_Image* abilities_image1 = nullptr;
+	UI_Image* abilities_image2 = nullptr;
+	UI_Image* abilities_image3 = nullptr;
+	UI_Image* abilities_image4 = nullptr;
 
 	UI_Text* ready_text = nullptr; 
 
