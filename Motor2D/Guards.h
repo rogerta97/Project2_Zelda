@@ -103,8 +103,6 @@ private:
 
 	void SetIdleAnim();
 
-	void ClearTargetPath();
-
 public:
 	Entity*					target = nullptr;
 
@@ -125,7 +123,7 @@ private:
 
 	int						rupee_reward = 0;
 
-	std::queue<iPoint>		target_path;
+	std::list<iPoint>		target_path;
 
 	iPoint					initial_pos = NULLPOINT;
 

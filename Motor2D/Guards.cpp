@@ -19,7 +19,7 @@
 #define GUARD_W 32
 
 #define FOLLOW_RANGE 250
-#define ATTACK_RANGE 50
+#define ATTACK_RANGE 40
 
 #define HALFMAP 81*32
 
@@ -297,12 +297,11 @@ bool Guards::OnRangeAttack(iPoint pos)
 
 void Guards::CheckState()
 {
-	if (target != nullptr && target->to_delete)
+	if (target != nullptr && target->to_delete && !LookForTarget())
 	{
 		target = nullptr;
 		state = g_s_follow;
 		move_state = gMove_ReturnToPath;
-		PathToInitialPos();
 	}
 	
 	switch (state)
@@ -310,9 +309,9 @@ void Guards::CheckState()
 	case g_s_idle:
 		if (is_attacked && LookForTarget())
 		{
-			PathToTarget();
 			state = g_s_follow;
 			move_state = gMove_AproachTarget;
+			PathToTarget();
 		}
 		IdleRight();
 		break;
@@ -321,15 +320,24 @@ void Guards::CheckState()
 		switch (move_state)
 		{
 		case gMove_AproachTarget:
-			if (OnRangeAttack(target->GetPos()))
+			if (OnRangeAttack(target->game_object->GetPos()))
 			{
 				if(abilities.at(0)->CdCompleted())
 					state = g_s_attack;
 			} 
 			else
 			{
-				if(OnRangeFollow(target->GetPos()))
+				if (target != nullptr && OnRangeFollow(target->game_object->GetPos()))
+				{
+					if (target_path.empty() || App->map->WorldToMap(target->game_object->GetPos().x, target->game_object->GetPos().y) != *target_path.end())
+					{
+						PathToTarget();
+						iPoint end = (*target_path.end());
+						LOG("%d %d %d %d", App->map->WorldToMap(target->game_object->GetPos().x, target->game_object->GetPos().y).x, App->map->WorldToMap(target->game_object->GetPos().x, target->game_object->GetPos().y).y, App->map->WorldToMap(end.x, end.y).x, App->map->WorldToMap(end.x, end.y).y);
+					}
+				
 					GuardMove();
+				}
 				else
 				{
 					target = nullptr;
@@ -340,9 +348,13 @@ void Guards::CheckState()
 			}
 			break;
 		case gMove_ReturnToPath:
-			if (LookForTarget() && target != nullptr && OnRangeFollow(target->GetPos()))
+			if (LookForTarget() && target != nullptr && OnRangeFollow(target->game_object->GetPos()))
 			{
 				move_state = gMove_AproachTarget;
+				PathToTarget();
+			}
+			else if(!LookForTarget() && target_path.empty())
+			{ 
 				PathToTarget();
 			}
 			else if (target_path.empty() && !attacking)
@@ -373,9 +385,9 @@ void Guards::CheckState()
 
 					game_object->animator->GetCurrentAnimation()->Reset();
 
-					PathToTarget();
 					state = g_s_follow;
 					move_state = gMove_AproachTarget;
+					PathToTarget();
 
 					draw_offset.SetToZero();
 
@@ -398,15 +410,15 @@ void Guards::CheckState()
 
 void Guards::SetTargetPath(const std::list<iPoint>* path)
 {
-	ClearTargetPath();
+	target_path.clear();
 
 	for (std::list<iPoint>::const_iterator it = path->begin(); it != path->end(); it++)
-		target_path.push(*it);
+		target_path.push_back(*it);
 }
 
 void Guards::PathToTarget()
 {
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y)) > 0)
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->game_object->GetPos().y, target->game_object->GetPos().y)) > 0)
 		SetTargetPath(App->pathfinding->GetLastPath());
 }
 
@@ -437,7 +449,7 @@ void Guards::GuardMove()
 	Move(target_world_pos.x - GetPos().x, target_world_pos.y - GetPos().y);
 
 	if (guard_map_pos == target_map_pos)
-		target_path.pop();
+		target_path.pop_front();
 }
 
 void Guards::GuardAttack()
@@ -630,8 +642,3 @@ void Guards::SetIdleAnim()
 	}
 }
 
-void Guards::ClearTargetPath()
-{
-	while (!target_path.empty())
-		target_path.pop();
-}
