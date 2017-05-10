@@ -56,7 +56,7 @@ bool MainScene::Start()
 
 
 	iPoint minimap_pos = { screen.w - 58, 5 };
-	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
+	SDL_Rect minimap_rect;
 
 	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
@@ -154,9 +154,9 @@ bool MainScene::Start()
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
 		//BUTTON REMAPPING
-		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
+		key_mapping minimap_key = App->scene->players[button_it].mapping->GetMapping(m_k_minimap);
 		SDL_Rect button_pos = { 703,2334,28,26 };
-		switch (shop_key.key_id)
+		switch (minimap_key.key_id)
 		{
 		case SDL_CONTROLLER_BUTTON_A:
 			button_pos = { 533,762,36, 32 };
@@ -168,11 +168,11 @@ bool MainScene::Start()
 			button_pos = { 497,762,36, 32 };
 			break;
 		case SDL_CONTROLLER_BUTTON_Y:
-			minimap_rect = { 472, 588, 36, 32 };;
+			button_pos = { 532, 587, 36, 32 };;
 			break;
 		}
 		button_it++;
-		it->minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
+		it->minimap_icon = it->viewport_window->CreateImage(minimap_pos, button_pos);
 	}
 	//
 
