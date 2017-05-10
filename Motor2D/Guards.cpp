@@ -13,16 +13,17 @@
 #include "Spell.h"
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
+#include "Functions.h"
 
 #define GUARD_H 56
 #define GUARD_W 32
 
-#define FOLLOW_RANGE 150
-#define ATTACK_RANGE 60
+#define FOLLOW_RANGE 250
+#define ATTACK_RANGE 50
 
 #define HALFMAP 81*32
 
-#define Half_Tile 16
+#define HALF_TILE 16
 
 Guards::Guards(iPoint pos)
 {
@@ -33,7 +34,7 @@ Guards::Guards(iPoint pos)
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
 
-	initialPos = { pos.x,pos.y };
+	initial_pos = { pos.x, pos.y };
 
 	pugi::xml_document doc;
 	App->xml->LoadXML("guards.xml", doc);
@@ -51,9 +52,6 @@ Guards::Guards(iPoint pos)
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	cd_timer = App->AddGameplayTimer();
-	cd_timer->Start();
-
 	name = "guards";
 }
 
@@ -65,7 +63,7 @@ bool Guards::Start()
 {
 	bool ret = true;
 
-	show_life_bar = true;
+	cd_timer = App->AddGameplayTimer();
 
 	game_object->SetAnimation("guard_idle_lateral");
 
@@ -90,35 +88,6 @@ bool Guards::Update(float dt)
 
 	speed = stats.speed*dt;
 
-	CheckState();
-
-	if (!stuned)
-	{
-		switch (state)
-		{
-		case g_s_idle:
-			GuardIdle();
-			break;
-		case g_s_follow:
-			GuardMove();
-			break;
-		case g_s_attack:
-			GuardAttack();
-			break;
-		case g_s_reset:
-			is_attacked = false;
-			GuardMove();
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		SetIdleAnim();
-	}
-		
-
 	LifeBar(iPoint(20, 3), iPoint(-10, -25));
 
 	Entity* entity = nullptr;
@@ -134,22 +103,16 @@ bool Guards::Update(float dt)
 			{
 				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
 
-				spell->Effects(entity, this, ability);
-				if (entity->GetPos().DistanceTo(initialPos) < FOLLOW_RANGE)
-				{
-					is_attacked = true;
-				}
+				spell->Effects(entity, this, ability);				
 			}
 			else
 				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
 
-			if (stats.life <= 0)
-			{
-				App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-				App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-			}
+			is_attacked = true;
 		}
 	}
+
+	CheckState();
 
 	return ret;
 }
@@ -164,7 +127,10 @@ bool Guards::Draw(float dt)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - draw_offset.x - 23, game_object->GetPos().y - draw_offset.y - 36 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(initialPos.x, initialPos.y, FOLLOW_RANGE, 255, 0, 0);
+	{
+		App->view->LayerDrawCircle(initial_pos.x, initial_pos.y, FOLLOW_RANGE, 255, 0, 0);
+		App->view->LayerDrawCircle(GetPos().x, GetPos().y, ATTACK_RANGE, 255, 0, 0);
+	}
 	return ret;
 }
 
@@ -297,69 +263,97 @@ void Guards::IdleRight()
 	draw_offset.x = 8;
 }
 
-void Guards::CheckState()
+void Guards::Die(Entity* killed_by)
 {
-	if (target != nullptr)
+	if (killed_by != nullptr)
 	{
-		if (target->to_delete == true)
+		if (stats.life <= 0)
 		{
-			target = nullptr;
+			App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
 		}
 	}
+}
+
+bool Guards::OnRangeFollow(iPoint pos)
+{
+	bool ret = false;
+
+	if (abs(DistanceFromTwoPoints(initial_pos.x, initial_pos.y, pos.x, pos.y)) <= FOLLOW_RANGE)
+		ret = true;
+
+	return ret;
+}
+
+bool Guards::OnRangeAttack(iPoint pos)
+{
+	bool ret = false;
+
+	if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, pos.x, pos.y)) <= ATTACK_RANGE)
+		ret = true;
+
+	return ret;
+}
+
+void Guards::CheckState()
+{
+	if (target != nullptr && target->to_delete)
+	{
+		target = nullptr;
+		state = g_s_follow;
+		move_state = gMove_ReturnToPath;
+		PathToInitialPos();
+	}
+	
 	switch (state)
 	{
 	case g_s_idle:
 		if (is_attacked && LookForTarget())
-				PathToTarget();
+		{
+			PathToTarget();
+			state = g_s_follow;
+			move_state = gMove_AproachTarget;
+		}
+		IdleRight();
 		break;
 	case g_s_follow:
 	{
 		switch (move_state)
 		{
-		case gMove_Idle:
-			if (is_attacked && LookForTarget())
-				PathToTarget();
-			break;
 		case gMove_AproachTarget:
-			if (target == nullptr)
+			if (OnRangeAttack(target->GetPos()))
 			{
-				target_path_index = 0;
-				target = nullptr;
-				move_state = gMove_ReturnToPath;
-				state = g_s_reset;
-				PathToInitialPos();
-			}
+				if(abilities.at(0)->CdCompleted())
+					state = g_s_attack;
+			} 
 			else
 			{
-				if (GetPos().DistanceTo(target->GetPos()) < ATTACK_RANGE - ATTACK_RANGE / 4)
-					state = g_s_attack;
+				if(OnRangeFollow(target->GetPos()))
+					GuardMove();
 				else
 				{
-					if (initialPos.DistanceTo(target->GetPos()) < FOLLOW_RANGE)
-					{
-						if (target != nullptr && App->map->WorldToMap(target->GetPos().x, target->GetPos().y) != *target_path.end())
-						{
-							PathToTarget();
-						}
-					}
-					else
-					{
-						target_path_index = 0;
-						target = nullptr;
-						move_state = gMove_ReturnToPath;
-						state = g_s_reset;
-						PathToInitialPos();
-					}
+					target = nullptr;
+					state = g_s_follow;
+					move_state = gMove_ReturnToPath;
+					PathToInitialPos();
 				}
 			}
 			break;
 		case gMove_ReturnToPath:
-			if (is_attacked && LookForTarget())
+			if (LookForTarget() && target != nullptr && OnRangeFollow(target->GetPos()))
 			{
-				PathToTarget();
 				move_state = gMove_AproachTarget;
-				state = g_s_follow;
-			}			
+				PathToTarget();
+			}
+			else if (target_path.empty() && !attacking)
+			{
+				state = g_s_idle;
+			}
+			else
+			{
+				GuardMove();
+			}
+
 			break;
 		default:
 			break;
@@ -367,114 +361,59 @@ void Guards::CheckState()
 		break;
 	}
 	case g_s_attack:
-		if (target == nullptr)
+		if (attacking)
 		{
-			target_path_index = 0;
-			move_state = gMove_ReturnToPath;
-			state = g_s_reset;
-			PathToInitialPos();
-			break;
-		}
-		if (game_object->animator->IsCurrentAnimation("guard_attack_up") || game_object->animator->IsCurrentAnimation("guard_attack_down")
-			|| game_object->animator->IsCurrentAnimation("guard_attack_lateral"))
-		{
-			if (game_object->animator->GetCurrentAnimation()->Finished())
+			if (game_object->animator->IsCurrentAnimation("guard_attack_up") 
+				|| game_object->animator->IsCurrentAnimation("guard_attack_down")
+				|| game_object->animator->IsCurrentAnimation("guard_attack_lateral"))
 			{
-				if (initialPos.DistanceTo(target->GetPos()) > FOLLOW_RANGE)
+				if (game_object->animator->GetCurrentAnimation()->Finished())
 				{
-					target_path_index = 0;
-					target = nullptr;
-					move_state = gMove_ReturnToPath;
-					state = g_s_reset;
-					PathToInitialPos();
-				}
-				if (abilities.at(0)->fixture != nullptr)
-				{
-					game_object->DeleteFixture(abilities.at(0)->fixture);
-					abilities.at(0)->fixture = nullptr;
-				}
+					game_object->DeleteFixture(GetAbility(0)->fixture);
 
-				if (target != nullptr)
-				{
-					if (GetPos().DistanceTo(target->GetPos()) > ATTACK_RANGE)
-					{
-						state = g_s_follow;
-						move_state = gMove_AproachTarget;
-						PathToTarget();
-					}
+					game_object->animator->GetCurrentAnimation()->Reset();
+
+					PathToTarget();
+					state = g_s_follow;
+					move_state = gMove_AproachTarget;
+
+					draw_offset.SetToZero();
+
+					attacking = false;
 				}
-				
-				game_object->animator->GetCurrentAnimation()->Reset();
-				draw_offset.SetToZero();
-				SetIdleAnim();
 			}
 		}
-		else if (target->to_delete == true)
+		else
 		{
-			state = g_s_reset;
-			move_state = gMove_ReturnToPath;
-			PathToInitialPos();
+			GuardAttack();
 		}
-		break;
-	case g_s_reset:
-		if (is_attacked && LookForTarget())
-		{
-			PathToTarget();
-			move_state = gMove_AproachTarget;
-			state = g_s_follow;
-		}
-		else if (GetPos().DistanceTo(initialPos) == 0)
-		{
-			move_state = gMove_Idle;
-			state = g_s_idle;
-			SetIdleAnim();
-		}
+
 		break;
 	default:
 		break;
 	}
-
+	
+	is_attacked = false;
 }
 
 void Guards::SetTargetPath(const std::list<iPoint>* path)
 {
+	ClearTargetPath();
+
 	for (std::list<iPoint>::const_iterator it = path->begin(); it != path->end(); it++)
-	{
-		target_path.push_back(*it);
-	}
+		target_path.push(*it);
 }
 
 void Guards::PathToTarget()
 {
 	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y)) > 0)
-	{
-		target_path.clear();
 		SetTargetPath(App->pathfinding->GetLastPath());
-		target_path_index = 0;
-		state = g_s_follow;
-		move_state = gMove_AproachTarget;
-	}
-	else
-	{
-		PathToInitialPos();
-	}
 }
 
 void Guards::PathToInitialPos()
 {
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(initialPos.x,initialPos.y)) > 0)
-	{
-		target_path.clear();
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(initial_pos.x, initial_pos.y)) > 0)
 		SetTargetPath(App->pathfinding->GetLastPath());
-		target_path_index = 0;
-		state = g_s_reset;
-		move_state = gMove_ReturnToPath;
-	}
-	else
-	{
-		move_state = gMove_Idle;
-	}
-		
 }
 
 void Guards::GuardIdle()
@@ -486,88 +425,28 @@ void Guards::GuardIdle()
 
 void Guards::GuardMove()
 {
-	CheckState();
-	draw_offset.SetToZero();
+	if (target_path.empty())
+		return;
 
-	iPoint map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
+	iPoint guard_map_pos = App->map->WorldToMap(GetPos().x, GetPos().y);
 
-	switch (move_state)
-	{
-	case gMove_Idle:
-	{
-		if (target_path_index < target_path.size() - 1)
-		{
-			if (map_pos == target_path.at(target_path_index))
-				target_path_index++;
-		}
-		else
-		{
-			state = g_s_idle;
-			break;
-		}
+	iPoint target_map_pos = target_path.front();
 
-		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
-		target_pos.y += Half_Tile;
-		target_pos.x += Half_Tile;
+	iPoint target_world_pos = App->map->MapToWorld(target_map_pos.x, target_map_pos.y);
 
-		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
+	Move(target_world_pos.x - GetPos().x, target_world_pos.y - GetPos().y);
 
-		break;
-	}
-	case gMove_AproachTarget:
-	{
-		if (target_path_index < target_path.size() - 1)
-		{
-			if (map_pos == target_path.at(target_path_index))
-				target_path_index++;
-		}
-		else
-		{
-			move_state = gMove_Idle;
-			break;
-		}
-
-		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
-		target_pos.y += Half_Tile;
-		target_pos.x += Half_Tile;
-
-		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
-
-		break;
-	}
-	case gMove_ReturnToPath:
-	{
-		if (target_path_index < target_path.size() - 1)
-		{
-			if (map_pos == target_path.at(target_path_index))
-				target_path_index++;
-		}
-		else {
-			move_state = gMove_Idle;
-			break;
-		}
-
-		iPoint target_pos = App->map->MapToWorld(target_path.at(target_path_index).x, target_path.at(target_path_index).y);
-		target_pos.y += Half_Tile;
-		target_pos.x += Half_Tile;
-
-		Move(target_pos.x - GetPos().x, target_pos.y - GetPos().y);
-
-		break;
-	}
-	default:
-		break;
-	}
+	if (guard_map_pos == target_map_pos)
+		target_path.pop();
 }
 
 void Guards::GuardAttack()
 {
-	CheckState();
-
 	if (cd_timer->ReadSec()>abilities.at(0)->cd)
 	{
 		Attack();
 		cd_timer->Start();
+		attacking = true;
 	}
 }
 
@@ -585,28 +464,24 @@ bool Guards::LookForTarget()
 
 	for (std::vector<Entity*>::iterator it = players1.begin(); it != players1.end(); it++)
 	{
-		if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
+		if (OnRangeFollow((*it)->GetPos()) && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance && !(*it)->to_delete)
 		{
 			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
 			target = *it;
 			ret = true;
-			break;
 		}
 	}
 	
-	if (ret == false)
+	for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
 	{
-		for (std::vector<Entity*>::iterator it = players2.begin(); it != players2.end(); it++)
+		if (OnRangeFollow((*it)->GetPos()) && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance && !(*it)->to_delete)
 		{
-			if (GetPos().DistanceTo((*it)->GetPos()) < FOLLOW_RANGE && GetPos().DistanceTo((*it)->GetPos()) < shortest_distance)
-			{
-				shortest_distance = GetPos().DistanceTo((*it)->GetPos());
-				target = *it;
-				ret = true;
-				break;
-			}
+			shortest_distance = GetPos().DistanceTo((*it)->GetPos());
+			target = *it;
+			ret = true;
 		}
 	}
+	
 
 	return ret;
 }
@@ -753,4 +628,10 @@ void Guards::SetIdleAnim()
 	default:
 		break;
 	}
+}
+
+void Guards::ClearTargetPath()
+{
+	while (!target_path.empty())
+		target_path.pop();
 }

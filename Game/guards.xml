@@ -12,10 +12,6 @@
       <rect h="72" w="46" y="72" x="0"/>
       <rect h="72" w="46" y="72" x="46"/>
     </anim>
-    <anim loop="true" name="guard_attack_down" speed="3">
-      <rect h="72" w="46" y="144" x="0"/>
-      <rect h="72" w="46" y="144" x="46"/>
-    </anim>
     <anim loop="true" name="guard_walk_up" speed="5">
       <rect h="72" w="46" y="0" x="92"/>
       <rect h="72" w="46" y="0" x="138"/>
@@ -23,10 +19,6 @@
     <anim loop="true" name="guard_idle_up" speed="5">
       <rect h="72" w="46" y="72" x="92"/>
       <rect h="72" w="46" y="72" x="138"/>
-    </anim>
-    <anim loop="true" name="guard_attack_up" speed="3">
-      <rect h="72" w="46" y="144" x="184"/>
-      <rect h="72" w="46" y="144" x="138"/>
     </anim>
     <anim loop="true" name="guard_walk_side" speed="5">
       <rect h="72" w="46" y="0" x="184"/>
@@ -36,9 +28,17 @@
       <rect h="72" w="46" y="72" x="184"/>
       <rect h="72" w="46" y="72" x="230"/>
     </anim>
-    <anim loop="true" name="guard_attack_lateral" speed="3">
+    <anim loop="false" name="guard_attack_lateral" speed="3">
       <rect h="72" w="46" y="144" x="184"/>
       <rect h="72" w="46" y="144" x="230"/>
+    </anim>
+    <anim loop="false" name="guard_attack_up" speed="3">
+      <rect h="72" w="46" y="144" x="184"/>
+      <rect h="72" w="46" y="144" x="138"/>
+    </anim>
+    <anim loop="false" name="guard_attack_down" speed="3">
+      <rect h="72" w="46" y="144" x="0"/>
+      <rect h="72" w="46" y="144" x="46"/>
     </anim>
   </animations>
   <stats speed="100" rupees="10" power="15" hp="80">

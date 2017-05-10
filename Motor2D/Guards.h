@@ -13,15 +13,13 @@ enum GUARDS_STATE
 	g_s_idle,
 	g_s_follow,
 	g_s_attack,
-	g_s_reset,
-	
 };
 
 enum GUARDS_MOVE_STATE
 {
 	gMove_AproachTarget,
-	gMove_Idle,
 	gMove_ReturnToPath,
+	gMove_null,
 };
 
 
@@ -77,9 +75,11 @@ public:
 	void IdleLeft();
 	void IdleRight();
 
+	void Die(Entity* killed_by);
 
 private:
-
+	bool OnRangeFollow(iPoint pos);
+	bool OnRangeAttack(iPoint pos);
 	void CheckState();
 
 	void SetTargetPath(const std::list<iPoint>* path);
@@ -103,8 +103,11 @@ private:
 
 	void SetIdleAnim();
 
+	void ClearTargetPath();
+
 public:
 	Entity*					target = nullptr;
+
 private:
 	j1Timer*				cd_timer = nullptr;
 
@@ -116,16 +119,17 @@ private:
 	float					speed = 0;
 
 	GUARDS_STATE			state = g_s_null;
-	GUARDS_MOVE_STATE		move_state = gMove_Idle;
+	GUARDS_MOVE_STATE		move_state = gMove_null;
 
 	states					anim_state = states_null;
 
 	int						rupee_reward = 0;
 
-	std::vector<iPoint>		target_path;
-	int						target_path_index = 0;
+	std::queue<iPoint>		target_path;
 
-	iPoint					initialPos = NULLPOINT;
+	iPoint					initial_pos = NULLPOINT;
+
+	int						attacking = false;
 
 };
 #endif // !_GUARDS_H_
