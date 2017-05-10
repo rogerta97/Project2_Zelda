@@ -1407,7 +1407,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1429,7 +1429,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1447,7 +1447,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1469,7 +1469,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1498,7 +1498,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1520,7 +1520,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1538,7 +1538,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1560,7 +1560,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 425, 32, 32 };
 			break;
 
 		case ganon:
