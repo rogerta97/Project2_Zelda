@@ -123,9 +123,9 @@
      </anim>
    </animations>
   <stats hp="100" speed="160" power="20" rupees="100">
-    <ability1 mult="0" cd="15" bd="0"/>
-    <ability2 heal="20" cd="1"/>
-    <ability3 mult="0" cd="1" bd="0"/>
+    <ability1 mult="0" cd="1" bd="5"/>
+    <ability2 heal="20" cd="15"/>
+    <ability3 mult="0" cd="10" bd="0"/>
     <ability4 mult="0" cd="50" bd="0"/>
     <basic_attack_spell mult ="1"/>
   </stats>
