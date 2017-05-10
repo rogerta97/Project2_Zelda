@@ -189,7 +189,7 @@ void MinionManager::KillMinion(Entity * minion)
 
 	}
 
-	App->audio->PlayFx(death_sound_effect, 0);
+	//App->audio->PlayFx(death_sound_effect, 0);
 }
 
 void MinionManager::StartTimer()

@@ -136,7 +136,7 @@ void TowerManager::KillTower(Entity * tower)
 		break;
 	}
 
-	App->audio->PlayFx(death_sound_effect, 0);
+	//App->audio->PlayFx(death_sound_effect, 0);
 }
 
 void TowerManager::SetHP(Entity * tower, uint hp)
