@@ -68,6 +68,7 @@ public:
 
 private:
 	void DeleteSpellIfTarget(Entity* target);
+	void DeleteSpellIfOwner(Entity* target);
 	void RemoveSpells();
 
 public:
