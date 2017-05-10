@@ -90,7 +90,7 @@ public:
 	FinalScreen*				 final_screen = nullptr; 
 	LogoScene*					 logo_scene = nullptr;
 	RemapingScene*				 remaping_scene = nullptr; 
-	TransitionScene*		     change_scene = nullptr;
+	TransitionScene*		     transition_scene = nullptr;
 	
 	player_info					 players[4];
 

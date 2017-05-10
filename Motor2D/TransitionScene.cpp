@@ -15,7 +15,6 @@ TransitionScene::~TransitionScene()
 
 bool TransitionScene::Start()
 {
-
 	uint w, h; 
 
 	App->win->GetWindowSize(w, h);
@@ -35,6 +34,7 @@ bool TransitionScene::Start()
 
 bool TransitionScene::Update(float dt)
 {
+	bool ret = true;
 
 	App->render->Blit(screen, 0, 0);
 
@@ -43,14 +43,17 @@ bool TransitionScene::Update(float dt)
 	if(App->input->GetControllerButton(0, a1.key_id) == KEY_DOWN)
 		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 
-	return true; 
-		
+	return ret; 
 }
 
 bool TransitionScene::CleanUp()
 {
-	App->gui->DeleteElement(window); 
-	return false;
+	bool ret = true;
+
+	if (App->scene->GetCurrentScene() != App->scene->transition_scene)
+		App->gui->DeleteElement(window); 
+
+	return ret;
 }
 
 void TransitionScene::FadeIn()

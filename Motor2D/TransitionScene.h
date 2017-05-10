@@ -28,7 +28,6 @@ private:
 
 	UI_Image* background_text_image = nullptr;
 	UI_Text*  continue_text = nullptr; 
-
 };
 
 #endif

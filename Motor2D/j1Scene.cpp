@@ -78,8 +78,8 @@ bool j1Scene::Start()
 	scenes.push_back(final_screen); 
 	remaping_scene = new RemapingScene();
 	scenes.push_back(remaping_scene); 
-	change_scene = new TransitionScene(); 
-	scenes.push_back(change_scene); 
+	transition_scene = new TransitionScene(); 
+	scenes.push_back(transition_scene);
 	// -------------
 
 	// Starting scene
