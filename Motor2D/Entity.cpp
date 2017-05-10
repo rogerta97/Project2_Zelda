@@ -90,6 +90,9 @@ int Entity::GetLife()
 
 void Entity::DealDamage(int damage)
 {
+	if (invulnerable)
+		return;
+
 	if (stats.life > 0)
 	{
 		if (stats.shield > 0)

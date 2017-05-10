@@ -77,7 +77,7 @@ bool MainScene::Start()
 
 	MainSceneViewport curr_viewport;
 
-
+	LOG("Creating players UI");
 	int count = 0; 
 	for (int i = 0; i < 4;i++)
 	{
@@ -149,6 +149,7 @@ bool MainScene::Start()
 		count++;
 	}
 	// ------------------
+
 	//Load Minimap Button
 	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
@@ -174,8 +175,7 @@ bool MainScene::Start()
 		button_it++;
 		it->minimap_icon = it->viewport_window->CreateImage(minimap_pos, button_pos);
 	}
-	//
-
+	// ------------------
 
 	// Creating pause UI
 	uint w, h;
@@ -213,29 +213,37 @@ bool MainScene::Start()
 	// -------------------
 
 	App->console->AddText("viewports.set 4", Input);
+
 	//Load Map
+	LOG("Loading map");
 	if (App->map->Load("zelda_moba.tmx"))
 	{
+		LOG("Creating walkability map");
 		int w, h;
 		uchar* data = NULL;
 		if (App->map->CreateWalkabilityMap(w, h, &data))
+		{
+			LOG("Setting pathfinding map");
 			App->pathfinding->SetMap(w, h, data);
+		}
 
 		RELEASE_ARRAY(data);
 	}
 
 	// Map collisions
+	LOG("Loading collisions");
 	CreateMapCollisions();
 
 	// Shop Manager
+	LOG("Loading shop");
 	shop_manager = new ShopManager();
 	shop_manager->Start();
 
 	// Loading Players
+	LOG("Loading Players");
 	player_manager = new PlayerManager();
 	player_manager->Start();
 
-	LOG("Loading Players");
 	bool def = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -640,8 +648,6 @@ void MainScene::CreateMapCollisions()
 		map_collisions.push_back(b);
 		RELEASE_ARRAY(points);
 	}
-
-	
 }
 
 void MainScene::DrawScreenSeparation()

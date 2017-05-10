@@ -2441,6 +2441,9 @@ void UI_Check_Box::CheckControl()
 
 bool UI_Element_Cmp::operator()(UI_Element *& e1, UI_Element *& e2)
 {
+	if (e1 == nullptr || e2 == nullptr)
+		return false;
+
 	if (e1->blit_layer > e2->blit_layer)
 		return true;
 	else if (e1->blit_layer == e2->blit_layer)
