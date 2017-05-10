@@ -51,7 +51,6 @@ private:
 	void UpdateRupees();
 
 public:
-
 	Entity*     entity = nullptr;
 	states      state = states::states_null;
 	shows	    show = shows::show_null;

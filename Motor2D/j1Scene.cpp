@@ -133,6 +133,7 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	bool ret = false;
+
 	if (current_scene != nullptr)
 		ret = current_scene->CleanUp();
 
