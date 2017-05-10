@@ -25,7 +25,7 @@ QuestManager::QuestManager()
 	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,136,130 }, true));
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,187,107}, true));
 		//BUTTON REMAPPING
 
 
@@ -57,7 +57,7 @@ QuestManager::QuestManager()
 			button_pos = { 703,2334,28,26 };
 			break;
 		}
-		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-28,52),button_pos));
+		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-28,59),button_pos));
 
 		//
 		curr_player_text = new PlayerText(); 
@@ -387,7 +387,6 @@ void QuestManager::update_progress()
 					}
 					case 1:
 					{
-
 						player_text_list[1]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						player_text_list[3]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						break;
@@ -431,7 +430,7 @@ void QuestManager::UpdateWindows()
 	{
 		if (windows_to_move[i] == true)
 		{
-			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 165)
+			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 186)
 			player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x-3, player_quest_windows[i]->GetPos().y));
 		}
 		if (windows_to_move[i] == false)
