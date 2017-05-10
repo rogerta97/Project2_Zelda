@@ -125,7 +125,7 @@ void QuestManager::Update()
 {
 	if (quests_enabled)
 	{
-		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
 		{
 			active_quest = GetRandomValue(1, 3);
 			for (int i = 0; i < 4; i++)
@@ -368,15 +368,15 @@ void QuestManager::update_progress()
 					{
 					case 0:
 					{
-
-						player_text_list[0]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[2]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						//FICA UN SWITCH PUTU PENDEHO
+						player_text_list[0]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[2]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						break;
 					}
 					case 1:
 					{
-						player_text_list[1]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[3]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[1]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[3]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						break;
 					}
 					default:

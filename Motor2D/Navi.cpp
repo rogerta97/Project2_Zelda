@@ -49,8 +49,8 @@ Navi::Navi(iPoint pos)
 	stats.base_speed = stats.speed = stats.restore_speed = stats_node.attribute("speed").as_int();
 
 	float dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
-	float cd = stats_node.child("ability2").attribute("cd").as_float();
-	float bd = stats_node.child("ability2").attribute("bd").as_int();
+	float cd = stats_node.child("ability1").attribute("cd").as_float();
+	float bd = stats_node.child("ability1").attribute("bd").as_int();
 	
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
 	a1->SetImages({ 816, 351, 80, 48 }, { 816, 473, 80, 48 }, { 1013, 1960, 80, 48 }, { 0,0,0,0 });
