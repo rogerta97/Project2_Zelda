@@ -173,7 +173,7 @@ bool CharacterSelectionScene::Update(float dt)
 		App->scene->players[2].character = curr_player_data3->entity;
 		App->scene->players[3].character = curr_player_data4->entity;
 
-		App->scene->ChangeScene((Scene*)App->scene->transition_scene);
+		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 
 	for (int i = 0; i < viewports_data.size(); i++)
