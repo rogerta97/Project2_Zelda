@@ -585,7 +585,6 @@ bool Minion::LookForTarget()
 		if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 		{
 			target = *it;
-			attack_pos = target->GetPos();
 			ret = true;
 			break;
 		}
@@ -605,14 +604,13 @@ bool Minion::LookForTarget()
 			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 			{
 				target = *it;
-				attack_pos = target->GetPos();
 				switch (GetTeam())
 				{
 				case 1:
-					attack_pos.x -= 32;
+					attack_pos_offset.x = -40;
 					break;
 				case 2:
-					attack_pos.x += 32;
+					attack_pos_offset.x = 40;
 					break;
 				}
 				ret = true;
@@ -635,7 +633,6 @@ bool Minion::LookForTarget()
 			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 			{
 				target = *it;
-				attack_pos = target->GetPos();
 				ret = true;
 				break;
 			}
@@ -645,9 +642,15 @@ bool Minion::LookForTarget()
 	if (base_path_index >= base_path.size() - 1)
 	{
 		if (GetTeam() == 1)
+		{
 			target = App->scene->main_scene->base_manager->GetBase(2);
-		else
+			attack_pos_offset.x = -125;
+		}
+		else 
+		{
 			target = App->scene->main_scene->base_manager->GetBase(1);
+			attack_pos_offset.x = -125;
+		}
 
 		ret = true;
 	}

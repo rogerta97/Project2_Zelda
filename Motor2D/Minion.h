@@ -133,7 +133,7 @@ private:
 
 	int					rupee_reward = 0;
 
-	iPoint				attack_pos = NULLPOINT;
+	iPoint				attack_pos_offset = NULLPOINT;
 };
 
 #endif // !MINION_H_
