@@ -217,6 +217,9 @@
     <ClCompile Include="GanonBat.cpp">
       <Filter>Engine\5. Spells ===========\GanonBat</Filter>
     </ClCompile>
+    <ClCompile Include="TransitionScene.cpp">
+      <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -468,6 +471,9 @@
     <ClInclude Include="GanonBat.h">
       <Filter>Engine\5. Spells ===========\GanonBat</Filter>
     </ClInclude>
+    <ClInclude Include="TransitionScene.h">
+      <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -583,6 +589,9 @@
     </Filter>
     <Filter Include="Engine\5. Spells ===========\GanonBat">
       <UniqueIdentifier>{73871d8c-0b6f-4ef9-9fff-fbb6a564f10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\TransitionScene">
+      <UniqueIdentifier>{18b1530f-8c2d-4090-85f4-e22038f3602d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

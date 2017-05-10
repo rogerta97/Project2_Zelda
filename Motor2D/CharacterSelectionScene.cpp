@@ -144,7 +144,7 @@ bool CharacterSelectionScene::Update(float dt)
 		for (int i = 0; i < 4; i++)
 			App->scene->players[i].character = entity_name::navi;
 
-		App->scene->ChangeScene((Scene*)App->scene->main_scene);
+		App->scene->ChangeScene((Scene*)App->scene->change_scene);
 	}
 
 	if (all_ready)
@@ -155,7 +155,7 @@ bool CharacterSelectionScene::Update(float dt)
 		App->scene->players[2].character = curr_player_data3->entity;
 		App->scene->players[3].character = curr_player_data4->entity;
 
-		App->scene->ChangeScene((Scene*)App->scene->main_scene);
+		App->scene->ChangeScene((Scene*)App->scene->change_scene);
 	}
 
 	for (int i = 0; i < viewports_data.size(); i++)
