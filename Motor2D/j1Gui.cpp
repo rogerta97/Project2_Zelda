@@ -464,49 +464,6 @@ void j1Gui::DeleteElement(UI_Element* element)
 		{
 			if (*ch != nullptr)
 			{
-				// Delete from parent list
-				if ((*ch)->parent != nullptr && !(*ch)->parent->childs.empty())
-				{
-					for (list<UI_Element*>::iterator it = (*ch)->parent->childs.begin(); it != (*ch)->parent->childs.end();)
-					{
-						if (*ch == *it)
-						{
-							it = (*ch)->parent->childs.erase(it);
-						}
-						else
-							++it;
-					}
-				}
-
-				// Delete from parent element list
-				if ((*ch)->parent_element != nullptr && !(*ch)->parent_element->childs.empty())
-				{
-					for (list<UI_Element*>::iterator it = (*ch)->parent_element->childs.begin(); it != (*ch)->parent_element->childs.end();)
-					{
-						if (*it == *ch)
-						{
-							it = (*ch)->parent_element->childs.erase(it);
-						}
-						else
-							++it;
-					}
-				}
-
-				// Delete from window list
-				if (!windows.empty())
-				{
-					for (list<UI_Window*>::iterator it = windows.begin(); it != windows.end();)
-					{
-						if (*it = (UI_Window*)*ch)
-						{
-							it = windows.erase(it);
-							break;
-						}
-						else
-							++it;
-					}
-				}
-
 				App->gui->EraseFromElementsList(*ch);
 
 				(*ch)->cleanup();
@@ -546,12 +503,12 @@ void j1Gui::EraseFromElementsList(UI_Element * to_del)
 				}
 			}
 
-			// Dekete from parent element list
+			// Delete from parent element list
 			if (curr->parent_element != nullptr && !curr->parent_element->childs.empty())
 			{
 				for (list<UI_Element*>::iterator it = curr->parent_element->childs.begin(); it != curr->parent_element->childs.end();)
 				{
-					if (*it == curr)
+					if ((*it) == curr)
 					{
 						it = curr->parent_element->childs.erase(it);
 					}
@@ -561,7 +518,7 @@ void j1Gui::EraseFromElementsList(UI_Element * to_del)
 			}
 
 			// Delete from window list
-			if (!windows.empty())
+			if (!windows.empty() && curr->type == ui_window)
 			{
 				for (list<UI_Window*>::iterator it = windows.begin(); it != windows.end();)
 				{
@@ -782,6 +739,8 @@ void UI_Element::AddChild(UI_Element * _child)
 {
 	childs.push_back(_child);
 	_child->parent_element = this;
+	_child->parent_element->childs.push_back(_child);
+	_child->parent = this->parent;
 }
 
 // ---------------------------------------------------------------------

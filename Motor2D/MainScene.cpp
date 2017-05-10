@@ -399,7 +399,6 @@ bool MainScene::Update(float dt)
 
 	}
 
-
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
@@ -592,8 +591,6 @@ void MainScene::UpdateProgressBar()
 	{
 		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4});
 	}
-	
-
 }
 
 void MainScene::ListenEvent(int type, EventThrower * origin, int id)
@@ -769,10 +766,8 @@ void PauseUI::SetPauseUI(bool ui_state)
 
 void PauseUI::MoveCursor()
 {
-
 	switch (cursor_state)
 	{
-
 	case p_e_resume:
 		cursor_1->SetPos({resume_background->GetPos().x - 60, resume_background->GetPos().y});
 		cursor_2->SetPos({ resume_background->GetPos().x + resume_background->image.w + 10, resume_background->GetPos().y});
@@ -787,15 +782,11 @@ void PauseUI::MoveCursor()
 		cursor_1->SetPos({0,0});
 		cursor_2->SetPos({0,0});
 		break; 
-
 	}
-
-	
 }
 
 void PauseUI::UpdatePause()
 {
-
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && cursor_state == p_e_quit)
 	{
 		cursor_state = p_e_resume;
@@ -815,7 +806,7 @@ void PauseUI::UpdatePause()
 			break;
 
 		case p_e_quit:
-			App->scene->ChangeScene(App->scene->main_scene); 
+			App->scene->ChangeScene((Scene*)App->scene->logo_scene); 
 			break;
 
 		case p_e_null:

@@ -62,8 +62,6 @@ public:
 	// Enable or disable the minimap on a viewport (1 to 4)
 	void SetActive(bool set, int viewport);
 
-
-
 private:
 	SDL_Rect GetPlayerRect(Player* pl);
 
