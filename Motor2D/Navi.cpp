@@ -51,12 +51,12 @@ Navi::Navi(iPoint pos)
 	float dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	float cd = stats_node.child("ability2").attribute("cd").as_float();
 	float bd = stats_node.child("ability2").attribute("bd").as_int();
-	heal = stats_node.child("ability1").attribute("heal").as_float();
+	
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
 	a1->SetImages({ 816, 351, 80, 48 }, { 816, 473, 80, 48 }, { 1013, 1960, 80, 48 }, { 0,0,0,0 });
 
 	cd = stats_node.child("ability2").attribute("cd").as_float();
-	heal = stats_node.child("ability1").attribute("heal").as_float();
+	heal = stats_node.child("ability2").attribute("heal").as_float();
 	Ability* a2 = AddAbility(1, cd, 0, 0);
 	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, { 0,0,0,0 });
 
