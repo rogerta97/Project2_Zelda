@@ -169,10 +169,6 @@ public:
 	void SetEnabled(bool set);
 	void SetEnabledAndChilds(bool set);
 
-	// Child functions
-	void AddChild(UI_Element* child);
-	void AddChildBoth(UI_Element* child);
-
 	// Mouse functions
 	bool MouseClickEnterLeftIntern();
 	bool MouseClickOutLeftIntern();

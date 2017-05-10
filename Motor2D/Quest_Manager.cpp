@@ -73,9 +73,9 @@ QuestManager::QuestManager()
 	}
 	for (int i = 0; i < 4; i++)
 	{
-		player_quest_windows[i]->AddChild(player_text_list[i]->active_quest_text);
+		//player_quest_windows[i]->AddChild(player_text_list[i]->active_quest_text);
 
-		player_quest_windows[i]->AddChild(player_remap_button[i]);
+		//player_quest_windows[i]->AddChild(player_remap_button[i]);
 	}
 
 	App->xml->LoadXML("Quests.xml", quests_file);

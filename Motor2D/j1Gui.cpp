@@ -733,28 +733,6 @@ bool UI_Element::CheckClickRect(int x, int y)
 }
 
 // ---------------------------------------------------------------------
-// Adds a child to an UI_Element.
-// ---------------------------------------------------------------------
-void UI_Element::AddChild(UI_Element * _child)
-{
-	childs.push_back(_child);
-	_child->parent_element = this;
-	_child->parent_element->childs.push_back(_child);
-	_child->parent = this->parent;
-}
-
-// ---------------------------------------------------------------------
-// Adds both childs one to the other to avoid the overlaping check. (Deprecated?)
-// ---------------------------------------------------------------------
-void UI_Element::AddChildBoth(UI_Element * _child)
-{
-	childs.push_back(_child);
-	_child->parent_element = this;
-	_child->childs.push_back(this);
-	this->parent_element = _child;
-}
-
-// ---------------------------------------------------------------------
 // Mouse check functions.
 // ---------------------------------------------------------------------
 
@@ -1891,7 +1869,8 @@ void UI_Scroll_Bar::Set(iPoint pos, int view_w, int view_h, int button_size)
 	button_v = new UI_Button();
 	button_v->Set(iPoint(view_w + button_size, pos.y), button_size, view_h);
 	button_v->layer = App->gui->elements_list.size() + 1;
-	AddChild(button_v);
+	childs.push_back(button_v);
+	button_v->parent_element = this;
 	button_starting_v = button_v->rect.h;
 	App->gui->elements_list_priority.push(button_v);
 	// ----------
@@ -1900,7 +1879,8 @@ void UI_Scroll_Bar::Set(iPoint pos, int view_w, int view_h, int button_size)
 	button_h = new UI_Button();
 	button_h->Set(iPoint(pos.x, pos.y + view_h), view_w, button_size);
 	button_h->layer = App->gui->elements_list.size() + 2;
-	AddChild(button_h);
+	childs.push_back(button_h);
+	button_h->parent_element = this;
 	button_starting_h = button_h->rect.w;
 	App->gui->elements_list_priority.push(button_h);
 	// ----------
