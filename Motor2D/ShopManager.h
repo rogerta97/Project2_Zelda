@@ -63,13 +63,12 @@ public:
 	bool CleanUp();
 
 	SDL_Rect GetPlayerItem(int player_index, int item_index);
+	void UpdatePlayerItems(int view, Player* player);
 
 private:
 	void ChangeShopState(int view);
 	void UpdateItemInfo(int view);
-	void UpdatePlayerItems(int view, Player* player);
-
-
+	
 public:
 	UI_Window*		shop_window = nullptr;
 	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };

@@ -63,7 +63,7 @@ public:
 	uint		viewport = 0;
 
 	UI_Text*    rupees_num = nullptr;
-	uint	    rupees = 0;
+	uint	    rupees = 400;
 
 	j1Timer*    death_timer = nullptr;
 	float		death_time = 5.0f;
@@ -154,6 +154,7 @@ private:
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
 	void SetAbilitiesIcon(int index);
+	void CheckBomb(Player* player);
 
 public:
 	vector<Player*>     players;

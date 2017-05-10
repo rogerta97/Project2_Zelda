@@ -539,7 +539,10 @@ void ShopManager::UpdatePlayerItems(int view, Player * player)
 	for (int i = 0; i < 3; i++)
 	{
 		if (player->items[i] == nullptr)
-			break;
+		{
+			shops[view]->player_items[i]->image = NULLRECT;
+			continue;
+		}
 
 		shops[view]->player_items[i]->image = player->items[i]->image_rect;
 	}

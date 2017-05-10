@@ -654,6 +654,8 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	a3_release = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) < 22000;
 	a4_release = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) < 22000;
 
+	bool ability_use = false;
+	
 	if (a1_release)
 	{
 		if (curr_player->show != shows::show_null)
@@ -663,24 +665,28 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = basic_atack_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_basic_atack_up)
 			{
 				curr_player->state = basic_atack_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_basic_atack_left)
 			{
 				curr_player->state = basic_atack_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_basic_atack_right)
 			{
 				curr_player->state = basic_atack_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 		}
 	}
@@ -694,24 +700,28 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = ability1_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability1_up)
 			{
 				curr_player->state = ability1_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability1_left)
 			{
 				curr_player->state = ability1_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability1_right)
 			{
 				curr_player->state = ability1_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 		}
 	}
@@ -725,24 +735,28 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = ability2_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability2_up)
 			{
 				curr_player->state = ability2_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability2_left)
 			{
 				curr_player->state = ability2_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability2_right)
 			{
 				curr_player->state = ability2_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 		}
 	}
@@ -756,27 +770,35 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = ability3_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability3_up)
 			{
 				curr_player->state = ability3_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability3_left)
 			{
 				curr_player->state = ability3_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability3_right)
 			{
 				curr_player->state = ability3_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 		}
 	}
+
+	//check if bomb explode
+	if (ability_use)
+		CheckBomb(curr_player);
 
 	if (curr_player->move != stop || curr_player->show != show_null)
 		curr_player->base_travel = false;
@@ -1662,6 +1684,26 @@ void PlayerManager::SetAbilitiesIcon(int index)
 	}
 	break;
 
+	}
+}
+
+void PlayerManager::CheckBomb(Player * player)
+{
+	int i = 0;
+	for (; i < 3; ++i)
+	{
+		if (player->items[i] != nullptr && player->items[i]->name == "Bomb")
+		{
+			break;
+		}
+	}
+
+	if (i != 3 && GetRandomValue(0, 99) < 20)
+	{
+		player->entity->stats.life -= player->entity->stats.max_life*0.7f;
+		player->items[i] = nullptr;
+		player->ApplyItemStats();
+		App->scene->main_scene->shop_manager->UpdatePlayerItems(player->viewport - 1, player);
 	}
 }
 
