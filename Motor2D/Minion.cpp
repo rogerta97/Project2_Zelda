@@ -585,6 +585,7 @@ bool Minion::LookForTarget()
 		if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 		{
 			target = *it;
+			attack_pos = target->GetPos();
 			ret = true;
 			break;
 		}
@@ -604,6 +605,16 @@ bool Minion::LookForTarget()
 			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 			{
 				target = *it;
+				attack_pos = target->GetPos();
+				switch (GetTeam())
+				{
+				case 1:
+					attack_pos.x -= 32;
+					break;
+				case 2:
+					attack_pos.x += 32;
+					break;
+				}
 				ret = true;
 				break;
 			}
@@ -624,6 +635,7 @@ bool Minion::LookForTarget()
 			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 			{
 				target = *it;
+				attack_pos = target->GetPos();
 				ret = true;
 				break;
 			}

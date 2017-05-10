@@ -132,6 +132,8 @@ private:
 	EventThrower*       event_thrower = nullptr;
 
 	int					rupee_reward = 0;
+
+	iPoint				attack_pos = NULLPOINT;
 };
 
 #endif // !MINION_H_
