@@ -509,7 +509,7 @@ void Minion::CheckState()
 					abilities.at(0)->fixture = nullptr;
 				}
 
-				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
+				if (GetPos().DistanceTo(target->GetPos()) > attack_range + abs(attack_pos_offset.x))
 				{
 					state = Minion_Move;
 					move_state = Move_AproachTarget;
@@ -541,7 +541,7 @@ void Minion::SetTargetPath(const std::list<iPoint>* path)
 
 void Minion::PathToTarget()
 {
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y)) > 0)
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x + attack_pos_offset.x, target->GetPos().y + attack_pos_offset.y)) > 0)
 	{
 		target_path.clear();
 		SetTargetPath(App->pathfinding->GetLastPath());
@@ -572,6 +572,8 @@ void Minion::PathToBasePath()
 bool Minion::LookForTarget()
 {
 	bool ret = false;
+
+	attack_pos_offset.SetToZero();
 
 	//Chack for enemy minion
 	std::list<Minion*> minions;
