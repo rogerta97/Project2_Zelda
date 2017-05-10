@@ -75,7 +75,7 @@ public:
 
 	vector<PlayerText*> player_text_list; 
 	vector<UI_Image*>   player_quest_windows;
-
+	vector<UI_Image*>	player_remap_button;
 	iPoint          placer = NULLPOINT;
 
 	vector<Entity*>  cucos;

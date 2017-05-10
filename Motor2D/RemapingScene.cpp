@@ -257,7 +257,7 @@ bool RemapingScene::Update(float dt)
 
 		}
 
-		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
+		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 		{
 			if(!inside)
 				App->scene->ChangeScene((Scene*)App->scene->menu_scene);

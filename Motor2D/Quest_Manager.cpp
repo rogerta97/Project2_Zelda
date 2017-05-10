@@ -8,6 +8,8 @@
 #include "j1XMLLoader.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
+#include "Mapping.h"
+#include "j1Scene.h"
 
 QuestManager::QuestManager()
 {
@@ -20,9 +22,44 @@ QuestManager::QuestManager()
 	{
 		windows_to_move.push_back(false);
 	}
+	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 689,2204,150,130 }, true)); 
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,136,130 }, true));
+		//BUTTON REMAPPING
+
+
+
+
+
+
+
+
+
+
+
+
+
+		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
+		SDL_Rect button_pos = { 703,2334,28,26 };
+		switch (shop_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			button_pos = { 703,2360,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			button_pos = { 703,2386,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			button_pos = { 703,2412,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			button_pos = { 703,2334,28,26 };
+			break;
+		}
+		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-28,52),button_pos));
+
+		//
 		curr_player_text = new PlayerText(); 
 
 		for (int i = 0; i<3; i++)
@@ -49,6 +86,8 @@ QuestManager::QuestManager()
 	for (int i = 0; i < 4; i++)
 	{
 		player_quest_windows[i]->AddChild(player_text_list[i]->active_quest_text);
+
+		player_quest_windows[i]->AddChild(player_remap_button[i]);
 	}
 
 	App->xml->LoadXML("Quests.xml", quests_file);
@@ -392,7 +431,7 @@ void QuestManager::UpdateWindows()
 	{
 		if (windows_to_move[i] == true)
 		{
-			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 150)
+			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 165)
 			player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x-3, player_quest_windows[i]->GetPos().y));
 		}
 		if (windows_to_move[i] == false)
