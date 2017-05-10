@@ -25,21 +25,8 @@ QuestManager::QuestManager()
 	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,187,107}, true));
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,178,107}, true));
 		//BUTTON REMAPPING
-
-
-
-
-
-
-
-
-
-
-
-
-
 		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
 		SDL_Rect button_pos = { 703,2334,28,26 };
 		switch (shop_key.key_id)
@@ -57,8 +44,8 @@ QuestManager::QuestManager()
 			button_pos = { 703,2334,28,26 };
 			break;
 		}
-		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-28,59),button_pos));
-
+		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-27,59),button_pos));
+		button_it++;
 		//
 		curr_player_text = new PlayerText(); 
 
@@ -73,7 +60,7 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_25, 15, false, 255, 215, 0));
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_25, 16, false, 255, 215, 0));
 
 
 		curr_player_text->active_quest_text->SetText(" ");
@@ -298,13 +285,13 @@ void QuestManager::update_progress()
 			case 0:
 			{
 				string team_1;
-				team_1 += "Power quest\nis active, slay\n 2 enemy players.\n Progress ";
+				team_1 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l2";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Power quest\nis active, slay\n 2 enemy players.\n Progress ";
+				team_2 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l2";
 				player_text_list[1]->active_quest_text->SetText(team_2);
@@ -314,13 +301,13 @@ void QuestManager::update_progress()
 			case 1:
 			{
 				string team_1;
-				team_1 += "Speed quest\n is active.\n Progress ";
+				team_1 += "Speed quest\nis active.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Speed quest\n is active.\n Progress ";
+				team_2 += "Speed quest\nis active.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l3";
 				player_text_list[1]->active_quest_text->SetText(team_2);
@@ -330,13 +317,13 @@ void QuestManager::update_progress()
 			case 2:
 			{
 				string team_1;
-				team_1 += "Health quest\nis active\nkill jungle\ncamps.\n Progress ";
+				team_1 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Health quest\nis active\nkill jungle\ncamps.\n Progress ";
+				team_2 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l3";
 				player_text_list[1]->active_quest_text->SetText(team_2);
@@ -430,7 +417,7 @@ void QuestManager::UpdateWindows()
 	{
 		if (windows_to_move[i] == true)
 		{
-			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 186)
+			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 177)
 			player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x-3, player_quest_windows[i]->GetPos().y));
 		}
 		if (windows_to_move[i] == false)
