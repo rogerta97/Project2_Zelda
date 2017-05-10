@@ -29,6 +29,7 @@
 #include "j1XMLLoader.h"
 #include "MinimapManager.h"
 #include "MinimapManager.h"
+#include "RemapingScene.h"
 
 MainScene::MainScene()
 {
@@ -53,6 +54,7 @@ bool MainScene::Start()
 	iPoint rupiees_pos = { screen.w / 50 + 15 , screen.h / 40 + 5 };
 	SDL_Rect rupiees_rect = { 32, 0, 16, 16 };
 
+
 	iPoint minimap_pos = { screen.w - 58, 5 };
 	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
 
@@ -75,6 +77,7 @@ bool MainScene::Start()
 
 	MainSceneViewport curr_viewport;
 
+
 	int count = 0; 
 	for (int i = 0; i < 4;i++)
 	{
@@ -87,7 +90,6 @@ bool MainScene::Start()
 		curr_viewport.viewport_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 		curr_viewport.viewport_window->viewport = i + 1;
 		curr_viewport.rupiees_img = curr_viewport.viewport_window->CreateImage(rupiees_pos, rupiees_rect);
-		curr_viewport.minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
 		curr_viewport.win_text = curr_viewport.viewport_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
 
@@ -147,7 +149,32 @@ bool MainScene::Start()
 		count++;
 	}
 	// ------------------
-
+	//Load Minimap Button
+	int button_it = 0;
+	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
+	{
+		//BUTTON REMAPPING
+		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
+		SDL_Rect button_pos = { 703,2334,28,26 };
+		switch (shop_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			button_pos = { 533,762,36, 32 };
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			button_pos = { 569,762,36, 32 };
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			button_pos = { 497,762,36, 32 };
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			minimap_rect = { 472, 588, 36, 32 };;
+			break;
+		}
+		button_it++;
+		it->minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
+	}
+	//
 
 
 	// Creating pause UI
@@ -274,7 +301,7 @@ bool MainScene::Start()
 	minimap_manager = new MinimapManager();
 	minimap_manager->Start();
 
-
+	
 	//Load Victory/Defeat Animations
 	pugi::xml_document gs;
 

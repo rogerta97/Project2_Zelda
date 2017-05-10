@@ -444,16 +444,19 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	}
 
 	// Minimap
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+	int minimap_key;
+	App->scene->players[(curr_player)->controller_index].mapping->GetKey(m_k_minimap, &minimap_key);
+	if (App->input->GetControllerButton(curr_player->controller_index, minimap_key) == KEY_DOWN)
 	{
 		App->scene->main_scene->minimap_manager->SetActive(true, curr_player->viewport);
 		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Enable();
 	}
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
+	if (App->input->GetControllerButton(curr_player->controller_index, minimap_key) == KEY_UP)
 	{
 		App->scene->main_scene->minimap_manager->SetActive(false, curr_player->viewport);
 		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Disable();
 	}
+
 	int shop_key;
 	App->scene->players[(curr_player)->controller_index].mapping->GetKey(m_k_shop, &shop_key);
 	if (App->input->GetControllerButton(curr_player->controller_index, shop_key) == KEY_UP && App->scene->main_scene->quest_manager->quests_enabled && App->scene->main_scene->quest_manager->active_quest != -1)
