@@ -582,15 +582,12 @@ void MainScene::UpdateProgressBar()
 {
 	iPoint zelda_pos = App->map->WorldToMap(zelda_manager->GetZeldaPos().x, zelda_manager->GetZeldaPos().y);
 
-	float percentage = (zelda_pos.x-36) * 100 / 95;
+	float percentage = (zelda_pos.x-35) * 100 / 97;
 	percentage /= 100;
 
-	int delta = (progress_bar->rect.w * percentage) - progress_bar->rect.w/2;
-
-	for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
-	{
-		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4});
-	}
+	int delta = (progress_bar->rect.w * percentage);
+	
+	princess->SetPos({ progress_bar->GetPos().x + delta - princess->image.w/2, progress_bar->GetPos().y - 4});
 }
 
 void MainScene::ListenEvent(int type, EventThrower * origin, int id)
