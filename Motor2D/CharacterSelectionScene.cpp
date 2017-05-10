@@ -162,7 +162,7 @@ bool CharacterSelectionScene::Update(float dt)
 		for (int i = 0; i < 4; i++)
 			App->scene->players[i].character = entity_name::navi;
 
-		App->scene->ChangeScene((Scene*)App->scene->transition_scene);
+		App->scene->ChangeScene((Scene*)App->scene->main_scene);
 	}
 
 	if (all_ready)
