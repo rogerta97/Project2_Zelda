@@ -9,7 +9,7 @@
 	</renderer>
 	<fonts>
 		<default_font file="fonts/open_sans/OpenSans-Regular.ttf" size="24" />
-    <game_font file ="fonts/PIXELADE.ttf" size ="30"/>
+    <game_font file ="fonts/PIXELADE.TTF" size ="30"/>
 	</fonts>
 	<gui>
 		<atlas file="gui/UI_sheet_final.png" />

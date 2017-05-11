@@ -72,6 +72,8 @@ private:
 
 public:
 
+	uint					activation_time = 0;
+
 private:
 	uint					team1_players = 0;
 	uint					team2_players = 0;
@@ -91,7 +93,6 @@ private:
 	int						initial_path_pos = 0;
 
 	bool					active = false;
-	uint					activation_time = 0;
 
 	states					anim_state = states_null;
 
