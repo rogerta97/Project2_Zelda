@@ -64,6 +64,7 @@ public:
 
 	SDL_Rect GetPlayerItem(int player_index, int item_index);
 	void UpdatePlayerItems(int view, Player* player);
+	bool IsActive(int viewport);
 
 private:
 	void ChangeShopState(int view);
