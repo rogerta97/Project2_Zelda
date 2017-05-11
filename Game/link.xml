@@ -244,7 +244,7 @@
 
      </anim>
    </animations>
-  <stats hp="120" speed="200" power="15" rupees="100">
+  <stats hp="120" speed="150" power="15" rupees="100">
     <ability1 mult="1" cd="1" bd="0"/>
     <ability2 mult="0.5" cd="8" bd="15"/>
     <ability3 mult="0.3" cd="20" bd="8"/>
