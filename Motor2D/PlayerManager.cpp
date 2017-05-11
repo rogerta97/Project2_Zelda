@@ -1731,7 +1731,7 @@ void PlayerManager::Explode(Player * player)
 		return;
 	}
 
-	App->view->LayerBlit(player->entity->GetPos().y, player->explosion_tex, player->entity->GetPos(), player->explosion->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+	App->view->LayerBlit(player->entity->GetPos().y + 1, player->explosion_tex, { player->entity->GetPos().x-27, player->entity->GetPos().y-27 }, player->explosion->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
 }
 
 
