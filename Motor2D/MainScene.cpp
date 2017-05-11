@@ -368,11 +368,11 @@ bool MainScene::Update(float dt)
 	quest_manager->update_progress();
 
 	// Update Managers
-	if(minion_manager != nullptr)
+	if (minion_manager != nullptr)
 		minion_manager->Update();
-	if(shop_manager != nullptr)
+	if (shop_manager != nullptr)
 		shop_manager->Update();
-	if(player_manager != nullptr)
+	if (player_manager != nullptr)
 		player_manager->Update(dt);
 	if (jungleCamp_manager != nullptr)
 		jungleCamp_manager->Update(dt);
@@ -400,17 +400,17 @@ bool MainScene::Update(float dt)
 	//Update Victory/Defeat animation
 	if (winner != 0)
 	{
-		if(!App->GetGamePause())
+		if (!App->GetGamePause())
 			UpdateWinnerAnim(winner, dt);
 		else
 			UpdateWinnerAnim(winner, 0);
-	}		
+	}
 
 	for (int i = 0; i < 4; i++)
 	{
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 		{
-			ui_viewports.at(i).minimapstate.SetPlayerStats(i); 
+			ui_viewports.at(i).minimapstate.SetPlayerStats(i);
 		}
 
 	}
@@ -434,17 +434,20 @@ bool MainScene::Update(float dt)
 		pause_ui.SetPauseUI(false);
 	}
 	else
-		pause_ui.UpdatePause(); 
+		pause_ui.UpdatePause();
 	// ------
-	
-	int count_down = App->scene->main_scene->zelda_manager->GetSpawnTime() - game_timer->ReadSec();
-	princess_timer->SetText(SecToMin(count_down));
 
-	if (princess_timer->enabled == true && count_down <= 0)
+	if (App->scene->main_scene->zelda_manager != nullptr)
 	{
-		princess_timer->enabled = false; 
+		int count_down = App->scene->main_scene->zelda_manager->GetSpawnTime() - game_timer->ReadSec();
+		princess_timer->SetText(SecToMin(count_down));
 
-		princess->enabled = true; 
+		if (princess_timer->enabled == true && count_down <= 0)
+		{
+			princess_timer->enabled = false;
+
+			princess->enabled = true;
+		}
 	}
 
 	//DrawScreenSeparation();
