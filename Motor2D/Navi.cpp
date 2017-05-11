@@ -18,7 +18,6 @@
 #define BASIC_ATTACK_RANGE 270
 
 #define ABILITY1_RANGE 140
-#define ABILITY1_DURATION 5
 #define HEAL_TICK_TIME 1
 
 #define ABILITY2_RANGE 160
@@ -59,6 +58,7 @@ Navi::Navi(iPoint pos)
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	heal = stats_node.child("ability2").attribute("heal").as_float();
+	ability1_duration = stats_node.child("ability2").attribute("duration").as_float();
 	Ability* a2 = AddAbility(1, cd, 0, 0);
 	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, { 0,0,0,0 });
 
@@ -155,11 +155,12 @@ bool Navi::Update(float dt)
 		}
 	}
 
+	ability1_ticks_time = ability1_duration / (1 + (stats.speed - stats.base_speed)*GetAbility(1)->damage_multiplicator);
 
 	// Ability 1 --------------------
 	if (ability1)
 	{
-		if (ability1_timer->ReadSec() < ABILITY1_DURATION)
+		if (ability1_timer->ReadSec() < ability1_duration)
 		{
 			if (GetTeam() == ANIMATIONS_TEAM)
 				App->view->LayerBlit(game_object->GetPos().y - 1, game_object->GetTexture(), { GetPos().x - 140, GetPos().y - 140 }, game_object->animator->GetAnimation("heal_area")->GetAnimationFrame(dt), 0);

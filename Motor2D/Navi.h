@@ -138,6 +138,8 @@ private:
 	vector<heal_element> to_heal;
 	bool	  look_for_entities = true;
 	float	  heal = 0.0f;
+	float	  ability1_duration = 0.0f;
+	float	  ability1_ticks_time = 0.0f;
 
 	// Ability 2
 	bool	  ability2 = false;
