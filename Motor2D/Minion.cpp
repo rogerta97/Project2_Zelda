@@ -119,11 +119,11 @@ bool Minion::Update(float dt)
 			{
 				if (spell->name == "t_attack")
 				{
-					DealDamage(((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage)*tower_dmg_mult);
+					DealDamage((((float)entity->stats.power * (float)spell->stats.damage_multiplicator) + (float)ability->damage)*tower_dmg_mult);
 				}
 				else
 				{
-					DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+					DealDamage(((float)entity->stats.power * (float)spell->stats.damage_multiplicator) + (float)ability->damage); // Spells control their own damage mutiplicator
 
 					spell->Effects(entity, this, ability);
 				}

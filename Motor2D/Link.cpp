@@ -121,12 +121,12 @@ bool Link::Update(float dt)
 		{
 			if (spell != nullptr)
 			{
-				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+				DealDamage(((float)entity->stats.power * (float)spell->stats.damage_multiplicator) + (float)ability->damage); // Spells control their own damage mutiplicator
 
 				spell->Effects(entity, this, ability);
 			}
 			else
-				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+				DealDamage(((float)entity->stats.power * (float)ability->damage_multiplicator) + (float)ability->damage);
 
 			// Base travel cancel
 			Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(game_object->pbody);

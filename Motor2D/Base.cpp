@@ -109,7 +109,7 @@ bool Base::Update(float dt)
 			if (!invulnerable)
 			{
 				if (spell == nullptr)
-					DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+					DealDamage(((float)entity->stats.power * (float)ability->damage_multiplicator) + (float)ability->damage);
 
 				Die(entity);
 			}
