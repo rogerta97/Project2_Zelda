@@ -85,6 +85,8 @@ public:
 	Animator*	explosion = nullptr;
 	SDL_Texture* explosion_tex = nullptr;
 	bool		play_exp = false;
+
+	bool		invert_controls = false;
 };
 
 struct PlayerManagerUI

@@ -339,10 +339,23 @@ bool Navi::Draw(float dt)
 			{
 				App->view->LayerBlit(9999, game_object->GetTexture(), { (int)(rect.w*0.5f) - 180, (int)(rect.h*0.5f) - 150 }, game_object->animator->GetAnimation("ulti_letters")->GetAnimationFrame(dt), view.at(i), -1.0f, false);
 			}
+
+			App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[0]->game_object->pbody)->invert_controls = true;
+			App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[1]->game_object->pbody)->invert_controls = true;
 		}
 		else
 		{
 			ability3 = false;
+
+			// Get enemy team
+			int enemy_team = 0;
+			if (GetTeam() == 1)
+				enemy_team = 2;
+			else
+				enemy_team = 1;
+
+			App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[0]->game_object->pbody)->invert_controls = false;
+			App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[1]->game_object->pbody)->invert_controls = false;
 		}
 	}
 	// -------------------------------

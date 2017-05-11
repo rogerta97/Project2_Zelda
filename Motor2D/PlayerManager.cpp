@@ -486,40 +486,101 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		curr_player->move = move_upleft;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_downright;
+		}
+		else
+		{
+			curr_player->move = move_upleft;
+		}
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		curr_player->move = move_upright;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_downleft;
+		}
+		else
+		{
+			curr_player->move = move_upright;
+		}
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 	{
-		curr_player->move = move_downleft;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_upright;
+		}
+		else
+		{
+			curr_player->move = move_downleft;
+		}
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 	{
-		curr_player->move = move_downright;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_upleft;
+		}
+		else
+		{
+			curr_player->move = move_downright;
+		}
 	}
 	// Normal moves
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
 	{
-		curr_player->move = move_left;
-		curr_player->state = run_left;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_right;
+			curr_player->state = run_right;
+		}
+		else
+		{
+			curr_player->move = move_left;
+			curr_player->state = run_left;
+		}
+		
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
 	{
-		curr_player->move = move_right;
-		curr_player->state = run_right;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_left;
+			curr_player->state = run_left;
+		}
+		else
+		{
+			curr_player->move = move_right;
+			curr_player->state = run_right;
+		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
 	{
-		curr_player->move = move_up;
-		curr_player->state = run_up;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_down;
+			curr_player->state = run_down;
+		}
+		else
+		{
+			curr_player->move = move_up;
+			curr_player->state = run_up;
+		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
 	{
-		curr_player->move = move_down;
-		curr_player->state = run_down;
+		if (curr_player->invert_controls)
+		{
+			curr_player->move = move_up;
+			curr_player->state = run_up;
+		}
+		else
+		{
+			curr_player->move = move_down;
+			curr_player->state = run_down;
+		}
 	}
 	else
 	{
