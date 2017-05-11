@@ -6,7 +6,7 @@
 #include "j1Map.h"
 #include "j1Audio.h"
 
-#define ZELDA_SPAWN_TIME 15*60
+
 
 ZeldaManager::ZeldaManager()
 {
@@ -55,7 +55,7 @@ bool ZeldaManager::Update()
 {
 	bool ret = true;
 
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() > (ZELDA_SPAWN_TIME - 60) && anounced == false)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() > (GetSpawnTime() - 60) && anounced == false)
 	{
 		anounced = true;
 		App->audio->PlayFx(zelda_anouncer);
