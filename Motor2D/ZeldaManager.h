@@ -15,6 +15,7 @@ public:
 
 	iPoint GetZeldaPos();
 	Zelda* GetZelda();
+
 	int GetSpawnTime(); 
 
 private:

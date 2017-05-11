@@ -322,12 +322,15 @@ bool MainScene::Start()
 
 	defeat = new Animator();
 	victory = new Animator();
+	zelda_appearing = new Animator(); 
 
 	defeat->LoadAnimationsFromXML(gs, "defeat_animations");
 	victory->LoadAnimationsFromXML(gs, "victory_animations");
+	zelda_appearing->LoadAnimationsFromXML(gs, "zelda_face"); 
 
 	defeat->SetAnimation("idle");
 	victory->SetAnimation("idle");
+	zelda_appearing->SetAnimation("idle"); 
 
 	// Allow player input once the level is loaded
 	player_manager->AllowInput(0);

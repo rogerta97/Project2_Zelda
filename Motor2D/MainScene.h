@@ -160,6 +160,7 @@ private:
 
 	Animator*			victory = nullptr;
 	Animator*			defeat = nullptr;
+	Animator*			zelda_appearing = nullptr; 
 
 	// Pause UI
 	PauseUI				pause_ui; 
