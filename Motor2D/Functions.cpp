@@ -73,6 +73,10 @@ string SecToMin(int time)
 	string sec_str = std::to_string(sec);
 
 	minutes_str += semicolon;
+
+	if (sec < 10)
+		minutes_str += "0"; 
+
 	minutes_str += sec_str; 
 
 	return minutes_str;

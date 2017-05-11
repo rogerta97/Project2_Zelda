@@ -144,8 +144,6 @@ public:
 
 	UI_Image*			progress_bar = nullptr;
 	UI_Image*			princess = nullptr;
-
-	UI_Image*		    timer_background = nullptr; 
 	UI_Text*		    princess_timer = nullptr; 
 
 private:

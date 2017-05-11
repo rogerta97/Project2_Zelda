@@ -66,12 +66,11 @@ Zelda * ZeldaManager::GetZelda()
 
 int ZeldaManager::GetSpawnTime()
 {
-	// zelda->activation_time*60
 
 	Zelda* zelda = GetZelda(); 
 
 	if (zelda != nullptr)
-		return 10;
+		return zelda->activation_time*60;
 
 	else
 		return -1; 
