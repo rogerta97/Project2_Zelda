@@ -210,6 +210,9 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		p->team = team;
 
 		SetAbilitiesIcon(players.size() - 1);
+
+		pugi::xml_document explo_doc;
+		App->xml->LoadXML("explosion.xml", explo_doc);
 	}
 
 	return ret;

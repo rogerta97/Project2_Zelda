@@ -548,6 +548,11 @@ void ShopManager::UpdatePlayerItems(int view, Player * player)
 	}
 }
 
+bool ShopManager::IsActive(int viewport)
+{
+	return shops[viewport - 1]->active;
+}
+
 SDL_Rect ShopManager::GetPlayerItem(int player_index, int item_index)
 {
 	return shops[player_index]->player_items[item_index]->image; 
