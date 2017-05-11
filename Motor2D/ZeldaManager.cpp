@@ -4,9 +4,16 @@
 #include "j1Entity.h"
 #include "Zelda.h"
 #include "j1Map.h"
+#include "j1Audio.h"
+
+
 
 ZeldaManager::ZeldaManager()
 {
+
+	//Anouncer
+	zelda_anouncer = App->audio->LoadFx("Audio/Voice act/esperarse_que__voy_1.wav");
+
 	iPoint pos(App->map->GetZeldaPosition());
 	zelda = (Zelda*)App->entity->CreateEntity(entity_name::zelda, { pos.x + 16, pos.y + 30 });
 	zelda->SetTimer(App->scene->main_scene->GetGameTimer());
@@ -44,6 +51,19 @@ ZeldaManager::~ZeldaManager()
 {
 }
 
+bool ZeldaManager::Update()
+{
+	bool ret = true;
+
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() > (GetSpawnTime() - 60) && anounced == false)
+	{
+		anounced = true;
+		App->audio->PlayFx(zelda_anouncer);
+	}
+
+	return ret;
+}
+
 void ZeldaManager::CleanUp()
 {
 	App->entity->DeleteEntity(zelda);
@@ -70,8 +90,13 @@ int ZeldaManager::GetSpawnTime()
 	Zelda* zelda = GetZelda(); 
 
 	if (zelda != nullptr)
-		return zelda->activation_time*60;
+		return 5;
 
 	else
 		return -1; 
+}
+
+zelda_states ZeldaManager::GetZeldaState()
+{
+	return zelda->GetZeldaState();
 }

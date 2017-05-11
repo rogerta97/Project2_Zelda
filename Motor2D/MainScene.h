@@ -126,6 +126,8 @@ private:
 
 	void GetPlayerItemsRects();
 
+	void DoPrincessAnimation(float dt); 
+
 public:
 	// Managers
 	MinionManager*		minion_manager = nullptr;
@@ -144,6 +146,8 @@ public:
 
 	UI_Image*			progress_bar = nullptr;
 	UI_Image*			princess = nullptr;
+
+	UI_Image*			spawn_time_background = nullptr; 
 	UI_Text*		    princess_timer = nullptr; 
 
 private:

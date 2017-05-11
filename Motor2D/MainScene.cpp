@@ -183,14 +183,14 @@ bool MainScene::Start()
 	main_scene_window = App->gui->UI_CreateWin({ 0,0 }, w, h, 10, false);
 
 	SDL_Rect win_size = { 0,0, w,h };
+	SDL_Rect spawn_background_rect = { 0,1367,81,33 };
 
 	// Common UI
 	progress_bar = main_scene_window->CreateImage(iPoint(w / 2 - 192, h / 2 - 12), { 0, 28, 385, 24 });
 	princess = main_scene_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 2), { 0,0,32,28 });
-	princess_timer = main_scene_window->CreateText(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 2), App->font->game_font_25, 0, false, 0, 0, 0);
-
-	progress_bar->enabled = true; 
-
+	spawn_time_background = main_scene_window->CreateImage(iPoint(w/2 - spawn_background_rect.w/2, h/2 - spawn_background_rect.h/2), spawn_background_rect);
+	princess_timer = main_scene_window->CreateText(iPoint(spawn_time_background->GetPos().x + 19, spawn_time_background->GetPos().y + 4), App->font->game_font_25, 0, false, 0, 0, 0);
+	
 	princess->enabled = false; 
 
 	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
@@ -326,7 +326,7 @@ bool MainScene::Start()
 
 	defeat->LoadAnimationsFromXML(gs, "defeat_animations");
 	victory->LoadAnimationsFromXML(gs, "victory_animations");
-	zelda_appearing->LoadAnimationsFromXML(gs, "zelda_face"); 
+	zelda_appearing->LoadAnimationsFromXML(gs, "zelda_face");
 
 	defeat->SetAnimation("idle");
 	victory->SetAnimation("idle");
@@ -437,6 +437,8 @@ bool MainScene::Update(float dt)
 		pause_ui.UpdatePause();
 	// ------
 
+	// Princess progress bar 
+
 	if (App->scene->main_scene->zelda_manager != nullptr)
 	{
 		int count_down = App->scene->main_scene->zelda_manager->GetSpawnTime() - game_timer->ReadSec();
@@ -445,10 +447,23 @@ bool MainScene::Update(float dt)
 		if (princess_timer->enabled == true && count_down <= 0)
 		{
 			princess_timer->enabled = false;
+			spawn_time_background->enabled = false; 
 
 			princess->enabled = true;
+
 		}
 	}
+	
+	if (App->scene->main_scene->zelda_manager->GetZeldaState() == z_s_move || App->scene->main_scene->zelda_manager->GetZeldaState() == z_s_move_to_path)
+	{
+		DoPrincessAnimation(dt);
+	}
+	else
+	{
+		princess->image = zelda_appearing->GetCurrentAnimation()->GetFrame(0); 
+	}
+
+	// -----
 
 	//DrawScreenSeparation();
 
@@ -487,8 +502,11 @@ bool MainScene::CleanUp()
 	//Release Animators
 	victory->CleanUp();
 	defeat->CleanUp();
+	zelda_appearing->CleanUp(); 
+
 	RELEASE(victory);
 	RELEASE(defeat);
+	RELEASE(zelda_appearing);
 
 	App->DeleteGameplayTimer(game_timer);
 	App->DeleteGameplayTimer(quest_timer);
@@ -732,6 +750,12 @@ void MainScene::GetPlayerItemsRects()
 				App->scene->players[i].items_rects[j] = player_manager->players[i]->items[j]->image_rect;
 		}
 	}
+}
+
+void MainScene::DoPrincessAnimation(float dt)
+{
+	SDL_Rect curr_frame = zelda_appearing->GetCurrentAnimation()->GetAnimationFrame(dt);
+	princess->image = curr_frame; 
 }
 
 void MinimapState::Enable()
