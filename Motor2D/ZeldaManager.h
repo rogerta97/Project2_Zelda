@@ -11,6 +11,8 @@ public:
 	ZeldaManager();
 	~ZeldaManager();
 
+	bool Update();
+
 	void CleanUp();
 
 	iPoint GetZeldaPos();
@@ -19,11 +21,9 @@ public:
 	int GetSpawnTime(); 
 
 private:
-
-public:
-
-private:
 	Zelda* zelda = nullptr;
+	int zelda_anouncer;
+	bool anounced = false;
 };
 
 #endif
