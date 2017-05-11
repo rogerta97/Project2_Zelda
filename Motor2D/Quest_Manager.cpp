@@ -11,6 +11,8 @@
 #include "Mapping.h"
 #include "j1Scene.h"
 
+#define WINDOW_SPEED 500
+
 QuestManager::QuestManager()
 {
 	player_text_list.clear();
@@ -408,24 +410,25 @@ void QuestManager::SwitchWindowState(int player)
 }
 void QuestManager::UpdateWindows()
 {
+	int speed = WINDOW_SPEED*App->GetDT();
 	for (int i = 0; i < windows_to_move.size(); i++)
 	{
 		if (windows_to_move[i] == true)
 		{
 			if (player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 177)
 			{
-				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - 3, player_quest_windows[i]->GetPos().y));
-				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - 3, player_text_list[i]->active_quest_text->GetPos().y));
-				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - 3, player_remap_button[i]->GetPos().y));
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - speed, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - speed, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - speed, player_remap_button[i]->GetPos().y));
 			}
 		}
 		if (windows_to_move[i] == false)
 		{
 			if (player_quest_windows[i]->GetPos().x < App->view->GetViewportRect(1).w)
 			{
-				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + 3, player_quest_windows[i]->GetPos().y));
-				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + 3, player_text_list[i]->active_quest_text->GetPos().y));
-				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + 3, player_remap_button[i]->GetPos().y));
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + speed, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + speed, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + speed, player_remap_button[i]->GetPos().y));
 			}
 		}
 	}

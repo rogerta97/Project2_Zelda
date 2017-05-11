@@ -122,11 +122,11 @@
        <rect x = "774" y = "1120" w = "280" h = "280"/>
      </anim>
    </animations>
-  <stats hp="100" speed="160" power="20" rupees="100">
-    <ability1 mult="0" cd="1" bd="5"/>
-    <ability2 heal="20" cd="15"/>
+  <stats hp="100" speed="160" power="5" rupees="100">
+    <ability1 mult="0" cd="1" bd="10"/>
+    <ability2 heal="20" cd="12"/>
     <ability3 mult="0" cd="10" bd="0"/>
     <ability4 mult="0" cd="50" bd="0"/>
-    <basic_attack_spell mult ="1"/>
+    <basic_attack_spell mult ="0.5"/>
   </stats>
 </file>

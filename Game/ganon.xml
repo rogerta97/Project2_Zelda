@@ -186,10 +186,10 @@
 
    </animations>
   <stats hp="160" speed="200" power="10" rupees="100">
-    <ability1 mult="1" cd="1" bd="3"/>
+    <ability1 mult="0.8" cd="1" bd="2"/>
     <ability2 mult="0" cd="8" bd="5"/>
-    <ability3 mult="0.5" cd="15" bd="8"/>
-    <ability4 mult="1" cd="30" bd="10"/>
-    <bat_spell mult ="0.6" bat_fire_bd ="2" bat_fire_dm ="0.3"/>
+    <ability3 mult="0.5" cd="12" bd="8"/>
+    <ability4 mult="1" cd="35" bd="10"/>
+    <bat_spell mult ="0.6" bat_fire_bd ="2" bat_fire_dm ="0.2"/>
   </stats>
 </file>
