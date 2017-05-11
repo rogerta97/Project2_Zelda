@@ -16,7 +16,7 @@
     <description>So fast it feels like flying !</description>
     <power value="0"/>
     <hp value="0"/>
-    <speed value="60"/>
+    <speed value="80"/>
     <price rupees="500"/>
     <upgrade id="-1"/>
     <upgrade_from id="0"/>
@@ -47,7 +47,7 @@
     <name>Shield</name>
     <description>The best attack is a good defense. </description>
     <power value="0"/>
-    <hp value="50"/>
+    <hp value="80"/>
     <speed value="0"/>
     <price rupees="200"/>
     <upgrade id="5"/>
@@ -57,7 +57,7 @@
     <name>Sturdy Shield</name>
     <description>A sturdier version of the shield.</description>
     <power value="0"/>
-    <hp value="120"/>
+    <hp value="240"/>
     <speed value="0"/>
     <price rupees="500"/>
     <upgrade id="-1"/>
