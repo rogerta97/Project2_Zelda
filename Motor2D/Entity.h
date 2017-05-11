@@ -79,6 +79,15 @@ enum states
 	mskeleton_attack_lateral,
 	mskeleton_attack_down,
 
+	guard_up,
+	guard_left,
+	guard_right,
+	guard_down,
+	guard_attack_up,
+	guard_attack_left,
+	guard_attack_right,
+	guard_attack_down,
+
 	basic_chicken,
 	cap_chicken,
 	black_chicken,

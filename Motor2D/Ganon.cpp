@@ -792,7 +792,7 @@ void Ganon::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 	{
 		Entity* e = App->entity->FindEntityByBody(bodyB);
 
-		if (e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete && !e->to_delete)
+		if (bodyA == game_object->pbody && e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete && !e->to_delete)
 		{
 			e->Stun(1.0f);
 		}

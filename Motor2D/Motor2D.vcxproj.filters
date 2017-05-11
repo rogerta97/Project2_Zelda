@@ -199,6 +199,9 @@
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
+    <ClCompile Include="Guards.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
     <ClCompile Include="FinalScreen.cpp">
       <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
     </ClCompile>
@@ -450,6 +453,9 @@
     <ClInclude Include="NaviBasicAttack.h">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClInclude>
+    <ClInclude Include="Guards.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
     <ClInclude Include="FinalScreen.h">
       <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
     </ClInclude>
@@ -672,6 +678,9 @@
     </Xml>
     <Xml Include="..\Game\navibasicattack.xml">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\guards.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
     </Xml>
     <Xml Include="..\Game\ganon.xml">
       <Filter>Engine\4. Entities ==========\Ganon</Filter>
