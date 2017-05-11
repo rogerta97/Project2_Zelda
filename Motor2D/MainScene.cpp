@@ -185,8 +185,15 @@ bool MainScene::Start()
 	SDL_Rect win_size = { 0,0, w,h };
 
 	// Common UI
+	SDL_Rect background_timer_rect = {128, 52, 217, 55}; 
+
+	timer_background = main_scene_window->CreateImage(iPoint(w / 2 - background_timer_rect.w/2, h / 2 - background_timer_rect.h / 2), background_timer_rect);
+	princess_timer = main_scene_window->CreateText(iPoint(timer_background->GetPos().x + 50, timer_background->GetPos().y + 10), App->font->game_font_40);
+
 	progress_bar = main_scene_window->CreateImage(iPoint(w / 2 - 192, h / 2 - 12), { 0, 28, 385, 24 });
 	princess = main_scene_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 2), { 0,0,32,28 });
+	progress_bar->enabled = false; 
+	princess->enabled = false; 
 
 	SDL_Rect back_button_rect = { 128, 52, 217, 55 };
 
@@ -429,6 +436,18 @@ bool MainScene::Update(float dt)
 		pause_ui.UpdatePause(); 
 	// ------
 	
+	int count_down = App->scene->main_scene->zelda_manager->GetSpawnTime() - game_timer->ReadSec();
+	princess_timer->SetText(SecToMin(count_down + 1));
+
+	if (princess_timer->enabled == true && count_down < 0)
+	{
+		princess_timer->enabled = false; 
+		timer_background->enabled = false; 
+
+		progress_bar->enabled = true; 
+		princess->enabled = true; 
+	}
+
 	//DrawScreenSeparation();
 
 	return ret;

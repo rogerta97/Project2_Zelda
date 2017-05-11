@@ -30,6 +30,9 @@ void Tokenize(std::string string, const char separator, std::list<std::string>& 
 //Puts al chars to lower case
 void ToLowerCase(std::string str);
 
+//Transforms from seconds to minutes and returns a string 
+string SecToMin(int time);
+
 // Loads an xml and and load it's animations
 void LoadAnimationFromXML(list<SDL_Rect>& rects, const char* file, const char* animation_name);
 
