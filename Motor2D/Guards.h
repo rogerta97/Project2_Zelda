@@ -129,6 +129,9 @@ private:
 
 	int						attacking = false;
 
+	int						current_life = 0;
+
+	iPoint					last_target_pos = NULLPOINT;
 };
 #endif // !_GUARDS_H_
 

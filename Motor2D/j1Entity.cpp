@@ -326,6 +326,22 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				}
 			}
 		}
+
+		if (curr_event->event_data.entity != nullptr && !end)
+		{
+			vector<Entity*> guards = FindEntitiesByName("guard");
+
+			for (int i = 0; i < guards.size(); i++)
+			{
+				Guards* g = (Guards*)guards.at(i);
+				if (g->target == curr_event->event_data.entity)
+				{
+					g->target = nullptr;
+					end = true;
+					break;
+				}
+			}
+		}
 	}
 }
 
