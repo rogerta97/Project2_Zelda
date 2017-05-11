@@ -18,7 +18,6 @@
 #define BASIC_ATTACK_RANGE 270
 
 #define ABILITY1_RANGE 140
-#define HEAL_TICK_TIME 1
 
 #define ABILITY2_RANGE 160
 #define ABILITY2_MOVE_SAFE_OFFSET 10
@@ -178,7 +177,7 @@ bool Navi::Update(float dt)
 					{
 						heal_element he;
 						he.timer = App->AddGameplayTimer();
-						he.timer->SubstractTimeFromStart(HEAL_TICK_TIME);
+						he.timer->SubstractTimeFromStart(ability1_ticks_time);
 						he.entity = players.at(i);
 						to_heal.push_back(he);
 					}
@@ -190,7 +189,7 @@ bool Navi::Update(float dt)
 					{
 						heal_element he;
 						he.timer = App->AddGameplayTimer();
-						he.timer->SubstractTimeFromStart(HEAL_TICK_TIME);
+						he.timer->SubstractTimeFromStart(ability1_ticks_time);
 						he.entity = minions.at(i);
 						to_heal.push_back(he);
 					}
@@ -200,7 +199,7 @@ bool Navi::Update(float dt)
 
 			for(vector<heal_element>::iterator it = to_heal.begin(); it != to_heal.end();)
 			{
-				if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, (*it).entity->GetPos().x, (*it).entity->GetPos().y)) <= ABILITY1_RANGE && (*it).timer->ReadSec() > HEAL_TICK_TIME)
+				if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, (*it).entity->GetPos().x, (*it).entity->GetPos().y)) <= ABILITY1_RANGE && (*it).timer->ReadSec() > ability1_ticks_time)
 				{
 					(*it).entity->Heal(heal);
 					(*it).timer->Start();
