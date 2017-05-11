@@ -81,6 +81,8 @@ public:
 	float		last_heal_time = 0.0f;
 
 	float		last_rupee_time = 60.0f;
+
+	Animator*	explosion = nullptr;
 };
 
 struct PlayerManagerUI
