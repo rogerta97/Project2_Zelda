@@ -85,7 +85,7 @@ public:
 	int				active_quest = -1;
 
 private:
-	
+	int quest_fx;
 	vector<bool>	stop_window;
 	uint			timer_read = 0;
 	SDL_Rect		test_rect;

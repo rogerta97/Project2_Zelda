@@ -10,12 +10,14 @@
 #include "j1Pathfinding.h"
 #include "Mapping.h"
 #include "j1Scene.h"
+#include "j1Audio.h"
 
 #define WINDOW_SPEED 500
 
 QuestManager::QuestManager()
 {
 	player_text_list.clear();
+	quest_fx = App->audio->LoadFx("Audio/Voice act/new_quest_1.wav");
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
 
@@ -124,6 +126,7 @@ void QuestManager::Update()
 	{
 		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 		{
+			App->audio->PlayFx(quest_fx);
 			active_quest = GetRandomValue(1, 3);
 			for (int i = 0; i < 4; i++)
 			{
