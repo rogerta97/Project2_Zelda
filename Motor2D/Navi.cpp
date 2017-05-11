@@ -154,7 +154,7 @@ bool Navi::Update(float dt)
 		}
 	}
 
-	ability1_ticks_time = ability1_duration / (1 + (stats.speed - stats.base_speed)*GetAbility(1)->damage_multiplicator);
+	ability1_ticks_time = ability1_duration / (4 + (stats.speed - stats.base_speed)*GetAbility(1)->damage_multiplicator);
 
 	// Ability 1 --------------------
 	if (ability1)
