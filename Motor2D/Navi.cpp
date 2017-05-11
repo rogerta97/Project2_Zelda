@@ -19,6 +19,7 @@
 
 #define ABILITY1_RANGE 140
 #define ABILITY1_DURATION 5
+#define HEAL_TICK_TIME 1
 
 #define ABILITY2_RANGE 160
 #define ABILITY2_MOVE_SAFE_OFFSET 10
@@ -172,24 +173,36 @@ bool Navi::Update(float dt)
 
 				for (int i = 0; i < players.size(); i++)
 				{
-					if(players.at(i)->GetTeam() == GetTeam())
-						to_heal.push_back(players.at(i));
+					if (players.at(i)->GetTeam() == GetTeam())
+					{
+						heal_element he;
+						he.timer = App->AddGameplayTimer();
+						he.timer->SubstractTimeFromStart(HEAL_TICK_TIME);
+						he.entity = players.at(i);
+						to_heal.push_back(he);
+					}
 				}
 
 				for (int i = 0; i < minions.size(); i++)
 				{
-					if(minions.at(i)->GetTeam() == GetTeam())
-						to_heal.push_back(minions.at(i));
+					if (minions.at(i)->GetTeam() == GetTeam())
+					{
+						heal_element he;
+						he.timer = App->AddGameplayTimer();
+						he.timer->SubstractTimeFromStart(HEAL_TICK_TIME);
+						he.entity = minions.at(i);
+						to_heal.push_back(he);
+					}
 				}
 				look_for_entities = false;
 			}
 
-			for(vector<Entity*>::iterator it = to_heal.begin(); it != to_heal.end();)
+			for(vector<heal_element>::iterator it = to_heal.begin(); it != to_heal.end();)
 			{
-				if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, (*it)->GetPos().x, (*it)->GetPos().y)) <= ABILITY1_RANGE)
+				if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, (*it).entity->GetPos().x, (*it).entity->GetPos().y)) <= ABILITY1_RANGE && (*it).timer->ReadSec() > HEAL_TICK_TIME)
 				{
-					(*it)->Heal(heal);
-					it = to_heal.erase(it);
+					(*it).entity->Heal(heal);
+					(*it).timer->Start();
 				}
 				else
 					++it;
@@ -199,7 +212,12 @@ bool Navi::Update(float dt)
 		{
 			ability1 = false;
 			look_for_entities = true;
-			to_heal.clear();
+
+			for (vector<heal_element>::iterator it = to_heal.begin(); it != to_heal.end();)
+			{
+				(*it).CleanUp();
+				it = to_heal.erase(it);
+			}
 		}
 	}
 	// Ability 2 --------------------
@@ -351,6 +369,15 @@ bool Navi::CleanUp()
 
 	App->DeleteGameplayTimer(ability1_timer);
 	App->DeleteGameplayTimer(ability3_timer);
+
+	if (!to_heal.empty())
+	{
+		for (vector<heal_element>::iterator it = to_heal.begin(); it != to_heal.end();)
+		{
+			(*it).CleanUp();
+			it = to_heal.erase(it);
+		}
+	}
 
 	return ret;
 }
@@ -787,10 +814,11 @@ void Navi::ListenEv(int type, EventThrower * origin, int id)
 
 		if (!to_heal.empty())
 		{
-			for (vector<Entity*>::iterator it = to_heal.begin(); it != to_heal.end();)
+			for (vector<heal_element>::iterator it = to_heal.begin(); it != to_heal.end();)
 			{
-				if ((*it) == curr_event->event_data.entity)
+				if ((*it).entity == curr_event->event_data.entity)
 				{
+					(*it).CleanUp();
 					it = to_heal.erase(it);
 					break;
 				}

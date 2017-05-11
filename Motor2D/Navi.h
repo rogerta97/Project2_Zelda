@@ -15,6 +15,17 @@ enum navi_ability2_dir
 	a2_direction_null
 };
 
+struct heal_element
+{
+	void CleanUp()
+	{
+		App->DeleteGameplayTimer(timer);
+	}
+
+	Entity* entity = nullptr;
+	j1Timer* timer = nullptr;
+};
+
 class Navi : public Entity
 {
 public:
@@ -124,7 +135,7 @@ private:
 	// Ability 1
 	j1Timer*  ability1_timer = nullptr;
 	bool	  ability1 = false;
-	vector<Entity*> to_heal;
+	vector<heal_element> to_heal;
 	bool	  look_for_entities = true;
 	float	  heal = 0.0f;
 

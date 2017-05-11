@@ -437,7 +437,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		return;
 
 	// Base travel
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN)
+	key_mapping back_key = App->scene->players[index].mapping->GetMapping(m_k_back);
 	{
 		curr_player->BaseTravel();
 		curr_player->move = stop;
