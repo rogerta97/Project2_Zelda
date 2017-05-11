@@ -65,6 +65,7 @@ Ganon::Ganon(iPoint pos)
 	Ability* a2 = AddAbility(1, cd, bd, dmg_mult, "ganon_bat");
 	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, { 0,0,0,0 });
 
+	shield = stats_node.child("ability3").attribute("shield").as_int();
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
@@ -659,7 +660,7 @@ void Ganon::ShowAbility1Right()
 
 void Ganon::Ability2Up()
 {
-	stats.shield = 10;
+	stats.shield = shield;
 	CreateAbility2Balls();
 	ability2 = true;
 	ability2_timer->Start();
@@ -780,7 +781,7 @@ void Ganon::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 					e->DealDamage((stats.power * GetAbility(2)->damage_multiplicator) + (GetAbility(2)->damage));
 					e->Die(this);
 					DeleteAbility2BallByPbody(bodyA);
-					stats.shield += 10;
+					stats.shield += shield;
 				}
 
 				break;
