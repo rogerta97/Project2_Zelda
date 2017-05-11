@@ -86,6 +86,7 @@ public:
 
 private:
 	
+	vector<bool>	stop_window;
 	uint			timer_read = 0;
 	SDL_Rect		test_rect;
 

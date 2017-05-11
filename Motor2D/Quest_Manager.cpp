@@ -110,6 +110,7 @@ QuestManager::QuestManager()
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
 		(*it)->active_quest_text->enabled = false; 
+		stop_window.push_back(false);
 	}
 }
 
@@ -413,9 +414,19 @@ void QuestManager::UpdateWindows()
 	int speed = WINDOW_SPEED*App->GetDT();
 	for (int i = 0; i < windows_to_move.size(); i++)
 	{
-		if (windows_to_move[i] == true)
+		if (windows_to_move[i] == true && stop_window[i] == false)
 		{
-			if (player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 177)
+			int new_x = (App->view->GetViewportRect(1).w - 177) - player_quest_windows[i]->GetPos().x;
+			if (player_quest_windows[i]->GetPos().x - speed < App->view->GetViewportRect(1).w - 177)
+			{
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - new_x, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - new_x, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - new_x, player_remap_button[i]->GetPos().y));
+				stop_window[i] = true;
+			}
+
+
+			else if (player_quest_windows[i]->GetPos().x > App->view->GetViewportRect(1).w - 177)
 			{
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - speed, player_quest_windows[i]->GetPos().y));
 				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - speed, player_text_list[i]->active_quest_text->GetPos().y));
@@ -429,6 +440,7 @@ void QuestManager::UpdateWindows()
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + speed, player_quest_windows[i]->GetPos().y));
 				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + speed, player_text_list[i]->active_quest_text->GetPos().y));
 				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + speed, player_remap_button[i]->GetPos().y));
+				stop_window[i] = false;
 			}
 		}
 	}
