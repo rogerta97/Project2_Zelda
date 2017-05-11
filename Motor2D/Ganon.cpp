@@ -292,6 +292,7 @@ bool Ganon::Draw(float dt)
 			{
 				reset = true;
 				game_object->DeleteFixture(GetAbility(3)->fixture);
+				IdleDown();
 			}
 		}
 
@@ -660,10 +661,13 @@ void Ganon::ShowAbility1Right()
 
 void Ganon::Ability2Up()
 {
-	stats.shield = shield;
-	CreateAbility2Balls();
-	ability2 = true;
-	ability2_timer->Start();
+	if (!attacking)
+	{
+		stats.shield = shield;
+		CreateAbility2Balls();
+		ability2 = true;
+		ability2_timer->Start();
+	}
 }
 
 void Ganon::Ability2Down()
@@ -703,6 +707,7 @@ void Ganon::Ability3Up()
 	if (!attacking)
 	{
 		attacking = true;
+		can_move = false;
 
 		if (GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("ultimate_attack");
@@ -734,20 +739,22 @@ void Ganon::Ability3Right()
 
 void Ganon::ShowAbility3Up()
 {
-	look_for_target = true;
-	can_move = false;
-	ability3 = true;
+	if (!attacking)
+	{
+		look_for_target = true;
+		can_move = false;
+		ability3 = true;
 
-	if (GetTeam() == ANIMATIONS_TEAM)
-		game_object->SetAnimation("look_for_target");
-	else
-		game_object->SetAnimation("look_for_target_2");
+		if (GetTeam() == ANIMATIONS_TEAM)
+			game_object->SetAnimation("look_for_target");
+		else
+			game_object->SetAnimation("look_for_target_2");
 
-	draw_offset = { 68, 115 };
+		draw_offset = { 68, 115 };
 
-	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ABILITY3_RANGE, 255, 255, 255, 255, 1, main_view);
-
+		int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ABILITY3_RANGE, 255, 255, 255, 255, 1, main_view);
+	}
 }
 
 void Ganon::ShowAbility3Down()
@@ -896,6 +903,7 @@ void Ganon::MoveCamera()
 
 	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
+		//iPoint new_pos = { App->view->GetCameraPos(curr_player->viewport).x + speed*cos(45 * DEGTORAD),  App->view->GetCameraPos(curr_player->viewport).y + speed*sin(45 * DEGTORAD) };
 		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
