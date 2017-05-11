@@ -71,12 +71,6 @@ QuestManager::QuestManager()
 
 		player_text_list.push_back(curr_player_text);
 	}
-	for (int i = 0; i < 4; i++)
-	{
-		//player_quest_windows[i]->AddChild(player_text_list[i]->active_quest_text);
-
-		//player_quest_windows[i]->AddChild(player_remap_button[i]);
-	}
 
 	App->xml->LoadXML("Quests.xml", quests_file);
 	quests_node = quests_file.child("quests");
@@ -125,7 +119,7 @@ void QuestManager::Update()
 {
 	if (quests_enabled)
 	{
-		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
 		{
 			active_quest = GetRandomValue(1, 3);
 			for (int i = 0; i < 4; i++)
@@ -418,13 +412,21 @@ void QuestManager::UpdateWindows()
 	{
 		if (windows_to_move[i] == true)
 		{
-			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 177)
-			player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x-3, player_quest_windows[i]->GetPos().y));
+			if (player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 177)
+			{
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - 3, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - 3, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - 3, player_remap_button[i]->GetPos().y));
+			}
 		}
 		if (windows_to_move[i] == false)
 		{
-			if (player_quest_windows[i]->GetPos().x<App->view->GetViewportRect(1).w)
+			if (player_quest_windows[i]->GetPos().x < App->view->GetViewportRect(1).w)
+			{
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + 3, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + 3, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + 3, player_remap_button[i]->GetPos().y));
+			}
 		}
 	}
 }
