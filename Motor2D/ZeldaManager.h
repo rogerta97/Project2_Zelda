@@ -2,6 +2,7 @@
 #define _ZELDAMANAGER_H_
 
 #include "p2Point.h"
+#include "Zelda.h"
 
 class Zelda;
 
@@ -19,6 +20,9 @@ public:
 	Zelda* GetZelda();
 
 	int GetSpawnTime(); 
+
+	zelda_states GetZeldaState(); 
+
 
 private:
 	Zelda* zelda = nullptr;
