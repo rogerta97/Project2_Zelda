@@ -83,6 +83,8 @@ public:
 	float		last_rupee_time = 60.0f;
 
 	Animator*	explosion = nullptr;
+	SDL_Texture* explosion_tex = nullptr;
+	bool		play_exp = false;
 };
 
 struct PlayerManagerUI
@@ -157,6 +159,7 @@ private:
 	void PasiveRupee(Player* player);
 	void SetAbilitiesIcon(int index);
 	void CheckBomb(Player* player);
+	void Explode(Player* player);
 
 public:
 	vector<Player*>     players;

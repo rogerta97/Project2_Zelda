@@ -151,6 +151,10 @@ bool PlayerManager::Update(float dt)
 			// Update death text
 			UpdateDeathUI(curr_player, dt);
 		}
+		if (curr_player->play_exp)
+		{
+			Explode(curr_player);
+		}
 	}
 
 	return true;
@@ -213,6 +217,10 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 
 		pugi::xml_document explo_doc;
 		App->xml->LoadXML("explosion.xml", explo_doc);
+
+		p->explosion = new Animator();
+		p->explosion_tex = p->explosion->LoadAnimationsFromXML(explo_doc, "animations");
+		p->explosion->SetAnimation("explosion");
 	}
 
 	return ret;
@@ -227,6 +235,8 @@ void PlayerManager::DeletePlayer(int controller_index)
 			if ((*it)->controller_index == controller_index - 1)
 			{
 				(*it)->CleanUp();
+				(*it)->explosion->CleanUp();
+				RELEASE((*it)->explosion)
 				RELEASE(*it);
 				players.erase(it);
 				break;
@@ -1708,7 +1718,20 @@ void PlayerManager::CheckBomb(Player * player)
 		player->items[i] = nullptr;
 		player->ApplyItemStats();
 		App->scene->main_scene->shop_manager->UpdatePlayerItems(player->viewport - 1, player);
+		player->play_exp = true;
 	}
+}
+
+void PlayerManager::Explode(Player * player)
+{
+	if (player->explosion->GetCurrentAnimation()->Finished())
+	{
+		player->play_exp = false;
+		player->explosion->GetCurrentAnimation()->Reset();
+		return;
+	}
+
+	App->view->LayerBlit(player->entity->GetPos().y + 1, player->explosion_tex, { player->entity->GetPos().x-27, player->entity->GetPos().y-27 }, player->explosion->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
 }
 
 

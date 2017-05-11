@@ -2,7 +2,7 @@
 
 <file>
    <animations texture ="textures/PlayerFX_spritesheet.png">
-      <anim speed = "10" name = "explosion" loop = "true">
+      <anim speed = "10" name = "explosion" loop = "false">
         <rect x = "186" y = "2" w = "54" h = "54"/>
 		<rect x = "186" y = "60" w = "54" h = "54"/>
 		<rect x = "186" y = "118" w = "54" h = "54"/>
