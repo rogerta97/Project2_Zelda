@@ -112,6 +112,8 @@ bool Guards::Update(float dt)
 
 			is_attacked = true;
 		}
+
+		Die(entity);
 	}
 
 	if (current_life < stats.life)
