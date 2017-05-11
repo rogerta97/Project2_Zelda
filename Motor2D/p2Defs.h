@@ -23,7 +23,7 @@
 // Deletes an array of buffers
 #define RELEASE_ARRAY( x ) \
     {                              \
-    if( x != NULL )              \
+    if( x != nullptr )              \
 	    {                            \
       delete[] x;                \
 	  x = nullptr;                    \

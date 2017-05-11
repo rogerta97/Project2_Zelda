@@ -509,7 +509,7 @@ void Minion::CheckState()
 					abilities.at(0)->fixture = nullptr;
 				}
 
-				if (GetPos().DistanceTo(target->GetPos()) > attack_range)
+				if (GetPos().DistanceTo(target->GetPos()) > attack_range + abs(attack_pos_offset.x))
 				{
 					state = Minion_Move;
 					move_state = Move_AproachTarget;
@@ -541,7 +541,7 @@ void Minion::SetTargetPath(const std::list<iPoint>* path)
 
 void Minion::PathToTarget()
 {
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x, target->GetPos().y)) > 0)
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(GetPos().x, GetPos().y), App->map->WorldToMap(target->GetPos().x + attack_pos_offset.x, target->GetPos().y + attack_pos_offset.y)) > 0)
 	{
 		target_path.clear();
 		SetTargetPath(App->pathfinding->GetLastPath());
@@ -572,6 +572,8 @@ void Minion::PathToBasePath()
 bool Minion::LookForTarget()
 {
 	bool ret = false;
+
+	attack_pos_offset.SetToZero();
 
 	//Chack for enemy minion
 	std::list<Minion*> minions;
@@ -604,6 +606,15 @@ bool Minion::LookForTarget()
 			if (GetPos().DistanceTo((*it)->GetPos()) < vision_range)
 			{
 				target = *it;
+				switch (GetTeam())
+				{
+				case 1:
+					attack_pos_offset.x = -40;
+					break;
+				case 2:
+					attack_pos_offset.x = 40;
+					break;
+				}
 				ret = true;
 				break;
 			}
@@ -633,9 +644,15 @@ bool Minion::LookForTarget()
 	if (base_path_index >= base_path.size() - 1)
 	{
 		if (GetTeam() == 1)
+		{
 			target = App->scene->main_scene->base_manager->GetBase(2);
-		else
+			attack_pos_offset.x = -125;
+		}
+		else 
+		{
 			target = App->scene->main_scene->base_manager->GetBase(1);
+			attack_pos_offset.x = -125;
+		}
 
 		ret = true;
 	}

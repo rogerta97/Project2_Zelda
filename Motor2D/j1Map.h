@@ -106,7 +106,6 @@ struct MapData
 class j1Map : public j1Module
 {
 public:
-
 	j1Map();
 
 	// Destructor
@@ -180,7 +179,6 @@ public:
 	iPoint GetWaterfallPosition() const;
 
 private:
-
 	bool LoadMap();
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
@@ -193,17 +191,15 @@ private:
 	TileSet* GetTilesetFromTileId(int id) const;
 
 public:
-
 	MapData data;
-	SDL_Rect fit_square;
+	SDL_Rect fit_square = NULLRECT;
 
 private:
-
 	pugi::xml_document	map_file;
 	std::string			folder;
-	bool				map_loaded;
-	int					draw_margin;
-	int					offset;
+	bool				map_loaded = false;
+	int					draw_margin = 0;
+	int					offset = 0;
 };
 
 #endif // __j1MAP_H__

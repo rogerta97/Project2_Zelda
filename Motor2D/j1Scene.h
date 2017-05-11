@@ -12,6 +12,7 @@ class MainScene;
 class FinalScreen; 
 class CharacterSelectionScene; 
 class TeamSelectScene;
+class TransitionScene; 
 class LogoScene;
 class RemapingScene; 
 class Mapping;
@@ -32,7 +33,7 @@ struct player_info
 
 	SDL_Rect		items_rects[3] = { {0,0,0,0},{ 0,0,0,0 },{ 0,0,0,0 } };
 
-	void Reset() { gamepad = 5; viewport = 5;  team = 3; player = 5; character = e_n_null; kills = 0; deaths = 0; minions = 0; towers = 0; }
+	void Reset() { character = e_n_null; kills = 0; deaths = 0; minions = 0; towers = 0; }
 	
 };																						 
 																						 
@@ -89,7 +90,8 @@ public:
 	FinalScreen*				 final_screen = nullptr; 
 	LogoScene*					 logo_scene = nullptr;
 	RemapingScene*				 remaping_scene = nullptr; 
-
+	TransitionScene*		     transition_scene = nullptr;
+	
 	player_info					 players[4];
 
 	Scene*						 last_scene = nullptr;

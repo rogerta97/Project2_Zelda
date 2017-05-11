@@ -444,18 +444,22 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	}
 
 	// Minimap
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+	int minimap_key;
+	App->scene->players[(curr_player)->controller_index].mapping->GetKey(m_k_minimap, &minimap_key);
+	if (App->input->GetControllerButton(curr_player->controller_index, minimap_key) == KEY_DOWN)
 	{
 		App->scene->main_scene->minimap_manager->SetActive(true, curr_player->viewport);
 		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Enable();
 	}
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_Y) == KEY_UP)
+	if (App->input->GetControllerButton(curr_player->controller_index, minimap_key) == KEY_UP)
 	{
 		App->scene->main_scene->minimap_manager->SetActive(false, curr_player->viewport);
 		App->scene->main_scene->ui_viewports[curr_player->controller_index].minimapstate.Disable();
 	}
-	
-	if (App->input->GetControllerButton(curr_player->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_UP && App->scene->main_scene->quest_manager->quests_enabled)
+
+	int shop_key;
+	App->scene->players[(curr_player)->controller_index].mapping->GetKey(m_k_shop, &shop_key);
+	if (App->input->GetControllerButton(curr_player->controller_index, shop_key) == KEY_UP && App->scene->main_scene->quest_manager->quests_enabled && App->scene->main_scene->quest_manager->active_quest != -1)
 	{
 		App->scene->main_scene->quest_manager->SwitchWindowState(curr_player->viewport);
 	}
@@ -650,6 +654,8 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 	a3_release = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) < 22000;
 	a4_release = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) < 22000;
 
+	bool ability_use = false;
+	
 	if (a1_release)
 	{
 		if (curr_player->show != shows::show_null)
@@ -659,24 +665,28 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = basic_atack_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_basic_atack_up)
 			{
 				curr_player->state = basic_atack_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_basic_atack_left)
 			{
 				curr_player->state = basic_atack_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_basic_atack_right)
 			{
 				curr_player->state = basic_atack_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 1);
+				ability_use = true;
 			}
 		}
 	}
@@ -690,24 +700,28 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = ability1_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability1_up)
 			{
 				curr_player->state = ability1_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability1_left)
 			{
 				curr_player->state = ability1_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability1_right)
 			{
 				curr_player->state = ability1_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 2);
+				ability_use = true;
 			}
 		}
 	}
@@ -721,24 +735,28 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = ability2_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability2_up)
 			{
 				curr_player->state = ability2_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability2_left)
 			{
 				curr_player->state = ability2_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability2_right)
 			{
 				curr_player->state = ability2_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
+				ability_use = true;
 			}
 		}
 	}
@@ -752,27 +770,35 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->state = ability3_down;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability3_up)
 			{
 				curr_player->state = ability3_up;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability3_left)
 			{
 				curr_player->state = ability3_left;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 			else if (curr_player->show == shows::show_ability3_right)
 			{
 				curr_player->state = ability3_right;
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
+				ability_use = true;
 			}
 		}
 	}
+
+	//check if bomb explode
+	if (ability_use)
+		CheckBomb(curr_player);
 
 	if (curr_player->move != stop || curr_player->show != show_null)
 		curr_player->base_travel = false;
@@ -1403,7 +1429,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1425,7 +1451,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1443,7 +1469,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1465,7 +1491,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1494,7 +1520,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1516,7 +1542,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1534,7 +1560,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 				break;
 
 			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 425, 32, 32 };
+				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 425, 32, 32 };
 				break;
 
 			case ganon:
@@ -1556,7 +1582,7 @@ void PlayerManager::SetAbilitiesIcon(int index)
 			break;
 
 		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 425, 32, 32 };
+			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 425, 32, 32 };
 			break;
 
 		case ganon:
@@ -1658,6 +1684,26 @@ void PlayerManager::SetAbilitiesIcon(int index)
 	}
 	break;
 
+	}
+}
+
+void PlayerManager::CheckBomb(Player * player)
+{
+	int i = 0;
+	for (; i < 3; ++i)
+	{
+		if (player->items[i] != nullptr && player->items[i]->name == "Bomb")
+		{
+			break;
+		}
+	}
+
+	if (i != 3 && GetRandomValue(0, 99) < 20)
+	{
+		player->entity->stats.life -= player->entity->stats.max_life*0.7f;
+		player->items[i] = nullptr;
+		player->ApplyItemStats();
+		App->scene->main_scene->shop_manager->UpdatePlayerItems(player->viewport - 1, player);
 	}
 }
 

@@ -8,9 +8,12 @@
 #include "j1XMLLoader.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
+#include "Mapping.h"
+#include "j1Scene.h"
 
 QuestManager::QuestManager()
 {
+	player_text_list.clear();
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
 
@@ -20,9 +23,31 @@ QuestManager::QuestManager()
 	{
 		windows_to_move.push_back(false);
 	}
+	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 689,2204,150,130 }, true)); 
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,178,107}, true));
+		//BUTTON REMAPPING
+		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
+		SDL_Rect button_pos = { 703,2334,28,26 };
+		switch (shop_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			button_pos = { 703,2360,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			button_pos = { 703,2386,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			button_pos = { 703,2412,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			button_pos = { 703,2334,28,26 };
+			break;
+		}
+		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-27,59),button_pos));
+		button_it++;
+		//
 		curr_player_text = new PlayerText(); 
 
 		for (int i = 0; i<3; i++)
@@ -36,7 +61,7 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 24;
 		}
-		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_25, 15, false, 255, 215, 0));
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_25, 16, false, 255, 215, 0));
 
 
 		curr_player_text->active_quest_text->SetText(" ");
@@ -45,10 +70,6 @@ QuestManager::QuestManager()
 		offset = 0;
 
 		player_text_list.push_back(curr_player_text);
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		player_quest_windows[i]->AddChild(player_text_list[i]->active_quest_text);
 	}
 
 	App->xml->LoadXML("Quests.xml", quests_file);
@@ -166,7 +187,7 @@ void QuestManager::CleanUp()
 	{
 		(*it)->player_text.clear();
 	}
-	player_text_list.clear();
+	
 
 	// Clear Cucos
 	if (!cucos.empty())
@@ -259,13 +280,13 @@ void QuestManager::update_progress()
 			case 0:
 			{
 				string team_1;
-				team_1 += "Power quest\nis active, slay\n 2 enemy players.\n Progress ";
+				team_1 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l2";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Power quest\nis active, slay\n 2 enemy players.\n Progress ";
+				team_2 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l2";
 				player_text_list[1]->active_quest_text->SetText(team_2);
@@ -275,13 +296,13 @@ void QuestManager::update_progress()
 			case 1:
 			{
 				string team_1;
-				team_1 += "Speed quest\n is active.\n Progress ";
+				team_1 += "Speed quest\nis active.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Speed quest\n is active.\n Progress ";
+				team_2 += "Speed quest\nis active.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l3";
 				player_text_list[1]->active_quest_text->SetText(team_2);
@@ -291,13 +312,13 @@ void QuestManager::update_progress()
 			case 2:
 			{
 				string team_1;
-				team_1 += "Health quest\nis active\nkill jungle\ncamps.\n Progress ";
+				team_1 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
 				team_1 += "l3";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Health quest\nis active\nkill jungle\ncamps.\n Progress ";
+				team_2 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
 				team_2 += "l3";
 				player_text_list[1]->active_quest_text->SetText(team_2);
@@ -341,16 +362,15 @@ void QuestManager::update_progress()
 					{
 					case 0:
 					{
-
-						player_text_list[0]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[2]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						//FICA UN SWITCH PUTU PENDEHO
+						player_text_list[0]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[2]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						break;
 					}
 					case 1:
 					{
-
-						player_text_list[1]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[3]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[1]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[3]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
 						break;
 					}
 					default:
@@ -392,13 +412,21 @@ void QuestManager::UpdateWindows()
 	{
 		if (windows_to_move[i] == true)
 		{
-			if(player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 150)
-			player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x-3, player_quest_windows[i]->GetPos().y));
+			if (player_quest_windows[i]->GetPos().x>App->view->GetViewportRect(1).w - 177)
+			{
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - 3, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - 3, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - 3, player_remap_button[i]->GetPos().y));
+			}
 		}
 		if (windows_to_move[i] == false)
 		{
-			if (player_quest_windows[i]->GetPos().x<App->view->GetViewportRect(1).w)
+			if (player_quest_windows[i]->GetPos().x < App->view->GetViewportRect(1).w)
+			{
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + 3, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + 3, player_text_list[i]->active_quest_text->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + 3, player_remap_button[i]->GetPos().y));
+			}
 		}
 	}
 }

@@ -29,6 +29,7 @@
 #include "j1XMLLoader.h"
 #include "MinimapManager.h"
 #include "MinimapManager.h"
+#include "RemapingScene.h"
 
 MainScene::MainScene()
 {
@@ -53,8 +54,9 @@ bool MainScene::Start()
 	iPoint rupiees_pos = { screen.w / 50 + 15 , screen.h / 40 + 5 };
 	SDL_Rect rupiees_rect = { 32, 0, 16, 16 };
 
+
 	iPoint minimap_pos = { screen.w - 58, 5 };
-	SDL_Rect minimap_rect = { 472, 588, 58, 80 };
+	SDL_Rect minimap_rect;
 
 	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
@@ -75,6 +77,7 @@ bool MainScene::Start()
 
 	MainSceneViewport curr_viewport;
 
+	LOG("Creating players UI");
 	int count = 0; 
 	for (int i = 0; i < 4;i++)
 	{
@@ -87,7 +90,6 @@ bool MainScene::Start()
 		curr_viewport.viewport_window = App->gui->UI_CreateWin(iPoint(0, 0), screen.w, screen.h, 0, true);
 		curr_viewport.viewport_window->viewport = i + 1;
 		curr_viewport.rupiees_img = curr_viewport.viewport_window->CreateImage(rupiees_pos, rupiees_rect);
-		curr_viewport.minimap_icon = curr_viewport.viewport_window->CreateImage(minimap_pos, minimap_rect);
 		curr_viewport.win_text = curr_viewport.viewport_window->CreateImage(win_text_pos, NULLRECT);
 		curr_viewport.win_text->enabled = false;
 
@@ -148,7 +150,32 @@ bool MainScene::Start()
 	}
 	// ------------------
 
-
+	//Load Minimap Button
+	int button_it = 0;
+	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
+	{
+		//BUTTON REMAPPING
+		key_mapping minimap_key = App->scene->players[button_it].mapping->GetMapping(m_k_minimap);
+		SDL_Rect button_pos = { 703,2334,28,26 };
+		switch (minimap_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			button_pos = { 533,762,36, 32 };
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			button_pos = { 569,762,36, 32 };
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			button_pos = { 497,762,36, 32 };
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			button_pos = { 532, 587, 36, 32 };;
+			break;
+		}
+		button_it++;
+		it->minimap_icon = it->viewport_window->CreateImage(minimap_pos, button_pos);
+	}
+	// ------------------
 
 	// Creating pause UI
 	uint w, h;
@@ -186,29 +213,37 @@ bool MainScene::Start()
 	// -------------------
 
 	App->console->AddText("viewports.set 4", Input);
+
 	//Load Map
+	LOG("Loading map");
 	if (App->map->Load("zelda_moba.tmx"))
 	{
+		LOG("Creating walkability map");
 		int w, h;
 		uchar* data = NULL;
 		if (App->map->CreateWalkabilityMap(w, h, &data))
+		{
+			LOG("Setting pathfinding map");
 			App->pathfinding->SetMap(w, h, data);
+		}
 
 		RELEASE_ARRAY(data);
 	}
 
 	// Map collisions
+	LOG("Loading collisions");
 	CreateMapCollisions();
 
 	// Shop Manager
+	LOG("Loading shop");
 	shop_manager = new ShopManager();
 	shop_manager->Start();
 
 	// Loading Players
+	LOG("Loading Players");
 	player_manager = new PlayerManager();
 	player_manager->Start();
 
-	LOG("Loading Players");
 	bool def = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -274,7 +309,7 @@ bool MainScene::Start()
 	minimap_manager = new MinimapManager();
 	minimap_manager->Start();
 
-
+	
 	//Load Victory/Defeat Animations
 	pugi::xml_document gs;
 
@@ -371,7 +406,6 @@ bool MainScene::Update(float dt)
 		}
 
 	}
-
 
 	// Test
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
@@ -556,17 +590,12 @@ void MainScene::UpdateProgressBar()
 {
 	iPoint zelda_pos = App->map->WorldToMap(zelda_manager->GetZeldaPos().x, zelda_manager->GetZeldaPos().y);
 
-	float percentage = (zelda_pos.x-36) * 100 / 95;
+	float percentage = (zelda_pos.x-35) * 100 / 97;
 	percentage /= 100;
 
-	int delta = (progress_bar->rect.w * percentage) - progress_bar->rect.w/2;
-
-	for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++)
-	{
-		//(*it)->princess->SetPos({ (*it)->progress_bar->GetPos().x + delta, (*it)->progress_bar->GetPos().y - 4});
-	}
+	int delta = (progress_bar->rect.w * percentage);
 	
-
+	princess->SetPos({ progress_bar->GetPos().x + delta - princess->image.w/2, progress_bar->GetPos().y - 4});
 }
 
 void MainScene::ListenEvent(int type, EventThrower * origin, int id)
@@ -619,8 +648,6 @@ void MainScene::CreateMapCollisions()
 		map_collisions.push_back(b);
 		RELEASE_ARRAY(points);
 	}
-
-	
 }
 
 void MainScene::DrawScreenSeparation()
@@ -742,10 +769,8 @@ void PauseUI::SetPauseUI(bool ui_state)
 
 void PauseUI::MoveCursor()
 {
-
 	switch (cursor_state)
 	{
-
 	case p_e_resume:
 		cursor_1->SetPos({resume_background->GetPos().x - 60, resume_background->GetPos().y});
 		cursor_2->SetPos({ resume_background->GetPos().x + resume_background->image.w + 10, resume_background->GetPos().y});
@@ -760,15 +785,11 @@ void PauseUI::MoveCursor()
 		cursor_1->SetPos({0,0});
 		cursor_2->SetPos({0,0});
 		break; 
-
 	}
-
-	
 }
 
 void PauseUI::UpdatePause()
 {
-
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && cursor_state == p_e_quit)
 	{
 		cursor_state = p_e_resume;
@@ -788,7 +809,7 @@ void PauseUI::UpdatePause()
 			break;
 
 		case p_e_quit:
-			App->scene->ChangeScene(App->scene->main_scene); 
+			App->scene->ChangeScene((Scene*)App->scene->logo_scene); 
 			break;
 
 		case p_e_null:

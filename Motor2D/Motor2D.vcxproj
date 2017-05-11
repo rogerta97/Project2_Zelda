@@ -86,6 +86,7 @@
     <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
+    <ClCompile Include="TransitionScene.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Cuco.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Bushes.h" />
+    <ClInclude Include="TransitionScene.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="Cuco.h" />
     <ClInclude Include="CollisionFilters.h" />

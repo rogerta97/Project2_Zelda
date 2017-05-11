@@ -110,20 +110,38 @@ bool j1Spell::CleanUp()
 
 void j1Spell::OnCollision(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-		(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			if(!(*it)->to_delete)
+				(*it)->OnColl(bodyA, bodyB, fixtureA, fixtureB);
+		}
+	}
 }
 
 void j1Spell::OnCollisionEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-		(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			if (!(*it)->to_delete)
+				(*it)->OnCollEnter(bodyA, bodyB, fixtureA, fixtureB);
+		}
+	}
 }
 
 void j1Spell::OnCollisionOut(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
-		(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+	if (!spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			if (!(*it)->to_delete)
+				(*it)->OnCollOut(bodyA, bodyB, fixtureA, fixtureB);
+		}
+	}
 }
 
 void j1Spell::ListenEvent(int type, EventThrower * origin, int id)
@@ -137,14 +155,18 @@ void j1Spell::ListenEvent(int type, EventThrower * origin, int id)
 		if (curr_event->event_data.entity != nullptr)
 		{
 			DeleteSpellIfTarget(curr_event->event_data.entity);
+			DeleteSpellIfOwner(curr_event->event_data.entity);
 
-			// Delete from ganon bat timer checker
-			for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+			if (!spell_list.empty())
 			{
-				if ((*it)->type == spell_name::ganon_bat)
+				// Delete from ganon bat timer checker
+				for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 				{
-					GanonBat* gb = (GanonBat*)(*it);
-					gb->DeleteEntityFromHitList(curr_event->event_data.entity);
+					if ((*it)->type == spell_name::ganon_bat)
+					{
+						GanonBat* gb = (GanonBat*)(*it);
+						gb->DeleteEntityFromHitList(curr_event->event_data.entity);
+					}
 				}
 			}
 		}
@@ -204,6 +226,20 @@ void j1Spell::DeleteSpellIfTarget(Entity * target)
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
 		{
 			if ((*it)->target != nullptr && (*it)->target == target)
+			{
+				DeleteSpell(*it);
+			}
+		}
+	}
+}
+
+void j1Spell::DeleteSpellIfOwner(Entity * owner)
+{
+	if (owner != nullptr && !spell_list.empty())
+	{
+		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)
+		{
+			if ((*it)->owner != nullptr && (*it)->owner == owner)
 			{
 				DeleteSpell(*it);
 			}

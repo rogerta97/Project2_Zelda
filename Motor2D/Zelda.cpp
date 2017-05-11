@@ -228,7 +228,7 @@ void Zelda::CheckState()
 		}
 		break;
 	case z_s_idle:
-		if ((team1_players > team2_players) || (team2_players > team1_players))
+		if ((team1_players == 0 &&  team2_players != 0) || (team2_players== 0 && team1_players!=0))
 		{
 			state = z_s_move;
 
@@ -256,7 +256,7 @@ void Zelda::CheckState()
 		}
 		break;
 	case z_s_move:
-		if ((team1_players == 0 && team2_players == 0) || (team1_players == team2_players))
+		if ((team1_players == 0 && team2_players == 0) || (team1_players != 0 && team2_players != 0))
 		{
 			state = z_s_idle;
 		}

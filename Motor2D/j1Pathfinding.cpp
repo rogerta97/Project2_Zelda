@@ -31,8 +31,9 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 	this->height = height;
 
 	RELEASE_ARRAY(map);
+
 	map = new uchar[width*height];
-	memcpy(map, data, width*height);
+	memcpy(map, data, sizeof(uchar) * width*height);
 }
 
 // Utility: return true if pos is inside the map boundaries
@@ -64,10 +65,9 @@ void j1PathFinding::ChangeWalkability(uchar * change_matrix, int start_x, int st
 	{
 		for (int y = start_y; y < start_y + matrix_h; y++)
 		{
-			map[y*width + x] = change_matrix[(y - start_y)*matrix_w + (x - start_x)];
+  			map[y*width + x] = change_matrix[(y - start_y)*matrix_w + (x - start_x)];
 		}
 	}
-
 }
 
 // To request all tiles involved in the last generated path

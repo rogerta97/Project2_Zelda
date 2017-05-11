@@ -149,7 +149,7 @@ void NaviBasicAttack::CleanSpell()
 void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	// Delete if hits another enemy entity
-	if (bodyA == game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box && bodyB != owner->game_object->pbody)
+	if (bodyA == game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box && owner != nullptr && bodyB != owner->game_object->pbody)
 	{
 		Entity* e = nullptr;
 

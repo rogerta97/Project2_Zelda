@@ -51,7 +51,6 @@ private:
 	void UpdateRupees();
 
 public:
-
 	Entity*     entity = nullptr;
 	states      state = states::states_null;
 	shows	    show = shows::show_null;
@@ -155,6 +154,7 @@ private:
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
 	void SetAbilitiesIcon(int index);
+	void CheckBomb(Player* player);
 
 public:
 	vector<Player*>     players;

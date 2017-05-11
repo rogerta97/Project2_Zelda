@@ -246,6 +246,7 @@ bool Link::Update(float dt)
 			attacking = false;
 			find = false;
 			link_collision->SetSensor(false);
+			invulnerable = false;
 			Ability1Up();
 		}
 	}
@@ -691,6 +692,7 @@ void Link::Ability3Up()
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
@@ -702,6 +704,7 @@ void Link::Ability3Down()
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
@@ -713,6 +716,7 @@ void Link::Ability3Left()
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }
@@ -724,6 +728,7 @@ void Link::Ability3Right()
 	can_move = false;
 	attacking = true;
 	ability3_range = 0;
+	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
 }

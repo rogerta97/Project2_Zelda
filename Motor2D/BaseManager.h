@@ -14,7 +14,6 @@ public:
 	bool CleanUp();
 	void KillBase(Base* base);
 
-
 	Entity* GetBase(int team)const;
 	void b_Invulnerable(Base* base);
 
