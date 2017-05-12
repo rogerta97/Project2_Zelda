@@ -333,19 +333,23 @@ bool Navi::Draw(float dt)
 			else
 				enemy_team = 1;
 
-			// Invert controls
+			// Print hey listen
 			vector<int> view = App->scene->main_scene->player_manager->GetTeamViewports(enemy_team);
 			SDL_Rect rect = App->view->GetViewportRect(1);
 			for (int i = 0; i < view.size(); i++)
 			{
 				App->view->LayerBlit(9999, game_object->GetTexture(), { (int)(rect.w*0.5f) - 180, (int)(rect.h*0.5f) - 150 }, game_object->animator->GetAnimation("ulti_letters")->GetAnimationFrame(dt), view.at(i), -1.0f, false);
 			}
-			Player* p1 = App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[0]->game_object->pbody);
-			if (p1 != nullptr && !p1->is_dead && p1->entity != nullptr)
-				p1->invert_controls = true;
-			Player* p2 = App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[1]->game_object->pbody);
-			if (p2 != nullptr && !p2->is_dead && p2->entity != nullptr)
-				p2->invert_controls = true;
+
+			// Invert controls
+			vector<Entity*> enemy_p = App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team);
+			
+			for (int i = 0; i < enemy_p.size(); i++)
+			{
+				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(enemy_p.at(i)->game_object->pbody);
+				if (p != nullptr && !p->is_dead && p->entity != nullptr)
+					p->invert_controls = true;
+			}
 		}
 		else
 		{
@@ -359,12 +363,14 @@ bool Navi::Draw(float dt)
 				enemy_team = 1;
 
 			// Des-invert controls
-			Player* p1 = App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[0]->game_object->pbody);
-			if (p1 != nullptr && !p1->is_dead && p1->entity != nullptr)
-				p1->invert_controls = false;
-			Player* p2 = App->scene->main_scene->player_manager->GetPlayerFromBody(App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team)[1]->game_object->pbody);
-			if (p2 != nullptr && !p2->is_dead && p2->entity != nullptr)
-				p2->invert_controls = false;
+			vector<Entity*> enemy_p = App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team);
+
+			for (int i = 0; i < enemy_p.size(); i++)
+			{
+				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(enemy_p.at(i)->game_object->pbody);
+				if (p != nullptr && !p->is_dead && p->entity != nullptr)
+					p->invert_controls = false;
+			}
 		}
 	}
 	// -------------------------------

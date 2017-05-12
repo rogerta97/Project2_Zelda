@@ -258,7 +258,7 @@ bool MainScene::Start()
 			break;
 		}
 	}
-	def = true; 
+
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
@@ -450,17 +450,16 @@ bool MainScene::Update(float dt)
 			spawn_time_background->enabled = false; 
 
 			princess->enabled = true;
-
 		}
-	}
-	
-	if (App->scene->main_scene->zelda_manager->GetZeldaState() == z_s_move || App->scene->main_scene->zelda_manager->GetZeldaState() == z_s_move_to_path)
-	{
-		DoPrincessAnimation(dt);
-	}
-	else
-	{
-		princess->image = zelda_appearing->GetCurrentAnimation()->GetFrame(0); 
+
+		if (App->scene->main_scene->zelda_manager->GetZeldaState() == z_s_move || App->scene->main_scene->zelda_manager->GetZeldaState() == z_s_move_to_path)
+		{
+			DoPrincessAnimation(dt);
+		}
+		else
+		{
+			princess->image = zelda_appearing->GetCurrentAnimation()->GetFrame(0); 
+		}
 	}
 
 	// -----
