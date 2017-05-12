@@ -653,8 +653,11 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 			curr_player->state = run_down;
 	}
 
+	if (curr_player->cancel_hability == true)
+		curr_player->show = show_null;
+
 	// Abilities PRESS
-	if (!curr_player->entity->stuned && !curr_player->disable_controller)
+	if (!curr_player->entity->stuned && !curr_player->disable_controller && curr_player->cancel_hability == false)
 	{
 		bool a1_press = false, a2_press = false, a3_press = false, a4_press = false;
 
@@ -721,13 +724,15 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 		}
 	}
 
+
+
 	// Abilities RELEASE
 	bool a1_release = false, a2_release = false, a3_release = false, a4_release = false;
 
-	a1_release = (a1.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a1.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a1.key_id) < 22000;
-	a2_release = (a2.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a2.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a2.key_id) < 22000;
-	a3_release = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) < 22000;
-	a4_release = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_IDLE : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) < 22000;
+	a1_release = (a1.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a1.key_id) == KEY_UP : App->input->GetControllerJoystickMove(curr_player->controller_index, a1.key_id) < 22000;
+	a2_release = (a2.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a2.key_id) == KEY_UP : App->input->GetControllerJoystickMove(curr_player->controller_index, a2.key_id) < 22000;
+	a3_release = (a3.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a3.key_id) == KEY_UP : App->input->GetControllerJoystickMove(curr_player->controller_index, a3.key_id) < 22000;
+	a4_release = (a4.is_button == true) ? App->input->GetControllerButton(curr_player->controller_index, a4.key_id) == KEY_UP : App->input->GetControllerJoystickMove(curr_player->controller_index, a4.key_id) < 22000;
 
 	bool ability_use = false;
 	
@@ -764,6 +769,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				ability_use = true;
 			}
 		}
+		curr_player->cancel_hability = false; 
 	}
 
 	if (a2_release)
@@ -799,6 +805,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				ability_use = true;
 			}
 		}
+		curr_player->cancel_hability = false;
 	}
 
 	if (a3_release)
@@ -811,6 +818,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 			else if (curr_player->show == shows::show_ability2_up)
 			{
@@ -818,6 +826,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 			else if (curr_player->show == shows::show_ability2_left)
 			{
@@ -825,6 +834,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 			else if (curr_player->show == shows::show_ability2_right)
 			{
@@ -832,8 +842,10 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 3);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 		}
+	
 	}
 
 	if (a4_release)
@@ -846,6 +858,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 			else if (curr_player->show == shows::show_ability3_up)
 			{
@@ -853,6 +866,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 			else if (curr_player->show == shows::show_ability3_left)
 			{
@@ -860,6 +874,7 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 			else if (curr_player->show == shows::show_ability3_right)
 			{
@@ -867,9 +882,12 @@ void PlayerManager::PlayerInput(Player * curr_player, int index)
 				curr_player->show = shows::show_null;
 				ResetAbilityTimer(curr_player, 4);
 				ability_use = true;
+				curr_player->cancel_hability = false;
 			}
 		}
 	}
+
+	
 
 	//check if bomb explode
 	if (ability_use)
@@ -1341,7 +1359,15 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		break;
 	}
 
-	// --------------
+	// --------------+
+
+	key_mapping back_mapping;
+
+	back_mapping = App->scene->players[curr_player->viewport - 1].mapping->GetMapping(m_k_back);
+
+	if (curr_player->show != shows::show_null && App->input->GetControllerButton(curr_player->viewport - 1, back_mapping.key_id) == KEY_DOWN)
+		curr_player->cancel_hability = true;
+
 }
 
 void PlayerManager::UpdateDeathUI(Player* curr_player, float dt)
