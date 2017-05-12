@@ -253,7 +253,6 @@ bool MainScene::Start()
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
-		p1->AddRupees(1000); 
 		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), 2, 2, 2, 1);
 		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), 3, 3, 1, 2);
 		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), 4, 4, 2, 2);
