@@ -56,7 +56,12 @@ struct PauseUI
 
 struct MinimapState 
 {
-	UI_Image* stats_back_image = nullptr; 
+	UI_Image* stats_back_image_top = nullptr;
+	UI_Image* stats_back_image_down = nullptr; 
+
+	UI_Text* kills_num = nullptr;
+	UI_Text* deaths_num = nullptr;
+	UI_Text* minions_num = nullptr;
 
 	UI_Text* hp_text = nullptr;
 	UI_Text* hp_num = nullptr; 
@@ -66,12 +71,6 @@ struct MinimapState
 
 	UI_Text* speed_text = nullptr;
 	UI_Text* speed_num = nullptr;
-
-	UI_Text* kills_text = nullptr;
-	UI_Text* kills_num = nullptr;
-
-	UI_Text* minions_text = nullptr;
-	UI_Text* minions_num = nullptr;
 
 	UI_Image* items_background = nullptr; 
 	UI_Text*  items_text = nullptr; 

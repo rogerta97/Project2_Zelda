@@ -35,7 +35,7 @@ bool MinimapManager::Start()
 
 	SDL_Rect view = App->view->GetViewportRect(1);
 
-	SDL_Rect minimap_rect = {0, 621, 468, 235};
+	SDL_Rect minimap_rect = { 0, 622, 473, 234 };
 	SDL_Texture* minimap_texture = App->tex->LoadTexture("gui/UI_sheet_final.png");
 	iPoint minimap_pos = {(int)(view.w*0.5) - (int)(minimap_rect.w * 0.5), (int)(view.h*0.5) - (int)(minimap_rect.h * 0.5) };
 

@@ -60,20 +60,24 @@ bool MainScene::Start()
 
 	iPoint win_text_pos = { int(screen.w*0.5f) - 170, int(screen.h*0.5f) - 100 };
 
-	SDL_Rect minimap_img_rect = {0, 588, 472, 313}; 
+	SDL_Rect minimap_img_rect = {0, 622, 473, 234}; 
 	iPoint minimap_img_pos = { screen.w / 2 - minimap_img_rect.w / 2, screen.h / 2 - minimap_img_rect.h / 2 };
 
-	SDL_Rect stats_back_img_rect = { 0, 900, 410, 83 }; 
-	iPoint stats_back_img_pos = { screen.w / 2 - stats_back_img_rect.w / 2 - 10, screen.h - 90 };
+	SDL_Rect stats_back_img_rect_down = { 0, 900, 410, 83 }; 
+	SDL_Rect stats_back_img_rect_top = { 735, 2315, 334, 84 };
+
+	iPoint stats_back_img_pos_top = { screen.w / 2 - stats_back_img_rect_top.w / 2 - 10, minimap_img_pos.y - 20 };
+	iPoint stats_back_img_pos_down = { screen.w / 2 - stats_back_img_rect_down.w / 2 - 10, screen.h - 90 };
 	
 	iPoint items_back_image_pos = { minimap_img_pos.x - 70, minimap_img_pos.y + 40 };
 
-	iPoint hp_text_pos = { stats_back_img_pos.x + 25, stats_back_img_pos.y + 15 }; 
+	iPoint hp_text_pos = { stats_back_img_pos_down.x + 25, stats_back_img_pos_down.y + 15 };
 	iPoint power_text_pos = { hp_text_pos.x + 125 , hp_text_pos.y };
 	iPoint speed_text_pos = { hp_text_pos.x + 275, hp_text_pos.y };
-	iPoint kills_text_pos = { hp_text_pos.x + 55, hp_text_pos.y + 25 };
+	iPoint kills_num_pos = { stats_back_img_pos_top.x + 55, stats_back_img_pos_top.y + 25 };
 	iPoint items_text_pos = { items_back_image_pos.x + 15, items_back_image_pos.y + 15 };
-	iPoint minions_text_pos = { hp_text_pos.x + 175, hp_text_pos.y + 25 };
+	iPoint minions_num_pos = { stats_back_img_pos_top.x + 175, stats_back_img_pos_top.y + 25 };
+	iPoint deaths_num_pos = { stats_back_img_pos_top.x + 120, stats_back_img_pos_top.y + 25 };
 
 	MainSceneViewport curr_viewport;
 
@@ -94,8 +98,10 @@ bool MainScene::Start()
 		curr_viewport.win_text->enabled = false;
 
 		// Minimap UI
-		curr_viewport.minimapstate.stats_back_image = curr_viewport.viewport_window->CreateImage(stats_back_img_pos, stats_back_img_rect);
-		curr_viewport.minimapstate.stats_back_image->blit_layer = MINIMAP_LAYER;
+		curr_viewport.minimapstate.stats_back_image_top = curr_viewport.viewport_window->CreateImage(stats_back_img_pos_top, stats_back_img_rect_top);
+		curr_viewport.minimapstate.stats_back_image_top->blit_layer = MINIMAP_LAYER;
+		curr_viewport.minimapstate.stats_back_image_down = curr_viewport.viewport_window->CreateImage(stats_back_img_pos_down, stats_back_img_rect_down);
+		curr_viewport.minimapstate.stats_back_image_down->blit_layer = MINIMAP_LAYER;
 
 		curr_viewport.minimapstate.hp_text = curr_viewport.viewport_window->CreateText(iPoint(hp_text_pos.x, hp_text_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.hp_text->blit_layer = MINIMAP_LAYER;
@@ -114,18 +120,11 @@ bool MainScene::Start()
 		curr_viewport.minimapstate.speed_text->SetText("SPEED:");
 		curr_viewport.minimapstate.speed_num = curr_viewport.viewport_window->CreateText(iPoint(speed_text_pos.x + 60, speed_text_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.speed_num->blit_layer = MINIMAP_LAYER;
-
-		curr_viewport.minimapstate.kills_text = curr_viewport.viewport_window->CreateText(iPoint(kills_text_pos.x , kills_text_pos.y), App->font->game_font_25);
-		curr_viewport.minimapstate.kills_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.kills_text->SetText("KILLS:"); 
-		curr_viewport.minimapstate.kills_num = curr_viewport.viewport_window->CreateText(iPoint(kills_text_pos.x + 60, kills_text_pos.y), App->font->game_font_25);
+	
+		curr_viewport.minimapstate.kills_num = curr_viewport.viewport_window->CreateText(iPoint(kills_num_pos.x , kills_num_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.kills_num->blit_layer = MINIMAP_LAYER;
 
-		curr_viewport.minimapstate.minions_text = curr_viewport.viewport_window->CreateText(iPoint(minions_text_pos.x + 10, minions_text_pos.y), App->font->game_font_25);
-		curr_viewport.minimapstate.minions_text->blit_layer = MINIMAP_LAYER;
-		curr_viewport.minimapstate.minions_text->SetText("MINIONS:");
-
-		curr_viewport.minimapstate.minions_num = curr_viewport.viewport_window->CreateText(iPoint(minions_text_pos.x +100, minions_text_pos.y), App->font->game_font_25);
+		curr_viewport.minimapstate.minions_num = curr_viewport.viewport_window->CreateText(iPoint(minions_num_pos.x , minions_num_pos.y), App->font->game_font_25);
 		curr_viewport.minimapstate.minions_num->blit_layer = MINIMAP_LAYER;
 
 		curr_viewport.minimapstate.items_background = curr_viewport.viewport_window->CreateImage(items_back_image_pos, { 327, 983, 83, 216 });
@@ -759,16 +758,15 @@ void MainScene::DoPrincessAnimation(float dt)
 
 void MinimapState::Enable()
 {
-	stats_back_image->enabled = true;
+	stats_back_image_down->enabled = true;
+	stats_back_image_top->enabled = true;
 	hp_text->enabled = true;	
 	hp_num->enabled = true; 
 	power_text->enabled = true;
 	power_num->enabled = true;
 	speed_text->enabled = true;
 	speed_num->enabled = true;
-	kills_text->enabled = true;
 	kills_num->enabled = true;
-	minions_text->enabled = true;
 	minions_num->enabled = true;
 	items_text->enabled = true; 
 	items_background->enabled = true; 
@@ -779,16 +777,15 @@ void MinimapState::Enable()
 
 void MinimapState::Disable()
 {
-	stats_back_image->enabled = false;
+	stats_back_image_down->enabled = false;
+	stats_back_image_top->enabled = false;
 	hp_text->enabled = false;
 	hp_num->enabled = false;
 	power_text->enabled = false;
 	power_num->enabled = false;
 	speed_text->enabled = false;
 	speed_num->enabled = false;
-	kills_text->enabled = false;
 	kills_num->enabled = false;
-	minions_text->enabled = false;
 	minions_num->enabled = false;
 	items_text->enabled = false;
 	items_background->enabled = false;
