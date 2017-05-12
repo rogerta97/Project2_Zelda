@@ -87,6 +87,7 @@ public:
 	bool		play_exp = false;
 
 	bool		invert_controls = false;
+	bool		cancel_hability = false; 
 };
 
 struct PlayerManagerUI

@@ -258,7 +258,7 @@ bool MainScene::Start()
 			break;
 		}
 	}
-
+	def = true; 
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
