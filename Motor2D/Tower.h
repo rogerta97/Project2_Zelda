@@ -46,6 +46,8 @@ public:
 
 	void Die(Entity* killed_by);
 
+	void SetInvulnerableAnimation(uint team);
+
 private:
 	void DoAttack();
 	void Idle();
@@ -57,7 +59,7 @@ public:
 private:
 	bool				flip = false;
 
-	uint				attack_range = 150;
+	uint				attack_range = 175;
 
 	TOWER_STATE			state = Tower_Idle;
 	states				anim_state = states_null;
@@ -66,6 +68,9 @@ private:
 
 	bool				wait_first = true;
 	j1Timer*			wait_firest_timer = nullptr;
+
+	SDL_Texture*		shield = nullptr;
+	SDL_Rect			shield_rect = NULLRECT;
 };
 
 #endif // !TOWER_H_
