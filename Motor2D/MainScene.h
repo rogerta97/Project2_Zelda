@@ -63,17 +63,11 @@ struct MinimapState
 	UI_Text* deaths_num = nullptr;
 	UI_Text* minions_num = nullptr;
 
-	UI_Text* hp_text = nullptr;
+
 	UI_Text* hp_num = nullptr; 
-
-	UI_Text* power_text = nullptr;
 	UI_Text* power_num = nullptr;
-
-	UI_Text* speed_text = nullptr;
 	UI_Text* speed_num = nullptr;
-
 	UI_Image* items_background = nullptr; 
-	UI_Text*  items_text = nullptr; 
 
 	UI_Image* item_1_img = nullptr; 
 	UI_Image* item_2_img = nullptr;
