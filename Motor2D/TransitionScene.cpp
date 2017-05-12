@@ -19,7 +19,7 @@ bool TransitionScene::Start()
 
 	window = App->gui->UI_CreateWin({0,0}, w, h, 0, false);
 
-	SDL_Rect background_text_rect = {128, 52, 217, 55}; 
+	SDL_Rect background_text_rect = {81, 1345, 230, 55}; 
 
 	background_text_image = window->CreateImage({(int)w/2 - background_text_rect.w/2, (int)h - 70}, background_text_rect);
 	continue_text = window->CreateText({ (int)background_text_image->GetPos().x + 15, (int)background_text_image->GetPos().y + 13 }, App->font->game_font_25);
