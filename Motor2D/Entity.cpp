@@ -42,7 +42,7 @@ bool Entity::GotHit(Entity *& entity, Ability *& ability, Spell* &spell)
 }
 
 
-Ability* Entity::AddAbility(int number, int cooldow, int base_damage, float damage_multiplier, char* name)
+Ability* Entity::AddAbility(int number, float cooldow, int base_damage, float damage_multiplier, char* name)
 {
 	Ability* ret = nullptr;
 

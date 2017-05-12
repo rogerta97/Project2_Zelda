@@ -7,7 +7,7 @@
 #include "j1XMLLoader.h"
 
 #define DESTRUCTION_TIME 1.5f
-#define SPEED 230
+#define SPEED 200
 
 BoneAttack::BoneAttack(iPoint pos)
 {
@@ -47,8 +47,6 @@ bool BoneAttack::PreUpdate()
 {
 	bool ret = true;
 
-
-
 	return ret;
 }
 
@@ -60,7 +58,6 @@ bool BoneAttack::Update(float dt)
 
 	game_object->SetPos({ game_object->fGetPos().x + (speed * cos(DEGTORAD * angle)), game_object->fGetPos().y + (speed * sin(DEGTORAD * angle))});
 		
-	
 	if (timer->ReadSec() > DESTRUCTION_TIME)
 		App->spell->DeleteSpell(this);
 

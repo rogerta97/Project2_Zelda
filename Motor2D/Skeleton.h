@@ -12,7 +12,6 @@ enum SKELETON_STATE
 	s_s_null,
 	s_s_idle,
 	s_s_attack,
-	s_s_stunned,
 };
 
 class Skeleton :public Entity
@@ -49,20 +48,15 @@ public:
 
 private:
 	void Idle();
-	void Stunned();
-	void Attack();
 
 	void SpinAttack();
 	void Bonemerang();
 
 	bool LookForTarget();
-
 public:
 	Entity*					target = nullptr;
 
 private:
-	j1Timer*				stun_timer = nullptr;;
-
 	bool					flip = false;
 
 	SKELETON_STATE			state = s_s_null;

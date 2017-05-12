@@ -309,7 +309,7 @@ public:
 	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void ListenEv(int type, EventThrower* origin, int id) {};
 
-	Ability* AddAbility(int number, int cooldow, int base_damage, float damage_multiplier, char* name = "no_name");
+	Ability* AddAbility(int number, float cooldow, int base_damage, float damage_multiplier, char* name = "no_name");
 	Ability* GetAbility(int number);
 	Ability* GetAbilityByName(const char* name);
 

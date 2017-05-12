@@ -14,6 +14,7 @@
 #include "BoneAttack.h"
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
+#include "j1Input.h"
 
 #define SKELETON_W 85
 #define SKELETON_H 75
@@ -22,7 +23,7 @@
 
 #define HALFMAP 81*32
 
-#define RANGE 150
+#define RANGE 200
 
 
 Skeleton::Skeleton(iPoint pos)
@@ -65,8 +66,6 @@ Skeleton::~Skeleton()
 bool Skeleton::Start()
 {
 	bool ret = true;
-
-	stun_timer = App->AddGameplayTimer();
 
 	Idle();
 
@@ -112,6 +111,7 @@ bool Skeleton::Update(float dt)
 			}
 
 			Die(entity);
+			state = s_s_attack;
 		}
 	}
 
@@ -124,24 +124,34 @@ bool Skeleton::Update(float dt)
 		Idle();
 		break;
 	case s_s_attack:
-		Attack();
-		if (!LookForTarget() || target == nullptr)
+		if (target == nullptr)
 		{
-			if (!game_object->animator->GetCurrentAnimation()->Finished())
+			LookForTarget();
+		}
+
+		if (target == nullptr)
+		{
+			state = s_s_idle;
+		}
+		else
+		{
+			if (GetAbility(0)->CdCompleted())
 			{
-				if(game_object->animator->IsCurrentAnimation("spin"))
-					game_object->DeleteFixture(abilities.at(0)->fixture);
+				SpinAttack();
+				GetAbility(0)->cd_timer->Start();
 			}
-			Idle();
+			if (GetAbility(1)->CdCompleted())
+			{
+				Bonemerang();
+				GetAbility(1)->cd_timer->Start();
+			}
+		}
+
+		if (target != nullptr && abs(DistanceFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y)) > RANGE)
+		{
+			target = nullptr;
 		}
 		break;
-	case s_s_stunned:
-		Stunned();
-		if (stun_timer->ReadSec() > STUN)
-		{
-			stun_timer->Stop();
-			state = s_s_attack;
-		}
 	default:
 		break;
 	}
@@ -157,6 +167,16 @@ bool Skeleton::Draw(float dt)
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 42 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, RANGE, 255, 0, 0);
+
+	if (game_object->animator->IsCurrentAnimation("spin"))
+	{
+		if (game_object->animator->GetCurrentAnimation()->Finished())
+		{
+			game_object->DeleteFixture(abilities.at(0)->fixture);
+			game_object->animator->GetCurrentAnimation()->Reset();
+			Idle();
+		}
+	}
 	
 	return ret;
 }
@@ -171,8 +191,6 @@ bool Skeleton::PostUpdate()
 bool Skeleton::CleanUp()
 {
 	bool ret = true;
-
-	App->DeleteGameplayTimer(stun_timer);
 
 	return ret;
 }
@@ -197,75 +215,27 @@ void Skeleton::Die(Entity * killed_by)
 
 void Skeleton::Idle()
 {
-	state = s_s_idle;
 	game_object->SetAnimation("skeleton_idle");
 	flip = false;
-	anim_state = skeleton_idle;
 
 	draw_offset = NULLPOINT;
-}
-
-void Skeleton::Stunned()
-{
-	state = s_s_stunned;
-	game_object->SetAnimation("stunned");
-	flip = false;
-	anim_state = skeleton_stunned;
-
-	draw_offset = NULLPOINT;
-
-	if (!stun_timer->IsActive())
-		stun_timer->Start();
-
-}
-
-void Skeleton::Attack()
-{
-	if (abilities.at(1)->CdCompleted() && abilities.at(0)->CdCompleted())
-	{
-		if (!game_object->animator->IsCurrentAnimation("spin"))
-		{
-			if (!game_object->animator->IsCurrentAnimation("bone"))
-			{
-				Bonemerang();
-
-			}
-			if (game_object->animator->IsCurrentAnimation("bone") && game_object->animator->GetCurrentAnimation()->Finished())
-			{
-				game_object->animator->GetCurrentAnimation()->Reset();
-				SpinAttack();
-			}
-		}
-		if (game_object->animator->IsCurrentAnimation("spin") && game_object->animator->GetCurrentAnimation()->Finished())
-		{
-			game_object->animator->GetCurrentAnimation()->Reset();
-			game_object->DeleteFixture(abilities.at(0)->fixture);
-			state = s_s_stunned;
-		}
-	}
 }
 
 void Skeleton::SpinAttack()
 {
 	game_object->SetAnimation("spin");
 	flip = false;
-	anim_state = skeleton_spin;
 
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 70, fixture_type::f_t_attack);
 
 	draw_offset.x = 36;
 	draw_offset.y = 44;
-	
 }
 
 void Skeleton::Bonemerang()
 {
-	game_object->SetAnimation("bone");
 	flip = false;
-	anim_state = skeleton_bone;
-	int angle = 0;
-	
-	angle = GetRandomValue(0, 360);
+	int angle = GetRandomValue(0, 360);
 
 	BoneAttack* ba = (BoneAttack*)App->spell->CreateSpell(bone_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 	ba->SetAngle(angle);
