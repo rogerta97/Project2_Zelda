@@ -78,7 +78,7 @@ bool MainScene::Start()
 	iPoint power_text_pos = { hp_text_pos.x + 125 , hp_text_pos.y };
 	iPoint speed_text_pos = { hp_text_pos.x + 275, hp_text_pos.y };
 	iPoint kills_num_pos = { stats_back_img_pos_top.x + 75, stats_back_img_pos_top.y + 15 };
-	iPoint deaths_num_pos = { stats_back_img_pos_top.x + 188, stats_back_img_pos_top.y + 15 };
+	iPoint deaths_num_pos = { stats_back_img_pos_top.x + 187, stats_back_img_pos_top.y + 15 };
 	iPoint minions_num_pos = { stats_back_img_pos_top.x + 290, stats_back_img_pos_top.y + 15 };
 
 	MainSceneViewport curr_viewport;
