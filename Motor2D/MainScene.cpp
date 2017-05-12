@@ -375,6 +375,8 @@ bool MainScene::Update(float dt)
 		player_manager->Update(dt);
 	if (jungleCamp_manager != nullptr)
 		jungleCamp_manager->Update(dt);
+	if (base_manager != nullptr)
+		base_manager->Update();
 	if (quest_manager != nullptr)
 	{
 		quest_manager->Update();

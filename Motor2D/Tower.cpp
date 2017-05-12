@@ -154,13 +154,13 @@ bool Tower::Draw(float dt)
 {
 	bool ret = true;
 
-	LifeBar(iPoint(75, 6), iPoint(-36, -102));
+	LifeBar(iPoint(75, 6), iPoint(-36, -88));
 
 	App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x -32, game_object->GetPos().y -96}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 
 	if (invulnerable)
 	{
-		App->view->LayerBlit(GetPos().y, shield, { game_object->GetPos().x - 53, game_object->GetPos().y - 108 }, shield_rect, 0, -1.0f, true, SDL_FLIP_NONE);
+		App->view->LayerBlit(GetPos().y, shield, { game_object->GetPos().x - 53, game_object->GetPos().y - 94 }, shield_rect, 0, -1.0f, true, SDL_FLIP_NONE);
 	}
 	if (target != nullptr && !target->to_delete)
 	{
@@ -168,7 +168,7 @@ bool Tower::Draw(float dt)
 	}
 
 	if (App->debug_mode)
-		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 150, 0, 0);
+		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, attack_range, 190, 0, 0);
 
 	return ret;
 }
