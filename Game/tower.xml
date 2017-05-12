@@ -14,8 +14,14 @@
     <anim speed = "10" name = "tower2_attack" loop = "true">
      <rect x = "128" y = "128" w = "64" h = "128"/>
     </anim>
+    <anim speed = "10" name = "tower1_invulnerable" loop = "true">
+      <rect x = "64" y = "293" w = "64" h = "128"/>
+    </anim>
+    <anim speed = "10" name = "tower2_invulnerable" loop = "true">
+      <rect x = "128" y = "293" w = "64" h = "128"/>
+    </anim>
   </animations>
-  <stats hp="200" speed="0" power="50" rupees="150">
+  <stats hp="400" speed="0" power="50" rupees="150">
     <ability1 mult="1" cd="1" bd="4"/>
   </stats>
 </file>

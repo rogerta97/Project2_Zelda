@@ -27,9 +27,8 @@ public:
 
 private:
 
-public:
-
-private:
+	SDL_Texture* shield = nullptr;
+	SDL_Rect shield_rect = NULLRECT;
 
 };
 

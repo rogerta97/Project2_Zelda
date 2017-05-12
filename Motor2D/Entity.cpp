@@ -257,9 +257,6 @@ void Entity::UpdateStats(int extra_power, int extra_hp, int extra_speed)
 void Entity::SetInvulnerable()
 {
 	invulnerable = true;
-
-	show_life_bar = false;
-
 }
 
 void Entity::SetAbilityImages(int ability_id, SDL_Rect icon_rect)

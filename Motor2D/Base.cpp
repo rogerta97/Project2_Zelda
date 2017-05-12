@@ -92,6 +92,9 @@ bool Base::Start()
 
 	game_object->SetAnimation("idle");
 
+	shield_rect = { 192, 401, 16, 20 };
+	shield = App->tex->LoadTexture("textures/towersminions_sheet.png");
+
 	return true;
 }
 
@@ -124,6 +127,11 @@ bool Base::Draw(float dt)
 	LifeBar(iPoint(120, 10), iPoint(-55, -160));
 
 	App->view->LayerBlit(game_object->GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 120, game_object->GetPos().y - 144}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
+
+	if (invulnerable)
+	{
+		App->view->LayerBlit(game_object->GetPos().y, shield, { game_object->GetPos().x - 75, game_object->GetPos().y - 165 }, shield_rect, 0, -1.0f, true, SDL_FLIP_NONE);
+	}
 	return true;
 }
 

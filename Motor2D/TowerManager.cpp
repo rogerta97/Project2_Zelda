@@ -15,6 +15,7 @@ TowerManager::TowerManager()
 	t2 = (Tower*)App->entity->CreateEntity(tower, tower_positions1[1]);
 	t2->SetTeam(1);
 	t_Invulnerable(t2);
+	t2->SetInvulnerableAnimation(1);
 	SetHP(t2, t2->stats.base_hp + 100);
 	team1_towers.push_back(t2);
 
@@ -26,11 +27,13 @@ TowerManager::TowerManager()
 	t4 = (Tower*)App->entity->CreateEntity(tower, tower_positions2[1]);
 	t4->SetTeam(2);
 	t_Invulnerable(t4);
+	t4->SetInvulnerableAnimation(2);
 	SetHP(t4, t4->stats.base_hp + 100);
 	team2_towers.push_back(t4);
 
 	//to-improve: using for loop to create towers inside
-	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
+	death_sound_effect_1 = App->audio->LoadFx("Audio/Voice act/tower_1_2.wav");
+	death_sound_effect_2 = App->audio->LoadFx("Audio/Voice act/tower_2_2.wav");
 }
 
 TowerManager::~TowerManager()
@@ -114,13 +117,14 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
+		App->audio->PlayFx(death_sound_effect_2, 0);
 		break;
 	case 2:
 		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end();)
 		{
 			if (tower == (*it))
 			{
-				if (tower = t3)
+				if (tower == t3)
 				{
 					t4->show_life_bar = true;
 					t4->invulnerable = false;
@@ -133,10 +137,11 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
+		App->audio->PlayFx(death_sound_effect_1, 0);
 		break;
 	}
 
-	//App->audio->PlayFx(death_sound_effect, 0);
+	
 }
 
 void TowerManager::SetHP(Entity * tower, uint hp)

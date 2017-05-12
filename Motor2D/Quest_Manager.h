@@ -38,12 +38,12 @@ struct quest
 struct PlayerText
 {
 	vector<UI_Text*> player_text;
-//<<<<<<< HEAD
 
 	UI_Text* active_quest_text;
-//=======
-//	vector<UI_Text*> active_quest_text;
-//>>>>>>> refs/remotes/origin/development
+
+	vector<Animator*> quest_balls_animator;
+
+	vector<UI_Image*> quest_balls_images;
 };
 
 class QuestManager 
@@ -66,10 +66,13 @@ public:
 	void SpawnCucos(int num);
 	void SwitchWindowState(int player);
 	void UpdateWindows();
+	void UpdateQuestAnimations(float dt);
 
 public:
 	pugi::xml_document quests_file;
 	pugi::xml_node     quests_node;
+
+	pugi::xml_document quests_animations_file;
 
 	std::vector<quest*> vquest;
 
@@ -89,32 +92,7 @@ private:
 	vector<bool>	stop_window;
 	uint			timer_read = 0;
 	SDL_Rect		test_rect;
-
+	
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif

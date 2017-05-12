@@ -2,13 +2,13 @@
 
 <file>
   <animations texture ="gui/UI_sheet_final.png">
-    <anim speed = "10" name = "idle_health" loop = "false">
+    <anim speed = "10" name = "idle_health" loop = "true">
       <rect x = "926" y = "2399" w = "44" h = "46"/>
     </anim>
-<anim speed = "10" name = "idle_power" loop = "false">
+<anim speed = "10" name = "idle_power" loop = "true">
       <rect x = "1014" y = "2399" w = "44" h = "46"/>
     </anim>
-<anim speed = "10" name = "idle_speed" loop = "false">
+<anim speed = "10" name = "idle_speed" loop = "true">
       <rect x = "1102" y = "2399" w = "44" h = "46"/>
     </anim>
  <anim speed = "10" name = "active_health" loop = "true">
