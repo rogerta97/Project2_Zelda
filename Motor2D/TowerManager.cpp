@@ -32,7 +32,8 @@ TowerManager::TowerManager()
 	team2_towers.push_back(t4);
 
 	//to-improve: using for loop to create towers inside
-	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
+	death_sound_effect_1 = App->audio->LoadFx("Audio/Voice act/tower_1_2.wav");
+	death_sound_effect_2 = App->audio->LoadFx("Audio/Voice act/tower_2_2.wav");
 }
 
 TowerManager::~TowerManager()
@@ -116,6 +117,7 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
+		App->audio->PlayFx(death_sound_effect_1, 0);
 		break;
 	case 2:
 		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end();)
@@ -135,10 +137,11 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
+		App->audio->PlayFx(death_sound_effect_2, 0);
 		break;
 	}
 
-	//App->audio->PlayFx(death_sound_effect, 0);
+	
 }
 
 void TowerManager::SetHP(Entity * tower, uint hp)

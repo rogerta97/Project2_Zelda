@@ -31,7 +31,8 @@ private:
 	std::list<Tower*> team1_towers;
 	std::list<Tower*> team2_towers;
 
-	uint			  death_sound_effect = 100;
+	uint			  death_sound_effect_1 = 100;
+	uint			  death_sound_effect_2 = 100;
 
 	Tower*			  t1 = nullptr;
 	Tower*			  t2 = nullptr;
