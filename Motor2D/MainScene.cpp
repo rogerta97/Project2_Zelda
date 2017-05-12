@@ -74,9 +74,9 @@ bool MainScene::Start()
 	
 	iPoint items_back_image_pos = { minimap_img_pos.x - 70, minimap_img_pos.y + 10 };
 
-	iPoint hp_text_pos = { stats_back_img_pos_down.x + 25, stats_back_img_pos_down.y + 15 };
-	iPoint power_text_pos = { hp_text_pos.x + 125 , hp_text_pos.y };
-	iPoint speed_text_pos = { hp_text_pos.x + 275, hp_text_pos.y };
+	iPoint hp_text_pos = { stats_back_img_pos_down.x + 45, stats_back_img_pos_down.y + 10 };
+	iPoint power_text_pos = { hp_text_pos.x + 110 , hp_text_pos.y };
+	iPoint speed_text_pos = { hp_text_pos.x + 240, hp_text_pos.y };
 	iPoint kills_num_pos = { stats_back_img_pos_top.x + 75, stats_back_img_pos_top.y + 15 };
 	iPoint deaths_num_pos = { stats_back_img_pos_top.x + 187, stats_back_img_pos_top.y + 15 };
 	iPoint minions_num_pos = { stats_back_img_pos_top.x + 290, stats_back_img_pos_top.y + 15 };
@@ -126,9 +126,9 @@ bool MainScene::Start()
 		curr_viewport.minimapstate.items_background = curr_viewport.viewport_window->CreateImage(items_back_image_pos, { 327, 983, 83, 216 });
 		curr_viewport.minimapstate.items_background->blit_layer = MINIMAP_LAYER;
 
-		curr_viewport.minimapstate.item_1_img = curr_viewport.viewport_window->CreateImage(iPoint(items_back_image_pos.x + 26, items_back_image_pos.y + 50), { 0,0,0,0 });
-		curr_viewport.minimapstate.item_2_img = curr_viewport.viewport_window->CreateImage(iPoint(items_back_image_pos.x + 26, items_back_image_pos.y + 100), { 0,0,0,0 });
-		curr_viewport.minimapstate.item_3_img = curr_viewport.viewport_window->CreateImage(iPoint(items_back_image_pos.x + 26, items_back_image_pos.y + 150), { 0,0,0,0 });
+		curr_viewport.minimapstate.item_1_img = curr_viewport.viewport_window->CreateImage(iPoint(items_back_image_pos.x + 17, items_back_image_pos.y + 40), { 0,0,0,0 });
+		curr_viewport.minimapstate.item_2_img = curr_viewport.viewport_window->CreateImage(iPoint(items_back_image_pos.x + 17, items_back_image_pos.y + 90), { 0,0,0,0 });
+		curr_viewport.minimapstate.item_3_img = curr_viewport.viewport_window->CreateImage(iPoint(items_back_image_pos.x + 17, items_back_image_pos.y + 140), { 0,0,0,0 });
 
 		curr_viewport.minimapstate.item_1_img->blit_layer = MINIMAP_LAYER;
 		curr_viewport.minimapstate.item_2_img->blit_layer = MINIMAP_LAYER;
@@ -253,6 +253,7 @@ bool MainScene::Start()
 	if (!def)
 	{
 		Player* p1 = player_manager->AddPlayer(App->scene->players[0].character, iPoint(300, 700), 1, 1, 1, 1);
+		p1->AddRupees(1000); 
 		Player* p2 = player_manager->AddPlayer(App->scene->players[1].character, iPoint(300, 700), 2, 2, 2, 1);
 		Player* p3 = player_manager->AddPlayer(App->scene->players[2].character, iPoint(300, 700), 3, 3, 1, 2);
 		Player* p4 = player_manager->AddPlayer(App->scene->players[3].character, iPoint(300, 700), 4, 4, 2, 2);
@@ -266,7 +267,7 @@ bool MainScene::Start()
 
 	}
 
-
+	
 
 
 	// Disable player input until level is loaded
