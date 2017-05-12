@@ -1870,6 +1870,7 @@ void Player::Respawn()
 		base_travel = false; 
 		is_dead = false;
 		state = idle_down;
+		invert_controls = false;
 	}
 }
 

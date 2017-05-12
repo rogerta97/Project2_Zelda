@@ -843,6 +843,7 @@ void PauseUI::UpdatePause()
 			break;
 
 		case p_e_quit:
+			App->SetGamePause(!App->GetGamePause());
 			App->scene->ChangeScene((Scene*)App->scene->logo_scene); 
 			break;
 
