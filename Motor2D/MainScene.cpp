@@ -377,6 +377,7 @@ bool MainScene::Update(float dt)
 	{
 		quest_manager->Update();
 		quest_manager->UpdateWindows();
+		quest_manager->UpdateQuestAnimations(dt);
 	}
 	if (minimap_manager != nullptr)
 		minimap_manager->Update(dt);

@@ -21,6 +21,8 @@ QuestManager::QuestManager()
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
 
+	App->xml->LoadXML("quest_rects.xml", quests_animations_file);
+
 	PlayerText* curr_player_text = nullptr; 
 
 	for (int i = 0; i < 4; i++)
@@ -56,16 +58,18 @@ QuestManager::QuestManager()
 
 		for (int i = 0; i<3; i++)
 		{
-			placer = iPoint(screen.w - 30, screen.h - 30);
-			it->viewport_window->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+			curr_player_text->quest_balls_animator.push_back(new Animator());
+			placer = iPoint(screen.w - 40, screen.h - 60);
+			curr_player_text->quest_balls_images.push_back(new UI_Image);
+			curr_player_text->quest_balls_images[i] = it->viewport_window->CreateImage(placer, { 440,812 - offset,24,24 }, false);
 
-			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x - 6, placer.y), App->font->game_font_small));
 			curr_player_text->player_text[i]->SetText("0");
 
 			screen.h = screen.h - 30;
-			offset += 24;
+			offset += 26;
 		}
-		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 60), App->font->game_font_25, 16, false, 255, 215, 0));
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 55), App->font->game_font_25, 17, false, 255, 215, 0));
 
 
 		curr_player_text->active_quest_text->SetText(" ");
@@ -114,6 +118,29 @@ QuestManager::QuestManager()
 		(*it)->active_quest_text->enabled = false; 
 		stop_window.push_back(false);
 	}
+	//CREATE ANIMATORS
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			player_text_list[i]->quest_balls_animator[j]->LoadAnimationsFromXML(quests_animations_file, "animations");
+			switch (j)
+			{
+			case 0: 
+				player_text_list[i]->quest_balls_animator[j]->SetAnimation("idle_power");
+				break;
+			case 1: 
+				player_text_list[i]->quest_balls_animator[j]->SetAnimation("idle_speed");
+				break;
+			case 2: 
+				player_text_list[i]->quest_balls_animator[j]->SetAnimation("idle_health");
+				break;
+			default:
+				break;
+			}
+			
+		}
+	}
 }
 
 QuestManager::~QuestManager()
@@ -131,6 +158,20 @@ void QuestManager::Update()
 			for (int i = 0; i < 4; i++)
 			{
 				windows_to_move[i] = true;
+				switch (active_quest)
+				{
+				case 1: 
+					player_text_list[i]->quest_balls_animator[0]->SetAnimation("active_power");
+					break;
+				case 2:
+					player_text_list[i]->quest_balls_animator[1]->SetAnimation("active_speed");
+					break;
+				case 3:
+					player_text_list[i]->quest_balls_animator[2]->SetAnimation("active_health");
+					break;
+					default:
+						break;
+				}
 			}
 			if (active_quest == 2)
 			{
@@ -158,6 +199,23 @@ void QuestManager::Update()
 			}
 			reset_progress(active_quest);
 			change_state(active_quest, inactive);
+			for (int i = 0; i < 4; i++)
+			{
+				switch (active_quest)
+				{
+				case 1:
+					player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
+					break;
+				case 2:
+					player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
+					break;
+				case 3:
+					player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
+					break;
+				default:
+					break;
+				}
+			}
 			active_quest = -1;
 			timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 			for (int i = 0; i < 4; i++)
@@ -358,7 +416,7 @@ void QuestManager::update_progress()
 					player_text_list[2]->active_quest_text->enabled = false;
 					player_text_list[3]->active_quest_text->enabled = false;
 
-
+				
 					for (int i = 0; i < 4; i++)
 					{
 						windows_to_move[i] = false;
@@ -368,15 +426,42 @@ void QuestManager::update_progress()
 					{
 					case 0:
 					{
-						//FICA UN SWITCH PUTU PENDEHO
-						player_text_list[0]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[2]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[0]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[2]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+							switch (i)
+							{
+							case 0:
+								player_text_list[0]->quest_balls_animator[0]->SetAnimation("power_completed");
+								player_text_list[2]->quest_balls_animator[0]->SetAnimation("power_completed");
+							case 1:
+								player_text_list[0]->quest_balls_animator[1]->SetAnimation("speed_completed");
+								player_text_list[2]->quest_balls_animator[1]->SetAnimation("speed_completed");
+							case 2:
+								player_text_list[0]->quest_balls_animator[2]->SetAnimation("health_completed");
+								player_text_list[2]->quest_balls_animator[2]->SetAnimation("health_completed");
+							default:
+								break;
+							}
 						break;
 					}
 					case 1:
 					{
-						player_text_list[1]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[3]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[1]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[3]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						switch (i)
+						{
+						case 0:
+							player_text_list[1]->quest_balls_animator[0]->SetAnimation("power_completed");
+							player_text_list[3]->quest_balls_animator[0]->SetAnimation("power_completed");
+						case 1:
+							player_text_list[1]->quest_balls_animator[1]->SetAnimation("speed_completed");
+							player_text_list[3]->quest_balls_animator[1]->SetAnimation("speed_completed");
+						case 2:
+							player_text_list[1]->quest_balls_animator[2]->SetAnimation("health_completed");
+							player_text_list[3]->quest_balls_animator[2]->SetAnimation("health_completed");
+						default:
+							break;
+						}
 						break;
 					}
 					default:
@@ -445,6 +530,17 @@ void QuestManager::UpdateWindows()
 				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + speed, player_remap_button[i]->GetPos().y));
 				stop_window[i] = false;
 			}
+		}
+	}
+}
+
+void QuestManager::UpdateQuestAnimations(float dt)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			player_text_list[i]->quest_balls_images[j]->image = player_text_list[i]->quest_balls_animator[j]->GetCurrentAnimation()->GetAnimationFrame(dt);
 		}
 	}
 }
