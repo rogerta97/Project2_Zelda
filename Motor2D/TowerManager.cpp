@@ -122,7 +122,7 @@ void TowerManager::KillTower(Entity * tower)
 		{
 			if (tower == (*it))
 			{
-				if (tower = t3)
+				if (tower == t3)
 				{
 					t4->show_life_bar = true;
 					t4->invulnerable = false;
