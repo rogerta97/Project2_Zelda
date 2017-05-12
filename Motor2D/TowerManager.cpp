@@ -117,7 +117,7 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
-		App->audio->PlayFx(death_sound_effect_1, 0);
+		App->audio->PlayFx(death_sound_effect_2, 0);
 		break;
 	case 2:
 		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end();)
@@ -137,7 +137,7 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
-		App->audio->PlayFx(death_sound_effect_2, 0);
+		App->audio->PlayFx(death_sound_effect_1, 0);
 		break;
 	}
 
