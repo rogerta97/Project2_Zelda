@@ -34,8 +34,6 @@ GanonBat::GanonBat(iPoint pos)
 	fire_bd = stats_node.attribute("bat_fire_bd").as_int();
 	fire_mult = stats_node.attribute("bat_fire_dm").as_float();
 
-	//stats.damage_multiplicator = stats_node.attribute("mult").as_float(0.0f);
-
 	draw_offset = restore_draw_offset = { 25, 10 };
 
 	name = "ganon_bat";
@@ -237,7 +235,7 @@ void GanonBat::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, 
 		{
 			Entity* e = App->entity->FindEntityByBody(bodyB);
 
-			if (e != nullptr && owner != nullptr &&  e != owner && e->GetTeam() != owner->GetTeam() && !owner->to_delete)
+			if (e != nullptr && !e->to_delete && owner != nullptr && !owner->to_delete &&  e != owner && e->GetTeam() != owner->GetTeam())
 			{
 				if (CanDealDamage(e))
 				{

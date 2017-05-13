@@ -155,7 +155,7 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 
 		e = App->entity->FindEntityByBody(bodyB);
 
-		if (e != nullptr && e->GetTeam() != owner->GetTeam())
+		if (e != nullptr && !e->to_delete && e->GetTeam() != owner->GetTeam())
 		{
 			die = true;
 			timer->Start();

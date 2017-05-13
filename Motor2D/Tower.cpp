@@ -91,9 +91,6 @@ bool Tower::Update(float dt)
 {
 	bool ret = true;
 
-	if (to_delete)
-		return true;
-
 	switch (state)
 	{
 	case Tower_Idle:
