@@ -63,7 +63,7 @@ public:
 	uint		viewport = 0;
 
 	UI_Text*    rupees_num = nullptr;
-	uint	    rupees = 0;
+	uint	    rupees = 400;
 
 	j1Timer*    death_timer = nullptr;
 	float		death_time = 5.0f;
@@ -85,6 +85,7 @@ public:
 	Animator*	explosion = nullptr;
 	SDL_Texture* explosion_tex = nullptr;
 	bool		play_exp = false;
+	int			explo_times = 0;
 
 	bool		invert_controls = false;
 	bool		cancel_hability = false; 

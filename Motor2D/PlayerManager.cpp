@@ -1794,11 +1794,17 @@ void PlayerManager::CheckBomb(Player * player)
 
 void PlayerManager::Explode(Player * player)
 {
-	if (player->explosion->GetCurrentAnimation()->Finished())
+	if (player->explosion->GetCurrentAnimation()->Finished() && player->explo_times == 3)
 	{
 		player->play_exp = false;
 		player->explosion->GetCurrentAnimation()->Reset();
+		player->explo_times = 0;
 		return;
+	}
+	else if (player->explosion->GetCurrentAnimation()->Finished())
+	{
+		player->explosion->GetCurrentAnimation()->Reset();
+		player->explo_times++;
 	}
 
 	App->view->LayerBlit(player->entity->GetPos().y + 1, player->explosion_tex, { player->entity->GetPos().x-27, player->entity->GetPos().y-27 }, player->explosion->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
