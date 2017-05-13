@@ -67,8 +67,8 @@ public:
 	bool IsActive(int viewport);
 
 private:
-	void ChangeShopState(int view);
-	void UpdateItemInfo(int view);
+	void ChangeShopState(int view, Player* player = nullptr);
+	void UpdateItemInfo(int view, Player* player = nullptr);
 	
 public:
 	UI_Window*		shop_window = nullptr;

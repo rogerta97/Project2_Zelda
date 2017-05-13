@@ -311,7 +311,7 @@ bool ShopManager::Update()
 		App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_shop, &shop_key);
 		if (App->input->GetControllerButton((*it)->controller_index, shop_key) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
-			ChangeShopState((*it)->viewport - 1);
+			ChangeShopState((*it)->viewport - 1, *it);
 		}
 
 		if(shops[(*it)->viewport - 1]->active)
@@ -319,25 +319,25 @@ bool ShopManager::Update()
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item < shops[(*it)->viewport - 1]->items.size() - 2 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item += 2;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item > 1 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item -= 2;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN&& shops[(*it)->viewport - 1]->selected_item < shops[(*it)->viewport - 1]->items.size() - 1 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item += 1;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item > 0 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item -= 1;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			int accept_key;
@@ -382,7 +382,7 @@ bool ShopManager::Update()
 					
 					shops[(*it)->viewport - 1]->selected_item = 0;
 
-					UpdateItemInfo((*it)->viewport - 1);
+					UpdateItemInfo((*it)->viewport - 1, *it);
 
 					shops[(*it)->viewport - 1]->item_selected = false;
 
@@ -434,7 +434,7 @@ bool ShopManager::CleanUp()
 	return true;
 }
 
-void ShopManager::ChangeShopState(int view)
+void ShopManager::ChangeShopState(int view, Player* player)
 {
 	shops[view]->background->enabled = !shops[view]->background->enabled;
 	shops[view]->item_name->enabled = !shops[view]->item_name->enabled;
@@ -458,7 +458,7 @@ void ShopManager::ChangeShopState(int view)
 
 	shops[view]->selected_item = 0;
 
-	UpdateItemInfo(view);
+	UpdateItemInfo(view, player);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -487,7 +487,7 @@ void ShopManager::ChangeShopState(int view)
 		App->scene->main_scene->player_manager->AllowInput(view + 1);
 }
 
-void ShopManager::UpdateItemInfo(int view)
+void ShopManager::UpdateItemInfo(int view, Player* player)
 {
 	string text;
 	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->power);
@@ -502,8 +502,21 @@ void ShopManager::UpdateItemInfo(int view)
 	shops[view]->item_name->SetText(shops[view]->items[shops[view]->selected_item].item->name);
 
 	shops[view]->item_text->SetText(shops[view]->items[shops[view]->selected_item].item->description);
+	
+	int discount = 0;
+	if (player != nullptr)
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			if (player->items[i] != nullptr && player->items[i] == shops[view]->items[shops[view]->selected_item].item->upgrade_from)
+			{
+				discount = shops[view]->items[shops[view]->selected_item].item->upgrade_from->price;
+				break;
+			}
+		}
+	}
 
-	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->price);
+	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->price - discount);
 	shops[view]->price->SetText(text);
 
 	if (shops[view]->items[shops[view]->selected_item].item->upgrade == nullptr)
