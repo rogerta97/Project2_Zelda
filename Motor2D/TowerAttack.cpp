@@ -19,6 +19,12 @@ TowerAttack::TowerAttack(iPoint pos)
 	App->xml->LoadXML("towerattack.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("tower.xml", doc2);
+	pugi::xml_node stats_node = doc2.child("file").child("stats");
+
+	stats.damage_multiplicator = stats_node.child("ability1").attribute("mult").as_float();
+
 	draw_offset = restore_draw_offset = { 7, 9 };
 
 	name = "t_attack";
@@ -52,9 +58,9 @@ bool TowerAttack::Update(float dt)
 {
 	bool ret = true;
 
-	if (game_object->animator->IsCurrentAnimation("destroy"))
+	if (game_object->animator->IsCurrentAnimation("destroy") || target == nullptr)
 	{
-		if(game_object->animator->GetCurrentAnimation()->Finished())
+		if(game_object->animator->GetCurrentAnimation()->Finished() || target == nullptr)
 			App->spell->DeleteSpell(this);
 	}
 	else if (target != nullptr)
@@ -110,7 +116,7 @@ bool TowerAttack::CleanUp()
 
 void TowerAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
+	if (game_object != nullptr && target != nullptr && !target->to_delete && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);

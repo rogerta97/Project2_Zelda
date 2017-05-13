@@ -23,6 +23,7 @@
      <rect x = "168" y = "0" w = "90" h = "80"/>
     </anim>
   </animations>
+  
   <stats hp="250" speed="0" power="30" rupees="190">
     <ability1 mult="1" cd="5" bd="4"/>
     <ability2 mult="0.35" cd="0.3" bd="5"/>

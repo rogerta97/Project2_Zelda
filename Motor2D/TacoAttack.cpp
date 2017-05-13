@@ -57,12 +57,9 @@ bool TacoAttack::Update(float dt)
 {
 	bool ret = true;
 
-	if (to_delete)
-		return true;
-
-	if (game_object->animator->IsCurrentAnimation("destroy"))
+	if (game_object->animator->IsCurrentAnimation("destroy") || target == nullptr)
 	{
-		if (game_object->animator->GetCurrentAnimation()->Finished())
+		if (game_object->animator->GetCurrentAnimation()->Finished() || target == nullptr)
 			App->spell->DeleteSpell(this);
 	}
 	else if (target != nullptr)
@@ -118,7 +115,7 @@ void TacoAttack::CleanSpell()
 
 void TacoAttack::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
+	if (game_object != nullptr && target != nullptr && !target->to_delete && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);

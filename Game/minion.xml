@@ -44,6 +44,7 @@
        <rect x = "288" y = "64" w = "64" h = "64"/>
      </anim>
    </animations>
+  
   <stats hp="50" speed="45" power="5" tower_dmg_mult="0.20" rupees="10">
     <ability1 mult="1" cd="1" bd="4"/>
   </stats>

@@ -122,6 +122,7 @@
        <rect x = "774" y = "1120" w = "280" h = "280"/>
      </anim>
    </animations>
+  
   <stats hp="100" speed="170" power="5" rupees="100">
     <ability1 mult="0" cd="1" bd="10"/>
     <ability2 mult ="0.1" heal="10" duration ="4" cd="16"/>

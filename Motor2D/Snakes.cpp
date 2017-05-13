@@ -137,7 +137,10 @@ bool Snakes::Update(float dt)
 			else
 			{
 				if (!LookForTarget())
+				{
+					target = nullptr;
 					Idle();
+				}
 			}
 		}
 		else
