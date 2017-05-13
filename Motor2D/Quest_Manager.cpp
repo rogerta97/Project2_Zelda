@@ -251,7 +251,7 @@ void QuestManager::CleanUp()
 	// Clear Texts
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
-		(*it)->player_text.clear();
+		(*it)->CleanUp();
 	}
 	
 	// Clear Cucos

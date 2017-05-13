@@ -173,7 +173,7 @@ private:
 	void Explode(Player* player);
 
 public:
-	vector<Player*>     players;
+	vector<Player*>         players;
 
 private:
 	// UI Elements

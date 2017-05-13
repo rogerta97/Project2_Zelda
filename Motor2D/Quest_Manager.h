@@ -37,6 +37,16 @@ struct quest
 
 struct PlayerText
 {
+	void CleanUp()
+	{
+		for (int i = 0; i < quest_balls_animator.size(); i++)
+		{
+			quest_balls_animator.at(i)->CleanUp();
+			RELEASE(quest_balls_animator.at(i));
+		}
+		quest_balls_animator.clear();
+	}
+
 	vector<UI_Text*> player_text;
 
 	UI_Text* active_quest_text;
@@ -91,7 +101,7 @@ private:
 	int                 quest_fx = 0;
 	vector<bool>	    stop_window;
 	uint			    timer_read = 0;
-	SDL_Rect		    test_rect;
+	SDL_Rect		    test_rect = NULLRECT;
 	
 };
 
