@@ -1351,6 +1351,9 @@ void PlayerManager::CheckBomb(Player * player)
 
 void PlayerManager::Explode(Player * player)
 {
+	if (player->is_dead || player->entity == nullptr)
+		return;
+
 	if (player->explosion->GetCurrentAnimation()->Finished() && player->explo_times == 2)
 	{
 		player->play_exp = false;
