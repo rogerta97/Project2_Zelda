@@ -217,14 +217,14 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		ret = p;
 		p->team = team;
 
-		SetAbilitiesRemaping(p);
-
 		pugi::xml_document explo_doc;
 		App->xml->LoadXML("explosion.xml", explo_doc);
 
 		p->explosion = new Animator();
 		p->explosion_tex = p->explosion->LoadAnimationsFromXML(explo_doc, "animations");
 		p->explosion->SetAnimation("explosion");
+
+		SetAbilitiesRemaping(p);
 	}
 
 	return ret;
@@ -1269,9 +1269,12 @@ void PlayerManager::PasiveRupee(Player * curr_player)
 
 void PlayerManager::SetAbilitiesRemaping(Player * curr_player)
 {
+	if (curr_player->is_dead)
+		return;
+
 	int index = curr_player->viewport - 1;
 
-	for (int i = 0; i < players.size(); i++)
+	for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 	{
 		key_mapping key;
 		Ability* curr_player_ability = curr_player->entity->abilities.at(i);
