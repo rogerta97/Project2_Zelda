@@ -20,7 +20,7 @@ QuestManager::QuestManager()
 	quest_fx = App->audio->LoadFx("Audio/Voice act/new_quest_1.wav");
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
-
+	active_quest = -1;
 	App->xml->LoadXML("quest_rects.xml", quests_animations_file);
 
 	PlayerText* curr_player_text = nullptr; 
@@ -151,16 +151,24 @@ void QuestManager::Update()
 {
 	if (quests_enabled)
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			if (player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->GetName() == "completed_power" && player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation() == nullptr || player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->Finished())
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	if (player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->GetName() == "completed_power" &&  player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->GetFrameIndex() >5)
+		//		player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
+
+		//	if (player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation()->GetName() == "completed_speed")
+		//		player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
+
+		//	if (player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->GetName() == "completed_health" && player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->Finished())
+		//		player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
+		//}
+		if (active_quest == -1) {
+			for (int i = 0; i < 4; i++)
+			{
 				player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
-
-			if (player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation()->GetName() == "completed_speed" && player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation() == nullptr || player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation()->Finished())
 				player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
-
-			if (player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->GetName() == "completed_health" && player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation() == nullptr || player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->Finished())
 				player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
+			}
 		}
 		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
 		{
@@ -409,7 +417,8 @@ void QuestManager::update_progress()
 						cucos.clear();
 					}
 					vquest[i]->state = inactive;
-					//active_quest = -1;
+					active_quest = -1;
+					timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
 
