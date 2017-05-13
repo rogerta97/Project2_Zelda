@@ -688,6 +688,8 @@
     <Xml Include="..\Game\ganon_bat.xml">
       <Filter>Engine\5. Spells ===========\GanonBat</Filter>
     </Xml>
-    <Xml Include="..\Game\tacoattack.xml" />
+    <Xml Include="..\Game\tacoattack.xml">
+      <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
