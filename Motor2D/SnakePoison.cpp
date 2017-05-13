@@ -19,6 +19,12 @@ SnakePoison::SnakePoison(iPoint pos)
 	App->xml->LoadXML("snakepoison.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("snakes.xml", doc2);
+	pugi::xml_node stats_node = doc2.child("file").child("stats");
+
+	stats.damage_multiplicator = stats_node.child("ability1").attribute("mult").as_float();
+
 	draw_offset = restore_draw_offset = { 7, 9 };
 
 	name = "s_attack";
