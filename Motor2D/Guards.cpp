@@ -117,11 +117,16 @@ bool Guards::Update(float dt)
 		Die(entity);
 	}
 
+	if (target != nullptr && target->to_delete)
+		target = nullptr;
+
 	if (current_life < stats.life)
 	{
 		is_attacked = true;
 		current_life = stats.life;
 	}
+
+
 
 	CheckState();
 

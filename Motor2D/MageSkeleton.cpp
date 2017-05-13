@@ -120,6 +120,8 @@ bool MageSkeleton::Update(float dt)
 		}
 	}
 
+	if (target != nullptr && target->to_delete)
+		target = nullptr;
 
 	switch (state)
 	{

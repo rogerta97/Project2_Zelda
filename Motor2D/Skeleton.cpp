@@ -115,6 +115,9 @@ bool Skeleton::Update(float dt)
 		}
 	}
 
+	if (target != nullptr && target->to_delete)
+		target = nullptr;
+
 	switch (state)
 	{
 	case s_s_null:

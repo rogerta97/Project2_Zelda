@@ -256,8 +256,6 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				if (s->target == curr_event->event_data.entity)
 				{
 					s->target = nullptr;
-					end = true;
-					break;
 				}
 			}
 		}
@@ -272,8 +270,6 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				if (s->target == curr_event->event_data.entity)
 				{
 					s->target = nullptr;
-					end = true;
-					break;
 				}
 			}
 		}
@@ -288,8 +284,6 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				if (s->target == curr_event->event_data.entity)
 				{
 					s->target = nullptr;
-					end = true;
-					break;
 				}
 			}
 		}
@@ -304,8 +298,6 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				if (s->target == curr_event->event_data.entity)
 				{
 					s->target = nullptr;
-					end = true;
-					break;
 				}
 			}
 		}
@@ -321,12 +313,11 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				if (m->target == curr_event->event_data.entity)
 				{
 					m->target = nullptr;
-					end = true;
-					break;
 				}
 			}
 		}
 
+		// Guard kills
 		if (curr_event->event_data.entity != nullptr && !end)
 		{
 			vector<Entity*> guards = FindEntitiesByName("guard");
@@ -337,8 +328,6 @@ void j1Entity::ListenEvent(int type, EventThrower * origin, int id)
 				if (g->target == curr_event->event_data.entity)
 				{
 					g->target = nullptr;
-					end = true;
-					break;
 				}
 			}
 		}

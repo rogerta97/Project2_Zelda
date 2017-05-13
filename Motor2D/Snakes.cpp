@@ -102,6 +102,9 @@ bool Snakes::Update(float dt)
 		}
 	}
 
+	if (target != nullptr && target->to_delete)
+		target = nullptr;
+
 	switch (state)
 	{
 	case Snk_S_Null:
