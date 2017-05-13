@@ -3,7 +3,7 @@
 <file>  <!--Items must be ordered the more expensive first-->
   <item id="0">
     <name>Boots</name>
-    <description>The latest trend in footwear</description>
+    <description>Hyrule's latest trend in footwear.</description>
     <power value="0"/>
     <hp value="0"/>
     <speed value="30"/>
@@ -55,7 +55,7 @@
   </item>
   <item id="5">
     <name>Sturdy Shield</name>
-    <description>A sturdier version of the shield.</description>
+    <description>A sturdier version of the Shield.</description>
     <power value="0"/>
     <hp value="240"/>
     <speed value="0"/>
@@ -66,7 +66,7 @@
   </item>
   <item id="6">
     <name>Bomb</name>
-    <description>Boom! (Work In Progress) </description>
+    <description>Boom! Disappears after exploding. </description>
     <power value="50"/>
     <hp value="0"/>
     <speed value="0"/>
@@ -77,7 +77,7 @@
   
   <item id="7">
     <name>Triforce</name>
-    <description>Only heroes can wield a Triforce</description>
+    <description>Only Legends can wield a Triforce</description>
     <power value="30"/>
     <hp value="30"/>
     <speed value="30"/>
