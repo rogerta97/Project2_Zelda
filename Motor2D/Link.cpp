@@ -46,25 +46,25 @@ Link::Link(iPoint pos)
 	float cd = stats_node.child("ability1").attribute("cd").as_float();
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);
-	a1->SetImages({ 816, 351, 81, 48 }, { 816, 351, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 353, 32, 32 });
+	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 353, 32, 32 });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
 	Ability* a2 = AddAbility(1, cd, bd, dmg_mult);
-	a2->SetImages({ 896, 351, 80, 48 }, { 896, 351, 80, 48 }, { 1093, 1960, 80, 48 }, { 1014, 353, 32, 32 });
+	a2->SetImages({ 896, 351, 80, 48 }, { 896, 474, 80, 48 }, { 1093, 1960, 80, 48 }, { 1014, 353, 32, 32 });
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
 	Ability* a3 = AddAbility(2, cd, bd, dmg_mult, "boomerang"); // Name references to the Spell name
-	a3->SetImages({ 816, 399, 48, 73 }, { 816, 399, 48, 73 }, { 1013, 2008, 48, 73 }, { 1050, 353, 32, 32 });
+	a3->SetImages({ 816, 399, 48, 73 }, { 816, 522, 48, 73 }, { 1013, 2008, 48, 73 }, { 1050, 353, 32, 32 });
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
-	a4->SetImages({ 864, 399, 48, 73 }, { 864, 399, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 353, 32, 32 });
+	a4->SetImages({ 864, 399, 48, 73 }, { 864, 522, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 353, 32, 32 });
 	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));

@@ -1163,44 +1163,29 @@ void PlayerManager::UpdateUI(Player* curr_player)
 		Ability* ui_ability = nullptr;
 		int ability_index = GetUiAbilityByAbility(curr_player, curr_player->entity->abilities.at(i));
 
-		switch (ability_index)
+		if (i == 0 && (curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right))
 		{
-		case 0:
-			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability1;
-			break;
-		case 1:
-			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability2;
-			break;
-		case 2:
-			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability3;
-			break;
-		case 3:
-			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability4;
-			break;
+			p_manager_ui_elements.at(index).abilities_button.at(ability_index)->ChangeImage(curr_player->entity->abilities.at(ability_index)->ability_avaliable_pressed);
+			showing_attack = true;
 		}
 
-		if (i == 0 && curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		else if (i == 1 && (curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right))
 		{
-			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
-		}
-
-		else if (i == 1 && curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
-		{
-			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+			p_manager_ui_elements.at(index).abilities_button.at(ability_index)->ChangeImage(curr_player->entity->abilities.at(ability_index)->ability_avaliable_pressed);
 			showing_attack = true;
 		}
 
 
-		else if (i == 2 && curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right)
+		else if (i == 2 && (curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right))
 		{
-			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+			p_manager_ui_elements.at(index).abilities_button.at(ability_index)->ChangeImage(curr_player->entity->abilities.at(ability_index)->ability_avaliable_pressed);
 			showing_attack = true;
 		}
 
 
-		else if (i == 3 && curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right)
+		else if (i == 3 && (curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right))
 		{
-			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+			p_manager_ui_elements.at(index).abilities_button.at(ability_index)->ChangeImage(curr_player->entity->abilities.at(ability_index)->ability_avaliable_pressed);
 			showing_attack = true;
 		}
 
