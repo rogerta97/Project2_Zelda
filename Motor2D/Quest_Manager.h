@@ -69,29 +69,29 @@ public:
 	void UpdateQuestAnimations(float dt);
 
 public:
-	pugi::xml_document quests_file;
-	pugi::xml_node     quests_node;
+	pugi::xml_document  quests_file;
+	pugi::xml_node      quests_node;
 
-	pugi::xml_document quests_animations_file;
+	pugi::xml_document  quests_animations_file;
 
 	std::vector<quest*> vquest;
 
 	vector<PlayerText*> player_text_list; 
 	vector<UI_Image*>   player_quest_windows;
 	vector<UI_Image*>	player_remap_button;
-	iPoint          placer = NULLPOINT;
+	iPoint              placer = NULLPOINT;
 
-	vector<Entity*>  cucos;
-	vector<bool> windows_to_move;
+	vector<Entity*>     cucos;
+	vector<bool>        windows_to_move;
 
-	bool            quests_enabled = true;
-	int				active_quest = -1;
+	bool                quests_enabled = true;
+	int				    active_quest = -1;
 
 private:
-	int quest_fx;
-	vector<bool>	stop_window;
-	uint			timer_read = 0;
-	SDL_Rect		test_rect;
+	int                 quest_fx = 0;
+	vector<bool>	    stop_window;
+	uint			    timer_read = 0;
+	SDL_Rect		    test_rect;
 	
 };
 

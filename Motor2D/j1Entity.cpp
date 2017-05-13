@@ -420,6 +420,8 @@ Entity* j1Entity::CreateEntity(entity_name entity, iPoint pos)
 
 void j1Entity::ClearEntities()
 {
+	LOG("Clearing entities");
+
 	if (!entity_list.empty())
 	{
 		for (list<Entity*>::iterator it = entity_list.begin(); it != entity_list.end(); it++)

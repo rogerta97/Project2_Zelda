@@ -105,17 +105,6 @@ void AestheticsManager::CleanUp()
 {
 	LOG("Unloading AestheticsManager");
 
-	// Clear Trees
-	if (!trees_entity.empty())
-	{
-		for (std::vector<Tree*>::iterator it = trees_entity.begin(); it != trees_entity.end();)
-		{
-			App->entity->DeleteEntity(*it);
-			it = trees_entity.erase(it);
-		}
-	}
-	// -----
-
 	// Clear Eyes
 	if (!eyes.empty())
 	{
@@ -126,16 +115,6 @@ void AestheticsManager::CleanUp()
 		}
 	}
 	// -----
-
-	// Clear bushes
-	if (!bushes_entity.empty())
-	{
-		for (std::vector<Bush*>::iterator it = bushes_entity.begin(); it != bushes_entity.end();)
-		{
-			App->entity->DeleteEntity(*it);
-			it = bushes_entity.erase(it);
-		}
-	}
 
 	// Clear trees
 	if (!trees_nodes.empty())

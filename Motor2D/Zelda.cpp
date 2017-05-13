@@ -143,6 +143,11 @@ zelda_states Zelda::GetZeldaState()
 	return state;
 }
 
+int Zelda::GetActivationTime()
+{
+	return activation_time;
+}
+
 void Zelda::MoveUp(float speed)
 {
 	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });

@@ -246,13 +246,13 @@ void QuestManager::CleanUp()
 		}
 		vquest.clear();
 	}
+
 	// Clear Texts
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
 		(*it)->player_text.clear();
 	}
 	
-
 	// Clear Cucos
 	if (!cucos.empty())
 	{

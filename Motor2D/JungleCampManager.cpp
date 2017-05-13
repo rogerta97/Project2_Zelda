@@ -191,6 +191,7 @@ bool JungleCampManager::CleanUp()
 	}
 	mageskeleton_camp2.clear();
 	// ------
+
 	//Cleaning guards
 	for (int i = 0; i < guards_camp1.size(); i++)
 	{
@@ -203,7 +204,9 @@ bool JungleCampManager::CleanUp()
 		App->entity->DeleteEntity(guards_camp2[i]);
 	}
 	guards_camp2.clear();
-
+	// ------
+	
+	// Clean timers
 	App->DeleteGameplayTimer(snakes_timer_camp1);
 	App->DeleteGameplayTimer(snakes_timer_camp2);
 
@@ -212,6 +215,7 @@ bool JungleCampManager::CleanUp()
 
 	App->DeleteGameplayTimer(mageskeleton_timer_camp1);
 	App->DeleteGameplayTimer(mageskeleton_timer_camp2);
+
 	return true;
 }
 

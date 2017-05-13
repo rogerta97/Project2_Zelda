@@ -51,6 +51,8 @@ bool TransitionScene::CleanUp()
 	if (App->scene->GetCurrentScene() != App->scene->transition_scene)
 		App->gui->DeleteElement(window); 
 
+	App->tex->UnLoadTexture(screen);
+
 	return ret;
 }
 

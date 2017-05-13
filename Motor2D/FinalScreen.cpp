@@ -8,6 +8,8 @@
 
 bool FinalScreen::Start()
 {
+	App->view->SetViews(1);
+
 	uint w, h; 
 	App->win->GetWindowSize(w,h);
 
@@ -15,7 +17,8 @@ bool FinalScreen::Start()
 
 	// Creating general elements ----
 
-	window = App->gui->UI_CreateWin({0, 0}, screen.w, screen.h, 0, false);
+	window = App->gui->UI_CreateWin({0, 0}, screen.w, screen.h, 0, true, false, true);
+	window->blit_layer = 1;
 
 	SDL_Rect background_title_rect = { 0, 2203, 316, 69}; 
 	iPoint background_title_rect_pos = { screen.w/2 - background_title_rect.w / 2, screen.h/25 };
@@ -24,7 +27,7 @@ bool FinalScreen::Start()
 
 	title_text = window->CreateText({ background_title_rect_pos.x + 75, background_title_rect_pos.y + 13 }, App->font->game_font_40);
 	title_text->SetText("GAME STATS");
-
+	title_text->blit_layer += 300;
 
 	SDL_Rect background_X_rect = { 0, 2203, 316, 69 };
 	iPoint background_X_pos = { screen.w - (screen.w/4) - 15, screen.h / 25 };
@@ -40,6 +43,7 @@ bool FinalScreen::Start()
 
 	changescreen_text = window->CreateText(changescreen_text_pos, App->font->game_font_40);
 	changescreen_text->SetText("RETURN TO MENU"); 
+	changescreen_text->blit_layer += 300;
 
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
 
@@ -120,37 +124,47 @@ bool FinalScreen::Start()
 		else
 			new_card.rectangle_image = window->CreateImage({ background_card_pos.x, background_card_pos.y + y_offset }, background_card_rect_team2);
 
+		new_card.rectangle_image->blit_layer -= 300;
+		new_card.rectangle_image->layer -= 300;
 		
 		new_card.character_image = window->CreateImage({ background_card_pos.x - 130, background_card_pos.y + 15 + y_offset }, placeholder_character);
 
 		new_card.kills_text = window->CreateText({ kills_text_pos.x, kills_text_pos.y + y_offset }, App->font->game_font);
-		new_card.kills_text->SetText("KILLS");
+		new_card.kills_text->SetText("KILLS"); new_card.kills_text->blit_layer += 300;
 
 		new_card.kills_num = window->CreateText({ kills_text_pos.x + 20, kills_text_pos.y + 35 + y_offset }, App->font->game_font_40);
 		
 		new_card.deaths_text = window->CreateText({ deaths_text_pos.x, deaths_text_pos.y + y_offset }, App->font->game_font);
-		new_card.deaths_text->SetText("DEATHS");
+		new_card.deaths_text->SetText("DEATHS"); new_card.deaths_text->blit_layer += 300;
 
 		new_card.deaths_num = window->CreateText({ deaths_text_pos.x + 30, deaths_text_pos.y + 35 + y_offset }, App->font->game_font_40);
+		new_card.deaths_num->blit_layer += 300;
 	
 		new_card.minions_text = window->CreateText({ minions_text_pos.x, minions_text_pos.y + y_offset }, App->font->game_font);
-		new_card.minions_text->SetText("MINIONS");
+		new_card.minions_text->SetText("MINIONS"); new_card.minions_text->blit_layer += 300;
 
 		new_card.minions_num = window->CreateText({ minions_text_pos.x + 35, minions_text_pos.y + 35 + y_offset }, App->font->game_font_40);
+		new_card.minions_num->blit_layer += 300;
 	
 		new_card.towers_text = window->CreateText({ towers_text_pos.x, towers_text_pos.y + y_offset }, App->font->game_font);
-		new_card.towers_text->SetText("TOWERS");
+		new_card.towers_text->SetText("TOWERS"); new_card.towers_text->blit_layer += 300;
+		
 
 		new_card.towers_num = window->CreateText({ towers_text_pos.x + 35, towers_text_pos.y + 35 + y_offset }, App->font->game_font_40);
+		new_card.towers_num->blit_layer += 300;
 	
 		new_card.items_text = window->CreateText({ items_text_pos.x, items_text_pos.y + y_offset }, App->font->game_font);
-		new_card.items_text->SetText("ITEMS");
+		new_card.items_text->SetText("ITEMS"); new_card.items_text->blit_layer += 300;
+	
 	
 		new_card.item_images_1 = window->CreateImage({ item_1_image_pos.x, item_1_image_pos.y + y_offset }, placeholder_item);
+		new_card.item_images_1->blit_layer += 300;
 
 		new_card.item_images_2 = window->CreateImage({ item_2_image_pos.x, item_2_image_pos.y + y_offset }, placeholder_item);
+		new_card.item_images_2->blit_layer += 300;
 
 		new_card.item_images_3 = window->CreateImage({ item_3_image_pos.x, item_3_image_pos.y + y_offset }, placeholder_item);
+		new_card.item_images_3->blit_layer += 300;
 
 		new_card.SetInfo(player_info[i]); 
 
@@ -183,6 +197,7 @@ bool FinalScreen::CleanUp()
 
 	elements.clear();
 	player_info.clear();
+
 	return false;
 }
 

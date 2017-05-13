@@ -266,9 +266,6 @@ bool MainScene::Start()
 
 	}
 
-	
-
-
 	// Disable player input until level is loaded
 	player_manager->DisableInput(0);
 	// ----
@@ -403,7 +400,6 @@ bool MainScene::Update(float dt)
 			UpdateWinnerAnim(winner, 0);
 	}
 
-
 	for (int i = 0; i < 4; i++)
 	{
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
@@ -497,6 +493,7 @@ bool MainScene::CleanUp()
 	App->spell->ClearSpells();
 
 	//Release Animators
+	LOG("Release animators");
 	victory->CleanUp();
 	defeat->CleanUp();
 	zelda_appearing->CleanUp(); 
@@ -505,11 +502,13 @@ bool MainScene::CleanUp()
 	RELEASE(defeat);
 	RELEASE(zelda_appearing);
 
+	LOG("Delete timers");
 	App->DeleteGameplayTimer(game_timer);
 	App->DeleteGameplayTimer(quest_timer);
 	App->ClearGameplayTimers();
 
 	// Free UI
+	LOG("Freeing Main scene UI");
 	if (App->scene->GetCurrentScene() != App->scene->main_scene)	
 	{
 		for (vector<MainSceneViewport>::iterator it = ui_viewports.begin(); it != ui_viewports.end(); it++) 

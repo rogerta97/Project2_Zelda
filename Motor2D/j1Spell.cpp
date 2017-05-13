@@ -9,7 +9,7 @@
 #include "EventThrower.h"
 #include "GameObject.h"
 #include "GanonBat.h"
-
+#include "p2Log.h"
 
 j1Spell::j1Spell()
 {
@@ -249,6 +249,8 @@ void j1Spell::DeleteSpellIfOwner(Entity * owner)
 
 void j1Spell::ClearSpells()
 {
+	LOG("Clearing spells");
+
 	if (!spell_list.empty())
 	{
 		for (list<Spell*>::iterator it = spell_list.begin(); it != spell_list.end(); it++)

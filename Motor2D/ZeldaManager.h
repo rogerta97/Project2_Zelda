@@ -26,8 +26,9 @@ public:
 
 private:
 	Zelda* zelda = nullptr;
-	int zelda_anouncer;
-	bool anounced = false;
+	int    zelda_anouncer = 0;
+	bool   anounced = false;
+	int	   spawn_time = 0;
 };
 
 #endif

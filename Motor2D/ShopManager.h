@@ -49,8 +49,8 @@ struct shop
 
 	UI_Image*			shop_icon = nullptr;
 
-	Animator*		shop_icon_anim = nullptr;
-};
+	Animator*	     	shop_icon_anim = nullptr;
+}; 
 
 class ShopManager
 {

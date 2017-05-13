@@ -76,6 +76,11 @@ bool TowerManager::CleanUp()
 		team2_towers.clear();
 	}
 
+	t1 = nullptr;
+	t2 = nullptr;
+	t3 = nullptr;
+	t4 = nullptr;
+
 	return ret;
 }
 

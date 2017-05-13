@@ -10,13 +10,13 @@
 
 ZeldaManager::ZeldaManager()
 {
-
 	//Anouncer
 	zelda_anouncer = App->audio->LoadFx("Audio/Voice act/esperarse_que__voy_1.wav");
 
 	iPoint pos(App->map->GetZeldaPosition());
 	zelda = (Zelda*)App->entity->CreateEntity(entity_name::zelda, { pos.x + 16, pos.y + 30 });
 	zelda->SetTimer(App->scene->main_scene->GetGameTimer());
+	spawn_time = zelda->GetActivationTime();
 
 	// Set Zelda paths
 	zelda->SetInitialPath(App->map->GetZeldaInitPath());
@@ -86,11 +86,10 @@ Zelda * ZeldaManager::GetZelda()
 
 int ZeldaManager::GetSpawnTime()
 {
-
 	Zelda* zelda = GetZelda(); 
 
 	if (zelda != nullptr)
-		return 5;
+		return spawn_time;
 
 	else
 		return -1; 

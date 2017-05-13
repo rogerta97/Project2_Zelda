@@ -21,7 +21,6 @@ private:
 	void FadeOut();
 
 private:
-
 	SDL_Texture* screen = nullptr;
 
 	UI_Window* window = nullptr; 

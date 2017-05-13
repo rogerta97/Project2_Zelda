@@ -101,7 +101,7 @@ void j1Viewports::SetViews(uint number)
 		switch (number)
 		{
 		case 1:
-			scale = 2.0f;
+			scale = 1.0f;
 			break;
 		case 2:
 			scale = 1.0f;

@@ -1950,8 +1950,12 @@ void Player::AddRupees(int add)
 void Player::CleanUp()
 {
 	App->entity->DeleteEntity(entity);
+
 	App->DeleteGameplayTimer(death_timer);
 	App->DeleteGameplayTimer(base_travel_timer);
+
+	explosion->CleanUp();
+	RELEASE(explosion);
 }
 
 void Player::UpdateRupees()
