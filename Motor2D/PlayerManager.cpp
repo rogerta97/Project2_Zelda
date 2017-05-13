@@ -16,6 +16,9 @@
 #define BASE_TRAVEL_RECT_W 240
 #define BASE_TRAVEL_RECT_H 15
 
+#define EXPLOSION_OFFSET 54
+
+
 PlayerManager::PlayerManager()
 {
 }
@@ -1565,7 +1568,7 @@ void PlayerManager::CheckBomb(Player * player)
 
 void PlayerManager::Explode(Player * player)
 {
-	if (player->explosion->GetCurrentAnimation()->Finished() && player->explo_times == 3)
+	if (player->explosion->GetCurrentAnimation()->Finished() && player->explo_times == 2)
 	{
 		player->play_exp = false;
 		player->explosion->GetCurrentAnimation()->Reset();
@@ -1578,7 +1581,7 @@ void PlayerManager::Explode(Player * player)
 		player->explo_times++;
 	}
 
-	App->view->LayerBlit(player->entity->GetPos().y + 1, player->explosion_tex, { player->entity->GetPos().x-27, player->entity->GetPos().y-27 }, player->explosion->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
+	App->view->LayerBlit(player->entity->GetPos().y + 1, player->explosion_tex, { player->entity->GetPos().x-(EXPLOSION_OFFSET*((player->explo_times %2 == 0)? 1:0)), player->entity->GetPos().y-EXPLOSION_OFFSET+27*player->explo_times }, player->explosion->GetCurrentAnimation()->GetAnimationFrame(App->GetDT()));
 }
 
 
