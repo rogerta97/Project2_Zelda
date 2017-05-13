@@ -63,7 +63,7 @@ QuestManager::QuestManager()
 			curr_player_text->quest_balls_images.push_back(new UI_Image);
 			curr_player_text->quest_balls_images[i] = it->viewport_window->CreateImage(placer, { 440,812 - offset,24,24 }, false);
 
-			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x - 6, placer.y), App->font->game_font_small));
+			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x + 17, placer.y+10), App->font->game_font_25));
 			curr_player_text->player_text[i]->SetText("0");
 
 			screen.h = screen.h - 30;
@@ -151,16 +151,28 @@ void QuestManager::Update()
 {
 	if (quests_enabled)
 	{
-		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
+		for (int i = 0; i < 4; i++)
+		{
+			if (player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->GetName() == "completed_power" && player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation() == nullptr || player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->Finished())
+				player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
+
+			if (player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation()->GetName() == "completed_speed" && player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation() == nullptr || player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation()->Finished())
+				player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
+
+			if (player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->GetName() == "completed_health" && player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation() == nullptr || player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->Finished())
+				player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
+		}
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
 		{
 			App->audio->PlayFx(quest_fx);
-			active_quest = GetRandomValue(1, 3);
+			active_quest = GetRandomValue(1,3);
+
 			for (int i = 0; i < 4; i++)
 			{
 				windows_to_move[i] = true;
 				switch (active_quest)
 				{
-				case 1: 
+				case 1:
 					player_text_list[i]->quest_balls_animator[0]->SetAnimation("active_power");
 					break;
 				case 2:
@@ -169,8 +181,8 @@ void QuestManager::Update()
 				case 3:
 					player_text_list[i]->quest_balls_animator[2]->SetAnimation("active_health");
 					break;
-					default:
-						break;
+				default:
+					break;
 				}
 			}
 			if (active_quest == 2)
@@ -201,20 +213,9 @@ void QuestManager::Update()
 			change_state(active_quest, inactive);
 			for (int i = 0; i < 4; i++)
 			{
-				switch (active_quest)
-				{
-				case 1:
-					player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
-					break;
-				case 2:
-					player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
-					break;
-				case 3:
-					player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
-					break;
-				default:
-					break;
-				}
+				player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
+				player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
+				player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
 			}
 			active_quest = -1;
 			timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
@@ -408,6 +409,7 @@ void QuestManager::update_progress()
 						cucos.clear();
 					}
 					vquest[i]->state = inactive;
+					//active_quest = -1;
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
 
@@ -421,24 +423,33 @@ void QuestManager::update_progress()
 					{
 						windows_to_move[i] = false;
 					}
+					for (vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
+					{
+						(*it)->UpdateQuestsStats();
+					}
 
 					switch (j)
 					{
 					case 0:
 					{
-						player_text_list[0]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[2]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[0]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[2]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						App->scene->main_scene->player_manager->players[0]->AddRupees(100);
+						App->scene->main_scene->player_manager->players[2]->AddRupees(100);
 							switch (i)
 							{
 							case 0:
-								player_text_list[0]->quest_balls_animator[0]->SetAnimation("power_completed");
-								player_text_list[2]->quest_balls_animator[0]->SetAnimation("power_completed");
+								player_text_list[0]->quest_balls_animator[0]->SetAnimation("completed_power");
+								player_text_list[2]->quest_balls_animator[0]->SetAnimation("completed_power");
+								break;
 							case 1:
-								player_text_list[0]->quest_balls_animator[1]->SetAnimation("speed_completed");
-								player_text_list[2]->quest_balls_animator[1]->SetAnimation("speed_completed");
+								player_text_list[0]->quest_balls_animator[1]->SetAnimation("completed_speed");
+								player_text_list[2]->quest_balls_animator[1]->SetAnimation("completed_speed");
+								break;
 							case 2:
-								player_text_list[0]->quest_balls_animator[2]->SetAnimation("health_completed");
-								player_text_list[2]->quest_balls_animator[2]->SetAnimation("health_completed");
+								player_text_list[0]->quest_balls_animator[2]->SetAnimation("completed_health");
+								player_text_list[2]->quest_balls_animator[2]->SetAnimation("completed_health");
+								break;
 							default:
 								break;
 							}
@@ -446,19 +457,24 @@ void QuestManager::update_progress()
 					}
 					case 1:
 					{
-						player_text_list[1]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[3]->player_text[i-1]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[1]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[3]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						App->scene->main_scene->player_manager->players[1]->AddRupees(100);
+						App->scene->main_scene->player_manager->players[3]->AddRupees(100);
 						switch (i)
 						{
 						case 0:
-							player_text_list[1]->quest_balls_animator[0]->SetAnimation("power_completed");
-							player_text_list[3]->quest_balls_animator[0]->SetAnimation("power_completed");
+							player_text_list[1]->quest_balls_animator[0]->SetAnimation("completed_power");
+							player_text_list[3]->quest_balls_animator[0]->SetAnimation("completed_power");
+							break;
 						case 1:
-							player_text_list[1]->quest_balls_animator[1]->SetAnimation("speed_completed");
-							player_text_list[3]->quest_balls_animator[1]->SetAnimation("speed_completed");
+							player_text_list[1]->quest_balls_animator[1]->SetAnimation("completed_speed");
+							player_text_list[3]->quest_balls_animator[1]->SetAnimation("completed_speed");
+							break;
 						case 2:
-							player_text_list[1]->quest_balls_animator[2]->SetAnimation("health_completed");
-							player_text_list[3]->quest_balls_animator[2]->SetAnimation("health_completed");
+							player_text_list[1]->quest_balls_animator[2]->SetAnimation("completed_health");
+							player_text_list[3]->quest_balls_animator[2]->SetAnimation("completed_health");
+							break;
 						default:
 							break;
 						}
@@ -467,6 +483,7 @@ void QuestManager::update_progress()
 					default:
 						break;
 					}
+
 				}
 				j++;
 			}

@@ -1738,6 +1738,24 @@ void Player::CleanUp()
 	RELEASE(explosion);
 }
 
+void Player::UpdateQuestsStats()
+{
+	int extra_power = 0, extra_hp = 0, extra_speed = 0;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (items[i] == nullptr)
+		{
+			break;
+		}
+		extra_hp += items[i]->hp;
+		extra_power += items[i]->power;
+		extra_speed += items[i]->speed;
+	}
+
+	entity->UpdateStats(extra_power, extra_hp, extra_speed);
+}
+
 void Player::UpdateRupees()
 {
 	string r;

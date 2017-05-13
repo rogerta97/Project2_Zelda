@@ -46,6 +46,7 @@ public:
 	void ApplyItemStats();
 	void AddRupees(int add);
 	void CleanUp();
+	void UpdateQuestsStats();
 
 private:
 	void UpdateRupees();
