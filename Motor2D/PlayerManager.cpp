@@ -1271,7 +1271,7 @@ void PlayerManager::SetAbilitiesRemaping(Player * curr_player)
 {
 	int index = curr_player->viewport - 1;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < players.size(); i++)
 	{
 		key_mapping key;
 		Ability* curr_player_ability = curr_player->entity->abilities.at(i);
