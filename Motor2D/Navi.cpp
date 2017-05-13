@@ -52,26 +52,26 @@ Navi::Navi(iPoint pos)
 	float bd = stats_node.child("ability1").attribute("bd").as_float();
 	
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
-	a1->SetImages({ 816, 351, 80, 48 }, { 816, 473, 80, 48 }, { 1013, 1960, 80, 48 }, { 0,0,0,0 });
+	a1->SetImages({ 816, 351, 81, 48 }, { 816, 351, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 425, 32, 32 });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	heal = stats_node.child("ability2").attribute("heal").as_float();
 	ability1_duration = stats_node.child("ability2").attribute("duration").as_float();
 	Ability* a2 = AddAbility(1, cd, 0, 0);
-	a2->SetImages({ 896, 351, 80, 48 }, { 896, 473, 80, 48 }, { 1093, 1960, 80, 48 }, { 0,0,0,0 });
+	a2->SetImages({ 896, 351, 80, 48 }, { 896, 351, 80, 48 }, { 1093, 1960, 80, 48 }, { 1050, 425, 32, 32 });
 
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
 	Ability* a3 = AddAbility(2, cd, bd, dmg_mult);
-	a3->SetImages({ 816, 399, 48, 73 }, { 816, 521, 48, 73 }, { 1013, 2008, 48, 73 }, { 0,0,0,0 });
+	a3->SetImages({ 816, 399, 48, 73 }, { 816, 399, 48, 73 }, { 1013, 2008, 48, 73 }, { 1014, 425, 32, 32 });
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
-	a4->SetImages({ 864, 399, 48, 73 }, { 864, 521,48, 73 }, { 1061, 2008, 48, 73 }, { 0,0,0,0 });
+	a4->SetImages({ 864, 399, 48, 73 }, { 864, 399, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 425, 32, 32 });
 	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));

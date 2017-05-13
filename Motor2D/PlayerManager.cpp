@@ -213,7 +213,7 @@ Player* PlayerManager::AddPlayer(entity_name name, iPoint pos, int controller_in
 		ret = p;
 		p->team = team;
 
-		SetAbilitiesIcon(players.size() - 1);
+		SetAbilitiesRemaping(p);
 
 		pugi::xml_document explo_doc;
 		App->xml->LoadXML("explosion.xml", explo_doc);
@@ -1153,9 +1153,84 @@ void PlayerManager::UpdateUI(Player* curr_player)
 
 	bool showing_attack = false; 
 
-	switch (curr_player->viewport)
+	int index = curr_player->viewport - 1;
+
+	for (int i = 0; i < curr_player->entity->abilities.size(); i++)
+	{
+		Ability* ui_ability = nullptr;
+		int ability_index = GetUiAbilityByAbility(curr_player, curr_player->entity->abilities.at(i));
+
+		switch (ability_index)
+		{
+		case 0:
+			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability1;
+			break;
+		case 1:
+			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability2;
+			break;
+		case 2:
+			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability3;
+			break;
+		case 3:
+			ui_ability = p_manager_ui_elements.at(curr_player->viewport - 1).ability4;
+			break;
+		}
+
+		if (i == 0 && curr_player->show == shows::show_basic_atack_down || curr_player->show == shows::show_basic_atack_up || curr_player->show == shows::show_basic_atack_left || curr_player->show == shows::show_basic_atack_right)
+		{
+			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+		}
+
+		else if (i == 1 && curr_player->show == shows::show_ability1_down || curr_player->show == shows::show_ability1_up || curr_player->show == shows::show_ability1_left || curr_player->show == shows::show_ability1_right)
+		{
+			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (i == 2 && curr_player->show == shows::show_ability2_down || curr_player->show == shows::show_ability2_up || curr_player->show == shows::show_ability2_left || curr_player->show == shows::show_ability2_right)
+		{
+			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		else if (i == 3 && curr_player->show == shows::show_ability3_down || curr_player->show == shows::show_ability3_up || curr_player->show == shows::show_ability3_left || curr_player->show == shows::show_ability3_right)
+		{
+			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_avaliable_pressed);
+			showing_attack = true;
+		}
+
+
+		if (curr_player->entity->GetAbility(ability_index)->CdCompleted() && showing_attack == false)
+		{
+			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ablility_avaliable);
+			p_manager_ui_elements.at(index).abilities_icon.at(i)->ChangeImage(curr_player->entity->abilities.at(ability_index)->ability_icon);
+			p_manager_ui_elements.at(index).abilities_cd.at(i)->enabled = false;
+			p_manager_ui_elements.at(index).abilities_icon.at(i)->enabled = true;
+		}
+
+		else if (showing_attack != true)
+		{
+			p_manager_ui_elements.at(index).abilities_button.at(i)->ChangeImage(curr_player->entity->abilities.at(i)->ability_in_cd);
+			string str("");
+			str += std::to_string((int)curr_player->entity->abilities.at(ability_index)->GetCdTimeLeft() + 1);
+			p_manager_ui_elements.at(index).abilities_cd.at(i)->enabled = true;
+			p_manager_ui_elements.at(index).abilities_icon.at(i)->enabled = false;
+			p_manager_ui_elements.at(index).abilities_cd.at(i)->SetText(str);
+		}
+	}
+
+
+
+	// --------------------
+
+
+	/*switch (curr_player->viewport)
 	{
 	case 1:
+
+		
 
 		for (int i = 0; i < curr_player->entity->abilities.size(); i++)
 		{
@@ -1348,7 +1423,7 @@ void PlayerManager::UpdateUI(Player* curr_player)
 			}
 		}
 		break;
-	}
+	}*/
 
 	// --------------+
 }
@@ -1406,369 +1481,65 @@ void PlayerManager::PasiveRupee(Player * curr_player)
 	}
 }
 
-void PlayerManager::SetAbilitiesIcon(int index)
+void PlayerManager::SetAbilitiesRemaping(Player * curr_player)
 {
-	key_mapping new_key = App->scene->players[index].mapping->GetMapping(m_k_ability1);
+	int index = curr_player->viewport - 1;
 
-	switch (new_key.key_id)
+	for (int i = 0; i < 4; i++)
 	{
+		key_mapping key;
+		Ability* curr_player_ability = curr_player->entity->abilities.at(i);
 
-	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-	{
-		switch (players[index]->type)
+		switch (i)
 		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 978, 353, 32, 32 };
+		case 0:
+			key = App->scene->players[index].mapping->GetMapping(m_k_ability1);
 			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 978, 425, 32, 32 };
+		case 1:
+			key = App->scene->players[index].mapping->GetMapping(m_k_ability2);
 			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 978, 497, 32, 32 };
-
+		case 2:
+			key = App->scene->players[index].mapping->GetMapping(m_k_ability3);
 			break;
-		}
-	}
-	break;
-
-	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-	{
-		if (new_key.is_button)
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 978, 353, 32, 32 };
-				break;
-
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 978, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 978, 497, 32, 32 };
-				break;
-			}
-
-		}
-		else
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 978, 353, 32, 32 };
-				break;
-
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 978, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 978, 497, 32, 32 };
-				break;
-			}
-
-		}
-
-	}
-	break;
-
-	case LEFT_TRIGGER:
-	{
-		switch (players[index]->type)
-		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 978, 353, 32, 32 };
-			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 978, 425, 32, 32 };
-			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 978, 497, 32, 32 };
+		case 3:
+			key = App->scene->players[index].mapping->GetMapping(m_k_ability4);
 			break;
 		}
 
-	}
-	break;
-
-	}
-
-	// ----
-
-	new_key = App->scene->players[index].mapping->GetMapping(m_k_ability2);
-
-	switch (new_key.key_id)
-	{
-
-	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-	{
-		switch (players[index]->type)
+		switch (key.key_id)
 		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 353, 32, 32 };
+		case 10:
+			if (key.is_button)
+				p_manager_ui_elements.at(index).ability1 = curr_player_ability;
 			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 425, 32, 32 };
+		case 9:
+			if(key.is_button)
+				p_manager_ui_elements.at(index).ability2 = curr_player_ability;
+			else
+				p_manager_ui_elements.at(index).ability3 = curr_player_ability;
 			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 497, 32, 32 };
-
+		case 8:
+			p_manager_ui_elements.at(index).ability4 = curr_player_ability;
 			break;
 		}
 	}
-	break;
+}
 
-	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-	{
-		if (new_key.is_button)
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 353, 32, 32 };
-				break;
+int PlayerManager::GetUiAbilityByAbility(Player* curr_player, Ability * ability)
+{
+	if (p_manager_ui_elements.at(curr_player->viewport - 1).ability1 == ability)
+		return 0;
 
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 425, 32, 32 };
-				break;
+	if (p_manager_ui_elements.at(curr_player->viewport - 1).ability2 == ability)
+		return 1;
 
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 497, 32, 32 };
-				break;
-			}
+	if (p_manager_ui_elements.at(curr_player->viewport - 1).ability3 == ability)
+		return 2;
 
-		}
-		else
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 353, 32, 32 };
-				break;
+	if (p_manager_ui_elements.at(curr_player->viewport - 1).ability4 == ability)
+		return 3;
 
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 497, 32, 32 };
-				break;
-			}
-
-		}
-
-	}
-	break;
-
-	case LEFT_TRIGGER:
-	{
-		switch (players[index]->type)
-		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 353, 32, 32 };
-			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 425, 32, 32 };
-			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 497, 32, 32 };
-			break;
-		}
-
-	}
-	break;
-
-	}
-
-	// ---
-
-	new_key = App->scene->players[index].mapping->GetMapping(m_k_ability3);
-
-	switch (new_key.key_id)
-	{
-
-	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-	{
-		switch (players[index]->type)
-		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 353, 32, 32 };
-			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1014, 425, 32, 32 };
-			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1050, 497, 32, 32 };
-
-			break;
-		}
-	}
-	break;
-
-	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-	{
-		if (new_key.is_button)
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 353, 32, 32 };
-				break;
-
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1014, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1050, 497, 32, 32 };
-				break;
-			}
-
-		}
-		else
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 353, 32, 32 };
-				break;
-
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1014, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1050, 497, 32, 32 };
-				break;
-			}
-
-		}
-
-	}
-	break;
-
-	case LEFT_TRIGGER:
-	{
-		switch (players[index]->type)
-		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 353, 32, 32 };
-			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1014, 425, 32, 32 };
-			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1050, 497, 32, 32 };
-			break;
-		}
-
-	}
-	break;
-
-	}
-
-	// ----
-
-	new_key = App->scene->players[index].mapping->GetMapping(m_k_ability4);
-
-	switch (new_key.key_id)
-	{
-
-	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-	{
-		switch (players[index]->type)
-		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1086, 353, 32, 32 };
-			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1086, 425, 32, 32 };
-			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[0]->image = { 1086, 497, 32, 32 };
-
-			break;
-		}
-	}
-	break;
-
-	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-	{
-		if (new_key.is_button)
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1086, 353, 32, 32 };
-				break;
-
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1086, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[1]->image = { 1086, 497, 32, 32 };
-				break;
-			}
-
-		}
-		else
-		{
-			switch (players[index]->type)
-			{
-			case link:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1086, 353, 32, 32 };
-				break;
-
-			case navi:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1086, 425, 32, 32 };
-				break;
-
-			case ganon:
-				p_manager_ui_elements[index].abilities_icon[2]->image = { 1086, 497, 32, 32 };
-				break;
-			}
-
-		}
-
-	}
-	break;
-
-	case LEFT_TRIGGER:
-	{
-		switch (players[index]->type)
-		{
-		case link:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1086, 353, 32, 32 };
-			break;
-
-		case navi:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1086, 425, 32, 32 };
-			break;
-
-		case ganon:
-			p_manager_ui_elements[index].abilities_icon[3]->image = { 1086, 497, 32, 32 };
-			break;
-		}
-
-	}
-	break;
-
-	}
+	return 0;
 }
 
 void PlayerManager::CheckBomb(Player * player)

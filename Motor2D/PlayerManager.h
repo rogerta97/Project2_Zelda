@@ -93,6 +93,11 @@ public:
 
 struct PlayerManagerUI
 {
+	Ability*			ability1 = nullptr;
+	Ability*			ability2 = nullptr;
+	Ability*			ability3 = nullptr;
+	Ability*			ability4 = nullptr;
+
 	vector<UI_Image*>	abilities_button;
 	vector<UI_Image*>	abilities_icon;
 	vector<UI_Text*>    abilities_cd;
@@ -161,7 +166,8 @@ private:
 	void UpdateDeathUI(Player* player, float dt);
 	void PasiveHP(Player* player);
 	void PasiveRupee(Player* player);
-	void SetAbilitiesIcon(int index);
+	void SetAbilitiesRemaping(Player* player);
+	int GetUiAbilityByAbility(Player* player, Ability* ability);
 	void CheckBomb(Player* player);
 	void Explode(Player* player);
 

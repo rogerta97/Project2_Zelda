@@ -33,6 +33,7 @@ Guards::Guards(iPoint pos)
 	game_object->CreateCollision(iPoint(0, 15), 7, fixture_type::f_t_collision_box);
 	game_object->SetListener((j1Module*)App->entity);
 	game_object->SetFixedRotation(true);
+	game_object->SetKinematic();
 
 	initial_pos = { pos.x, pos.y };
 
