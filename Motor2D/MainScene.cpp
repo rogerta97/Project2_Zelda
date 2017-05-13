@@ -384,13 +384,6 @@ bool MainScene::Update(float dt)
 		UpdateProgressBar();
 	// ------
 
-	// End Game
-	if (winner != 0 && game_timer->ReadSec() > end_delay)
-	{
-		App->scene->ChangeScene((Scene*)App->scene->final_screen);
-		App->view->SetViews(1);
-	}
-
 	//Update Victory/Defeat animation
 	if (winner != 0)
 	{
@@ -407,12 +400,6 @@ bool MainScene::Update(float dt)
 			ui_viewports.at(i).minimapstate.SetPlayerStats(i);
 		}
 
-	}
-
-	// Test
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-	{
-		EndGame(1);
 	}
 
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
@@ -469,6 +456,19 @@ bool MainScene::PostUpdate()
 
 	if (player_manager != nullptr)
 		player_manager->PostUpdate();
+
+	// Test
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		EndGame(1);
+	}
+
+	// End Game
+	if (winner != 0 && game_timer->ReadSec() > end_delay)
+	{
+		App->scene->ChangeScene((Scene*)App->scene->final_screen);
+		App->view->SetViews(1);
+	}
 
 	return ret;
 }

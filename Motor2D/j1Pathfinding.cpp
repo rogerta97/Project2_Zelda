@@ -65,7 +65,10 @@ void j1PathFinding::ChangeWalkability(uchar * change_matrix, int start_x, int st
 	{
 		for (int y = start_y; y < start_y + matrix_h; y++)
 		{
-  			map[y*width + x] = change_matrix[(y - start_y)*matrix_w + (x - start_x)];
+			if (y <= height && y >= 0 && x <= width && x >= 0)
+				map[y*width + x] = change_matrix[(y - start_y)*matrix_w + (x - start_x)];
+			//else
+			//	LOG("");
 		}
 	}
 }
