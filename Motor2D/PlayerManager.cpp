@@ -154,6 +154,7 @@ bool PlayerManager::Update(float dt)
 			// Update death text
 			UpdateDeathUI(curr_player, dt);
 		}
+
 		if (curr_player->play_exp)
 		{
 			Explode(curr_player);
@@ -1133,6 +1134,7 @@ void PlayerManager::CheckIfRespawn(Player * player)
 			player->Respawn();
 			player->ApplyItemStats();
 			p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = false;
+			SetAbilitiesRemaping(player);
 		}
 	}
 }
@@ -1153,6 +1155,8 @@ void PlayerManager::CheckIfDeath(Player * player)
 void PlayerManager::UpdateUI(Player* curr_player)
 {
 	// UI Control -----------
+	if (curr_player->is_dead)
+		return;
 
 	bool showing_attack = false; 
 
