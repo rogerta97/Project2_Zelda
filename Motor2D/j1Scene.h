@@ -33,7 +33,7 @@ struct player_info
 
 	SDL_Rect		items_rects[3] = { {0,0,0,0},{ 0,0,0,0 },{ 0,0,0,0 } };
 
-	void Reset() { character = e_n_null; kills = 0; deaths = 0; minions = 0; towers = 0; }
+	void Reset() { character = e_n_null; kills = 0; deaths = 0; minions = 0; towers = 0; items_rects[0] = { 0,0,0,0 }; items_rects[1] = { 0,0,0,0 }; items_rects[2] = { 0,0,0,0 };	}
 	
 };																						 
 																						 
