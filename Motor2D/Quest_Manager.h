@@ -7,6 +7,8 @@
 #include "j1Gui.h"
 #include "Cuco.h"
 
+#define QUESTS_TIMER 5
+
 class Entity;
 
 struct objectives 
@@ -49,7 +51,8 @@ struct PlayerText
 
 	vector<UI_Text*> player_text;
 
-	UI_Text* active_quest_text;
+	UI_Text* active_quest_text = nullptr;
+	UI_Image* rupees_img = nullptr;
 
 	vector<Animator*> quest_balls_animator;
 

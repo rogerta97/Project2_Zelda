@@ -32,7 +32,7 @@ QuestManager::QuestManager()
 	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 729,2204,178,107}, true));
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 681 , 2470 ,188, 128}, true));
 		//BUTTON REMAPPING
 		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
 		SDL_Rect button_pos = { 703,2334,28,26 };
@@ -69,9 +69,9 @@ QuestManager::QuestManager()
 			screen.h = screen.h - 30;
 			offset += 26;
 		}
-		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 22, 55), App->font->game_font_25, 17, false, 255, 215, 0));
-
-
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 14, 63), App->font->game_font_25, 20, false, 255, 215, 0));
+		curr_player_text->rupees_img = (it->viewport_window->CreateImage(iPoint(screen.w + 130, 148), {32, 0, 16, 16}));
+	
 		curr_player_text->active_quest_text->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
@@ -79,6 +79,8 @@ QuestManager::QuestManager()
 
 		player_text_list.push_back(curr_player_text);
 	}
+
+
 
 	App->xml->LoadXML("Quests.xml", quests_file);
 	quests_node = quests_file.child("quests");
@@ -113,9 +115,13 @@ QuestManager::QuestManager()
 		}
 		vquest.push_back(q);
 	}
+
+	
+
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
 		(*it)->active_quest_text->enabled = false; 
+		(*it)->rupees_img->enabled = false;
 		stop_window.push_back(false);
 	}
 	//CREATE ANIMATORS
@@ -170,7 +176,7 @@ void QuestManager::Update()
 				player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
 			}
 		}
-		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 60 && active_quest == -1)
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > QUESTS_TIMER && active_quest == -1)
 		{
 			App->audio->PlayFx(quest_fx);
 			active_quest = GetRandomValue(1,3);
@@ -182,12 +188,15 @@ void QuestManager::Update()
 				{
 				case 1:
 					player_text_list[i]->quest_balls_animator[0]->SetAnimation("active_power");
+					player_text_list[i]->rupees_img->SetPos({ player_text_list[i]->rupees_img->GetPos().x, player_text_list[i]->rupees_img->GetPos().y });
 					break;
 				case 2:
 					player_text_list[i]->quest_balls_animator[1]->SetAnimation("active_speed");
+					player_text_list[i]->rupees_img->SetPos({ player_text_list[i]->rupees_img->GetPos().x, player_text_list[i]->rupees_img->GetPos().y - 20});
 					break;
 				case 3:
 					player_text_list[i]->quest_balls_animator[2]->SetAnimation("active_health");
+					player_text_list[i]->rupees_img->SetPos({ player_text_list[i]->rupees_img->GetPos().x, player_text_list[i]->rupees_img->GetPos().y  + 20});
 					break;
 				default:
 					break;
@@ -204,10 +213,11 @@ void QuestManager::Update()
 			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 			{
 				(*it)->active_quest_text->enabled = true;
+				(*it)->rupees_img->enabled = true;
 			}
 		}
 
-		if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
+		if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > QUESTS_TIMER*2)
 		{
 			if (active_quest == 2)
 			{
@@ -234,9 +244,12 @@ void QuestManager::Update()
 			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 			{
 				(*it)->active_quest_text->enabled = false;
+				(*it)->rupees_img->enabled = false;
 			}
 		}
 	}
+
+	
 }
 
 void QuestManager::CleanUp()
@@ -344,6 +357,7 @@ int QuestManager::get_progress(int id, int team)
 
 void QuestManager::update_progress()
 {
+
 	for (int i = 0; i < vquest.size(); i++)
 	{
 		if (vquest[i]->state == active)
@@ -355,13 +369,15 @@ void QuestManager::update_progress()
 				string team_1;
 				team_1 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
-				team_1 += "l2";
+				team_1 += "l2\n";
+				team_1 += "Reward: 200";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
 				team_2 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += "l2";
+				team_2 += "l2\n";
+				team_2 += "Reward: 200";
 				player_text_list[1]->active_quest_text->SetText(team_2);
 				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
@@ -371,13 +387,15 @@ void QuestManager::update_progress()
 				string team_1;
 				team_1 += "Speed quest\nis active.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
-				team_1 += "l3";
+				team_1 += "l3\n";
+				team_1 += "Reward: 200";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
 				team_2 += "Speed quest\nis active.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += "l3";
+				team_2 += "l3\n";
+				team_2 += "Reward: 200";
 				player_text_list[1]->active_quest_text->SetText(team_2);
 				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
@@ -387,13 +405,15 @@ void QuestManager::update_progress()
 				string team_1;
 				team_1 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
-				team_1 += "l3";
+				team_1 += "l3\n";
+				team_1 += "Reward: 200";
 				player_text_list[0]->active_quest_text->SetText(team_1);
 				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
 				team_2 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += "l3";
+				team_2 += "l3\n";
+				team_2 += "Reward: 200";
 				player_text_list[1]->active_quest_text->SetText(team_2);
 				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
@@ -426,6 +446,10 @@ void QuestManager::update_progress()
 					player_text_list[1]->active_quest_text->enabled = false;
 					player_text_list[2]->active_quest_text->enabled = false;
 					player_text_list[3]->active_quest_text->enabled = false;
+					player_text_list[0]->rupees_img->enabled = false;
+					player_text_list[1]->rupees_img->enabled = false;
+					player_text_list[2]->rupees_img->enabled = false;
+					player_text_list[3]->rupees_img->enabled = false;
 
 				
 					for (int i = 0; i < 4; i++)
@@ -535,6 +559,7 @@ void QuestManager::UpdateWindows()
 			{
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - new_x, player_quest_windows[i]->GetPos().y));
 				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - new_x, player_text_list[i]->active_quest_text->GetPos().y));
+				player_text_list[i]->rupees_img->SetPos(p2Point<int>(player_text_list[i]->rupees_img->GetPos().x - new_x, player_text_list[i]->rupees_img->GetPos().y));
 				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - new_x, player_remap_button[i]->GetPos().y));
 				stop_window[i] = true;
 			}
@@ -544,6 +569,7 @@ void QuestManager::UpdateWindows()
 			{
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - speed, player_quest_windows[i]->GetPos().y));
 				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - speed, player_text_list[i]->active_quest_text->GetPos().y));
+				player_text_list[i]->rupees_img->SetPos(p2Point<int>(player_text_list[i]->rupees_img->GetPos().x - speed, player_text_list[i]->rupees_img->GetPos().y));
 				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - speed, player_remap_button[i]->GetPos().y));
 			}
 		}
@@ -553,6 +579,7 @@ void QuestManager::UpdateWindows()
 			{
 				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + speed, player_quest_windows[i]->GetPos().y));
 				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + speed, player_text_list[i]->active_quest_text->GetPos().y));
+				player_text_list[i]->rupees_img->SetPos(p2Point<int>(player_text_list[i]->rupees_img->GetPos().x + speed, player_text_list[i]->rupees_img->GetPos().y));
 				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + speed, player_remap_button[i]->GetPos().y));
 				stop_window[i] = false;
 			}
