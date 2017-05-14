@@ -138,7 +138,7 @@ void Entity::Slow(float speed_multiplicator, float time)
 
 void Entity::Stun(float time)
 {
-	if (time < 0)
+	if (time < 0 || type == entity_name::base || type == entity_name::tree || type == entity_name::tower)
 		return;
 
 	for (list<stun>::iterator it = App->entity->stuned_entities.begin(); it != App->entity->stuned_entities.end();)

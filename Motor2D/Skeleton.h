@@ -54,17 +54,19 @@ private:
 
 	bool LookForTarget();
 public:
-	Entity*					target = nullptr;
+	Entity*			target = nullptr;
 
 private:
-	bool					flip = false;
+	bool			flip = false;
 
-	SKELETON_STATE			state = s_s_null;
-	states					anim_state = states_null;
+	SKELETON_STATE	state = s_s_null;
+	states			anim_state = states_null;
 
-	iPoint					draw_offset = NULLPOINT;
+	iPoint			draw_offset = NULLPOINT;
 
-	int						rupee_reward = 0;
+	int				rupee_reward = 0;
+
+	int				last_life = 0;
 };
 
 #endif // !SKELETON_H_

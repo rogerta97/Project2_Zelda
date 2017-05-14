@@ -119,13 +119,13 @@ bool Guards::Update(float dt)
 
 	if (target != nullptr && target->to_delete)
 		target = nullptr;
-
+	
+	// Is attacked
 	if (current_life < stats.life)
 	{
 		is_attacked = true;
-		current_life = stats.life;
 	}
-
+	current_life = stats.life;
 
 
 	CheckState();

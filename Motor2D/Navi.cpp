@@ -288,8 +288,8 @@ bool Navi::Update(float dt)
 		if (point_found)
 		{
 			App->view->LayerDrawCircle(ability2_point.x, ability2_point.y, 3, 255, 255, 255, 255, 99);
-			float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y);
-			MoveAngle(ABILITY2_SPEED, angle - 180);
+			float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y) - 180;
+			MoveAngle(ABILITY2_SPEED, angle);
 
 			if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, ability2_point.x, ability2_point.y)) < 20)
 			{
@@ -305,7 +305,7 @@ bool Navi::Update(float dt)
 			}
 		}
 	}
-
+	
 	return ret;
 }
 

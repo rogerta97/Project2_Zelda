@@ -9,6 +9,7 @@ struct ball
 {
 	GameObject* game_object = nullptr;
 	float		angle = 0;
+	bool		to_delete = false;
 };
 
 class Ganon : public Entity
@@ -115,6 +116,7 @@ private:
 	void ClearAbility2Balls();
 	void MoveCamera();
 	iPoint DrawTarget();
+	void DestroyBalls();
 public:
 
 private:

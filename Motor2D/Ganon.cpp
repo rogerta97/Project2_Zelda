@@ -23,10 +23,10 @@
 #define ABILITY2_RADIOUS 90
 #define ABILITY2_TOTATION_SPEED 300
 
-#define CAMERA_SPEED 400
+#define CAMERA_SPEED 450
 #define ABILITY3_RANGE 300
 #define ABILITY3_ATACK_EFFECT 100
-#define ABILITY3_MOVE_SPEED 800
+#define ABILITY3_MOVE_SPEED 700
 
 Ganon::Ganon(iPoint pos)
 {
@@ -198,6 +198,8 @@ bool Ganon::Update(float dt)
 		}
 		else
 		{
+			look_for_target = false;
+
 			// Recalculate target to fit the map and the range
 			if (target_found == true)
 			{
@@ -211,19 +213,24 @@ bool Ganon::Update(float dt)
 					target.y += (int)(substract * sin(angle*DEGTORAD));
 				}
 
-				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)))
+				int iterations = 0;
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)) && iterations < 300)
 				{
 					int substract = 10;
 					target.x += (int)(substract * cos(angle*DEGTORAD));
 					target.y += (int)(substract * sin(angle*DEGTORAD));
+					iterations++;
 				}
 
 				target_found = false;
+				angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 			}
 
 			// Move ganon to target
-			if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) > 7)
+			else if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) > 10)
 			{
+				int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
+				App->view->LayerDrawCircle(target.x, target.y, 10, 255, 255, 255, 255, 1, main_view);
 				MoveAngle(ABILITY3_MOVE_SPEED, angle);
 				game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 			}
@@ -237,6 +244,8 @@ bool Ganon::Update(float dt)
 		}
 	}
 	// ---------------------
+
+	DestroyBalls();
 
 	return ret;
 }
@@ -782,15 +791,13 @@ void Ganon::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 			{
 				Entity* e = App->entity->FindEntityByBody(bodyB);
 
-				if (e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete)
+				if (fixtureB->type == fixture_type::f_t_hit_box && e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete)
 				{
 					e->DealDamage((stats.power * GetAbility(2)->damage_multiplicator) + (GetAbility(2)->damage));
 					e->Die(this);
 					DeleteAbility2BallByPbody(bodyA);
 					stats.shield += shield;
 				}
-
-				break;
 			}
 		}
 	}
@@ -837,7 +844,6 @@ void Ganon::Die(Entity * killed_by)
 		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
 		App->scene->players[App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this) - 1].deaths++;
 	}
-
 }
 
 void Ganon::CreateAbility2Balls()
@@ -872,9 +878,8 @@ void Ganon::DeleteAbility2BallByPbody(PhysBody * body)
 	{
 		if ((*it).game_object->pbody == body)
 		{
-			(*it).game_object->CleanUp();
-			RELEASE((*it).game_object);
-			it = balls.erase(it);
+			(*it).to_delete = true;
+			break;
 		}
 		else
 			++it;
@@ -902,7 +907,6 @@ void Ganon::MoveCamera()
 
 	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		//iPoint new_pos = { App->view->GetCameraPos(curr_player->viewport).x + speed*cos(45 * DEGTORAD),  App->view->GetCameraPos(curr_player->viewport).y + speed*sin(45 * DEGTORAD) };
 		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
@@ -950,4 +954,22 @@ iPoint Ganon::DrawTarget()
 	ret = { -camera.x + (view.w / 2), -camera.y + (view.h / 2) };
 
 	return ret;
+}
+
+void Ganon::DestroyBalls()
+{
+	if (!balls.empty())
+	{
+		for (vector<ball>::iterator it = balls.begin(); it != balls.end();)
+		{
+			if ((*it).to_delete)
+			{
+				(*it).game_object->CleanUp();
+				RELEASE((*it).game_object);
+				it = balls.erase(it);
+			}
+			else
+				++it;
+		}
+	}
 }

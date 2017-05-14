@@ -56,6 +56,8 @@ Skeleton::Skeleton(iPoint pos)
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
+	last_life = stats.life;
+
 	name = "skeleton";
 }
 
@@ -105,15 +107,18 @@ bool Skeleton::Update(float dt)
 			else
 				DealDamage(((float)entity->stats.power * (float)ability->damage_multiplicator) + (float)ability->damage);
 
-			if (state == s_s_idle)
-			{
-				state = s_s_attack;
-			}
-
 			Die(entity);
+		}
+	}
+
+	if (stats.life < last_life)
+	{
+		if (LookForTarget())
+		{
 			state = s_s_attack;
 		}
 	}
+	last_life = stats.life;
 
 	if (target != nullptr && target->to_delete)
 		target = nullptr;

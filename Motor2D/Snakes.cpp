@@ -17,7 +17,7 @@
 #define SNAKE_H 32
 #define SNAKE_W 32
 
-#define ATTACK_RANGE 150
+#define ATTACK_RANGE 180
 #define HALFMAP 81*32
 
 Snakes::Snakes(iPoint pos)
@@ -44,6 +44,8 @@ Snakes::Snakes(iPoint pos)
 	AddAbility(0, cd, bd, dmg_mult, "s_attack");
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
+	last_life = stats.life;
 
 	name = "snake";
 }
@@ -91,16 +93,20 @@ bool Snakes::Update(float dt)
 			else
 				DealDamage(((float)entity->stats.power * (float)ability->damage_multiplicator) + (float)ability->damage);
 
-			if(state == Snk_S_Idle)
-			{
-				is_attacked = true;
-				state = Snk_S_Attack;
-				target = entity;
-			}
-
 			Die(entity);
 		}
 	}
+
+	// Is attacked
+	if (stats.life < last_life)
+	{
+		if(LookForTarget())
+		{
+			is_attacked = true;
+			state = Snk_S_Attack;
+		}
+	}
+	last_life = stats.life;
 
 	if (target != nullptr && target->to_delete)
 		target = nullptr;

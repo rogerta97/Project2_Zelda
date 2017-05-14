@@ -57,17 +57,19 @@ private:
 	bool LookForTarget();
 
 public:
-	Entity*					target = nullptr;
-
-private:
-	bool					flip = false;
-
-	bool					is_attacked = false;
-	int						rel_angle = 0;
-
-	MSKL_STATE				state = MSkl_S_Null;
-	states					anim_state = states_null;
-
-	int						rupee_reward = 0;
+	Entity*	 target = nullptr;
+			 
+private:	 
+	bool	   flip = false;
+			 
+	bool	   is_attacked = false;
+	int		   rel_angle = 0;
+			 
+	MSKL_STATE state = MSkl_S_Null;
+	states	   anim_state = states_null;
+			 
+	int		   rupee_reward = 0;
+			 
+	int		   last_life = 0;
 };
 #endif //_MAGESKELETON_H_
