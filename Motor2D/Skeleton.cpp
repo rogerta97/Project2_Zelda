@@ -14,6 +14,7 @@
 #include "BoneAttack.h"
 #include "j1XMLLoader.h"
 #include "Quest_Manager.h"
+#include "j1Input.h"
 
 #define SKELETON_W 85
 #define SKELETON_H 75
@@ -22,15 +23,16 @@
 
 #define HALFMAP 81*32
 
-#define RANGE 150
+#define RANGE 200
 
 
 Skeleton::Skeleton(iPoint pos)
 {
-	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SKELETON_W, SKELETON_H), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_tower, 0);
+	game_object = new GameObject(iPoint(pos.x, pos.y), iPoint(SKELETON_H, SKELETON_W), App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER, pbody_type::p_t_npc, 0);
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -53,6 +55,8 @@ Skeleton::Skeleton(iPoint pos)
 	AddAbility(1, cd, bd, dmg_mult, "bone");
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
+	last_life = stats.life;
 
 	name = "skeleton";
 }
@@ -86,8 +90,6 @@ bool Skeleton::Update(float dt)
 	if (to_delete)
 		return true;
 
-	LifeBar(iPoint(50, 4), iPoint(-27, -52));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -98,30 +100,28 @@ bool Skeleton::Update(float dt)
 		{
 			if (spell != nullptr)
 			{
-				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+				DealDamage(((float)entity->stats.power * (float)spell->stats.damage_multiplicator) + (float)ability->damage); // Spells control their own damage mutiplicator
 
 				spell->Effects(entity, this, ability);
 			}
 			else
-				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+				DealDamage(((float)entity->stats.power * (float)ability->damage_multiplicator) + (float)ability->damage);
 
-			if (state == s_s_idle)
-			{
-				state = s_s_attack;
-			}
-
-		}
-		if (stats.life <= 0)
-		{
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
-			{
-				App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-			}
+			Die(entity);
 		}
 	}
 
+	if (stats.life < last_life)
+	{
+		if (LookForTarget())
+		{
+			state = s_s_attack;
+		}
+	}
+	last_life = stats.life;
+
+	if (target != nullptr && target->to_delete)
+		target = nullptr;
 
 	switch (state)
 	{
@@ -132,24 +132,34 @@ bool Skeleton::Update(float dt)
 		Idle();
 		break;
 	case s_s_attack:
-		Attack();
-		if (!LookForTarget())
+		if (target == nullptr)
 		{
-			if (!game_object->animator->GetCurrentAnimation()->Finished())
+			LookForTarget();
+		}
+
+		if (target == nullptr)
+		{
+			state = s_s_idle;
+		}
+		else
+		{
+			if (GetAbility(0)->CdCompleted())
 			{
-				if(game_object->animator->IsCurrentAnimation("spin"))
-					game_object->DeleteFixture(abilities.at(0)->fixture);
+				SpinAttack();
+				GetAbility(0)->cd_timer->Start();
 			}
-			Idle();
+			if (GetAbility(1)->CdCompleted())
+			{
+				Bonemerang();
+				GetAbility(1)->cd_timer->Start();
+			}
+		}
+
+		if (target != nullptr && abs(DistanceFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y)) > RANGE)
+		{
+			target = nullptr;
 		}
 		break;
-	case s_s_stunned:
-		Stunned();
-		if (stun_timer.ReadSec() > STUN)
-		{
-			stun_timer.Stop();
-			state = s_s_attack;
-		}
 	default:
 		break;
 	}
@@ -160,9 +170,21 @@ bool Skeleton::Draw(float dt)
 {
 	bool ret = true;
 
+	LifeBar(iPoint(50, 4), iPoint(-27, -52));
+
 	App->view->LayerBlit(2, game_object->GetTexture(), { game_object->GetPos().x - 42 - draw_offset.x , game_object->GetPos().y - 39 - draw_offset.y}, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
 	if (App->debug_mode)
 		App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, RANGE, 255, 0, 0);
+
+	if (game_object->animator->IsCurrentAnimation("spin"))
+	{
+		if (game_object->animator->GetCurrentAnimation()->Finished())
+		{
+			game_object->DeleteFixture(abilities.at(0)->fixture);
+			game_object->animator->GetCurrentAnimation()->Reset();
+			Idle();
+		}
+	}
 	
 	return ret;
 }
@@ -186,77 +208,42 @@ iPoint Skeleton::GetPos() const
 	return game_object->GetPos();
 }
 
-void Skeleton::Idle()
+void Skeleton::Die(Entity * killed_by)
 {
-	state = s_s_idle;
-	game_object->SetAnimation("skeleton_idle");
-	flip = false;
-	anim_state = skeleton_idle;
-
-	draw_offset = NULLPOINT;
-}
-
-void Skeleton::Stunned()
-{
-	state = s_s_stunned;
-	game_object->SetAnimation("stunned");
-	flip = false;
-	anim_state = skeleton_stunned;
-
-	draw_offset = NULLPOINT;
-
-	if (!stun_timer.IsActive())
-		stun_timer.Start();
-
-}
-
-void Skeleton::Attack()
-{
-	if (abilities.at(1)->CdCompleted() && abilities.at(0)->CdCompleted())
+	if (stats.life <= 0 && !to_delete && killed_by != nullptr)
 	{
-		if (!game_object->animator->IsCurrentAnimation("spin"))
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+		if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
 		{
-			if (!game_object->animator->IsCurrentAnimation("bone"))
-			{
-				Bonemerang();
-
-			}
-			if (game_object->animator->IsCurrentAnimation("bone") && game_object->animator->GetCurrentAnimation()->Finished())
-			{
-				game_object->animator->GetCurrentAnimation()->Reset();
-				SpinAttack();
-			}
-		}
-		if (game_object->animator->IsCurrentAnimation("spin") && game_object->animator->GetCurrentAnimation()->Finished())
-		{
-			game_object->animator->GetCurrentAnimation()->Reset();
-			game_object->DeleteFixture(abilities.at(0)->fixture);
-			state = s_s_stunned;
+			App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
 		}
 	}
+}
+
+void Skeleton::Idle()
+{
+	game_object->SetAnimation("skeleton_idle");
+	flip = false;
+
+	draw_offset = NULLPOINT;
 }
 
 void Skeleton::SpinAttack()
 {
 	game_object->SetAnimation("spin");
 	flip = false;
-	anim_state = skeleton_spin;
 
 	GetAbility(0)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 70, fixture_type::f_t_attack);
 
 	draw_offset.x = 36;
 	draw_offset.y = 44;
-	
 }
 
 void Skeleton::Bonemerang()
 {
-	game_object->SetAnimation("bone");
 	flip = false;
-	anim_state = skeleton_bone;
-	int angle = 0;
-	
-	angle = GetRandomValue(0, 360);
+	int angle = GetRandomValue(0, 360);
 
 	BoneAttack* ba = (BoneAttack*)App->spell->CreateSpell(bone_attack, { game_object->GetPos().x, game_object->GetPos().y - 30 }, this);
 	ba->SetAngle(angle);

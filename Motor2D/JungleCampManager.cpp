@@ -6,12 +6,14 @@
 #include "Snakes.h"
 #include "Skeleton.h"
 #include "MageSkeleton.h"
+#include "Guards.h"
 #include "p2Log.h"
 #include "j1Audio.h"
 
 #define SNAKE_RESPAWN_TIME 60
 #define SKELETON_RESPAWN_TIME 100
 #define MAGESKELETON_RESPAWN_TIME 60
+#define GUARD_RESPAWN_TIME 80
 
 #define HALFMAP 81*32
 
@@ -28,19 +30,23 @@ bool JungleCampManager::Start()
 	bool ret = true;
 
 	// Stopping timers
-	snakes_timer_camp1.Stop();
-	snakes_timer_camp2.Stop();
+	snakes_timer_camp1 = App->AddGameplayTimer(); snakes_timer_camp1->Stop();
+	snakes_timer_camp2 = App->AddGameplayTimer(); snakes_timer_camp2->Stop();
 
-	skeleton_timer_camp1.Stop();
-	skeleton_timer_camp2.Stop();
+	skeleton_timer_camp1 = App->AddGameplayTimer(); skeleton_timer_camp1->Stop();
+	skeleton_timer_camp2 = App->AddGameplayTimer(); skeleton_timer_camp2->Stop();
 
-	mageskeleton_timer_camp1.Stop();
-	mageskeleton_timer_camp2.Stop();
+	mageskeleton_timer_camp1 = App->AddGameplayTimer(); mageskeleton_timer_camp1->Stop();
+	mageskeleton_timer_camp2 = App->AddGameplayTimer(); mageskeleton_timer_camp2->Stop();
+
+	guards_timer_camp1.Stop();
+	guards_timer_camp2.Stop();
 
 	// Spawning jungle camps
 	SpawnSkeleton(0);
 	SpawnSnake(0);
 	SpawnMageSkeleton(0);
+	SpawnGuard(0);
 
 	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Enemies/LTTP_Enemy_Kill.wav");
 
@@ -51,70 +57,92 @@ bool JungleCampManager::Update(float dt)
 {
 	bool ret = true;
 
-	if (snakes_camp1.empty() && !snakes_timer_camp1.IsActive())
+	if (snakes_camp1.empty() && !snakes_timer_camp1->IsActive())
 	{
-		snakes_timer_camp1.Start();
+		snakes_timer_camp1->Start();
 	}
 
-	if (snakes_camp2.empty() && !snakes_timer_camp2.IsActive())
+	if (snakes_camp2.empty() && !snakes_timer_camp2->IsActive())
 	{
-		snakes_timer_camp2.Start();
+		snakes_timer_camp2->Start();
 	}
 
-	if (snakes_timer_camp1.ReadSec() > SNAKE_RESPAWN_TIME)
+	if (snakes_timer_camp1->ReadSec() > SNAKE_RESPAWN_TIME)
 	{
 		SpawnSnake(1);
-		snakes_timer_camp1.Stop();
+		snakes_timer_camp1->Stop();
 	}
 
-	if (snakes_timer_camp2.ReadSec() > SNAKE_RESPAWN_TIME)
+	if (snakes_timer_camp2->ReadSec() > SNAKE_RESPAWN_TIME)
 	{
 		SpawnSnake(2);
-		snakes_timer_camp2.Stop();
+		snakes_timer_camp2->Stop();
 	}
 
-	if (skeleton_camp1 == nullptr && !skeleton_timer_camp1.IsActive())
+	if (skeleton_camp1 == nullptr && !skeleton_timer_camp1->IsActive())
 	{
-		skeleton_timer_camp1.Start();
+		skeleton_timer_camp1->Start();
 	}
 
-	if (skeleton_camp2 == nullptr && !skeleton_timer_camp2.IsActive())
+	if (skeleton_camp2 == nullptr && !skeleton_timer_camp2->IsActive())
 	{
-		skeleton_timer_camp2.Start();
+		skeleton_timer_camp2->Start();
 	}
 
-	if (skeleton_timer_camp1.ReadSec() > SKELETON_RESPAWN_TIME)
+	if (skeleton_timer_camp1->ReadSec() > SKELETON_RESPAWN_TIME)
 	{
 		SpawnSkeleton(1);
-		skeleton_timer_camp1.Stop();
+		skeleton_timer_camp1->Stop();
 	}
 
-	if (skeleton_timer_camp2.ReadSec() > SKELETON_RESPAWN_TIME)
+	if (skeleton_timer_camp2->ReadSec() > SKELETON_RESPAWN_TIME)
 	{
 		SpawnSkeleton(2);
-		skeleton_timer_camp2.Stop();
+		skeleton_timer_camp2->Stop();
 	}
 
-	if (mageskeleton_camp1.empty() && !mageskeleton_timer_camp1.IsActive())
+	if (mageskeleton_camp1.empty() && !mageskeleton_timer_camp1->IsActive())
 	{
-		mageskeleton_timer_camp1.Start();
+		mageskeleton_timer_camp1->Start();
 	}
 
-	if (mageskeleton_camp2.empty() && !mageskeleton_timer_camp2.IsActive())
+	if (mageskeleton_camp2.empty() && !mageskeleton_timer_camp2->IsActive())
 	{
-		mageskeleton_timer_camp2.Start();
+		mageskeleton_timer_camp2->Start();
 	}
 
-	if (mageskeleton_timer_camp1.ReadSec() > MAGESKELETON_RESPAWN_TIME)
+	if (mageskeleton_timer_camp1->ReadSec() > MAGESKELETON_RESPAWN_TIME)
 	{
 		SpawnMageSkeleton(1);
-		mageskeleton_timer_camp1.Stop();
+		mageskeleton_timer_camp1->Stop();
 	}
 
-	if (mageskeleton_timer_camp2.ReadSec() > MAGESKELETON_RESPAWN_TIME)
+	if (mageskeleton_timer_camp2->ReadSec() > MAGESKELETON_RESPAWN_TIME)
 	{
 		SpawnMageSkeleton(2);
-		mageskeleton_timer_camp2.Stop();
+		mageskeleton_timer_camp2->Stop();
+	}
+
+	if (guards_camp1.empty() && !guards_timer_camp1.IsActive())
+	{
+		guards_timer_camp1.Start();
+	}
+
+	if (guards_camp2.empty() && !guards_timer_camp2.IsActive())
+	{
+		guards_timer_camp2.Start();
+	}
+
+	if (guards_timer_camp1.ReadSec() > GUARD_RESPAWN_TIME)
+	{
+		SpawnGuard(1);
+		guards_timer_camp1.Stop();
+	}
+
+	if (guards_timer_camp2.ReadSec() > GUARD_RESPAWN_TIME)
+	{
+		SpawnGuard(2);
+		guards_timer_camp2.Stop();
 	}
 
 	return ret;
@@ -163,6 +191,30 @@ bool JungleCampManager::CleanUp()
 	}
 	mageskeleton_camp2.clear();
 	// ------
+
+	//Cleaning guards
+	for (int i = 0; i < guards_camp1.size(); i++)
+	{
+		App->entity->DeleteEntity(guards_camp1[i]);
+	}
+	guards_camp1.clear();
+
+	for (int i = 0; i < guards_camp2.size(); i++)
+	{
+		App->entity->DeleteEntity(guards_camp2[i]);
+	}
+	guards_camp2.clear();
+	// ------
+	
+	// Clean timers
+	App->DeleteGameplayTimer(snakes_timer_camp1);
+	App->DeleteGameplayTimer(snakes_timer_camp2);
+
+	App->DeleteGameplayTimer(skeleton_timer_camp1);
+	App->DeleteGameplayTimer(skeleton_timer_camp2);
+
+	App->DeleteGameplayTimer(mageskeleton_timer_camp1);
+	App->DeleteGameplayTimer(mageskeleton_timer_camp2);
 
 	return true;
 }
@@ -280,6 +332,61 @@ void JungleCampManager::SpawnMageSkeleton(uint camp)
 	}
 }
 
+void JungleCampManager::SpawnGuard(uint camp)
+{
+	switch (camp)
+	{
+	case 0:
+	{
+		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
+		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions[0]);
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions[1]);
+		Guards* g3 = (Guards*)App->entity->CreateEntity(guards, guard_positions[2]);
+
+		guards_camp1.push_back(g1);
+		guards_camp1.push_back(g2);
+		guards_camp1.push_back(g3);
+
+
+		Guards* g4 = (Guards*)App->entity->CreateEntity(guards, guard_positions[3]);
+		Guards* g5 = (Guards*)App->entity->CreateEntity(guards, guard_positions[4]);
+		Guards* g6 = (Guards*)App->entity->CreateEntity(guards, guard_positions[5]);
+
+		guards_camp2.push_back(g4);
+		guards_camp2.push_back(g5);
+		guards_camp2.push_back(g6);
+		break;
+	}
+	case 1:
+	{
+		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
+		Guards* g1 = (Guards*)App->entity->CreateEntity(guards, guard_positions[0]);
+		Guards* g2 = (Guards*)App->entity->CreateEntity(guards, guard_positions[1]);
+		Guards* g3 = (Guards*)App->entity->CreateEntity(guards, guard_positions[2]);
+
+		guards_camp1.push_back(g1);
+		guards_camp1.push_back(g2);
+		guards_camp1.push_back(g3);
+		break;
+	}
+	case 2:
+	{
+		std::vector<iPoint> guard_positions = App->map->GetGuardsSpawns();
+		Guards* g4 = (Guards*)App->entity->CreateEntity(guards, guard_positions[3]);
+		Guards* g5 = (Guards*)App->entity->CreateEntity(guards, guard_positions[4]);
+		Guards* g6 = (Guards*)App->entity->CreateEntity(guards, guard_positions[5]);
+
+		guards_camp2.push_back(g4);
+		guards_camp2.push_back(g5);
+		guards_camp2.push_back(g6);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+
 void JungleCampManager::SpawnSkeleton(uint camp)
 {
 	switch (camp)
@@ -381,7 +488,35 @@ void JungleCampManager::KillJungleCamp(Entity * camp)
 
 		break;
 	}
+	case guards:
+	{
+		if (camp->GetPos().x > HALFMAP)
+		{
+			for (std::vector<Entity*>::iterator it = guards_camp1.begin(); it != guards_camp1.end(); it++)
+			{
+				if (camp == *it)
+				{
+					guards_camp1.erase(it);
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (std::vector<Entity*>::iterator it = guards_camp2.begin(); it != guards_camp2.end(); it++)
+			{
+				if (camp == *it)
+				{
+					guards_camp2.erase(it);
+					break;
+				}
+			}
+		}
+
+		break;
 	}
+	}
+
 	App->entity->DeleteEntity(camp);
-	App->audio->PlayFx(death_sound_effect, 0);
+	//App->audio->PlayFx(death_sound_effect, 0);
 }

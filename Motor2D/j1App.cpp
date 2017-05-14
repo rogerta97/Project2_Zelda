@@ -149,7 +149,7 @@ bool j1App::Start()
 
 	debug_mode = false;
 
-	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 1, false);
+	debug_window = (UI_Window*)App->gui->UI_CreateWin(iPoint(0, 0), 200, 115, 9999999, false);
 	debug_colored_rect = (UI_ColoredRect*)debug_window->CreateColoredRect(iPoint(0, 0), 200, 115, { 20, 20, 20, 255 }, true);
 	debug_text = (UI_Text*)debug_window->CreateText(iPoint(5, 5), App->font->default_15, 15); debug_text->click_through = true;
 	
@@ -176,6 +176,7 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+	BROFILER_CATEGORY("UpdateLogic", Profiler::Color::Azure);
 	bool ret = true;
 	PrepareUpdate();
 
@@ -341,7 +342,6 @@ void j1App::LoadGame(const char* file)
 	// we should be checking if that file actually exist
 	// from the "GetSaveGames" list
 	want_to_load = true;
-	load_game.create("%s%s", fs->GetSaveDirectory(), file);
 }
 
 // ---------------------------------------
@@ -351,7 +351,6 @@ void j1App::SaveGame(const char* file) const
 	// from the "GetSaveGames" list ... should we overwrite ?
 
 	want_to_save = true;
-	save_game.create(file);
 }
 
 // ---------------------------------------
@@ -371,7 +370,7 @@ bool j1App::LoadGameNow()
 	bool ret = false;
 
 	char* buffer;
-	uint size = fs->Load(load_game.GetString(), &buffer);
+	uint size = fs->Load(load_game.c_str(), &buffer);
 
 	if(size > 0)
 	{
@@ -383,7 +382,7 @@ bool j1App::LoadGameNow()
 
 		if(result != NULL)
 		{
-			LOG("Loading new Game State from %s...", load_game.GetString());
+			LOG("Loading new Game State from %s...", load_game.c_str());
 
 			root = data.child("game_state");
 
@@ -401,10 +400,10 @@ bool j1App::LoadGameNow()
 
 		}
 		else
-			LOG("Could not parse game state xml file %s. pugi error: %s", load_game.GetString(), result.description());
+			LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
 	}
 	else
-		LOG("Could not load game state xml file %s", load_game.GetString());
+		LOG("Could not load game state xml file %s", load_game.c_str());
 
 	want_to_load = false;
 	return ret;
@@ -414,7 +413,7 @@ bool j1App::SavegameNow() const
 {
 	bool ret = true;
 
-	LOG("Saving Game State to %s...", save_game.GetString());
+	LOG("Saving Game State to %s...", save_game.c_str());
 
 	// xml object were we will store all data
 	pugi::xml_document data;
@@ -434,8 +433,8 @@ bool j1App::SavegameNow() const
 		data.save(stream);
 
 		// we are done, so write data to disk
-		fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.GetString());
+		fs->Save(save_game.c_str(), stream.str().c_str(), stream.str().length());
+		LOG("... finished saving", save_game.c_str());
 	}
 	else
 		LOG("Save process halted from an error in module %s", (*it)->name.c_str());
@@ -555,4 +554,67 @@ void j1App::ExpandEvent(int type, EventThrower * origin, int id)
 {
 	for (list<j1Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
 		(*it)->ListenEvent(type, origin, id);
+}
+
+void j1App::SetGamePause(bool set)
+{
+	if (set != game_paused)
+	{
+		switch (set)
+		{
+		case true:
+			for (int i = 0; i < gameplay_timers.size(); i++)
+				gameplay_timers.at(i)->PauseOn();
+			break;
+		case false:
+			for (int i = 0; i < gameplay_timers.size(); i++)
+				gameplay_timers.at(i)->PauseOff();
+			break;
+		}
+
+		game_paused = set;
+	}
+}
+
+bool j1App::GetGamePause()
+{
+	return game_paused;
+}
+
+j1Timer * j1App::AddGameplayTimer()
+{
+	j1Timer* ret = nullptr;
+
+	ret = new j1Timer();
+	ret->Start();
+	gameplay_timers.push_back(ret);
+
+	return ret;
+}
+
+void j1App::DeleteGameplayTimer(j1Timer * t)
+{
+	for (vector<j1Timer*>::iterator it = gameplay_timers.begin(); it != gameplay_timers.end();)
+	{
+		if ((*it) == t)
+		{
+			RELEASE((*it));
+			gameplay_timers.erase(it);
+			break;
+		}
+		else
+			++it;
+	}
+}
+
+void j1App::ClearGameplayTimers()
+{
+	if (!gameplay_timers.empty())
+	{
+		for (vector<j1Timer*>::iterator it = gameplay_timers.begin(); it != gameplay_timers.end();)
+		{
+			RELEASE((*it));
+			it = gameplay_timers.erase(it);
+		}
+	}
 }

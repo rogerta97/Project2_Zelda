@@ -7,7 +7,7 @@
 #include "j1XMLLoader.h"
 
 #define DESTRUCTION_TIME 1.5f
-#define SPEED 230
+#define SPEED 200
 
 BoneAttack::BoneAttack(iPoint pos)
 {
@@ -21,11 +21,15 @@ BoneAttack::BoneAttack(iPoint pos)
 	App->xml->LoadXML("boneattack.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
-	draw_offset = restore_draw_offset = { 7, 9 };
+	pugi::xml_document doc2;
+	App->xml->LoadXML("skeleton.xml", doc2);
+	pugi::xml_node stats_node = doc2.child("file").child("stats");
+
+	stats.damage_multiplicator = stats_node.child("ability2").attribute("mult").as_float();
+
+	draw_offset = restore_draw_offset = { 0, 16 };
 
 	name = "bone";
-
-	timer.Start();
 
 	starting_pos = pos;
 }
@@ -38,8 +42,9 @@ bool BoneAttack::Start()
 {
 	bool ret = true;
 
-	game_object->SetAnimation("spin");
+	timer = App->AddGameplayTimer();
 
+	game_object->SetAnimation("spin");
 
 	return ret;
 }
@@ -47,8 +52,6 @@ bool BoneAttack::Start()
 bool BoneAttack::PreUpdate()
 {
 	bool ret = true;
-
-
 
 	return ret;
 }
@@ -61,8 +64,7 @@ bool BoneAttack::Update(float dt)
 
 	game_object->SetPos({ game_object->fGetPos().x + (speed * cos(DEGTORAD * angle)), game_object->fGetPos().y + (speed * sin(DEGTORAD * angle))});
 		
-	
-	if (timer.ReadSec() > DESTRUCTION_TIME)
+	if (timer->ReadSec() > DESTRUCTION_TIME)
 		App->spell->DeleteSpell(this);
 
 	return ret;
@@ -88,6 +90,8 @@ bool BoneAttack::PostUpdate()
 bool BoneAttack::CleanUp()
 {
 	bool ret = true;
+
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }

@@ -16,7 +16,8 @@ enum button_action
 	QUIT,
 	FX,
 	MUSIC, 
-	REMAP, 
+	QUESTS,
+	REMAP
 };
 
 class MenuScene : public Scene
@@ -37,6 +38,8 @@ public:
 	void GoOptions();
 	void GoMenu(); 
 
+	bool QuestsEnabled();
+
 private:
 	void FadeOut();
 
@@ -44,6 +47,8 @@ public:
 	fPoint			   pos = NULLPOINT;
 
 	UI_Window*		   menu_window = nullptr;
+
+	bool			   quests_enabled = false;
 
 private:
 	UI_Image*		   triforce = nullptr;
@@ -60,7 +65,9 @@ private:
 
 	UI_Button*		   fx_button = nullptr;
 	UI_Button*		   music_button = nullptr;
+
 	UI_Button*		   remap_button = nullptr;
+	UI_Button*		   quests_button = nullptr;
 
 	UI_Text*		   start_text = nullptr; 
 	UI_Text*		   options_text = nullptr;
@@ -69,7 +76,9 @@ private:
 
 	UI_Text*		   fx_text = nullptr;
 	UI_Text*		   music_text = nullptr;
+
 	UI_Text*		   remap_text = nullptr;
+	UI_Text*		   quests_text = nullptr;
 
 	UI_Check_Box*	   options_checkbox = nullptr; 
 
@@ -91,7 +100,6 @@ private:
 	iPoint			   background_pos = NULLPOINT;
 	SDL_Rect		   background_image_rect = NULLRECT;
 	float              fade_value = 255.0f;
-
 };
 
 

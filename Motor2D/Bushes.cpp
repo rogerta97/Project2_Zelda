@@ -7,7 +7,7 @@
 Bush::Bush(iPoint _pos)
 {
 	pugi::xml_document doc;
-	App->xml->LoadXML("Bush.xml", doc);
+	App->xml->LoadXML("bush.xml", doc);
 
 	pugi::xml_node file = doc.child("file");
 

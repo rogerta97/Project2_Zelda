@@ -24,7 +24,7 @@ enum spell_name
 	bone_attack,
 	taco_attack,
 	navi_basic_attack,
-
+	ganon_bat,
 };
 
 class Spell;
@@ -68,6 +68,7 @@ public:
 
 private:
 	void DeleteSpellIfTarget(Entity* target);
+	void DeleteSpellIfOwner(Entity* target);
 	void RemoveSpells();
 
 public:

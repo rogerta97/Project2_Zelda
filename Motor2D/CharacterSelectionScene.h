@@ -28,6 +28,11 @@ struct player_data
 	string      ability3_text;
 	string      ability4_text;
 
+	SDL_Rect    ability1_rect_icon;
+	SDL_Rect    ability2_rect_icon;
+	SDL_Rect    ability3_rect_icon;
+	SDL_Rect    ability4_rect_icon;
+
 	entity_name entity = entity_name::e_n_null;
 };
 
@@ -39,7 +44,7 @@ struct viewport_data
 	{
 		SDL_Rect view = App->view->GetViewportRect(1);
 
-		iPoint big_image_pos = { view.w/2 - BIG_CARD_WIDTH/2, view.h / 5};
+		iPoint big_image_pos = { view.w/2 - BIG_CARD_WIDTH/2, view.h / 2 - 130};
 		iPoint small_image_left_pos = { big_image_pos.x - 120, big_image_pos.y + 30};
 		iPoint small_image_right_pos = { big_image_pos.x + 116 + 120 - 74, big_image_pos.y + 30};
 
@@ -50,7 +55,7 @@ struct viewport_data
 		iPoint background_info_image_pos = {view.w / 2 - background_info_image_rect.w/2, view.h / 2 - background_info_image_rect.h / 2 };
 			
 		SDL_Rect background_name_image_rect = { 128, 52,  217, 55 };
-		iPoint background_name_image_pos = { view.w / 2 - background_name_image_rect.w/2, view.h - (view.h / 3) };
+		iPoint background_name_image_pos = { view.w / 2 - background_name_image_rect.w/2, big_image_pos.y + 170 };
 
 		iPoint text_name_pos = { background_name_image_pos.x + 85, background_name_image_pos.y + 10};
 
@@ -59,7 +64,13 @@ struct viewport_data
 		iPoint abilities_info3_pos = { background_info_image_pos.x + 30, background_info_image_pos.y + 190};
 		iPoint abilities_info4_pos = { background_info_image_pos.x + 280, background_info_image_pos.y + 190};
 
-		iPoint ready_text_pos = { view.w/3 - 25, view.h - view.h/6};
+		iPoint abilities_image1_pos = { abilities_info1_pos.x + 75, abilities_info1_pos.y - 35 };
+		iPoint abilities_image2_pos = { abilities_info2_pos.x + 85, abilities_info2_pos.y-  35};
+		iPoint abilities_image3_pos = { abilities_info3_pos.x + 75, abilities_info3_pos.y - 35 };
+		iPoint abilities_image4_pos = { abilities_info4_pos.x + 85 , abilities_info4_pos.y- 35 };
+
+		press_start_text_pos = { (view.w / 2) - 130, text_name_pos.y + 60 };
+		ready_text_pos = { (view.w/2) - 33, text_name_pos.y + 60};
 
 		window = App->gui->UI_CreateWin(iPoint(0, 0), view.w, view.h, 1, true, false, true);
 		window->viewport = viewport;
@@ -73,7 +84,7 @@ struct viewport_data
 		background_name_image = window->CreateImage(background_name_image_pos, background_name_image_rect);
 		text_name = window->CreateText(text_name_pos, App->font->game_font);
 
-		ready_text = window->CreateText(ready_text_pos, App->font->game_font, 30);
+		ready_text = window->CreateText(press_start_text_pos, App->font->game_font, 30);
 		ready_text->SetText("Press START when ready");
 
 		background_info_image = window->CreateImage(background_info_image_pos, background_info_image_rect);
@@ -87,6 +98,15 @@ struct viewport_data
 		abilities_info3->enabled = false;
 		abilities_info4 = window->CreateText(abilities_info4_pos, App->font->game_font, 25);
 		abilities_info4->enabled = false;
+
+		abilities_image1 = window->CreateImage(abilities_image1_pos, {0,0,0,0});
+		abilities_image1->enabled = false;							
+		abilities_image2 = window->CreateImage(abilities_image2_pos, {0,0,0,0});
+		abilities_image2->enabled = false;							
+		abilities_image3 = window->CreateImage(abilities_image3_pos, {0,0,0,0});
+		abilities_image3->enabled = false;							 
+		abilities_image4 = window->CreateImage(abilities_image4_pos, {0,0,0,0});
+		abilities_image4->enabled = false;
 	};
 
 	~viewport_data() {};
@@ -110,7 +130,16 @@ struct viewport_data
 	UI_Text* abilities_info3 = nullptr;
 	UI_Text* abilities_info4 = nullptr;
 
+	UI_Image* abilities_image1 = nullptr;
+	UI_Image* abilities_image2 = nullptr;
+	UI_Image* abilities_image3 = nullptr;
+	UI_Image* abilities_image4 = nullptr;
+
 	UI_Text* ready_text = nullptr; 
+
+
+	iPoint	ready_text_pos = NULLPOINT;
+	iPoint	press_start_text_pos = NULLPOINT;
 
 	bool SetViewportInfo(player_data* player); 
 };
@@ -135,27 +164,26 @@ private:
 	void DrawScreenSeparation();
 
 public:
-
 	player_data* link = nullptr;
 	player_data* ganon = nullptr;
 	player_data* navi = nullptr;
 
 private:
 	vector<viewport_data> viewports_data;
-	vector<player_data*> players_data;
+	vector<player_data*>  players_data;
 
-	player_data* curr_player_data1 = nullptr;
-	player_data* curr_player_data2 = nullptr;
-	player_data* curr_player_data3 = nullptr;
-	player_data* curr_player_data4 = nullptr;
+	player_data*          curr_player_data1 = nullptr;
+	player_data*          curr_player_data2 = nullptr;
+	player_data*          curr_player_data3 = nullptr;
+	player_data*          curr_player_data4 = nullptr;
 
 	// Background image
-	SDL_Texture*	   background_image = nullptr;
-	iPoint			   background_pos = NULLPOINT;
-	SDL_Rect		   background_image_rect = NULLRECT;
-	float              fade_value = 255.0f;
+	SDL_Texture*	      background_image = nullptr;
+	iPoint			      background_pos = NULLPOINT;
+	SDL_Rect		      background_image_rect = NULLRECT;
+	float                 fade_value = 255.0f;
 
-	bool			   all_ready = false;
+	bool			      all_ready = false;
 };
 
 #endif

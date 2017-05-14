@@ -42,9 +42,9 @@ public:
 
 	iPoint GetPos() const;
 	zelda_states GetZeldaState();
+	int GetActivationTime();
 
 private:
-
 	void MoveUp(float speed);
 	void MoveDown(float speed);
 	void MoveLeft(float speed);
@@ -71,6 +71,7 @@ private:
 	void UpdatePlayers();
 
 public:
+	uint					activation_time = 0;
 
 private:
 	uint					team1_players = 0;
@@ -91,7 +92,6 @@ private:
 	int						initial_path_pos = 0;
 
 	bool					active = false;
-	uint					activation_time = 0;
 
 	states					anim_state = states_null;
 

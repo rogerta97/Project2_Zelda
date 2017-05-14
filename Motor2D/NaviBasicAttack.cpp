@@ -44,7 +44,7 @@ bool NaviBasicAttack::Start()
 
 	die = false;
 
-	timer.Start();
+	timer = App->AddGameplayTimer();
 
 	if (owner->GetTeam() == ANIMATIONS_TEAM)
 		game_object->SetAnimation("basic_projectile");
@@ -92,10 +92,11 @@ bool NaviBasicAttack::Update(float dt)
 	}
 
 	// Delete if life time over
-	if (!die && timer.ReadSec() > DESTRUCTION_TIME)
+	if (!die && timer->ReadSec() > DESTRUCTION_TIME)
 	{
 		die = true;
-		timer.Start();
+
+		timer->Start();
 
 		if (owner->GetTeam() == ANIMATIONS_TEAM)
 			game_object->SetAnimation("destroy");
@@ -107,7 +108,7 @@ bool NaviBasicAttack::Update(float dt)
 	}
 
 	// Delete entity if dead animation time over
-	if(die && timer.ReadSec() > DEAD_ANIMATION_TIME)
+	if(die && timer->ReadSec() > DEAD_ANIMATION_TIME)
 		App->spell->DeleteSpell(this);
 
 	return ret;
@@ -137,6 +138,8 @@ bool NaviBasicAttack::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(timer);
+
 	return ret;
 }
 
@@ -147,16 +150,18 @@ void NaviBasicAttack::CleanSpell()
 void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
 	// Delete if hits another enemy entity
-	if (fixtureB->type == fixture_type::f_t_hit_box && bodyB != owner->game_object->pbody)
+	if (bodyA == game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box && owner != nullptr && bodyB != owner->game_object->pbody)
+
 	{
 		Entity* e = nullptr;
 
 		e = App->entity->FindEntityByBody(bodyB);
 
-		if (e != nullptr && e->GetTeam() != owner->GetTeam())
+		if (e != nullptr && !e->to_delete && e->GetTeam() != owner->GetTeam())
 		{
 			die = true;
-			timer.Start();
+
+			timer->Start();
 
 			if (owner->GetTeam() == ANIMATIONS_TEAM)
 				game_object->SetAnimation("destroy");

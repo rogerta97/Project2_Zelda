@@ -37,8 +37,6 @@ public:
 
 private:
 	key_mapping* mapping = nullptr;
-
-
 };
 
 

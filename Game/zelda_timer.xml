@@ -1,0 +1,23 @@
+<!-- Config file for the game -->
+
+<file>
+   <animations texture ="textures/UI_sheet_final.png">
+      <anim speed = "10" name = "zelda_face" loop = "true">
+        <rect x = "142" y = "0" w = "28" h = "22"/>
+		<rect x = "170" y = "0" w = "28" h = "22"/>
+		<rect x = "198" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+		<rect x = "0" y = "0" w = "28" h = "22"/>
+      </anim>
+	    <anim speed = "10" name = "timer_rect" loop = "false">
+        <rect x = "0" y = "1367" w = "81" h = "33"/>
+      </anim>
+	  </animations>
+</file>

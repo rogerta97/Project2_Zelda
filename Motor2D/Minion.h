@@ -75,6 +75,8 @@ public:
 
 	void SetBasePath(std::list<iPoint>& path);
 
+	void Die(Entity* killed_by);
+
 private:
 
 	void MinionIdle();
@@ -102,6 +104,8 @@ private:
 
 	void SetIdleAnim();
 
+	void CheckNearestPathTile();
+
 public:
 	Entity*				target = nullptr;
 
@@ -125,11 +129,11 @@ private:
 
 	states				anim_state = states_null;
 
-	j1Timer				cd_timer;
-
 	EventThrower*       event_thrower = nullptr;
 
 	int					rupee_reward = 0;
+
+	iPoint				attack_pos_offset = NULLPOINT;
 };
 
 #endif // !MINION_H_

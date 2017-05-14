@@ -14,6 +14,7 @@
     <ProjectGuid>{2AF9969B-F202-497B-AF30-7BEF9CE8005E}</ProjectGuid>
     <RootNamespace>programacio_2</RootNamespace>
     <ProjectName>2DEngine</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -51,10 +52,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
+      <AdditionalIncludeDirectories>C:\Users\guillemdrdv\Documents\GitHub\Project2_Zelda\Game\Brofiler-1.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,6 +86,7 @@
     <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
+    <ClCompile Include="TransitionScene.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Cuco.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -91,6 +95,9 @@
     <ClCompile Include="FinalScreen.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Guards.cpp" />
+    <ClCompile Include="Ganon.cpp" />
+    <ClCompile Include="GanonBat.cpp" />
     <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
@@ -154,7 +161,9 @@
     <ClInclude Include="BezierEasing.h" />
     <ClInclude Include="BoneAttack.h" />
     <ClInclude Include="Boomerang.h" />
+    <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Bushes.h" />
+    <ClInclude Include="TransitionScene.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="Cuco.h" />
     <ClInclude Include="CollisionFilters.h" />
@@ -164,6 +173,9 @@
     <ClInclude Include="FinalScreen.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Guards.h" />
+    <ClInclude Include="Ganon.h" />
+    <ClInclude Include="GanonBat.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />
@@ -238,6 +250,11 @@
     <Xml Include="..\Game\entity_effects.xml" />
     <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
+    <Xml Include="..\Game\guards.xml" />
+    <Xml Include="..\Game\ganon.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\Game\ganon_bat.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
     <Xml Include="..\Game\mageskeleton.xml" />
@@ -251,6 +268,7 @@
     <Xml Include="..\Game\skeleton.xml" />
     <Xml Include="..\Game\snakepoison.xml" />
     <Xml Include="..\Game\snakes.xml" />
+    <Xml Include="..\Game\tacoattack.xml" />
     <Xml Include="..\Game\tower.xml" />
     <Xml Include="..\Game\towerattack.xml">
       <SubType>Designer</SubType>

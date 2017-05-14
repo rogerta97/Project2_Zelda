@@ -30,7 +30,6 @@ Zelda::Zelda(iPoint pos)
 
 	state = z_s_wait;
 
-
 	name = "zelda";
 }
 
@@ -144,6 +143,11 @@ zelda_states Zelda::GetZeldaState()
 	return state;
 }
 
+int Zelda::GetActivationTime()
+{
+	return activation_time;
+}
+
 void Zelda::MoveUp(float speed)
 {
 	game_object->SetPos({ game_object->fGetPos().x, game_object->fGetPos().y - speed });
@@ -229,7 +233,7 @@ void Zelda::CheckState()
 		}
 		break;
 	case z_s_idle:
-		if ((team1_players > team2_players) || (team2_players > team1_players))
+		if ((team1_players == 0 &&  team2_players != 0) || (team2_players== 0 && team1_players!=0))
 		{
 			state = z_s_move;
 
@@ -257,7 +261,7 @@ void Zelda::CheckState()
 		}
 		break;
 	case z_s_move:
-		if ((team1_players == 0 && team2_players == 0) || (team1_players == team2_players))
+		if ((team1_players == 0 && team2_players == 0) || (team1_players != 0 && team2_players != 0))
 		{
 			state = z_s_idle;
 		}

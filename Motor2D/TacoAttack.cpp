@@ -19,6 +19,12 @@ TacoAttack::TacoAttack(iPoint pos)
 	App->xml->LoadXML("tacoattack.xml", doc);
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("mageskeleton.xml", doc2);
+	pugi::xml_node stats_node = doc2.child("file").child("stats");
+
+	stats.damage_multiplicator = stats_node.child("ability1").attribute("mult").as_float();
+
 	draw_offset = restore_draw_offset = { 7, 9 };
 
 	name = "taco_attack";
@@ -31,6 +37,8 @@ TacoAttack::~TacoAttack()
 bool TacoAttack::Start()
 {
 	bool ret = true;
+
+	timer = App->AddGameplayTimer();
 
 	game_object->SetAnimation("projectile");
 
@@ -49,17 +57,14 @@ bool TacoAttack::Update(float dt)
 {
 	bool ret = true;
 
-	if (to_delete)
-		return true;
-
-	if (game_object->animator->IsCurrentAnimation("destroy"))
+	if (game_object->animator->IsCurrentAnimation("destroy") || target == nullptr)
 	{
-		if (game_object->animator->GetCurrentAnimation()->Finished())
+		if (game_object->animator->GetCurrentAnimation()->Finished() || target == nullptr)
 			App->spell->DeleteSpell(this);
 	}
 	else if (target != nullptr)
 	{
-		float speed = (INITIAL_SPEED + (ACCELERATION * timer.ReadSec())) * dt;
+		float speed = (INITIAL_SPEED + (ACCELERATION * timer->ReadSec())) * dt;
 
 		float initial_angle = AngleFromTwoPoints(game_object->GetPos().x, game_object->GetPos().y, target->GetPos().x, target->GetPos().y);
 
@@ -98,6 +103,7 @@ bool TacoAttack::CleanUp()
 {
 	bool ret = true;
 
+	App->DeleteGameplayTimer(timer);
 
 	return ret;
 }
@@ -109,7 +115,7 @@ void TacoAttack::CleanSpell()
 
 void TacoAttack::OnColl(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
 {
-	if (game_object != nullptr && target != nullptr && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
+	if (game_object != nullptr && target != nullptr && !target->to_delete && game_object->pbody == bodyA && bodyB == target->game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box)
 	{
 		game_object->SetAnimation("destroy");
 		game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);

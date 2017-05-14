@@ -11,6 +11,7 @@ class j1Timer;
 class Snakes;
 class Entity;
 class MageSkeleton;
+class Guards;
 
 class JungleCampManager
 {
@@ -25,6 +26,7 @@ public:
 	void SpawnSkeleton(uint camp);
 	void SpawnSnake(uint camp);
 	void SpawnMageSkeleton(uint camp);
+	void SpawnGuard(uint camp);
 	void KillJungleCamp(Entity* camp);
 
 public:
@@ -37,15 +39,21 @@ public:
 	std::vector<Entity*> mageskeleton_camp1;
 	std::vector<Entity*> mageskeleton_camp2;
 
+	std::vector<Entity*> guards_camp1;
+	std::vector<Entity*> guards_camp2;
+
 private:
-	j1Timer				 snakes_timer_camp1;
-	j1Timer				 snakes_timer_camp2;
+	j1Timer*			 snakes_timer_camp1 = nullptr;
+	j1Timer*			 snakes_timer_camp2 = nullptr;
 
-	j1Timer				 skeleton_timer_camp1;
-	j1Timer				 skeleton_timer_camp2;
+	j1Timer*			 skeleton_timer_camp1 = nullptr;
+	j1Timer*			 skeleton_timer_camp2 = nullptr;
 
-	j1Timer				 mageskeleton_timer_camp1;
-	j1Timer				 mageskeleton_timer_camp2;
+	j1Timer*			 mageskeleton_timer_camp1 = nullptr;
+	j1Timer*			 mageskeleton_timer_camp2 = nullptr;
+
+	j1Timer				 guards_timer_camp1;
+	j1Timer				 guards_timer_camp2;
 
 	uint				 death_sound_effect = 100;
 };

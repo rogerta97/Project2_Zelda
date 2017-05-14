@@ -10,6 +10,7 @@
 #include "RemapingScene.h"
 #include "MainScene.h"
 #include "MenuScene.h"
+#include "TransitionScene.h"
 #include "j1Console.h"
 #include "TeamSelectScene.h"
 #include "FinalScreen.h"
@@ -77,10 +78,12 @@ bool j1Scene::Start()
 	scenes.push_back(final_screen); 
 	remaping_scene = new RemapingScene();
 	scenes.push_back(remaping_scene); 
+	transition_scene = new TransitionScene(); 
+	scenes.push_back(transition_scene);
 	// -------------
 
 	// Starting scene
-	current_scene = remaping_scene;
+	current_scene = logo_scene;
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();
@@ -130,6 +133,7 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	bool ret = false;
+
 	if (current_scene != nullptr)
 		ret = current_scene->CleanUp();
 

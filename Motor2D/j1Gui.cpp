@@ -464,49 +464,6 @@ void j1Gui::DeleteElement(UI_Element* element)
 		{
 			if (*ch != nullptr)
 			{
-				// Delete from parent list
-				if ((*ch)->parent != nullptr && !(*ch)->parent->childs.empty())
-				{
-					for (list<UI_Element*>::iterator it = (*ch)->parent->childs.begin(); it != (*ch)->parent->childs.end();)
-					{
-						if (*ch == *it)
-						{
-							it = (*ch)->parent->childs.erase(it);
-						}
-						else
-							++it;
-					}
-				}
-
-				// Delete from parent element list
-				if ((*ch)->parent_element != nullptr && !(*ch)->parent_element->childs.empty())
-				{
-					for (list<UI_Element*>::iterator it = (*ch)->parent_element->childs.begin(); it != (*ch)->parent_element->childs.end();)
-					{
-						if (*it == *ch)
-						{
-							it = (*ch)->parent_element->childs.erase(it);
-						}
-						else
-							++it;
-					}
-				}
-
-				// Delete from window list
-				if (!windows.empty())
-				{
-					for (list<UI_Window*>::iterator it = windows.begin(); it != windows.end();)
-					{
-						if (*it = (UI_Window*)*ch)
-						{
-							it = windows.erase(it);
-							break;
-						}
-						else
-							++it;
-					}
-				}
-
 				App->gui->EraseFromElementsList(*ch);
 
 				(*ch)->cleanup();
@@ -546,12 +503,12 @@ void j1Gui::EraseFromElementsList(UI_Element * to_del)
 				}
 			}
 
-			// Dekete from parent element list
+			// Delete from parent element list
 			if (curr->parent_element != nullptr && !curr->parent_element->childs.empty())
 			{
 				for (list<UI_Element*>::iterator it = curr->parent_element->childs.begin(); it != curr->parent_element->childs.end();)
 				{
-					if (*it == curr)
+					if ((*it) == curr)
 					{
 						it = curr->parent_element->childs.erase(it);
 					}
@@ -561,7 +518,7 @@ void j1Gui::EraseFromElementsList(UI_Element * to_del)
 			}
 
 			// Delete from window list
-			if (!windows.empty())
+			if (!windows.empty() && curr->type == ui_window)
 			{
 				for (list<UI_Window*>::iterator it = windows.begin(); it != windows.end();)
 				{
@@ -773,26 +730,6 @@ bool UI_Element::CheckClickRect(int x, int y)
 	}
 
 	return false;
-}
-
-// ---------------------------------------------------------------------
-// Adds a child to an UI_Element.
-// ---------------------------------------------------------------------
-void UI_Element::AddChild(UI_Element * _child)
-{
-	childs.push_back(_child);
-	_child->parent_element = this;
-}
-
-// ---------------------------------------------------------------------
-// Adds both childs one to the other to avoid the overlaping check. (Deprecated?)
-// ---------------------------------------------------------------------
-void UI_Element::AddChildBoth(UI_Element * _child)
-{
-	childs.push_back(_child);
-	_child->parent_element = this;
-	_child->childs.push_back(this);
-	this->parent_element = _child;
 }
 
 // ---------------------------------------------------------------------
@@ -1932,7 +1869,8 @@ void UI_Scroll_Bar::Set(iPoint pos, int view_w, int view_h, int button_size)
 	button_v = new UI_Button();
 	button_v->Set(iPoint(view_w + button_size, pos.y), button_size, view_h);
 	button_v->layer = App->gui->elements_list.size() + 1;
-	AddChild(button_v);
+	childs.push_back(button_v);
+	button_v->parent_element = this;
 	button_starting_v = button_v->rect.h;
 	App->gui->elements_list_priority.push(button_v);
 	// ----------
@@ -1941,7 +1879,8 @@ void UI_Scroll_Bar::Set(iPoint pos, int view_w, int view_h, int button_size)
 	button_h = new UI_Button();
 	button_h->Set(iPoint(pos.x, pos.y + view_h), view_w, button_size);
 	button_h->layer = App->gui->elements_list.size() + 2;
-	AddChild(button_h);
+	childs.push_back(button_h);
+	button_h->parent_element = this;
 	button_starting_h = button_h->rect.w;
 	App->gui->elements_list_priority.push(button_h);
 	// ----------
@@ -2502,6 +2441,9 @@ void UI_Check_Box::CheckControl()
 
 bool UI_Element_Cmp::operator()(UI_Element *& e1, UI_Element *& e2)
 {
+	if (e1 == nullptr || e2 == nullptr)
+		return false;
+
 	if (e1->blit_layer > e2->blit_layer)
 		return true;
 	else if (e1->blit_layer == e2->blit_layer)

@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1XMLLoader.h"
 #include "Animation.h"
+#include "Mapping.h"
 
 ShopManager::ShopManager()
 {
@@ -253,41 +254,52 @@ bool ShopManager::Start()
 	//Shop icon
 	for (int i = 0; i < 4; i++)
 	{
-		int x = (win_w / 4 - 16) + (i % 2)*win_w / 2;
-		int y = (win_h / 4 - win_h / 6) + (i / 2)*win_h / 2;
+		int x = (win_w / 18) + (i % 2)*win_w / 2;
+		int y = (8) + (i / 2)*win_h / 2;
 
 		shops[i]->shop_icon = shop_window->CreateImage(iPoint(x, y), { 0,0,0,0 });
+
+		shops[i]->shop_icon_anim = new Animator();
+		shops[i]->shop_icon_anim->LoadAnimationsFromXML(shop_config, "animations");
+
+		key_mapping shop_key = App->scene->players[i].mapping->GetMapping(m_k_shop);
+
+		switch (shop_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_a");
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_b");
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_x");
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			shops[i]->shop_icon_anim->SetAnimation("shop_icon_y");
+			break;
+		}
+		
 	}
 
 	shop_window->SetEnabledAndChilds(false);
 	shop_window->enabled = true;
-
-	shop_icon_anim = new Animator();
-	shop_icon_anim->LoadAnimationsFromXML(shop_config, "animations");
-	shop_icon_anim->SetAnimation("shop_icon");
 
 	return true;
 }
 
 bool ShopManager::Update()
 {
-	bool shop_icon_updated = false;
-
 	for (std::vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
 	{
-		if ((*it)->is_dead)
+		if ((*it)->is_dead || App->GetGamePause())
 			return true;
 
 		if (team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200 && !shops[(*it)->viewport - 1]->active)
 		{
 			shops[(*it)->viewport - 1]->shop_icon->enabled = true;
-			if (!shop_icon_updated)
-			{
-				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
-				shop_icon_updated = true;
-			}
-			else
-				shops[(*it)->viewport - 1]->shop_icon->image = shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(0.0f);
+			shops[(*it)->viewport - 1]->shop_icon->image = shops[(*it)->viewport - 1]->shop_icon_anim->GetCurrentAnimation()->GetAnimationFrame(App->GetDT());
+				
 		}
 		else
 		{
@@ -295,9 +307,11 @@ bool ShopManager::Update()
 				shops[(*it)->viewport - 1]->shop_icon->enabled = false;
 		}
 
-		if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
+		int shop_key;
+		App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_shop, &shop_key);
+		if (App->input->GetControllerButton((*it)->controller_index, shop_key) == KEY_DOWN && team_shop[(*it)->entity->GetTeam() - 1].DistanceTo((*it)->entity->GetPos()) < 200)
 		{
-			ChangeShopState((*it)->viewport - 1);
+			ChangeShopState((*it)->viewport - 1, *it);
 		}
 
 		if(shops[(*it)->viewport - 1]->active)
@@ -305,28 +319,30 @@ bool ShopManager::Update()
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item < shops[(*it)->viewport - 1]->items.size() - 2 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item += 2;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item > 1 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item -= 2;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN&& shops[(*it)->viewport - 1]->selected_item < shops[(*it)->viewport - 1]->items.size() - 1 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item += 1;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
 			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && shops[(*it)->viewport - 1]->selected_item > 0 && !shops[(*it)->viewport - 1]->item_selected)
 			{
 				shops[(*it)->viewport - 1]->selected_item -= 1;
-				UpdateItemInfo((*it)->viewport - 1);
+				UpdateItemInfo((*it)->viewport - 1, *it);
 			}
 
-			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			int accept_key;
+			App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_confirm, &accept_key);
+			if (App->input->GetControllerButton((*it)->controller_index, accept_key) == KEY_DOWN)
 			{
 				if (shops[(*it)->viewport - 1]->item_selected)
 				{
@@ -366,7 +382,7 @@ bool ShopManager::Update()
 					
 					shops[(*it)->viewport - 1]->selected_item = 0;
 
-					UpdateItemInfo((*it)->viewport - 1);
+					UpdateItemInfo((*it)->viewport - 1, *it);
 
 					shops[(*it)->viewport - 1]->item_selected = false;
 
@@ -378,7 +394,9 @@ bool ShopManager::Update()
 				}
 			}
 
-			if (App->input->GetControllerButton((*it)->controller_index, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+			int back_key;
+			App->scene->players[(*it)->controller_index].mapping->GetKey(m_k_back, &back_key);
+			if (App->input->GetControllerButton((*it)->controller_index, back_key) == KEY_DOWN)
 			{
 				if (shops[(*it)->viewport - 1]->item_selected)
 				{
@@ -408,13 +426,15 @@ bool ShopManager::CleanUp()
 	//Release shops memory
 	for (int i = 0; i < 4; i++)
 	{
+		shops[i]->shop_icon_anim->CleanUp();
+		RELEASE(shops[i]->shop_icon_anim);
 		RELEASE(shops[i]);
-	}
+	}	
 
 	return true;
 }
 
-void ShopManager::ChangeShopState(int view)
+void ShopManager::ChangeShopState(int view, Player* player)
 {
 	shops[view]->background->enabled = !shops[view]->background->enabled;
 	shops[view]->item_name->enabled = !shops[view]->item_name->enabled;
@@ -438,7 +458,7 @@ void ShopManager::ChangeShopState(int view)
 
 	shops[view]->selected_item = 0;
 
-	UpdateItemInfo(view);
+	UpdateItemInfo(view, player);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -467,7 +487,7 @@ void ShopManager::ChangeShopState(int view)
 		App->scene->main_scene->player_manager->AllowInput(view + 1);
 }
 
-void ShopManager::UpdateItemInfo(int view)
+void ShopManager::UpdateItemInfo(int view, Player* player)
 {
 	string text;
 	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->power);
@@ -482,8 +502,21 @@ void ShopManager::UpdateItemInfo(int view)
 	shops[view]->item_name->SetText(shops[view]->items[shops[view]->selected_item].item->name);
 
 	shops[view]->item_text->SetText(shops[view]->items[shops[view]->selected_item].item->description);
+	
+	int discount = 0;
+	if (player != nullptr)
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			if (player->items[i] != nullptr && player->items[i] == shops[view]->items[shops[view]->selected_item].item->upgrade_from)
+			{
+				discount = shops[view]->items[shops[view]->selected_item].item->upgrade_from->price;
+				break;
+			}
+		}
+	}
 
-	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->price);
+	text = std::to_string(shops[view]->items[shops[view]->selected_item].item->price - discount);
 	shops[view]->price->SetText(text);
 
 	if (shops[view]->items[shops[view]->selected_item].item->upgrade == nullptr)
@@ -519,8 +552,21 @@ void ShopManager::UpdatePlayerItems(int view, Player * player)
 	for (int i = 0; i < 3; i++)
 	{
 		if (player->items[i] == nullptr)
-			break;
+		{
+			shops[view]->player_items[i]->image = NULLRECT;
+			continue;
+		}
 
 		shops[view]->player_items[i]->image = player->items[i]->image_rect;
 	}
+}
+
+bool ShopManager::IsActive(int viewport)
+{
+	return shops[viewport - 1]->active;
+}
+
+SDL_Rect ShopManager::GetPlayerItem(int player_index, int item_index)
+{
+	return shops[player_index]->player_items[item_index]->image; 
 }

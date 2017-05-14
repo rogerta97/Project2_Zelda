@@ -7,20 +7,16 @@
 
 class GameObject;
 
-
 enum SKELETON_STATE
 {
 	s_s_null,
 	s_s_idle,
 	s_s_attack,
-	s_s_stunned,
 };
-
 
 class Skeleton :public Entity
 {
 public:
-
 	Skeleton(iPoint pos);
 
 	~Skeleton();
@@ -48,36 +44,29 @@ public:
 
 	iPoint GetPos() const;
 
-private:
+	void Die(Entity* killed_by);
 
+private:
 	void Idle();
-	void Stunned();
-	void Attack();
 
 	void SpinAttack();
 	void Bonemerang();
 
 	bool LookForTarget();
-
+public:
+	Entity*			target = nullptr;
 
 private:
+	bool			flip = false;
 
-	j1Timer					cd_timer;
+	SKELETON_STATE	state = s_s_null;
+	states			anim_state = states_null;
 
-	j1Timer					stun_timer;
+	iPoint			draw_offset = NULLPOINT;
 
-	bool					flip = false;
+	int				rupee_reward = 0;
 
-	SKELETON_STATE			state = s_s_null;
-
-	states					anim_state = states_null;
-
-	iPoint					draw_offset = NULLPOINT;
-
-	Entity*					target = nullptr;
-
-	int						rupee_reward = 0;
-
+	int				last_life = 0;
 };
 
 #endif // !SKELETON_H_

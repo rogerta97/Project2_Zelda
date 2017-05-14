@@ -8,103 +8,78 @@
 #include "j1XMLLoader.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
+#include "Mapping.h"
+#include "j1Scene.h"
+#include "j1Audio.h"
+
+#define WINDOW_SPEED 500
 
 QuestManager::QuestManager()
 {
+	player_text_list.clear();
+	quest_fx = App->audio->LoadFx("Audio/Voice act/new_quest_1.wav");
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
+	active_quest = -1;
+	App->xml->LoadXML("quest_rects.xml", quests_animations_file);
 
 	PlayerText* curr_player_text = nullptr; 
 
+	for (int i = 0; i < 4; i++)
+	{
+		windows_to_move.push_back(false);
+	}
+	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 681 , 2470 ,188, 128}, true));
+		//BUTTON REMAPPING
+		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
+		SDL_Rect button_pos = { 703,2334,28,26 };
+		switch (shop_key.key_id)
+		{
+		case SDL_CONTROLLER_BUTTON_A:
+			button_pos = { 703,2360,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			button_pos = { 703,2386,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_X:
+			button_pos = { 703,2412,28,26 };
+			break;
+		case SDL_CONTROLLER_BUTTON_Y:
+			button_pos = { 703,2334,28,26 };
+			break;
+		}
+		player_remap_button.push_back(it->viewport_window->CreateImage(iPoint(screen.w-27,59),button_pos));
+		button_it++;
+		//
 		curr_player_text = new PlayerText(); 
 
 		for (int i = 0; i<3; i++)
 		{
-			placer = iPoint(screen.w - 30, screen.h - 30);
-			it->main_window->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
+			curr_player_text->quest_balls_animator.push_back(new Animator());
+			placer = iPoint(screen.w - 40, screen.h - 60);
+			curr_player_text->quest_balls_images.push_back(new UI_Image);
+			curr_player_text->quest_balls_images[i] = it->viewport_window->CreateImage(placer, { 440,812 - offset,24,24 }, false);
 
-			curr_player_text->player_text.push_back(it->main_window->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
+			curr_player_text->player_text.push_back(it->viewport_window->CreateText(iPoint(placer.x + 17, placer.y+10), App->font->game_font_25));
 			curr_player_text->player_text[i]->SetText("0");
 
 			screen.h = screen.h - 30;
-			offset += 24;
+			offset += 26;
 		}
-
-		curr_player_text->active_quest_text.push_back(it->main_window->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
-		curr_player_text->active_quest_text[0]->SetText(" ");
+		curr_player_text->active_quest_text = (it->viewport_window->CreateText(iPoint(screen.w + 14, 63), App->font->game_font_25, 20, false, 255, 215, 0));
+		curr_player_text->rupees_img = (it->viewport_window->CreateImage(iPoint(screen.w + 130, 148), {32, 0, 16, 16}));
+	
+		curr_player_text->active_quest_text->SetText(" ");
 
 		screen = App->view->GetViewportRect(1);
 		offset = 0;
 
-		player_text_list.push_back(curr_player_text); 
+		player_text_list.push_back(curr_player_text);
 	}
 
-	//for(int i = 0;i<3;i++)
-	//{
-	//	placer = iPoint(screen.w - 30, screen.h - 30);
-	//	App->scene->main_scene->main_window_1->CreateImage(placer, { 472, 812-offset, 24 ,24 }, false);
-
-	//	player_1_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(placer.x+6,placer.y), App->font->game_font_small));
-	//	player_1_text[i]->SetText("0");
-
-	//	screen.h = screen.h - 30;
-	//	offset += 24;
-	//}
-	//active_quest_text.push_back(App->scene->main_scene->main_window_1->CreateText(iPoint(screen.w/4 - 80 , 50), App->font->game_font_12, 0, false, 255, 215, 0));
-	//active_quest_text[0]->SetText(" ");
-
-	//screen = App->view->GetViewportRect(1);
-	//offset = 0;
-
-	//for (int i = 0; i<3; i++)
-	//{
-	//	placer = iPoint(screen.w - 30, screen.h - 30);
-	//	App->scene->main_scene->main_window_2->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
-
-	//	player_2_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
-	//	player_2_text[i]->SetText("0");
-
-	//	screen.h = screen.h - 30;
-	//	offset += 24;
-	//}
-	//active_quest_text.push_back(App->scene->main_scene->main_window_2->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
-	//active_quest_text[1]->SetText(" ");
-
-	//screen = App->view->GetViewportRect(1);
-	//offset = 0;
-
-	//for (int i = 0; i<3; i++)
-	//{
-	//	placer = iPoint(screen.w - 30, screen.h - 30);
-	//	App->scene->main_scene->main_window_3->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
-
-	//	player_3_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
-	//	player_3_text[i]->SetText("0");
-
-	//	screen.h = screen.h - 30;
-	//	offset += 24;
-	//}
-	//active_quest_text.push_back(App->scene->main_scene->main_window_3->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12, 0, false, 255, 215, 0));
-	//active_quest_text[2]->SetText(" ");
-
-	//screen = App->view->GetViewportRect(1);
-	//offset = 0;
-
-	//for (int i = 0; i<3; i++)
-	//{
-	//	placer = iPoint(screen.w - 30, screen.h - 30);
-	//	App->scene->main_scene->main_window_4->CreateImage(placer, { 472, 812 - offset, 24 ,24 }, false);
-
-	//	player_4_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(placer.x + 6, placer.y), App->font->game_font_small));
-	//	player_4_text[i]->SetText("0");
-
-	//	screen.h = screen.h - 30;
-	//	offset += 24;
-	//}	
-	//active_quest_text.push_back(App->scene->main_scene->main_window_4->CreateText(iPoint(screen.w / 4 - 80, 50), App->font->game_font_12,0,false,255, 215, 0));
-	//active_quest_text[3]->SetText(" ");
 
 
 	App->xml->LoadXML("Quests.xml", quests_file);
@@ -141,12 +116,37 @@ QuestManager::QuestManager()
 		vquest.push_back(q);
 	}
 
+	
 
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
-		(*it)->active_quest_text.at(0)->enabled = false; 
+		(*it)->active_quest_text->enabled = false; 
+		(*it)->rupees_img->enabled = false;
+		stop_window.push_back(false);
 	}
-
+	//CREATE ANIMATORS
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			player_text_list[i]->quest_balls_animator[j]->LoadAnimationsFromXML(quests_animations_file, "animations");
+			switch (j)
+			{
+			case 0: 
+				player_text_list[i]->quest_balls_animator[j]->SetAnimation("idle_power");
+				break;
+			case 1: 
+				player_text_list[i]->quest_balls_animator[j]->SetAnimation("idle_speed");
+				break;
+			case 2: 
+				player_text_list[i]->quest_balls_animator[j]->SetAnimation("idle_health");
+				break;
+			default:
+				break;
+			}
+			
+		}
+	}
 }
 
 QuestManager::~QuestManager()
@@ -155,60 +155,106 @@ QuestManager::~QuestManager()
 
 void QuestManager::Update()
 {
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 2 && active_quest == -1)
+	if (quests_enabled)
 	{
-		active_quest = GetRandomValue(1,3);
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	if (player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->GetName() == "completed_power" &&  player_text_list[i]->quest_balls_animator[0]->GetCurrentAnimation()->GetFrameIndex() >5)
+		//		player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
 
-		if (active_quest == 2)
-		{
-			SpawnCucos(5);
-		}
-		change_state(active_quest, active);
-		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
-		update_progress();
+		//	if (player_text_list[i]->quest_balls_animator[1]->GetCurrentAnimation()->GetName() == "completed_speed")
+		//		player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
 
-		for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
-		{
-			(*it)->active_quest_text.at(0)->enabled = true;
-		}
-
-		/*active_quest_text[0]->enabled = true;
-		active_quest_text[1]->enabled = true;
-		active_quest_text[2]->enabled = true;
-		active_quest_text[3]->enabled = true;*/
-	}
-
-	if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > 120)
-	{
-		if (active_quest == 2)
-		{
-			for (int i = 0; i < cucos.size(); i++)
+		//	if (player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->GetName() == "completed_health" && player_text_list[i]->quest_balls_animator[2]->GetCurrentAnimation()->Finished())
+		//		player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
+		//}
+		if (active_quest == -1) {
+			for (int i = 0; i < 4; i++)
 			{
-				App->entity->DeleteEntity(cucos[i]);
+				player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
+				player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
+				player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
 			}
-			cucos.clear();
 		}
-		reset_progress(active_quest);
-		change_state(active_quest, inactive);
-		active_quest = -1;
-		timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
-
-		for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
+		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > QUESTS_TIMER && active_quest == -1)
 		{
-			(*it)->active_quest_text.at(0)->enabled = false;
+			App->audio->PlayFx(quest_fx);
+			active_quest = GetRandomValue(1,3);
+
+			for (int i = 0; i < 4; i++)
+			{
+				windows_to_move[i] = true;
+				switch (active_quest)
+				{
+				case 1:
+					player_text_list[i]->quest_balls_animator[0]->SetAnimation("active_power");
+					player_text_list[i]->rupees_img->SetPos({ player_text_list[i]->rupees_img->GetPos().x, player_text_list[i]->rupees_img->GetPos().y });
+					break;
+				case 2:
+					player_text_list[i]->quest_balls_animator[1]->SetAnimation("active_speed");
+					player_text_list[i]->rupees_img->SetPos({ player_text_list[i]->rupees_img->GetPos().x, player_text_list[i]->rupees_img->GetPos().y - 20});
+					break;
+				case 3:
+					player_text_list[i]->quest_balls_animator[2]->SetAnimation("active_health");
+					player_text_list[i]->rupees_img->SetPos({ player_text_list[i]->rupees_img->GetPos().x, player_text_list[i]->rupees_img->GetPos().y  + 20});
+					break;
+				default:
+					break;
+				}
+			}
+			if (active_quest == 2)
+			{
+				SpawnCucos(5);
+			}
+			change_state(active_quest, active);
+			timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+			update_progress();
+
+			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
+			{
+				(*it)->active_quest_text->enabled = true;
+				(*it)->rupees_img->enabled = true;
+			}
 		}
 
-
-	/*	active_quest_text[0]->enabled = false;
-		active_quest_text[1]->enabled = false;
-		active_quest_text[2]->enabled = false;
-		active_quest_text[3]->enabled = false;*/
+		if (active_quest != -1 && App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > QUESTS_TIMER*2)
+		{
+			if (active_quest == 2)
+			{
+				for (int i = 0; i < cucos.size(); i++)
+				{
+					App->entity->DeleteEntity(cucos[i]);
+				}
+				cucos.clear();
+			}
+			reset_progress(active_quest);
+			change_state(active_quest, inactive);
+			for (int i = 0; i < 4; i++)
+			{
+				player_text_list[i]->quest_balls_animator[0]->SetAnimation("idle_power");
+				player_text_list[i]->quest_balls_animator[1]->SetAnimation("idle_speed");
+				player_text_list[i]->quest_balls_animator[2]->SetAnimation("idle_health");
+			}
+			active_quest = -1;
+			timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
+			for (int i = 0; i < 4; i++)
+			{
+				windows_to_move[i] = false;
+			}
+			for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
+			{
+				(*it)->active_quest_text->enabled = false;
+				(*it)->rupees_img->enabled = false;
+			}
+		}
 	}
+
+	
 }
 
 void QuestManager::CleanUp()
 {
-	// Quests
+	// Clear Quests
 	if (!vquest.empty())
 	{
 		for(int i = 0;i<vquest.size();i++)
@@ -223,13 +269,22 @@ void QuestManager::CleanUp()
 		vquest.clear();
 	}
 
-	// Texts
-
+	// Clear Texts
 	for (vector<PlayerText*>::iterator it = player_text_list.begin(); it != player_text_list.end(); it++)
 	{
-		(*it)->player_text.clear();
+		(*it)->CleanUp();
 	}
 	
+	// Clear Cucos
+	if (!cucos.empty())
+	{
+		for (int i = 0; i < cucos.size(); i++)
+		{
+			App->entity->DeleteEntity(cucos.at(i));
+		}
+
+		cucos.clear();
+	}
 }
 
 void QuestManager::DeathQuestEvent(Entity * attacant, Entity * victim)
@@ -302,6 +357,7 @@ int QuestManager::get_progress(int id, int team)
 
 void QuestManager::update_progress()
 {
+
 	for (int i = 0; i < vquest.size(); i++)
 	{
 		if (vquest[i]->state == active)
@@ -311,49 +367,55 @@ void QuestManager::update_progress()
 			case 0:
 			{
 				string team_1;
-				team_1 += "Power quest is active, slay 2 enemy players. Progress ";
+				team_1 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
-				team_1 += "l2";
-				player_text_list[0]->active_quest_text[0]->SetText(team_1);
-				player_text_list[2]->active_quest_text[0]->SetText(team_1);
+				team_1 += "l2\n";
+				team_1 += "Reward: 200";
+				player_text_list[0]->active_quest_text->SetText(team_1);
+				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "Power quest is active, slay 2 enemy players. Progress ";
+				team_2 += "Power quest\nis active, slay\n2 enemy players.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += "l2";
-				player_text_list[1]->active_quest_text[0]->SetText(team_2);
-				player_text_list[3]->active_quest_text[0]->SetText(team_2);
+				team_2 += "l2\n";
+				team_2 += "Reward: 200";
+				player_text_list[1]->active_quest_text->SetText(team_2);
+				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
 			}
 			case 1:
 			{
 				string team_1;
-				team_1 += "SPEED quest is active. Progress ";
+				team_1 += "Speed quest\nis active.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
-				team_1 += "l3";
-				player_text_list[0]->active_quest_text[0]->SetText(team_1);
-				player_text_list[2]->active_quest_text[0]->SetText(team_1);
+				team_1 += "l3\n";
+				team_1 += "Reward: 200";
+				player_text_list[0]->active_quest_text->SetText(team_1);
+				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "SPEED quest is active. Progress ";
+				team_2 += "Speed quest\nis active.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += "l3";
-				player_text_list[1]->active_quest_text[0]->SetText(team_2);
-				player_text_list[3]->active_quest_text[0]->SetText(team_2);
+				team_2 += "l3\n";
+				team_2 += "Reward: 200";
+				player_text_list[1]->active_quest_text->SetText(team_2);
+				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
 			}
 			case 2:
 			{
 				string team_1;
-				team_1 += "KILL STUFF TO GET HP. Progress ";
+				team_1 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_1 += std::to_string(vquest[i]->task[0]->current_progress);
-				team_1 += "l3";
-				player_text_list[0]->active_quest_text[0]->SetText(team_1);
-				player_text_list[2]->active_quest_text[0]->SetText(team_1);
+				team_1 += "l3\n";
+				team_1 += "Reward: 200";
+				player_text_list[0]->active_quest_text->SetText(team_1);
+				player_text_list[2]->active_quest_text->SetText(team_1);
 				string team_2;
-				team_2 += "KILL STUFF TO GET HP. Progress ";
+				team_2 += "Health quest\nis active\nkill jungle\ncamps.\nProgress ";
 				team_2 += std::to_string(vquest[i]->task[1]->current_progress);
-				team_2 += "l3";
-				player_text_list[1]->active_quest_text[0]->SetText(team_2);
-				player_text_list[3]->active_quest_text[0]->SetText(team_2);
+				team_2 += "l3\n";
+				team_2 += "Reward: 200";
+				player_text_list[1]->active_quest_text->SetText(team_2);
+				player_text_list[3]->active_quest_text->SetText(team_2);
 				break;
 			}
 			default:
@@ -375,58 +437,86 @@ void QuestManager::update_progress()
 						cucos.clear();
 					}
 					vquest[i]->state = inactive;
+					active_quest = -1;
+					timer_read = App->scene->main_scene->GetGameTimer()->ReadSec();
 					reset_progress(vquest[i]->id);
 					vquest[i]->task[j]->times_completed++;
-					player_text_list[0]->active_quest_text[0] ->enabled = false;
-					player_text_list[1]->active_quest_text[0] ->enabled = false;
-					player_text_list[2]->active_quest_text[0] ->enabled = false;
-					player_text_list[3]->active_quest_text[0] ->enabled = false;
 
-					for (int k = 0; k < App->scene->main_scene->player_manager->players.size(); k++)
+					player_text_list[0]->active_quest_text->enabled = false;
+					player_text_list[1]->active_quest_text->enabled = false;
+					player_text_list[2]->active_quest_text->enabled = false;
+					player_text_list[3]->active_quest_text->enabled = false;
+					player_text_list[0]->rupees_img->enabled = false;
+					player_text_list[1]->rupees_img->enabled = false;
+					player_text_list[2]->rupees_img->enabled = false;
+					player_text_list[3]->rupees_img->enabled = false;
+
+				
+					for (int i = 0; i < 4; i++)
 					{
-						//App->scene->main_scene->player_manager->players[k]->entity->UpdateStats(0, 0, 0);
+						windows_to_move[i] = false;
+					}
+					for (vector<Player*>::iterator it = App->scene->main_scene->player_manager->players.begin(); it != App->scene->main_scene->player_manager->players.end(); it++)
+					{
+						(*it)->UpdateQuestsStats();
 					}
 
 					switch (j)
 					{
 					case 0:
 					{
-
-						player_text_list[0]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[2]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-//=======
-//						player_1_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//						player_3_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//
-//						player_1_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//						player_3_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//
-//						player_1_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//						player_3_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//>>>>>>> refs/remotes/origin/development
+						player_text_list[0]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[2]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						App->scene->main_scene->player_manager->players[0]->AddRupees(100);
+						App->scene->main_scene->player_manager->players[2]->AddRupees(100);
+							switch (i)
+							{
+							case 0:
+								player_text_list[0]->quest_balls_animator[0]->SetAnimation("completed_power");
+								player_text_list[2]->quest_balls_animator[0]->SetAnimation("completed_power");
+								break;
+							case 1:
+								player_text_list[0]->quest_balls_animator[1]->SetAnimation("completed_speed");
+								player_text_list[2]->quest_balls_animator[1]->SetAnimation("completed_speed");
+								break;
+							case 2:
+								player_text_list[0]->quest_balls_animator[2]->SetAnimation("completed_health");
+								player_text_list[2]->quest_balls_animator[2]->SetAnimation("completed_health");
+								break;
+							default:
+								break;
+							}
 						break;
 					}
 					case 1:
 					{
-
-						player_text_list[1]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-						player_text_list[3]->player_text.at(0)->SetText(std::to_string(vquest[i]->task[j]->times_completed));
-//=======
-//						player_2_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//						player_4_text[1]->SetText(std::to_string(vquest[0]->task[j]->times_completed));
-//
-//						player_2_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//						player_4_text[0]->SetText(std::to_string(vquest[1]->task[j]->times_completed));
-//
-//						player_2_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//						player_4_text[2]->SetText(std::to_string(vquest[2]->task[j]->times_completed));
-//						break;
-//>>>>>>> refs/remotes/origin/development
+						player_text_list[1]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						player_text_list[3]->player_text[i]->SetText(std::to_string(vquest[i]->task[j]->times_completed));
+						App->scene->main_scene->player_manager->players[1]->AddRupees(100);
+						App->scene->main_scene->player_manager->players[3]->AddRupees(100);
+						switch (i)
+						{
+						case 0:
+							player_text_list[1]->quest_balls_animator[0]->SetAnimation("completed_power");
+							player_text_list[3]->quest_balls_animator[0]->SetAnimation("completed_power");
+							break;
+						case 1:
+							player_text_list[1]->quest_balls_animator[1]->SetAnimation("completed_speed");
+							player_text_list[3]->quest_balls_animator[1]->SetAnimation("completed_speed");
+							break;
+						case 2:
+							player_text_list[1]->quest_balls_animator[2]->SetAnimation("completed_health");
+							player_text_list[3]->quest_balls_animator[2]->SetAnimation("completed_health");
+							break;
+						default:
+							break;
+						}
 						break;
 					}
 					default:
 						break;
 					}
+
 				}
 				j++;
 			}
@@ -447,5 +537,63 @@ void QuestManager::SpawnCucos(int num)
 
 	//iPoint poss = App->map->MapToWorld(pos.x, pos.y);
 		cucos.push_back((Cuco*)App->entity->CreateEntity(cuco,App->map->MapToWorld(pos.x,pos.y)));
+	}
+}
+
+void QuestManager::SwitchWindowState(int player)
+{
+	if(windows_to_move[player -1] == false)
+	windows_to_move[player - 1] = true;
+	else 
+		windows_to_move[player - 1] = false;
+}
+void QuestManager::UpdateWindows()
+{
+	int speed = WINDOW_SPEED*App->GetDT();
+	for (int i = 0; i < windows_to_move.size(); i++)
+	{
+		if (windows_to_move[i] == true && stop_window[i] == false)
+		{
+			int new_x = (App->view->GetViewportRect(1).w - 177) - player_quest_windows[i]->GetPos().x;
+			if (player_quest_windows[i]->GetPos().x - speed < App->view->GetViewportRect(1).w - 177)
+			{
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - new_x, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - new_x, player_text_list[i]->active_quest_text->GetPos().y));
+				player_text_list[i]->rupees_img->SetPos(p2Point<int>(player_text_list[i]->rupees_img->GetPos().x - new_x, player_text_list[i]->rupees_img->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - new_x, player_remap_button[i]->GetPos().y));
+				stop_window[i] = true;
+			}
+
+
+			else if (player_quest_windows[i]->GetPos().x > App->view->GetViewportRect(1).w - 177)
+			{
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x - speed, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x - speed, player_text_list[i]->active_quest_text->GetPos().y));
+				player_text_list[i]->rupees_img->SetPos(p2Point<int>(player_text_list[i]->rupees_img->GetPos().x - speed, player_text_list[i]->rupees_img->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x - speed, player_remap_button[i]->GetPos().y));
+			}
+		}
+		if (windows_to_move[i] == false)
+		{
+			if (player_quest_windows[i]->GetPos().x < App->view->GetViewportRect(1).w)
+			{
+				player_quest_windows[i]->SetPos(p2Point<int>(player_quest_windows[i]->GetPos().x + speed, player_quest_windows[i]->GetPos().y));
+				player_text_list[i]->active_quest_text->SetPos(p2Point<int>(player_text_list[i]->active_quest_text->GetPos().x + speed, player_text_list[i]->active_quest_text->GetPos().y));
+				player_text_list[i]->rupees_img->SetPos(p2Point<int>(player_text_list[i]->rupees_img->GetPos().x + speed, player_text_list[i]->rupees_img->GetPos().y));
+				player_remap_button[i]->SetPos(p2Point<int>(player_remap_button[i]->GetPos().x + speed, player_remap_button[i]->GetPos().y));
+				stop_window[i] = false;
+			}
+		}
+	}
+}
+
+void QuestManager::UpdateQuestAnimations(float dt)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			player_text_list[i]->quest_balls_images[j]->image = player_text_list[i]->quest_balls_animator[j]->GetCurrentAnimation()->GetAnimationFrame(dt);
+		}
 	}
 }

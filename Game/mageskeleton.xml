@@ -26,10 +26,9 @@
      <rect x = "64" y = "0" w = "32" h = "48"/>
       <rect x = "96" y = "0" w = "32" h = "48"/>
     </anim>
-    
-    
   </animations>
-  <stats hp="50" speed="0" power="4" rupees="7">
-    <ability1 mult="1" cd="1" bd="3"/>
+  
+  <stats hp="65" speed="0" power="4" rupees="20">
+    <ability1 mult="0.5" cd="1.2" bd="6"/>
   </stats>
 </file>

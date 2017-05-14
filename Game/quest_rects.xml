@@ -1,0 +1,100 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture ="gui/UI_sheet_final.png">
+    <anim speed = "10" name = "idle_health" loop = "true">
+      <rect x = "926" y = "2399" w = "44" h = "46"/>
+    </anim>
+<anim speed = "10" name = "idle_power" loop = "true">
+      <rect x = "1014" y = "2399" w = "44" h = "46"/>
+    </anim>
+<anim speed = "10" name = "idle_speed" loop = "true">
+      <rect x = "1102" y = "2399" w = "44" h = "46"/>
+    </anim>
+ <anim speed = "10" name = "active_health" loop = "true">
+      <rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+<rect x = "926" y = "2399" w = "44" h = "46"/>
+      <rect x = "926" y = "2445" w = "44" h = "46"/>
+      <rect x = "926" y = "2491" w = "44" h = "46"/>
+      <rect x = "926" y = "2537" w = "44" h = "46"/>
+      <rect x = "926" y = "2582" w = "44" h = "46"/>
+    </anim>
+ <anim speed = "10" name = "active_power" loop = "true">
+      <rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+<rect x = "1014" y = "2399" w = "44" h = "46"/>
+      <rect x = "1014" y = "2445" w = "44" h = "46"/>
+      <rect x = "1014" y = "2491" w = "44" h = "46"/>
+      <rect x = "1014" y = "2537" w = "44" h = "46"/>
+      <rect x = "1014" y = "2582" w = "44" h = "46"/>
+    </anim>
+     <anim speed = "10" name = "active_speed" loop = "true">
+      <rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+<rect x = "1102" y = "2399" w = "44" h = "46"/>
+      <rect x = "1102" y = "2445" w = "44" h = "46"/>
+      <rect x = "1102" y = "2491" w = "44" h = "46"/>
+      <rect x = "1102" y = "2537" w = "44" h = "46"/>
+      <rect x = "1102" y = "2582" w = "44" h = "46"/>
+    </anim>
+<anim speed = "10" name = "completed_health" loop = "false">
+      <rect x = "970" y = "2399" w = "44" h = "46"/>
+      <rect x = "970" y = "2445" w = "44" h = "46"/>
+      <rect x = "970" y = "2491" w = "44" h = "46"/>
+      <rect x = "970" y = "2537" w = "44" h = "46"/>
+      <rect x = "970" y = "2625" w = "44" h = "46"/>
+      <rect x = "970" y = "2671" w = "44" h = "46"/>
+    </anim>
+<anim speed = "10" name = "completed_power" loop = "false">
+      <rect x = "1058" y = "2399" w = "44" h = "46"/>
+      <rect x = "1058" y = "2445" w = "44" h = "46"/>
+      <rect x = "1058" y = "2491" w = "44" h = "46"/>
+      <rect x = "1058" y = "2537" w = "44" h = "46"/>
+      <rect x = "1058" y = "2625" w = "44" h = "46"/>
+      <rect x = "1058" y = "2671" w = "44" h = "46"/>
+    </anim>
+<anim speed = "10" name = "completed_speed" loop = "false">
+      <rect x = "1146" y = "2399" w = "44" h = "46"/>
+      <rect x = "1146" y = "2445" w = "44" h = "46"/>
+      <rect x = "1146" y = "2491" w = "44" h = "46"/>
+      <rect x = "1146" y = "2537" w = "44" h = "46"/>
+      <rect x = "1146" y = "2625" w = "44" h = "46"/>
+      <rect x = "1146" y = "2671" w = "44" h = "46"/>
+    </anim>
+    
+  </animations>
+</file>

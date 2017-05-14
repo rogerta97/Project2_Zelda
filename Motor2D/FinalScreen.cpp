@@ -8,6 +8,8 @@
 
 bool FinalScreen::Start()
 {
+	App->view->SetViews(1);
+
 	uint w, h; 
 	App->win->GetWindowSize(w,h);
 
@@ -15,16 +17,17 @@ bool FinalScreen::Start()
 
 	// Creating general elements ----
 
-	window = App->gui->UI_CreateWin({0, 0}, screen.w, screen.h, 0, false);
+	window = App->gui->UI_CreateWin({0, 0}, screen.w, screen.h, 0, true, false, true);
+	window->blit_layer = 1;
 
 	SDL_Rect background_title_rect = { 0, 2203, 316, 69}; 
 	iPoint background_title_rect_pos = { screen.w/2 - background_title_rect.w / 2, screen.h/25 };
 
 	title_background = window->CreateImage(background_title_rect_pos, background_title_rect);
 
-	title_text = window->CreateText({ background_title_rect_pos.x + 75, background_title_rect_pos.y + 13 }, App->font->game_font_20);
+	title_text = window->CreateText({ background_title_rect_pos.x + 75, background_title_rect_pos.y + 13 }, App->font->game_font_40);
 	title_text->SetText("GAME STATS");
-
+	title_text->blit_layer += 300;
 
 	SDL_Rect background_X_rect = { 0, 2203, 316, 69 };
 	iPoint background_X_pos = { screen.w - (screen.w/4) - 15, screen.h / 25 };
@@ -38,8 +41,9 @@ bool FinalScreen::Start()
 
 	iPoint changescreen_text_pos = { background_X_pos.x + 70, background_X_pos.y + 15 };
 
-	changescreen_text = window->CreateText(changescreen_text_pos, App->font->game_font_20);
+	changescreen_text = window->CreateText(changescreen_text_pos, App->font->game_font_40);
 	changescreen_text->SetText("RETURN TO MENU"); 
+	changescreen_text->blit_layer += 300;
 
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
 
@@ -54,24 +58,42 @@ bool FinalScreen::Start()
 
 	for (int i = 0; i < 4; i++)
 	{
+		// I don't like that...
+		int index = i;
+		if (i == 1)
+			index = 2;
+		else if (i == 2)
+			index = 1;
+		// -----
+
 		final_screen_player_info new_info; 
 
-		new_info.deaths = 0; 
-		new_info.kills = 0;
-		new_info.minions = 0;
-		new_info.towers = 0;
+		new_info.deaths = App->scene->players[index].deaths; 
+		new_info.kills = App->scene->players[index].kills;
+		new_info.minions = App->scene->players[index].minions;
+		new_info.towers = App->scene->players[index].towers;
 
-		new_info.items[0] = placeholder_item;
-		new_info.items[1] = placeholder_item;
-		new_info.items[2] = placeholder_item;
+		new_info.items[0] = App->scene->players[index].items_rects[0];
+		new_info.items[1] = App->scene->players[index].items_rects[1];
+		new_info.items[2] = App->scene->players[index].items_rects[2];
 
-		new_info.character_name = "link"; 
+		switch (App->scene->players[index].character)
+		{
+		case link:
+			new_info.character_name = "link";
+			break;
+		case ganon:
+			new_info.character_name = "ganon";
+			break;
+		case navi:
+			new_info.character_name = "navi";
+			break;
+		}
 
 		player_info.push_back(new_info); 
 	} 
 
 	// ----
-
 
 	// Creating player cards 
 
@@ -102,37 +124,47 @@ bool FinalScreen::Start()
 		else
 			new_card.rectangle_image = window->CreateImage({ background_card_pos.x, background_card_pos.y + y_offset }, background_card_rect_team2);
 
+		new_card.rectangle_image->blit_layer -= 300;
+		new_card.rectangle_image->layer -= 300;
 		
 		new_card.character_image = window->CreateImage({ background_card_pos.x - 130, background_card_pos.y + 15 + y_offset }, placeholder_character);
 
 		new_card.kills_text = window->CreateText({ kills_text_pos.x, kills_text_pos.y + y_offset }, App->font->game_font);
-		new_card.kills_text->SetText("KILLS");
+		new_card.kills_text->SetText("KILLS"); new_card.kills_text->blit_layer += 300;
 
-		new_card.kills_num = window->CreateText({ kills_text_pos.x + 20, kills_text_pos.y + 35 + y_offset }, App->font->game_font_20);
+		new_card.kills_num = window->CreateText({ kills_text_pos.x + 20, kills_text_pos.y + 35 + y_offset }, App->font->game_font_40);
 		
 		new_card.deaths_text = window->CreateText({ deaths_text_pos.x, deaths_text_pos.y + y_offset }, App->font->game_font);
-		new_card.deaths_text->SetText("DEATHS");
+		new_card.deaths_text->SetText("DEATHS"); new_card.deaths_text->blit_layer += 300;
 
-		new_card.deaths_num = window->CreateText({ deaths_text_pos.x + 30, deaths_text_pos.y + 35 + y_offset }, App->font->game_font_20);
+		new_card.deaths_num = window->CreateText({ deaths_text_pos.x + 30, deaths_text_pos.y + 35 + y_offset }, App->font->game_font_40);
+		new_card.deaths_num->blit_layer += 300;
 	
 		new_card.minions_text = window->CreateText({ minions_text_pos.x, minions_text_pos.y + y_offset }, App->font->game_font);
-		new_card.minions_text->SetText("MINIONS");
+		new_card.minions_text->SetText("MINIONS"); new_card.minions_text->blit_layer += 300;
 
-		new_card.minions_num = window->CreateText({ minions_text_pos.x + 35, minions_text_pos.y + 35 + y_offset }, App->font->game_font_20);
+		new_card.minions_num = window->CreateText({ minions_text_pos.x + 35, minions_text_pos.y + 35 + y_offset }, App->font->game_font_40);
+		new_card.minions_num->blit_layer += 300;
 	
 		new_card.towers_text = window->CreateText({ towers_text_pos.x, towers_text_pos.y + y_offset }, App->font->game_font);
-		new_card.towers_text->SetText("TOWERS");
+		new_card.towers_text->SetText("TOWERS"); new_card.towers_text->blit_layer += 300;
+		
 
-		new_card.towers_num = window->CreateText({ towers_text_pos.x + 35, towers_text_pos.y + 35 + y_offset }, App->font->game_font_20);
+		new_card.towers_num = window->CreateText({ towers_text_pos.x + 35, towers_text_pos.y + 35 + y_offset }, App->font->game_font_40);
+		new_card.towers_num->blit_layer += 300;
 	
 		new_card.items_text = window->CreateText({ items_text_pos.x, items_text_pos.y + y_offset }, App->font->game_font);
-		new_card.items_text->SetText("ITEMS");
+		new_card.items_text->SetText("ITEMS"); new_card.items_text->blit_layer += 300;
+	
 	
 		new_card.item_images_1 = window->CreateImage({ item_1_image_pos.x, item_1_image_pos.y + y_offset }, placeholder_item);
+		new_card.item_images_1->blit_layer += 300;
 
 		new_card.item_images_2 = window->CreateImage({ item_2_image_pos.x, item_2_image_pos.y + y_offset }, placeholder_item);
+		new_card.item_images_2->blit_layer += 300;
 
 		new_card.item_images_3 = window->CreateImage({ item_3_image_pos.x, item_3_image_pos.y + y_offset }, placeholder_item);
+		new_card.item_images_3->blit_layer += 300;
 
 		new_card.SetInfo(player_info[i]); 
 
@@ -144,12 +176,11 @@ bool FinalScreen::Start()
 
 bool FinalScreen::Update(float dt)
 {
-
 	// Printing background
-		App->view->LayerBlit(0, background_image, App->view->camera1, {0,0,1994, 1359}, 0,1);
+	App->view->LayerBlit(0, background_image, App->view->GetCameraPos(1), {0,0, 1994, 1359}, 0, 1);
 
-		if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
-			App->scene->ChangeScene((Scene*)App->scene->menu_scene); 
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)
+		App->scene->ChangeScene((Scene*)App->scene->menu_scene); 
 
 	return false;
 }
@@ -159,12 +190,19 @@ bool FinalScreen::CleanUp()
 	if(App->scene->GetCurrentScene() != App->scene->final_screen)
 		App->gui->DeleteElement(window);
 
+	for (int i = 0; i < 4; ++i)
+	{
+		App->scene->players[i].Reset();
+	}
+
+	elements.clear();
+	player_info.clear();
+
 	return false;
 }
 
 void final_screen_element::SetInfo(final_screen_player_info player_info)
 {
-
 	SDL_Rect placeholder_character = { 460, 2240, 90, 90 };
 	SDL_Rect placeholder_item = { 460, 2240, 45, 45 };
 
@@ -179,17 +217,15 @@ void final_screen_element::SetInfo(final_screen_player_info player_info)
 	towers_num->SetText(towers_num_str);
 
 	if (player_info.character_name == "link")
-		character_image->image = {0, 2272, 108, 96};
+		character_image->image = { 0, 2272, 108, 96 };
 
 	else if (player_info.character_name == "ganon")
-		character_image->image = placeholder_character;
+		character_image->image = { 216,2362,108,96 };
 
 	else if (player_info.character_name == "navi")
-		character_image->image = { 216, 2272, 108, 96 };
+		character_image->image = { 216, 2272, 108, 90 };
 
 	item_images_1->image = player_info.items[0]; 
 	item_images_2->image = player_info.items[1];
 	item_images_3->image = player_info.items[2];
-	
-	
 }

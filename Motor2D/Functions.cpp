@@ -63,6 +63,25 @@ void ToLowerCase(std::string str)
 	}
 }
 
+string SecToMin(int time)
+{
+	int minutes = time / 60; 
+	int sec = time % 60; 
+
+	string minutes_str = std::to_string(minutes); 
+	string semicolon = ":";
+	string sec_str = std::to_string(sec);
+
+	minutes_str += semicolon;
+
+	if (sec < 10)
+		minutes_str += "0"; 
+
+	minutes_str += sec_str; 
+
+	return minutes_str;
+}
+
 // Deprecated
 void LoadAnimationFromXML(list<SDL_Rect>& rects, const char * file, const char* animation_name)
 {

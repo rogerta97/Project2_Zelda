@@ -23,11 +23,12 @@ public:
 
 	iPoint GetPos()const;
 
-private:
-
-public:
+	void Die(Entity* killed_by);
 
 private:
+
+	SDL_Texture* shield = nullptr;
+	SDL_Rect shield_rect = NULLRECT;
 
 };
 

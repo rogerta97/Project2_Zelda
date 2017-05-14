@@ -1,0 +1,61 @@
+<!-- Config file for the game -->
+
+<file>
+  <animations texture = "textures/ganon_spritesheet.png">
+    <anim speed = "10" name = "bat_spawn" loop = "false">
+      <rect x = "0" y = "268" w = "56" h = "28"/>
+      <rect x = "56" y = "268" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "bat_fly" loop = "true">
+      <rect x = "112" y = "268" w = "56" h = "28"/>
+      <rect x = "168" y = "268" w = "56" h = "28"/>
+      <rect x = "224" y = "268" w = "56" h = "28"/>
+      <rect x = "280" y = "268" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "bat_die" loop = "false">
+      <rect x = "112" y = "268" w = "56" h = "28"/>
+      <rect x = "56" y = "268" w = "56" h = "28"/>
+      <rect x = "0" y = "268" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "fire_spawn" loop = "false">
+      <rect x = "502" y = "268" w = "56" h = "32"/>
+      <rect x = "448" y = "268" w = "56" h = "32"/>
+    </anim>
+    <anim speed = "8" name = "fire_burn" loop = "true">
+      <rect x = "336" y = "268" w = "56" h = "32"/>
+      <rect x = "392" y = "268" w = "56" h = "32"/>
+    </anim>
+    <anim speed = "10" name = "fire_die" loop = "false">
+      <rect x = "448" y = "268" w = "56" h = "32"/>
+      <rect x = "502" y = "268" w = "56" h = "32"/>
+    </anim>
+
+    <anim speed = "10" name = "bat_spawn_2" loop = "false">
+      <rect x = "0" y = "1269" w = "56" h = "28"/>
+      <rect x = "56" y = "1269" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "bat_fly_2" loop = "true">
+      <rect x = "112" y = "1269" w = "56" h = "28"/>
+      <rect x = "168" y = "1269" w = "56" h = "28"/>
+      <rect x = "224" y = "1269" w = "56" h = "28"/>
+      <rect x = "280" y = "1269" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "bat_die_2" loop = "false">
+      <rect x = "112" y = "1269" w = "56" h = "28"/>
+      <rect x = "56" y = "1269" w = "56" h = "28"/>
+      <rect x = "0" y = "1269" w = "56" h = "28"/>
+    </anim>
+    <anim speed = "10" name = "fire_spawn_2" loop = "false">
+      <rect x = "502" y = "1269" w = "56" h = "32"/>
+      <rect x = "448" y = "1269" w = "56" h = "32"/>
+    </anim>
+    <anim speed = "8" name = "fire_burn_2" loop = "true">
+      <rect x = "336" y = "1269" w = "56" h = "32"/>
+      <rect x = "392" y = "1269" w = "56" h = "32"/>
+    </anim>
+    <anim speed = "10" name = "fire_die_2" loop = "false">
+      <rect x = "448" y = "1269" w = "56" h = "32"/>
+      <rect x = "502" y = "1269" w = "56" h = "32"/>
+    </anim>
+  </animations>
+</file>

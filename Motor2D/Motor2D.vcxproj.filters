@@ -199,6 +199,9 @@
     <ClCompile Include="NaviBasicAttack.cpp">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClCompile>
+    <ClCompile Include="Guards.cpp">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClCompile>
     <ClCompile Include="FinalScreen.cpp">
       <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
     </ClCompile>
@@ -210,6 +213,15 @@
     </ClCompile>
     <ClCompile Include="RemapingScene.cpp">
       <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Ganon.cpp">
+      <Filter>Engine\4. Entities ==========\Ganon</Filter>
+    </ClCompile>
+    <ClCompile Include="GanonBat.cpp">
+      <Filter>Engine\5. Spells ===========\GanonBat</Filter>
+    </ClCompile>
+    <ClCompile Include="TransitionScene.cpp">
+      <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -441,6 +453,9 @@
     <ClInclude Include="NaviBasicAttack.h">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
     </ClInclude>
+    <ClInclude Include="Guards.h">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </ClInclude>
     <ClInclude Include="FinalScreen.h">
       <Filter>Engine\3. Scenes ==========\FinalScreen</Filter>
     </ClInclude>
@@ -452,6 +467,18 @@
     </ClInclude>
     <ClInclude Include="RemapingScene.h">
       <Filter>Engine\3. Scenes ==========\RemapingScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Brofiler\Brofiler.h">
+      <Filter>Engine\6. Tools ===========\Brofiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Ganon.h">
+      <Filter>Engine\4. Entities ==========\Ganon</Filter>
+    </ClInclude>
+    <ClInclude Include="GanonBat.h">
+      <Filter>Engine\5. Spells ===========\GanonBat</Filter>
+    </ClInclude>
+    <ClInclude Include="TransitionScene.h">
+      <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -560,6 +587,18 @@
     <Filter Include="Engine\3. Scenes ==========\RemapingScene">
       <UniqueIdentifier>{207df101-4630-4235-976c-f1a561c292ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\6. Tools ===========\Brofiler">
+      <UniqueIdentifier>{e681b116-f05a-4592-b556-eb75364e7da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\4. Entities ==========\Ganon">
+      <UniqueIdentifier>{640b6707-e0cf-45d0-8e5c-f36569f30756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\5. Spells ===========\GanonBat">
+      <UniqueIdentifier>{73871d8c-0b6f-4ef9-9fff-fbb6a564f10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\3. Scenes ==========\TransitionScene">
+      <UniqueIdentifier>{18b1530f-8c2d-4090-85f4-e22038f3602d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -639,6 +678,18 @@
     </Xml>
     <Xml Include="..\Game\navibasicattack.xml">
       <Filter>Engine\5. Spells ===========\NaviBasicAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\guards.xml">
+      <Filter>Engine\4. Entities ==========\Jungle Camps</Filter>
+    </Xml>
+    <Xml Include="..\Game\ganon.xml">
+      <Filter>Engine\4. Entities ==========\Ganon</Filter>
+    </Xml>
+    <Xml Include="..\Game\ganon_bat.xml">
+      <Filter>Engine\5. Spells ===========\GanonBat</Filter>
+    </Xml>
+    <Xml Include="..\Game\tacoattack.xml">
+      <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </Xml>
   </ItemGroup>
 </Project>

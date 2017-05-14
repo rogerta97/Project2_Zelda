@@ -14,11 +14,9 @@ enum SNAKE_STATE
 	Snk_S_Attack,
 };
 
-
 class Snakes :public Entity
 {
 public:
-
 	Snakes(iPoint pos);
 
 	~Snakes();
@@ -43,13 +41,12 @@ public:
 
 	// On Collision
 	void OnCollEnter(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
-	//void OnColl(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB);
 
 	iPoint GetPos() const;
 
+	void Die(Entity* killed_by);
 
 private:
-
 	void Idle();
 	void DoAttack();
 	void AttackLeft();
@@ -60,23 +57,20 @@ private:
 	bool LookForTarget();
 
 public:
-	Entity*					target = nullptr;
+	Entity*		target = nullptr;
+
 private:
+	bool		flip = false;
 
-	j1Timer					cd_timer;
+	bool		is_attacked = false;
+	int			rel_angle = 0;
 
-	bool					flip = false;
+	SNAKE_STATE	state = Snk_S_Null;
+	states		anim_state = states_null;
 
-	bool					is_attacked = false;
+	int			rupee_reward = 0;
 
-	int						rel_angle = 0;
-
-	SNAKE_STATE				state = Snk_S_Null;
-
-	states					anim_state = states_null;
-
-	int						rupee_reward = 0;
-
+	int			last_life = 0;
 };
 
 #endif // !SNAKES_H_

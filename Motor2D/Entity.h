@@ -79,6 +79,15 @@ enum states
 	mskeleton_attack_lateral,
 	mskeleton_attack_down,
 
+	guard_up,
+	guard_left,
+	guard_right,
+	guard_down,
+	guard_attack_up,
+	guard_attack_left,
+	guard_attack_right,
+	guard_attack_down,
+
 	basic_chicken,
 	cap_chicken,
 	black_chicken,
@@ -144,7 +153,9 @@ public:
 	int life = 100;
 
 	int base_power = 0;
-	int power = 0;	
+	int power = 0;
+
+	int shield = 0;
 };
 
 struct Ability
@@ -153,23 +164,29 @@ struct Ability
 	{
 		index = _number; damage = _damage; damage_multiplicator = _damage_multiplicator, cd = _cd; cd = _cd;
 		name = _name;
-		cd_timer.SubstractTimeFromStart(_cd);
+		cd_timer = App->AddGameplayTimer();
+		cd_timer->SubstractTimeFromStart(_cd);
 	};
 
-	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd)
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd, SDL_Rect _ability_icon)
 	{
-		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd;
+		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd; ability_icon = _ability_icon; 
 	}
 
 	bool CdCompleted()
 	{
-		return cd_timer.ReadSec() >= cd;
+		return cd_timer->ReadSec() >= cd;
 	}
 
 	void CdReset() 
 	{
-		cd_timer.Start();
+		cd_timer->Start();
 	}
+
+	void CleanUp() 
+	{
+		App->DeleteGameplayTimer(cd_timer);
+	};
 
 	float GetCdTimeLeft();
 
@@ -185,17 +202,18 @@ struct Ability
 	b2Fixture* fixture = nullptr;
 	string     name;
 
-	j1Timer    cd_timer;
+	j1Timer*   cd_timer = nullptr;
 
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
 	SDL_Rect   ability_in_cd = NULLRECT;
+	SDL_Rect   ability_icon = NULLRECT; 
 };
 
 class Entity
 {
 public:
-	Entity() {};
+	Entity(){};
 
 	virtual ~Entity() {};
 
@@ -291,7 +309,7 @@ public:
 	virtual void OnCollOut(PhysBody* bodyA, PhysBody* bodyB, b2Fixture* fixtureA, b2Fixture* fixtureB) {};
 	virtual void ListenEv(int type, EventThrower* origin, int id) {};
 
-	Ability* AddAbility(int number, int cooldow, int base_damage, int damage_multiplier, char* name = "no_name");
+	Ability* AddAbility(int number, float cooldow, int base_damage, float damage_multiplier, char* name = "no_name");
 	Ability* GetAbility(int number);
 	Ability* GetAbilityByName(const char* name);
 
@@ -315,10 +333,17 @@ public:
 		return team;
 	}
 
-	void LifeBar(iPoint size, iPoint offset = { 0, 0 }); 
+	void LifeBar(iPoint size, iPoint offset = { 0, 0 }, int shiled = 0); 
 
 	//Update Stats
 	void UpdateStats(int extra_power, int extra_hp, int extra_speed);
+
+	//set invulnerability
+	void SetInvulnerable();
+
+	void SetAbilityImages(int ability_id, SDL_Rect icon_rect); 
+
+	virtual void Die(Entity* killed_by) {};
 
 private:
 	
@@ -337,6 +362,7 @@ public:
 	bool             attacking = false;
 	bool			 is_player = false;
 	bool			 stuned = false;
+	bool			 invulnerable = false;
 
 	// Life bar
 	bool			 show_life_bar = false;
@@ -360,8 +386,6 @@ protected:
 	// Draw
 	iPoint           draw_offset = NULLPOINT;
 	iPoint		     restore_draw_offset = NULLPOINT;
-
-	j1Timer			 stun_slow_timer;
 };
 
 #endif

@@ -1,3 +1,4 @@
+
 #ifndef __j1GUI_H__
 #define __j1GUI_H__
 
@@ -167,10 +168,6 @@ public:
 	// Enable function
 	void SetEnabled(bool set);
 	void SetEnabledAndChilds(bool set);
-
-	// Child functions
-	void AddChild(UI_Element* child);
-	void AddChildBoth(UI_Element* child);
 
 	// Mouse functions
 	bool MouseClickEnterLeftIntern();

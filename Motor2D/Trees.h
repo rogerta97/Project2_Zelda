@@ -20,6 +20,8 @@ public:
 
 	void SetTreeColor(const char* color); 
 
+	iPoint GetPos()const;
+
 	~Tree();
 
 	tree_color		type;

@@ -40,11 +40,11 @@ Tree::Tree(iPoint pos)
 	game_object->SetKinematic(); 
 
 	uchar* matrix = new uchar[20];
-	uchar data[20] = {  1,1,1,1,
-						1,1,1,1,
-						1,1,1,1,
+	uchar data[20] = {  0,0,0,0,
 						0,0,0,0,
-						1,0,0,1};
+						0,0,0,0,
+						0,0,0,0,
+						0,0,0,0};
 
 	memcpy_s(matrix, 20, data, 20);
 
@@ -71,6 +71,11 @@ bool Tree::CleanUp()
 void Tree::SetTreeColor(const char * color)
 {
 	game_object->SetAnimation(color);
+}
+
+iPoint Tree::GetPos() const
+{
+	return game_object->GetPos();
 }
 
 Tree::~Tree()

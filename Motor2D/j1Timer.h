@@ -16,12 +16,16 @@ public:
 	float ReadSec() const;
 	void SubstractTimeFromStart(float sec);
 	void Stop();
+	void PauseOn();
+	void PauseOff();
 
 	bool IsActive();
 
 
 private:
 	uint32	started_at;
+	bool	paused = false;
+	uint32  paused_at = 0;
 	bool	active = false;
 };
 

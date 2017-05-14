@@ -15,6 +15,17 @@ enum navi_ability2_dir
 	a2_direction_null
 };
 
+struct heal_element
+{
+	void CleanUp()
+	{
+		App->DeleteGameplayTimer(timer);
+	}
+
+	Entity* entity = nullptr;
+	j1Timer* timer = nullptr;
+};
+
 class Navi : public Entity
 {
 public:
@@ -111,29 +122,35 @@ public:
 	void SetCamera(int id);
 
 	iPoint GetPos() const;
+
+	void Die(Entity* killed_by);
 public:
 
 private:
-	int		 camera = 1;
-	bool	 flip = false;
+	int	      camera = 1;
+	bool 	  flip = false;
 
-	int		 rupee_reward = 0;
+	int		  rupee_reward = 0;
 
 	// Ability 1
-	j1Timer  ability1_timer;
-	bool	 ability1 = false;
-	vector<Entity*> to_heal;
-	bool	 look_for_entities = true;
+	j1Timer*  ability1_timer = nullptr;
+	bool	  ability1 = false;
+	vector<heal_element> to_heal;
+	bool	  look_for_entities = true;
+	float	  heal = 0.0f;
+	float	  ability1_duration = 0.0f;
+	float	  ability1_ticks_time = 0.0f;
 
 	// Ability 2
-	bool	 ability2 = false;
+	bool	  ability2 = false;
 	navi_ability2_dir ability2_dir = navi_ability2_dir::a2_direction_null;
-	iPoint   ability2_point = NULLPOINT;
-	bool	 find = false;
+	iPoint    ability2_point = NULLPOINT;
+	bool	  find = false;
+	bool      point_found = false;
 
 	// Ability 3
-	j1Timer	ability3_timer;
-	bool	ability3 = false;
+	j1Timer* ability3_timer = nullptr;
+	bool	 ability3 = false;
 
 	// 
 };

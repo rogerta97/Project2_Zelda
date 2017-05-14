@@ -48,7 +48,9 @@ struct shop
 	bool				active = false;
 
 	UI_Image*			shop_icon = nullptr;
-};
+
+	Animator*	     	shop_icon_anim = nullptr;
+}; 
 
 class ShopManager
 {
@@ -60,19 +62,20 @@ public:
 	bool Update();
 	bool CleanUp();
 
-private:
-	void ChangeShopState(int view);
-	void UpdateItemInfo(int view);
+	SDL_Rect GetPlayerItem(int player_index, int item_index);
 	void UpdatePlayerItems(int view, Player* player);
+	bool IsActive(int viewport);
 
+private:
+	void ChangeShopState(int view, Player* player = nullptr);
+	void UpdateItemInfo(int view, Player* player = nullptr);
+	
 public:
 	UI_Window*		shop_window = nullptr;
 	iPoint			team_shop[2] = { NULLPOINT,NULLPOINT };
 
 private:
 	shop*			shops[4] = { nullptr,nullptr,nullptr };
-
-	Animator*		shop_icon_anim = nullptr;
 };
 
 #endif // !_SHOPMANAGER_H_

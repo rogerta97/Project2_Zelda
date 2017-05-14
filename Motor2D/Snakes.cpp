@@ -17,7 +17,7 @@
 #define SNAKE_H 32
 #define SNAKE_W 32
 
-#define ATTACK_RANGE 150
+#define ATTACK_RANGE 180
 #define HALFMAP 81*32
 
 Snakes::Snakes(iPoint pos)
@@ -26,6 +26,7 @@ Snakes::Snakes(iPoint pos)
 
 	game_object->CreateCollision(iPoint(0, 0), game_object->GetHitBoxSize().x, game_object->GetHitBoxSize().y, fixture_type::f_t_hit_box);
 	game_object->SetListener((j1Module*)App->entity);
+	game_object->SetListener((j1Module*)App->spell);
 	game_object->SetFixedRotation(true);
 	game_object->SetKinematic();
 
@@ -43,6 +44,8 @@ Snakes::Snakes(iPoint pos)
 	AddAbility(0, cd, bd, dmg_mult, "s_attack");
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
+
+	last_life = stats.life;
 
 	name = "snake";
 }
@@ -73,11 +76,6 @@ bool Snakes::Update(float dt)
 {
 	bool ret = true;
 
-	if (to_delete)
-		return true;
-
-	LifeBar(iPoint(32, 4), iPoint(-20, -32));
-
 	Entity* entity = nullptr;
 	Ability* ability = nullptr;
 	Spell* spell = nullptr;
@@ -88,44 +86,30 @@ bool Snakes::Update(float dt)
 		{
 			if (spell != nullptr)
 			{
-				DealDamage((entity->stats.power * spell->stats.damage_multiplicator) + ability->damage); // Spells control their own damage mutiplicator
+				DealDamage(((float)entity->stats.power * (float)spell->stats.damage_multiplicator) + (float)ability->damage); // Spells control their own damage mutiplicator
 
 				spell->Effects(entity, this, ability);
 			}
 			else
-				DealDamage((entity->stats.power * ability->damage_multiplicator) + ability->damage);
+				DealDamage(((float)entity->stats.power * (float)ability->damage_multiplicator) + (float)ability->damage);
 
-			if(state == Snk_S_Idle)
-			{
-				is_attacked = true;
-				state = Snk_S_Attack;
-				target = entity;
-			}
-			
-		}
-		if (stats.life <= 0)
-		{
-			App->entity->AddRupeesIfPlayer(entity, rupee_reward);
-			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
-
-			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
-			{
-				if (this->GetPos().x > HALFMAP)
-				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
-						if (entity->is_player)
-							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-				}
-				else
-				{
-					if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
-						if (entity->is_player)
-							App->scene->main_scene->quest_manager->add_progress(3, entity->GetTeam());
-				}
-			}
+			Die(entity);
 		}
 	}
 
+	// Is attacked
+	if (stats.life < last_life)
+	{
+		if(LookForTarget())
+		{
+			is_attacked = true;
+			state = Snk_S_Attack;
+		}
+	}
+	last_life = stats.life;
+
+	if (target != nullptr && target->to_delete)
+		target = nullptr;
 
 	switch (state)
 	{
@@ -162,7 +146,10 @@ bool Snakes::Update(float dt)
 			else
 			{
 				if (!LookForTarget())
+				{
+					target = nullptr;
 					Idle();
+				}
 			}
 		}
 		else
@@ -179,6 +166,8 @@ bool Snakes::Update(float dt)
 bool Snakes::Draw(float dt)
 {
 	bool ret = true;
+
+	LifeBar(iPoint(32, 4), iPoint(-20, -32));
 
 	if(!flip)
 		App->view->LayerBlit(GetPos().y, game_object->GetTexture(), { game_object->GetPos().x - 14 , game_object->GetPos().y - 20 }, game_object->GetCurrentAnimationRect(dt), 0, -1.0f, true, SDL_FLIP_NONE);
@@ -208,6 +197,31 @@ bool Snakes::CleanUp()
 iPoint Snakes::GetPos() const
 {
 	return game_object->GetPos();
+}
+
+void Snakes::Die(Entity * killed_by)
+{
+	if (stats.life <= 0 && !to_delete &&  killed_by != nullptr)
+	{
+		App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
+		App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+
+		if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+		{
+			if (this->GetPos().x > HALFMAP)
+			{
+				if (App->scene->main_scene->jungleCamp_manager->snakes_camp1.empty())
+					if (killed_by->is_player)
+						App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+			}
+			else
+			{
+				if (App->scene->main_scene->jungleCamp_manager->snakes_camp2.empty())
+					if (killed_by->is_player)
+						App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+			}
+		}
+	}
 }
 
 void Snakes::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)
@@ -245,8 +259,7 @@ void Snakes::DoAttack()
 			if (!LookForTarget())
 				Idle();
 
-
-		abilities.at(0)->cd_timer.Start();
+		abilities.at(0)->cd_timer->Start();
 	}
 }
 
