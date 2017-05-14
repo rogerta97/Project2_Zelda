@@ -364,7 +364,6 @@ bool MenuScene::CleanUp()
 	App->tex->UnLoadTexture(main_banner_texture);	
 
 	// Background image
-	App->tex->UnLoadTexture(background_image);
 	fade_value = 255.0f;
 
 	//quests_enabled = false;

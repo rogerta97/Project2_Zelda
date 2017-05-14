@@ -23,6 +23,11 @@ private:
 private:
 	SDL_Texture* screen = nullptr;
 
+	// Background image
+	SDL_Texture* background_image = nullptr;
+	iPoint	     background_pos = NULLPOINT;
+	SDL_Rect     background_image_rect = NULLRECT;
+
 	UI_Window* window = nullptr; 
 
 	UI_Image* background_text_image = nullptr;

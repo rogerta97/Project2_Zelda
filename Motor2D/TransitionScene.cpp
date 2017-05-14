@@ -17,6 +17,11 @@ bool TransitionScene::Start()
 {
 	App->win->GetWindowSize(w, h);
 
+	// Background
+	background_image = App->tex->LoadTexture("gui/intro_background.png");
+	background_pos = { 0 , 0 };
+	background_image_rect = { 0, 0, 1994, 1359 };
+
 	window = App->gui->UI_CreateWin({0,0}, w, h, 0, false);
 
 	SDL_Rect background_text_rect = {81, 1345, 230, 55}; 
@@ -33,6 +38,8 @@ bool TransitionScene::Start()
 bool TransitionScene::Update(float dt)
 {
 	bool ret = true;
+
+	App->render->Blit(background_image, background_pos.x, background_pos.y, &background_image_rect);
 
 	App->render->Blit(screen, w/2 - 532, h/ 2 - 380);
 
@@ -52,6 +59,7 @@ bool TransitionScene::CleanUp()
 		App->gui->DeleteElement(window); 
 
 	App->tex->UnLoadTexture(screen);
+	App->tex->UnLoadTexture(background_image);
 
 	return ret;
 }
