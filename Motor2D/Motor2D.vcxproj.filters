@@ -694,11 +694,6 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="2DEngine.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Game\gui\appicon.png" />
-    <Image Include="icon1.ico" />
     <Image Include="..\Game\gui\appicon_ico.ico" />
   </ItemGroup>
 </Project>
