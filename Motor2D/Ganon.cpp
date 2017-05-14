@@ -75,6 +75,7 @@ Ganon::Ganon(iPoint pos)
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
 	bd = stats_node.child("ability4").attribute("bd").as_int();
+	stun_time = stats_node.child("ability4").attribute("stun_time").as_float();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
 	a4->SetImages({ 864, 399, 48, 73 }, { 864, 522, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 497, 32, 32 });
 	// -------------------------------------
@@ -802,7 +803,7 @@ void Ganon::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture * fixtureA
 
 		if (bodyA == game_object->pbody && e != nullptr && e != this && e->GetTeam() != GetTeam() && !to_delete && !e->to_delete)
 		{
-			e->Stun(1.0f);
+			e->Stun(stun_time);
 		}
 	}
 }

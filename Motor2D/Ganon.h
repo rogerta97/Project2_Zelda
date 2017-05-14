@@ -135,6 +135,7 @@ private:
 	j1Timer*	  look_for_target_timer = nullptr;
 	iPoint		  target = NULLPOINT;
 	bool		  target_found = false;
+	float		  stun_time = 0.0f;
 };
 
 #endif

@@ -189,7 +189,7 @@
     <ability1 mult="0.8" cd="1" bd="2"/>
     <ability2 mult="0" cd="8" bd="5"/>
     <ability3 mult="0.5" cd="12" bd="8" shield="15"/>
-    <ability4 mult="1" cd="35" bd="10"/>
+    <ability4 mult="1" cd="35" bd="10" stun_time ="2"/>
     <bat_spell mult ="0.6" bat_fire_bd ="2" bat_fire_dm ="0.2"/>
   </stats>
 </file>
