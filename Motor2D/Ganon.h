@@ -8,7 +8,7 @@ class GameObject;
 struct ball
 {
 	GameObject* game_object = nullptr;
-	int			angle = 0;
+	float		angle = 0;
 };
 
 class Ganon : public Entity
