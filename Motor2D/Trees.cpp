@@ -40,7 +40,7 @@ Tree::Tree(iPoint pos)
 	game_object->SetKinematic(); 
 
 	uchar* matrix = new uchar[20];
-	uchar data[20] = {  1,1,1,1,
+	uchar data[20] = {  0,0,0,0,
 						0,0,0,0,
 						0,0,0,0,
 						0,0,0,0,
