@@ -73,6 +73,11 @@ void Tree::SetTreeColor(const char * color)
 	game_object->SetAnimation(color);
 }
 
+iPoint Tree::GetPos() const
+{
+	return game_object->GetPos();
+}
+
 Tree::~Tree()
 {
 }
