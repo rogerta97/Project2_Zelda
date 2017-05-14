@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
-	<app framerate_cap="">
-		<title name="Project 2 - CatPad" />
+	<app framerate_cap="240">
+		<title name="Zelda Legends " />
 		<organization>UPC</organization>
 	</app>
 	<renderer>

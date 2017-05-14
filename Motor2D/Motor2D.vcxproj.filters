@@ -480,6 +480,7 @@
     <ClInclude Include="TransitionScene.h">
       <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -691,5 +692,13 @@
     <Xml Include="..\Game\tacoattack.xml">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="2DEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Game\gui\appicon.png" />
+    <Image Include="icon1.ico" />
+    <Image Include="..\Game\gui\appicon_ico.ico" />
   </ItemGroup>
 </Project>

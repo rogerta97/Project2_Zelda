@@ -201,8 +201,7 @@ bool RemapingScene::Update(float dt)
 
 					remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
 				}
-			}
-				
+			}	
 		}
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
@@ -225,8 +224,6 @@ bool RemapingScene::Update(float dt)
 					remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
 				}
 			}
-			
-
 		}
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN && inside == false)
@@ -240,7 +237,6 @@ bool RemapingScene::Update(float dt)
 
 				remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
 			}
-
 		}
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN && inside == false)
@@ -254,14 +250,12 @@ bool RemapingScene::Update(float dt)
 
 				remapping_ui[i].cursor->SetPos(GetCursorPosFromCurrentState(remapping_ui[i].current_state));
 			}
-
 		}
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 		{
 			if(!inside)
 				App->scene->ChangeScene((Scene*)App->scene->menu_scene);
-		
 		}
 
 		if (App->input->GetControllerButton(i, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
@@ -281,7 +275,6 @@ bool RemapingScene::Update(float dt)
 				QuitOption(i); 
 			}
 		}
-
 	}
 
 	App->view->LayerBlit(0, background_image, App->view->GetCameraPos(1), { 0,0,1994, 1359 }, 0, 1);
@@ -339,8 +332,6 @@ iPoint RemapingScene::GetCursorPosFromCurrentState(remaping_state curr_state)
 	case r_s_a4:
 		ret = { remapping_ui[0].a4_background->GetPos().x + remapping_ui[0].confirm_background->image.w + 10, remapping_ui[0].a4_background->GetPos().y  };
 		break;
-
-
 	}
 
 	return ret;
@@ -547,11 +538,6 @@ void RemapingScene::UpdateKeys(int i)
 			break;
 		}
 	}
-
-
-
-
-
 }
 
 void RemapingScene::EnterOption(int i)
@@ -560,7 +546,6 @@ void RemapingScene::EnterOption(int i)
 	remapping_ui[i].curr_inside_pos = 0; 
 	OpenFreeButtonList(i);
 	inside = true; 
-	
 }
 
 void RemapingScene::QuitOption(int i)
@@ -581,7 +566,6 @@ void RemapingScene::QuitOption(int i)
 	remapping_ui[i].support_pick->enabled = false; 
 
 	inside = false; 
-
 }
 
 void RemapingScene::OpenFreeButtonList(int i)
@@ -712,7 +696,6 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 		new_key.key_id = SDL_CONTROLLER_BUTTON_Y;
 		new_key.is_button = true;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
-
 	}
 	break;
 
@@ -735,7 +718,6 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 		new_key.key_id = SDL_CONTROLLER_BUTTON_Y;
 		new_key.is_button = true;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
-
 	}
 	break;
 
@@ -780,7 +762,6 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 		new_key.key_id = SDL_CONTROLLER_BUTTON_A;
 		new_key.is_button = true;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
-
 	}
 	break;
 
@@ -803,7 +784,6 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 		new_key.key_id = LEFT_TRIGGER;
 		new_key.is_button = false;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
-
 	}
 	break;
 
@@ -828,7 +808,6 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 			new_key.key_id = RIGHT_TRIGGER;
 			new_key.is_button = false;
 			remapping_ui[viewport].sdl_code.push_back(new_key);
-
 		}
 		else
 		{
@@ -849,9 +828,7 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 			new_key.key_id = LEFT_TRIGGER;
 			new_key.is_button = false;
 			remapping_ui[viewport].sdl_code.push_back(new_key);
-
 		}
-
 	}
 	break;
 
@@ -874,25 +851,20 @@ void RemapingScene::SetButtonsFromID(key_mapping curr_key, int viewport)
 		new_key.key_id = RIGHT_TRIGGER;
 		new_key.is_button = false;
 		remapping_ui[viewport].sdl_code.push_back(new_key);
-
 	}
 	break;
 
 	}
-
 }
 
 void RemapingScene::MoveSelectorCursor(bool up, int viewport)
 {
-
 	if (up) 
 	{
 		if ((remapping_ui[viewport].button_selector_cursor->GetPos().y - remapping_ui[viewport].button_selector_cursor->image.h) > remapping_ui[viewport].button_support->GetPos().y)
 		{
 			remapping_ui[viewport].button_selector_cursor->SetPos({ remapping_ui[viewport].button_selector_cursor->GetPos().x, remapping_ui[viewport].button_selector_cursor->GetPos().y - 57 });
 		}
-		
-		return;
 	}
 	else
 	{
@@ -900,12 +872,7 @@ void RemapingScene::MoveSelectorCursor(bool up, int viewport)
 		{
 			remapping_ui[viewport].button_selector_cursor->SetPos({ remapping_ui[viewport].button_selector_cursor->GetPos().x, remapping_ui[viewport].button_selector_cursor->GetPos().y + 57 });
 		}
-
-		return;
-
 	}
-	
-	
 }
 
 void RemapingScene::RemapKey(remaping_state curr_state, int sdl_scancode, bool isbutton, int viewport)
@@ -943,9 +910,6 @@ void RemapingScene::RemapKey(remaping_state curr_state, int sdl_scancode, bool i
 	case r_s_a4:
 		App->scene->players[viewport].mapping->MapKey(m_k_ability4, sdl_scancode, !isbutton);
 		break;
-
-
-
 	}
 }
 

@@ -64,8 +64,8 @@ struct viewport_data
 		iPoint abilities_info3_pos = { background_info_image_pos.x + 30, background_info_image_pos.y + 190};
 		iPoint abilities_info4_pos = { background_info_image_pos.x + 280, background_info_image_pos.y + 190};
 
-		iPoint abilities_image1_pos = { abilities_info1_pos.x + 65, abilities_info1_pos.y - 35 };
-		iPoint abilities_image2_pos = { abilities_info2_pos.x + 75, abilities_info2_pos.y-  35};
+		iPoint abilities_image1_pos = { abilities_info1_pos.x + 75, abilities_info1_pos.y - 35 };
+		iPoint abilities_image2_pos = { abilities_info2_pos.x + 85, abilities_info2_pos.y-  35};
 		iPoint abilities_image3_pos = { abilities_info3_pos.x + 75, abilities_info3_pos.y - 35 };
 		iPoint abilities_image4_pos = { abilities_info4_pos.x + 85 , abilities_info4_pos.y- 35 };
 
@@ -106,8 +106,6 @@ struct viewport_data
 		abilities_image3->enabled = false;							 
 		abilities_image4 = window->CreateImage(abilities_image4_pos, {0,0,0,0});
 		abilities_image4->enabled = false;
-
-
 	};
 
 	~viewport_data() {};
