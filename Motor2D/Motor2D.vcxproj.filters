@@ -480,9 +480,6 @@
     <ClInclude Include="TransitionScene.h">
       <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Engine\7. Resources ========</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -602,9 +599,6 @@
     <Filter Include="Engine\3. Scenes ==========\TransitionScene">
       <UniqueIdentifier>{18b1530f-8c2d-4090-85f4-e22038f3602d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\7. Resources ========">
-      <UniqueIdentifier>{f3f94228-cfa7-40b9-851d-e5dcb4fb1e4e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -697,15 +691,5 @@
     <Xml Include="..\Game\tacoattack.xml">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="2DEngine1.rc">
-      <Filter>Engine\7. Resources ========</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Game\gui\appicon_ico.ico">
-      <Filter>Engine\7. Resources ========</Filter>
-    </Image>
   </ItemGroup>
 </Project>

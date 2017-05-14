@@ -163,7 +163,6 @@
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Bushes.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="TransitionScene.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="Cuco.h" />
@@ -280,12 +279,6 @@
     </Xml>
     <Xml Include="..\Game\Trees.xml" />
     <Xml Include="..\Game\trunk.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="2DEngine1.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Game\gui\appicon_ico.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
