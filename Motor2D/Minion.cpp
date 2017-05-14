@@ -443,6 +443,8 @@ void Minion::CheckState()
 		case Move_FollowBasePath:
 			if (LookForTarget())
 				PathToTarget();
+			else if (base_path_index == base_path.size()-1)
+				App->scene->main_scene->minion_manager->KillMinion(this);
 			break;
 		case Move_AproachTarget:
 			if (target == nullptr)
@@ -640,23 +642,6 @@ bool Minion::LookForTarget()
 			}
 		}
 	}
-
-	if (base_path_index >= base_path.size() - 1)
-	{
-		if (GetTeam() == 1)
-		{
-			target = App->scene->main_scene->base_manager->GetBase(2);
-			attack_pos_offset.x = -125;
-		}
-		else 
-		{
-			target = App->scene->main_scene->base_manager->GetBase(1);
-			attack_pos_offset.x = -125;
-		}
-
-		ret = true;
-	}
-
 	return ret;
 }
 
