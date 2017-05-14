@@ -669,7 +669,7 @@ void Ganon::ShowAbility1Right()
 
 void Ganon::Ability2Up()
 {
-	if (!attacking)
+	if (!attacking && balls.empty())
 	{
 		stats.shield = shield;
 		CreateAbility2Balls();
@@ -712,7 +712,7 @@ void Ganon::ShowAbility2Right()
 
 void Ganon::Ability3Up()
 {
-	if (!attacking)
+	if (ability3)
 	{
 		attacking = true;
 		can_move = false;
@@ -749,6 +749,7 @@ void Ganon::ShowAbility3Up()
 {
 	if (!attacking)
 	{
+		attacking = true;
 		look_for_target = true;
 		can_move = false;
 		ability3 = true;
@@ -848,9 +849,6 @@ void Ganon::Die(Entity * killed_by)
 
 void Ganon::CreateAbility2Balls()
 {
-	if (!balls.empty())
-		return;
-
 	ball b;
 
 	for (int i = 1; i <= 3; i++)
