@@ -155,7 +155,9 @@ public:
 
 	void MoveCamera(int id, float x, float y);
 	void SetCamera(int id, int x, int y);
+
 	void CenterCamera(int id, float x, float y);
+  
 	iPoint GetCameraPos(uint viewport);
 
 	void OnCommand(std::list<std::string>& tokens);

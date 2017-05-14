@@ -95,6 +95,7 @@ bool NaviBasicAttack::Update(float dt)
 	if (!die && timer->ReadSec() > DESTRUCTION_TIME)
 	{
 		die = true;
+
 		timer->Start();
 
 		if (owner->GetTeam() == ANIMATIONS_TEAM)
@@ -150,6 +151,7 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 {
 	// Delete if hits another enemy entity
 	if (bodyA == game_object->pbody && fixtureB->type == fixture_type::f_t_hit_box && owner != nullptr && bodyB != owner->game_object->pbody)
+
 	{
 		Entity* e = nullptr;
 
@@ -158,6 +160,7 @@ void NaviBasicAttack::OnCollEnter(PhysBody * bodyA, PhysBody * bodyB, b2Fixture 
 		if (e != nullptr && !e->to_delete && e->GetTeam() != owner->GetTeam())
 		{
 			die = true;
+
 			timer->Start();
 
 			if (owner->GetTeam() == ANIMATIONS_TEAM)

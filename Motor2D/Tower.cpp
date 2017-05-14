@@ -143,7 +143,6 @@ bool Tower::Update(float dt)
 			Die(entity);
 		}
 	}
-
 	return ret;
 }
 

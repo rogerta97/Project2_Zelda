@@ -299,6 +299,7 @@ void Cuco::CucoMove()
 
 	iPoint target_map_pos = base_path.front();
 
+
 	iPoint target_world_pos = App->map->MapToWorld(target_map_pos.x, target_map_pos.y);
 
 	Move(target_world_pos.x - GetPos().x, target_world_pos.y - GetPos().y);
@@ -306,8 +307,10 @@ void Cuco::CucoMove()
 	if (cuco_map_pos == target_map_pos)
 		base_path.pop();
 
+
 	if (base_path.empty())
 		GetNewPath();
+
 }
 
 void Cuco::GetNewPath()
