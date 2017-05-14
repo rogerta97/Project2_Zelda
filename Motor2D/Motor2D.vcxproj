@@ -282,6 +282,9 @@
     <Xml Include="..\Game\trunk.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="2DEngine1.rc" />
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="..\Game\gui\appicon_ico.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
