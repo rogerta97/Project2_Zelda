@@ -7,7 +7,7 @@
 #include "j1Gui.h"
 #include "Cuco.h"
 
-#define QUESTS_TIMER 5
+#define QUESTS_TIMER 60
 
 class Entity;
 
