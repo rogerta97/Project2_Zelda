@@ -287,6 +287,22 @@ void Guards::Die(Entity* killed_by)
 		{
 			App->entity->AddRupeesIfPlayer(killed_by, rupee_reward);
 			App->scene->main_scene->jungleCamp_manager->KillJungleCamp(this);
+
+			if (App->scene->main_scene->quest_manager->vquest[2]->state == active)
+			{
+				if (this->GetPos().x > HALFMAP)
+				{
+					if (App->scene->main_scene->jungleCamp_manager->guards_camp1.empty())
+						if (killed_by->is_player)
+							App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+				}
+				else
+				{
+					if (App->scene->main_scene->jungleCamp_manager->guards_camp2.empty())
+						if (killed_by->is_player)
+							App->scene->main_scene->quest_manager->add_progress(3, killed_by->GetTeam());
+				}
+			}
 		}
 	}
 }
