@@ -44,7 +44,7 @@ struct viewport_data
 	{
 		SDL_Rect view = App->view->GetViewportRect(1);
 
-		iPoint big_image_pos = { view.w/2 - BIG_CARD_WIDTH/2, view.h / 5};
+		iPoint big_image_pos = { view.w/2 - BIG_CARD_WIDTH/2, view.h / 2 - 130};
 		iPoint small_image_left_pos = { big_image_pos.x - 120, big_image_pos.y + 30};
 		iPoint small_image_right_pos = { big_image_pos.x + 116 + 120 - 74, big_image_pos.y + 30};
 
@@ -55,7 +55,7 @@ struct viewport_data
 		iPoint background_info_image_pos = {view.w / 2 - background_info_image_rect.w/2, view.h / 2 - background_info_image_rect.h / 2 };
 			
 		SDL_Rect background_name_image_rect = { 128, 52,  217, 55 };
-		iPoint background_name_image_pos = { view.w / 2 - background_name_image_rect.w/2, view.h - (view.h / 3) };
+		iPoint background_name_image_pos = { view.w / 2 - background_name_image_rect.w/2, big_image_pos.y + 170 };
 
 		iPoint text_name_pos = { background_name_image_pos.x + 85, background_name_image_pos.y + 10};
 
@@ -69,7 +69,8 @@ struct viewport_data
 		iPoint abilities_image3_pos = { abilities_info3_pos.x + 75, abilities_info3_pos.y - 35 };
 		iPoint abilities_image4_pos = { abilities_info4_pos.x + 85 , abilities_info4_pos.y- 35 };
 
-		iPoint ready_text_pos = { view.w/3 - 25, view.h - view.h/6};
+		press_start_text_pos = { (view.w / 2) - 130, text_name_pos.y + 60 };
+		ready_text_pos = { (view.w/2) - 33, text_name_pos.y + 60};
 
 		window = App->gui->UI_CreateWin(iPoint(0, 0), view.w, view.h, 1, true, false, true);
 		window->viewport = viewport;
@@ -83,7 +84,7 @@ struct viewport_data
 		background_name_image = window->CreateImage(background_name_image_pos, background_name_image_rect);
 		text_name = window->CreateText(text_name_pos, App->font->game_font);
 
-		ready_text = window->CreateText(ready_text_pos, App->font->game_font, 30);
+		ready_text = window->CreateText(press_start_text_pos, App->font->game_font, 30);
 		ready_text->SetText("Press START when ready");
 
 		background_info_image = window->CreateImage(background_info_image_pos, background_info_image_rect);
@@ -135,6 +136,10 @@ struct viewport_data
 	UI_Image* abilities_image4 = nullptr;
 
 	UI_Text* ready_text = nullptr; 
+
+
+	iPoint	ready_text_pos = NULLPOINT;
+	iPoint	press_start_text_pos = NULLPOINT;
 
 	bool SetViewportInfo(player_data* player); 
 };

@@ -21,7 +21,6 @@ enum remaping_state
 	r_s_a4,
 
 	r_s_inside,
-
 };
 
 struct remap_ui
@@ -70,9 +69,9 @@ struct remap_ui
 	remaping_state current_state = r_s_confirm;
 	remaping_state prev_state = r_s_confirm; 
 	
-	int				curr_inside_pos = -1; 
+	int	           curr_inside_pos = -1; 
 
-	vector<key_mapping>	   sdl_code;
+	vector<key_mapping>	sdl_code;
 };
 
 class RemapingScene : public Scene
@@ -86,7 +85,7 @@ public:
 
 	bool CleanUp();
 
-	UI_Window* window; 
+	UI_Window* window = nullptr; 
 
 private:
 	// Gets the position of the cursor depending on what the state is
@@ -112,7 +111,6 @@ private:
 	void MoveSelectorCursor(bool up, int viewport);
 
 	void RemapKey(remaping_state curr_state, int sdl_scancode, bool isbutton, int viewport); 
-
 	
 private:
 	remap_ui		   remapping_ui[4];

@@ -21,12 +21,12 @@ bool CharacterSelectionScene::Start()
 {
 	bool ret = true;
 
+	App->console->AddText("viewports.set 4", Input);
+
 	// Background images
 	background_image = App->tex->LoadTexture("gui/intro_background.png");
 	background_pos = { 0 , 0 };
 	background_image_rect = { 0, 0, 1994, 1359 };
-
-	App->console->AddText("viewports.set 4", Input);
 
 	// Create players and info
 	link = new player_data();
@@ -275,7 +275,7 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			viewports_data[i].is_ready = true;
 
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x + 100, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetPos(viewports_data[i].ready_text_pos);
 			viewports_data[i].ready_text->SetText("READY!");
 
 		}
@@ -284,7 +284,7 @@ bool CharacterSelectionScene::Update(float dt)
 		{
 			viewports_data[i].is_ready = false;
 
-			viewports_data[i].ready_text->SetPos(iPoint(viewports_data[i].ready_text->GetPos().x - 100, viewports_data[i].ready_text->GetPos().y));
+			viewports_data[i].ready_text->SetPos(viewports_data[i].press_start_text_pos);
 			viewports_data[i].ready_text->SetText("Press START when ready!");
 		}
 
