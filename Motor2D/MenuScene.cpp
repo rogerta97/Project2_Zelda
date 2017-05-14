@@ -251,12 +251,7 @@ bool MenuScene::Update(float dt)
 	
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		App->scene->ChangeScene(App->scene->main_scene);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
-	{
-		quit_text->StartInterpolationAnimation(iPoint(quit_text->GetPos().x - 200, quit_text->GetPos().y), fPoint(1, 0), fPoint(0, 1), 5);
+		//App->scene->ChangeScene(App->scene->main_scene);
 	}
 
 	// Blit main banner
