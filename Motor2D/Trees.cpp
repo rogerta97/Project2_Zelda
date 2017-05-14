@@ -41,7 +41,7 @@ Tree::Tree(iPoint pos)
 
 	uchar* matrix = new uchar[20];
 	uchar data[20] = {  1,1,1,1,
-						1,1,1,1,
+						0,0,0,0,
 						0,0,0,0,
 						0,0,0,0,
 						0,0,0,0};
