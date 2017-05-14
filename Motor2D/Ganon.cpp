@@ -194,17 +194,17 @@ bool Ganon::Update(float dt)
 
 			target = DrawTarget();
 
+			angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 		}
 		else
 		{
 			// Recalculate target to fit the map and the range
-			if (target_found = true)
+			if (target_found == true)
 			{
 				int distance = abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y));
 
 				if (distance > ABILITY3_RANGE)
 				{
-					int angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 					int substract = distance - ABILITY3_RANGE;
 
 					target.x += (int)(substract * cos(angle*DEGTORAD));
@@ -213,7 +213,6 @@ bool Ganon::Update(float dt)
 
 				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)))
 				{
-					int angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 					int substract = 10;
 					target.x += (int)(substract * cos(angle*DEGTORAD));
 					target.y += (int)(substract * sin(angle*DEGTORAD));
@@ -225,7 +224,6 @@ bool Ganon::Update(float dt)
 			// Move ganon to target
 			if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y)) > 7)
 			{
-				float angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 				MoveAngle(ABILITY3_MOVE_SPEED, angle);
 				game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 			}

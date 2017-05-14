@@ -136,6 +136,7 @@ private:
 	iPoint		  target = NULLPOINT;
 	bool		  target_found = false;
 	float		  stun_time = 0.0f;
+	int			  angle = 0;
 };
 
 #endif
