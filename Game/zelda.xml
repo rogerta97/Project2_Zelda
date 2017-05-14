@@ -3,7 +3,7 @@
 <file>
   <radius value="200"/>
   <area x="0" y="51" w="400" h="400"/>
-  <activation_time sec="600"/>
+  <activation_time sec="480"/>
   <speed value="25"/>
   <animations texture ="textures/zelda_spritesheet.png">
     <anim speed = "5" name = "walk_up" loop = "true">
