@@ -153,8 +153,8 @@ private:
 
 	mutable bool		want_to_save = false;
 	bool				want_to_load = false;
-	p2SString			load_game;
-	mutable p2SString	save_game;
+	string			load_game;
+	mutable string	save_game;
 
 	// Engine debug info
 	int					capped_ms = -1;
