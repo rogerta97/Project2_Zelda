@@ -39,17 +39,18 @@ Tree::Tree(iPoint pos)
 	game_object->SetFixedRotation(true); 
 	game_object->SetKinematic(); 
 
-	uchar* matrix = new uchar[20];
-	uchar data[20] = {  1,1,1,1,
-						1,1,1,1,
-						0,0,0,0,
-						0,0,0,0,
-						0,0,0,0};
+	uchar* matrix = new uchar[36];
+	uchar data[36] = {  1,1,1,1,1,1,
+						1,1,1,1,1,1,
+						0,0,0,0,0,0,
+						0,0,0,0,0,0,
+						0,0,0,0,0,0, 
+						0,0,0,0,0,0, };
 
-	memcpy_s(matrix, 20, data, 20);
+	memcpy_s(matrix, 36, data, 36);
 
-	iPoint map_pos = App->map->WorldToMap(GetPos().x - 128/2, GetPos().y - 80);
-	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 4, 5);
+	iPoint map_pos = App->map->WorldToMap(GetPos().x - 128/2 - 32, GetPos().y - 80);
+	App->pathfinding->ChangeWalkability(matrix, map_pos.x, map_pos.y, 6, 6);
 
 	RELEASE_ARRAY(matrix);
 
