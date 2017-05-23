@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!-- Config file for the game -->
+
+<file>
+
+  <animations texture="textures/abilities_rects.png">
+
+<link>
+    <anim loop="false" name="basicattack_rect" speed="1">
+      <rect h="79" w="92" y="48" x="10"/>
+    </anim>
+    <anim loop="false" name="boomerang_rect" speed="1">
+      <rect h="1" w="38" y="170" x="24"/>
+    </anim>
+    <anim loop="false" name="spinattack_rect" speed="1">
+      <rect h="203" w="182" y="104" x="104"/>
+    </anim>
+    <anim loop="false" name="ulti_rect" speed="1">
+      <rect h="2" w="2" y="200" x="34"/>
+    </anim>
+ </link>
+
+ <navi>
+    <anim loop="false" name="basicattack_rect" speed="1">
+      <rect h="1" w="64" y="270" x="26"/>
+    </anim>
+    <anim loop="false" name="blink_rect" speed="1">
+      <rect h="203" w="146" y="34" x="34"/>
+    </anim>
+ </navi>
+
+ <ganon>
+    <anim loop="false" name="basicattack_rect" speed="1">
+      <rect h="1" w="92" y="76" x="26"/>
+    </anim>
+    <anim loop="false" name="bat_rect" speed="1">
+      <rect h="1" w="120" y="260" x="24"/>
+    </anim>
+    <anim loop="false" name="ulti_rect" speed="1">
+      <rect h="1" w=146" y="200" x="200"/>
+    </anim>
+ </ganon>
+
+ </animations>
+
+</file>
