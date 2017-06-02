@@ -5,6 +5,7 @@
 #include "j1Gui.h"
 #include "j1Render.h"
 #include "j1Timer.h"
+#include "Video.h"
 
 class LogoScene : public Scene
 {
@@ -17,19 +18,7 @@ public:
 	bool CleanUp();
 
 private:
-	void FadeIn();
-	void FadeOut();
-
-private:
 	iPoint       win_size = NULLPOINT;
-
-	SDL_Texture* logo = nullptr;
-	SDL_Rect     logo_rect = NULLRECT;
-	iPoint       logo_pos = NULLPOINT;
-
-	j1Timer      timer;
-
-	float        fade_value = 255.0f;
 };
 
 

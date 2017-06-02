@@ -23,6 +23,8 @@
 #include "j1Viewports.h"
 #include "j1Spell.h"
 #include "j1XMLLoader.h"
+#include "Video.h"
+
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -46,6 +48,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	view = new j1Viewports();
 	spell = new j1Spell();
 	xml = new j1XMLLoader();
+	video = new Video();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -63,6 +66,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(entity);
 	AddModule(spell);
 	AddModule(view);
+	AddModule(video);
 
 	// Scene
 	AddModule(scene);

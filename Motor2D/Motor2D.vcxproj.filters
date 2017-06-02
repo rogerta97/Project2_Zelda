@@ -223,6 +223,12 @@
     <ClCompile Include="TransitionScene.cpp">
       <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>Engine\1. Modules =========</Filter>
+    </ClCompile>
+    <ClCompile Include="theoraplay.c">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -479,6 +485,12 @@
     </ClInclude>
     <ClInclude Include="TransitionScene.h">
       <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>Engine\1. Modules =========</Filter>
+    </ClInclude>
+    <ClInclude Include="theoraplay.h">
+      <Filter>Engine\2. Components ======</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
