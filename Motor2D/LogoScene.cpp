@@ -6,11 +6,6 @@
 #include "j1Scene.h"
 #include "j1Input.h"
 
-#define LOGO_APPEAR 1
-#define LOGO_OUT 5.5f
-#define SCREEN_TIME 8
-#define FADE_SPEED 150
-
 LogoScene::LogoScene()
 {
 }
@@ -25,9 +20,11 @@ bool LogoScene::Start()
 
 	LOG("Start LogoScene");
 
+	win_size = App->win->GetWindowSize();
+
 	App->render->background = {255, 255, 255};
 
-	App->video->PlayVideo("catwithsound.ogv", { 10,10,500,500 });
+	App->video->PlayVideo("catwithsound.ogv", { win_size.x / 2 - 154,win_size.y / 2 - 154,306,306 });
 
 	return ret;
 }
@@ -36,9 +33,18 @@ bool LogoScene::Update(float dt)
 {
 	bool ret = true;
 
-
 	if (!App->video->IsPlaying())
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+	{
+		if (logo_played == true)
+		{
+			App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		}
+		else
+		{
+			logo_played = true;
+			App->video->PlayVideo("zelda-lehendas.ogv", { 0,0,win_size.x,win_size.y });
+		}
+	}
 
 	return ret;
 }

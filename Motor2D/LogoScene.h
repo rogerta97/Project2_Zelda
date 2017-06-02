@@ -19,6 +19,8 @@ public:
 
 private:
 	iPoint       win_size = NULLPOINT;
+
+	bool		 logo_played = false;
 };
 
 
