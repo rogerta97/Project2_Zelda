@@ -3,45 +3,39 @@
 <!-- Config file for the game -->
 
 <file>
+  <link>
+    <basicattack_rect>
+        <rect x="79" y="92" w="48" h="10"/>
+      </basicattack_rect>
+    <boomerang_rect>
+        <rect x="1" y="38" w="170" h="24"/>
+      </boomerang_rect>
+    <spinattack_rect>
+        <rect x="203" y="182" w="104" h="104"/>
+      </spinattack_rect>
+    <ulti_rect>
+        <rect x="2" y="2" w="200" h="34"/>
+    </ulti_rect>
+   </link>
 
-  <animations texture="textures/abilities_rects.png">
+   <navi>
+      <basicattack_rect>
+        <rect x="1" y="64" w="270" h="26"/>
+      </basicattack_rect>
+      <blink_rect>
+        <rect x="203" y="146" w="34" h="34"/>
+      </blink_rect>
+   </navi>
 
-<link>
-    <anim loop="false" name="basicattack_rect" speed="1">
-      <rect h="79" w="92" y="48" x="10"/>
-    </anim>
-    <anim loop="false" name="boomerang_rect" speed="1">
-      <rect h="1" w="38" y="170" x="24"/>
-    </anim>
-    <anim loop="false" name="spinattack_rect" speed="1">
-      <rect h="203" w="182" y="104" x="104"/>
-    </anim>
-    <anim loop="false" name="ulti_rect" speed="1">
-      <rect h="2" w="2" y="200" x="34"/>
-    </anim>
- </link>
-
- <navi>
-    <anim loop="false" name="basicattack_rect" speed="1">
-      <rect h="1" w="64" y="270" x="26"/>
-    </anim>
-    <anim loop="false" name="blink_rect" speed="1">
-      <rect h="203" w="146" y="34" x="34"/>
-    </anim>
- </navi>
-
- <ganon>
-    <anim loop="false" name="basicattack_rect" speed="1">
-      <rect h="1" w="92" y="76" x="26"/>
-    </anim>
-    <anim loop="false" name="bat_rect" speed="1">
-      <rect h="1" w="120" y="260" x="24"/>
-    </anim>
-    <anim loop="false" name="ulti_rect" speed="1">
-      <rect h="1" w=146" y="200" x="200"/>
-    </anim>
- </ganon>
-
- </animations>
-
+   <ganon>
+      <basicattack_rect>
+        <rect x="1" y="92" w="76" h="26"/>
+      </basicattack_rect>
+     <bat_rect>
+        <rect x="1" y="120" w="260" h="24"/>
+      </bat_rect>
+     <ulti_rect>
+        <rect x="1" y="146" w="200" h="200"/>
+     </ulti_rect>
+   </ganon>
 </file>

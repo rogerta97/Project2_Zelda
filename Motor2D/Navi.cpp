@@ -39,6 +39,10 @@ Navi::Navi(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("navi.xml", doc);
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("abilities_rects.xml", doc2);
+	pugi::xml_node hit_node = doc2.child("file").child("navi");
+
 	// Loading Abilities ----------------
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 	rupee_reward = stats_node.attribute("rupees").as_int();
@@ -52,7 +56,11 @@ Navi::Navi(iPoint pos)
 	float bd = stats_node.child("ability1").attribute("bd").as_float();
 	
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
-	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 425, 32, 32 });
+	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 425, 32, 32 }, 
+	{ hit_node.child("basicattack_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("h").as_int(0) });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
@@ -65,7 +73,11 @@ Navi::Navi(iPoint pos)
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
 	Ability* a3 = AddAbility(2, cd, bd, dmg_mult);
-	a3->SetImages({ 816, 399, 48, 73 }, { 816, 522, 48, 73 }, { 1013, 2008, 48, 73 }, { 1014, 425, 32, 32 });
+	a3->SetImages({ 816, 399, 48, 73 }, { 816, 522, 48, 73 }, { 1013, 2008, 48, 73 }, { 1014, 425, 32, 32 }, 
+	{ hit_node.child("blink_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("blink_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("blink_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("blink_rect").child("rect").attribute("h").as_int(0) });
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();

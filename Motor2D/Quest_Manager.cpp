@@ -17,7 +17,19 @@
 QuestManager::QuestManager()
 {
 	player_text_list.clear();
-	quest_fx = App->audio->LoadFx("Audio/Voice act/new_quest_1.wav");
+
+	//Voice announcer new quests
+	new_quest_1 = App->audio->LoadFx("Audio/Voice act/new_quest_1.wav");
+	new_quest_2 = App->audio->LoadFx("Audio/Voice act/new_quest_2.wav");
+	new_quest_3 = App->audio->LoadFx("Audio/Voice act/new_quest_3.wav");
+
+	//Quest complete voice
+	quest_completed_1_1 = App->audio->LoadFx("Audio/Voice act/quest_1_1.wav");
+	quest_completed_1_2 = App->audio->LoadFx("Audio/Voice act/quest_1_2.wav");
+	quest_completed_1_3 = App->audio->LoadFx("Audio/Voice act/quest_1_3.wav");
+	quest_completed_2_1 = App->audio->LoadFx("Audio/Voice act/quest_2_1.wav");
+
+
 	SDL_Rect screen = App->view->GetViewportRect(1);
 	int offset = 0;
 	active_quest = -1;
@@ -178,7 +190,7 @@ void QuestManager::Update()
 		}
 		if (App->scene->main_scene->GetGameTimer()->ReadSec() - timer_read > QUESTS_TIMER && active_quest == -1)
 		{
-			App->audio->PlayFx(quest_fx);
+			App->audio->PlayFx(GetRandomValue(new_quest_1,new_quest_3),0);
 			active_quest = GetRandomValue(1,3);
 
 			for (int i = 0; i < 4; i++)
@@ -223,6 +235,7 @@ void QuestManager::Update()
 			{
 				for (int i = 0; i < cucos.size(); i++)
 				{
+					if (!cucos[i]->is_player)
 					App->entity->DeleteEntity(cucos[i]);
 				}
 				cucos.clear();
@@ -428,10 +441,21 @@ void QuestManager::update_progress()
 			{
 				if (vquest[i]->task[j]->current_progress == vquest[i]->task[j]->requirement)
 				{
+					switch(j)
+					{
+					case 0:
+						App->audio->PlayFx(GetRandomValue(quest_completed_1_1, quest_completed_1_3), 0);
+						break;
+					case 1:
+						App->audio->PlayFx(quest_completed_2_1, 0);
+					default:
+						break;
+					}
 					if (vquest[i]->id == 2)
 					{
 						for (int i = 0; i < cucos.size(); i++)
 						{
+							if(!cucos[i]->is_player)
 							App->entity->DeleteEntity(cucos[i]);
 						}
 						cucos.clear();

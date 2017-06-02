@@ -143,6 +143,8 @@ public:
 	UI_Image*			spawn_time_background = nullptr; 
 	UI_Text*		    princess_timer = nullptr; 
 
+	uint*				pause_close = nullptr;
+
 private:
 	UI_Window*			main_scene_window = nullptr;
 	
@@ -161,6 +163,8 @@ private:
 
 	// Pause UI
 	PauseUI				pause_ui; 
+	uint				pause_in_fx = 100;
+	uint				pause_out_fx = 100;
 };
 
 

@@ -15,6 +15,7 @@ class TeamSelectScene;
 class TransitionScene; 
 class LogoScene;
 class RemapingScene; 
+class CreditsScene; 
 class Mapping;
 
 struct player_info
@@ -90,6 +91,7 @@ public:
 	FinalScreen*				 final_screen = nullptr; 
 	LogoScene*					 logo_scene = nullptr;
 	RemapingScene*				 remaping_scene = nullptr; 
+	CreditsScene*				 credits_scene = nullptr;
 	TransitionScene*		     transition_scene = nullptr;
 	
 	player_info					 players[4];

@@ -101,7 +101,15 @@ public:
 	int				    active_quest = -1;
 
 private:
-	int                 quest_fx = 0;
+	uint                new_quest_1 = 100;
+	uint                new_quest_2 = 100;
+	uint                new_quest_3 = 100;
+
+	uint                quest_completed_1_1 = 100;
+	uint                quest_completed_1_2 = 100;
+	uint                quest_completed_1_3 = 100;
+	uint                quest_completed_2_1 = 100;
+
 	vector<bool>	    stop_window;
 	uint			    timer_read = 0;
 	SDL_Rect		    test_rect = NULLRECT;
