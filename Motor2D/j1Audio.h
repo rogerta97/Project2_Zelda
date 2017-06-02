@@ -44,6 +44,9 @@ public:
 
 	void StopMusic();
 
+	void PauseMusic();
+	void ResumeMusic();
+
 	void DefaultVolume();
 	void ChangeVolume(int volume);
 	bool MusicPlaying();

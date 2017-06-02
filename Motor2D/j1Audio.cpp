@@ -188,6 +188,16 @@ void j1Audio::StopMusic()
 	Mix_HaltMusic();
 }
 
+void j1Audio::PauseMusic()
+{
+	Mix_Pause(-1);
+}
+
+void j1Audio::ResumeMusic()
+{
+	Mix_Resume(-1);
+}
+
 void j1Audio::ChangeVolume(int volume)
 {
 	Mix_VolumeMusic(volume);

@@ -176,6 +176,12 @@ bool MainScene::Start()
 	SDL_Rect win_size = { 0,0, w,h };
 	SDL_Rect spawn_background_rect = { 0,1367,81,33 };
 
+	//Pause FX
+	pause_in_fx = App->audio->LoadFx("Audio/FX/UI/LTTP_Pause_Open.wav");
+	pause_out_fx = App->audio->LoadFx("Audio/FX/UI/LTTP_Pause_Close.wav");
+
+	pause_close = &pause_out_fx;
+
 	// Common UI
 	progress_bar = main_scene_window->CreateImage(iPoint(w / 2 - 192, h / 2 - 12), { 0, 28, 385, 24 });
 	princess = main_scene_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 2), { 0,0,32,28 });
@@ -402,6 +408,7 @@ bool MainScene::Update(float dt)
 
 	}
 
+	// Pause
 	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
 		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
 		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
@@ -409,6 +416,15 @@ bool MainScene::Update(float dt)
 	{
 		App->SetGamePause(!App->GetGamePause());
 		pause_ui.SetPauseUI(true);
+		App->audio->PlayFx(pause_in_fx,0);
+		//App->audio->PauseMusic();
+
+		if (!App->GetGamePause())
+		{
+			App->audio->PlayFx(pause_out_fx, 0);
+			//App->audio->ResumeMusic();
+		}
+			
 	}
 	else if (App->GetGamePause() == false)
 	{
@@ -611,7 +627,7 @@ void MainScene::EndGame(int _winner)
 
 	UpdateWinnerAnim(winner,0.0f);
 
-	App->audio->ChangeVolume(75);
+	App->audio->ChangeVolume(5);
 	App->audio->PlayMusic("Audio/Music/triforce_chamber.ogg");
 
 	game_timer->Start();
@@ -788,6 +804,7 @@ void MinimapState::Disable()
 
 void PauseUI::SetPauseUI(bool ui_state)
 {
+
 	resume_background->enabled = ui_state; 
 	resume_text->enabled = ui_state;
 
