@@ -903,39 +903,68 @@ void Ganon::MoveCamera()
 
 	Player* curr_player = App->scene->main_scene->player_manager->GetPlayerFromBody(game_object->pbody);
 
+	SDL_Rect camera_rect = App->view->GetViewportSize();
+	iPoint camera_pos = App->view->GetCameraPos(curr_player->viewport);
+
+	iPoint camera_center = { -camera_pos.x + camera_rect.w/2, -camera_pos.y + camera_rect.h/2 };
+
 	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x - speed*cos(45 * DEGTORAD), camera_center.y - speed*sin(45 * DEGTORAD) };
+
+		if(abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x + speed*cos(45 * DEGTORAD), camera_center.y - speed*sin(45 * DEGTORAD) };
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x - speed*cos(45 * DEGTORAD), camera_center.y + speed*sin(45 * DEGTORAD) };
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x + speed*cos(45 * DEGTORAD), camera_center.y + speed*sin(45 * DEGTORAD) };
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
 	}
 
 	// Normal moves
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, speed, 0);
+		iPoint new_pos = { camera_center.x - (int)speed, camera_center.y};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, speed, 0);
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, -speed, 0);
+		iPoint new_pos = { camera_center.x + (int)speed, camera_center.y};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, -speed, 0);
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
 	{
-		App->view->MoveCamera(curr_player->viewport, 0, speed);
+		iPoint new_pos = { camera_center.x, camera_center.y - (int)speed};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, 0, speed);
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
 	{
-		App->view->MoveCamera(curr_player->viewport, 0, -speed);
+		iPoint new_pos = { camera_center.x, camera_center.y + (int)speed};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, 0, -speed);
 	}
 }
 
