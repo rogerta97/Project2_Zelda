@@ -223,6 +223,7 @@ void QuestManager::Update()
 			{
 				for (int i = 0; i < cucos.size(); i++)
 				{
+					if (!cucos[i]->is_player)
 					App->entity->DeleteEntity(cucos[i]);
 				}
 				cucos.clear();
@@ -432,6 +433,7 @@ void QuestManager::update_progress()
 					{
 						for (int i = 0; i < cucos.size(); i++)
 						{
+							if(!cucos[i]->is_player)
 							App->entity->DeleteEntity(cucos[i]);
 						}
 						cucos.clear();
