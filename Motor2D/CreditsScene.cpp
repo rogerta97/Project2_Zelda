@@ -59,7 +59,7 @@ bool CreditsScene::Start()
 	content.iban_line = window->CreateText(iban_line_pos, App->font->game_font_40);
 	content.iban_line->SetText("- Team Leader & Management: Iban Mas"); 
 
-	content.ivan_line = window->CreateText(ivan_line_pos, App->font->g);
+	content.ivan_line = window->CreateText(ivan_line_pos, App->font->game_font_40);
 	content.ivan_line->SetText("- Art: Ivan Papiol");
 
 	content.guillem_line = window->CreateText(guillem_line_pos, App->font->game_font_40);
