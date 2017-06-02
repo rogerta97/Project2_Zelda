@@ -614,27 +614,25 @@ void Ganon::BasicAttackRight()
 void Ganon::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 90, 25, 70 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
-	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 12, game_object->GetPos().y }, GetAbility(0)->hitbox_image, main_view);
-
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 36, game_object->GetPos().y - 63 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Ganon::ShowBasicAttackDown()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 14, game_object->GetPos().y + 25, 25, 55 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 36, game_object->GetPos().y + 24 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Ganon::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 76, game_object->GetPos().y - 4 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Ganon::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 0 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 0, game_object->GetPos().y - 4 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Ganon::Ability1Up()
@@ -664,26 +662,25 @@ void Ganon::Ability1Right()
 void Ganon::ShowAbility1Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	//App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 12, game_object->GetPos().y }, GetAbility(0)->hitbox_image, main_view);
-	//App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - ABILITY1_RANGE, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 134, game_object->GetPos().y - 113 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Ganon::ShowAbility1Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 127, game_object->GetPos().y + 83 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Ganon::ShowAbility1Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, (int)(-ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 297, game_object->GetPos().y - 03 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_VERTICAL, 180);
 }
 
 void Ganon::ShowAbility1Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x + 30, game_object->GetPos().y + 03 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Ganon::Ability2Up()
@@ -719,14 +716,17 @@ void Ganon::ShowAbility2Up()
 
 void Ganon::ShowAbility2Down()
 {
+	Ability2Up();
 }
 
 void Ganon::ShowAbility2Left()
 {
+	Ability2Up();
 }
 
 void Ganon::ShowAbility2Right()
 {
+	Ability2Up();
 }
 
 void Ganon::Ability3Up()
@@ -994,8 +994,8 @@ iPoint Ganon::DrawTarget()
 	SDL_Rect view = App->view->GetViewportRect(1);
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	iPoint camera = App->view->GetCameraPos(main_view);
-	App->view->LayerDrawCircle(-camera.x + (view.w/2), -camera.y + (view.h / 2), 20, 255, 255, 255, 255, 1, main_view);
-	App->view->LayerDrawCircle(-camera.x + (view.w / 2), -camera.y + (view.h / 2), ABILITY3_ATACK_EFFECT, 255, 255, 255, 255, 1, main_view);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(3)->hitbox_texture, { -camera.x + (view.w / 2) - 100, -camera.y + (view.h / 2) - 100 }, GetAbility(3)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
+	App->view->LayerDrawCircle(-camera.x + (view.w/2), -camera.y + (view.h / 2), 20, 255, 255, 255, 50, 1, main_view);
 
 	ret = { -camera.x + (view.w / 2), -camera.y + (view.h / 2) };
 
