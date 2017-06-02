@@ -248,10 +248,18 @@ void Tower::DoAttack()
 		if (game_object->GetPos().x < HALFMAP)
 		{
 			game_object->SetAnimation("tower_attack");
+			if (invulnerable)
+			{
+				game_object->SetAnimation("tower1_invulnerable_attack");
+			}
 		}
 		else
 		{
 			game_object->SetAnimation("tower2_attack");
+			if (invulnerable)
+			{
+				game_object->SetAnimation("tower2_invulnerable_attack");
+			}
 		}
 		
 		anim_state = tower_attack;
