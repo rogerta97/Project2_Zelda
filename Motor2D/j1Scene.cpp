@@ -86,7 +86,7 @@ bool j1Scene::Start()
 	// -------------
 
 	// Starting scene
-	current_scene = logo_scene;
+	current_scene = credits_scene;
 
 	if(current_scene != nullptr)
 		ret = current_scene->Start();
