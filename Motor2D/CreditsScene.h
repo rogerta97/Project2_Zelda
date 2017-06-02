@@ -9,6 +9,19 @@
 struct Credits_UI 
 {
 	SDL_Texture* logo = nullptr; 
+	SDL_Texture* icons_tex = nullptr; 
+
+	SDL_Rect logo_rect = NULLRECT; 
+	iPoint logo_pos = NULLPOINT; 
+
+	SDL_Rect twitter_logo_rect = NULLRECT; 
+	iPoint twitter_pos = NULLPOINT; 
+
+	SDL_Rect github_logo_rect = NULLRECT;
+	iPoint github_pos = NULLPOINT;
+
+	SDL_Rect mail_logo_rect = NULLRECT;
+	iPoint mail_pos = NULLPOINT;
 
 	UI_Text*  iban_line_1 = nullptr; 
 	UI_Text*  iban_line_2 = nullptr;
@@ -23,11 +36,10 @@ struct Credits_UI
 	UI_Text*  voice_line = nullptr; 
 	UI_Text*  voice_editor_line = nullptr; 
 
-	UI_Image* twitter_logo = nullptr; 
-
-	UI_Image* github_logo = nullptr;
-
-	UI_Image* mail_logo = nullptr;
+	UI_Button* twitter_button = nullptr; 
+	UI_Button* github_button = nullptr;
+	UI_Button* mail_button = nullptr;
+	
 };
 
 class CreditsScene : public Scene
@@ -45,6 +57,9 @@ private:
 	UI_Window*   window = nullptr;
 	SDL_Rect	 size = NULLRECT; 
 
+	bool		 is_in_twitter = false; 
+	bool		 is_in_github = false; 
+	bool		 is_in_mail = false; 
 
 	SDL_Rect	 logo_rect = NULLRECT; 
 	Credits_UI	 content; 
