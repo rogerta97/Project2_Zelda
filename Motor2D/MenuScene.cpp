@@ -258,11 +258,6 @@ bool MenuScene::Update(float dt)
 		App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
 	}
 
-	//Stop music ones it finish
-	if (music_time.ReadSec() > 17)
-	{
-		App->audio->StopMusic();
-	}
 
 	return true;
 }
