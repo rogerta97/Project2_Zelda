@@ -14,6 +14,7 @@
 #include "j1Console.h"
 #include "TeamSelectScene.h"
 #include "FinalScreen.h"
+#include "CreditsScene.h"
 #include "CharacterSelectionScene.h"
 #include "LogoScene.h"
 #include "Mapping.h"
@@ -80,6 +81,8 @@ bool j1Scene::Start()
 	scenes.push_back(remaping_scene); 
 	transition_scene = new TransitionScene(); 
 	scenes.push_back(transition_scene);
+	credits_scene = new CreditsScene();
+	scenes.push_back(credits_scene);
 	// -------------
 
 	// Starting scene
