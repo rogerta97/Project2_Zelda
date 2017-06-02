@@ -101,7 +101,7 @@ bool CreditsScene::Start()
 bool CreditsScene::Update(float dt)
 {
 
-	App->render->Blit(content.logo, size.w/4 - logo_rect.w/2, size.h/2 - logo_rect.h/2 ); 
+	App->render->Blit(content.logo, size.w/4 - logo_rect.w/2 - 10, size.h/2 - logo_rect.h/2 - 20); 
 
 	key_mapping back_key = App->scene->players[0].mapping->GetMapping(m_k_back); 
 

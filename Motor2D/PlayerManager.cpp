@@ -99,7 +99,9 @@ bool PlayerManager::Start()
 	// Event
 	event_thrower = new EventThrower();
 
-	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Link/LTTP_Link_Dying.wav");
+	legend_slained_sound_effect_1 = App->audio->LoadFx("Audio/Voice act/slain_1.wav");
+	legend_slained_sound_effect_2 = App->audio->LoadFx("Audio/Voice act/slain_2.wav");
+	legend_slained_sound_effect_3 = App->audio->LoadFx("Audio/Voice act/slain_3.wav");
 
 	return true;
 }
@@ -1146,7 +1148,7 @@ void PlayerManager::CheckIfDeath(Player * player)
     	player->Kill();
 		player->show = shows::show_null;
 
-		App->audio->PlayFx(death_sound_effect, 0);
+		App->audio->PlayFx(GetRandomValue(legend_slained_sound_effect_1,legend_slained_sound_effect_3), 0);
 
 		p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = true;
 	}

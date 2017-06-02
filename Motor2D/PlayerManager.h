@@ -183,7 +183,9 @@ private:
 
 	uint					last_heal_time = 0;
 
-	uint			     	death_sound_effect = 100;
+	uint			     	legend_slained_sound_effect_1 = 100;
+	uint			     	legend_slained_sound_effect_2 = 100;
+	uint			     	legend_slained_sound_effect_3 = 100;
 
 	Animator*				death_text_anim = nullptr;
 	SDL_Texture*		    death_text_texture = nullptr;
