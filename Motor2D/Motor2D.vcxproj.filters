@@ -700,5 +700,8 @@
     <Xml Include="..\Game\tacoattack.xml">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
     </Xml>
+    <Xml Include="..\Game\abilities_rects.xml">
+      <Filter>Engine\4. Entities ==========</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

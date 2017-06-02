@@ -243,6 +243,7 @@
     <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Game\abilities_rects.xml" />
     <Xml Include="..\Game\base.xml">
       <SubType>Designer</SubType>
     </Xml>

@@ -44,6 +44,10 @@ Ganon::Ganon(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("ganon.xml", doc);
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("abilities_rects.xml", doc2);
+	pugi::xml_node hit_node = doc2.child("file").child("ganon");
+
 	// Loading Abilities ----------------
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 	rupee_reward = stats_node.attribute("rupees").as_int();
@@ -57,13 +61,21 @@ Ganon::Ganon(iPoint pos)
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
 
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);
-	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 497, 32, 32 });
+	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 497, 32, 32 }, 
+	{ hit_node.child("basicattack_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("h").as_int(0) });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
 	Ability* a2 = AddAbility(1, cd, bd, dmg_mult, "ganon_bat");
-	a2->SetImages({ 896, 351, 80, 48 }, { 896, 474, 80, 48 }, { 1093, 1960, 80, 48 }, { 1014, 497, 32, 32 });
+	a2->SetImages({ 896, 351, 80, 48 }, { 896, 474, 80, 48 }, { 1093, 1960, 80, 48 }, { 1014, 497, 32, 32 }, 
+	{ hit_node.child("bat_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("bat_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("bat_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("bat_rect").child("rect").attribute("h").as_int(0) });
 
 	shield = stats_node.child("ability3").attribute("shield").as_int();
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
@@ -77,7 +89,11 @@ Ganon::Ganon(iPoint pos)
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	stun_time = stats_node.child("ability4").attribute("stun_time").as_float();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
-	a4->SetImages({ 864, 399, 48, 73 }, { 864, 522, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 497, 32, 32 });
+	a4->SetImages({ 864, 399, 48, 73 }, { 864, 522, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 497, 32, 32 }, 
+	{ hit_node.child("ulti_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("ulti_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("ulti_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("ulti_rect").child("rect").attribute("h").as_int(0) });
 	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -599,6 +615,8 @@ void Ganon::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 90, 25, 70 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 12, game_object->GetPos().y }, GetAbility(0)->hitbox_image, main_view);
+
 }
 
 void Ganon::ShowBasicAttackDown()
@@ -646,7 +664,8 @@ void Ganon::Ability1Right()
 void Ganon::ShowAbility1Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - ABILITY1_RANGE, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	//App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 12, game_object->GetPos().y }, GetAbility(0)->hitbox_image, main_view);
+	//App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - ABILITY1_RANGE, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
 }
 
 void Ganon::ShowAbility1Down()

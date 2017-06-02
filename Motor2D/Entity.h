@@ -166,11 +166,16 @@ struct Ability
 		name = _name;
 		cd_timer = App->AddGameplayTimer();
 		cd_timer->SubstractTimeFromStart(_cd);
+		hitbox_texture = App->tex->LoadTexture("textures/abilities_rects.png");
 	};
 
-	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd, SDL_Rect _ability_icon)
+	void SetImages(SDL_Rect _ablility_avaliable, SDL_Rect _ability_avaliable_pressed, SDL_Rect _ability_in_cd, SDL_Rect _ability_icon, SDL_Rect _hitbox_image = NULLRECT)
 	{
-		ability_avaliable_pressed = _ability_avaliable_pressed; ablility_avaliable = _ablility_avaliable; ability_in_cd = _ability_in_cd; ability_icon = _ability_icon; 
+		ability_avaliable_pressed = _ability_avaliable_pressed; 
+		ablility_avaliable = _ablility_avaliable; 
+		ability_in_cd = _ability_in_cd; 
+		ability_icon = _ability_icon; 
+		hitbox_image = _hitbox_image;
 	}
 
 	bool CdCompleted()
@@ -207,7 +212,10 @@ struct Ability
 	SDL_Rect   ability_avaliable_pressed = NULLRECT;
 	SDL_Rect   ablility_avaliable = NULLRECT;
 	SDL_Rect   ability_in_cd = NULLRECT;
-	SDL_Rect   ability_icon = NULLRECT; 
+	SDL_Rect   ability_icon = NULLRECT;
+
+	SDL_Rect   hitbox_image = NULLRECT;
+	SDL_Texture* hitbox_texture = nullptr;
 };
 
 class Entity
