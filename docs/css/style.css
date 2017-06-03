@@ -56,12 +56,12 @@ p
     }
 .navbar-default .navbar-nav li a:hover
     {
-        color: #93ca3a;
+        color: #ff8000;
     }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #93ca3a;
+  color: #ff8000;
   background-color: transparent;
 }
 .navbar-default .navbar-toggle
@@ -263,7 +263,7 @@ p
     }
 #art h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #art h4
@@ -297,7 +297,7 @@ p
     }
 #teamleader h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #teamleader h4
@@ -331,7 +331,7 @@ p
     }
 #team h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #team h4
@@ -365,7 +365,7 @@ p
     }
 #ui h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #ui h4
@@ -399,7 +399,7 @@ p
     }
 #qa h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #qa h4
@@ -433,7 +433,7 @@ p
     }
 #design h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #design h4
@@ -467,7 +467,7 @@ p
     }
 #programming h3
     {
-        color: #93ca3a;
+        color: #ff8000;
         padding-bottom: 10px;
     }
 #programming h4
@@ -705,7 +705,7 @@ p
 /* start contact */
 #contact
     {
-        background: url('../images/contact-bg.jpg');
+        background: url('../images/contact-bg.png');
 		background-position: 0px 0px;
         background-size: cover;
         background-repeat: no-repeat;
@@ -718,7 +718,7 @@ p
     }
 #contact .fa
     {
-        color: #93ca3a;
+        color: #ff8000;
         font-size: 18px;
         padding-bottom: 14px;
     }
