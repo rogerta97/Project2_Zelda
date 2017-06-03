@@ -21,6 +21,9 @@ private:
 	iPoint       win_size = NULLPOINT;
 
 	bool		 logo_played = false;
+
+	UI_Image*	 skip = nullptr;
+	UI_Window*	 window = nullptr;
 };
 
 

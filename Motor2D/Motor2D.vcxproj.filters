@@ -718,5 +718,8 @@
     <Xml Include="..\Game\config.xml">
       <Filter>Engine</Filter>
     </Xml>
+    <Xml Include="..\Game\logo_scene.xml">
+      <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
