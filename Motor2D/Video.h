@@ -13,8 +13,8 @@ struct THEORAPLAY_VideoFrame;
 struct AudioQueue 
 {
 	const THEORAPLAY_AudioPacket *audio;
-	int offset;
-	struct AudioQueue *next;
+	int offset = 0;
+	struct AudioQueue *next = nullptr;
 };
 
 class Video : public j1Module
@@ -50,27 +50,27 @@ private:
 	void LoadVideo(const char *fname);
 
 private:
-	THEORAPLAY_Decoder* decoder;
+	THEORAPLAY_Decoder* decoder = nullptr;
 	const THEORAPLAY_VideoFrame* video;
 	const THEORAPLAY_AudioPacket* audio;
-	SDL_Window* screen;
-	SDL_Texture* texture;
+	SDL_Window*   screen = nullptr;
+	SDL_Texture*  texture = nullptr;
 	SDL_AudioSpec spec;
-	SDL_Event event;
+	SDL_Event     event;
 
-	Uint32 baseticks;
-	Uint32 framems;
-	int init_failed;
-	int quit;
+	Uint32        baseticks;
+	Uint32        framems;
+	int           init_failed;
+	int           quit;
 
-	void* pixels;
-	int pitch;
-	bool want_to_play;
+	void*         pixels;
+	int           pitch = 0;
+	bool          want_to_play = false;
 
 	static AudioQueue* audio_queue;
 	static AudioQueue* audio_queue_tail;
 
-	SDL_Rect rendering_rect;
+	SDL_Rect      rendering_rect = NULLRECT;
 };
 
 #endif // __VIDEO_H__

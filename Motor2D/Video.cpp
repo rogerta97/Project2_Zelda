@@ -55,10 +55,18 @@ bool Video::CleanUp()
 	if (!active)
 		return true;
 
-	if (texture) SDL_DestroyTexture(texture);
-	if (video) THEORAPLAY_freeVideo(video);
-	if (audio) THEORAPLAY_freeAudio(audio);
-	if (decoder) THEORAPLAY_stopDecode(decoder);
+	if (texture)
+		App->tex->UnLoadTexture(texture);
+
+	if (video) 
+		THEORAPLAY_freeVideo(video);
+
+	if (audio) 
+		THEORAPLAY_freeAudio(audio);
+
+	if (decoder) 
+		THEORAPLAY_stopDecode(decoder);
+
 	SDL_CloseAudio();
 	SDL_Quit();
 
@@ -75,9 +83,15 @@ void SDLCALL Video::audio_callback(void *userdata, Uint8 *stream, int len)
 {
 	Sint16 *dst = (Sint16 *)stream;
 
-	while (audio_queue && (len > 0)) {
+	while (audio_queue && (len > 0)) 
+	{
 		volatile AudioQueue *item = audio_queue;
+
+		if (item->next == nullptr)
+			return;
+
 		AudioQueue *next = item->next;
+
 		const int channels = item->audio->channels;
 
 		const float *src = item->audio->samples + (item->offset * channels);
@@ -87,7 +101,8 @@ void SDLCALL Video::audio_callback(void *userdata, Uint8 *stream, int len)
 		if (cpy > (len / sizeof(Sint16)))
 			cpy = len / sizeof(Sint16);
 
-		for (i = 0; i < cpy; i++) {
+		for (i = 0; i < cpy; i++) 
+		{
 			const float val = *(src++);
 			if (val < -1.0f)
 				*(dst++) = -32768;
@@ -100,9 +115,10 @@ void SDLCALL Video::audio_callback(void *userdata, Uint8 *stream, int len)
 		item->offset += (cpy / channels);
 		len -= cpy * sizeof(Sint16);
 
-		if (item->offset >= item->audio->frames) {
+		if (item->offset >= item->audio->frames) 
+		{
 			THEORAPLAY_freeAudio(item->audio);
-			SDL_free((void *)item);
+			delete item;
 			audio_queue = next;
 		}
 	}
@@ -117,8 +133,10 @@ void SDLCALL Video::audio_callback(void *userdata, Uint8 *stream, int len)
 
 void Video::queue_audio(const THEORAPLAY_AudioPacket *audio) 
 {
-	AudioQueue *item = (AudioQueue *)SDL_malloc(sizeof(AudioQueue));
-	if (!item) {
+	AudioQueue *item = new AudioQueue;
+
+	if (!item) 
+	{
 		THEORAPLAY_freeAudio(audio);
 		return;
 	}
@@ -248,10 +266,17 @@ bool Video::Update(float dt)
 
 void Video::ResetValues()
 {
-	if (texture) SDL_DestroyTexture(texture);
-	if (video) THEORAPLAY_freeVideo(video);
-	if (audio) THEORAPLAY_freeAudio(audio);
-	if (decoder) THEORAPLAY_stopDecode(decoder);
+	if (texture) 
+		App->tex->UnLoadTexture(texture);
+
+	if (video) 
+		THEORAPLAY_freeVideo(video);
+
+	if (audio) 
+		THEORAPLAY_freeAudio(audio);
+
+	if (decoder) 
+		THEORAPLAY_stopDecode(decoder);
 
 	decoder = NULL;
 	video = NULL;
