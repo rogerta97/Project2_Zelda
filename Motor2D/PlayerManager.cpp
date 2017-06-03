@@ -1556,10 +1556,8 @@ void Player::BaseTravelAnimation()
 	{
 		if (base_travel_timer->ReadSec() - base_trave_time_anim_time > (float)((BASE_TRAVEL_TIME) / base_travel_time_div))
 		{
-			LOG("%f %f", (BASE_TRAVEL_TIME) / base_travel_time_div, base_travel_timer->ReadSec() - base_trave_time_anim_time);
 			base_trave_time_anim_time = base_travel_timer->ReadSec();
 			base_travel_time_div+=3.6f;
-
 
 			switch (state)
 			{
