@@ -51,6 +51,8 @@ public:
 	void ChangeVolume(int volume);
 	bool MusicPlaying();
 
+	void RestartAudio();
+
 private:
 
 	_Mix_Music*			    music = NULL;

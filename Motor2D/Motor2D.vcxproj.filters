@@ -228,7 +228,7 @@
     </ClCompile>
     <ClCompile Include="theoraplay.c">
       <Filter>Engine\2. Components ======</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="CreditsScene.cpp">
       <Filter>Engine\3. Scenes ==========\Credits</Filter>
     </ClCompile>
@@ -714,6 +714,9 @@
     </Xml>
     <Xml Include="..\Game\abilities_rects.xml">
       <Filter>Engine\4. Entities ==========</Filter>
+    </Xml>
+    <Xml Include="..\Game\config.xml">
+      <Filter>Engine</Filter>
     </Xml>
   </ItemGroup>
 </Project>

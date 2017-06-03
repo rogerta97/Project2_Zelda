@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "j1Scene.h"
 #include "j1Input.h"
+#include "j1Audio.h"
 
 LogoScene::LogoScene()
 {
@@ -24,7 +25,7 @@ bool LogoScene::Start()
 
 	App->render->background = {255, 255, 255};
 
-	App->video->PlayVideo("catwithsound.ogv", { win_size.x / 2 - 154,win_size.y / 2 - 154,306,306 });
+	App->video->PlayVideo("logo.ogv", { win_size.x / 2 - 154,win_size.y / 2 - 154,306,306 });
 
 	return ret;
 }
@@ -42,7 +43,7 @@ bool LogoScene::Update(float dt)
 		else
 		{
 			logo_played = true;
-			App->video->PlayVideo("zelda-lehendas.ogv", { 0,0,win_size.x,win_size.y });
+			App->video->PlayVideo("intro.ogv", { 0,0,win_size.x,win_size.y });
 		}
 	}
 
@@ -56,6 +57,8 @@ bool LogoScene::CleanUp()
 	LOG("Start LogoScene");
 
 	App->render->background = { 0, 0, 0 };
+
+	App->audio->RestartAudio();
 
 	return ret;
 }

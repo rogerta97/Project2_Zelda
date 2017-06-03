@@ -142,7 +142,8 @@ void Video::LoadVideo(const char *fname)
 	decoder = THEORAPLAY_startDecodeFile(fname, 30, THEORAPLAY_VIDFMT_IYUV);
 
 	// Wait until we have video and/or audio data, so we can set up hardware.
-	while (!audio || !video) {
+	while (!audio || !video) 
+	{
 		if (!audio) audio = THEORAPLAY_getAudio(decoder);
 		if (!video) video = THEORAPLAY_getVideo(decoder);
 		SDL_Delay(10);
