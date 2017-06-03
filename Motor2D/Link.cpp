@@ -14,6 +14,7 @@
 #include "j1Map.h"
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
+#include "j1Audio.h"
 
 #define ABILITY3_MAX_RANGE 200
 #define ABILITY3_GROW_SPEED 205.0f
@@ -94,6 +95,8 @@ Link::Link(iPoint pos)
 	blit_layer = 2;
 
 	name = "link";
+
+	link_ultimate = App->audio->LoadFx("Audio/FX/Entities/Link/OOT_Link_StrongAttack.wav");
 }
 
 Link::~Link()
@@ -710,6 +713,8 @@ void Link::Ability3Up()
 	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
+
+	App->audio->PlayFx(link_ultimate, 0);
 }
 
 void Link::Ability3Down()
@@ -722,6 +727,8 @@ void Link::Ability3Down()
 	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
+
+	App->audio->PlayFx(link_ultimate, 0);
 }
 
 void Link::Ability3Left()
@@ -734,6 +741,8 @@ void Link::Ability3Left()
 	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
+
+	App->audio->PlayFx(link_ultimate, 0);
 }
 
 void Link::Ability3Right()
@@ -746,6 +755,8 @@ void Link::Ability3Right()
 	invulnerable = true;
 	GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), 50, fixture_type::f_t_attack);
 	DeleteAbility3Test();
+
+	App->audio->PlayFx(link_ultimate, 0);
 }
 
 void Link::ShowAbility3Up()

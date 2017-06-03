@@ -141,6 +141,8 @@ private:
 	b2Fixture*   link_collision = nullptr;
 
 	int			 rupee_reward = 0;
+
+	uint		 link_ultimate = 100;
 };
 
 #endif

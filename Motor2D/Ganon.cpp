@@ -16,6 +16,7 @@
 #include "j1XMLLoader.h"
 #include "GanonBat.h"
 #include "j1Input.h"
+#include "j1Audio.h"
 
 #define ABILITY1_RANGE 260
 
@@ -106,6 +107,8 @@ Ganon::Ganon(iPoint pos)
 	look_for_target_timer = App->AddGameplayTimer();
 
 	name = "ganon";
+
+	ganon_ulti_1 = App->audio->LoadFx("Audio/FX/Entities/Enemies/OOT_Ganondorf_Pound_FX.wav");
 }
 
 Ganon::~Ganon()
@@ -249,6 +252,7 @@ bool Ganon::Update(float dt)
 				App->view->LayerDrawCircle(target.x, target.y, 10, 255, 255, 255, 255, 1, main_view);
 				MoveAngle(ABILITY3_MOVE_SPEED, angle);
 				game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+
 			}
 			// Finish ability, deal damage
 			else
@@ -256,6 +260,8 @@ bool Ganon::Update(float dt)
 				ability3 = false;
 				game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
 				GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), ABILITY3_ATACK_EFFECT, fixture_type::f_t_attack);
+
+				//App->audio->PlayFx(ganon_ulti_1, 0);
 			}
 		}
 	}
@@ -747,6 +753,7 @@ void Ganon::Ability3Up()
 
 		target_found = true;
 	}
+	
 }
 
 void Ganon::Ability3Down()

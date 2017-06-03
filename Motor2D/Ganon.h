@@ -139,6 +139,8 @@ private:
 	bool		  target_found = false;
 	float		  stun_time = 0.0f;
 	int			  angle = 0;
+
+	uint		  ganon_ulti_1 = 100;
 };
 
 #endif
