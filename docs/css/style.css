@@ -25,7 +25,7 @@ p
     }
 
 /* start all section */
-#service, #divider, #about, #team, #newsletter,
+#game, #divider, #about, #teamleader, #art, #ui, #programming, #qa, #design,
  #pricing, #portfolio, #client, #contact
     {
         padding-top: 100px;
@@ -160,17 +160,17 @@ p
 /* end home */
 
 /* start service */
-#service .media
+#game .media
     {
         padding: 10px;
     }
-#service .media .fa
+#game .media .fa
     {
         color: #202020;
         font-size: 40px;
         margin-right: 20px;
     }
-#service .media .media-heading
+#game .media .media-heading
     {
         border-bottom: 2px solid #202020;
         font-weight: 600;
@@ -239,34 +239,204 @@ p
 /* end about */
 
 /* start team */
-#team
+#art
     {
         border-top: 1px solid #f6f6f6;
         border-bottom: 1px solid #f6f6f6;
         text-align: center;
     }
-#team h2
+#art h2
     {
         padding-bottom: 30px;
     }
-#team img
+#art img
     {
         border: 1px solid #f6f6f6;
         display: inline-block;
         padding: 10px;
         transition: all 0.4s ease-in;
     }
-#team img:hover
+#art img:hover
     {
         opacity: 0.4;
         cursor: pointer;
     }
-#team h3
+#art h3
     {
         color: #93ca3a;
         padding-bottom: 10px;
     }
-#team h4
+#art h4
+    {
+        font-size: 14px;
+        padding-top: 20px;
+        line-height: 0px;
+    }
+	
+#teamleader
+    {
+        border-top: 1px solid #f6f6f6;
+        border-bottom: 1px solid #f6f6f6;
+        text-align: center;
+    }
+#teamleader h2
+    {
+        padding-bottom: 30px;
+    }
+#teamleader img
+    {
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+        padding: 10px;
+        transition: all 0.4s ease-in;
+    }
+#teamleader img:hover
+    {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+#teamleader h3
+    {
+        color: #93ca3a;
+        padding-bottom: 10px;
+    }
+#teamleader h4
+    {
+        font-size: 14px;
+        padding-top: 20px;
+        line-height: 0px;
+    }
+	
+#ui
+    {
+        border-top: 1px solid #f6f6f6;
+        border-bottom: 1px solid #f6f6f6;
+        text-align: center;
+    }
+#ui h2
+    {
+        padding-bottom: 30px;
+    }
+#ui img
+    {
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+        padding: 10px;
+        transition: all 0.4s ease-in;
+    }
+#ui img:hover
+    {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+#ui h3
+    {
+        color: #93ca3a;
+        padding-bottom: 10px;
+    }
+#ui h4
+    {
+        font-size: 14px;
+        padding-top: 20px;
+        line-height: 0px;
+    }
+	
+#qa
+    {
+        border-top: 1px solid #f6f6f6;
+        border-bottom: 1px solid #f6f6f6;
+        text-align: center;
+    }
+#qa h2
+    {
+        padding-bottom: 30px;
+    }
+#qa img
+    {
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+        padding: 10px;
+        transition: all 0.4s ease-in;
+    }
+#qa img:hover
+    {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+#qa h3
+    {
+        color: #93ca3a;
+        padding-bottom: 10px;
+    }
+#qa h4
+    {
+        font-size: 14px;
+        padding-top: 20px;
+        line-height: 0px;
+    }
+	
+#design
+    {
+        border-top: 1px solid #f6f6f6;
+        border-bottom: 1px solid #f6f6f6;
+        text-align: center;
+    }
+#design h2
+    {
+        padding-bottom: 30px;
+    }
+#design img
+    {
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+        padding: 10px;
+        transition: all 0.4s ease-in;
+    }
+#design img:hover
+    {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+#design h3
+    {
+        color: #93ca3a;
+        padding-bottom: 10px;
+    }
+#design h4
+    {
+        font-size: 14px;
+        padding-top: 20px;
+        line-height: 0px;
+    }
+	
+#programming
+    {
+        border-top: 1px solid #f6f6f6;
+        border-bottom: 1px solid #f6f6f6;
+        text-align: center;
+    }
+#programming h2
+    {
+        padding-bottom: 30px;
+    }
+#programming img
+    {
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+        padding: 10px;
+        transition: all 0.4s ease-in;
+    }
+#programming img:hover
+    {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+#programming h3
+    {
+        color: #93ca3a;
+        padding-bottom: 10px;
+    }
+#programming h4
     {
         font-size: 14px;
         padding-top: 20px;
@@ -502,6 +672,7 @@ p
 #contact
     {
         background: url('../images/contact-bg.jpg');
+		background-position: 0px 0px;
         background-size: cover;
         background-repeat: no-repeat;
         color: #ffffff;
