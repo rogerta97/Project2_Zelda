@@ -650,25 +650,25 @@ void Navi::BasicAttackRight()
 void Navi::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - BASIC_ATTACK_RANGE, 25, (int)(BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 133, game_object->GetPos().y - 153 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Navi::ShowBasicAttackDown()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 136, game_object->GetPos().y + 110 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Navi::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, (int)(-BASIC_ATTACK_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 286, game_object->GetPos().y - 5 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Navi::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(BASIC_ATTACK_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x + 16, game_object->GetPos().y - 5 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Navi::Ability1Up()
@@ -694,23 +694,22 @@ void Navi::Ability1Right()
 
 void Navi::ShowAbility1Up()
 {
-	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ABILITY1_RANGE, 255, 255, 255, 255, blit_layer - 1, main_view, false, true);
+	Ability1Up();
 }
 
 void Navi::ShowAbility1Down()
 {
-	ShowAbility1Up();
+	Ability1Up();
 }
 
 void Navi::ShowAbility1Left()
 {
-	ShowAbility1Up();
+	Ability1Up();
 }
 
 void Navi::ShowAbility1Right()
 {
-	ShowAbility1Up();
+	Ability1Up();
 }
 
 void Navi::Ability2Up()
@@ -760,29 +759,25 @@ void Navi::Ability2Right()
 void Navi::ShowAbility2Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16, game_object->GetPos().y - 10 - ABILITY2_RANGE }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Navi::ShowAbility2Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16, game_object->GetPos().y - 17 + ABILITY2_RANGE }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Navi::ShowAbility2Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16 - ABILITY2_RANGE, game_object->GetPos().y - 16 }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Navi::ShowAbility2Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16 + ABILITY2_RANGE, game_object->GetPos().y - 16 }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Navi::Ability3Up()
@@ -808,22 +803,22 @@ void Navi::Ability3Right()
 
 void Navi::ShowAbility3Up()
 {
-
+	Ability3Up();
 }
 
 void Navi::ShowAbility3Down()
 {
-
+	Ability3Up();
 }
 
 void Navi::ShowAbility3Left()
 {
-
+	Ability3Up();
 }
 
 void Navi::ShowAbility3Right()
 {
-
+	Ability3Up();
 }
 
 void Navi::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

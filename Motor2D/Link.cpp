@@ -579,25 +579,25 @@ void Link::BasicAttackRight()
 void Link::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 13, game_object->GetPos().y - 55, 10, 45 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 30, game_object->GetPos().y - 30 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Link::ShowBasicAttackDown()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 5, game_object->GetPos().y + 20, 10, 45 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 18, game_object->GetPos().y + 20 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Link::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x -50 , game_object->GetPos().y - 4, 45, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 53, game_object->GetPos().y + 0 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Link::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 20, game_object->GetPos().y - 4, 45, 10 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x + 5, game_object->GetPos().y + 0 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Link::Ability1Up()
@@ -634,7 +634,7 @@ void Link::Ability1Right()
 void Link::ShowAbility1Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, 50, 51, 153, 255, 100, blit_layer - 1, main_view, false, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 50, game_object->GetPos().y - 50 }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Link::ShowAbility1Down()
@@ -679,30 +679,25 @@ void Link::Ability2Right()
 void Link::ShowAbility2Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85, 25, (int)(BOOMERANG_RANGE * 0.5) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 85 - (int)(BOOMERANG_RANGE * 0.5), 25, (int)(BOOMERANG_RANGE * 0.5) }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 83, game_object->GetPos().y - 100 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Link::ShowAbility2Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(BOOMERANG_RANGE * 0.5) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15 + (int)(BOOMERANG_RANGE * 0.5), 25, (int)(BOOMERANG_RANGE * 0.5) }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
-
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 86, game_object->GetPos().y + 85 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Link::ShowAbility2Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 75, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25}, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 - (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 176, game_object->GetPos().y - 14 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Link::ShowAbility2Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12 + (int)(BOOMERANG_RANGE * 0.5), game_object->GetPos().y + 12, (int)(BOOMERANG_RANGE * 0.5), -25 }, 201, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x + 16, game_object->GetPos().y - 12 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Link::Ability3Up()
@@ -759,7 +754,9 @@ void Link::ShowAbility3Up()
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, -(int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+
+	SDL_Rect rect = { GetAbility(3)->hitbox_image.x + GetAbility(3)->hitbox_image.w - ability3_range,  GetAbility(3)->hitbox_image.y, ability3_range, GetAbility(3)->hitbox_image.h };
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(3)->hitbox_texture, { game_object->GetPos().x - 032, game_object->GetPos().y - 15 }, rect, main_view, -1.0f, true, SDL_FLIP_NONE, -90, 0, -10);
 
 	CreateAbility3Test();
 }
@@ -770,7 +767,8 @@ void Link::ShowAbility3Down()
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 17, game_object->GetPos().y, 35, (int)ability3_range }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	SDL_Rect rect = { GetAbility(3)->hitbox_image.x + GetAbility(3)->hitbox_image.w - ability3_range,  GetAbility(3)->hitbox_image.y, ability3_range, GetAbility(3)->hitbox_image.h };
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(3)->hitbox_texture, { game_object->GetPos().x + 26, game_object->GetPos().y + 30 }, rect, main_view, -1.0f, true, SDL_FLIP_NONE, 90, 0, -10);
 
 	CreateAbility3Test();
 }
@@ -781,8 +779,9 @@ void Link::ShowAbility3Left()
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 10, game_object->GetPos().y - 18, -(int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
-
+	SDL_Rect rect = { GetAbility(3)->hitbox_image.x + GetAbility(3)->hitbox_image.w - ability3_range,  GetAbility(3)->hitbox_image.y, ability3_range, GetAbility(3)->hitbox_image.h };
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(3)->hitbox_texture, { game_object->GetPos().x - 15, game_object->GetPos().y + 35 }, rect, main_view, -1.0f, true, SDL_FLIP_NONE, 180, 0, -10);
+	
 	CreateAbility3Test();
 }
 
@@ -792,7 +791,8 @@ void Link::ShowAbility3Right()
 		ability3_range += ABILITY3_GROW_SPEED * App->GetDT();
 
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 10, game_object->GetPos().y - 18, (int)ability3_range, 35 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	SDL_Rect rect = { GetAbility(3)->hitbox_image.x + GetAbility(3)->hitbox_image.w - ability3_range,  GetAbility(3)->hitbox_image.y, ability3_range, GetAbility(3)->hitbox_image.h };
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(3)->hitbox_texture, { game_object->GetPos().x + 15, game_object->GetPos().y - 18 }, rect, main_view, -1.0f, true, SDL_FLIP_NONE, 0, 0, -10);
 
 	CreateAbility3Test();
 }
