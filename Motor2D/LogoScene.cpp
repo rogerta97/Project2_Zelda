@@ -76,6 +76,9 @@ bool LogoScene::CleanUp()
 
 	App->render->background = { 0, 0, 0 };
 
+	if (App->scene->GetCurrentScene() != App->scene->logo_scene)
+		App->gui->DeleteElement(window);
+
 	App->audio->RestartAudio();
 
 	return ret;

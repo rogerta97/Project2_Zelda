@@ -8,6 +8,7 @@
 #include "j1Render.h"
 #include "j1Audio.h"
 #include <sstream>
+#include "j1Viewports.h"
 
 #include <stdio.h>
 
