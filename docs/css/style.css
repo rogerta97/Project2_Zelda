@@ -26,9 +26,9 @@ p
 
 /* start all section */
 #game, #divider, #about, #teamleader, #art, #ui, #programming, #qa, #design,
- #pricing, #portfolio, #client, #contact
+ #pricing, #portfolio, #client, #contact, #team
     {
-        padding-top: 100px;
+        padding-top: 130px;
         padding-bottom: 100px;
         position: relative;
     }
@@ -81,7 +81,7 @@ p
 /* start home */        
 #home
 	{
-      padding-top: 65px;
+      padding-top: 130px;
 	}
 .flexslider {
   margin: 0 0 60px;
@@ -89,7 +89,7 @@ p
   padding: 0;
   position: relative;
   zoom: 1;
-  background-color: #371604;
+  background-color: #FF8000;
   overflow: hidden;
   margin: 0;
 }
@@ -301,6 +301,40 @@ p
         padding-bottom: 10px;
     }
 #teamleader h4
+    {
+        font-size: 14px;
+        padding-top: 20px;
+        line-height: 0px;
+    }
+	
+#team
+    {
+        border-top: 1px solid #f6f6f6;
+        border-bottom: 1px solid #f6f6f6;
+        text-align: center;
+    }
+#team h2
+    {
+        padding-bottom: 30px;
+    }
+#team img
+    {
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+        padding: 10px;
+        transition: all 0.4s ease-in;
+    }
+#team img:hover
+    {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+#team h3
+    {
+        color: #93ca3a;
+        padding-bottom: 10px;
+    }
+#team h4
     {
         font-size: 14px;
         padding-top: 20px;
