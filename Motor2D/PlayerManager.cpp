@@ -1451,6 +1451,8 @@ void Player::BaseTravel()
 	{
 		base_travel_timer->Start();
 		base_travel = true;
+		base_travel_time_div = 4;
+		base_trave_time_anim_time = 0;
 	}
 	else if(!is_dead)
 	{
@@ -1470,6 +1472,7 @@ void Player::BaseTravel()
 			entity->game_object->SetPos(r);
 			base_travel = false;
 		}
+		BaseTravelAnimation();
 	}
 	else
 	{
@@ -1545,6 +1548,36 @@ void Player::UpdateQuestsStats()
 	}
 
 	entity->UpdateStats(extra_power, extra_hp, extra_speed);
+}
+
+void Player::BaseTravelAnimation()
+{
+	if (!is_dead && entity != nullptr)
+	{
+		if (base_travel_timer->ReadSec() - base_trave_time_anim_time > (float)((BASE_TRAVEL_TIME) / base_travel_time_div))
+		{
+			LOG("%f %f", (BASE_TRAVEL_TIME) / base_travel_time_div, base_travel_timer->ReadSec() - base_trave_time_anim_time);
+			base_trave_time_anim_time = base_travel_timer->ReadSec();
+			base_travel_time_div+=3.6f;
+
+
+			switch (state)
+			{
+			case idle_up:
+				state = idle_left;
+				break;
+			case idle_left:
+				state = idle_down;
+				break;
+			case idle_down:
+				state = idle_right;
+				break;
+			case idle_right:
+				state = idle_up;
+				break;
+			}
+		}
+	}
 }
 
 void Player::UpdateRupees()
