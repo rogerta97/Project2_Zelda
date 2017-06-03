@@ -152,6 +152,7 @@ private:
 	j1Timer* ability3_timer = nullptr;
 	bool	 ability3 = false;
 
+	uint	 hey_listen = 100;
 	// 
 };
 

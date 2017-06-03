@@ -14,6 +14,7 @@
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
 #include "NaviBasicAttack.h"
+#include "j1Audio.h"
 
 #define BASIC_ATTACK_RANGE 270
 
@@ -93,6 +94,8 @@ Navi::Navi(iPoint pos)
 	blit_layer = 2;
 
 	name = "navi";
+
+	hey_listen = App->audio->LoadFx("Audio/FX/Entities/Navi/OOT_Navi_HeyListen.wav");
 }
 
 Navi::~Navi()
@@ -784,21 +787,25 @@ void Navi::Ability3Up()
 {
 	ability3 = true;
 	ability3_timer->Start();
+	
 }
 
 void Navi::Ability3Down()
 {
 	Ability3Up();
+	App->audio->PlayFx(hey_listen, 0);
 }
 
 void Navi::Ability3Left()
 {
 	Ability3Up();
+	App->audio->PlayFx(hey_listen, 0);
 }
 
 void Navi::Ability3Right()
 {
 	Ability3Up();
+	App->audio->PlayFx(hey_listen, 0);
 }
 
 void Navi::ShowAbility3Up()
