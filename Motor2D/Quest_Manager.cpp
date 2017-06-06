@@ -44,7 +44,7 @@ QuestManager::QuestManager()
 	int button_it = 0;
 	for (vector<MainSceneViewport>::iterator it = App->scene->main_scene->ui_viewports.begin(); it != App->scene->main_scene->ui_viewports.end(); it++)
 	{
-		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 681 , 2470 ,188, 128}, true));
+		player_quest_windows.push_back(it->viewport_window->CreateImage(iPoint(screen.w, 50), SDL_Rect{ 681 , 2470 ,188, 145}, true));
 		//BUTTON REMAPPING
 		key_mapping shop_key = App->scene->players[button_it].mapping->GetMapping(m_k_shop);
 		SDL_Rect button_pos = { 703,2334,28,26 };
