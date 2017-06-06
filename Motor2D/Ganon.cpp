@@ -250,6 +250,7 @@ bool Ganon::Update(float dt)
 			{
 				int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 				App->view->LayerDrawCircle(target.x, target.y, 10, 255, 255, 255, 255, 1, main_view);
+				angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 				MoveAngle(ABILITY3_MOVE_SPEED, angle);
 				game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
 
