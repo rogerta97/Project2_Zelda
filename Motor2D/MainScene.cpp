@@ -409,32 +409,6 @@ bool MainScene::Update(float dt)
 		}
 
 	}
-
-	// Pause
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-	{
-		App->SetGamePause(!App->GetGamePause());
-		pause_ui.SetPauseUI(true);
-		App->audio->PlayFx(pause_in_fx,0);
-		//App->audio->PauseMusic();
-
-		if (!App->GetGamePause())
-		{
-			App->audio->PlayFx(pause_out_fx, 0);
-			//App->audio->ResumeMusic();
-		}
-			
-	}
-	else if (App->GetGamePause() == false)
-	{
-		pause_ui.SetPauseUI(false);
-	}
-	else
-		pause_ui.UpdatePause();
 	// ------
 
 	// Princess progress bar 
@@ -488,6 +462,33 @@ bool MainScene::PostUpdate()
 		App->scene->ChangeScene((Scene*)App->scene->final_screen);
 		App->view->SetViews(1);
 	}
+
+
+	// Pause
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		App->SetGamePause(!App->GetGamePause());
+		pause_ui.SetPauseUI(true);
+		App->audio->PlayFx(pause_in_fx, 0);
+		//App->audio->PauseMusic();
+
+		if (!App->GetGamePause())
+		{
+			App->audio->PlayFx(pause_out_fx, 0);
+			//App->audio->ResumeMusic();
+		}
+
+	}
+	else if (App->GetGamePause() == false)
+	{
+		pause_ui.SetPauseUI(false);
+	}
+	else
+		pause_ui.UpdatePause();
 
 	return ret;
 }
@@ -863,7 +864,7 @@ void PauseUI::UpdatePause()
 
 		case p_e_quit:
 			App->SetGamePause(!App->GetGamePause());
-			App->scene->ChangeScene((Scene*)App->scene->logo_scene); 
+			App->scene->ChangeScene((Scene*)App->scene->menu_scene); 
 			break;
 
 		case p_e_null:

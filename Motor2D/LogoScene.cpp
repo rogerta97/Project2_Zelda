@@ -72,7 +72,7 @@ bool LogoScene::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Start LogoScene");
+	LOG("Clean LogoScene");
 
 	App->render->background = { 0, 0, 0 };
 

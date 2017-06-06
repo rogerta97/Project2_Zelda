@@ -422,6 +422,28 @@ bool Navi::CleanUp()
 		}
 	}
 
+	if (ability3)
+	{
+		ability3 = false;
+
+		// Get enemy team
+		int enemy_team = 0;
+		if (GetTeam() == 1)
+			enemy_team = 2;
+		else
+			enemy_team = 1;
+
+		// Des-invert controls
+		vector<Entity*> enemy_p = App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team);
+
+		for (int i = 0; i < enemy_p.size(); i++)
+		{
+			Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(enemy_p.at(i)->game_object->pbody);
+			if (p != nullptr)
+				p->invert_controls = false;
+		}
+	}
+
 	return ret;
 }
 
