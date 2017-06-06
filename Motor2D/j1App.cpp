@@ -187,9 +187,6 @@ bool j1App::Update()
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug_mode = !debug_mode;
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
-
 	if(input->GetWindowEvent(WE_QUIT) == true || end_program)
 		ret = false;
 
