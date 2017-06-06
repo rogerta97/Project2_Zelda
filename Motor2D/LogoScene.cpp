@@ -5,11 +5,8 @@
 #include "Scene.h"
 #include "j1Scene.h"
 #include "j1Input.h"
-
-#define LOGO_APPEAR 1
-#define LOGO_OUT 5.5f
-#define SCREEN_TIME 8
-#define FADE_SPEED 150
+#include "j1Audio.h"
+#include "j1XMLLoader.h"
 
 LogoScene::LogoScene()
 {
@@ -25,17 +22,28 @@ bool LogoScene::Start()
 
 	LOG("Start LogoScene");
 
+	pugi::xml_document doc;
+
+	App->xml->LoadXML("logo_scene.xml", doc);
+
+	pugi::xml_node skip_node = doc.child("file").child("skip_img");
+	pugi::xml_node logo_node = doc.child("file").child("logo");
+	
+	SDL_Rect skip_image = { skip_node.attribute("x").as_int(),skip_node.attribute("y").as_int(),skip_node.attribute("w").as_int(),skip_node.attribute("h").as_int() };
+
+	win_size = App->win->GetWindowSize();
+
+	window = App->gui->UI_CreateWin({ 0,0 }, win_size.x, win_size.y, 1, false);
+
+	iPoint margin = { logo_node.attribute("x_margin").as_int(),logo_node.attribute("y_margin").as_int() };
+
+	skip = window->CreateImage({ win_size.x - skip_image.w - margin.x,win_size.y - skip_image.h - margin.y }, skip_image);
+
 	App->render->background = {255, 255, 255};
 
-	// Logo properties
-	logo = App->tex->LoadTexture("textures/catpad_logo.png");
-	logo_rect = {0, 0, 306, 306 };
+	int logo_size = logo_node.attribute("size").as_int();
 
-	win_size =  App->win->GetWindowSize();
-	logo_pos = { (win_size.x/2) - (logo_rect.w /2), (win_size.y / 2) - (logo_rect.h/2) };
-	// --------------
-
-	timer.Start();
+	App->video->PlayVideo("logo.ogv", { win_size.x / 2 - logo_size/2,win_size.y / 2 - logo_size / 2,logo_size,logo_size });
 
 	return ret;
 }
@@ -44,20 +52,17 @@ bool LogoScene::Update(float dt)
 {
 	bool ret = true;
 
-	if (timer.ReadSec() > LOGO_APPEAR && timer.ReadSec() < LOGO_OUT)
-		FadeOut();
-	else
-		FadeIn();
-
-	App->render->Blit(logo, logo_pos.x, logo_pos.y, &logo_rect);
-	App->render->DrawQuad({ 0, 0, win_size.x,  win_size.y }, 255, 255, 255, -1.0f, fade_value, true);
-
-	if (timer.ReadSec() > SCREEN_TIME)
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
-
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (!App->video->IsPlaying())
 	{
-		App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		if (logo_played == true)
+		{
+			App->scene->ChangeScene((Scene*)App->scene->menu_scene);
+		}
+		else
+		{
+			logo_played = true;
+			App->video->PlayVideo("intro.ogv", { 0,0,win_size.x,win_size.y });
+		}
 	}
 
 	return ret;
@@ -67,26 +72,14 @@ bool LogoScene::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Start LogoScene");
+	LOG("Clean LogoScene");
 
-	App->tex->UnLoadTexture(logo);
 	App->render->background = { 0, 0, 0 };
 
-	fade_value = 255.0f;
+	if (App->scene->GetCurrentScene() != App->scene->logo_scene)
+		App->gui->DeleteElement(window);
+
+	App->audio->RestartAudio();
 
 	return ret;
-}
-
-void LogoScene::FadeIn()
-{
-	fade_value += (FADE_SPEED*1.5f)*App->GetDT();
-	if (fade_value > 255)
-		fade_value = 255;
-}
-
-void LogoScene::FadeOut()
-{
-	fade_value -= FADE_SPEED*App->GetDT();
-	if (fade_value < 0)
-		fade_value = 0;
 }

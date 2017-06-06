@@ -223,6 +223,15 @@
     <ClCompile Include="TransitionScene.cpp">
       <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>Engine\1. Modules =========</Filter>
+    </ClCompile>
+    <ClCompile Include="theoraplay.c">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditsScene.cpp">
+      <Filter>Engine\3. Scenes ==========\Credits</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -480,6 +489,15 @@
     <ClInclude Include="TransitionScene.h">
       <Filter>Engine\3. Scenes ==========\TransitionScene</Filter>
     </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>Engine\1. Modules =========</Filter>
+    </ClInclude>
+    <ClInclude Include="theoraplay.h">
+      <Filter>Engine\2. Components ======</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditsScene.h">
+      <Filter>Engine\3. Scenes ==========\Credits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -599,6 +617,9 @@
     <Filter Include="Engine\3. Scenes ==========\TransitionScene">
       <UniqueIdentifier>{18b1530f-8c2d-4090-85f4-e22038f3602d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\3. Scenes ==========\Credits">
+      <UniqueIdentifier>{53fb29a9-442c-45df-8a74-a4270f1833e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\link.xml">
@@ -690,6 +711,15 @@
     </Xml>
     <Xml Include="..\Game\tacoattack.xml">
       <Filter>Engine\5. Spells ===========\TacoAttack</Filter>
+    </Xml>
+    <Xml Include="..\Game\abilities_rects.xml">
+      <Filter>Engine\4. Entities ==========</Filter>
+    </Xml>
+    <Xml Include="..\Game\config.xml">
+      <Filter>Engine</Filter>
+    </Xml>
+    <Xml Include="..\Game\logo_scene.xml">
+      <Filter>Engine\3. Scenes ==========\LogoScene</Filter>
     </Xml>
   </ItemGroup>
 </Project>

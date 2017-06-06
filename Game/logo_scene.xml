@@ -1,0 +1,6 @@
+<!-- Config file for the game -->
+
+<file>
+  <logo size="612" x_margin="10" y_margin="10"/>
+  <skip_img x="0" y="2477" w="321" h="70"/>
+</file>

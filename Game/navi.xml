@@ -45,7 +45,7 @@
  	  <rect x = "192" y = "100" w = "48" h = "50"/>
 	  <rect x = "240" y = "100" w = "48" h = "50"/>
      </anim>
-<anim speed = "10" name = "heal_area" loop = "true">
+<anim speed = "7" name = "heal_area" loop = "true">
  	  <rect x = "774" y = "0" w = "280" h = "280"/>
 	  <rect x = "774" y = "280" w = "280" h = "280"/>
         <rect x = "774" y = "560" w = "280" h = "280"/>

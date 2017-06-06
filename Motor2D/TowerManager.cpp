@@ -31,9 +31,14 @@ TowerManager::TowerManager()
 	SetHP(t4, t4->stats.base_hp + 100);
 	team2_towers.push_back(t4);
 
-	//to-improve: using for loop to create towers inside
-	death_sound_effect_1 = App->audio->LoadFx("Audio/Voice act/tower_1_2.wav");
-	death_sound_effect_2 = App->audio->LoadFx("Audio/Voice act/tower_2_2.wav");
+	//voice acting team 1
+	tower_death_sound_effect_1_1 = App->audio->LoadFx("Audio/Voice act/tower_1_1.wav");
+	tower_death_sound_effect_1_2 = App->audio->LoadFx("Audio/Voice act/tower_1_2.wav");
+
+	//voice acting team 2
+	tower_death_sound_effect_2_1 = App->audio->LoadFx("Audio/Voice act/tower_2_1.wav");
+	tower_death_sound_effect_2_2 = App->audio->LoadFx("Audio/Voice act/tower_2_2.wav");
+	tower_death_sound_effect_2_3 = App->audio->LoadFx("Audio/Voice act/tower_2_3.wav");
 }
 
 TowerManager::~TowerManager()
@@ -122,7 +127,7 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
-		App->audio->PlayFx(death_sound_effect_2, 0);
+		App->audio->PlayFx(GetRandomValue(tower_death_sound_effect_2_1, tower_death_sound_effect_2_3), 0);
 		break;
 	case 2:
 		for (std::list<Tower*>::const_iterator it = team2_towers.begin(); it != team2_towers.end();)
@@ -142,7 +147,7 @@ void TowerManager::KillTower(Entity * tower)
 		}
 
 		App->entity->DeleteEntity(tower);
-		App->audio->PlayFx(death_sound_effect_1, 0);
+		App->audio->PlayFx(GetRandomValue(tower_death_sound_effect_1_1, tower_death_sound_effect_1_2), 0);
 		break;
 	}
 

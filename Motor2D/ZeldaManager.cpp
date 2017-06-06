@@ -10,8 +10,11 @@
 
 ZeldaManager::ZeldaManager()
 {
-	//Anouncer
-	zelda_anouncer = App->audio->LoadFx("Audio/Voice act/esperarse_que__voy_1.wav");
+	//Anouncers
+	zelda_anouncer = App->audio->LoadFx("Audio/Voice act/be_prepared_1.wav");
+	zelda_intro_1 = App->audio->LoadFx("Audio/Voice act/intro_1.wav");
+	zelda_intro_2 = App->audio->LoadFx("Audio/Voice act/intro_2.wav");
+
 
 	iPoint pos(App->map->GetZeldaPosition());
 	zelda = (Zelda*)App->entity->CreateEntity(entity_name::zelda, { pos.x + 16, pos.y + 30 });
@@ -58,7 +61,11 @@ bool ZeldaManager::Update()
 	if (App->scene->main_scene->GetGameTimer()->ReadSec() > (GetSpawnTime() - 60) && anounced == false)
 	{
 		anounced = true;
-		App->audio->PlayFx(zelda_anouncer);
+		App->audio->PlayFx(zelda_anouncer,0);
+	}
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() > GetSpawnTime() && anounced == true)
+	{
+		App->audio->PlayFx(GetRandomValue(zelda_intro_1,zelda_intro_2), 0);
 	}
 
 	return ret;
@@ -67,6 +74,7 @@ bool ZeldaManager::Update()
 void ZeldaManager::CleanUp()
 {
 	App->entity->DeleteEntity(zelda);
+	anounced = false;
 }
 
 iPoint ZeldaManager::GetZeldaPos()

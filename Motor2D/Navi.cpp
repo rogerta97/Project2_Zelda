@@ -14,6 +14,7 @@
 #include "Quest_Manager.h"
 #include "j1XMLLoader.h"
 #include "NaviBasicAttack.h"
+#include "j1Audio.h"
 
 #define BASIC_ATTACK_RANGE 270
 
@@ -39,6 +40,10 @@ Navi::Navi(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("navi.xml", doc);
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("abilities_rects.xml", doc2);
+	pugi::xml_node hit_node = doc2.child("file").child("navi");
+
 	// Loading Abilities ----------------
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 	rupee_reward = stats_node.attribute("rupees").as_int();
@@ -52,7 +57,11 @@ Navi::Navi(iPoint pos)
 	float bd = stats_node.child("ability1").attribute("bd").as_float();
 	
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult, "navi_basic_attack");
-	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 425, 32, 32 });
+	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 425, 32, 32 }, 
+	{ hit_node.child("basicattack_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("h").as_int(0) });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
@@ -65,7 +74,11 @@ Navi::Navi(iPoint pos)
 	cd = stats_node.child("ability3").attribute("cd").as_float();
 	bd = stats_node.child("ability3").attribute("bd").as_int();
 	Ability* a3 = AddAbility(2, cd, bd, dmg_mult);
-	a3->SetImages({ 816, 399, 48, 73 }, { 816, 522, 48, 73 }, { 1013, 2008, 48, 73 }, { 1014, 425, 32, 32 });
+	a3->SetImages({ 816, 399, 48, 73 }, { 816, 522, 48, 73 }, { 1013, 2008, 48, 73 }, { 1014, 425, 32, 32 }, 
+	{ hit_node.child("blink_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("blink_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("blink_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("blink_rect").child("rect").attribute("h").as_int(0) });
 
 	dmg_mult = stats_node.child("ability4").attribute("mult").as_float();
 	cd = stats_node.child("ability4").attribute("cd").as_float();
@@ -81,6 +94,8 @@ Navi::Navi(iPoint pos)
 	blit_layer = 2;
 
 	name = "navi";
+
+	hey_listen = App->audio->LoadFx("Audio/FX/Entities/Navi/OOT_Navi_HeyListen.wav");
 }
 
 Navi::~Navi()
@@ -368,7 +383,7 @@ bool Navi::Draw(float dt)
 			for (int i = 0; i < enemy_p.size(); i++)
 			{
 				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(enemy_p.at(i)->game_object->pbody);
-				if (p != nullptr && !p->is_dead && p->entity != nullptr)
+				if (p != nullptr)
 					p->invert_controls = false;
 			}
 		}
@@ -404,6 +419,28 @@ bool Navi::CleanUp()
 		{
 			(*it).CleanUp();
 			it = to_heal.erase(it);
+		}
+	}
+
+	if (ability3)
+	{
+		ability3 = false;
+
+		// Get enemy team
+		int enemy_team = 0;
+		if (GetTeam() == 1)
+			enemy_team = 2;
+		else
+			enemy_team = 1;
+
+		// Des-invert controls
+		vector<Entity*> enemy_p = App->scene->main_scene->player_manager->GetTeamPlayers(enemy_team);
+
+		for (int i = 0; i < enemy_p.size(); i++)
+		{
+			Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(enemy_p.at(i)->game_object->pbody);
+			if (p != nullptr)
+				p->invert_controls = false;
 		}
 	}
 
@@ -638,25 +675,25 @@ void Navi::BasicAttackRight()
 void Navi::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - BASIC_ATTACK_RANGE, 25, (int)(BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 133, game_object->GetPos().y - 153 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Navi::ShowBasicAttackDown()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(BASIC_ATTACK_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 136, game_object->GetPos().y + 110 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Navi::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, (int)(-BASIC_ATTACK_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 286, game_object->GetPos().y - 5 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Navi::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(BASIC_ATTACK_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x + 16, game_object->GetPos().y - 5 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Navi::Ability1Up()
@@ -682,23 +719,22 @@ void Navi::Ability1Right()
 
 void Navi::ShowAbility1Up()
 {
-	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(game_object->GetPos().x, game_object->GetPos().y, ABILITY1_RANGE, 255, 255, 255, 255, blit_layer - 1, main_view, false, true);
+	
 }
 
 void Navi::ShowAbility1Down()
 {
-	ShowAbility1Up();
+
 }
 
 void Navi::ShowAbility1Left()
 {
-	ShowAbility1Up();
+
 }
 
 void Navi::ShowAbility1Right()
 {
-	ShowAbility1Up();
+
 }
 
 void Navi::Ability2Up()
@@ -748,29 +784,25 @@ void Navi::Ability2Right()
 void Navi::ShowAbility2Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y - ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16, game_object->GetPos().y - 10 - ABILITY2_RANGE }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Navi::ShowAbility2Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x, GetPos().y + ABILITY2_RANGE, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16, game_object->GetPos().y - 17 + ABILITY2_RANGE }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Navi::ShowAbility2Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x - ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16 - ABILITY2_RANGE, game_object->GetPos().y - 16 }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Navi::ShowAbility2Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 2, 255, 255, 255, 255, blit_layer, main_view);
-	App->view->LayerDrawCircle(GetPos().x + ABILITY2_RANGE, GetPos().y, 13, 255, 255, 255, 255, blit_layer, main_view);
+	App->view->LayerBlit(GetPos().y - 1, GetAbility(2)->hitbox_texture, { game_object->GetPos().x - 16 + ABILITY2_RANGE, game_object->GetPos().y - 16 }, GetAbility(2)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Navi::Ability3Up()
@@ -782,16 +814,19 @@ void Navi::Ability3Up()
 void Navi::Ability3Down()
 {
 	Ability3Up();
+	App->audio->PlayFx(hey_listen, 0);
 }
 
 void Navi::Ability3Left()
 {
 	Ability3Up();
+	App->audio->PlayFx(hey_listen, 0);
 }
 
 void Navi::Ability3Right()
 {
 	Ability3Up();
+	App->audio->PlayFx(hey_listen, 0);
 }
 
 void Navi::ShowAbility3Up()

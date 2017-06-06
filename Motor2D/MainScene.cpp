@@ -176,6 +176,12 @@ bool MainScene::Start()
 	SDL_Rect win_size = { 0,0, w,h };
 	SDL_Rect spawn_background_rect = { 0,1367,81,33 };
 
+	//Pause FX
+	pause_in_fx = App->audio->LoadFx("Audio/FX/UI/LTTP_Pause_Open.wav");
+	pause_out_fx = App->audio->LoadFx("Audio/FX/UI/LTTP_Pause_Close.wav");
+
+	pause_close = &pause_out_fx;
+
 	// Common UI
 	progress_bar = main_scene_window->CreateImage(iPoint(w / 2 - 192, h / 2 - 12), { 0, 28, 385, 24 });
 	princess = main_scene_window->CreateImage(iPoint(progress_bar->rect.x + (progress_bar->rect.w / 2) - 15, progress_bar->rect.y - 2), { 0,0,32,28 });
@@ -333,7 +339,7 @@ bool MainScene::Start()
 	App->console->AddCommand("scene.set_player_gamepad", App->scene, 2, 2, "Set to player the gampad number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 	App->console->AddCommand("scene.set_player_camera", App->scene, 2, 2, "Set to player the camera number. Min_args: 2. Max_args: 2. Args: 1, 2, 3, 4");
 
-	App->audio->ChangeVolume(25);
+	App->audio->ChangeVolume(20);
 	App->audio->PlayMusic("Audio/Music/overworld.ogg");
 
 	return ret;
@@ -377,6 +383,8 @@ bool MainScene::Update(float dt)
 	}
 	if (minimap_manager != nullptr)
 		minimap_manager->Update(dt);
+	if (zelda_manager != nullptr)
+		zelda_manager->Update();
 	// ------
 
 	// Update progress bar
@@ -401,21 +409,6 @@ bool MainScene::Update(float dt)
 		}
 
 	}
-
-	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
-		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
-	{
-		App->SetGamePause(!App->GetGamePause());
-		pause_ui.SetPauseUI(true);
-	}
-	else if (App->GetGamePause() == false)
-	{
-		pause_ui.SetPauseUI(false);
-	}
-	else
-		pause_ui.UpdatePause();
 	// ------
 
 	// Princess progress bar 
@@ -469,6 +462,33 @@ bool MainScene::PostUpdate()
 		App->scene->ChangeScene((Scene*)App->scene->final_screen);
 		App->view->SetViews(1);
 	}
+
+
+	// Pause
+	if (App->input->GetControllerButton(0, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(1, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(2, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetControllerButton(3, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN ||
+		App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		App->SetGamePause(!App->GetGamePause());
+		pause_ui.SetPauseUI(true);
+		App->audio->PlayFx(pause_in_fx, 0);
+		//App->audio->PauseMusic();
+
+		if (!App->GetGamePause())
+		{
+			App->audio->PlayFx(pause_out_fx, 0);
+			//App->audio->ResumeMusic();
+		}
+
+	}
+	else if (App->GetGamePause() == false)
+	{
+		pause_ui.SetPauseUI(false);
+	}
+	else
+		pause_ui.UpdatePause();
 
 	return ret;
 }
@@ -788,6 +808,7 @@ void MinimapState::Disable()
 
 void PauseUI::SetPauseUI(bool ui_state)
 {
+
 	resume_background->enabled = ui_state; 
 	resume_text->enabled = ui_state;
 
@@ -843,7 +864,7 @@ void PauseUI::UpdatePause()
 
 		case p_e_quit:
 			App->SetGamePause(!App->GetGamePause());
-			App->scene->ChangeScene((Scene*)App->scene->logo_scene); 
+			App->scene->ChangeScene((Scene*)App->scene->menu_scene); 
 			break;
 
 		case p_e_null:

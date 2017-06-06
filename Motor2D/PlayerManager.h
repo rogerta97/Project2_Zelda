@@ -47,6 +47,7 @@ public:
 	void AddRupees(int add);
 	void CleanUp();
 	void UpdateQuestsStats();
+	void BaseTravelAnimation();
 
 private:
 	void UpdateRupees();
@@ -78,6 +79,9 @@ public:
 
 	bool		base_travel = false;
 	j1Timer*    base_travel_timer = nullptr;
+
+	float		base_travel_time_div = 4;
+	float		base_trave_time_anim_time = 0;
 
 	float		last_heal_time = 0.0f;
 
@@ -183,7 +187,9 @@ private:
 
 	uint					last_heal_time = 0;
 
-	uint			     	death_sound_effect = 100;
+	uint			     	legend_slained_sound_effect_1 = 100;
+	uint			     	legend_slained_sound_effect_2 = 100;
+	uint			     	legend_slained_sound_effect_3 = 100;
 
 	Animator*				death_text_anim = nullptr;
 	SDL_Texture*		    death_text_texture = nullptr;

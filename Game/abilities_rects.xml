@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!-- Config file for the game -->
+
+<file>
+  <link>
+    <basicattack_rect>
+        <rect x="79" y="92" w="48" h="10"/>
+      </basicattack_rect>
+    <boomerang_rect>
+        <rect x="1" y="38" w="170" h="24"/>
+      </boomerang_rect>
+    <spinattack_rect>
+        <rect x="203" y="182" w="104" h="104"/>
+      </spinattack_rect>
+    <ulti_rect>
+        <rect x="2" y="2" w="200" h="34"/>
+    </ulti_rect>
+   </link>
+
+   <navi>
+      <basicattack_rect>
+        <rect x="1" y="64" w="270" h="26"/>
+      </basicattack_rect>
+      <blink_rect>
+        <rect x="203" y="146" w="34" h="34"/>
+      </blink_rect>
+   </navi>
+
+   <ganon>
+      <basicattack_rect>
+        <rect x="1" y="92" w="76" h="26"/>
+      </basicattack_rect>
+     <bat_rect>
+        <rect x="1" y="120" w="260" h="24"/>
+      </bat_rect>
+     <ulti_rect>
+        <rect x="1" y="146" w="200" h="200"/>
+     </ulti_rect>
+   </ganon>
+</file>

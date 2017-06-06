@@ -86,6 +86,8 @@
     <ClCompile Include="BoneAttack.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="Bushes.cpp" />
+    <ClCompile Include="theoraplay.c" />
+    <ClCompile Include="CreditsScene.cpp" />
     <ClCompile Include="TransitionScene.cpp" />
     <ClCompile Include="CharacterSelectionScene.cpp" />
     <ClCompile Include="Cuco.cpp" />
@@ -148,6 +150,7 @@
     <ClCompile Include="TowerAttack.cpp" />
     <ClCompile Include="TowerManager.cpp" />
     <ClCompile Include="Trees.cpp" />
+    <ClCompile Include="Video.cpp" />
     <ClCompile Include="Waterfall.cpp" />
     <ClCompile Include="Zelda.cpp" />
     <ClCompile Include="ZeldaManager.cpp" />
@@ -163,6 +166,8 @@
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Bushes.h" />
+    <ClInclude Include="theoraplay.h" />
+    <ClInclude Include="CreditsScene.h" />
     <ClInclude Include="TransitionScene.h" />
     <ClInclude Include="CharacterSelectionScene.h" />
     <ClInclude Include="Cuco.h" />
@@ -235,18 +240,21 @@
     <ClInclude Include="TowerAttack.h" />
     <ClInclude Include="TowerManager.h" />
     <ClInclude Include="Trees.h" />
+    <ClInclude Include="Video.h" />
     <ClInclude Include="Waterfall.h" />
     <ClInclude Include="Zelda.h" />
     <ClInclude Include="ZeldaManager.h" />
     <ClInclude Include="Trunk.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Game\abilities_rects.xml" />
     <Xml Include="..\Game\base.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\Game\boneattack.xml" />
     <Xml Include="..\Game\boomerang.xml" />
     <Xml Include="..\Game\bush.xml" />
+    <Xml Include="..\Game\config.xml" />
     <Xml Include="..\Game\entity_effects.xml" />
     <Xml Include="..\Game\eyes.xml" />
     <Xml Include="..\Game\GameSettings.xml" />
@@ -257,6 +265,7 @@
     <Xml Include="..\Game\ganon_bat.xml" />
     <Xml Include="..\Game\Items.xml" />
     <Xml Include="..\Game\link.xml" />
+    <Xml Include="..\Game\logo_scene.xml" />
     <Xml Include="..\Game\mageskeleton.xml" />
     <Xml Include="..\Game\MapCollisions.xml" />
     <Xml Include="..\Game\menu_scene.xml" />

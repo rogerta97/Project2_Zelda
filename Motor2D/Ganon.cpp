@@ -16,6 +16,7 @@
 #include "j1XMLLoader.h"
 #include "GanonBat.h"
 #include "j1Input.h"
+#include "j1Audio.h"
 
 #define ABILITY1_RANGE 260
 
@@ -44,6 +45,10 @@ Ganon::Ganon(iPoint pos)
 	pugi::xml_document doc;
 	App->xml->LoadXML("ganon.xml", doc);
 
+	pugi::xml_document doc2;
+	App->xml->LoadXML("abilities_rects.xml", doc2);
+	pugi::xml_node hit_node = doc2.child("file").child("ganon");
+
 	// Loading Abilities ----------------
 	pugi::xml_node stats_node = doc.child("file").child("stats");
 	rupee_reward = stats_node.attribute("rupees").as_int();
@@ -57,13 +62,21 @@ Ganon::Ganon(iPoint pos)
 	int bd = stats_node.child("ability1").attribute("bd").as_int();
 
 	Ability* a1 = AddAbility(0, cd, bd, dmg_mult);
-	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 497, 32, 32 });
+	a1->SetImages({ 816, 351, 81, 48 }, { 816, 474, 81, 48 }, { 1013, 1960, 80, 48 }, { 978, 497, 32, 32 }, 
+	{ hit_node.child("basicattack_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("basicattack_rect").child("rect").attribute("h").as_int(0) });
 
 	dmg_mult = stats_node.child("ability2").attribute("mult").as_float();
 	cd = stats_node.child("ability2").attribute("cd").as_float();
 	bd = stats_node.child("ability2").attribute("bd").as_int();
 	Ability* a2 = AddAbility(1, cd, bd, dmg_mult, "ganon_bat");
-	a2->SetImages({ 896, 351, 80, 48 }, { 896, 474, 80, 48 }, { 1093, 1960, 80, 48 }, { 1014, 497, 32, 32 });
+	a2->SetImages({ 896, 351, 80, 48 }, { 896, 474, 80, 48 }, { 1093, 1960, 80, 48 }, { 1014, 497, 32, 32 }, 
+	{ hit_node.child("bat_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("bat_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("bat_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("bat_rect").child("rect").attribute("h").as_int(0) });
 
 	shield = stats_node.child("ability3").attribute("shield").as_int();
 	dmg_mult = stats_node.child("ability3").attribute("mult").as_float();
@@ -77,7 +90,11 @@ Ganon::Ganon(iPoint pos)
 	bd = stats_node.child("ability4").attribute("bd").as_int();
 	stun_time = stats_node.child("ability4").attribute("stun_time").as_float();
 	Ability* a4 = AddAbility(3, cd, bd, dmg_mult);
-	a4->SetImages({ 864, 399, 48, 73 }, { 864, 522, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 497, 32, 32 });
+	a4->SetImages({ 864, 399, 48, 73 }, { 864, 522, 48, 73 }, { 1061, 2008, 48, 73 }, { 1086, 497, 32, 32 }, 
+	{ hit_node.child("ulti_rect").child("rect").attribute("x").as_int(0),
+		hit_node.child("ulti_rect").child("rect").attribute("y").as_int(0),
+		hit_node.child("ulti_rect").child("rect").attribute("w").as_int(0),
+		hit_node.child("ulti_rect").child("rect").attribute("h").as_int(0) });
 	// -------------------------------------
 
 	game_object->SetTexture(game_object->LoadAnimationsFromXML(doc, "animations"));
@@ -90,6 +107,8 @@ Ganon::Ganon(iPoint pos)
 	look_for_target_timer = App->AddGameplayTimer();
 
 	name = "ganon";
+
+	ganon_ulti_1 = App->audio->LoadFx("Audio/FX/Entities/Enemies/MM_GoronLink_Pound.wav");
 }
 
 Ganon::~Ganon()
@@ -214,7 +233,7 @@ bool Ganon::Update(float dt)
 				}
 
 				int iterations = 0;
-				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)) && iterations < 300)
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)) && iterations < 100)
 				{
 					int substract = 10;
 					target.x += (int)(substract * cos(angle*DEGTORAD));
@@ -231,8 +250,10 @@ bool Ganon::Update(float dt)
 			{
 				int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 				App->view->LayerDrawCircle(target.x, target.y, 10, 255, 255, 255, 255, 1, main_view);
+				angle = AngleFromTwoPoints(GetPos().x, GetPos().y, target.x, target.y) - 180;
 				MoveAngle(ABILITY3_MOVE_SPEED, angle);
 				game_object->SetCatMask(App->cf->CATEGORY_NONCOLLISIONABLE, App->cf->MASK_NONCOLLISIONABLE);
+
 			}
 			// Finish ability, deal damage
 			else
@@ -240,6 +261,8 @@ bool Ganon::Update(float dt)
 				ability3 = false;
 				game_object->SetCatMask(App->cf->CATEGORY_PLAYER, App->cf->MASK_PLAYER);
 				GetAbility(3)->fixture = game_object->CreateCollisionSensor(iPoint(0, 0), ABILITY3_ATACK_EFFECT, fixture_type::f_t_attack);
+
+				App->audio->PlayFx(ganon_ulti_1, 0);
 			}
 		}
 	}
@@ -598,25 +621,25 @@ void Ganon::BasicAttackRight()
 void Ganon::ShowBasicAttackUp()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 90, 25, 70 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 36, game_object->GetPos().y - 63 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Ganon::ShowBasicAttackDown()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 14, game_object->GetPos().y + 25, 25, 55 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 36, game_object->GetPos().y + 24 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Ganon::ShowBasicAttackLeft()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 75 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 76, game_object->GetPos().y - 4 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 180);
 }
 
 void Ganon::ShowBasicAttackRight()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 0 , game_object->GetPos().y - 4, 75, 25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(0)->hitbox_texture, { game_object->GetPos().x - 0, game_object->GetPos().y - 4 }, GetAbility(0)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Ganon::Ability1Up()
@@ -646,25 +669,25 @@ void Ganon::Ability1Right()
 void Ganon::ShowAbility1Up()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y - 12 - ABILITY1_RANGE, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 134, game_object->GetPos().y - 113 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, -90);
 }
 
 void Ganon::ShowAbility1Down()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 15, 25, (int)(ABILITY1_RANGE) }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 127, game_object->GetPos().y + 83 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 90);
 }
 
 void Ganon::ShowAbility1Left()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x - 12, game_object->GetPos().y + 12, (int)(-ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x - 297, game_object->GetPos().y - 03 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_VERTICAL, 180);
 }
 
 void Ganon::ShowAbility1Right()
 {
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
-	App->view->LayerDrawQuad({ game_object->GetPos().x + 12, game_object->GetPos().y + 12, (int)(ABILITY1_RANGE), -25 }, 51, 153, 255, 100, true, blit_layer - 1, main_view, true);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(1)->hitbox_texture, { game_object->GetPos().x + 30, game_object->GetPos().y + 03 }, GetAbility(1)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
 }
 
 void Ganon::Ability2Up()
@@ -695,19 +718,22 @@ void Ganon::Ability2Right()
 
 void Ganon::ShowAbility2Up()
 {
-	Ability2Up();
+
 }
 
 void Ganon::ShowAbility2Down()
 {
+	
 }
 
 void Ganon::ShowAbility2Left()
 {
+	
 }
 
 void Ganon::ShowAbility2Right()
 {
+
 }
 
 void Ganon::Ability3Up()
@@ -728,6 +754,7 @@ void Ganon::Ability3Up()
 
 		target_found = true;
 	}
+	
 }
 
 void Ganon::Ability3Down()
@@ -903,39 +930,68 @@ void Ganon::MoveCamera()
 
 	Player* curr_player = App->scene->main_scene->player_manager->GetPlayerFromBody(game_object->pbody);
 
+	SDL_Rect camera_rect = App->view->GetViewportSize();
+	iPoint camera_pos = App->view->GetCameraPos(curr_player->viewport);
+
+	iPoint camera_center = { -camera_pos.x + camera_rect.w/2, -camera_pos.y + camera_rect.h/2 };
+
 	if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x - speed*cos(45 * DEGTORAD), camera_center.y - speed*sin(45 * DEGTORAD) };
+
+		if(abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x + speed*cos(45 * DEGTORAD), camera_center.y - speed*sin(45 * DEGTORAD) };
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x - speed*cos(45 * DEGTORAD), camera_center.y + speed*sin(45 * DEGTORAD) };
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000 && App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
+		fPoint new_pos = { camera_center.x + speed*cos(45 * DEGTORAD), camera_center.y + speed*sin(45 * DEGTORAD) };
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, -speed*cos(45 * DEGTORAD), -speed*sin(45 * DEGTORAD));
 	}
 
 	// Normal moves
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_LEFT) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, speed, 0);
+		iPoint new_pos = { camera_center.x - (int)speed, camera_center.y};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, speed, 0);
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_RIGHT) > 12000)
 	{
-		App->view->MoveCamera(curr_player->viewport, -speed, 0);
+		iPoint new_pos = { camera_center.x + (int)speed, camera_center.y};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, -speed, 0);
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_UP) > 6000)
 	{
-		App->view->MoveCamera(curr_player->viewport, 0, speed);
+		iPoint new_pos = { camera_center.x, camera_center.y - (int)speed};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, 0, speed);
 	}
 	else if (App->input->GetControllerJoystickMove(curr_player->controller_index, LEFTJOY_DOWN) > 6000)
 	{
-		App->view->MoveCamera(curr_player->viewport, 0, -speed);
+		iPoint new_pos = { camera_center.x, camera_center.y + (int)speed};
+
+		if (abs(DistanceFromTwoPoints(GetPos().x, GetPos().y, new_pos.x, new_pos.y)) < ABILITY3_RANGE)
+			App->view->MoveCamera(curr_player->viewport, 0, -speed);
 	}
 }
 
@@ -946,8 +1002,8 @@ iPoint Ganon::DrawTarget()
 	SDL_Rect view = App->view->GetViewportRect(1);
 	int main_view = App->scene->main_scene->player_manager->GetEntityViewportIfIsPlayer(this);
 	iPoint camera = App->view->GetCameraPos(main_view);
-	App->view->LayerDrawCircle(-camera.x + (view.w/2), -camera.y + (view.h / 2), 20, 255, 255, 255, 255, 1, main_view);
-	App->view->LayerDrawCircle(-camera.x + (view.w / 2), -camera.y + (view.h / 2), ABILITY3_ATACK_EFFECT, 255, 255, 255, 255, 1, main_view);
+	App->view->LayerBlit(GetPos().y + 1, GetAbility(3)->hitbox_texture, { -camera.x + (view.w / 2) - 100, -camera.y + (view.h / 2) - 100 }, GetAbility(3)->hitbox_image, main_view, -1.0f, true, SDL_FLIP_NONE, 0);
+	App->view->LayerDrawCircle(-camera.x + (view.w/2), -camera.y + (view.h / 2), 20, 255, 255, 255, 50, 1, main_view);
 
 	ret = { -camera.x + (view.w / 2), -camera.y + (view.h / 2) };
 

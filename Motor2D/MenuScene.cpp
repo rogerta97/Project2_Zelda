@@ -248,11 +248,6 @@ bool MenuScene::Update(float dt)
 
 	cursors.at(0)->SetPos(iPoint(button_list.at(current_button)->GetPos().x - 70, button_list.at(current_button)->GetPos().y + 2));
 	cursors.at(1)->SetPos(iPoint(button_list.at(current_button)->GetPos().x + button_list.at(current_button)->rect.w + 5, button_list.at(current_button)->GetPos().y + 2));
-	
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		//App->scene->ChangeScene(App->scene->main_scene);
-	}
 
 	// Blit main banner
 	if (App->scene->GetCurrentScene() == this)
@@ -263,11 +258,6 @@ bool MenuScene::Update(float dt)
 		App->render->Blit(main_banner_texture, main_banner_pos.x, main_banner_pos.y, &main_banner->GetCurrentAnimation()->GetAnimationFrame(dt));
 	}
 
-	//Stop music ones it finish
-	if (music_time.ReadSec() > 17)
-	{
-		App->audio->StopMusic();
-	}
 
 	return true;
 }
@@ -295,6 +285,7 @@ bool MenuScene::PostUpdate()
 				break;
 
 			case CREDITS:
+				App->scene->ChangeScene((Scene*)App->scene->credits_scene); 
 				break;
 
 			case QUIT:

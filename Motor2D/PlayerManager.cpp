@@ -99,7 +99,9 @@ bool PlayerManager::Start()
 	// Event
 	event_thrower = new EventThrower();
 
-	death_sound_effect = App->audio->LoadFx("Audio/FX/Entities/Link/LTTP_Link_Dying.wav");
+	legend_slained_sound_effect_1 = App->audio->LoadFx("Audio/Voice act/slain_1.wav");
+	legend_slained_sound_effect_2 = App->audio->LoadFx("Audio/Voice act/slain_2.wav");
+	legend_slained_sound_effect_3 = App->audio->LoadFx("Audio/Voice act/slain_3.wav");
 
 	return true;
 }
@@ -1146,7 +1148,7 @@ void PlayerManager::CheckIfDeath(Player * player)
     	player->Kill();
 		player->show = shows::show_null;
 
-		App->audio->PlayFx(death_sound_effect, 0);
+		App->audio->PlayFx(GetRandomValue(legend_slained_sound_effect_1,legend_slained_sound_effect_3), 0);
 
 		p_manager_ui_elements.at(player->viewport - 1).death_time->enabled = true;
 	}
@@ -1449,6 +1451,8 @@ void Player::BaseTravel()
 	{
 		base_travel_timer->Start();
 		base_travel = true;
+		base_travel_time_div = 4;
+		base_trave_time_anim_time = 0;
 	}
 	else if(!is_dead)
 	{
@@ -1468,6 +1472,7 @@ void Player::BaseTravel()
 			entity->game_object->SetPos(r);
 			base_travel = false;
 		}
+		BaseTravelAnimation();
 	}
 	else
 	{
@@ -1543,6 +1548,34 @@ void Player::UpdateQuestsStats()
 	}
 
 	entity->UpdateStats(extra_power, extra_hp, extra_speed);
+}
+
+void Player::BaseTravelAnimation()
+{
+	if (!is_dead && entity != nullptr)
+	{
+		if (base_travel_timer->ReadSec() - base_trave_time_anim_time > (float)((BASE_TRAVEL_TIME) / base_travel_time_div))
+		{
+			base_trave_time_anim_time = base_travel_timer->ReadSec();
+			base_travel_time_div+=3.6f;
+
+			switch (state)
+			{
+			case idle_up:
+				state = idle_left;
+				break;
+			case idle_left:
+				state = idle_down;
+				break;
+			case idle_down:
+				state = idle_right;
+				break;
+			case idle_right:
+				state = idle_up;
+				break;
+			}
+		}
+	}
 }
 
 void Player::UpdateRupees()
