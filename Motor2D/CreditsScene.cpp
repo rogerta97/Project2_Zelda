@@ -25,6 +25,7 @@ bool CreditsScene::Start()
 	logo_rect = { 0,0, 306, 306 }; 
 
 	content.icons_tex = App->tex->LoadTexture("textures/icons.png");
+	content.background_image = App->tex->LoadTexture("gui/credits_background.png"); 
 
 	App->win->GetWindowSize(w, h);
 	
@@ -68,34 +69,34 @@ bool CreditsScene::Start()
 	iPoint mail_logo_pos = { 0,0 };
 	iPoint mail_text_pos = { twitter_logo_pos.x + 20, twitter_logo_pos.y };
 
-	content.iban_line_1 = window->CreateText(iban_line1_pos, App->font->game_font_60);
+	content.iban_line_1 = window->CreateText(iban_line1_pos, App->font->game_font_60, 0, 0, 0,0,0);
 	content.iban_line_1->SetText("· Team Leader: Iban Mas"); 
 
-	content.iban_line_2 = window->CreateText(iban_line2_pos, App->font->game_font_60);
+	content.iban_line_2 = window->CreateText(iban_line2_pos, App->font->game_font_60, 0, 0, 0, 0, 0);
 	content.iban_line_2->SetText("· Management: Iban Mas");
 
-	content.ivan_line = window->CreateText(ivan_line_pos, App->font->game_font_60);
+	content.ivan_line = window->CreateText(ivan_line_pos, App->font->game_font_60, 0, 0, 0, 0, 0);
 	content.ivan_line->SetText("· Art: Ivan Papiol");
 
-	content.guillem_line = window->CreateText(guillem_line_pos, App->font->game_font_60);
+	content.guillem_line = window->CreateText(guillem_line_pos, App->font->game_font_60, 0, 0, 0, 0, 0);
 	content.guillem_line->SetText("· Code: Guillem Sunyer");
 
-	content.domi_line = window->CreateText(domi_line_pos, App->font->game_font_60);
+	content.domi_line = window->CreateText(domi_line_pos, App->font->game_font_60, 0, 0, 0, 0, 0);
 	content.domi_line->SetText("· QA: Guillem Dominguez");
 
-	content.sergi_line = window->CreateText(sergi_line_pos, App->font->game_font_60);
+	content.sergi_line = window->CreateText(sergi_line_pos, App->font->game_font_60, 0, 0, 0, 0, 0);
 	content.sergi_line->SetText("· Game Design: Sergi Perez");
 
-	content.roger_line = window->CreateText(roger_line_pos, App->font->game_font_60);
+	content.roger_line = window->CreateText(roger_line_pos, App->font->game_font_60, 0, 0, 0, 0,0);
 	content.roger_line->SetText("· UI: Roger Tello");
 
-	content.special_thanks = window->CreateText(special_thanks_text_pos, App->font->game_font_60);
+	content.special_thanks = window->CreateText(special_thanks_text_pos, App->font->game_font_60, 0, 0, 0, 0,0);
 	content.special_thanks->SetText("Special thanks to:"); 
 
-	content.voice_line = window->CreateText(voice_line_pos, App->font->game_font_60);
+	content.voice_line = window->CreateText(voice_line_pos, App->font->game_font_60, 0, 0, 0, 0,0);
 	content.voice_line->SetText("· Jasmin Schaefer: Voice Acting"); 
 
-	content.voice_editor_line = window->CreateText(voice_editor_pos, App->font->game_font_60);
+	content.voice_editor_line = window->CreateText(voice_editor_pos, App->font->game_font_60, 0, 0, 0, 0,0);
 	content.voice_editor_line->SetText("· Neku: Voice Editing"); 
 
 	content.twitter_button = window->CreateButton(content.twitter_pos, 96,96);
@@ -109,7 +110,7 @@ bool CreditsScene::Start()
 
 bool CreditsScene::Update(float dt)
 {
-
+	App->render->Blit(content.background_image, 0, 0);
 	App->render->Blit(content.logo, content.logo_pos.x, content.logo_pos.y, &logo_rect);
 
 	App->render->Blit(content.icons_tex, content.twitter_pos.x, content.twitter_pos.y, &content.twitter_logo_rect);
@@ -156,7 +157,7 @@ bool CreditsScene::Update(float dt)
 		App->OpenWebPage("https://github.com/rogerta97/Project2_Zelda");
 
 	else if (is_in_mail && content.mail_button->MouseClickEnterLeft())
-		App->OpenWebPage("");
+		App->OpenWebPage("https://rogerta97.github.io/Project2_Zelda");
 
 	return false;
 }
