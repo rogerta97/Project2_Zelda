@@ -383,7 +383,7 @@ bool Navi::Draw(float dt)
 			for (int i = 0; i < enemy_p.size(); i++)
 			{
 				Player* p = App->scene->main_scene->player_manager->GetPlayerFromBody(enemy_p.at(i)->game_object->pbody);
-				if (p != nullptr && !p->is_dead && p->entity != nullptr)
+				if (p != nullptr)
 					p->invert_controls = false;
 			}
 		}
@@ -697,22 +697,22 @@ void Navi::Ability1Right()
 
 void Navi::ShowAbility1Up()
 {
-	Ability1Up();
+	
 }
 
 void Navi::ShowAbility1Down()
 {
-	Ability1Up();
+
 }
 
 void Navi::ShowAbility1Left()
 {
-	Ability1Up();
+
 }
 
 void Navi::ShowAbility1Right()
 {
-	Ability1Up();
+
 }
 
 void Navi::Ability2Up()
@@ -787,7 +787,6 @@ void Navi::Ability3Up()
 {
 	ability3 = true;
 	ability3_timer->Start();
-	
 }
 
 void Navi::Ability3Down()
@@ -810,22 +809,22 @@ void Navi::Ability3Right()
 
 void Navi::ShowAbility3Up()
 {
-	Ability3Up();
+
 }
 
 void Navi::ShowAbility3Down()
 {
-	Ability3Up();
+
 }
 
 void Navi::ShowAbility3Left()
 {
-	Ability3Up();
+
 }
 
 void Navi::ShowAbility3Right()
 {
-	Ability3Up();
+
 }
 
 void Navi::OnColl(PhysBody* bodyA, PhysBody * bodyB, b2Fixture * fixtureA, b2Fixture * fixtureB)

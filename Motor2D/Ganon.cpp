@@ -233,7 +233,7 @@ bool Ganon::Update(float dt)
 				}
 
 				int iterations = 0;
-				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)) && iterations < 300)
+				while (!App->pathfinding->IsWalkable(App->map->WorldToMap(target.x, target.y)) && iterations < 100)
 				{
 					int substract = 10;
 					target.x += (int)(substract * cos(angle*DEGTORAD));
@@ -717,22 +717,22 @@ void Ganon::Ability2Right()
 
 void Ganon::ShowAbility2Up()
 {
-	Ability2Up();
+
 }
 
 void Ganon::ShowAbility2Down()
 {
-	Ability2Up();
+	
 }
 
 void Ganon::ShowAbility2Left()
 {
-	Ability2Up();
+	
 }
 
 void Ganon::ShowAbility2Right()
 {
-	Ability2Up();
+
 }
 
 void Ganon::Ability3Up()
