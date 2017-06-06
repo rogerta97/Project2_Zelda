@@ -74,6 +74,7 @@ bool ZeldaManager::Update()
 void ZeldaManager::CleanUp()
 {
 	App->entity->DeleteEntity(zelda);
+	anounced = false;
 }
 
 iPoint ZeldaManager::GetZeldaPos()

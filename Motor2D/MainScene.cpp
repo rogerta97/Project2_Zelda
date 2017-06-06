@@ -383,6 +383,8 @@ bool MainScene::Update(float dt)
 	}
 	if (minimap_manager != nullptr)
 		minimap_manager->Update(dt);
+	if (zelda_manager != nullptr)
+		zelda_manager->Update();
 	// ------
 
 	// Update progress bar
