@@ -10,6 +10,7 @@ struct Credits_UI
 {
 	SDL_Texture* logo = nullptr; 
 	SDL_Texture* icons_tex = nullptr; 
+	SDL_Texture* background_image = nullptr; 
 
 	SDL_Rect logo_rect = NULLRECT; 
 	iPoint logo_pos = NULLPOINT; 
