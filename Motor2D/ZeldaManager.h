@@ -6,6 +6,14 @@
 
 class Zelda;
 
+enum anounced_state
+{
+	a_null,
+	a_idle,
+	a_prepare,
+	a_anounced
+};
+
 class ZeldaManager
 {
 public:
@@ -29,8 +37,9 @@ private:
 	uint   zelda_anouncer = 100;
 	uint   zelda_intro_1 = 100;
 	uint   zelda_intro_2 = 100;
-	bool   anounced = false;
 	int	   spawn_time = 0;
+
+	anounced_state state = a_null;
 };
 
 #endif

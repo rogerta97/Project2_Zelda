@@ -47,6 +47,8 @@ ZeldaManager::ZeldaManager()
 	}
 
 	zelda->SetPath(path_sorted);
+	
+	state = a_idle;
 	// -----
 }
 
@@ -58,13 +60,14 @@ bool ZeldaManager::Update()
 {
 	bool ret = true;
 
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() > (GetSpawnTime() - 60) && anounced == false)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() > (GetSpawnTime() - 30) && state == a_idle)
 	{
-		anounced = true;
+		state = a_prepare;
 		App->audio->PlayFx(zelda_anouncer,0);
 	}
-	if (App->scene->main_scene->GetGameTimer()->ReadSec() > GetSpawnTime() && anounced == true)
+	if (App->scene->main_scene->GetGameTimer()->ReadSec() > GetSpawnTime() && state == a_prepare)
 	{
+		state = a_anounced;
 		App->audio->PlayFx(GetRandomValue(zelda_intro_1,zelda_intro_2), 0);
 	}
 
@@ -74,7 +77,7 @@ bool ZeldaManager::Update()
 void ZeldaManager::CleanUp()
 {
 	App->entity->DeleteEntity(zelda);
-	anounced = false;
+	state = a_null;
 }
 
 iPoint ZeldaManager::GetZeldaPos()
